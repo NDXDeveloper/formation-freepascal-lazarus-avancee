@@ -2368,4 +2368,4 @@ Maintenant que vous maîtrisez FreePascal sur AVR/Arduino, vous pouvez :
 
 *Prochaine section : 14.3 ARM Cortex-M et STM32*
 
-⏭️ [ARM Cortex-M et STM32](14-systemes-embarques-iot/03-arm-cortex-m-stm32.md)
+⏭️ [ARM Cortex-M et STM32](/14-systemes-embarques-iot/03-arm-cortex-m-stm32.md)

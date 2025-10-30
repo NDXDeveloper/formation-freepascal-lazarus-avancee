@@ -2593,4 +2593,4 @@ L'accès matériel direct avec FreePascal est un domaine technique mais extrême
 
 Bon développement matériel avec FreePascal ! 🚀
 
-⏭️ [Optimisation mémoire pour embarqué](14-systemes-embarques-iot/10-optimisation-memoire-embarque.md)
+⏭️ [Optimisation mémoire pour embarqué](/14-systemes-embarques-iot/10-optimisation-memoire-embarque.md)

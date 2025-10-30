@@ -3345,4 +3345,4 @@ Vous disposez maintenant d'une base solide pour développer des solutions IoT pr
 
 **Bon développement IoT ! 🚀**
 
-⏭️ [Communication série](14-systemes-embarques-iot/06-communication-serie.md)
+⏭️ [Communication série](/14-systemes-embarques-iot/06-communication-serie.md)

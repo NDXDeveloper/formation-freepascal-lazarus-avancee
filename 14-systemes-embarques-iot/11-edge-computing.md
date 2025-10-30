@@ -3641,4 +3641,4 @@ L'Edge Computing n'est pas juste une tendance, c'est le **futur de l'IoT**. Avec
 
 **Bonne programmation Edge ! 🚀**
 
-⏭️ [Intelligence Artificielle et Machine Learning](15-intelligence-artificielle-machine-learning/README.md)
+⏭️ [Intelligence Artificielle et Machine Learning](/15-intelligence-artificielle-machine-learning/README.md)

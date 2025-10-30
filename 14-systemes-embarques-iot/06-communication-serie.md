@@ -695,4 +695,4 @@ Avec FreePascal, vous disposez d'un langage **clair et portable** pour implémen
 
 *Prochaine section : 14.6.1 Ports COM Windows*
 
-⏭️ [Ports COM Windows](14-systemes-embarques-iot/06.1-ports-com-windows.md)
+⏭️ [Ports COM Windows](/14-systemes-embarques-iot/06.1-ports-com-windows.md)

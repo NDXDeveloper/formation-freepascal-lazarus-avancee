@@ -697,4 +697,4 @@ Que vous souhaitiez créer des objets connectés personnels, des systèmes indus
 
 *Prochaine section : 14.1 FreePascal pour microcontrôleurs*
 
-⏭️ [FreePascal pour microcontrôleurs](14-systemes-embarques-iot/01-freepascal-microcontroleurs.md)
+⏭️ [FreePascal pour microcontrôleurs](/14-systemes-embarques-iot/01-freepascal-microcontroleurs.md)

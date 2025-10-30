@@ -635,4 +635,4 @@ Les concepts restent identiques quel que soit le langage :
 
 Le temps réel est une discipline exigeante mais passionnante, au cœur de nombreux systèmes embarqués modernes !
 
-⏭️ [Drivers et accès matériel direct](14-systemes-embarques-iot/09-drivers-acces-materiel-direct.md)
+⏭️ [Drivers et accès matériel direct](/14-systemes-embarques-iot/09-drivers-acces-materiel-direct.md)

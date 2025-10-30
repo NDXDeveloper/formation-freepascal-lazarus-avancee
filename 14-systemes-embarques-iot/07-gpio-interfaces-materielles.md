@@ -4327,4 +4327,4 @@ Dans ce chapitre, nous avons exploré en profondeur les interfaces matérielles 
 
 **Bon développement et bons projets embarqués !** 🔧⚡
 
-⏭️ [Temps réel et RTOS](14-systemes-embarques-iot/08-temps-reel-rtos.md)
+⏭️ [Temps réel et RTOS](/14-systemes-embarques-iot/08-temps-reel-rtos.md)

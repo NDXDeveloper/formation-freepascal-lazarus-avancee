@@ -552,4 +552,4 @@ FreePascal pour microcontrôleurs est une alternative intéressante au C/C++ tra
 
 Dans les prochaines sections, nous explorerons en détail la programmation AVR (Arduino), ARM Cortex-M (STM32), et les différents protocoles de communication pour microcontrôleurs.
 
-⏭️ [AVR et Arduino avec FreePascal](14-systemes-embarques-iot/02-avr-arduino-freepascal.md)
+⏭️ [AVR et Arduino avec FreePascal](/14-systemes-embarques-iot/02-avr-arduino-freepascal.md)

@@ -2258,4 +2258,4 @@ Les microcontrôleurs ARM Cortex-M, notamment la famille STM32, représentent un
 
 *Ce tutoriel fait partie de la formation "FreePascal/Lazarus - Niveau Développeur Avancé - Edition Multi-plateforme Windows/Ubuntu"*
 
-⏭️ [Raspberry Pi et Linux embarqué](14-systemes-embarques-iot/04-raspberry-pi-linux-embarque.md)
+⏭️ [Raspberry Pi et Linux embarqué](/14-systemes-embarques-iot/04-raspberry-pi-linux-embarque.md)

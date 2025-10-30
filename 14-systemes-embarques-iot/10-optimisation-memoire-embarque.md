@@ -2666,4 +2666,4 @@ Un microcontrôleur avec seulement **512 octets de RAM** peut accomplir des tâc
 
 Bonne optimisation ! 🚀
 
-⏭️ [Edge computing](14-systemes-embarques-iot/11-edge-computing.md)
+⏭️ [Edge computing](/14-systemes-embarques-iot/11-edge-computing.md)
