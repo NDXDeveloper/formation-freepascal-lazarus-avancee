@@ -139,6 +139,9 @@ uses
 
 type
   TPerson = class
+  private
+    FName: String;
+    FAge: Integer;
   published  // Les propriétés published sont accessibles via RTTI
     property Name: String read FName write FName;
     property Age: Integer read FAge write FAge;
@@ -153,7 +156,7 @@ begin
   TypeData := GetTypeData(TypeInfo);
 
   WriteLn('Nom de la classe: ', TypeInfo^.Name);
-  WriteLn('Taille de l\'instance: ', TypeData^.ClassType.InstanceSize, ' octets');
+  WriteLn('Taille de l''instance: ', TypeData^.ClassType.InstanceSize, ' octets');
 end;
 ```
 
@@ -557,14 +560,14 @@ begin
 end;
 
 // Utilisation
-initialization
-  RegisterClass(TCircle, 'TCircle');
-  RegisterClass(TSquare, 'TSquare');
-
 var
   Shape: TShape;
   ShapeType: String;
 begin
+  // Enregistrer les classes
+  RegisterClass(TCircle, 'TCircle');
+  RegisterClass(TSquare, 'TSquare');
+
   Write('Entrez le type de forme (TCircle ou TSquare): ');
   ReadLn(ShapeType);
 
@@ -576,6 +579,8 @@ begin
   end
   else
     WriteLn('Type inconnu');
+
+  RegisteredClasses.Free;
 end;
 ```
 

@@ -34,21 +34,24 @@ FreePascal est polyglotte : il peut "parler" plusieurs dialectes de Pascal. C'es
 Chaque mode active différentes fonctionnalités et comportements :
 
 ```pascal
-program ExempleModes;
-
-{$mode objfpc}  // Mode FreePascal
+// En mode ObjFPC
+{$mode objfpc}
 type
   TMyClass = class
-    procedure DoSomething(const S: string);  // 'const' obligatoire pour optimisation
+    procedure DoSomething(const S: string);  // 'const' recommandé pour optimisation
   end;
+```
 
-// Versus en mode Delphi
+```pascal
+// En mode Delphi
 {$mode delphi}
 type
   TMyClass = class
     procedure DoSomething(S: string);  // Delphi accepte sans 'const'
   end;
 ```
+
+> **Note** : Un seul `{$mode}` est autorisé par unité ou programme. Les deux exemples ci-dessus représentent deux fichiers distincts.
 
 **Conseil pour débutants** : Utilisez `{$mode objfpc}` pour les nouveaux projets. Ce mode encourage les bonnes pratiques et offre les meilleures optimisations.
 
@@ -121,37 +124,47 @@ type
 FreePascal offre plus d'opérateurs surchargeables que Delphi :
 
 ```pascal
-{$mode objfpc}
+{$mode objfpc}{$H+}
+{$modeswitch advancedrecords}
+
+uses
+  Math;  // Pour Power()
+
 type
   TVector = record
     X, Y: Double;
-    // FreePascal supporte plus d'opérateurs
-    class operator + (A, B: TVector): TVector;
-    class operator ** (A: TVector; B: Double): TVector;  // Puissance - pas en Delphi
-    class operator >< (A, B: TVector): Boolean;  // Symétrique - spécifique FPC
+    // Les méthodes sur records nécessitent {$modeswitch advancedrecords}
   end;
+
+// En ObjFPC, les opérateurs sur records sont déclarés globalement
+// FreePascal supporte plus d'opérateurs que Delphi
+operator + (A, B: TVector): TVector;
+operator ** (A: TVector; B: Double): TVector;  // Puissance - pas en Delphi
+operator >< (A, B: TVector): Boolean;          // Symétrique - spécifique FPC
 
 implementation
 
-class operator TVector.+(A, B: TVector): TVector;
+operator +(A, B: TVector): TVector;
 begin
   Result.X := A.X + B.X;
   Result.Y := A.Y + B.Y;
 end;
 
-class operator TVector.**(A: TVector; B: Double): TVector;
+operator **(A: TVector; B: Double): TVector;
 begin
   // Élévation à la puissance
   Result.X := Power(A.X, B);
   Result.Y := Power(A.Y, B);
 end;
 
-class operator TVector.><(A, B: TVector): Boolean;
+operator ><(A, B: TVector): Boolean;
 begin
   // Test de différence symétrique (exemple personnalisé)
   Result := (A.X <> B.X) or (A.Y <> B.Y);
 end;
 ```
+
+> **Note** : En mode Delphi (`{$mode delphi}`), les opérateurs peuvent être déclarés à l'intérieur du record avec `class operator`. En mode ObjFPC, ils sont toujours déclarés globalement.
 
 ### 4. Inline Assembly : Approches Différentes
 
@@ -223,8 +236,8 @@ begin
     WriteLn('Compilation pour Android');
   {$ENDIF}
 
-  {$IFDEF RASPBERRY}
-    WriteLn('Compilation pour Raspberry Pi');
+  {$IFDEF CPUARM}
+    WriteLn('Compilation pour architecture ARM (Raspberry Pi, etc.)');
   {$ENDIF}
 end.
 ```

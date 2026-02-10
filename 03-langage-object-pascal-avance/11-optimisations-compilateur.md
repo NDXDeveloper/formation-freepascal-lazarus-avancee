@@ -652,12 +652,17 @@ for i := 1 to 8 do
   arr[i] := i * 2;
 
 // Après optimisation O2 (déroulement par 4)
-for i := 1 to 8 step 4 do
+// Pseudo-code illustratif (step n'existe pas en Pascal) :
+//   for i := 1 to 8 step 4 do ...
+// Le compilateur génère l'équivalent de :
+i := 1;
+while i <= 8 do
 begin
   arr[i] := i * 2;
   arr[i+1] := (i+1) * 2;
   arr[i+2] := (i+2) * 2;
   arr[i+3] := (i+3) * 2;
+  Inc(i, 4);
 end;
 ```
 
@@ -678,7 +683,7 @@ d := a * 2;  // Maintenant a est prêt
 3. **Register allocation (allocation de registres)**
 ```pascal
 // Variables fréquemment utilisées gardées dans les registres
-procedure Calculate;
+function Calculate: Integer;
 var
   i, sum: Integer;  // Seront dans des registres, pas en mémoire
 begin
@@ -2194,13 +2199,20 @@ end;
 #### 4. Problèmes avec l'ordre d'évaluation
 
 ```pascal
-// Code dépendant de l'ordre
+// Code dépendant de l'ordre d'évaluation des paramètres
 function DangerousCode: Integer;
 var
   x: Integer;
+
+  function NextValue: Integer;
+  begin
+    Inc(x);
+    Result := x;
+  end;
+
 begin
   x := 0;
-  Result := Inc(x) + Inc(x);  // Ordre non garanti!
+  Result := NextValue + NextValue;  // Ordre non garanti !
   // Peut donner 3 ou 4 selon l'optimisation
 end;
 
@@ -2818,7 +2830,7 @@ begin
   WriteLn;
   WriteLn('=== Benchmark Results ===');
   WriteLn('Compiler: FreePascal ', {$I %FPCVERSION%});
-  WriteLn('Target: ', {$I %FPCTARGET%});
+  WriteLn('Target: ', {$I %FPCTARGETOS%});
   WriteLn('CPU: ', {$I %FPCTARGETCPU%});
 
   {$IFDEF O0}

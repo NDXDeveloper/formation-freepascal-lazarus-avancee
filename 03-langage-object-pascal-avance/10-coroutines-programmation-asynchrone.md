@@ -321,8 +321,23 @@ end;
 
 ### Pattern Future/Promise
 
+> **Note :** Les types `TProc<T>` et `TFunc<T>` utilisés ci-dessous sont des types Delphi qui n'existent pas en FPC. En mode ObjFPC avec `{$modeswitch functionreferences}`, vous devez les déclarer :
+> ```pascal
+> type
+>   TProc = reference to procedure;
+>   TIntProc = reference to procedure(Value: Integer);
+>   TStringProc = reference to procedure(const Value: string);
+>   TIntFunc = reference to function: Integer;
+> ```
+
 ```pascal
+// Nécessite : uses SyncObjs;  (pour TRTLCriticalSection)
 type
+  // Types de callbacks (à déclarer en FPC ObjFPC)
+  TIntProc = reference to procedure(Value: Integer);
+  TStringProc = reference to procedure(const Value: string);
+  TIntFunc = reference to function: Integer;
+
   // État d'un Future
   TFutureState = (fsPending, fsResolved, fsRejected);
 
@@ -332,8 +347,8 @@ type
     FState: TFutureState;
     FValue: Integer;
     FError: string;
-    FOnComplete: TProc<Integer>;
-    FOnError: TProc<string>;
+    FOnComplete: TIntProc;
+    FOnError: TStringProc;
     FLock: TRTLCriticalSection;
   public
     constructor Create;
@@ -342,8 +357,8 @@ type
     procedure Resolve(Value: Integer);
     procedure Reject(const Error: string);
 
-    function Then_(OnComplete: TProc<Integer>): TIntFuture;
-    function Catch(OnError: TProc<string>): TIntFuture;
+    function Then_(OnComplete: TIntProc): TIntFuture;
+    function Catch(OnError: TStringProc): TIntFuture;
 
     function IsComplete: Boolean;
     function GetValue: Integer;
@@ -400,7 +415,7 @@ begin
   end;
 end;
 
-function TIntFuture.Then_(OnComplete: TProc<Integer>): TIntFuture;
+function TIntFuture.Then_(OnComplete: TIntProc): TIntFuture;
 begin
   Result := Self;
 
@@ -416,7 +431,7 @@ begin
   end;
 end;
 
-function TIntFuture.Catch(OnError: TProc<string>): TIntFuture;
+function TIntFuture.Catch(OnError: TStringProc): TIntFuture;
 begin
   Result := Self;
 
@@ -470,15 +485,15 @@ type
   TAsyncTask = class(TThread)
   private
     FFuture: TIntFuture;
-    FComputation: TFunc<Integer>;
+    FComputation: TIntFunc;
   protected
     procedure Execute; override;
   public
-    constructor Create(Computation: TFunc<Integer>);
+    constructor Create(Computation: TIntFunc);
     property Future: TIntFuture read FFuture;
   end;
 
-constructor TAsyncTask.Create(Computation: TFunc<Integer>);
+constructor TAsyncTask.Create(Computation: TIntFunc);
 begin
   inherited Create(True);
   FreeOnTerminate := True;
@@ -561,6 +576,8 @@ end;
 
 ```pascal
 type
+  TProc = reference to procedure;
+
   // Contexte d'exécution asynchrone
   TAsyncContext = class
   private
@@ -1214,6 +1231,8 @@ end;
 
 ```pascal
 type
+  // Nécessite : uses DateUtils;  (pour MSecsPerDay)
+
   // Tâche planifiée
   TScheduledTask = class
   private
@@ -1715,6 +1734,8 @@ end;
 
 ```pascal
 type
+  // Nécessite : uses SyncObjs;  (pour TEvent, TCriticalSection)
+
   // CountDownLatch - attendre que N événements se produisent
   TCountDownLatch = class
   private
@@ -2018,7 +2039,7 @@ begin
       var
         Value, Result: Integer;
       begin
-        while not TThread.CurrentThread.CheckTerminated do
+        while not TThread.CurrentThread.Terminated do
         begin
           if FInputChannel.Receive(Value, 100) then
           begin

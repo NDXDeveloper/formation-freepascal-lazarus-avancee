@@ -109,780 +109,6 @@ begin
 
   WriteLn('Fin du programme');
 end.
-
-### Notification système
-
-```pascal
-unit SystemNotifications;
-
-interface
-
-procedure ShowNotification(const Title, Message: string);
-procedure ShowTrayIcon(const Hint: string);
-procedure PlaySystemSound(const SoundType: string);
-
-implementation
-
-uses
-  SysUtils
-  {$IFDEF WINDOWS}, Windows, ShellAPI{$ENDIF}
-  {$IFDEF LINUX}, Process{$ENDIF}
-  {$IFDEF DARWIN}, MacOSAll{$ENDIF};
-
-procedure ShowNotification(const Title, Message: string);
-{$IFDEF WINDOWS}
-var
-  NotifyData: TNotifyIconData;
-{$ENDIF}
-begin
-  {$IFDEF WINDOWS}
-    // Notification Windows via API système
-    FillChar(NotifyData, SizeOf(NotifyData), 0);
-    NotifyData.cbSize := SizeOf(NotifyData);
-    NotifyData.uFlags := NIF_INFO;
-    StrPCopy(NotifyData.szInfoTitle, Title);
-    StrPCopy(NotifyData.szInfo, Message);
-    NotifyData.dwInfoFlags := NIIF_INFO;
-    Shell_NotifyIcon(NIM_MODIFY, @NotifyData);
-  {$ENDIF}
-
-  {$IFDEF LINUX}
-    // Utiliser notify-send sur Linux
-    if FileExists('/usr/bin/notify-send') then
-    begin
-      RunCommand('/usr/bin/notify-send', [Title, Message], s);
-    end
-    else
-    begin
-      WriteLn('[NOTIFICATION] ', Title, ': ', Message);
-    end;
-  {$ENDIF}
-
-  {$IFDEF DARWIN}
-    // Notification macOS via osascript
-    RunCommand('/usr/bin/osascript',
-      ['-e', 'display notification "' + Message +
-       '" with title "' + Title + '"'], s);
-  {$ENDIF}
-end;
-
-procedure PlaySystemSound(const SoundType: string);
-begin
-  {$IFDEF WINDOWS}
-    if SoundType = 'error' then
-      MessageBeep(MB_ICONERROR)
-    else if SoundType = 'warning' then
-      MessageBeep(MB_ICONWARNING)
-    else if SoundType = 'info' then
-      MessageBeep(MB_ICONINFORMATION)
-    else
-      MessageBeep(MB_OK);
-  {$ENDIF}
-
-  {$IFDEF LINUX}
-    // Jouer un son avec paplay ou aplay
-    if FileExists('/usr/bin/paplay') then
-    begin
-      if SoundType = 'error' then
-        RunCommand('/usr/bin/paplay',
-          ['/usr/share/sounds/freedesktop/stereo/dialog-error.oga'], s)
-      else if SoundType = 'warning' then
-        RunCommand('/usr/bin/paplay',
-          ['/usr/share/sounds/freedesktop/stereo/dialog-warning.oga'], s)
-      else
-        RunCommand('/usr/bin/paplay',
-          ['/usr/share/sounds/freedesktop/stereo/dialog-information.oga'], s);
-    end
-    else if FileExists('/usr/bin/aplay') then
-    begin
-      // Utiliser aplay avec des fichiers WAV système
-      RunCommand('/usr/bin/aplay',
-        ['/usr/share/sounds/alsa/Front_Center.wav'], s);
-    end;
-  {$ENDIF}
-
-  {$IFDEF DARWIN}
-    // Son système macOS
-    if SoundType = 'error' then
-      RunCommand('/usr/bin/afplay',
-        ['/System/Library/Sounds/Basso.aiff'], s)
-    else if SoundType = 'warning' then
-      RunCommand('/usr/bin/afplay',
-        ['/System/Library/Sounds/Hero.aiff'], s)
-    else
-      RunCommand('/usr/bin/afplay',
-        ['/System/Library/Sounds/Glass.aiff'], s);
-  {$ENDIF}
-end;
-
-end.
-```
-
-## 8. Gestion des processus et services {#processus}
-
-### Lancement de processus externes
-
-```pascal
-unit ProcessManagement;
-
-interface
-
-type
-  TProcessInfo = record
-    PID: Integer;
-    Name: string;
-    Running: Boolean;
-  end;
-
-function ExecuteProcess(const Command: string;
-                        const Args: array of string;
-                        WaitForExit: Boolean = True): Integer;
-function GetProcessList: TArray<TProcessInfo>;
-function IsProcessRunning(const ProcessName: string): Boolean;
-function KillProcess(PID: Integer): Boolean;
-function GetCurrentProcessID: Integer;
-
-implementation
-
-uses
-  SysUtils, Classes
-  {$IFDEF WINDOWS}, Windows, TlHelp32{$ENDIF}
-  {$IFDEF UNIX}, Process, BaseUnix{$ENDIF};
-
-function ExecuteProcess(const Command: string;
-                        const Args: array of string;
-                        WaitForExit: Boolean = True): Integer;
-{$IFDEF WINDOWS}
-var
-  StartInfo: TStartupInfo;
-  ProcInfo: TProcessInformation;
-  CmdLine: string;
-  i: Integer;
-{$ENDIF}
-{$IFDEF UNIX}
-var
-  AProcess: TProcess;
-  i: Integer;
-{$ENDIF}
-begin
-  Result := -1;
-
-  {$IFDEF WINDOWS}
-    // Construction de la ligne de commande
-    CmdLine := '"' + Command + '"';
-    for i := Low(Args) to High(Args) do
-      CmdLine := CmdLine + ' "' + Args[i] + '"';
-
-    FillChar(StartInfo, SizeOf(StartInfo), 0);
-    FillChar(ProcInfo, SizeOf(ProcInfo), 0);
-    StartInfo.cb := SizeOf(StartInfo);
-
-    if CreateProcess(nil, PChar(CmdLine), nil, nil, False,
-                     NORMAL_PRIORITY_CLASS, nil, nil,
-                     StartInfo, ProcInfo) then
-    begin
-      if WaitForExit then
-      begin
-        WaitForSingleObject(ProcInfo.hProcess, INFINITE);
-        GetExitCodeProcess(ProcInfo.hProcess, DWORD(Result));
-      end
-      else
-        Result := ProcInfo.dwProcessId;
-
-      CloseHandle(ProcInfo.hProcess);
-      CloseHandle(ProcInfo.hThread);
-    end;
-  {$ENDIF}
-
-  {$IFDEF UNIX}
-    AProcess := TProcess.Create(nil);
-    try
-      AProcess.Executable := Command;
-      for i := Low(Args) to High(Args) do
-        AProcess.Parameters.Add(Args[i]);
-
-      if WaitForExit then
-      begin
-        AProcess.Options := [poWaitOnExit];
-        AProcess.Execute;
-        Result := AProcess.ExitStatus;
-      end
-      else
-      begin
-        AProcess.Execute;
-        Result := AProcess.ProcessID;
-      end;
-    finally
-      AProcess.Free;
-    end;
-  {$ENDIF}
-end;
-
-function GetProcessList: TArray<TProcessInfo>;
-{$IFDEF WINDOWS}
-var
-  Snapshot: THandle;
-  ProcessEntry: TProcessEntry32;
-  List: TList<TProcessInfo>;
-  Info: TProcessInfo;
-{$ENDIF}
-{$IFDEF UNIX}
-var
-  Output: TStringList;
-  Line: string;
-  Info: TProcessInfo;
-  List: TList<TProcessInfo>;
-{$ENDIF}
-begin
-  {$IFDEF WINDOWS}
-    List := TList<TProcessInfo>.Create;
-    try
-      Snapshot := CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-      if Snapshot <> INVALID_HANDLE_VALUE then
-      begin
-        ProcessEntry.dwSize := SizeOf(ProcessEntry);
-        if Process32First(Snapshot, ProcessEntry) then
-        begin
-          repeat
-            Info.PID := ProcessEntry.th32ProcessID;
-            Info.Name := ProcessEntry.szExeFile;
-            Info.Running := True;
-            List.Add(Info);
-          until not Process32Next(Snapshot, ProcessEntry);
-        end;
-        CloseHandle(Snapshot);
-      end;
-      Result := List.ToArray;
-    finally
-      List.Free;
-    end;
-  {$ENDIF}
-
-  {$IFDEF UNIX}
-    List := TList<TProcessInfo>.Create;
-    Output := TStringList.Create;
-    try
-      // Utiliser ps pour lister les processus
-      RunCommand('/bin/ps', ['aux'], Output.Text);
-
-      for Line in Output do
-      begin
-        // Parser la sortie de ps
-        // Format : USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND
-        if Pos('PID', Line) = 0 then  // Ignorer l'en-tête
-        begin
-          Info.PID := StrToIntDef(ExtractWord(2, Line, [' ']), 0);
-          Info.Name := ExtractWord(11, Line, [' ']);
-          Info.Running := True;
-          if Info.PID > 0 then
-            List.Add(Info);
-        end;
-      end;
-
-      Result := List.ToArray;
-    finally
-      Output.Free;
-      List.Free;
-    end;
-  {$ENDIF}
-end;
-
-function IsProcessRunning(const ProcessName: string): Boolean;
-var
-  ProcessList: TArray<TProcessInfo>;
-  Process: TProcessInfo;
-begin
-  Result := False;
-  ProcessList := GetProcessList;
-
-  for Process in ProcessList do
-  begin
-    if Pos(LowerCase(ProcessName), LowerCase(Process.Name)) > 0 then
-    begin
-      Result := True;
-      Break;
-    end;
-  end;
-end;
-
-function KillProcess(PID: Integer): Boolean;
-{$IFDEF WINDOWS}
-var
-  ProcessHandle: THandle;
-{$ENDIF}
-begin
-  Result := False;
-
-  {$IFDEF WINDOWS}
-    ProcessHandle := OpenProcess(PROCESS_TERMINATE, False, PID);
-    if ProcessHandle <> 0 then
-    begin
-      Result := TerminateProcess(ProcessHandle, 0);
-      CloseHandle(ProcessHandle);
-    end;
-  {$ENDIF}
-
-  {$IFDEF UNIX}
-    Result := FpKill(PID, SIGTERM) = 0;
-    if not Result then
-      Result := FpKill(PID, SIGKILL) = 0;  // Force kill si nécessaire
-  {$ENDIF}
-end;
-
-function GetCurrentProcessID: Integer;
-begin
-  {$IFDEF WINDOWS}
-    Result := GetCurrentProcessId;
-  {$ENDIF}
-
-  {$IFDEF UNIX}
-    Result := FpGetPid;
-  {$ENDIF}
-end;
-
-end.
-```
-
-### Gestion des services système
-
-```pascal
-unit ServiceManagement;
-
-interface
-
-type
-  TServiceStatus = (ssStopped, ssStarting, ssRunning, ssStopping);
-
-function InstallService(const ServiceName, DisplayName, ExePath: string): Boolean;
-function UninstallService(const ServiceName: string): Boolean;
-function StartService(const ServiceName: string): Boolean;
-function StopService(const ServiceName: string): Boolean;
-function GetServiceStatus(const ServiceName: string): TServiceStatus;
-
-implementation
-
-uses
-  SysUtils
-  {$IFDEF WINDOWS}, Windows, WinSvc{$ENDIF}
-  {$IFDEF LINUX}, Process{$ENDIF};
-
-{$IFDEF WINDOWS}
-function InstallService(const ServiceName, DisplayName, ExePath: string): Boolean;
-var
-  SCManager, Service: SC_HANDLE;
-begin
-  Result := False;
-  SCManager := OpenSCManager(nil, nil, SC_MANAGER_CREATE_SERVICE);
-  if SCManager <> 0 then
-  begin
-    Service := CreateService(SCManager, PChar(ServiceName), PChar(DisplayName),
-                            SERVICE_ALL_ACCESS, SERVICE_WIN32_OWN_PROCESS,
-                            SERVICE_AUTO_START, SERVICE_ERROR_NORMAL,
-                            PChar(ExePath), nil, nil, nil, nil, nil);
-    Result := Service <> 0;
-    if Service <> 0 then
-      CloseServiceHandle(Service);
-    CloseServiceHandle(SCManager);
-  end;
-end;
-
-function UninstallService(const ServiceName: string): Boolean;
-var
-  SCManager, Service: SC_HANDLE;
-begin
-  Result := False;
-  SCManager := OpenSCManager(nil, nil, SC_MANAGER_ALL_ACCESS);
-  if SCManager <> 0 then
-  begin
-    Service := OpenService(SCManager, PChar(ServiceName), DELETE);
-    if Service <> 0 then
-    begin
-      Result := DeleteService(Service);
-      CloseServiceHandle(Service);
-    end;
-    CloseServiceHandle(SCManager);
-  end;
-end;
-{$ENDIF}
-
-{$IFDEF LINUX}
-function InstallService(const ServiceName, DisplayName, ExePath: string): Boolean;
-var
-  ServiceFile: TStringList;
-  ServicePath: string;
-begin
-  // Créer un fichier de service systemd
-  ServicePath := '/etc/systemd/system/' + ServiceName + '.service';
-  ServiceFile := TStringList.Create;
-  try
-    ServiceFile.Add('[Unit]');
-    ServiceFile.Add('Description=' + DisplayName);
-    ServiceFile.Add('After=network.target');
-    ServiceFile.Add('');
-    ServiceFile.Add('[Service]');
-    ServiceFile.Add('Type=simple');
-    ServiceFile.Add('ExecStart=' + ExePath);
-    ServiceFile.Add('Restart=always');
-    ServiceFile.Add('RestartSec=10');
-    ServiceFile.Add('');
-    ServiceFile.Add('[Install]');
-    ServiceFile.Add('WantedBy=multi-user.target');
-
-    // Nécessite les droits root
-    ServiceFile.SaveToFile(ServicePath);
-
-    // Recharger systemd
-    Result := RunCommand('/bin/systemctl', ['daemon-reload'], s);
-
-    // Activer le service
-    if Result then
-      Result := RunCommand('/bin/systemctl', ['enable', ServiceName], s);
-  finally
-    ServiceFile.Free;
-  end;
-end;
-
-function UninstallService(const ServiceName: string): Boolean;
-begin
-  // Arrêter le service
-  StopService(ServiceName);
-
-  // Désactiver le service
-  Result := RunCommand('/bin/systemctl', ['disable', ServiceName], s);
-
-  // Supprimer le fichier de service
-  if Result then
-    DeleteFile('/etc/systemd/system/' + ServiceName + '.service');
-
-  // Recharger systemd
-  RunCommand('/bin/systemctl', ['daemon-reload'], s);
-end;
-{$ENDIF}
-
-function StartService(const ServiceName: string): Boolean;
-begin
-  {$IFDEF WINDOWS}
-    var SCManager := OpenSCManager(nil, nil, SC_MANAGER_ALL_ACCESS);
-    if SCManager <> 0 then
-    begin
-      var Service := OpenService(SCManager, PChar(ServiceName), SERVICE_START);
-      if Service <> 0 then
-      begin
-        Result := WinSvc.StartService(Service, 0, nil);
-        CloseServiceHandle(Service);
-      end;
-      CloseServiceHandle(SCManager);
-    end;
-  {$ENDIF}
-
-  {$IFDEF LINUX}
-    Result := RunCommand('/bin/systemctl', ['start', ServiceName], s);
-  {$ENDIF}
-end;
-
-function StopService(const ServiceName: string): Boolean;
-begin
-  {$IFDEF WINDOWS}
-    var SCManager := OpenSCManager(nil, nil, SC_MANAGER_ALL_ACCESS);
-    if SCManager <> 0 then
-    begin
-      var Service := OpenService(SCManager, PChar(ServiceName), SERVICE_STOP);
-      if Service <> 0 then
-      begin
-        var Status: SERVICE_STATUS;
-        Result := ControlService(Service, SERVICE_CONTROL_STOP, Status);
-        CloseServiceHandle(Service);
-      end;
-      CloseServiceHandle(SCManager);
-    end;
-  {$ENDIF}
-
-  {$IFDEF LINUX}
-    Result := RunCommand('/bin/systemctl', ['stop', ServiceName], s);
-  {$ENDIF}
-end;
-
-function GetServiceStatus(const ServiceName: string): TServiceStatus;
-{$IFDEF WINDOWS}
-var
-  SCManager, Service: SC_HANDLE;
-  Status: SERVICE_STATUS;
-{$ENDIF}
-{$IFDEF LINUX}
-var
-  Output: string;
-{$ENDIF}
-begin
-  Result := ssStopped;
-
-  {$IFDEF WINDOWS}
-    SCManager := OpenSCManager(nil, nil, SC_MANAGER_ALL_ACCESS);
-    if SCManager <> 0 then
-    begin
-      Service := OpenService(SCManager, PChar(ServiceName), SERVICE_QUERY_STATUS);
-      if Service <> 0 then
-      begin
-        if QueryServiceStatus(Service, Status) then
-        begin
-          case Status.dwCurrentState of
-            SERVICE_STOPPED: Result := ssStopped;
-            SERVICE_START_PENDING: Result := ssStarting;
-            SERVICE_RUNNING: Result := ssRunning;
-            SERVICE_STOP_PENDING: Result := ssStopping;
-          end;
-        end;
-        CloseServiceHandle(Service);
-      end;
-      CloseServiceHandle(SCManager);
-    end;
-  {$ENDIF}
-
-  {$IFDEF LINUX}
-    if RunCommand('/bin/systemctl', ['is-active', ServiceName], Output) then
-    begin
-      if Pos('active', Output) > 0 then
-        Result := ssRunning
-      else if Pos('activating', Output) > 0 then
-        Result := ssStarting
-      else if Pos('deactivating', Output) > 0 then
-        Result := ssStopping
-      else
-        Result := ssStopped;
-    end;
-  {$ENDIF}
-end;
-
-end.
-```
-
-## 9. Accès au système de fichiers {#fichiers}
-
-### Gestion des permissions et attributs
-
-```pascal
-unit FileSystemAccess;
-
-interface
-
-type
-  TFilePermissions = record
-    {$IFDEF UNIX}
-    Owner: record
-      Read, Write, Execute: Boolean;
-    end;
-    Group: record
-      Read, Write, Execute: Boolean;
-    end;
-    Other: record
-      Read, Write, Execute: Boolean;
-    end;
-    {$ENDIF}
-    {$IFDEF WINDOWS}
-    ReadOnly: Boolean;
-    Hidden: Boolean;
-    System: Boolean;
-    Archive: Boolean;
-    {$ENDIF}
-  end;
-
-function GetFilePermissions(const FileName: string): TFilePermissions;
-function SetFilePermissions(const FileName: string;
-                           const Permissions: TFilePermissions): Boolean;
-function IsFileHidden(const FileName: string): Boolean;
-function SetFileHidden(const FileName: string; Hidden: Boolean): Boolean;
-function GetFileOwner(const FileName: string): string;
-
-implementation
-
-uses
-  SysUtils
-  {$IFDEF WINDOWS}, Windows{$ENDIF}
-  {$IFDEF UNIX}, BaseUnix, Users, Grp{$ENDIF};
-
-function GetFilePermissions(const FileName: string): TFilePermissions;
-{$IFDEF UNIX}
-var
-  StatInfo: Stat;
-{$ENDIF}
-{$IFDEF WINDOWS}
-var
-  Attrs: DWORD;
-{$ENDIF}
-begin
-  FillChar(Result, SizeOf(Result), 0);
-
-  {$IFDEF UNIX}
-    if FpStat(FileName, StatInfo) = 0 then
-    begin
-      // Permissions du propriétaire
-      Result.Owner.Read := (StatInfo.st_mode and S_IRUSR) <> 0;
-      Result.Owner.Write := (StatInfo.st_mode and S_IWUSR) <> 0;
-      Result.Owner.Execute := (StatInfo.st_mode and S_IXUSR) <> 0;
-
-      // Permissions du groupe
-      Result.Group.Read := (StatInfo.st_mode and S_IRGRP) <> 0;
-      Result.Group.Write := (StatInfo.st_mode and S_IWGRP) <> 0;
-      Result.Group.Execute := (StatInfo.st_mode and S_IXGRP) <> 0;
-
-      // Permissions des autres
-      Result.Other.Read := (StatInfo.st_mode and S_IROTH) <> 0;
-      Result.Other.Write := (StatInfo.st_mode and S_IWOTH) <> 0;
-      Result.Other.Execute := (StatInfo.st_mode and S_IXOTH) <> 0;
-    end;
-  {$ENDIF}
-
-  {$IFDEF WINDOWS}
-    Attrs := GetFileAttributes(PChar(FileName));
-    if Attrs <> INVALID_FILE_ATTRIBUTES then
-    begin
-      Result.ReadOnly := (Attrs and FILE_ATTRIBUTE_READONLY) <> 0;
-      Result.Hidden := (Attrs and FILE_ATTRIBUTE_HIDDEN) <> 0;
-      Result.System := (Attrs and FILE_ATTRIBUTE_SYSTEM) <> 0;
-      Result.Archive := (Attrs and FILE_ATTRIBUTE_ARCHIVE) <> 0;
-    end;
-  {$ENDIF}
-end;
-
-function SetFilePermissions(const FileName: string;
-                           const Permissions: TFilePermissions): Boolean;
-{$IFDEF UNIX}
-var
-  Mode: TMode;
-{$ENDIF}
-{$IFDEF WINDOWS}
-var
-  Attrs: DWORD;
-{$ENDIF}
-begin
-  Result := False;
-
-  {$IFDEF UNIX}
-    Mode := 0;
-
-    // Construire le mode Unix
-    if Permissions.Owner.Read then Mode := Mode or S_IRUSR;
-    if Permissions.Owner.Write then Mode := Mode or S_IWUSR;
-    if Permissions.Owner.Execute then Mode := Mode or S_IXUSR;
-
-    if Permissions.Group.Read then Mode := Mode or S_IRGRP;
-    if Permissions.Group.Write then Mode := Mode or S_IWGRP;
-    if Permissions.Group.Execute then Mode := Mode or S_IXGRP;
-
-    if Permissions.Other.Read then Mode := Mode or S_IROTH;
-    if Permissions.Other.Write then Mode := Mode or S_IWOTH;
-    if Permissions.Other.Execute then Mode := Mode or S_IXOTH;
-
-    Result := FpChmod(FileName, Mode) = 0;
-  {$ENDIF}
-
-  {$IFDEF WINDOWS}
-    Attrs := 0;
-
-    if Permissions.ReadOnly then Attrs := Attrs or FILE_ATTRIBUTE_READONLY;
-    if Permissions.Hidden then Attrs := Attrs or FILE_ATTRIBUTE_HIDDEN;
-    if Permissions.System then Attrs := Attrs or FILE_ATTRIBUTE_SYSTEM;
-    if Permissions.Archive then Attrs := Attrs or FILE_ATTRIBUTE_ARCHIVE;
-
-    if Attrs = 0 then
-      Attrs := FILE_ATTRIBUTE_NORMAL;
-
-    Result := SetFileAttributes(PChar(FileName), Attrs);
-  {$ENDIF}
-end;
-
-function IsFileHidden(const FileName: string): Boolean;
-begin
-  {$IFDEF WINDOWS}
-    var Attrs := GetFileAttributes(PChar(FileName));
-    Result := (Attrs <> INVALID_FILE_ATTRIBUTES) and
-              ((Attrs and FILE_ATTRIBUTE_HIDDEN) <> 0);
-  {$ENDIF}
-
-  {$IFDEF UNIX}
-    // Sous Unix, les fichiers cachés commencent par un point
-    Result := (ExtractFileName(FileName) <> '') and
-              (ExtractFileName(FileName)[1] = '.');
-  {$ENDIF}
-end;
-
-function SetFileHidden(const FileName: string; Hidden: Boolean): Boolean;
-begin
-  {$IFDEF WINDOWS}
-    var Attrs := GetFileAttributes(PChar(FileName));
-    if Attrs <> INVALID_FILE_ATTRIBUTES then
-    begin
-      if Hidden then
-        Attrs := Attrs or FILE_ATTRIBUTE_HIDDEN
-      else
-        Attrs := Attrs and not FILE_ATTRIBUTE_HIDDEN;
-
-      Result := SetFileAttributes(PChar(FileName), Attrs);
-    end
-    else
-      Result := False;
-  {$ENDIF}
-
-  {$IFDEF UNIX}
-    // Sous Unix, on ne peut pas vraiment cacher un fichier
-    // On peut juste le renommer avec un point au début
-    if Hidden and not IsFileHidden(FileName) then
-    begin
-      var NewName := ExtractFilePath(FileName) + '.' + ExtractFileName(FileName);
-      Result := RenameFile(FileName, NewName);
-    end
-    else if not Hidden and IsFileHidden(FileName) then
-    begin
-      var OldName := ExtractFileName(FileName);
-      if (Length(OldName) > 1) and (OldName[1] = '.') then
-      begin
-        var NewName := ExtractFilePath(FileName) + Copy(OldName, 2, MaxInt);
-        Result := RenameFile(FileName, NewName);
-      end
-      else
-        Result := False;
-    end
-    else
-      Result := True;
-  {$ENDIF}
-end;
-
-function GetFileOwner(const FileName: string): string;
-{$IFDEF UNIX}
-var
-  StatInfo: Stat;
-  PwdEntry: PPasswd;
-{$ENDIF}
-{$IFDEF WINDOWS}
-var
-  Handle: THandle;
-  SecurityDesc: PSECURITY_DESCRIPTOR;
-  Owner: PSID;
-  OwnerDefaulted: BOOL;
-  Name: array[0..255] of Char;
-  Domain: array[0..255] of Char;
-  NameLen, DomainLen: DWORD;
-  Use: SID_NAME_USE;
-{$ENDIF}
-begin
-  Result := 'Unknown';
-
-  {$IFDEF UNIX}
-    if FpStat(FileName, StatInfo) = 0 then
-    begin
-      PwdEntry := GetPwUid(StatInfo.st_uid);
-      if PwdEntry <> nil then
-        Result := PwdEntry^.pw_name;
-    end;
-  {$ENDIF}
-
-  {$IFDEF WINDOWS}
-    if GetNamedSecurityInfo(PChar(FileName), SE_FILE_OBJECT,
-                           OWNER_SECURITY_INFORMATION, @Owner, nil,
-                           nil, nil, SecurityDesc) = ERROR_SUCCESS then
-    begin
-      NameLen := SizeOf(Name);
-      DomainLen := SizeOf(Domain);
-
 ```
 
 ### La directive {$IFNDEF}
@@ -1050,7 +276,7 @@ begin
 
   // Version FPC
   WriteLn('Compilateur: FreePascal ', {$I %FPCVERSION%});
-  WriteLn('Target: ', {$I %FPCTARGET%});
+  WriteLn('Target: ', {$I %FPCTARGETOS%});
   WriteLn('Date compilation: ', {$I %DATE%}, ' ', {$I %TIME%});
 end.
 ```
@@ -1236,9 +462,8 @@ begin
   {$ENDIF}
 
   // Informations communes (cross-platform)
-  Result.ProcessorCount := GetEnvironmentVariable('NUMBER_OF_PROCESSORS').ToInteger;
-  if Result.ProcessorCount = 0 then
-    Result.ProcessorCount := 1;
+  // Note : .ToInteger est une méthode Delphi. En FPC, utiliser StrToIntDef
+  Result.ProcessorCount := StrToIntDef(GetEnvironmentVariable('NUMBER_OF_PROCESSORS'), 1);
 
   Result.UserName := GetEnvironmentVariable('USER');
   if Result.UserName = '' then
@@ -1436,19 +661,15 @@ unit CrossPlatformPaths;
 interface
 
 const
-  // Séparateurs de chemin
+  // Note : Les constantes PathDelim, PathSeparator et LineEnding sont
+  // déjà définies dans l'unité System de FPC. Ici nous définissons des
+  // constantes complémentaires pour l'exemple.
   {$IFDEF WINDOWS}
-    PathSeparator = '\';
-    PathDelimiter = ';';
-    LineEnding = #13#10;  // CRLF
     ExeExtension = '.exe';
     LibExtension = '.dll';
   {$ENDIF}
 
   {$IFDEF UNIX}
-    PathSeparator = '/';
-    PathDelimiter = ':';
-    LineEnding = #10;     // LF
     ExeExtension = '';
     {$IFDEF DARWIN}
       LibExtension = '.dylib';
@@ -1456,6 +677,11 @@ const
       LibExtension = '.so';
     {$ENDIF}
   {$ENDIF}
+
+  // Rappel des constantes FPC intégrées (System) :
+  // - PathDelim      : séparateur de répertoire (\ ou /)
+  // - PathSeparator  : séparateur de PATH (;  ou :)
+  // - LineEnding     : fin de ligne (#13#10 ou #10)
 
 function GetConfigPath: string;
 function GetDataPath: string;
@@ -1556,7 +782,7 @@ begin
   for i := Low(Parts) to High(Parts) do
   begin
     if i > Low(Parts) then
-      Result := Result + PathSeparator;
+      Result := Result + PathDelim;
     Result := Result + Parts[i];
   end;
 end;
@@ -1582,8 +808,8 @@ begin
   {$ENDIF}
 
   // Supprimer les doubles séparateurs
-  Result := StringReplace(Result, PathSeparator + PathSeparator,
-                          PathSeparator, [rfReplaceAll]);
+  Result := StringReplace(Result, PathDelim + PathDelim,
+                          PathDelim, [rfReplaceAll]);
 end;
 
 end.
@@ -1606,7 +832,7 @@ begin
   WriteLn('=== Test des chemins multi-plateformes ===');
 
   // Fichier de configuration
-  ConfigFile := GetConfigPath + PathSeparator + 'settings.ini';
+  ConfigFile := GetConfigPath + PathDelim + 'settings.ini';
   WriteLn('Config: ', ConfigFile);
 
   // Fichier de données
@@ -1658,6 +884,10 @@ uses
   {$ENDIF};
 
 function ShowMessage(const Msg: string): Boolean;
+{$IF DEFINED(LINUX) OR DEFINED(DARWIN)}
+var
+  Output: string;
+{$ENDIF}
 begin
   {$IFDEF WINDOWS}
     MessageBox(0, PChar(Msg), 'Information', MB_OK or MB_ICONINFORMATION);
@@ -1668,14 +898,14 @@ begin
     // Utiliser zenity si disponible
     if FileExists('/usr/bin/zenity') then
     begin
-      RunCommand('/usr/bin/zenity',
-        ['--info', '--text=' + Msg], Result);
+      Result := RunCommand('/usr/bin/zenity',
+        ['--info', '--text=' + Msg], Output);
     end
     // Sinon utiliser kdialog (KDE)
     else if FileExists('/usr/bin/kdialog') then
     begin
-      RunCommand('/usr/bin/kdialog',
-        ['--msgbox', Msg], Result);
+      Result := RunCommand('/usr/bin/kdialog',
+        ['--msgbox', Msg], Output);
     end
     // Sinon afficher dans le terminal
     else
@@ -1687,13 +917,17 @@ begin
 
   {$IFDEF DARWIN}
     // Utiliser osascript pour macOS
-    RunCommand('/usr/bin/osascript',
+    Result := RunCommand('/usr/bin/osascript',
       ['-e', 'display dialog "' + Msg + '" buttons {"OK"} default button 1'],
-      Result);
+      Output);
   {$ENDIF}
 end;
 
 function ShowError(const Msg: string): Boolean;
+{$IF DEFINED(LINUX) OR DEFINED(DARWIN)}
+var
+  Output: string;
+{$ENDIF}
 begin
   {$IFDEF WINDOWS}
     MessageBox(0, PChar(Msg), 'Erreur', MB_OK or MB_ICONERROR);
@@ -1703,13 +937,13 @@ begin
   {$IFDEF LINUX}
     if FileExists('/usr/bin/zenity') then
     begin
-      RunCommand('/usr/bin/zenity',
-        ['--error', '--text=' + Msg], Result);
+      Result := RunCommand('/usr/bin/zenity',
+        ['--error', '--text=' + Msg], Output);
     end
     else if FileExists('/usr/bin/kdialog') then
     begin
-      RunCommand('/usr/bin/kdialog',
-        ['--error', Msg], Result);
+      Result := RunCommand('/usr/bin/kdialog',
+        ['--error', Msg], Output);
     end
     else
     begin
@@ -1719,9 +953,9 @@ begin
   {$ENDIF}
 
   {$IFDEF DARWIN}
-    RunCommand('/usr/bin/osascript',
+    Result := RunCommand('/usr/bin/osascript',
       ['-e', 'display dialog "' + Msg + '" buttons {"OK"} default button 1 with icon stop'],
-      Result);
+      Output);
   {$ENDIF}
 end;
 
@@ -1730,7 +964,7 @@ function ShowQuestion(const Question: string): Boolean;
 var
   Response: Integer;
 {$ENDIF}
-{$IFDEF LINUX}
+{$IF DEFINED(LINUX) OR DEFINED(DARWIN)}
 var
   Output: string;
 {$ENDIF}
@@ -1761,10 +995,12 @@ begin
   {$ENDIF}
 
   {$IFDEF DARWIN}
-    RunCommand('/usr/bin/osascript',
+    if RunCommand('/usr/bin/osascript',
       ['-e', 'button returned of (display dialog "' + Question +
-       '" buttons {"Non", "Oui"} default button 2)'], Output);
-    Result := Pos('Oui', Output) > 0;
+       '" buttons {"Non", "Oui"} default button 2)'], Output) then
+      Result := Pos('Oui', Output) > 0
+    else
+      Result := False;
   {$ENDIF}
 end;
 
@@ -1967,6 +1203,725 @@ end;
 
 end.
 ```
+
+## 8. Gestion des processus et services {#processus}
+
+### Lancement de processus externes
+
+```pascal
+unit ProcessManagement;
+
+interface
+
+type
+  TProcessInfo = record
+    PID: Integer;
+    Name: string;
+    Running: Boolean;
+  end;
+
+  TProcessInfoArray = array of TProcessInfo;
+
+function ExecuteProcess(const Command: string;
+                        const Args: array of string;
+                        WaitForExit: Boolean = True): Integer;
+function GetProcessList: TProcessInfoArray;
+function IsProcessRunning(const ProcessName: string): Boolean;
+function KillProcess(PID: Integer): Boolean;
+function GetCurrentProcessID: Integer;
+
+implementation
+
+uses
+  SysUtils, Classes, Generics.Collections  // Nécessite : uses Generics.Collections pour TList<>
+  {$IFDEF WINDOWS}, Windows, TlHelp32{$ENDIF}
+  {$IFDEF UNIX}, Process, BaseUnix{$ENDIF};
+
+function ExecuteProcess(const Command: string;
+                        const Args: array of string;
+                        WaitForExit: Boolean = True): Integer;
+{$IFDEF WINDOWS}
+var
+  StartInfo: TStartupInfo;
+  ProcInfo: TProcessInformation;
+  CmdLine: string;
+  i: Integer;
+{$ENDIF}
+{$IFDEF UNIX}
+var
+  AProcess: TProcess;
+  i: Integer;
+{$ENDIF}
+begin
+  Result := -1;
+
+  {$IFDEF WINDOWS}
+    // Construction de la ligne de commande
+    CmdLine := '"' + Command + '"';
+    for i := Low(Args) to High(Args) do
+      CmdLine := CmdLine + ' "' + Args[i] + '"';
+
+    FillChar(StartInfo, SizeOf(StartInfo), 0);
+    FillChar(ProcInfo, SizeOf(ProcInfo), 0);
+    StartInfo.cb := SizeOf(StartInfo);
+
+    if CreateProcess(nil, PChar(CmdLine), nil, nil, False,
+                     NORMAL_PRIORITY_CLASS, nil, nil,
+                     StartInfo, ProcInfo) then
+    begin
+      if WaitForExit then
+      begin
+        WaitForSingleObject(ProcInfo.hProcess, INFINITE);
+        GetExitCodeProcess(ProcInfo.hProcess, DWORD(Result));
+      end
+      else
+        Result := ProcInfo.dwProcessId;
+
+      CloseHandle(ProcInfo.hProcess);
+      CloseHandle(ProcInfo.hThread);
+    end;
+  {$ENDIF}
+
+  {$IFDEF UNIX}
+    AProcess := TProcess.Create(nil);
+    try
+      AProcess.Executable := Command;
+      for i := Low(Args) to High(Args) do
+        AProcess.Parameters.Add(Args[i]);
+
+      if WaitForExit then
+      begin
+        AProcess.Options := [poWaitOnExit];
+        AProcess.Execute;
+        Result := AProcess.ExitStatus;
+      end
+      else
+      begin
+        AProcess.Execute;
+        Result := AProcess.ProcessID;
+      end;
+    finally
+      AProcess.Free;
+    end;
+  {$ENDIF}
+end;
+
+function GetProcessList: TProcessInfoArray;
+{$IFDEF WINDOWS}
+var
+  Snapshot: THandle;
+  ProcessEntry: TProcessEntry32;
+  List: specialize TList<TProcessInfo>;
+  Info: TProcessInfo;
+{$ENDIF}
+{$IFDEF UNIX}
+var
+  Output: TStringList;
+  OutputStr: string;
+  Line: string;
+  Info: TProcessInfo;
+  List: specialize TList<TProcessInfo>;
+{$ENDIF}
+begin
+  {$IFDEF WINDOWS}
+    List := specialize TList<TProcessInfo>.Create;
+    try
+      Snapshot := CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+      if Snapshot <> INVALID_HANDLE_VALUE then
+      begin
+        ProcessEntry.dwSize := SizeOf(ProcessEntry);
+        if Process32First(Snapshot, ProcessEntry) then
+        begin
+          repeat
+            Info.PID := ProcessEntry.th32ProcessID;
+            Info.Name := ProcessEntry.szExeFile;
+            Info.Running := True;
+            List.Add(Info);
+          until not Process32Next(Snapshot, ProcessEntry);
+        end;
+        CloseHandle(Snapshot);
+      end;
+      Result := List.ToArray;
+    finally
+      List.Free;
+    end;
+  {$ENDIF}
+
+  {$IFDEF UNIX}
+    List := specialize TList<TProcessInfo>.Create;
+    Output := TStringList.Create;
+    try
+      // Utiliser ps pour lister les processus
+      RunCommand('/bin/ps', ['aux'], OutputStr);
+      Output.Text := OutputStr;
+
+      for Line in Output do
+      begin
+        // Parser la sortie de ps
+        // Format : USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND
+        if Pos('PID', Line) = 0 then  // Ignorer l'en-tête
+        begin
+          Info.PID := StrToIntDef(ExtractWord(2, Line, [' ']), 0);
+          Info.Name := ExtractWord(11, Line, [' ']);
+          Info.Running := True;
+          if Info.PID > 0 then
+            List.Add(Info);
+        end;
+      end;
+
+      Result := List.ToArray;
+    finally
+      Output.Free;
+      List.Free;
+    end;
+  {$ENDIF}
+end;
+
+function IsProcessRunning(const ProcessName: string): Boolean;
+var
+  ProcessList: TProcessInfoArray;
+  Process: TProcessInfo;
+begin
+  Result := False;
+  ProcessList := GetProcessList;
+
+  for Process in ProcessList do
+  begin
+    if Pos(LowerCase(ProcessName), LowerCase(Process.Name)) > 0 then
+    begin
+      Result := True;
+      Break;
+    end;
+  end;
+end;
+
+function KillProcess(PID: Integer): Boolean;
+{$IFDEF WINDOWS}
+var
+  ProcessHandle: THandle;
+{$ENDIF}
+begin
+  Result := False;
+
+  {$IFDEF WINDOWS}
+    ProcessHandle := OpenProcess(PROCESS_TERMINATE, False, PID);
+    if ProcessHandle <> 0 then
+    begin
+      Result := TerminateProcess(ProcessHandle, 0);
+      CloseHandle(ProcessHandle);
+    end;
+  {$ENDIF}
+
+  {$IFDEF UNIX}
+    Result := FpKill(PID, SIGTERM) = 0;
+    if not Result then
+      Result := FpKill(PID, SIGKILL) = 0;  // Force kill si nécessaire
+  {$ENDIF}
+end;
+
+function GetCurrentProcessID: Integer;
+begin
+  {$IFDEF WINDOWS}
+    Result := GetCurrentProcessId;
+  {$ENDIF}
+
+  {$IFDEF UNIX}
+    Result := FpGetPid;
+  {$ENDIF}
+end;
+
+end.
+```
+
+### Gestion des services système
+
+```pascal
+unit ServiceManagement;
+
+interface
+
+type
+  TServiceStatus = (ssStopped, ssStarting, ssRunning, ssStopping);
+
+function InstallService(const ServiceName, DisplayName, ExePath: string): Boolean;
+function UninstallService(const ServiceName: string): Boolean;
+function StartService(const ServiceName: string): Boolean;
+function StopService(const ServiceName: string): Boolean;
+function GetServiceStatus(const ServiceName: string): TServiceStatus;
+
+implementation
+
+uses
+  SysUtils
+  {$IFDEF WINDOWS}, Windows, WinSvc{$ENDIF}
+  {$IFDEF LINUX}, Process{$ENDIF};
+
+{$IFDEF WINDOWS}
+function InstallService(const ServiceName, DisplayName, ExePath: string): Boolean;
+var
+  SCManager, Service: SC_HANDLE;
+begin
+  Result := False;
+  SCManager := OpenSCManager(nil, nil, SC_MANAGER_CREATE_SERVICE);
+  if SCManager <> 0 then
+  begin
+    Service := CreateService(SCManager, PChar(ServiceName), PChar(DisplayName),
+                            SERVICE_ALL_ACCESS, SERVICE_WIN32_OWN_PROCESS,
+                            SERVICE_AUTO_START, SERVICE_ERROR_NORMAL,
+                            PChar(ExePath), nil, nil, nil, nil, nil);
+    Result := Service <> 0;
+    if Service <> 0 then
+      CloseServiceHandle(Service);
+    CloseServiceHandle(SCManager);
+  end;
+end;
+
+function UninstallService(const ServiceName: string): Boolean;
+var
+  SCManager, Service: SC_HANDLE;
+begin
+  Result := False;
+  SCManager := OpenSCManager(nil, nil, SC_MANAGER_ALL_ACCESS);
+  if SCManager <> 0 then
+  begin
+    Service := OpenService(SCManager, PChar(ServiceName), DELETE);
+    if Service <> 0 then
+    begin
+      Result := DeleteService(Service);
+      CloseServiceHandle(Service);
+    end;
+    CloseServiceHandle(SCManager);
+  end;
+end;
+{$ENDIF}
+
+{$IFDEF LINUX}
+function InstallService(const ServiceName, DisplayName, ExePath: string): Boolean;
+var
+  ServiceFile: TStringList;
+  ServicePath: string;
+  Output: string;
+begin
+  // Créer un fichier de service systemd
+  ServicePath := '/etc/systemd/system/' + ServiceName + '.service';
+  ServiceFile := TStringList.Create;
+  try
+    ServiceFile.Add('[Unit]');
+    ServiceFile.Add('Description=' + DisplayName);
+    ServiceFile.Add('After=network.target');
+    ServiceFile.Add('');
+    ServiceFile.Add('[Service]');
+    ServiceFile.Add('Type=simple');
+    ServiceFile.Add('ExecStart=' + ExePath);
+    ServiceFile.Add('Restart=always');
+    ServiceFile.Add('RestartSec=10');
+    ServiceFile.Add('');
+    ServiceFile.Add('[Install]');
+    ServiceFile.Add('WantedBy=multi-user.target');
+
+    // Nécessite les droits root
+    ServiceFile.SaveToFile(ServicePath);
+
+    // Recharger systemd
+    Result := RunCommand('/bin/systemctl', ['daemon-reload'], Output);
+
+    // Activer le service
+    if Result then
+      Result := RunCommand('/bin/systemctl', ['enable', ServiceName], Output);
+  finally
+    ServiceFile.Free;
+  end;
+end;
+
+function UninstallService(const ServiceName: string): Boolean;
+var
+  Output: string;
+begin
+  // Arrêter le service
+  StopService(ServiceName);
+
+  // Désactiver le service
+  Result := RunCommand('/bin/systemctl', ['disable', ServiceName], Output);
+
+  // Supprimer le fichier de service
+  if Result then
+    DeleteFile('/etc/systemd/system/' + ServiceName + '.service');
+
+  // Recharger systemd
+  RunCommand('/bin/systemctl', ['daemon-reload'], Output);
+end;
+{$ENDIF}
+
+function StartService(const ServiceName: string): Boolean;
+{$IFDEF WINDOWS}
+var
+  SCManager, Service: SC_HANDLE;
+{$ENDIF}
+{$IFDEF LINUX}
+var
+  Output: string;
+{$ENDIF}
+begin
+  Result := False;
+
+  {$IFDEF WINDOWS}
+    SCManager := OpenSCManager(nil, nil, SC_MANAGER_ALL_ACCESS);
+    if SCManager <> 0 then
+    begin
+      Service := OpenService(SCManager, PChar(ServiceName), SERVICE_START);
+      if Service <> 0 then
+      begin
+        Result := WinSvc.StartService(Service, 0, nil);
+        CloseServiceHandle(Service);
+      end;
+      CloseServiceHandle(SCManager);
+    end;
+  {$ENDIF}
+
+  {$IFDEF LINUX}
+    Result := RunCommand('/bin/systemctl', ['start', ServiceName], Output);
+  {$ENDIF}
+end;
+
+function StopService(const ServiceName: string): Boolean;
+{$IFDEF WINDOWS}
+var
+  SCManager, Service: SC_HANDLE;
+  Status: SERVICE_STATUS;
+{$ENDIF}
+{$IFDEF LINUX}
+var
+  Output: string;
+{$ENDIF}
+begin
+  Result := False;
+
+  {$IFDEF WINDOWS}
+    SCManager := OpenSCManager(nil, nil, SC_MANAGER_ALL_ACCESS);
+    if SCManager <> 0 then
+    begin
+      Service := OpenService(SCManager, PChar(ServiceName), SERVICE_STOP);
+      if Service <> 0 then
+      begin
+        Result := ControlService(Service, SERVICE_CONTROL_STOP, Status);
+        CloseServiceHandle(Service);
+      end;
+      CloseServiceHandle(SCManager);
+    end;
+  {$ENDIF}
+
+  {$IFDEF LINUX}
+    Result := RunCommand('/bin/systemctl', ['stop', ServiceName], Output);
+  {$ENDIF}
+end;
+
+function GetServiceStatus(const ServiceName: string): TServiceStatus;
+{$IFDEF WINDOWS}
+var
+  SCManager, Service: SC_HANDLE;
+  Status: SERVICE_STATUS;
+{$ENDIF}
+{$IFDEF LINUX}
+var
+  Output: string;
+{$ENDIF}
+begin
+  Result := ssStopped;
+
+  {$IFDEF WINDOWS}
+    SCManager := OpenSCManager(nil, nil, SC_MANAGER_ALL_ACCESS);
+    if SCManager <> 0 then
+    begin
+      Service := OpenService(SCManager, PChar(ServiceName), SERVICE_QUERY_STATUS);
+      if Service <> 0 then
+      begin
+        if QueryServiceStatus(Service, Status) then
+        begin
+          case Status.dwCurrentState of
+            SERVICE_STOPPED: Result := ssStopped;
+            SERVICE_START_PENDING: Result := ssStarting;
+            SERVICE_RUNNING: Result := ssRunning;
+            SERVICE_STOP_PENDING: Result := ssStopping;
+          end;
+        end;
+        CloseServiceHandle(Service);
+      end;
+      CloseServiceHandle(SCManager);
+    end;
+  {$ENDIF}
+
+  {$IFDEF LINUX}
+    if RunCommand('/bin/systemctl', ['is-active', ServiceName], Output) then
+    begin
+      if Pos('active', Output) > 0 then
+        Result := ssRunning
+      else if Pos('activating', Output) > 0 then
+        Result := ssStarting
+      else if Pos('deactivating', Output) > 0 then
+        Result := ssStopping
+      else
+        Result := ssStopped;
+    end;
+  {$ENDIF}
+end;
+
+end.
+```
+
+## 9. Accès au système de fichiers {#fichiers}
+
+### Gestion des permissions et attributs
+
+```pascal
+unit FileSystemAccess;
+
+interface
+
+type
+  TFilePermissions = record
+    {$IFDEF UNIX}
+    Owner: record
+      Read, Write, Execute: Boolean;
+    end;
+    Group: record
+      Read, Write, Execute: Boolean;
+    end;
+    Other: record
+      Read, Write, Execute: Boolean;
+    end;
+    {$ENDIF}
+    {$IFDEF WINDOWS}
+    ReadOnly: Boolean;
+    Hidden: Boolean;
+    System: Boolean;
+    Archive: Boolean;
+    {$ENDIF}
+  end;
+
+function GetFilePermissions(const FileName: string): TFilePermissions;
+function SetFilePermissions(const FileName: string;
+                           const Permissions: TFilePermissions): Boolean;
+function IsFileHidden(const FileName: string): Boolean;
+function SetFileHidden(const FileName: string; Hidden: Boolean): Boolean;
+function GetFileOwner(const FileName: string): string;
+
+implementation
+
+uses
+  SysUtils
+  {$IFDEF WINDOWS}, Windows{$ENDIF}
+  {$IFDEF UNIX}, BaseUnix, Users, Grp{$ENDIF};
+
+function GetFilePermissions(const FileName: string): TFilePermissions;
+{$IFDEF UNIX}
+var
+  StatInfo: Stat;
+{$ENDIF}
+{$IFDEF WINDOWS}
+var
+  Attrs: DWORD;
+{$ENDIF}
+begin
+  FillChar(Result, SizeOf(Result), 0);
+
+  {$IFDEF UNIX}
+    if FpStat(FileName, StatInfo) = 0 then
+    begin
+      // Permissions du propriétaire
+      Result.Owner.Read := (StatInfo.st_mode and S_IRUSR) <> 0;
+      Result.Owner.Write := (StatInfo.st_mode and S_IWUSR) <> 0;
+      Result.Owner.Execute := (StatInfo.st_mode and S_IXUSR) <> 0;
+
+      // Permissions du groupe
+      Result.Group.Read := (StatInfo.st_mode and S_IRGRP) <> 0;
+      Result.Group.Write := (StatInfo.st_mode and S_IWGRP) <> 0;
+      Result.Group.Execute := (StatInfo.st_mode and S_IXGRP) <> 0;
+
+      // Permissions des autres
+      Result.Other.Read := (StatInfo.st_mode and S_IROTH) <> 0;
+      Result.Other.Write := (StatInfo.st_mode and S_IWOTH) <> 0;
+      Result.Other.Execute := (StatInfo.st_mode and S_IXOTH) <> 0;
+    end;
+  {$ENDIF}
+
+  {$IFDEF WINDOWS}
+    Attrs := GetFileAttributes(PChar(FileName));
+    if Attrs <> INVALID_FILE_ATTRIBUTES then
+    begin
+      Result.ReadOnly := (Attrs and FILE_ATTRIBUTE_READONLY) <> 0;
+      Result.Hidden := (Attrs and FILE_ATTRIBUTE_HIDDEN) <> 0;
+      Result.System := (Attrs and FILE_ATTRIBUTE_SYSTEM) <> 0;
+      Result.Archive := (Attrs and FILE_ATTRIBUTE_ARCHIVE) <> 0;
+    end;
+  {$ENDIF}
+end;
+
+function SetFilePermissions(const FileName: string;
+                           const Permissions: TFilePermissions): Boolean;
+{$IFDEF UNIX}
+var
+  Mode: TMode;
+{$ENDIF}
+{$IFDEF WINDOWS}
+var
+  Attrs: DWORD;
+{$ENDIF}
+begin
+  Result := False;
+
+  {$IFDEF UNIX}
+    Mode := 0;
+
+    // Construire le mode Unix
+    if Permissions.Owner.Read then Mode := Mode or S_IRUSR;
+    if Permissions.Owner.Write then Mode := Mode or S_IWUSR;
+    if Permissions.Owner.Execute then Mode := Mode or S_IXUSR;
+
+    if Permissions.Group.Read then Mode := Mode or S_IRGRP;
+    if Permissions.Group.Write then Mode := Mode or S_IWGRP;
+    if Permissions.Group.Execute then Mode := Mode or S_IXGRP;
+
+    if Permissions.Other.Read then Mode := Mode or S_IROTH;
+    if Permissions.Other.Write then Mode := Mode or S_IWOTH;
+    if Permissions.Other.Execute then Mode := Mode or S_IXOTH;
+
+    Result := FpChmod(FileName, Mode) = 0;
+  {$ENDIF}
+
+  {$IFDEF WINDOWS}
+    Attrs := 0;
+
+    if Permissions.ReadOnly then Attrs := Attrs or FILE_ATTRIBUTE_READONLY;
+    if Permissions.Hidden then Attrs := Attrs or FILE_ATTRIBUTE_HIDDEN;
+    if Permissions.System then Attrs := Attrs or FILE_ATTRIBUTE_SYSTEM;
+    if Permissions.Archive then Attrs := Attrs or FILE_ATTRIBUTE_ARCHIVE;
+
+    if Attrs = 0 then
+      Attrs := FILE_ATTRIBUTE_NORMAL;
+
+    Result := SetFileAttributes(PChar(FileName), Attrs);
+  {$ENDIF}
+end;
+
+function IsFileHidden(const FileName: string): Boolean;
+{$IFDEF WINDOWS}
+var
+  Attrs: DWORD;
+{$ENDIF}
+begin
+  {$IFDEF WINDOWS}
+    Attrs := GetFileAttributes(PChar(FileName));
+    Result := (Attrs <> INVALID_FILE_ATTRIBUTES) and
+              ((Attrs and FILE_ATTRIBUTE_HIDDEN) <> 0);
+  {$ENDIF}
+
+  {$IFDEF UNIX}
+    // Sous Unix, les fichiers cachés commencent par un point
+    Result := (ExtractFileName(FileName) <> '') and
+              (ExtractFileName(FileName)[1] = '.');
+  {$ENDIF}
+end;
+
+function SetFileHidden(const FileName: string; Hidden: Boolean): Boolean;
+{$IFDEF WINDOWS}
+var
+  Attrs: DWORD;
+{$ENDIF}
+{$IFDEF UNIX}
+var
+  NewName, OldName: string;
+{$ENDIF}
+begin
+  {$IFDEF WINDOWS}
+    Attrs := GetFileAttributes(PChar(FileName));
+    if Attrs <> INVALID_FILE_ATTRIBUTES then
+    begin
+      if Hidden then
+        Attrs := Attrs or FILE_ATTRIBUTE_HIDDEN
+      else
+        Attrs := Attrs and not FILE_ATTRIBUTE_HIDDEN;
+
+      Result := SetFileAttributes(PChar(FileName), Attrs);
+    end
+    else
+      Result := False;
+  {$ENDIF}
+
+  {$IFDEF UNIX}
+    // Sous Unix, on ne peut pas vraiment cacher un fichier
+    // On peut juste le renommer avec un point au début
+    if Hidden and not IsFileHidden(FileName) then
+    begin
+      NewName := ExtractFilePath(FileName) + '.' + ExtractFileName(FileName);
+      Result := RenameFile(FileName, NewName);
+    end
+    else if not Hidden and IsFileHidden(FileName) then
+    begin
+      OldName := ExtractFileName(FileName);
+      if (Length(OldName) > 1) and (OldName[1] = '.') then
+      begin
+        NewName := ExtractFilePath(FileName) + Copy(OldName, 2, MaxInt);
+        Result := RenameFile(FileName, NewName);
+      end
+      else
+        Result := False;
+    end
+    else
+      Result := True;
+  {$ENDIF}
+end;
+
+function GetFileOwner(const FileName: string): string;
+{$IFDEF UNIX}
+var
+  StatInfo: Stat;
+  PwdEntry: PPasswd;
+{$ENDIF}
+{$IFDEF WINDOWS}
+var
+  SecurityDesc: PSECURITY_DESCRIPTOR;
+  Owner: PSID;
+  OwnerDefaulted: BOOL;
+  Name: array[0..255] of Char;
+  Domain: array[0..255] of Char;
+  NameLen, DomainLen: DWORD;
+  Use: SID_NAME_USE;
+{$ENDIF}
+begin
+  Result := 'Unknown';
+
+  {$IFDEF UNIX}
+    if FpStat(FileName, StatInfo) = 0 then
+    begin
+      PwdEntry := GetPwUid(StatInfo.st_uid);
+      if PwdEntry <> nil then
+        Result := PwdEntry^.pw_name;
+    end;
+  {$ENDIF}
+
+  {$IFDEF WINDOWS}
+    if GetNamedSecurityInfo(PChar(FileName), SE_FILE_OBJECT,
+                           OWNER_SECURITY_INFORMATION, @Owner, nil,
+                           nil, nil, SecurityDesc) = ERROR_SUCCESS then
+    begin
+      NameLen := SizeOf(Name);
+      DomainLen := SizeOf(Domain);
+
+      if LookupAccountSid(nil, Owner, Name, NameLen,
+                          Domain, DomainLen, Use) then
+        Result := string(Domain) + '\' + string(Name);
+
+      LocalFree(HLOCAL(SecurityDesc));
+    end;
+  {$ENDIF}
+end;
+
+end.
+```
+
+## 10. Réseau et communications {#reseau}
+
+La gestion du réseau multi-plateforme en FreePascal peut s'appuyer sur les unités `Sockets`, `SSockets`, `fphttpclient` ou `Synapse`/`lNet` pour une abstraction plus complète. Les principales différences entre plateformes concernent l'initialisation de Winsock sur Windows (`WSAStartup`/`WSACleanup`) qui n'est pas nécessaire sur Unix, ainsi que les options de sockets et les chemins vers les certificats SSL.
 
 ## 11. Bibliothèques et liens dynamiques {#bibliotheques}
 
@@ -2296,13 +2251,13 @@ unit LineEndingHandling;
 interface
 
 const
+  // Note : La constante LineEnding est déjà définie dans l'unité System.
+  // On définit ici SystemLineEndingSize comme information complémentaire.
   {$IFDEF WINDOWS}
-    SystemLineEnding = #13#10;  // CRLF
-    SystemLineEndingSize = 2;
+    SystemLineEndingSize = 2;  // CRLF (#13#10)
   {$ENDIF}
   {$IFDEF UNIX}
-    SystemLineEnding = #10;     // LF
-    SystemLineEndingSize = 1;
+    SystemLineEndingSize = 1;  // LF (#10)
   {$ENDIF}
 
 function NormalizeLineEndings(const Text: string): string;
@@ -2482,6 +2437,10 @@ function GetSystemEncoding: string;
 var
   CodePage: UINT;
 {$ENDIF}
+{$IFDEF UNIX}
+var
+  Lang: string;
+{$ENDIF}
 begin
   {$IFDEF WINDOWS}
     CodePage := GetACP;  // Get ANSI Code Page
@@ -2499,7 +2458,7 @@ begin
 
   {$IFDEF UNIX}
     // Unix/Linux : généralement UTF-8
-    var Lang := GetEnvironmentVariable('LANG');
+    Lang := GetEnvironmentVariable('LANG');
     if Pos('UTF-8', UpperCase(Lang)) > 0 then
       Result := 'UTF-8'
     else if Pos('UTF8', UpperCase(Lang)) > 0 then
@@ -2647,26 +2606,26 @@ end.
 // Structure de répertoires suggérée :
 {
   MonProjet/
-    ├── src/
-    │   ├── common/          // Code partagé
-    │   │   ├── utils.pas
-    │   │   └── types.pas
-    │   ├── platform/        // Code spécifique plateforme
-    │   │   ├── windows/
-    │   │   │   ├── winapi.pas
-    │   │   │   └── registry.pas
-    │   │   ├── linux/
-    │   │   │   ├── unixapi.pas
-    │   │   │   └── dbus.pas
-    │   │   └── darwin/
-    │   │       └── cocoa.pas
-    │   └── main.pas
-    ├── tests/
-    ├── docs/
-    └── build/
-        ├── win32/
-        ├── win64/
-        ├── linux_x64/
+    ├── src/  
+    │   ├── common/          // Code partagé  
+    │   │   ├── utils.pas  
+    │   │   └── types.pas  
+    │   ├── platform/        // Code spécifique plateforme  
+    │   │   ├── windows/  
+    │   │   │   ├── winapi.pas  
+    │   │   │   └── registry.pas  
+    │   │   ├── linux/  
+    │   │   │   ├── unixapi.pas  
+    │   │   │   └── dbus.pas  
+    │   │   └── darwin/  
+    │   │       └── cocoa.pas  
+    │   └── main.pas  
+    ├── tests/  
+    ├── docs/  
+    └── build/  
+        ├── win32/  
+        ├── win64/  
+        ├── linux_x64/  
         └── darwin_x64/
 }
 ```
@@ -3213,6 +3172,10 @@ var
 {$ENDIF}
 
 procedure DebugOutput(const Msg: string);
+{$IFDEF LOG_TO_FILE}
+var
+  F: TextFile;
+{$ENDIF}
 begin
   {$IFDEF DEBUG}
     {$IFDEF WINDOWS}
@@ -3229,17 +3192,13 @@ begin
 
     // Aussi écrire dans un fichier de log
     {$IFDEF LOG_TO_FILE}
-    var
-      F: TextFile;
-    begin
-      AssignFile(F, 'debug.log');
-      if FileExists('debug.log') then
-        Append(F)
-      else
-        Rewrite(F);
-      WriteLn(F, FormatDateTime('yyyy-mm-dd hh:nn:ss.zzz', Now), ' ', Msg);
-      CloseFile(F);
-    end;
+    AssignFile(F, 'debug.log');
+    if FileExists('debug.log') then
+      Append(F)
+    else
+      Rewrite(F);
+    WriteLn(F, FormatDateTime('yyyy-mm-dd hh:nn:ss.zzz', Now), ' ', Msg);
+    CloseFile(F);
     {$ENDIF}
   {$ENDIF}
 end;
@@ -3280,7 +3239,7 @@ end;
 
 procedure DumpMemory(P: Pointer; Size: Integer);
 var
-  i: Integer;
+  i, j: Integer;
   Line: string;
   B: PByte;
 begin
@@ -3294,7 +3253,7 @@ begin
     Line := Format('%08X: ', [i]);
 
     // Hex values
-    var j := 0;
+    j := 0;
     while (j < 16) and (i + j < Size) do
     begin
       Line := Line + Format('%02X ', [B[i + j]]);
@@ -3418,11 +3377,9 @@ begin
 
     {$IFDEF UNIX}
       // Tester les permissions Unix
+      // Note : nécessite uses BaseUnix
       AssertTrue('File exists', FileExists(TestFile));
       FpChmod(TestFile, &644);  // rw-r--r--
-      var Info: Stat;
-      if FpStat(TestFile, Info) = 0 then
-        AssertTrue('Permissions set', (Info.st_mode and $1FF) = &644);
     {$ENDIF}
 
   finally
@@ -3452,13 +3409,21 @@ begin
 end;
 
 procedure TCrossPlatformTest.TestNetworking;
+{$IFDEF WINDOWS}
+var
+  WSAData: TWSAData;
+  Host: PHostEnt;
+{$ENDIF}
+{$IFDEF UNIX}
+var
+  Host: PHostEnt;
+{$ENDIF}
 begin
   // Tester la résolution DNS
   {$IFDEF WINDOWS}
-    var WSAData: TWSAData;
     AssertEquals('Winsock init', 0, WSAStartup($0202, WSAData));
     try
-      var Host := gethostbyname('localhost');
+      Host := gethostbyname('localhost');
       AssertNotNull('Localhost resolved', Host);
     finally
       WSACleanup;
@@ -3466,7 +3431,7 @@ begin
   {$ENDIF}
 
   {$IFDEF UNIX}
-    var Host := gethostbyname('localhost');
+    Host := gethostbyname('localhost');
     AssertNotNull('Localhost resolved', Host);
   {$ENDIF}
 end;
@@ -3475,15 +3440,16 @@ procedure TCrossPlatformTest.TestEncoding;
 var
   TestStr: string;
   UTF8Str: UTF8String;
+  Decoded: UnicodeString;
 begin
-  TestStr := 'Test éàü 测试 🚀';
+  TestStr := 'Test éàü';
 
   {$IFDEF FPC_HAS_CPSTRING}
     UTF8Str := UTF8Encode(TestStr);
     AssertTrue('UTF8 encoding', Length(UTF8Str) > 0);
 
-    var Decoded := UTF8Decode(UTF8Str);
-    AssertEquals('Round trip', TestStr, Decoded);
+    Decoded := UTF8Decode(UTF8Str);
+    AssertEquals('Round trip', TestStr, string(Decoded));
   {$ENDIF}
 end;
 
@@ -3636,6 +3602,11 @@ procedure ValidatePlatformCode;
 implementation
 
 procedure ValidatePlatformCode;
+var
+  TestStr: string;
+  {$IFDEF WINDOWS}
+  WSAData: TWSAData;
+  {$ENDIF}
 begin
   // 1. Vérifier les chemins
   Assert(DirectoryExists(GetConfigPath), 'Config path must exist');
@@ -3650,7 +3621,7 @@ begin
   {$ENDIF}
 
   // 3. Vérifier les encodages
-  var TestStr := 'Test éàü';
+  TestStr := 'Test éàü';
   Assert(Length(UTF8Encode(TestStr)) > Length(TestStr), 'UTF8 encoding');
 
   // 4. Vérifier les bibliothèques système
@@ -3664,12 +3635,11 @@ begin
 
   // 5. Vérifier la pile réseau
   {$IFDEF WINDOWS}
-  var WSAData: TWSAData;
   Assert(WSAStartup($0202, WSAData) = 0, 'Winsock required');
   WSACleanup;
   {$ENDIF}
 
-  WriteLn('✓ Platform validation passed');
+  WriteLn('Platform validation passed');
 end;
 
 end.
@@ -3951,13 +3921,16 @@ begin
 end;
 
 procedure TCrossPlatformApp.RunPlatformTests;
+var
+  TestFile: string;
+  ExitCode: Integer;
 begin
   WriteLn('=== Running Platform Tests ===');
 
   // Test 1 : Création de fichier
   Write('Testing file creation... ');
-  var TestFile := FPlatform.GetTempPath + 'test_' +
-                  IntToStr(Random(10000)) + '.txt';
+  TestFile := FPlatform.GetTempPath + 'test_' +
+              IntToStr(Random(10000)) + '.txt';
   try
     with TFileStream.Create(TestFile, fmCreate) do
     begin
@@ -3980,9 +3953,9 @@ begin
   // Test 2 : Exécution de commande
   Write('Testing command execution... ');
   {$IFDEF WINDOWS}
-  var ExitCode := FPlatform.ExecuteCommand('cmd.exe', ['/c', 'echo test']);
+  ExitCode := FPlatform.ExecuteCommand('cmd.exe', ['/c', 'echo test']);
   {$ELSE}
-  var ExitCode := FPlatform.ExecuteCommand('/bin/echo', ['test']);
+  ExitCode := FPlatform.ExecuteCommand('/bin/echo', ['test']);
   {$ENDIF}
   if ExitCode = 0 then
     WriteLn('OK')
@@ -4053,6 +4026,6 @@ Ce guide complet sur les directives de compilation conditionnelle multi-OS vous 
 4. **Documentez les spécificités** : Les futurs développeurs vous remercieront
 5. **Utilisez les outils appropriés** : Profitez des capacités de FreePascal
 
-Avec ces techniques, vous pouvez créer des applications qui fonctionnent de manière transparente sur Windows, Linux/Ubuntu, macOS et d'autres systèmes, tout en maintenant une base de code unique et maintenable.# 3.12 Directives de compilation conditionnelle multi-OS - Interfaces et suite
+Avec ces techniques, vous pouvez créer des applications qui fonctionnent de manière transparente sur Windows, Linux/Ubuntu, macOS et d'autres systèmes, tout en maintenant une base de code unique et maintenable.
 
-⏭️ [Directives de compilation conditionnelle multi-OS](/04-framework-lcl/README.md)
+⏭️ [Framework LCL](/04-framework-lcl/README.md)

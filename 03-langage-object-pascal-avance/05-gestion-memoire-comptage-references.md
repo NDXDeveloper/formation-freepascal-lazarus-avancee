@@ -321,8 +321,8 @@ end;
 type
   TRefCountedObject = class(TInterfacedObject)
   protected
-    function _AddRef: Integer; stdcall;
-    function _Release: Integer; stdcall;
+    function _AddRef: Integer; {$IFDEF WINDOWS}stdcall{$ELSE}cdecl{$ENDIF};
+    function _Release: Integer; {$IFDEF WINDOWS}stdcall{$ELSE}cdecl{$ENDIF};
   public
     constructor Create;
     destructor Destroy; override;
@@ -1574,8 +1574,8 @@ begin
 
   BitFlags := TBitFlags.Create(1000);
   try
-    WriteLn('BitFlags : ', Length(BitFlags.FData), ' octets');
-    WriteLn('Économie : ', SizeOf(BoolArray) - Length(BitFlags.FData), ' octets');
+    WriteLn('BitFlags : environ 125 octets');
+    WriteLn('Économie : environ ', SizeOf(BoolArray) - 125, ' octets');
   finally
     BitFlags.Free;
   end;
@@ -1762,7 +1762,7 @@ type
     FItems: TDictionary<TKey, TCacheItem<TValue>>;
     FMaxSize: Integer;
     FDefaultTTL: Integer; // Time To Live en secondes
-    FLock: TReaderWriterLock;
+    FLock: TMultiReadExclusiveWriteSynchronizer;
 
     procedure EvictLRU;
     procedure CleanExpired;
@@ -1781,7 +1781,7 @@ begin
   FItems := TDictionary<TKey, TCacheItem<TValue>>.Create;
   FMaxSize := AMaxSize;
   FDefaultTTL := ATTL;
-  FLock := TReaderWriterLock.Create;
+  FLock := TMultiReadExclusiveWriteSynchronizer.Create;
 end;
 
 destructor TSmartCache<TKey, TValue>.Destroy;
@@ -1909,6 +1909,9 @@ end;
 
 ```pascal
 type
+  // Type de fonction factory pour créer des objets
+  TObjectFactory = function: TObject;
+
   // Gestionnaire de ressources avec comptage de références
   TResourceManager = class
   private
@@ -1930,7 +1933,7 @@ type
     destructor Destroy; override;
 
     function AcquireResource(const Name: String;
-                           Factory: TFunc<TObject>): TObject;
+                           Factory: TObjectFactory): TObject;
     procedure ReleaseResource(const Name: String);
     procedure PrintStatistics;
   end;
@@ -1967,7 +1970,7 @@ begin
 end;
 
 function TResourceManager.AcquireResource(const Name: String;
-                                         Factory: TFunc<TObject>): TObject;
+                                         Factory: TObjectFactory): TObject;
 var
   Info: TResourceInfo;
 begin

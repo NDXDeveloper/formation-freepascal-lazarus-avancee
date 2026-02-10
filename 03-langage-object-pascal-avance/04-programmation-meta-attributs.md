@@ -265,6 +265,7 @@ end;
 var
   Product: TProduct;
   Errors: TStringList;
+  I: Integer;
 begin
   Product := TProduct.Create;
   try
@@ -275,8 +276,8 @@ begin
     if not TValidator.ValidateObject(Product, Errors) then
     begin
       WriteLn('Erreurs de validation:');
-      for var Error in Errors do
-        WriteLn('  - ', Error);
+      for I := 0 to Errors.Count - 1 do
+        WriteLn('  - ', Errors[I]);
     end;
 
     Errors.Free;
@@ -2810,7 +2811,7 @@ type
     [Trace(2)]
     [Metric('order.delete')]
     [Documentation('Supprime une commande')]
-    [ExpectedException(EAccessDenied)]
+    [ExpectedException(EAccessViolation)]
     [Test('Test de suppression avec permissions')]
     procedure DeleteOrder(OrderId: Integer);
   end;
@@ -2943,6 +2944,7 @@ var
   Context: TRttiContext;
   RttiType: TRttiType;
   RttiProp: TRttiProperty;
+  Attr: TCustomAttribute;
 begin
   Key := AClass.ClassName + '.' + PropName;
 
@@ -2964,7 +2966,7 @@ begin
     if Assigned(RttiProp) then
     begin
       SetLength(Info.Attributes, 0);
-      for var Attr in RttiProp.GetAttributes do
+      for Attr in RttiProp.GetAttributes do
       begin
         SetLength(Info.Attributes, Length(Info.Attributes) + 1);
         Info.Attributes[High(Info.Attributes)] := Attr;

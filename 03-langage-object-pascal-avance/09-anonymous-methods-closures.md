@@ -1329,6 +1329,7 @@ type
     GetHistory: reference to function: string;
   end;
 
+// Nécessite : uses Classes;  (pour TStringList)
 function CreateBankAccount(InitialBalance: Integer): TBankAccount;
 var
   Balance: Integer;
@@ -1792,7 +1793,7 @@ end;
 // Les closures ont un coût en performance
 procedure PerformanceConsiderations;
 var
-  DirectCall, ClosureCall: Int64;
+  DirectCall, ClosureCall: Int64;  // Nécessite : uses DateUtils;  (pour MilliSecondsBetween)
   StartTime: TDateTime;
   I: Integer;
   Func: TIntegerFunc;

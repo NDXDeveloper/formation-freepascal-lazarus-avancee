@@ -771,6 +771,8 @@ begin
   Result := (A.Min >= B.Min) and (A.Max <= B.Max);
 end;
 
+// Nécessite : uses Math;  (pour Max, Min)
+
 // Intersection de deux intervalles
 operator * (const A, B: TInterval): TInterval;
 begin
@@ -1058,29 +1060,10 @@ type
   TPermission = (pRead, pWrite, pExecute, pDelete);
   TPermissions = set of TPermission;
 
-// Union de permissions
-operator + (const P1, P2: TPermissions): TPermissions;
-begin
-  Result := P1 + P2;  // Union d'ensembles
-end;
-
-// Retrait de permissions
-operator - (const P1, P2: TPermissions): TPermissions;
-begin
-  Result := P1 - P2;  // Différence d'ensembles
-end;
-
-// Intersection de permissions
-operator * (const P1, P2: TPermissions): TPermissions;
-begin
-  Result := P1 * P2;  // Intersection d'ensembles
-end;
-
-// Test de permission
-operator in (const P: TPermission; const PS: TPermissions): Boolean;
-begin
-  Result := P in PS;
-end;
+// Note : Les opérateurs +, -, * et in sont déjà intégrés pour les types
+// ensemble (set of). Il n'est pas nécessaire (ni recommandé) de les surcharger,
+// car cela provoquerait une récursion infinie (l'opérateur s'appellerait
+// lui-même au lieu d'utiliser l'opérateur natif des ensembles).
 
 // Utilisation
 procedure UseEnumOperators;
@@ -1092,6 +1075,7 @@ begin
 
   // Jour suivant
   Inc(Today);
+  // Nécessite : uses TypInfo;
   WriteLn('Demain : ', GetEnumName(TypeInfo(TDay), Ord(Today)));
 
   // Dans une semaine
@@ -1118,10 +1102,13 @@ end;
 
 ### Smart pointer avec comptage de références
 
+> **Note :** Cet exemple utilise des `class operator` de conversion (`:=`) et de comparaison (`=`) à l'intérieur du record, ce qui nécessite `{$mode delphi}`. En mode ObjFPC, seuls les opérateurs de gestion (`Initialize`, `Finalize`, `Copy`, `AddRef`) peuvent être déclarés dans un record ; les autres opérateurs doivent être globaux.
+
 ```pascal
+{$mode delphi}
 type
   // Pointeur intelligent générique
-  generic TSmartPtr<T: class> = record
+  TSmartPtr<T: class> = record
   private
     FObject: T;
     FRefCount: ^Integer;
@@ -1235,9 +1222,10 @@ type
   TMyClass = class
     Name: string;
     constructor Create(const AName: string);
+    destructor Destroy; override;
   end;
 
-  TMyClassPtr = specialize TSmartPtr<TMyClass>;
+  TMyClassPtr = TSmartPtr<TMyClass>;
 
 constructor TMyClass.Create(const AName: string);
 begin

@@ -351,9 +351,9 @@ type
   // Classe dérivée qui reste générique
   TLabeledContainer<T> = class(TContainer<T>)
   private
-    FLabel: String;
+    FCaption: String;
   public
-    property Label: String read FLabel write FLabel;
+    property Caption: String read FCaption write FCaption;
   end;
 
   // Classe dérivée avec spécialisation
@@ -457,6 +457,7 @@ type
 destructor TSmartContainer<T>.Destroy;
 begin
   // Libération conditionnelle si T est un objet
+  // Nécessite : uses TypInfo;
   if FOwnsItem and (PTypeInfo(TypeInfo(T))^.Kind = tkClass) then
     TObject(FItem).Free;
   inherited;

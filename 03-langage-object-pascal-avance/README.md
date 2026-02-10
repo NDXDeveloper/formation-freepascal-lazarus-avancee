@@ -95,7 +95,7 @@ type
   end;
 
   // Management automatique avec helpers et inline
-  TAutoManager = record helper for TObject
+  TAutoManager = class helper for TObject
     procedure AutoFree; inline;
     function Cast<T: class>: T; inline;
   end;
@@ -277,13 +277,16 @@ type
   // Record avancé avec méthodes
   TVector2D = record
     X, Y: Double;
-    class operator +(const A, B: TVector2D): TVector2D;
     function Magnitude: Double;
     procedure Normalize;
   end;
 
-  // Générique avec contrainte
-  TCache<T: class> = class
+// En ObjFPC, les opérateurs sur records sont déclarés globalement
+operator +(const A, B: TVector2D): TVector2D;
+
+type
+  // Générique avec contrainte (mot-clé generic obligatoire en ObjFPC)
+  generic TCache<T: class> = class
   private
     FItems: specialize TDictionary<string, T>;
   public
@@ -295,7 +298,7 @@ type
 
 { TVector2D }
 
-class operator TVector2D.+(const A, B: TVector2D): TVector2D;
+operator +(const A, B: TVector2D): TVector2D;
 begin
   Result.X := A.X + B.X;
   Result.Y := A.Y + B.Y;
