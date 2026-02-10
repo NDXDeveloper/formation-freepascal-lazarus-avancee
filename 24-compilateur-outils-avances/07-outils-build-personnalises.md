@@ -1176,7 +1176,7 @@ begin
   try
     Content.LoadFromFile(FileName);
     // Hash simplifié (dans un vrai projet, utiliser MD5/SHA)
-    Hash := IntToHex(Content.Text.GetHashCode, 8);
+    Hash := IntToHex(Length(Content.Text) xor $5A5A5A5A, 8);
     Result := ExtractFileName(FileName) + '_' + Hash;
   finally
     Content.Free;
@@ -1463,14 +1463,21 @@ type
     Version: string;
   end;
 
-procedure LoadDependencies(const FileName: string; out Deps: array of TDependency);
+procedure LoadDependencies(const FileName: string; var Deps: array of TDependency);
 var
   JSONData: TJSONData;
   JSONArray: TJSONArray;
   JSONObj: TJSONObject;
+  FileContent: TStringList;
   i: Integer;
 begin
-  JSONData := GetJSON(TStringList.Create.LoadFromFile(FileName).Text);
+  FileContent := TStringList.Create;
+  try
+    FileContent.LoadFromFile(FileName);
+    JSONData := GetJSON(FileContent.Text);
+  finally
+    FileContent.Free;
+  end;
   try
     JSONArray := TJSONObject(JSONData).Arrays['dependencies'];
 
@@ -1650,9 +1657,16 @@ var
   JSONData: TJSONData;
   JSONObj, ProjectObj, PathsObj, BuildObj: TJSONObject;
   OptionsArray: TJSONArray;
+  FileContent: TStringList;
   i: Integer;
 begin
-  JSONData := GetJSON(TStringList.Create.LoadFromFile(FileName).Text);
+  FileContent := TStringList.Create;
+  try
+    FileContent.LoadFromFile(FileName);
+    JSONData := GetJSON(FileContent.Text);
+  finally
+    FileContent.Free;
+  end;
   try
     JSONObj := TJSONObject(JSONData);
 
@@ -1850,10 +1864,10 @@ end;
 
 Les outils de build personnalisés sont essentiels pour :
 
-✅ **Automatiser** le processus de compilation
-✅ **Standardiser** les builds dans l'équipe
-✅ **Optimiser** le temps de développement
-✅ **Faciliter** le déploiement multi-plateforme
+✅ **Automatiser** le processus de compilation  
+✅ **Standardiser** les builds dans l'équipe  
+✅ **Optimiser** le temps de développement  
+✅ **Faciliter** le déploiement multi-plateforme  
 ✅ **Intégrer** CI/CD facilement
 
 **Points clés à retenir :**

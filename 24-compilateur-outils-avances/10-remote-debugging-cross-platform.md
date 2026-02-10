@@ -854,7 +854,7 @@ ConfigFile := ExtractFilePath(ParamStr(0)) + 'config.ini';
 ✅ **Documenter la configuration de debug**
 
 **Fichier : `DEBUG.md`**
-```markdown
+````markdown
 # Configuration de Debug à Distance
 
 ## Machine Linux (192.168.1.100)
@@ -869,7 +869,7 @@ gdbserver :2345 ./monprogramme
 ## Notes
 - Compiler avec: `lazbuild --build-mode=Debug`
 - Logs disponibles dans: `/var/log/monapp/`
-```
+````
 
 ---
 
@@ -928,10 +928,10 @@ echo "  ssh ${REMOTE_USER}@${REMOTE_HOST} 'killall gdbserver'"
 
 Le remote debugging cross-platform est une compétence essentielle pour :
 
-✅ **Développer** efficacement des applications multi-plateformes
-✅ **Tester** le comportement réel sur chaque OS
-✅ **Identifier** les bugs spécifiques à une plateforme
-✅ **Optimiser** sans quitter son environnement habituel
+✅ **Développer** efficacement des applications multi-plateformes  
+✅ **Tester** le comportement réel sur chaque OS  
+✅ **Identifier** les bugs spécifiques à une plateforme  
+✅ **Optimiser** sans quitter son environnement habituel  
 ✅ **Collaborer** avec des équipes distantes
 
 **Points clés à retenir :**

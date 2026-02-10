@@ -1024,10 +1024,10 @@ Scanner.Options := Scanner.Options + [po_delphi];  // Mode Delphi
 
 La bibliothèque **fcl-passrc** est un outil puissant qui permet :
 
-✅ **Analyser** la structure du code Pascal
-✅ **Générer** de la documentation automatiquement
-✅ **Créer** des outils de refactoring
-✅ **Développer** des analyseurs de qualité de code
+✅ **Analyser** la structure du code Pascal  
+✅ **Générer** de la documentation automatiquement  
+✅ **Créer** des outils de refactoring  
+✅ **Développer** des analyseurs de qualité de code  
 ✅ **Migrer** du code entre dialectes
 
 **Points clés à retenir :**

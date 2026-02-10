@@ -869,10 +869,10 @@ Restart-Service LxssManager
 
 WSL2 est un outil puissant pour le développement FreePascal/Lazarus multi-plateforme :
 
-✅ **Développement hybride** Windows + Linux
-✅ **Tests rapides** sur les deux OS
-✅ **Compilation croisée** facilitée
-✅ **Partage de code** transparent
+✅ **Développement hybride** Windows + Linux  
+✅ **Tests rapides** sur les deux OS  
+✅ **Compilation croisée** facilitée  
+✅ **Partage de code** transparent  
 ✅ **Performances** proches du natif
 
 **Points clés à retenir :**

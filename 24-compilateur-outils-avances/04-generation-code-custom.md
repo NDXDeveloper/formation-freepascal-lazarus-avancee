@@ -343,10 +343,17 @@ var
   JSONArray: TJSONArray;
   EntityObj, FieldObj: TJSONObject;
   FieldsArray: TJSONArray;
+  FileContent: TStringList;
   Entity: TEntityDef;
   i, j: Integer;
 begin
-  JSONData := GetJSON(TStringList.Create.LoadFromFile(JSONFile).Text);
+  FileContent := TStringList.Create;
+  try
+    FileContent.LoadFromFile(JSONFile);
+    JSONData := GetJSON(FileContent.Text);
+  finally
+    FileContent.Free;
+  end;
   try
     JSONArray := TJSONObject(JSONData).Arrays['entities'];
 
@@ -385,7 +392,7 @@ Génération de code qui s'adapte automatiquement à la plateforme cible.
 program CrossPlatformGenerator;
 
 uses
-  SysUtils, Classes;
+  SysUtils, Classes, TypInfo;
 
 type
   TTargetPlatform = (tpWindows, tpLinux, tpMacOS);
@@ -691,7 +698,7 @@ begin
     Code.Add('interface');
     Code.Add('');
     Code.Add('uses');
-    Code.Add('  TestFramework, ' + ClassName + ';');
+    Code.Add('  fpcunit, ' + ClassName + ';');
     Code.Add('');
     Code.Add('type');
     Code.Add('  T' + ClassName + 'Test = class(TTestCase)');
@@ -708,7 +715,7 @@ begin
     Code.Add('begin');
     Code.Add('  Instance := T' + ClassName + '.Create;');
     Code.Add('  try');
-    Code.Add('    CheckNotNull(Instance);');
+    Code.Add('    AssertNotNull(Instance);');
     Code.Add('  finally');
     Code.Add('    Instance.Free;');
     Code.Add('  end;');

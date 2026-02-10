@@ -206,64 +206,46 @@ Les macros sont substituées par leurs valeurs lors du préprocessing.
 
 ```pascal
 {$MACRO ON}
-{$DEFINE APP_NAME := 'MonApplication'}
 {$DEFINE APP_VERSION := '2.5.1'}
 
-program {APP_NAME};
+program MonApp;
 
 const
-  ApplicationName = '{APP_NAME}';
-  Version = '{APP_VERSION}';
+  Version = APP_VERSION;  // L'identifiant macro s'utilise directement
 
 begin
-  WriteLn(ApplicationName, ' version ', Version);
+  WriteLn('MonApp version ', Version);
 end.
 ```
 
 **Résultat après préprocessing :**
 ```pascal
-program MonApplication;
+program MonApp;
 
 const
-  ApplicationName = 'MonApplication';
-  Version = '2.5.1';
+  Version = '2.5.1';  // Macro remplacée par sa valeur
 
 begin
-  WriteLn(ApplicationName, ' version ', Version);
+  WriteLn('MonApp version ', Version);
 end.
 ```
 
-### Macros avec paramètres
+> **Important :** En FPC, les macros sont de la substitution textuelle simple. L'identifiant macro s'utilise directement dans le code (pas entre accolades). `{NomMacro}` serait interprété comme un commentaire Pascal, pas comme une expansion de macro.
 
-Les macros peuvent être paramétrées pour créer des modèles réutilisables.
+### Limites des macros FPC
+
+> **Attention :** Contrairement au préprocesseur C, les macros FPC **ne supportent pas les paramètres** (`%1`, `%2` n'existent pas). Elles sont uniquement de la substitution textuelle simple. Pour du code générique ou paramétré, utilisez plutôt des **génériques**, des **fichiers d'inclusion** ou des **outils de génération de code** (voir section 24.4).
+
+Les macros restent utiles pour des substitutions simples :
 
 ```pascal
 {$MACRO ON}
-{$DEFINE PROPERTY_READ := property %1: %2 read F%1}
-{$DEFINE PROPERTY_WRITE := property %1: %2 read F%1 write F%1}
+{$DEFINE DB_ENGINE := SQLite}
+{$DEFINE MAX_CONNECTIONS := 10}
 
-type
-  TMyClass = class
-  private
-    FName: string;
-    FAge: Integer;
-  public
-    {PROPERTY_READ Name string};      // Lecture seule
-    {PROPERTY_WRITE Age Integer};     // Lecture/écriture
-  end;
-```
-
-**Résultat après préprocessing :**
-```pascal
-type
-  TMyClass = class
-  private
-    FName: string;
-    FAge: Integer;
-  public
-    property Name: string read FName;
-    property Age: Integer read FAge write FAge;
-  end;
+const
+  Engine = 'DB_ENGINE';       // Pas d'expansion dans les chaînes !
+  MaxConn = MAX_CONNECTIONS;  // Expansion : MaxConn = 10
 ```
 
 ---
@@ -324,76 +306,58 @@ end.
 
 ## Macros avancées
 
-### Génération de code répétitif
+### Macros pour la compilation conditionnelle (cas réels)
+
+Les macros FPC sont surtout utiles pour activer/désactiver du code :
 
 ```pascal
 {$MACRO ON}
-{$DEFINE DECLARE_FIELD := private F%1: %2;}
-{$DEFINE DECLARE_PROPERTY := public property %1: %2 read F%1 write Set%1;}
-{$DEFINE DECLARE_SETTER := private procedure Set%1(const Value: %2);}
 
-type
-  TCustomer = class
-  {DECLARE_FIELD ID Integer}
-  {DECLARE_FIELD Name string}
-  {DECLARE_FIELD Email string}
-  {DECLARE_FIELD Age Integer}
-
-  {DECLARE_SETTER ID Integer}
-  {DECLARE_SETTER Name string}
-  {DECLARE_SETTER Email string}
-  {DECLARE_SETTER Age Integer}
-
-  {DECLARE_PROPERTY ID Integer}
-  {DECLARE_PROPERTY Name string}
-  {DECLARE_PROPERTY Email string}
-  {DECLARE_PROPERTY Age Integer}
-  end;
-```
-
-### Macros pour les assertions
-
-```pascal
-{$MACRO ON}
 {$IFDEF DEBUG}
-  {$DEFINE ASSERT_NOT_NIL := if %1 = nil then raise Exception.Create('%1 est nil');}
-  {$DEFINE ASSERT_RANGE := if not InRange(%1, %2, %3) then raise Exception.Create('%1 hors limites');}
+  {$DEFINE LOG_PREFIX := '[DEBUG] '}
 {$ELSE}
-  {$DEFINE ASSERT_NOT_NIL := }
-  {$DEFINE ASSERT_RANGE := }
+  {$DEFINE LOG_PREFIX := ''}
 {$ENDIF}
-
-procedure ProcessData(Data: TObject; Index: Integer);
-begin
-  {ASSERT_NOT_NIL Data}
-  {ASSERT_RANGE Index 0 100}
-
-  // Traitement...
-end;
-```
-
-### Macros pour le logging
-
-```pascal
-{$MACRO ON}
-{$DEFINE LOG := WriteLn('[', TimeToStr(Now), '] ', %1);}
-{$DEFINE LOG_ERROR := WriteLn('[ERROR] [', TimeToStr(Now), '] ', %1);}
-{$DEFINE LOG_DEBUG := {$IFDEF DEBUG}WriteLn('[DEBUG] [', TimeToStr(Now), '] ', %1);{$ENDIF}}
 
 procedure MyProcedure;
 begin
-  {LOG 'Début du traitement'}
+  WriteLn(LOG_PREFIX, 'Début du traitement');
 
   try
     // Code...
-    {LOG_DEBUG 'Valeur intermédiaire calculée'}
   except
     on E: Exception do
-      {LOG_ERROR E.Message}
+      WriteLn('[ERROR] ', E.Message);
   end;
 
-  {LOG 'Fin du traitement'}
+  WriteLn(LOG_PREFIX, 'Fin du traitement');
 end;
+```
+
+### Génération de code répétitif via fichiers d'inclusion
+
+Pour générer du code répétitif, les **fichiers d'inclusion** sont plus adaptés que les macros :
+
+**Fichier : `customer_fields.inc`**
+```pascal
+  private
+    FID: Integer;
+    FName: string;
+    FEmail: string;
+    FAge: Integer;
+  public
+    property ID: Integer read FID write FID;
+    property Name: string read FName write FName;
+    property Email: string read FEmail write FEmail;
+    property Age: Integer read FAge write FAge;
+```
+
+**Usage :**
+```pascal
+type
+  TCustomer = class
+  {$I customer_fields.inc}
+  end;
 ```
 
 ---
@@ -408,8 +372,8 @@ end;
 {$I %FILE%}        // Nom du fichier actuel
 {$I %LINE%}        // Numéro de ligne actuel
 {$I %FPCVERSION%}  // Version de FreePascal
-{$I %FPCTARGET%}   // Plateforme cible
-{$I %FPCTARGETOS%} // OS cible
+{$I %FPCTARGETCPU%} // Architecture CPU cible
+{$I %FPCTARGETOS%}  // OS cible
 ```
 
 **Exemple d'utilisation :**
@@ -490,9 +454,9 @@ end.
 {$ENDIF}
 
 const
-  DatabaseHost = {DB_HOST};
-  DatabasePort = {DB_PORT};
-  DatabaseName = {DB_NAME};
+  DatabaseHost = DB_HOST;
+  DatabasePort = DB_PORT;
+  DatabaseName = DB_NAME;
 
 begin
   WriteLn('Connexion à : ', DatabaseHost, ':', DatabasePort, '/', DatabaseName);
@@ -625,9 +589,9 @@ end.
 {$ENDIF}
 
 const
-  ConfigDirectory = {CONFIG_PATH};
-  TempDirectory = {TEMP_PATH};
-  PathSeparator = {PATH_SEP};
+  ConfigDirectory = CONFIG_PATH;
+  TempDirectory = TEMP_PATH;
+  MyPathSep = PATH_SEP;
 
 function GetFullPath(const FileName: string): string;
 begin
@@ -702,7 +666,7 @@ end.
 {$ENDIF}
 
 const
-  SQLiteLibrary = {LIBPREFIX} + 'sqlite3' + {LIBEXT};
+  SQLiteLibrary = LIBPREFIX + 'sqlite3' + LIBEXT;
   // Windows: 'sqlite3.dll'
   // Linux:   'libsqlite3.so'
   // macOS:   'libsqlite3.dylib'
@@ -725,7 +689,7 @@ const
 
 function GetConfigPath: string;
 begin
-  Result := {APP_DATA} + PathDelim + 'MyApp' + PathDelim;
+  Result := APP_DATA + PathDelim + 'MyApp' + PathDelim;
 end;
 ```
 
@@ -741,15 +705,15 @@ end;
 
 {$IFDEF OPTIMIZE_SIZE}
   {$DEFINE USE_INLINE := }
-  {$DEFINE LOG := }
 {$ELSE}
   {$DEFINE USE_INLINE := inline;}
-  {$DEFINE LOG := WriteLn(%1);}
 {$ENDIF}
 
-function Calculate(X: Integer): Integer; {USE_INLINE}
+function Calculate(X: Integer): Integer; USE_INLINE
 begin
-  {LOG 'Calcul avec X = ' + IntToStr(X)}
+  {$IFNDEF OPTIMIZE_SIZE}
+  WriteLn('Calcul avec X = ', X);
+  {$ENDIF}
   Result := X * X;
 end;
 ```
@@ -771,11 +735,11 @@ procedure ProcessData;
 var
   StartTimer: QWord;
 begin
-  {START_TIMER}
+  START_TIMER   // Expansion : StartTimer := GetTickCount64; (ou rien)
 
   // Traitement...
 
-  {STOP_TIMER}
+  STOP_TIMER    // Expansion : WriteLn(...) (ou rien)
 end;
 ```
 
@@ -820,19 +784,22 @@ end.
 ```pascal
 {$MACRO ON}
 
-// Macro pour tracer l'exécution
-// Usage: {TRACE 'Message de débogage'}
+// Macro pour activer/désactiver le traçage
 // Actif uniquement en mode DEBUG
 {$IFDEF DEBUG}
-  {$DEFINE TRACE := WriteLn('[TRACE] ', %1);}
+  {$DEFINE TRACE_PREFIX := '[TRACE] '}
 {$ELSE}
-  {$DEFINE TRACE := }
+  {$DEFINE TRACE_PREFIX := }
 {$ENDIF}
 
-// Macro pour validation des paramètres
-// Usage: {CHECK_NOT_NIL MonObjet}
-// Lève une exception si l'objet est nil
-{$DEFINE CHECK_NOT_NIL := if %1 = nil then raise Exception.Create('%1 ne peut pas être nil');}
+// Utilisation :
+procedure DoWork;
+begin
+  {$IFDEF DEBUG}
+  WriteLn(TRACE_PREFIX, 'Début de DoWork');
+  {$ENDIF}
+  // ...
+end;
 ```
 
 ### 3. Fichiers d'inclusion séparés
@@ -877,9 +844,10 @@ end.
 
 ### 4. Éviter les macros trop complexes
 
-**❌ Mauvais - macro trop complexe :**
+**❌ Mauvais - les macros FPC ne supportent pas les paramètres :**
 ```pascal
-{$DEFINE COMPLEX_MACRO := if %1 > %2 then WriteLn(%3) else if %1 < %2 then WriteLn(%4) else WriteLn(%5);}
+// Ceci ne fonctionne PAS en FPC (pas de macros paramétrées)
+// {$DEFINE COMPLEX_MACRO := if %1 > %2 then WriteLn(%3)...}
 ```
 
 **✅ Bon - utiliser des fonctions :**
@@ -911,7 +879,7 @@ Cela génère un fichier `.ppu` contenant le code après préprocessing.
 {$MACRO ON}
 {$DEFINE MY_MACRO := SomeValue}
 
-{$MESSAGE 'MY_MACRO est défini comme : ' + {MY_MACRO}}
+{$MESSAGE 'MY_MACRO est défini'}
 
 {$IFDEF DEBUG}
   {$MESSAGE 'Mode DEBUG activé'}
@@ -931,7 +899,7 @@ Cela génère un fichier `.ppu` contenant le code après préprocessing.
 {$MESSAGE 'APP_NAME définie'}
 
 const
-  FullName = {APP_NAME} + ' v' + {VERSION};
+  FullName = APP_NAME + ' v' + VERSION;
 {$MESSAGE 'Constante FullName créée'}
 ```
 
@@ -941,23 +909,29 @@ const
 
 ### 1. Les macros ne sont pas des fonctions
 
+Les macros FPC ne supportent **pas les paramètres**. Elles ne font que de la substitution textuelle simple.
+
 ```pascal
 {$MACRO ON}
 
-// ❌ Ceci ne fonctionne PAS comme prévu
-{$DEFINE SQUARE := %1 * %1}
+// Les macros ne peuvent remplacer que des identifiants simples
+{$DEFINE TWO := 2}
+{$DEFINE PI_APPROX := 3.14159}
 
 var
   X: Integer;
 begin
-  X := 2 + 1;
-  WriteLn({SQUARE X});  // Donne : 2 + 1 * 2 + 1 = 5 (et non 9!)
+  X := TWO * TWO;             // Devient : X := 2 * 2;
+  WriteLn(PI_APPROX);         // Devient : WriteLn(3.14159);
 end.
 ```
 
-**Solution : utiliser des parenthèses**
+**Pour des calculs paramétrés, utilisez des fonctions :**
 ```pascal
-{$DEFINE SQUARE := (%1) * (%1)}
+function Square(X: Integer): Integer; inline;
+begin
+  Result := X * X;
+end;
 ```
 
 ### 2. Portée des définitions
@@ -978,14 +952,11 @@ Les `{$DEFINE}` sont **globaux** dans une unité et ses dépendances.
 
 ```pascal
 {$MACRO ON}
-{$DEFINE NAME := John}
+{$DEFINE NAME := 'John'}
 
 const
-  Message = 'Hello {NAME}';  // ❌ Ne fonctionne pas dans les chaînes
-
-// ✅ Utiliser la concaténation
-const
-  Message2 = 'Hello ' + {NAME};
+  Msg1 = 'Hello NAME';    // ❌ Pas d'expansion dans les chaînes littérales
+  Msg2 = 'Hello ' + NAME; // ✅ Concaténation : 'Hello ' + 'John'
 ```
 
 ---
@@ -994,10 +965,10 @@ const
 
 Le préprocesseur et les macros de FreePascal sont des outils puissants qui permettent :
 
-✅ **Compilation conditionnelle** pour le multi-plateforme
-✅ **Réduction de code répétitif** avec les macros
-✅ **Configuration flexible** selon l'environnement
-✅ **Optimisation** en éliminant le code inutile
+✅ **Compilation conditionnelle** pour le multi-plateforme  
+✅ **Réduction de code répétitif** avec les macros  
+✅ **Configuration flexible** selon l'environnement  
+✅ **Optimisation** en éliminant le code inutile  
 ✅ **Compatibilité** avec différentes versions du compilateur
 
 **Points clés à retenir :**

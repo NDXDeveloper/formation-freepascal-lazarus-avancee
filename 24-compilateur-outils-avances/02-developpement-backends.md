@@ -332,8 +332,8 @@ begin
 end;
 ```
 
-**Avantages :** Simple, rapide à compiler
-**Inconvénients :** Pas optimal
+**Avantages :** Simple, rapide à compiler  
+**Inconvénients :** Pas optimal  
 
 #### 2. Graph coloring (coloration de graphe)
 
@@ -1264,9 +1264,9 @@ if PtrUInt(MyPointer) > 1000 then
 
 Les architectures ont des règles d'alignement différentes :
 
-**x86 :** Tolérant, peut accéder à des données non alignées (moins efficace)
-**ARM :** Strict, crash si données non alignées
-**AVR :** Pas de restriction (8 bits)
+**x86 :** Tolérant, peut accéder à des données non alignées (moins efficace)  
+**ARM :** Strict, crash si données non alignées  
+**AVR :** Pas de restriction (8 bits)  
 
 ```pascal
 {$PACKRECORDS 1}  // Pas d'alignement (compact)

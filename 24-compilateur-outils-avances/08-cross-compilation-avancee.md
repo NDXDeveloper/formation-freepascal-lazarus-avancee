@@ -658,10 +658,10 @@ Ressources utiles :
 
 La cross-compilation avec FreePascal est :
 
-✅ **Puissante** : Support natif de nombreuses plateformes
-✅ **Mature** : Technologie éprouvée depuis des années
-✅ **Bien documentée** : Communauté active et documentation riche
-✅ **Gratuite** : Tous les outils sont open source
+✅ **Puissante** : Support natif de nombreuses plateformes  
+✅ **Mature** : Technologie éprouvée depuis des années  
+✅ **Bien documentée** : Communauté active et documentation riche  
+✅ **Gratuite** : Tous les outils sont open source  
 ✅ **Productive** : Workflow unifié pour toutes les plateformes
 
 Dans les sections suivantes, nous allons explorer en détail comment mettre en place et utiliser la cross-compilation dans vos projets, que vous développiez sur Windows, Linux, ou que vous cibliez des plateformes embarquées.
