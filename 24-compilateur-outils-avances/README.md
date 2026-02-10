@@ -192,11 +192,11 @@ Pour suivre ce chapitre, assurez-vous d'avoir :
 
 ```bash
 # Installation via le gestionnaire de paquets
-sudo apt update
+sudo apt update  
 sudo apt install fpc fpc-source lazarus git
 
 # Vérification des versions
-fpc -version
+fpc -version  
 lazbuild --version
 ```
 
@@ -268,7 +268,7 @@ Ne vous contentez pas de lire :
 
 ```pascal
 // Testez chaque concept avec du code simple
-program TestOptimization;
+program TestOptimization;  
 var
   x, y: Integer;
 begin
@@ -296,7 +296,7 @@ Le code source du FPC est votre meilleure documentation :
 
 ```pascal
 // Dans compiler/scanner.pas
-procedure tscannerfile.readtoken;
+procedure tscannerfile.readtoken;  
 begin
   // Comment le scanner lit-il les tokens ?
   // Explorez ce code !
@@ -390,7 +390,7 @@ Les exemples de code seront présentés ainsi :
 
 ```pascal
 // Code Pascal standard
-program Example;
+program Example;  
 begin
   WriteLn('Hello World');
 end.
@@ -403,7 +403,7 @@ fpc monprogramme.pas
 
 ```asm
 ; Code assembleur
-mov eax, [ebx]
+mov eax, [ebx]  
 add eax, 1
 ```
 
@@ -581,7 +581,7 @@ const
   MAX_BUFFER_SIZE = 1024;
 
 // Procédures/Fonctions : PascalCase
-procedure DoSomething;
+procedure DoSomething;  
 function GetValue: Integer;
 ```
 
@@ -589,7 +589,7 @@ function GetValue: Integer;
 
 ```pascal
 // 2 espaces par niveau
-procedure Example;
+procedure Example;  
 begin
   if condition then
   begin

@@ -71,7 +71,7 @@ program CodeGenerator;
 uses
   SysUtils, Classes;
 
-procedure GenerateClassFromTable(const TableName: string);
+procedure GenerateClassFromTable(const TableName: string);  
 var
   Output: TStringList;
 begin
@@ -125,7 +125,7 @@ Utilisation de la RTTI (Run-Time Type Information) pour générer dynamiquement 
 uses
   TypInfo, Rtti;
 
-procedure GeneratePropertyAccessors(AClass: TClass);
+procedure GeneratePropertyAccessors(AClass: TClass);  
 var
   Context: TRttiContext;
   RType: TRttiType;
@@ -199,7 +199,7 @@ type
     procedure SaveTo(const OutputFile: string);
   end;
 
-constructor TTemplateEngine.Create(const TemplateFile: string);
+constructor TTemplateEngine.Create(const TemplateFile: string);  
 var
   TemplateList: TStringList;
 begin
@@ -212,14 +212,14 @@ begin
   end;
 end;
 
-function TTemplateEngine.Replace(const Marker, Value: string): TTemplateEngine;
+function TTemplateEngine.Replace(const Marker, Value: string): TTemplateEngine;  
 begin
   FTemplate := StringReplace(FTemplate, '{{' + Marker + '}}',
     Value, [rfReplaceAll]);
   Result := Self; // Pour le chaînage
 end;
 
-procedure TTemplateEngine.SaveTo(const OutputFile: string);
+procedure TTemplateEngine.SaveTo(const OutputFile: string);  
 var
   Output: TStringList;
 begin
@@ -298,7 +298,7 @@ type
     Fields: array of TFieldDef;
   end;
 
-procedure GenerateClassFromEntity(const Entity: TEntityDef);
+procedure GenerateClassFromEntity(const Entity: TEntityDef);  
 var
   Code: TStringList;
   Field: TFieldDef;
@@ -337,7 +337,7 @@ begin
   end;
 end;
 
-procedure ParseAndGenerate(const JSONFile: string);
+procedure ParseAndGenerate(const JSONFile: string);  
 var
   JSONData: TJSONData;
   JSONArray: TJSONArray;
@@ -397,7 +397,7 @@ uses
 type
   TTargetPlatform = (tpWindows, tpLinux, tpMacOS);
 
-procedure GeneratePlatformSpecificCode(Platform: TTargetPlatform);
+procedure GeneratePlatformSpecificCode(Platform: TTargetPlatform);  
 var
   Code: TStringList;
 begin
@@ -464,7 +464,7 @@ program ParsePascalCode;
 uses
   SysUtils, Classes, PasTree, PScanner, PParser;
 
-procedure AnalyzeUnit(const FileName: string);
+procedure AnalyzeUnit(const FileName: string);  
 var
   Module: TPasModule;
   Scanner: TPascalScanner;
@@ -527,7 +527,7 @@ unit GeneratedCustomer;
 ### 2. Gestion de la régénération
 
 ```pascal
-procedure SafeGenerate(const OutputFile: string);
+procedure SafeGenerate(const OutputFile: string);  
 begin
   // Vérifier si le fichier existe
   if FileExists(OutputFile) then
@@ -559,20 +559,20 @@ end;
 Inclure des commentaires dans le code généré :
 
 ```pascal
-Code.Add('  /// <summary>');
-Code.Add('  /// Représente un client dans le système');
-Code.Add('  /// </summary>');
-Code.Add('  /// <remarks>');
-Code.Add('  /// Cette classe a été générée automatiquement');
-Code.Add('  /// à partir de la table Customer');
-Code.Add('  /// </remarks>');
+Code.Add('  /// <summary>');  
+Code.Add('  /// Représente un client dans le système');  
+Code.Add('  /// </summary>');  
+Code.Add('  /// <remarks>');  
+Code.Add('  /// Cette classe a été générée automatiquement');  
+Code.Add('  /// à partir de la table Customer');  
+Code.Add('  /// </remarks>');  
 Code.Add('  TCustomer = class');
 ```
 
 ### 4. Validation du code généré
 
 ```pascal
-function ValidateGeneratedCode(const PascalFile: string): Boolean;
+function ValidateGeneratedCode(const PascalFile: string): Boolean;  
 var
   Process: TProcess;
 begin
@@ -601,13 +601,13 @@ end;
 **Script batch : `generate.bat`**
 ```batch
 @echo off
-echo Génération du code...
-generator.exe entities.json
+echo Génération du code...  
+generator.exe entities.json  
 if %ERRORLEVEL% NEQ 0 (
     echo Erreur lors de la génération
     exit /b 1
 )
-echo Compilation...
+echo Compilation...  
 lazbuild project.lpi
 ```
 
@@ -621,8 +621,8 @@ echo "Génération du code..."
 if [ $? -ne 0 ]; then
     echo "Erreur lors de la génération"
     exit 1
-fi
-echo "Compilation..."
+fi  
+echo "Compilation..."  
 lazbuild project.lpi
 ```
 
@@ -674,7 +674,7 @@ Permet d'exécuter du Pascal à la volée pour générer du code dynamiquement.
 ```pascal
 // Lire une spécification OpenAPI YAML/JSON
 // Générer les classes, les contrôleurs et les routes
-procedure GenerateRESTAPIFromOpenAPI(const SpecFile: string);
+procedure GenerateRESTAPIFromOpenAPI(const SpecFile: string);  
 begin
   // Parser le fichier OpenAPI
   // Pour chaque endpoint, générer :
@@ -687,7 +687,7 @@ end;
 ### 2. Génération de tests unitaires
 
 ```pascal
-procedure GenerateTestsForClass(const ClassName: string);
+procedure GenerateTestsForClass(const ClassName: string);  
 var
   Code: TStringList;
 begin
@@ -735,7 +735,7 @@ end;
 Générer automatiquement les directives de compilation conditionnelle :
 
 ```pascal
-procedure AddPlatformDirectives(const SourceFile, OutputFile: string);
+procedure AddPlatformDirectives(const SourceFile, OutputFile: string);  
 var
   Source, Output: TStringList;
   i: Integer;

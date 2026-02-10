@@ -74,7 +74,7 @@ lazbuild monproject.lpi
 lazbuild --build-mode=Release monproject.lpi
 
 # Pour plusieurs OS
-lazbuild --os=linux --cpu=x86_64 monproject.lpi
+lazbuild --os=linux --cpu=x86_64 monproject.lpi  
 lazbuild --os=win64 --cpu=x86_64 monproject.lpi
 ```
 
@@ -143,22 +143,22 @@ fpc fpmake.pp      # Compiler le script de build
 @echo off
 setlocal
 
-echo =======================================
-echo  Build Script - MonProjet
-echo =======================================
+echo =======================================  
+echo  Build Script - MonProjet  
+echo =======================================  
 echo.
 
 :: Configuration
-set PROJECT_NAME=MonProjet
-set PROJECT_FILE=src\%PROJECT_NAME%.lpi
-set OUTPUT_DIR=bin
+set PROJECT_NAME=MonProjet  
+set PROJECT_FILE=src\%PROJECT_NAME%.lpi  
+set OUTPUT_DIR=bin  
 set BUILD_MODE=Release
 
 :: Créer le répertoire de sortie
 if not exist "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
 
 :: Compilation
-echo [1/3] Compilation en cours...
+echo [1/3] Compilation en cours...  
 lazbuild --build-mode=%BUILD_MODE% "%PROJECT_FILE%"
 
 if %ERRORLEVEL% NEQ 0 (
@@ -169,18 +169,18 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 :: Copier l'exécutable
-echo [2/3] Copie de l'executable...
+echo [2/3] Copie de l'executable...  
 copy /Y "%PROJECT_NAME%.exe" "%OUTPUT_DIR%\"
 
 :: Copier les ressources
-echo [3/3] Copie des ressources...
+echo [3/3] Copie des ressources...  
 xcopy /Y /E /I resources "%OUTPUT_DIR%\resources"
 
-echo.
-echo =======================================
-echo  Build termine avec succes!
-echo  Executable: %OUTPUT_DIR%\%PROJECT_NAME%.exe
-echo =======================================
+echo.  
+echo =======================================  
+echo  Build termine avec succes!  
+echo  Executable: %OUTPUT_DIR%\%PROJECT_NAME%.exe  
+echo =======================================  
 pause
 ```
 
@@ -190,22 +190,22 @@ pause
 ```bash
 #!/bin/bash
 
-echo "======================================="
-echo " Build Script - MonProjet"
-echo "======================================="
+echo "======================================="  
+echo " Build Script - MonProjet"  
+echo "======================================="  
 echo
 
 # Configuration
-PROJECT_NAME="MonProjet"
-PROJECT_FILE="src/${PROJECT_NAME}.lpi"
-OUTPUT_DIR="bin"
+PROJECT_NAME="MonProjet"  
+PROJECT_FILE="src/${PROJECT_NAME}.lpi"  
+OUTPUT_DIR="bin"  
 BUILD_MODE="Release"
 
 # Créer le répertoire de sortie
 mkdir -p "$OUTPUT_DIR"
 
 # Compilation
-echo "[1/3] Compilation en cours..."
+echo "[1/3] Compilation en cours..."  
 lazbuild --build-mode=$BUILD_MODE "$PROJECT_FILE"
 
 if [ $? -ne 0 ]; then
@@ -215,18 +215,18 @@ if [ $? -ne 0 ]; then
 fi
 
 # Copier l'exécutable
-echo "[2/3] Copie de l'exécutable..."
-cp -f "$PROJECT_NAME" "$OUTPUT_DIR/"
+echo "[2/3] Copie de l'exécutable..."  
+cp -f "$PROJECT_NAME" "$OUTPUT_DIR/"  
 chmod +x "$OUTPUT_DIR/$PROJECT_NAME"
 
 # Copier les ressources
-echo "[3/3] Copie des ressources..."
+echo "[3/3] Copie des ressources..."  
 cp -r resources "$OUTPUT_DIR/"
 
-echo
-echo "======================================="
-echo " Build terminé avec succès!"
-echo " Exécutable: $OUTPUT_DIR/$PROJECT_NAME"
+echo  
+echo "======================================="  
+echo " Build terminé avec succès!"  
+echo " Exécutable: $OUTPUT_DIR/$PROJECT_NAME"  
 echo "======================================="
 ```
 
@@ -280,7 +280,7 @@ var
 
 { Utilitaires }
 
-procedure PrintHeader;
+procedure PrintHeader;  
 begin
   WriteLn('===========================================');
   WriteLn(' BuildTool v', VERSION);
@@ -289,23 +289,23 @@ begin
   WriteLn;
 end;
 
-procedure PrintStep(const Step: string);
+procedure PrintStep(const Step: string);  
 begin
   WriteLn;
   WriteLn('>>> ', Step);
 end;
 
-procedure PrintSuccess(const Msg: string);
+procedure PrintSuccess(const Msg: string);  
 begin
   WriteLn('[OK] ', Msg);
 end;
 
-procedure PrintError(const Msg: string);
+procedure PrintError(const Msg: string);  
 begin
   WriteLn('[ERREUR] ', Msg);
 end;
 
-function ExecuteCommand(const Command: string; ShowOutput: Boolean = True): Boolean;
+function ExecuteCommand(const Command: string; ShowOutput: Boolean = True): Boolean;  
 var
   Process: TProcess;
   OutputLines: TStringList;
@@ -349,7 +349,7 @@ end;
 
 { Étapes de build }
 
-function CleanBuild: Boolean;
+function CleanBuild: Boolean;  
 begin
   PrintStep('Nettoyage...');
 
@@ -370,7 +370,7 @@ begin
   Result := True;
 end;
 
-function CompileProject: Boolean;
+function CompileProject: Boolean;  
 var
   Command: string;
 begin
@@ -396,7 +396,7 @@ begin
     PrintError('Échec de la compilation');
 end;
 
-function RunTests: Boolean;
+function RunTests: Boolean;  
 begin
   if not Config.RunTests then
   begin
@@ -420,7 +420,7 @@ begin
     PrintError('Certains tests ont échoué');
 end;
 
-function GenerateDocumentation: Boolean;
+function GenerateDocumentation: Boolean;  
 begin
   if not Config.GenerateDocs then
   begin
@@ -438,7 +438,7 @@ begin
     PrintError('Échec de la génération de documentation');
 end;
 
-function CopyResources: Boolean;
+function CopyResources: Boolean;  
 var
   Command: string;
 begin
@@ -464,7 +464,7 @@ begin
     PrintError('Échec de la copie des ressources');
 end;
 
-function CreateInstaller: Boolean;
+function CreateInstaller: Boolean;  
 begin
   if not Config.CreateInstaller then
   begin
@@ -497,7 +497,7 @@ end;
 
 { Configuration et menu }
 
-procedure LoadDefaultConfig;
+procedure LoadDefaultConfig;  
 begin
   Config.ProjectName := 'MonProjet';
   Config.ProjectFile := 'src/MonProjet.lpi';
@@ -510,7 +510,7 @@ begin
   Config.CreateInstaller := False;
 end;
 
-procedure ParseCommandLine;
+procedure ParseCommandLine;  
 var
   i: Integer;
   Param: string;
@@ -551,7 +551,7 @@ begin
   end;
 end;
 
-procedure PrintSummary;
+procedure PrintSummary;  
 var
   Duration: Double;
 begin
@@ -635,10 +635,10 @@ end.
 **Fichier : `Makefile`**
 ```makefile
 # Configuration
-PROJECT_NAME = MonProjet
-PROJECT_FILE = src/$(PROJECT_NAME).lpi
-BUILD_MODE = Release
-OUTPUT_DIR = bin
+PROJECT_NAME = MonProjet  
+PROJECT_FILE = src/$(PROJECT_NAME).lpi  
+BUILD_MODE = Release  
+OUTPUT_DIR = bin  
 LAZBUILD = lazbuild
 
 # Cibles
@@ -694,12 +694,12 @@ build-all: build-linux build-windows
 
 **Utilisation :**
 ```bash
-make              # Build complet (clean + build)
-make clean        # Nettoyer
-make build        # Compiler
-make debug        # Compiler en Debug
-make release      # Compiler en Release
-make test         # Exécuter tests
+make              # Build complet (clean + build)  
+make clean        # Nettoyer  
+make build        # Compiler  
+make debug        # Compiler en Debug  
+make release      # Compiler en Release  
+make test         # Exécuter tests  
 make build-all    # Compiler pour toutes les plateformes
 ```
 
@@ -713,13 +713,13 @@ make build-all    # Compiler pour toutes les plateformes
 ```bash
 #!/bin/bash
 
-PROJECT_NAME="MonProjet"
-PROJECT_FILE="src/${PROJECT_NAME}.lpi"
+PROJECT_NAME="MonProjet"  
+PROJECT_FILE="src/${PROJECT_NAME}.lpi"  
 OUTPUT_BASE="releases"
 
-echo "========================================="
-echo " Cross-Compilation - $PROJECT_NAME"
-echo "========================================="
+echo "========================================="  
+echo " Cross-Compilation - $PROJECT_NAME"  
+echo "========================================="  
 echo
 
 # Fonction de build
@@ -761,19 +761,19 @@ build_for_platform() {
 }
 
 # Nettoyer
-rm -rf "$OUTPUT_BASE"
+rm -rf "$OUTPUT_BASE"  
 mkdir -p "$OUTPUT_BASE"
 
 # Builds pour différentes plateformes
-build_for_platform "linux" "x86_64"
-build_for_platform "linux" "i386"
-build_for_platform "win64" "x86_64"
-build_for_platform "win32" "i386"
+build_for_platform "linux" "x86_64"  
+build_for_platform "linux" "i386"  
+build_for_platform "win64" "x86_64"  
+build_for_platform "win32" "i386"  
 build_for_platform "darwin" "x86_64"
 
-echo "========================================="
-echo " Cross-compilation terminée!"
-echo " Archives disponibles dans: $OUTPUT_BASE"
+echo "========================================="  
+echo " Cross-compilation terminée!"  
+echo " Archives disponibles dans: $OUTPUT_BASE"  
 echo "========================================="
 
 ls -lh "$OUTPUT_BASE"/*.tar.gz
@@ -913,7 +913,7 @@ program VersionGen;
 uses
   SysUtils, Classes, Process;
 
-function GetGitCommitCount: Integer;
+function GetGitCommitCount: Integer;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -942,7 +942,7 @@ begin
   end;
 end;
 
-function GetGitCommitHash: string;
+function GetGitCommitHash: string;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -971,7 +971,7 @@ begin
   end;
 end;
 
-procedure GenerateVersionFile;
+procedure GenerateVersionFile;  
 var
   VersionFile: TStringList;
   Major, Minor: Integer;
@@ -1039,13 +1039,13 @@ lazbuild projet.lpi
 ### 1. Build incrémental
 
 ```pascal
-function NeedRebuild(const SourceFile, OutputFile: string): Boolean;
+function NeedRebuild(const SourceFile, OutputFile: string): Boolean;  
 begin
   Result := not FileExists(OutputFile) or
             (FileAge(SourceFile) > FileAge(OutputFile));
 end;
 
-procedure SmartBuild;
+procedure SmartBuild;  
 begin
   if NeedRebuild('src/main.pas', 'bin/main.o') then
   begin
@@ -1078,19 +1078,19 @@ type
     property Success: Boolean read FSuccess;
   end;
 
-constructor TBuildThread.Create(const Command: string);
+constructor TBuildThread.Create(const Command: string);  
 begin
   inherited Create(True);
   FreeOnTerminate := False;
   FCommand := Command;
 end;
 
-procedure TBuildThread.Execute;
+procedure TBuildThread.Execute;  
 begin
   FSuccess := ExecuteCommand(FCommand, False);
 end;
 
-procedure ParallelBuild;
+procedure ParallelBuild;  
 var
   Threads: array[1..3] of TBuildThread;
   i: Integer;
@@ -1147,7 +1147,7 @@ type
     procedure ClearCache;
   end;
 
-constructor TBuildCache.Create(const CacheDir: string);
+constructor TBuildCache.Create(const CacheDir: string);  
 begin
   inherited Create;
   FCacheDir := CacheDir;
@@ -1159,14 +1159,14 @@ begin
     FCacheIndex.LoadFromFile(FCacheDir + 'index.txt');
 end;
 
-destructor TBuildCache.Destroy;
+destructor TBuildCache.Destroy;  
 begin
   FCacheIndex.SaveToFile(FCacheDir + 'index.txt');
   FCacheIndex.Free;
   inherited Destroy;
 end;
 
-function TBuildCache.GetCacheKey(const FileName: string): string;
+function TBuildCache.GetCacheKey(const FileName: string): string;  
 var
   Hash: string;
   Content: TStringList;
@@ -1183,7 +1183,7 @@ begin
   end;
 end;
 
-function TBuildCache.IsCached(const FileName: string): Boolean;
+function TBuildCache.IsCached(const FileName: string): Boolean;  
 var
   Key: string;
 begin
@@ -1191,7 +1191,7 @@ begin
   Result := FCacheIndex.IndexOf(Key) >= 0;
 end;
 
-procedure TBuildCache.AddToCache(const FileName: string);
+procedure TBuildCache.AddToCache(const FileName: string);  
 var
   Key: string;
 begin
@@ -1200,7 +1200,7 @@ begin
     FCacheIndex.Add(Key);
 end;
 
-procedure TBuildCache.ClearCache;
+procedure TBuildCache.ClearCache;  
 begin
   FCacheIndex.Clear;
   DeleteFile(FCacheDir + 'index.txt');
@@ -1230,7 +1230,7 @@ type
     property LogToConsole: Boolean read FLogToConsole write FLogToConsole;
   end;
 
-constructor TBuildLogger.Create(const LogFileName: string = '');
+constructor TBuildLogger.Create(const LogFileName: string = '');  
 begin
   inherited Create;
   FLogToConsole := True;
@@ -1243,14 +1243,14 @@ begin
   end;
 end;
 
-destructor TBuildLogger.Destroy;
+destructor TBuildLogger.Destroy;  
 begin
   if FLogToFile then
     CloseFile(FLogFile);
   inherited Destroy;
 end;
 
-procedure TBuildLogger.WriteLog(Level: TLogLevel; const Msg: string);
+procedure TBuildLogger.WriteLog(Level: TLogLevel; const Msg: string);  
 var
   LevelStr: string;
   LogLine: string;
@@ -1272,22 +1272,22 @@ begin
     WriteLn(FLogFile, LogLine);
 end;
 
-procedure TBuildLogger.Debug(const Msg: string);
+procedure TBuildLogger.Debug(const Msg: string);  
 begin
   WriteLog(llDebug, Msg);
 end;
 
-procedure TBuildLogger.Info(const Msg: string);
+procedure TBuildLogger.Info(const Msg: string);  
 begin
   WriteLog(llInfo, Msg);
 end;
 
-procedure TBuildLogger.Warning(const Msg: string);
+procedure TBuildLogger.Warning(const Msg: string);  
 begin
   WriteLog(llWarning, Msg);
 end;
 
-procedure TBuildLogger.Error(const Msg: string);
+procedure TBuildLogger.Error(const Msg: string);  
 begin
   WriteLog(llError, Msg);
 end;
@@ -1318,7 +1318,7 @@ end;
 uses
   fphttpclient, fpjson, jsonparser;
 
-procedure SendSlackNotification(const WebhookURL, Message: string);
+procedure SendSlackNotification(const WebhookURL, Message: string);  
 var
   HTTPClient: TFPHTTPClient;
   Response: string;
@@ -1345,7 +1345,7 @@ begin
 end;
 
 // Utilisation
-procedure NotifyBuildComplete(Success: Boolean);
+procedure NotifyBuildComplete(Success: Boolean);  
 var
   Msg: string;
 begin
@@ -1364,7 +1364,7 @@ end;
 uses
   fpsock, sockets;
 
-procedure UploadToFTP(const FileName, Host, User, Pass, RemotePath: string);
+procedure UploadToFTP(const FileName, Host, User, Pass, RemotePath: string);  
 var
   // Implémentation simplifiée - utiliser un client FTP complet en production
   Command: string;
@@ -1384,7 +1384,7 @@ end;
 ### 3. Génération de release notes
 
 ```pascal
-procedure GenerateReleaseNotes(const OutputFile: string);
+procedure GenerateReleaseNotes(const OutputFile: string);  
 var
   Process: TProcess;
   Output: TStringList;
@@ -1463,7 +1463,7 @@ type
     Version: string;
   end;
 
-procedure LoadDependencies(const FileName: string; var Deps: array of TDependency);
+procedure LoadDependencies(const FileName: string; var Deps: array of TDependency);  
 var
   JSONData: TJSONData;
   JSONArray: TJSONArray;
@@ -1495,7 +1495,7 @@ begin
   end;
 end;
 
-function CloneRepository(const URL, Name, Version: string): Boolean;
+function CloneRepository(const URL, Name, Version: string): Boolean;  
 var
   Command: string;
   TargetDir: string;
@@ -1535,7 +1535,7 @@ begin
     WriteLn('  [ERREUR] Installation échouée');
 end;
 
-procedure InstallDependencies;
+procedure InstallDependencies;  
 var
   Deps: array of TDependency;
   i: Integer;
@@ -1640,19 +1640,19 @@ type
     property CompilerOptions: TStringList read FCompilerOptions;
   end;
 
-constructor TBuildConfiguration.Create;
+constructor TBuildConfiguration.Create;  
 begin
   inherited Create;
   FCompilerOptions := TStringList.Create;
 end;
 
-destructor TBuildConfiguration.Destroy;
+destructor TBuildConfiguration.Destroy;  
 begin
   FCompilerOptions.Free;
   inherited Destroy;
 end;
 
-procedure TBuildConfiguration.LoadFromFile(const FileName: string);
+procedure TBuildConfiguration.LoadFromFile(const FileName: string);  
 var
   JSONData: TJSONData;
   JSONObj, ProjectObj, PathsObj, BuildObj: TJSONObject;
@@ -1699,7 +1699,7 @@ end;
 ### Générer la documentation du build
 
 ```pascal
-procedure GenerateBuildDocumentation;
+procedure GenerateBuildDocumentation;  
 var
   Doc: TStringList;
 begin
@@ -1757,13 +1757,13 @@ end;
 var
   VerboseMode: Boolean = False;
 
-procedure VerboseLog(const Msg: string);
+procedure VerboseLog(const Msg: string);  
 begin
   if VerboseMode then
     WriteLn('[VERBOSE] ', Msg);
 end;
 
-function ExecuteCommandVerbose(const Command: string): Boolean;
+function ExecuteCommandVerbose(const Command: string): Boolean;  
 begin
   VerboseLog('Exécution : ' + Command);
   Result := ExecuteCommand(Command);
@@ -1787,25 +1787,25 @@ type
     procedure PrintReport;
   end;
 
-constructor TBuildProfiler.Create;
+constructor TBuildProfiler.Create;  
 begin
   inherited Create;
   FSteps := TStringList.Create;
   FStartTime := Now;
 end;
 
-destructor TBuildProfiler.Destroy;
+destructor TBuildProfiler.Destroy;  
 begin
   FSteps.Free;
   inherited Destroy;
 end;
 
-procedure TBuildProfiler.StartStep(const StepName: string);
+procedure TBuildProfiler.StartStep(const StepName: string);  
 begin
   FSteps.AddObject(StepName, TObject(PtrInt(GetTickCount64)));
 end;
 
-procedure TBuildProfiler.EndStep(const StepName: string);
+procedure TBuildProfiler.EndStep(const StepName: string);  
 var
   Index: Integer;
   StartTick, Duration: QWord;
@@ -1819,7 +1819,7 @@ begin
   end;
 end;
 
-procedure TBuildProfiler.PrintReport;
+procedure TBuildProfiler.PrintReport;  
 var
   i: Integer;
   TotalDuration: Double;

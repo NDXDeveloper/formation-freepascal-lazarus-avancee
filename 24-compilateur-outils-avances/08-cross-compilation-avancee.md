@@ -245,7 +245,7 @@ Paramètres de compilation
 
 **Étape 2 : Analyse du code**
 ```pascal
-program Hello;
+program Hello;  
 begin
   WriteLn('Hello Cross-Compilation!');
 end.
@@ -254,14 +254,14 @@ end.
 
 **Étape 3 : Génération de code**
 ```
-Code Pascal → Représentation intermédiaire →
+Code Pascal → Représentation intermédiaire →  
 Assembleur pour la cible → Fichiers objets
 ```
 
 **Étape 4 : Liaison**
 ```
-Fichiers objets (.o) + RTL cible + Bibliothèques système cible →
-Linker de la plateforme cible →
+Fichiers objets (.o) + RTL cible + Bibliothèques système cible →  
+Linker de la plateforme cible →  
 Exécutable final (.exe, .elf, etc.)
 ```
 
@@ -359,12 +359,12 @@ Avant de vous lancer dans la cross-compilation, il est recommandé de maîtriser
 Pour une installation complète multi-plateformes :
 
 ```
-FreePascal de base              : ~200 MB
-Lazarus IDE                     : ~150 MB
+FreePascal de base              : ~200 MB  
+Lazarus IDE                     : ~150 MB  
 Sources FPC                     : ~100 MB
 
-Cross-compiler Windows          : ~300 MB
-Cross-compiler ARM              : ~200 MB
+Cross-compiler Windows          : ~300 MB  
+Cross-compiler ARM              : ~200 MB  
 Cross-compiler Android          : ~500 MB
 
 Total recommandé                : ~2 GB

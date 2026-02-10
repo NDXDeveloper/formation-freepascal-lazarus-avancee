@@ -102,8 +102,8 @@ wsl --list --verbose
 Lors du premier lancement d'Ubuntu :
 ```bash
 # Créer votre utilisateur
-Enter new UNIX username: votrenom
-New password: ********
+Enter new UNIX username: votrenom  
+New password: ********  
 Retype new password: ********
 ```
 
@@ -128,14 +128,14 @@ sudo apt install fpc
 sudo apt install lazarus lazarus-ide
 
 # Vérifier les versions
-fpc -iV
+fpc -iV  
 lazbuild --version
 ```
 
 **Option 2 : Installation depuis les PPA (versions plus récentes)**
 ```bash
 # Ajouter le PPA
-sudo add-apt-repository ppa:lazarus-team/lazarus
+sudo add-apt-repository ppa:lazarus-team/lazarus  
 sudo apt update
 
 # Installer
@@ -145,11 +145,11 @@ sudo apt install lazarus
 **Option 3 : Installation manuelle (dernière version)**
 ```bash
 # Télécharger depuis le site officiel
-cd ~/Downloads
+cd ~/Downloads  
 wget https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%203.4/lazarus-project_3.4.0-0_amd64.deb
 
 # Installer
-sudo dpkg -i lazarus-project_3.4.0-0_amd64.deb
+sudo dpkg -i lazarus-project_3.4.0-0_amd64.deb  
 sudo apt-get install -f  # Résoudre les dépendances
 ```
 
@@ -157,7 +157,7 @@ sudo apt-get install -f  # Résoudre les dépendances
 
 ```bash
 # Tester FreePascal
-echo 'program test; begin writeln("Hello from WSL!"); end.' > test.pas
+echo 'program test; begin writeln("Hello from WSL!"); end.' > test.pas  
 fpc test.pas
 ./test
 
@@ -221,14 +221,14 @@ explorer.exe \\wsl$\Ubuntu\home\votrenom
 **❌ À éviter : Travailler sur /mnt/c depuis WSL**
 ```bash
 # LENT - Les performances sont dégradées
-cd /mnt/c/Users/VotreNom/Projects
+cd /mnt/c/Users/VotreNom/Projects  
 fpc monprojet.pas  # Sera plus lent
 ```
 
 **✅ Recommandé : Travailler dans le système de fichiers Linux**
 ```bash
 # RAPIDE - Performances natives Linux
-cd ~/projects
+cd ~/projects  
 fpc monprojet.pas  # Sera rapide
 ```
 
@@ -265,13 +265,13 @@ C:\Projects\MonProjet\     (code source Windows)
 echo Synchronisation vers WSL...
 
 :: Définir les chemins
-set WINDOWS_PROJECT=C:\Projects\MonProjet
+set WINDOWS_PROJECT=C:\Projects\MonProjet  
 set WSL_PROJECT=/home/votrenom/projects/MonProjet
 
 :: Synchroniser avec rsync (plus rapide)
 wsl rsync -av --delete "%WINDOWS_PROJECT%/" "%WSL_PROJECT%/"
 
-echo Synchronisation terminée!
+echo Synchronisation terminée!  
 pause
 ```
 
@@ -311,7 +311,7 @@ else
 fi
 
 # Compiler
-echo "Compilation pour $PLATFORM..."
+echo "Compilation pour $PLATFORM..."  
 lazbuild --build-mode=Release projet.lpi
 
 # Copier l'exécutable dans le bon dossier
@@ -376,27 +376,27 @@ fpc -Twin64 -Px86_64 monprogramme.pas
 ```bash
 #!/bin/bash
 
-PROJECT="MonProjet"
+PROJECT="MonProjet"  
 PROJECT_FILE="src/${PROJECT}.lpi"
 
-echo "================================"
-echo " Cross-Compilation Multi-OS"
-echo "================================"
+echo "================================"  
+echo " Cross-Compilation Multi-OS"  
+echo "================================"  
 echo
 
 # Build Linux
-echo "[1/2] Compilation Linux..."
-lazbuild --os=linux --cpu=x86_64 "$PROJECT_FILE"
+echo "[1/2] Compilation Linux..."  
+lazbuild --os=linux --cpu=x86_64 "$PROJECT_FILE"  
 mv "$PROJECT" "bin/${PROJECT}-linux"
 
 # Build Windows
-echo "[2/2] Compilation Windows..."
-lazbuild --os=win64 --cpu=x86_64 "$PROJECT_FILE"
+echo "[2/2] Compilation Windows..."  
+lazbuild --os=win64 --cpu=x86_64 "$PROJECT_FILE"  
 mv "${PROJECT}.exe" "bin/${PROJECT}.exe"
 
-echo
-echo "Build terminé!"
-echo "  Linux:   bin/${PROJECT}-linux"
+echo  
+echo "Build terminé!"  
+echo "  Linux:   bin/${PROJECT}-linux"  
 echo "  Windows: bin/${PROJECT}.exe"
 ```
 
@@ -474,7 +474,7 @@ Si WSLg n'est pas disponible, utiliser un serveur X11.
 nano ~/.bashrc
 
 # Ajouter à la fin :
-export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
+export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0  
 export LIBGL_ALWAYS_INDIRECT=1
 
 # Recharger
@@ -537,7 +537,7 @@ else
 endif
 
 # Configuration
-PROJECT := MonProjet
+PROJECT := MonProjet  
 BUILD_DIR := bin
 
 .PHONY: all clean
@@ -560,9 +560,9 @@ clean:
 #!/bin/bash
 
 # Couleurs pour l'affichage
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
+RED='\033[0;31m'  
+GREEN='\033[0;32m'  
+YELLOW='\033[1;33m'  
 NC='\033[0m' # No Color
 
 # Détecter l'environnement
@@ -605,7 +605,7 @@ esac
 mkdir -p "$OUTPUT_DIR"
 
 # Compiler
-echo -e "${GREEN}Compilation...${NC}"
+echo -e "${GREEN}Compilation...${NC}"  
 lazbuild --build-mode=Release projet.lpi
 
 if [ $? -eq 0 ]; then
@@ -705,9 +705,9 @@ Add-MpPreference -ExclusionPath "\\wsl$"
 **Fichier : `C:\Users\VotreNom\.wslconfig`**
 ```ini
 [wsl2]
-memory=4GB          # Limiter à 4GB
-processors=4        # Utiliser 4 cœurs
-swap=2GB           # 2GB de swap
+memory=4GB          # Limiter à 4GB  
+processors=4        # Utiliser 4 cœurs  
+swap=2GB           # 2GB de swap  
 localhostForwarding=true
 ```
 
@@ -769,8 +769,8 @@ curl http://localhost:3000
 
 ```bash
 # Cloner le projet dans WSL
-cd ~
-git clone https://github.com/user/projet.git
+cd ~  
+git clone https://github.com/user/projet.git  
 cd projet
 
 # Développer sous Windows via \\wsl$
@@ -790,12 +790,12 @@ cd projet
 echo "=== Tests Multi-OS ==="
 
 # Test Linux
-echo "[1/2] Tests Linux..."
+echo "[1/2] Tests Linux..."  
 lazbuild --os=linux tests/TestRunner.lpi
 ./tests/TestRunner
 
 # Test Windows (via WSL)
-echo "[2/2] Tests Windows..."
+echo "[2/2] Tests Windows..."  
 lazbuild --os=win64 tests/TestRunner.lpi
 ./tests/TestRunner.exe  # Exécuté via WSL
 
@@ -813,17 +813,17 @@ set -e  # Arrêter en cas d'erreur
 echo "=== Pipeline de Build ==="
 
 # Étape 1 : Nettoyage
-echo "[1/5] Nettoyage..."
+echo "[1/5] Nettoyage..."  
 rm -rf bin/*
 
 # Étape 2 : Build Linux
-echo "[2/5] Build Linux..."
-lazbuild --os=linux --build-mode=Release projet.lpi
+echo "[2/5] Build Linux..."  
+lazbuild --os=linux --build-mode=Release projet.lpi  
 mv projet bin/projet-linux
 
 # Étape 3 : Build Windows
-echo "[3/5] Build Windows..."
-lazbuild --os=win64 --build-mode=Release projet.lpi
+echo "[3/5] Build Windows..."  
+lazbuild --os=win64 --build-mode=Release projet.lpi  
 mv projet.exe bin/projet.exe
 
 # Étape 4 : Tests
@@ -831,7 +831,7 @@ echo "[4/5] Exécution des tests..."
 ./bin/projet-linux --run-tests
 
 # Étape 5 : Copie vers Windows
-echo "[5/5] Copie vers Windows..."
+echo "[5/5] Copie vers Windows..."  
 cp bin/* /mnt/c/Users/$USER/Desktop/releases/
 
 echo "Pipeline terminé!"

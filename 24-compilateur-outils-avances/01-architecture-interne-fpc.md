@@ -60,7 +60,7 @@ Imaginez que vous lisez une phrase en français. Vous ne lisez pas lettre par le
 
 **Exemple de code source :**
 ```pascal
-program Hello;
+program Hello;  
 var
   x: Integer;
 begin
@@ -162,7 +162,7 @@ end.
 
 **Vérification de portée :**
 ```pascal
-procedure Test;
+procedure Test;  
 var
   local: Integer;
 begin
@@ -349,15 +349,15 @@ x := x + 1;
 
 **Code assembleur x86 généré (simplifié) :**
 ```asm
-mov eax, [x]      ; Charger x dans le registre eax
-add eax, 1        ; Ajouter 1
+mov eax, [x]      ; Charger x dans le registre eax  
+add eax, 1        ; Ajouter 1  
 mov [x], eax      ; Stocker le résultat dans x
 ```
 
 **Code assembleur ARM généré (simplifié) :**
 ```asm
-ldr r0, [x]       ; Charger x dans le registre r0
-add r0, r0, #1    ; Ajouter 1
+ldr r0, [x]       ; Charger x dans le registre r0  
+add r0, r0, #1    ; Ajouter 1  
 str r0, [x]       ; Stocker le résultat dans x
 ```
 

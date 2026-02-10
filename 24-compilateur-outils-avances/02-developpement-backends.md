@@ -202,16 +202,16 @@ Utilisables pour n'importe quelle opération :
 
 **x86-64 (Intel/AMD) :**
 ```
-RAX, RBX, RCX, RDX     - 64 bits
-RSI, RDI, RBP, RSP     - 64 bits
+RAX, RBX, RCX, RDX     - 64 bits  
+RSI, RDI, RBP, RSP     - 64 bits  
 R8 à R15               - 64 bits (ajoutés en 64-bit)
 ```
 
 **ARM :**
 ```
-R0 à R12               - 32 bits généraux
-R13 (SP)               - Stack Pointer (pile)
-R14 (LR)               - Link Register (retour de fonction)
+R0 à R12               - 32 bits généraux  
+R13 (SP)               - Stack Pointer (pile)  
+R14 (LR)               - Link Register (retour de fonction)  
 R15 (PC)               - Program Counter (instruction suivante)
 ```
 
@@ -236,13 +236,13 @@ R15 (PC)               - Program Counter (instruction suivante)
 x := y + 5;
 
 // Généré par le backend x86-64
-mov rax, [y]      // Charger y dans RAX
-add rax, 5        // Ajouter 5 à RAX
+mov rax, [y]      // Charger y dans RAX  
+add rax, 5        // Ajouter 5 à RAX  
 mov [x], rax      // Stocker RAX dans x
 
 // Généré par le backend ARM
-ldr r0, [y]       // Charger y dans R0
-add r0, r0, #5    // Ajouter 5 à R0
+ldr r0, [y]       // Charger y dans R0  
+add r0, r0, #5    // Ajouter 5 à R0  
 str r0, [x]       // Stocker R0 dans x
 ```
 
@@ -270,7 +270,7 @@ add [x], 1
 inc [x]
 
 ; Option 3 : LEA (Load Effective Address - astucieux!)
-lea rax, [x+1]
+lea rax, [x+1]  
 mov [x], rax
 ```
 
@@ -313,7 +313,7 @@ Les processeurs ont un nombre limité de registres, mais un programme peut avoir
 Parcours linéaire du code, allocation à la demande :
 
 ```pascal
-procedure simple_allocation;
+procedure simple_allocation;  
 var
   free_registers: set of tregister;
 begin
@@ -347,22 +347,22 @@ Méthode sophistiquée utilisée par FPC pour les optimisations avancées :
 
 ```pascal
 // Variables et leur durée de vie
-x := 5;        // x vit de ligne 1 à 3
-y := x + 2;    // y vit de ligne 2 à 4
-z := x + 1;    // z vit de ligne 3 à 5
+x := 5;        // x vit de ligne 1 à 3  
+y := x + 2;    // y vit de ligne 2 à 4  
+z := x + 1;    // z vit de ligne 3 à 5  
 w := y + z;    // w vit de ligne 4 à 5
 
 // Graphe d'interférence
-x -- y  (vivent ensemble)
-x -- z  (vivent ensemble)
-y -- z  (vivent ensemble)
-y -- w  (vivent ensemble)
+x -- y  (vivent ensemble)  
+x -- z  (vivent ensemble)  
+y -- z  (vivent ensemble)  
+y -- w  (vivent ensemble)  
 z -- w  (vivent ensemble)
 
 // Coloration (allocation)
-x → R0
-y → R1
-z → R2
+x → R0  
+y → R1  
+z → R2  
 w → R0  (on peut réutiliser R0, x est mort)
 ```
 
@@ -372,18 +372,18 @@ Quand il n'y a plus de registres libres, on doit **sauvegarder** (spill) une var
 
 ```pascal
 // Trop de variables actives
-a := b + c;
-d := e + f;
-g := h + i;
+a := b + c;  
+d := e + f;  
+g := h + i;  
 j := k + l;
 
 // Si seulement 3 registres disponibles :
-mov r0, [b]
-add r0, [c]
+mov r0, [b]  
+add r0, [c]  
 mov [a], r0      // Sauvegarder 'a' en mémoire (spill)
 
-mov r0, [e]      // Réutiliser r0
-add r0, [f]
+mov r0, [e]      // Réutiliser r0  
+add r0, [f]  
 mov [d], r0
 ```
 
@@ -400,7 +400,7 @@ Important pour les appels de fonction :
 - Exemples x86-64 : RBX, RSI, RDI, R12-R15
 
 ```pascal
-procedure Example;
+procedure Example;  
 var
   x: Integer;  // Supposons x dans RBX (callee-saved)
 begin
@@ -479,7 +479,7 @@ function Add(a, b, c, d: Integer): Integer;
 ### Implémentation dans le backend
 
 ```pascal
-procedure tcgcpu.a_call_reg(reg: tregister);
+procedure tcgcpu.a_call_reg(reg: tregister);  
 var
   para: tcgpara;
 begin
@@ -544,8 +544,8 @@ Pile (croît vers le bas) :
 
 ```asm
 ; x86-64
-push rbp           ; Sauvegarder l'ancien BP
-mov rbp, rsp       ; Nouveau BP = SP actuel
+push rbp           ; Sauvegarder l'ancien BP  
+mov rbp, rsp       ; Nouveau BP = SP actuel  
 sub rsp, 32        ; Allouer 32 octets pour variables locales
 ```
 
@@ -553,15 +553,15 @@ sub rsp, 32        ; Allouer 32 octets pour variables locales
 
 ```asm
 ; x86-64
-mov rsp, rbp       ; Restaurer SP
-pop rbp            ; Restaurer ancien BP
+mov rsp, rbp       ; Restaurer SP  
+pop rbp            ; Restaurer ancien BP  
 ret                ; Retourner
 ```
 
 ### Génération par le backend
 
 ```pascal
-procedure tcgcpu.g_proc_entry(localsize: longint);
+procedure tcgcpu.g_proc_entry(localsize: longint);  
 begin
   { Générer le prologue }
   list.concat(taicpu.op_reg(A_PUSH, NR_BP));
@@ -571,7 +571,7 @@ begin
     list.concat(taicpu.op_const_reg(A_SUB, localsize, NR_SP));
 end;
 
-procedure tcgcpu.g_proc_exit;
+procedure tcgcpu.g_proc_exit;  
 begin
   { Générer l'épilogue }
   list.concat(taicpu.op_reg_reg(A_MOV, NR_BP, NR_SP));
@@ -595,7 +595,7 @@ Les **modes d'adressage** définissent comment accéder aux données en mémoire
 La valeur est dans l'instruction elle-même :
 
 ```asm
-mov rax, 42        ; 42 est une valeur immédiate
+mov rax, 42        ; 42 est une valeur immédiate  
 add rbx, 10
 ```
 
@@ -604,7 +604,7 @@ add rbx, 10
 La valeur est dans un registre :
 
 ```asm
-mov rax, rbx       ; Copier RBX dans RAX
+mov rax, rbx       ; Copier RBX dans RAX  
 add rcx, rdx       ; RCX = RCX + RDX
 ```
 
@@ -682,7 +682,7 @@ Remplacer des séquences d'instructions inefficaces :
 
 **Avant optimisation :**
 ```asm
-mov rax, 0
+mov rax, 0  
 add rax, rbx
 ```
 
@@ -694,7 +694,7 @@ mov rax, rbx       ; Plus court et plus rapide
 **Autre exemple :**
 ```asm
 ; Avant
-push rax
+push rax  
 pop rbx
 
 ; Après
@@ -712,13 +712,13 @@ Certains processeurs ont des instructions optimisées :
 x := y + 4;
 
 // Naïf
-mov rax, [y]
-add rax, 4
+mov rax, [y]  
+add rax, 4  
 mov [x], rax
 
 // Optimisé avec LEA
-mov rax, [y]
-lea rax, [rax+4]   ; LEA peut faire addition sans affecter flags
+mov rax, [y]  
+lea rax, [rax+4]   ; LEA peut faire addition sans affecter flags  
 mov [x], rax
 ```
 
@@ -727,8 +727,8 @@ mov [x], rax
 ```pascal
 // Sauvegarder plusieurs registres
 // Naïf
-str r0, [sp, #-4]!
-str r1, [sp, #-4]!
+str r0, [sp, #-4]!  
+str r1, [sp, #-4]!  
 str r2, [sp, #-4]!
 
 // Optimisé
@@ -745,15 +745,15 @@ for i := 0 to 3 do
   result[i] := a[i] + b[i];
 
 // Naïf (4 instructions)
-mov rax, [a]
-add rax, [b]
+mov rax, [a]  
+add rax, [b]  
 mov [result], rax
 ; ... répéter 4 fois
 
 // Optimisé avec SSE (x86)
-movups xmm0, [a]       ; Charger 4 entiers en une fois
-movups xmm1, [b]
-addps xmm0, xmm1       ; Additionner les 4 en parallèle
+movups xmm0, [a]       ; Charger 4 entiers en une fois  
+movups xmm1, [b]  
+addps xmm0, xmm1       ; Additionner les 4 en parallèle  
 movups [result], xmm0  ; Stocker les 4 résultats
 ```
 
@@ -851,7 +851,7 @@ type
 
 implementation
 
-procedure tcgcpu.emit(op: tasmop; dest, src: tregister);
+procedure tcgcpu.emit(op: tasmop; dest, src: tregister);  
 var
   ai: taicpu;
 begin
@@ -886,7 +886,7 @@ begin
   emit(asmop, dst, src);
 end;
 
-procedure tcgcpu.a_call_name(const s: string);
+procedure tcgcpu.a_call_name(const s: string);  
 var
   ai: taicpu;
 begin
@@ -936,7 +936,7 @@ begin
   result := spill_register(list);
 end;
 
-procedure trgcpu.ungetregister(list: TAsmList; r: tregister);
+procedure trgcpu.ungetregister(list: TAsmList; r: tregister);  
 begin
   { Marquer le registre comme libre }
   used_registers := used_registers - [r];
@@ -948,7 +948,7 @@ end.
 ### Étape 4 : Test du backend
 
 ```pascal
-program TestBackend;
+program TestBackend;  
 var
   x, y, z: Integer;
 begin
@@ -962,21 +962,21 @@ end.
 **Code généré par notre backend hypothétique :**
 ```asm
 ; x := 10
-MOV R0, #10
+MOV R0, #10  
 MOV [x], R0
 
 ; y := 20
-MOV R0, #20
+MOV R0, #20  
 MOV [y], R0
 
 ; z := x + y
-MOV R0, [x]
-MOV R1, [y]
-ADD R0, R1
+MOV R0, [x]  
+MOV R1, [y]  
+ADD R0, R1  
 MOV [z], R0
 
 ; WriteLn(z)
-MOV R0, [z]
+MOV R0, [z]  
 CALL WriteLn
 
 ; Fin du programme
@@ -1013,19 +1013,19 @@ FPC supporte officiellement de nombreuses architectures. Voici les principales :
 
 **Registres principaux :**
 ```
-EAX - Accumulateur (calculs, retour de fonction)
-EBX - Base
-ECX - Compteur (boucles)
-EDX - Données
-ESI - Source Index
-EDI - Destination Index
-EBP - Base Pointer (frame de pile)
+EAX - Accumulateur (calculs, retour de fonction)  
+EBX - Base  
+ECX - Compteur (boucles)  
+EDX - Données  
+ESI - Source Index  
+EDI - Destination Index  
+EBP - Base Pointer (frame de pile)  
 ESP - Stack Pointer (sommet de pile)
 ```
 
 **Exemple de code généré :**
 ```pascal
-function Add(a, b: Integer): Integer;
+function Add(a, b: Integer): Integer;  
 begin
   Result := a + b;
 end;
@@ -1033,16 +1033,16 @@ end;
 
 ```asm
 ; Prologue
-push ebp
+push ebp  
 mov ebp, esp
 
 ; a est dans [ebp+8], b dans [ebp+12]
-mov eax, [ebp+8]      ; Charger a
+mov eax, [ebp+8]      ; Charger a  
 add eax, [ebp+12]     ; Ajouter b
 ; Résultat automatiquement dans EAX
 
 ; Épilogue
-pop ebp
+pop ebp  
 ret
 ```
 
@@ -1056,13 +1056,13 @@ ret
 
 **Registres :**
 ```
-RAX, RBX, RCX, RDX, RSI, RDI, RBP, RSP  (extensions 64-bit)
+RAX, RBX, RCX, RDX, RSI, RDI, RBP, RSP  (extensions 64-bit)  
 R8, R9, R10, R11, R12, R13, R14, R15    (nouveaux)
 ```
 
 **Exemple de code généré :**
 ```pascal
-function Multiply(a, b: Int64): Int64;
+function Multiply(a, b: Int64): Int64;  
 begin
   Result := a * b;
 end;
@@ -1071,8 +1071,8 @@ end;
 ```asm
 ; Windows x64 calling convention
 ; a dans RCX, b dans RDX
-mov rax, rcx
-imul rax, rdx     ; Multiplication signée 64 bits
+mov rax, rcx  
+imul rax, rdx     ; Multiplication signée 64 bits  
 ret               ; Résultat dans RAX
 ```
 
@@ -1086,17 +1086,17 @@ ret               ; Résultat dans RAX
 
 **Registres :**
 ```
-R0-R3   - Arguments et valeurs temporaires
-R4-R11  - Variables locales (préservés)
-R12     - Intra-procedure call scratch
-R13(SP) - Stack Pointer
-R14(LR) - Link Register (adresse de retour)
+R0-R3   - Arguments et valeurs temporaires  
+R4-R11  - Variables locales (préservés)  
+R12     - Intra-procedure call scratch  
+R13(SP) - Stack Pointer  
+R14(LR) - Link Register (adresse de retour)  
 R15(PC) - Program Counter
 ```
 
 **Exemple de code généré :**
 ```pascal
-function Add(a, b: Integer): Integer;
+function Add(a, b: Integer): Integer;  
 begin
   Result := a + b;
 end;
@@ -1104,7 +1104,7 @@ end;
 
 ```asm
 ; a dans R0, b dans R1
-add r0, r0, r1    ; R0 = R0 + R1
+add r0, r0, r1    ; R0 = R0 + R1  
 bx lr             ; Retour (branch to LR)
 ```
 
@@ -1115,7 +1115,7 @@ bx lr             ; Retour (branch to LR)
 
 ```asm
 ; Instruction conditionnelle
-cmp r0, #0        ; Comparer R0 à 0
+cmp r0, #0        ; Comparer R0 à 0  
 addgt r1, r1, #1  ; Ajouter 1 à R1 si R0 > 0 (Greater Than)
 ```
 
@@ -1129,16 +1129,16 @@ addgt r1, r1, #1  ; Ajouter 1 à R1 si R0 > 0 (Greater Than)
 
 **Registres :**
 ```
-X0-X30  - Registres 64 bits
-W0-W30  - Accès 32 bits des registres X
-SP      - Stack Pointer
+X0-X30  - Registres 64 bits  
+W0-W30  - Accès 32 bits des registres X  
+SP      - Stack Pointer  
 PC      - Program Counter (pas directement accessible)
 ```
 
 **Exemple :**
 ```asm
 ; a dans X0, b dans X1
-add x0, x0, x1    ; Addition 64 bits
+add x0, x0, x1    ; Addition 64 bits  
 ret               ; Retour
 ```
 
@@ -1159,7 +1159,7 @@ var
 
 **Exemple de code généré :**
 ```pascal
-procedure LED_On;
+procedure LED_On;  
 begin
   PORTB := PORTB or (1 shl 5);  // Allumer la LED pin 13
 end;
@@ -1167,9 +1167,9 @@ end;
 
 ```asm
 ; AVR assembleur
-in r24, PORTB      ; Lire le port B
-ori r24, 0x20      ; OR avec 00100000 (bit 5)
-out PORTB, r24     ; Écrire dans le port B
+in r24, PORTB      ; Lire le port B  
+ori r24, 0x20      ; OR avec 00100000 (bit 5)  
+out PORTB, r24     ; Écrire dans le port B  
 ret
 ```
 
@@ -1183,7 +1183,7 @@ ret
 
 **Exemple :**
 ```pascal
-function Add(a, b: Integer): Integer;
+function Add(a, b: Integer): Integer;  
 begin
   Result := a + b;
 end;
@@ -1207,7 +1207,7 @@ end;
 Le code Pascal que vous écrivez est généralement portable :
 
 ```pascal
-program CrossPlatform;
+program CrossPlatform;  
 var
   x, y: Integer;
 begin
@@ -1303,7 +1303,7 @@ Valeur 0x12345678 en mémoire : 12 34 56 78
 uses
   System.SysUtils;
 
-function SwapEndian(Value: LongWord): LongWord;
+function SwapEndian(Value: LongWord): LongWord;  
 begin
   Result := SwapEndian(Value);  // Fonction RTL portable
 end;
@@ -1326,7 +1326,7 @@ end;
 FPC permet d'écrire de l'assembleur directement dans le code Pascal :
 
 ```pascal
-function GetCPUID: string;
+function GetCPUID: string;  
 var
   a, b, c, d: LongWord;
 begin
@@ -1351,13 +1351,13 @@ FPC supporte les deux syntaxes :
 
 **Syntaxe Intel (par défaut) :**
 ```asm
-mov eax, ebx      // destination, source
+mov eax, ebx      // destination, source  
 add eax, 10
 ```
 
 **Syntaxe AT&T :**
 ```asm
-movl %ebx, %eax   // source, destination (inversé!)
+movl %ebx, %eax   // source, destination (inversé!)  
 addl $10, %eax
 ```
 
@@ -1366,7 +1366,7 @@ addl $10, %eax
 Vous pouvez spécifier quels registres utiliser :
 
 ```pascal
-procedure FastCopy(src, dst: Pointer; count: Integer);
+procedure FastCopy(src, dst: Pointer; count: Integer);  
 begin
   asm
     mov esi, src      // Source dans ESI
@@ -1383,7 +1383,7 @@ Pour du code assembleur complexe, utilisez des fichiers séparés :
 
 **myasm.asm :**
 ```asm
-section .text
+section .text  
 global my_fast_function
 
 my_fast_function:
@@ -1417,7 +1417,7 @@ Option `-a` pour générer le listing assembleur :
 fpc -a myprogram.pas
 
 # Voir le fichier généré
-cat myprogram.s      # Linux
+cat myprogram.s      # Linux  
 type myprogram.s     # Windows
 ```
 
@@ -1479,9 +1479,9 @@ for i := 1 to 4 do
   a[i] := 0;
 
 // Optimisé (déroulé)
-a[1] := 0;
-a[2] := 0;
-a[3] := 0;
+a[1] := 0;  
+a[2] := 0;  
+a[3] := 0;  
 a[4] := 0;
 ```
 
@@ -1494,11 +1494,11 @@ Certaines optimisations dépendent du backend :
 x := y * 3;
 
 // Naïf
-mov eax, [y]
+mov eax, [y]  
 imul eax, 3
 
 // Optimisé
-mov eax, [y]
+mov eax, [y]  
 lea eax, [eax + eax*2]  // eax = eax + eax*2 = eax*3
 ```
 
@@ -1507,12 +1507,12 @@ lea eax, [eax + eax*2]  // eax = eax + eax*2 = eax*3
 x := y * 4;
 
 // Naïf
-mov r0, [y]
-mov r1, #4
+mov r0, [y]  
+mov r1, #4  
 mul r0, r0, r1
 
 // Optimisé
-ldr r0, [y]
+ldr r0, [y]  
 lsl r0, r0, #2     // Shift left 2 = multiplication par 4
 ```
 
@@ -1612,8 +1612,8 @@ qemu-arm ./myprogram_arm
 **Docker :** Conteneurs multi-arch
 ```dockerfile
 # Dockerfile pour ARM
-FROM arm32v7/debian
-COPY myprogram /app/
+FROM arm32v7/debian  
+COPY myprogram /app/  
 CMD ["/app/myprogram"]
 ```
 
@@ -1634,7 +1634,7 @@ type
     procedure TestAlignment;
   end;
 
-procedure TPortabilityTests.TestPointerSize;
+procedure TPortabilityTests.TestPointerSize;  
 begin
   {$IFDEF CPU64}
   AssertEquals('Pointer size', 8, SizeOf(Pointer));
@@ -1660,8 +1660,8 @@ end.
 git clone https://gitlab.com/freepascal.org/fpc/source.git fpc
 
 # Naviguer vers un backend
-cd fpc/compiler/x86_64     # Backend x86-64
-cd fpc/compiler/arm        # Backend ARM
+cd fpc/compiler/x86_64     # Backend x86-64  
+cd fpc/compiler/arm        # Backend ARM  
 cd fpc/compiler/aarch64    # Backend ARM 64-bit
 ```
 
@@ -1687,7 +1687,7 @@ x86_64/
 Dans `ncpuadd.pas` ou `ncpumat.pas` :
 
 ```pascal
-procedure tx86_64addnode.pass_generate_code;
+procedure tx86_64addnode.pass_generate_code;  
 begin
   // Vérifier si c'est une multiplication par puissance de 2
   if (nodetype = muln) and
@@ -1707,7 +1707,7 @@ end;
 
 ```bash
 # Recompiler le compilateur
-make clean
+make clean  
 make
 
 # Tester
@@ -1725,7 +1725,7 @@ cat test.s
 git checkout -b optimize_mul_by_two
 
 # Commiter
-git add compiler/x86_64/ncpumat.pas
+git add compiler/x86_64/ncpumat.pas  
 git commit -m "Optimize multiplication by power of 2 using shifts"
 
 # Créer une Merge Request sur GitLab

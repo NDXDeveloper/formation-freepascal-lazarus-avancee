@@ -93,7 +93,7 @@ objdump -g monprogramme | head
 **Sur Ubuntu/Linux (machine cible) :**
 ```bash
 # Installer gdbserver
-sudo apt update
+sudo apt update  
 sudo apt install gdbserver
 
 # Vérifier l'installation
@@ -168,7 +168,7 @@ Dans Lazarus :
 3. Définir les paramètres :
 
 ```
-Host: 192.168.1.100  (IP de la machine Linux)
+Host: 192.168.1.100  (IP de la machine Linux)  
 Port: 2345
 ```
 
@@ -204,15 +204,15 @@ Port: 2345
 #!/bin/bash
 
 # Configuration
-PROJECT="monprogramme"
+PROJECT="monprogramme"  
 PORT=2345
 
 # Compiler
-echo "Compilation..."
+echo "Compilation..."  
 lazbuild --build-mode=Debug "${PROJECT}.lpi"
 
 # Lancer gdbserver
-echo "Lancement de gdbserver sur le port $PORT..."
+echo "Lancement de gdbserver sur le port $PORT..."  
 gdbserver 0.0.0.0:$PORT "./$PROJECT"
 ```
 
@@ -309,7 +309,7 @@ gdbserver localhost:2345 ./monprogramme
 
 2. Dans Lazarus, se connecter à :
 ```
-Host: localhost
+Host: localhost  
 Port: 2345
 ```
 
@@ -380,7 +380,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copier l'application
-WORKDIR /app
+WORKDIR /app  
 COPY . /app
 
 # Compiler avec debug
@@ -404,7 +404,7 @@ docker run -p 2345:2345 mon-app-debug
 
 **Se connecter depuis l'IDE :**
 ```
-Host: localhost
+Host: localhost  
 Port: 2345
 ```
 
@@ -440,11 +440,11 @@ docker-compose up
 **Étape 1 : Installation des outils**
 ```bash
 # Sur le Raspberry Pi
-sudo apt update
+sudo apt update  
 sudo apt install fpc gdbserver
 
 # Vérifier l'installation
-fpc -iV
+fpc -iV  
 gdbserver --version
 ```
 
@@ -453,7 +453,7 @@ gdbserver --version
 # Transférer le code source
 # (via scp, git, ou partage réseau)
 
-cd ~/monprojet
+cd ~/monprojet  
 fpc -g -gl -Tlinux -Parm monprogramme.pas
 ```
 
@@ -478,7 +478,7 @@ scp monprogramme pi@192.168.1.150:~/
 
 **Sur Raspberry Pi :**
 ```bash
-chmod +x monprogramme
+chmod +x monprogramme  
 gdbserver :2345 ./monprogramme
 ```
 
@@ -490,22 +490,22 @@ gdbserver :2345 ./monprogramme
 ```bash
 #!/bin/bash
 
-PI_IP="192.168.1.150"
-PI_USER="pi"
+PI_IP="192.168.1.150"  
+PI_USER="pi"  
 PROJECT="monprogramme"
 
 echo "=== Build and Debug for Raspberry Pi ==="
 
 # Cross-compilation
-echo "[1/3] Cross-compilation..."
+echo "[1/3] Cross-compilation..."  
 fpc -Tlinux -Parm -g -gl "${PROJECT}.pas"
 
 # Transfert
-echo "[2/3] Transfert vers le Pi..."
+echo "[2/3] Transfert vers le Pi..."  
 scp "$PROJECT" "${PI_USER}@${PI_IP}:~/"
 
 # Lancement distant du debug
-echo "[3/3] Lancement de gdbserver sur le Pi..."
+echo "[3/3] Lancement de gdbserver sur le Pi..."  
 ssh "${PI_USER}@${PI_IP}" "gdbserver :2345 ~/${PROJECT}" &
 
 echo "Ready! Connect your debugger to ${PI_IP}:2345"
@@ -563,7 +563,7 @@ type
 
 implementation
 
-constructor TRemoteLogger.Create(const Host: string; Port: Word);
+constructor TRemoteLogger.Create(const Host: string; Port: Word);  
 var
   Addr: TInetSockAddr;
 begin
@@ -578,14 +578,14 @@ begin
   FConnected := fpConnect(FSocket, @Addr, SizeOf(Addr)) = 0;
 end;
 
-destructor TRemoteLogger.Destroy;
+destructor TRemoteLogger.Destroy;  
 begin
   if FConnected then
     CloseSocket(FSocket);
   inherited Destroy;
 end;
 
-procedure TRemoteLogger.Log(const Msg: string);
+procedure TRemoteLogger.Log(const Msg: string);  
 var
   LogLine: string;
 begin
@@ -630,7 +630,7 @@ program DebugTest;
 uses
   SysUtils;
 
-procedure DebugPoint(const Location: string);
+procedure DebugPoint(const Location: string);  
 begin
   {$IFDEF DEBUG}
   WriteLn('[DEBUG] ', Location);
@@ -882,43 +882,43 @@ gdbserver :2345 ./monprogramme
 #!/bin/bash
 
 # Configuration
-REMOTE_HOST="192.168.1.100"
-REMOTE_USER="user"
-REMOTE_PATH="/home/user/projects/monprojet"
-LOCAL_PATH="$(pwd)"
-PROJECT="monprojet"
+REMOTE_HOST="192.168.1.100"  
+REMOTE_USER="user"  
+REMOTE_PATH="/home/user/projects/monprojet"  
+LOCAL_PATH="$(pwd)"  
+PROJECT="monprojet"  
 DEBUG_PORT=2345
 
 # Couleurs
-GREEN='\033[0;32m'
-RED='\033[0;31m'
+GREEN='\033[0;32m'  
+RED='\033[0;31m'  
 NC='\033[0m'
 
 echo "=== Remote Debugging Setup ==="
 
 # 1. Compiler localement
-echo -e "${GREEN}[1/5]${NC} Compilation..."
+echo -e "${GREEN}[1/5]${NC} Compilation..."  
 lazbuild --build-mode=Debug "${PROJECT}.lpi"
 
 # 2. Transférer
-echo -e "${GREEN}[2/5]${NC} Transfert vers ${REMOTE_HOST}..."
+echo -e "${GREEN}[2/5]${NC} Transfert vers ${REMOTE_HOST}..."  
 scp "${PROJECT}" "${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}/"
 
 # 3. Créer tunnel SSH
-echo -e "${GREEN}[3/5]${NC} Création du tunnel SSH..."
+echo -e "${GREEN}[3/5]${NC} Création du tunnel SSH..."  
 ssh -f -N -L ${DEBUG_PORT}:localhost:${DEBUG_PORT} "${REMOTE_USER}@${REMOTE_HOST}"
 
 # 4. Lancer gdbserver sur la machine distante
-echo -e "${GREEN}[4/5]${NC} Lancement de gdbserver..."
+echo -e "${GREEN}[4/5]${NC} Lancement de gdbserver..."  
 ssh "${REMOTE_USER}@${REMOTE_HOST}" "cd ${REMOTE_PATH} && gdbserver :${DEBUG_PORT} ./${PROJECT}" &
 
 # 5. Informations
-echo -e "${GREEN}[5/5]${NC} Configuration terminée!"
-echo
-echo "Connect your debugger to: localhost:${DEBUG_PORT}"
-echo
-echo "Pour arrêter:"
-echo "  killall ssh"
+echo -e "${GREEN}[5/5]${NC} Configuration terminée!"  
+echo  
+echo "Connect your debugger to: localhost:${DEBUG_PORT}"  
+echo  
+echo "Pour arrêter:"  
+echo "  killall ssh"  
 echo "  ssh ${REMOTE_USER}@${REMOTE_HOST} 'killall gdbserver'"
 ```
 

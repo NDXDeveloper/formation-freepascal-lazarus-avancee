@@ -123,13 +123,13 @@ type
 
 implementation
 
-function TCalculator.Add(A, B: Integer): Integer;
+function TCalculator.Add(A, B: Integer): Integer;  
 begin
   Result := A + B;
   FResult := Result;
 end;
 
-function TCalculator.Subtract(A, B: Integer): Integer;
+function TCalculator.Subtract(A, B: Integer): Integer;  
 begin
   Result := A - B;
   FResult := Result;
@@ -155,7 +155,7 @@ type
     function FindSourceFile(const AName: String): TLineReader; override;
   end;
 
-function TSimpleFileResolver.FindSourceFile(const AName: String): TLineReader;
+function TSimpleFileResolver.FindSourceFile(const AName: String): TLineReader;  
 var
   FileStream: TFileStream;
 begin
@@ -169,7 +169,7 @@ begin
   Result := TFileLineReader.Create(FileStream);
 end;
 
-procedure ParsePascalFile(const FileName: string);
+procedure ParsePascalFile(const FileName: string);  
 var
   FileResolver: TSimpleFileResolver;
   Engine: TPasTreeContainer;
@@ -219,7 +219,7 @@ end.
 
 **Résultat :**
 ```
-Unité analysée : Sample
+Unité analysée : Sample  
 Type de module : TPasModule
 ```
 
@@ -248,7 +248,7 @@ TPasElement (classe de base)
 ### Parcourir les éléments d'une unité
 
 ```pascal
-procedure ExploreModule(Module: TPasModule);
+procedure ExploreModule(Module: TPasModule);  
 var
   i: Integer;
   Element: TPasElement;
@@ -301,7 +301,7 @@ end;
 ### Extraire les informations d'une classe
 
 ```pascal
-procedure AnalyzeClass(ClassType: TPasClassType);
+procedure AnalyzeClass(ClassType: TPasClassType);  
 var
   i: Integer;
   Member: TPasElement;
@@ -364,7 +364,7 @@ Classe : TCalculator
 ### Extraire les paramètres
 
 ```pascal
-procedure AnalyzeProcedure(Proc: TPasProcedure);
+procedure AnalyzeProcedure(Proc: TPasProcedure);  
 var
   i, j: Integer;
   Arg: TPasArgument;
@@ -426,7 +426,7 @@ Procédure/Fonction : Subtract
 ### Détecter et analyser différents types
 
 ```pascal
-procedure AnalyzeType(PasType: TPasType);
+procedure AnalyzeType(PasType: TPasType);  
 begin
   WriteLn('Type : ', PasType.Name);
 
@@ -474,7 +474,7 @@ program DocGenerator;
 uses
   SysUtils, Classes, PasTree, PScanner, PParser;
 
-procedure GenerateClassDocumentation(ClassType: TPasClassType; Output: TStrings);
+procedure GenerateClassDocumentation(ClassType: TPasClassType; Output: TStrings);  
 var
   i: Integer;
   Member: TPasElement;
@@ -509,7 +509,7 @@ begin
   Output.Add('');
 end;
 
-procedure GenerateDocumentation(const InputFile, OutputFile: string);
+procedure GenerateDocumentation(const InputFile, OutputFile: string);  
 var
   FileResolver: TSimpleFileResolver;
   Engine: TPasTreeContainer;
@@ -586,7 +586,7 @@ type
     Used: Boolean;
   end;
 
-procedure FindUnusedProcedures(Module: TPasModule);
+procedure FindUnusedProcedures(Module: TPasModule);  
 var
   ProcList: TObjectList;
   i, j: Integer;
@@ -644,7 +644,7 @@ uses
 
 { Convertir les propriétés avec getters/setters explicites
   en propriétés modernes avec champs automatiques }
-procedure ModernizeProperties(ClassType: TPasClassType);
+procedure ModernizeProperties(ClassType: TPasClassType);  
 var
   i: Integer;
   Member: TPasElement;
@@ -701,21 +701,21 @@ type
     procedure GenerateReport;
   end;
 
-constructor TProjectAnalyzer.Create;
+constructor TProjectAnalyzer.Create;  
 begin
   inherited Create;
   FModules := TObjectList.Create(False);
   FFileResolver := TSimpleFileResolver.Create;
 end;
 
-destructor TProjectAnalyzer.Destroy;
+destructor TProjectAnalyzer.Destroy;  
 begin
   FModules.Free;
   FFileResolver.Free;
   inherited Destroy;
 end;
 
-procedure TProjectAnalyzer.AnalyzeFile(const FileName: string);
+procedure TProjectAnalyzer.AnalyzeFile(const FileName: string);  
 var
   Engine: TPasTreeContainer;
   Scanner: TPascalScanner;
@@ -743,7 +743,7 @@ begin
   end;
 end;
 
-procedure TProjectAnalyzer.AnalyzeProject(const ProjectDir: string);
+procedure TProjectAnalyzer.AnalyzeProject(const ProjectDir: string);  
 var
   SearchRec: TSearchRec;
   FilePath: string;
@@ -765,7 +765,7 @@ begin
   WriteLn('Nombre de modules analysés : ', FModules.Count);
 end;
 
-procedure TProjectAnalyzer.GenerateReport;
+procedure TProjectAnalyzer.GenerateReport;  
 var
   i: Integer;
   Module: TPasModule;
@@ -816,7 +816,7 @@ end.
 ### Capturer les erreurs de parsing
 
 ```pascal
-procedure SafeParseFile(const FileName: string);
+procedure SafeParseFile(const FileName: string);  
 var
   FileResolver: TSimpleFileResolver;
   Engine: TPasTreeContainer;
@@ -935,7 +935,7 @@ type
     procedure PrintStatistics;
   end;
 
-procedure TCustomAnalyzer.AnalyzeElement(Element: TPasElement);
+procedure TCustomAnalyzer.AnalyzeElement(Element: TPasElement);  
 var
   i: Integer;
   ClassType: TPasClassType;
@@ -959,7 +959,7 @@ begin
   end;
 end;
 
-procedure TCustomAnalyzer.PrintStatistics;
+procedure TCustomAnalyzer.PrintStatistics;  
 begin
   WriteLn('=== Statistiques ===');
   WriteLn('Classes : ', FClassCount);
@@ -990,7 +990,7 @@ end;
 ### 2. Vérifier les pointeurs nil
 
 ```pascal
-if Assigned(Module) and Assigned(Module.InterfaceSection) then
+if Assigned(Module) and Assigned(Module.InterfaceSection) then  
 begin
   // Utilisation sûre
 end;

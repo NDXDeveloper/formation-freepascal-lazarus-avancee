@@ -65,16 +65,16 @@ add eax, ebx
 ; Stocker dans z
 mov [z], eax
 ; Charger z pour l'affichage
-mov eax, [z]
-push eax
+mov eax, [z]  
+push eax  
 call WriteLn
 ```
 
 **Avec optimisation :**
 ```asm
 ; Le compilateur calcule : 5 + 10 = 15
-mov eax, 15
-push eax
+mov eax, 15  
+push eax  
 call WriteLn
 ; x, y, z n'existent même plus !
 ```
@@ -158,7 +158,7 @@ Les **optimisations peephole** examinent de petites séquences d'instructions et
 
 **Avant :**
 ```asm
-mov eax, ebx
+mov eax, ebx  
 mov eax, ebx    ; Redondant !
 ```
 
@@ -171,8 +171,8 @@ mov eax, ebx
 
 **Avant :**
 ```pascal
-x := x + 0;  // Ajouter 0 ne fait rien
-y := y * 1;  // Multiplier par 1 ne fait rien
+x := x + 0;  // Ajouter 0 ne fait rien  
+y := y * 1;  // Multiplier par 1 ne fait rien  
 z := z * 0;  // Multiplier par 0 donne toujours 0
 ```
 
@@ -189,8 +189,8 @@ Remplacer des opérations coûteuses par des équivalents moins coûteux :
 
 **Avant :**
 ```pascal
-x := y * 2;    // Multiplication
-x := y / 2;    // Division
+x := y * 2;    // Multiplication  
+x := y / 2;    // Division  
 x := y * 8;    // Multiplication par puissance de 2
 ```
 
@@ -273,25 +273,25 @@ end.
 
 **Avant :**
 ```pascal
-a := b + c;
-d := b + c;      // Recalcule la même chose !
+a := b + c;  
+d := b + c;      // Recalcule la même chose !  
 e := b + c;      // Encore !
 ```
 
 **Après :**
 ```pascal
-temp := b + c;   // Calculer une fois
-a := temp;
-d := temp;       // Réutiliser
+temp := b + c;   // Calculer une fois  
+a := temp;  
+d := temp;       // Réutiliser  
 e := temp;
 ```
 
 **Code assembleur optimisé :**
 ```asm
-mov eax, [b]
-add eax, [c]     ; Calcul une seule fois
-mov [a], eax
-mov [d], eax     ; Juste copier
+mov eax, [b]  
+add eax, [c]     ; Calcul une seule fois  
+mov [a], eax  
+mov [d], eax     ; Juste copier  
 mov [e], eax
 ```
 
@@ -368,7 +368,7 @@ Sortir de la boucle les calculs qui ne changent pas :
 
 **Avant :**
 ```pascal
-for i := 1 to 1000 do
+for i := 1 to 1000 do  
 begin
   limit := GetMaxValue;  // Ne change pas dans la boucle !
   if data[i] > limit then
@@ -378,8 +378,8 @@ end;
 
 **Après :**
 ```pascal
-limit := GetMaxValue;    // Appelé une seule fois
-for i := 1 to 1000 do
+limit := GetMaxValue;    // Appelé une seule fois  
+for i := 1 to 1000 do  
 begin
   if data[i] > limit then
     Process(data[i]);
@@ -400,9 +400,9 @@ for i := 0 to 3 do
 
 **Après déroulage :**
 ```pascal
-sum := sum + data[0];
-sum := sum + data[1];
-sum := sum + data[2];
+sum := sum + data[0];  
+sum := sum + data[1];  
+sum := sum + data[2];  
 sum := sum + data[3];
 // La boucle a disparu !
 ```
@@ -431,7 +431,7 @@ for i := 1 to 1000 do
 
 **Après :**
 ```pascal
-for i := 1 to 1000 do
+for i := 1 to 1000 do  
 begin
   a[i] := b[i] + c[i];
   d[i] := a[i] * 2;      // Dans la même boucle
@@ -451,7 +451,7 @@ Remplacer l'appel d'une fonction par son code directement :
 
 **Avant :**
 ```pascal
-function Square(x: Integer): Integer; inline;
+function Square(x: Integer): Integer; inline;  
 begin
   Result := x * x;
 end;
@@ -485,7 +485,7 @@ end.
 **Utilisation :**
 ```pascal
 // Marquer une fonction inline
-function FastCalc(x: Integer): Integer; inline;
+function FastCalc(x: Integer): Integer; inline;  
 begin
   Result := x * 2 + 1;
 end;
@@ -497,7 +497,7 @@ Optimiser les appels récursifs terminaux :
 
 **Avant (récursion) :**
 ```pascal
-function Factorial(n: Integer): Integer;
+function Factorial(n: Integer): Integer;  
 begin
   if n <= 1 then
     Result := 1
@@ -510,7 +510,7 @@ end;
 
 **Solution avec accumulation :**
 ```pascal
-function FactorialTail(n, acc: Integer): Integer;
+function FactorialTail(n, acc: Integer): Integer;  
 begin
   if n <= 1 then
     Result := acc
@@ -521,10 +521,10 @@ end;
 
 **Après optimisation :**
 ```pascal
-function FactorialTail(n, acc: Integer): Integer;
+function FactorialTail(n, acc: Integer): Integer;  
 label
   Start;
-begin
+begin  
 Start:
   if n <= 1 then
     Result := acc
@@ -545,7 +545,7 @@ Supprimer les affectations inutiles :
 
 **Avant :**
 ```pascal
-procedure Example;
+procedure Example;  
 var
   x: Integer;
 begin
@@ -557,7 +557,7 @@ end;
 
 **Après :**
 ```pascal
-procedure Example;
+procedure Example;  
 var
   x: Integer;
 begin
@@ -574,7 +574,7 @@ Placer les variables les plus utilisées dans les registres CPU plutôt qu'en m�
 
 **Sans optimisation :**
 ```pascal
-function Calculate(a, b, c: Integer): Integer;
+function Calculate(a, b, c: Integer): Integer;  
 begin
   Result := (a + b) * c;
 end;
@@ -582,17 +582,17 @@ end;
 
 **Code généré non optimisé :**
 ```asm
-mov eax, [a]     ; Charger depuis mémoire
-add eax, [b]     ; Charger depuis mémoire
-mov ebx, [c]     ; Charger depuis mémoire
-imul eax, ebx
+mov eax, [a]     ; Charger depuis mémoire  
+add eax, [b]     ; Charger depuis mémoire  
+mov ebx, [c]     ; Charger depuis mémoire  
+imul eax, ebx  
 mov [Result], eax ; Stocker en mémoire
 ```
 
 **Code optimisé (variables en registres) :**
 ```asm
 ; a déjà dans eax, b dans ebx, c dans ecx
-add eax, ebx     ; Directement dans les registres !
+add eax, ebx     ; Directement dans les registres !  
 imul eax, ecx
 ; Result déjà dans eax (convention d'appel)
 ```
@@ -605,7 +605,7 @@ Réduire les copies entre registres :
 
 **Avant :**
 ```asm
-mov eax, ebx
+mov eax, ebx  
 mov ecx, eax     ; Copie inutile
 ```
 
@@ -702,19 +702,19 @@ else
 
 **Code naïf :**
 ```asm
-cmp eax, ebx
-jle else_branch
-mov ecx, eax
-jmp end_if
-else_branch:
-mov ecx, ebx
+cmp eax, ebx  
+jle else_branch  
+mov ecx, eax  
+jmp end_if  
+else_branch:  
+mov ecx, ebx  
 end_if:
 ```
 
 **Code optimisé (x86) :**
 ```asm
-cmp eax, ebx
-cmovg ecx, eax   ; Conditional move - pas de saut !
+cmp eax, ebx  
+cmovg ecx, eax   ; Conditional move - pas de saut !  
 cmovle ecx, ebx
 ```
 
@@ -821,7 +821,7 @@ end;
 function FastCalc(x: Integer): Integer; inline;
 
 // Empêcher l'inlining
-function ComplexCalc(x: Integer): Integer;
+function ComplexCalc(x: Integer): Integer;  
 begin
   // Code complexe
 end; {$OPTIMIZATION NOINLINE}
@@ -841,7 +841,7 @@ fpc -Os myprogram.pas
 fpc -O3 myprogram.pas
 
 # Optimiser pour un processeur spécifique
-fpc -Op3 myprogram.pas     # Pentium 3 et supérieur
+fpc -Op3 myprogram.pas     # Pentium 3 et supérieur  
 fpc -CpARMV7A myprogram.pas # ARM v7-A
 
 # Désactiver des optimisations spécifiques
@@ -884,7 +884,7 @@ for i := 0 to GetLength - 1 do  // GetLength appelé à chaque itération !
 
 **Bon :**
 ```pascal
-len := GetLength;  // Appelé une fois
+len := GetLength;  // Appelé une fois  
 for i := 0 to len - 1 do
   Process(data[i]);
 ```
@@ -893,7 +893,7 @@ for i := 0 to len - 1 do
 
 **Moins optimisé :**
 ```pascal
-procedure Process(s: string);  // Copie de la chaîne
+procedure Process(s: string);  // Copie de la chaîne  
 begin
   WriteLn(Length(s));
 end;
@@ -901,7 +901,7 @@ end;
 
 **Plus optimisé :**
 ```pascal
-procedure Process(const s: string);  // Pas de copie !
+procedure Process(const s: string);  // Pas de copie !  
 begin
   WriteLn(Length(s));
 end;
@@ -911,8 +911,8 @@ end;
 
 **Moins optimisé :**
 ```pascal
-i := 0;
-while i < 1000 do
+i := 0;  
+while i < 1000 do  
 begin
   Process(i);
   Inc(i);
@@ -932,7 +932,7 @@ for i := 0 to 999 do  // Le compilateur optimise mieux les for
 var
   Global: Integer;  // Variable globale
 
-procedure Test;
+procedure Test;  
 begin
   Global := Global + 1;  // Accès mémoire
 end;
@@ -940,7 +940,7 @@ end;
 
 **Plus optimisé :**
 ```pascal
-procedure Test;
+procedure Test;  
 var
   Local: Integer;   // Variable locale → registre
 begin
@@ -1087,18 +1087,18 @@ var
     FunctionBTime: Int64;
   end;
 
-procedure StartProfile(var calls: Integer; var time: Int64);
+procedure StartProfile(var calls: Integer; var time: Int64);  
 begin
   Inc(calls);
   time := time - GetTickCount64;
 end;
 
-procedure StopProfile(var time: Int64);
+procedure StopProfile(var time: Int64);  
 begin
   time := time + GetTickCount64;
 end;
 
-procedure FunctionA;
+procedure FunctionA;  
 begin
   StartProfile(ProfileData.FunctionACalls, ProfileData.FunctionATime);
 
@@ -1117,7 +1117,7 @@ WriteLn('FunctionA: ', ProfileData.FunctionACalls, ' appels, ',
 Comparer plusieurs approches :
 
 ```pascal
-procedure BenchmarkApproach;
+procedure BenchmarkApproach;  
 const
   ITERATIONS = 1000000;
 var
@@ -1146,7 +1146,7 @@ end;
 
 **Code initial (non optimisé) :**
 ```pascal
-procedure BubbleSort(var arr: array of Integer);
+procedure BubbleSort(var arr: array of Integer);  
 var
   i, j, temp: Integer;
 begin
@@ -1163,7 +1163,7 @@ end;
 
 **Optimisation 1 : Réduire les comparaisons**
 ```pascal
-procedure BubbleSortOpt1(var arr: array of Integer);
+procedure BubbleSortOpt1(var arr: array of Integer);  
 var
   i, j, temp: Integer;
   n: Integer;
@@ -1182,7 +1182,7 @@ end;
 
 **Optimisation 2 : Sortie anticipée**
 ```pascal
-procedure BubbleSortOpt2(var arr: array of Integer);
+procedure BubbleSortOpt2(var arr: array of Integer);  
 var
   i, j, temp: Integer;
   swapped: Boolean;
@@ -1206,7 +1206,7 @@ end;
 
 **Optimisation 3 : Meilleur algorithme**
 ```pascal
-procedure QuickSort(var arr: array of Integer; left, right: Integer);
+procedure QuickSort(var arr: array of Integer; left, right: Integer);  
 var
   i, j, pivot, temp: Integer;
 begin
@@ -1246,7 +1246,7 @@ end;
 
 **Code initial :**
 ```pascal
-function FindValue(const arr: array of Integer; value: Integer): Integer;
+function FindValue(const arr: array of Integer; value: Integer): Integer;  
 var
   i: Integer;
 begin
@@ -1262,7 +1262,7 @@ end;
 
 **Optimisation : Tableau trié + recherche binaire**
 ```pascal
-function BinarySearch(const arr: array of Integer; value: Integer): Integer;
+function BinarySearch(const arr: array of Integer; value: Integer): Integer;  
 var
   left, right, mid: Integer;
 begin
@@ -1356,7 +1356,7 @@ end;
 
 **Code initial :**
 ```pascal
-function Distance(x1, y1, x2, y2: Double): Double;
+function Distance(x1, y1, x2, y2: Double): Double;  
 begin
   Result := Sqrt(Sqr(x2 - x1) + Sqr(y2 - y1));
 end;
@@ -1368,13 +1368,13 @@ for i := 1 to 1000000 do
 
 **Optimisation 1 : Distance carrée (éviter sqrt)**
 ```pascal
-function DistanceSquared(x1, y1, x2, y2: Double): Double; inline;
+function DistanceSquared(x1, y1, x2, y2: Double): Double; inline;  
 begin
   Result := Sqr(x2 - x1) + Sqr(y2 - y1);
 end;
 
 // Si on compare juste des distances, pas besoin de sqrt !
-for i := 1 to 1000000 do
+for i := 1 to 1000000 do  
 begin
   dsq := DistanceSquared(points[i].x, points[i].y, target.x, target.y);
   if dsq < threshold_squared then  // Comparer les carrés
@@ -1385,7 +1385,7 @@ end;
 
 **Optimisation 2 : Approximation rapide**
 ```pascal
-function FastDistance(x1, y1, x2, y2: Double): Double; inline;
+function FastDistance(x1, y1, x2, y2: Double): Double; inline;  
 var
   dx, dy, min, max: Double;
 begin
@@ -1563,7 +1563,7 @@ fpc -k-lhugetlbfs myprogram.pas
 
 **Code portable (fonctionne partout) :**
 ```pascal
-procedure GenericCopy(src, dst: Pointer; count: Integer);
+procedure GenericCopy(src, dst: Pointer; count: Integer);  
 var
   i: Integer;
 begin
@@ -1574,7 +1574,7 @@ end;
 
 **Code optimisé (spécifique x86-64) :**
 ```pascal
-procedure OptimizedCopy(src, dst: Pointer; count: Integer);
+procedure OptimizedCopy(src, dst: Pointer; count: Integer);  
 begin
   {$IFDEF CPUX86_64}
   asm
@@ -1599,7 +1599,7 @@ end;
 
 ```pascal
 // Code Pascal simple
-function Sum(const arr: array of Integer): Integer;
+function Sum(const arr: array of Integer): Integer;  
 var
   i: Integer;
 begin
@@ -1627,13 +1627,13 @@ Le compilateur peut :
 **Bon usage d'inline :**
 ```pascal
 // OUI - petite fonction, appelée souvent
-function Square(x: Integer): Integer; inline;
+function Square(x: Integer): Integer; inline;  
 begin
   Result := x * x;
 end;
 
 // NON - grosse fonction
-function ComplexCalculation(data: TArray<Double>): TResult; inline;
+function ComplexCalculation(data: TArray<Double>): TResult; inline;  
 begin
   // 100 lignes de code...
 end;
@@ -1649,8 +1649,8 @@ for i := 0 to 999 do
   Process(i);
 
 // Les while sont plus difficiles à optimiser
-i := 0;
-while i < 1000 do
+i := 0;  
+while i < 1000 do  
 begin
   Process(i);
   Inc(i);
@@ -1665,7 +1665,7 @@ Le `for` permet au compilateur de mieux comprendre l'intention et d'optimiser.
 
 ```pascal
 // Avec goto - difficile à optimiser
-procedure WithGoto;
+procedure WithGoto;  
 label
   Start, End;
 begin
@@ -1678,7 +1678,7 @@ begin
 end;
 
 // Sans goto - le compilateur optimise mieux
-procedure WithoutGoto;
+procedure WithoutGoto;  
 begin
   while not condition do
   begin
@@ -1813,14 +1813,14 @@ type
 
 implementation
 
-constructor TBenchmark.Create(const AName: string);
+constructor TBenchmark.Create(const AName: string);  
 begin
   FName := AName;
   FStart := GetTickCount64;
   WriteLn('Benchmark "', FName, '" started...');
 end;
 
-destructor TBenchmark.Destroy;
+destructor TBenchmark.Destroy;  
 var
   elapsed: QWord;
 begin

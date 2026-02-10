@@ -319,7 +319,7 @@ Les macros FPC sont surtout utiles pour activer/désactiver du code :
   {$DEFINE LOG_PREFIX := ''}
 {$ENDIF}
 
-procedure MyProcedure;
+procedure MyProcedure;  
 begin
   WriteLn(LOG_PREFIX, 'Début du traitement');
 
@@ -499,7 +499,7 @@ type
     {$ENDIF}
   end;
 
-function TMyClass.GetValue: Integer;
+function TMyClass.GetValue: Integer;  
 begin
   Result := 42;
 end;
@@ -593,7 +593,7 @@ const
   TempDirectory = TEMP_PATH;
   MyPathSep = PATH_SEP;
 
-function GetFullPath(const FileName: string): string;
+function GetFullPath(const FileName: string): string;  
 begin
   Result := ConfigDirectory + FileName;
 end;
@@ -616,7 +616,7 @@ end.
 
 program FeatureFlagsDemo;
 
-procedure InitializeApp;
+procedure InitializeApp;  
 begin
   WriteLn('Initialisation de l''application...');
 
@@ -687,7 +687,7 @@ const
   {$DEFINE APP_DATA := GetEnvironmentVariable('HOME') + '/.config'}
 {$ENDIF}
 
-function GetConfigPath: string;
+function GetConfigPath: string;  
 begin
   Result := APP_DATA + PathDelim + 'MyApp' + PathDelim;
 end;
@@ -709,7 +709,7 @@ end;
   {$DEFINE USE_INLINE := inline;}
 {$ENDIF}
 
-function Calculate(X: Integer): Integer; USE_INLINE
+function Calculate(X: Integer): Integer; USE_INLINE  
 begin
   {$IFNDEF OPTIMIZE_SIZE}
   WriteLn('Calcul avec X = ', X);
@@ -731,7 +731,7 @@ end;
   {$DEFINE STOP_TIMER := }
 {$ENDIF}
 
-procedure ProcessData;
+procedure ProcessData;  
 var
   StartTimer: QWord;
 begin
@@ -793,7 +793,7 @@ end.
 {$ENDIF}
 
 // Utilisation :
-procedure DoWork;
+procedure DoWork;  
 begin
   {$IFDEF DEBUG}
   WriteLn(TRACE_PREFIX, 'Début de DoWork');
@@ -852,7 +852,7 @@ end.
 
 **✅ Bon - utiliser des fonctions :**
 ```pascal
-procedure CompareAndLog(A, B: Integer; Greater, Less, Equal: string);
+procedure CompareAndLog(A, B: Integer; Greater, Less, Equal: string);  
 begin
   if A > B then WriteLn(Greater)
   else if A < B then WriteLn(Less)
@@ -928,7 +928,7 @@ end.
 
 **Pour des calculs paramétrés, utilisez des fonctions :**
 ```pascal
-function Square(X: Integer): Integer; inline;
+function Square(X: Integer): Integer; inline;  
 begin
   Result := X * X;
 end;
