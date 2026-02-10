@@ -369,6 +369,7 @@ uses Windows, Registry, SysUtils;
 
 var
   Reg: TRegistry;
+  ListeValeurs: TStringList;
   Valeur: string;
 begin
   Reg := TRegistry.Create;
@@ -385,7 +386,7 @@ begin
 
       // Lister toutes les valeurs
       WriteLn('Valeurs dans cette clé :');
-      var ListeValeurs := TStringList.Create;
+      ListeValeurs := TStringList.Create;
       try
         Reg.GetValueNames(ListeValeurs);
         for Valeur in ListeValeurs do
@@ -409,11 +410,15 @@ end.
 ### 1. Toujours vérifier les valeurs de retour
 
 ```pascal
-if FonctionAPI(...) = 0 then  // Beaucoup de fonctions retournent 0 en cas d'erreur
+var
+  CodeErreur: DWORD;
 begin
-  // Obtenir le code d'erreur
-  var CodeErreur := GetLastError();
-  WriteLn('Erreur : ', SysErrorMessage(CodeErreur));
+  if FonctionAPI(...) = 0 then  // Beaucoup de fonctions retournent 0 en cas d'erreur
+  begin
+    // Obtenir le code d'erreur
+    CodeErreur := GetLastError();
+    WriteLn('Erreur : ', SysErrorMessage(CodeErreur));
+  end;
 end;
 ```
 

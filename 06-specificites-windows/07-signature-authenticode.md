@@ -2057,6 +2057,9 @@ end;
 procedure TSignatureApp.GererCertificats;
 var
   Choix: string;
+  PfxFile: string;
+  Password: string;
+  Num: Integer;
 begin
   repeat
     WriteLn;
@@ -2081,12 +2084,11 @@ begin
       '2':
         begin
           Write('Chemin du fichier PFX : ');
-          var PfxFile: string;
           ReadLn(PfxFile);
 
           if FileExists(PfxFile) then
           begin
-            var Password := DemanderMotDePasse;
+            Password := DemanderMotDePasse;
             try
               FCertStore.LoadFromFile(PfxFile, Password);
               WriteLn('Certificat importé avec succès');
@@ -2114,7 +2116,6 @@ begin
           FCertStore.LoadFromStore('MY');
           FCertStore.ListCertificates;
           Write('Numéro du certificat à examiner : ');
-          var Num: Integer;
           ReadLn(Num);
           // Afficher les détails...
         end;
@@ -2343,6 +2344,13 @@ end;
 procedure TSignatureApp.ConfigurerApplication;
 var
   Choix: string;
+  Path: string;
+  Input: string;
+  Num: Integer;
+  i: Integer;
+  Desc: string;
+  URL: string;
+  Algo: string;
 begin
   repeat
     WriteLn;
@@ -2364,7 +2372,6 @@ begin
       '1':
         begin
           Write('Chemin de SignTool : ');
-          var Path: string;
           ReadLn(Path);
           if FileExists(Path) then
             FConfig.Values['SignTool'] := Path
@@ -2375,7 +2382,6 @@ begin
       '2':
         begin
           Write('Chemin du certificat PFX : ');
-          var Path: string;
           ReadLn(Path);
           if FileExists(Path) then
             FConfig.Values['Certificate'] := Path
@@ -2386,13 +2392,12 @@ begin
       '3':
         begin
           WriteLn('Serveurs de timestamp disponibles :');
-          for var i := 0 to High(TimestampServers) do
+          for i := 0 to High(TimestampServers) do
             WriteLn(i + 1, '. ', TimestampServers[i].Name, ' : ',
                    TimestampServers[i].URL);
           Write('Numéro ou URL personnalisée : ');
-          var Input: string;
           ReadLn(Input);
-          var Num := StrToIntDef(Input, 0);
+          Num := StrToIntDef(Input, 0);
           if (Num > 0) and (Num <= Length(TimestampServers)) then
             FConfig.Values['Timestamp'] := TimestampServers[Num - 1].URL
           else
@@ -2402,7 +2407,6 @@ begin
       '4':
         begin
           Write('Description : ');
-          var Desc: string;
           ReadLn(Desc);
           FConfig.Values['Description'] := Desc;
         end;
@@ -2410,7 +2414,6 @@ begin
       '5':
         begin
           Write('URL : ');
-          var URL: string;
           ReadLn(URL);
           FConfig.Values['URL'] := URL;
         end;
@@ -2420,7 +2423,6 @@ begin
           WriteLn('1. SHA1 (ancien, compatible)');
           WriteLn('2. SHA256 (recommandé)');
           Write('Choix : ');
-          var Algo: string;
           ReadLn(Algo);
           if Algo = '1' then
             FConfig.Values['Algorithm'] := 'SHA1'

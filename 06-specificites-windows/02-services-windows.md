@@ -257,29 +257,29 @@ Un service doit s'exécuter sous un compte Windows. Le choix du compte est cruci
 ## Défis et considérations
 
 ### 1. Pas d'interface graphique directe
-**Défi** : Comment savoir ce qui se passe ?
-**Solutions** :
+**Défi** : Comment savoir ce qui se passe ?  
+**Solutions** :  
 - Journalisation détaillée
 - Application de monitoring séparée
 - Notifications par email/SMS
 
 ### 2. Débogage plus complexe
-**Défi** : On ne peut pas simplement mettre un breakpoint
-**Solutions** :
+**Défi** : On ne peut pas simplement mettre un breakpoint  
+**Solutions** :  
 - Mode debug qui s'exécute comme application console
 - Attachement du débogueur au service en cours
 - Logs détaillés pour tracer l'exécution
 
 ### 3. Gestion des erreurs critique
-**Défi** : Pas d'utilisateur pour voir les messages d'erreur
-**Solutions** :
+**Défi** : Pas d'utilisateur pour voir les messages d'erreur  
+**Solutions** :  
 - Gestion d'erreur robuste
 - Journalisation de toutes les exceptions
 - Stratégies de récupération automatique
 
 ### 4. Installation et déploiement
-**Défi** : Un service doit être "installé" dans Windows
-**Solutions** :
+**Défi** : Un service doit être "installé" dans Windows  
+**Solutions** :  
 - Installateur qui enregistre le service
 - Utilitaire en ligne de commande
 - Script PowerShell d'installation

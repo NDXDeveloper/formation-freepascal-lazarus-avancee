@@ -322,7 +322,7 @@ Windows s'exécute sur une grande variété de matériels :
    uses Windows;
    {$ENDIF}
    {$IFDEF LINUX}
-   uses UnixUtils;
+   uses Unix;
    {$ENDIF}
 
    procedure ShowSystemNotification(const AMessage: string);

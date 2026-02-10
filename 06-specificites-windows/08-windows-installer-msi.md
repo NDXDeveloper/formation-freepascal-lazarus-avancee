@@ -714,6 +714,8 @@ begin
 end;
 
 procedure TLogAnalyzer.ShowReport;
+var
+  i: Integer;
 begin
   WriteLn('=== RAPPORT D''ANALYSE DU LOG MSI ===');
   WriteLn;
@@ -728,7 +730,7 @@ begin
   if FErrors.Count > 0 then
   begin
     WriteLn('ERREURS DÉTECTÉES :');
-    for var i := 0 to Min(10, FErrors.Count - 1) do
+    for i := 0 to Min(10, FErrors.Count - 1) do
       WriteLn('  - ', FErrors[i]);
     if FErrors.Count > 10 then
       WriteLn('  ... et ', FErrors.Count - 10, ' autres');
@@ -738,7 +740,7 @@ begin
   if FWarnings.Count > 0 then
   begin
     WriteLn('AVERTISSEMENTS :');
-    for var i := 0 to Min(5, FWarnings.Count - 1) do
+    for i := 0 to Min(5, FWarnings.Count - 1) do
       WriteLn('  - ', FWarnings[i]);
     WriteLn;
   end;
@@ -1214,6 +1216,8 @@ uses
   FileUtil, Windows, ShellAPI, Process;
 
 procedure TInstallWizardForm.FormCreate(Sender: TObject);
+var
+  Node: TTreeNode;
 begin
   FCurrentPage := 0;
   FComponents := TStringList.Create;
@@ -1237,7 +1241,7 @@ begin
   with TreeViewComponents.Items do
   begin
     Clear;
-    var Node := Add(nil, 'Application principale');
+    Node := Add(nil, 'Application principale');
     Node.StateIndex := 1;
     FComponents.AddObject('main', Node);
 
@@ -1422,18 +1426,21 @@ begin
 end;
 
 procedure TInstallWizardForm.StartInstallation;
+var
+  Generator: TWiXGenerator;
+  i: Integer;
 begin
   Log('Démarrage de l''installation...');
   ProgressBar.Position := 0;
 
   // Créer le fichier WiX
   Log('Génération du fichier WiX...');
-  var Generator := TWiXGenerator.Create;
+  Generator := TWiXGenerator.Create;
   try
     Generator.SetProductInfo(Application.Title, '1.0.0', 'Mon Entreprise');
 
     // Ajouter les fichiers selon les composants sélectionnés
-    for var i := 0 to TreeViewComponents.Items.Count - 1 do
+    for i := 0 to TreeViewComponents.Items.Count - 1 do
     begin
       if TreeViewComponents.Items[i].StateIndex = 1 then
       begin

@@ -1678,15 +1678,18 @@ begin
 end;
 
 procedure TMainForm.EffectuerOperationNormale;
+var
+  ConfigUser: TConfigurationManager;
+  Valeur: string;
 begin
   MemoLog.Lines.Add('--- Opération normale ---');
 
   try
     // Lire une configuration utilisateur
     MemoLog.Lines.Add('Lecture config utilisateur...');
-    var ConfigUser := TConfigurationManager.Create(False);
+    ConfigUser := TConfigurationManager.Create(False);
     try
-      var Valeur := ConfigUser.LireValeur('General', 'LastRun', 'Jamais');
+      Valeur := ConfigUser.LireValeur('General', 'LastRun', 'Jamais');
       MemoLog.Lines.Add('Dernière exécution : ' + Valeur);
 
       // Écrire la date actuelle

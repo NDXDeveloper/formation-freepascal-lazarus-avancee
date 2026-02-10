@@ -527,18 +527,16 @@ end;
 
 procedure TPSScriptGenerator.AddFileOperation(const Operation, Path: string);
 begin
-  case LowerCase(Operation) of
-    'create':
-      AddLine('New-Item -Path "' + Path + '" -ItemType File -Force');
-    'delete':
-      AddLine('Remove-Item -Path "' + Path + '" -Force');
-    'exists':
-      AddLine('$exists = Test-Path -Path "' + Path + '"');
-    'copy':
-      AddLine('Copy-Item -Path "' + Path + '" -Destination "' + Path + '.bak"');
-    'move':
-      AddLine('Move-Item -Path "' + Path + '" -Destination "' + Path + '.old"');
-  end;
+  if LowerCase(Operation) = 'create' then
+    AddLine('New-Item -Path "' + Path + '" -ItemType File -Force')
+  else if LowerCase(Operation) = 'delete' then
+    AddLine('Remove-Item -Path "' + Path + '" -Force')
+  else if LowerCase(Operation) = 'exists' then
+    AddLine('$exists = Test-Path -Path "' + Path + '"')
+  else if LowerCase(Operation) = 'copy' then
+    AddLine('Copy-Item -Path "' + Path + '" -Destination "' + Path + '.bak"')
+  else if LowerCase(Operation) = 'move' then
+    AddLine('Move-Item -Path "' + Path + '" -Destination "' + Path + '.old"');
 end;
 
 procedure TPSScriptGenerator.AddRegistryOperation(const Operation, Key, Value: string);
@@ -547,16 +545,14 @@ var
 begin
   RegPath := 'Registry::' + Key;
 
-  case LowerCase(Operation) of
-    'get':
-      AddLine('$regValue = Get-ItemProperty -Path "' + RegPath + '" -Name "' + Value + '"');
-    'set':
-      AddLine('Set-ItemProperty -Path "' + RegPath + '" -Name "' + Value + '" -Value $value');
-    'create':
-      AddLine('New-Item -Path "' + RegPath + '" -Force');
-    'delete':
-      AddLine('Remove-ItemProperty -Path "' + RegPath + '" -Name "' + Value + '"');
-  end;
+  if LowerCase(Operation) = 'get' then
+    AddLine('$regValue = Get-ItemProperty -Path "' + RegPath + '" -Name "' + Value + '"')
+  else if LowerCase(Operation) = 'set' then
+    AddLine('Set-ItemProperty -Path "' + RegPath + '" -Name "' + Value + '" -Value $value')
+  else if LowerCase(Operation) = 'create' then
+    AddLine('New-Item -Path "' + RegPath + '" -Force')
+  else if LowerCase(Operation) = 'delete' then
+    AddLine('Remove-ItemProperty -Path "' + RegPath + '" -Name "' + Value + '"');
 end;
 
 function TPSScriptGenerator.GenerateScript: string;
@@ -2687,13 +2683,14 @@ var
   ScriptFile: string;
   ScriptContent: TStringList;
   ShellInfo: TShellExecuteInfo;
+  PS: TPowerShell;
 begin
   Result := False;
 
   // Si déjà élevé, exécuter directement
   if FIsElevated then
   begin
-    var PS := TPowerShell.Create;
+    PS := TPowerShell.Create;
     try
       Result := PS.ExecuteScript(Script);
     finally
@@ -2737,6 +2734,7 @@ function TElevatedPowerShell.RunAsUser(const Script: string;
                                        const Username, Password: string): Boolean;
 var
   Command: string;
+  PS: TPowerShell;
 begin
   // Créer un credential sécurisé
   Command := Format(
@@ -2746,7 +2744,7 @@ begin
     [Password, Username, Script]
   );
 
-  var PS := TPowerShell.Create;
+  PS := TPowerShell.Create;
   try
     Result := PS.Execute(Command);
   finally

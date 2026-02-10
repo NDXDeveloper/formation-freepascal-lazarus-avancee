@@ -409,10 +409,10 @@ Dans les sections suivantes, nous allons explorer :
 
 Mais avant de commencer à coder, assurez-vous de :
 
-✅ Comprendre la structure hiérarchique du Registre
-✅ Connaître la différence entre HKCU et HKLM
-✅ Avoir exploré le Registre avec regedit.exe
-✅ Avoir fait une sauvegarde de votre Registre
+✅ Comprendre la structure hiérarchique du Registre  
+✅ Connaître la différence entre HKCU et HKLM  
+✅ Avoir exploré le Registre avec regedit.exe  
+✅ Avoir fait une sauvegarde de votre Registre  
 ✅ Comprendre les risques et précautions
 
 ## Résumé : L'essentiel à retenir
