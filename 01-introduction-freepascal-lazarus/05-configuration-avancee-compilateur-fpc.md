@@ -211,7 +211,6 @@ Créons un fichier de configuration optimisé :
 #ENDIF
 
 # === Encoding et locale ===
--Fcutf8      # UTF-8 par défaut
 -FcUTF8      # Fichiers source en UTF-8
 
 # === Fin de configuration ===
@@ -443,9 +442,14 @@ Les directives permettent de configurer la compilation directement dans le code 
 ### Directives conditionnelles
 
 ```pascal
-// Définir des symboles
+// Définir des symboles (booléens, pas de valeur)
 {$DEFINE DEBUG}
 {$DEFINE VERSION2}
+
+// Pour définir des macros avec une valeur, activer {$MACRO ON}
+{$MACRO ON}
+{$DEFINE AppVersion := '2.0'}
+// Sans {$MACRO ON}, la syntaxe {$DEFINE Name := value} provoque une erreur
 
 // Conditions simples
 {$IFDEF DEBUG}
@@ -542,12 +546,12 @@ FPC supporte plusieurs modes de syntaxe :
 
 #IFDEF MODE_DELPHI
   -Mdelphi
-  -Sh       # @ retourne un pointeur (Delphi)
+  -Sh       # AnsiStrings par défaut (équivalent {$H+})
 #ENDIF
 
 #IFDEF MODE_OBJFPC
   -Mobjfpc
-  -Sh-      # @ retourne l'adresse d'une procédure
+  -Sh       # AnsiStrings par défaut (équivalent {$H+})
   -Sc       # Opérateurs C (*=, +=, etc.)
   -Sg       # Goto autorisé
   -Si       # Inline supporté
@@ -1012,7 +1016,7 @@ fpc @configs/production.cfg program.pas
 
 Créez un `CONFIG.md` :
 
-```markdown
+````markdown
 # Configuration FPC du Projet
 
 ## Profils disponibles
@@ -1030,7 +1034,7 @@ Créez un `CONFIG.md` :
 ```bash
 FPC_PROFILE=release make build
 ```
-```
+````
 
 ## Conclusion
 

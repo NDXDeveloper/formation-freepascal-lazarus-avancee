@@ -547,21 +547,21 @@ Le code écrit une fois fonctionne vraiment partout :
 
 ### Lazarus est fait pour vous si...
 
-✅ Vous cherchez un outil **vraiment gratuit**
-✅ Vous développez pour **multiples plateformes**
-✅ Vous aimez les **interfaces natives**
-✅ Vous préférez la **simplicité à la mode**
-✅ Vous valorisez la **stabilité**
-✅ Vous croyez au **logiciel libre**
-✅ Vous avez des **ressources limitées**
+✅ Vous cherchez un outil **vraiment gratuit**  
+✅ Vous développez pour **multiples plateformes**  
+✅ Vous aimez les **interfaces natives**  
+✅ Vous préférez la **simplicité à la mode**  
+✅ Vous valorisez la **stabilité**  
+✅ Vous croyez au **logiciel libre**  
+✅ Vous avez des **ressources limitées**  
 ✅ Vous migrez depuis **Delphi**
 
 ### Lazarus n'est peut-être pas pour vous si...
 
-❌ Vous développez exclusivement du **web moderne**
-❌ Vous ciblez principalement le **mobile**
-❌ Vous avez besoin du **dernier framework à la mode**
-❌ Votre équipe ne connaît que **JavaScript**
+❌ Vous développez exclusivement du **web moderne**  
+❌ Vous ciblez principalement le **mobile**  
+❌ Vous avez besoin du **dernier framework à la mode**  
+❌ Votre équipe ne connaît que **JavaScript**  
 ❌ Vous dépendez de l'**écosystème .NET/Java**
 
 ### Le mot de la fin

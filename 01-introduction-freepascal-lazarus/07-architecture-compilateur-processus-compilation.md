@@ -725,36 +725,42 @@ fpc -vp program.pas > ast.txt
 
 ### Compilation incrémentale
 
-```ini
-# fpc.cfg
-# Garder les unités compilées
--B-  # Ne pas tout recompiler
--Ur  # Recharger les unités modifiées seulement
+FPC effectue une compilation incrémentale par défaut : seules les unités dont le source a changé (ou dont les dépendances ont changé) sont recompilées.
+
+```bash
+# Par défaut, FPC ne recompile que le nécessaire
+fpc program.pas
+
+# Pour forcer la recompilation totale (si nécessaire)
+fpc -B program.pas  # -B = Build all (tout recompiler)
 ```
 
 Gain de temps typique :
 - Première compilation : 10 secondes
-- Recompilations : 1-2 secondes
+- Recompilations (incrémental) : 1-2 secondes
 
-### Compilation parallèle
+### Accélérer la compilation
+
+> **Note** : FPC ne supporte pas la compilation parallèle multi-threads en interne (pas d'option `-J` pour le parallélisme). Cependant, `lazbuild` et les Makefiles permettent de compiler plusieurs packages en parallèle.
 
 ```bash
-# Utiliser plusieurs cœurs
-fpc -J4 program.pas  # 4 threads parallèles
+# Compiler plusieurs projets en parallèle avec make
+make -j4
 
-# Ou dans Lazarus
-# Options → Compiler → Compilation → Parallel processes: 4
+# Ou utiliser lazbuild pour les packages Lazarus
+lazbuild --build-all monprojet.lpi
 ```
 
-### Cache de compilation
+### Optimiser les temps de compilation
 
 ```bash
-# Utiliser un cache disque
-export FPC_CACHE_DIR=/tmp/fpc-cache
-fpc program.pas
+# Placer les unités compilées sur un disque rapide (SSD ou RAM disk)
+mkdir -p /tmp/fpc-units
+fpc -FU/tmp/fpc-units program.pas
 
-# Ou RAM disk pour performance maximale
-sudo mount -t tmpfs -o size=1G tmpfs /tmp/fpc-cache
+# Ou monter un tmpfs pour performance maximale
+sudo mount -t tmpfs -o size=1G tmpfs /tmp/fpc-units
+fpc -FU/tmp/fpc-units program.pas
 ```
 
 ## Diagnostic des problèmes de compilation

@@ -106,19 +106,20 @@ La LCL adopte une approche différente :
 #### Extensions Delphi propriétaires
 
 Delphi a ajouté des fonctionnalités qui lui sont propres :
-- **ARC** (Automatic Reference Counting) sur mobile
+- **ARC** (Automatic Reference Counting) sur mobile — *retiré depuis Delphi 10.4 Sydney (2020), remplacé par le modèle classique de gestion mémoire unifié*
 - **Attributes** avancés
 - **Anonymous methods** (syntaxe spécifique)
 - **Parallel Programming Library**
 - **Live Bindings**
+- **Inline variables** (depuis Delphi 10.3 Rio)
 
 #### Extensions FreePascal spécifiques
 
 FreePascal a ses propres innovations :
 - **Modes de syntaxe** multiples (TP7, Delphi, ObjFPC, MacPas)
-- **Inline variables** (avant Delphi)
-- **Operator overloading** étendu
-- **Generic specialization** plus flexible
+- **Inline variables** (en mode Delphi uniquement, via `{$MODE DELPHI}` ou `{$MODESWITCH ADVANCEDRECORDS}`)
+- **Operator overloading** étendu (syntaxe `operator` globale en ObjFPC)
+- **Generic specialization** avec syntaxe `generic`/`specialize` en ObjFPC
 - **Bit packed records** avancés
 
 #### Code compatible à 90%
@@ -465,28 +466,28 @@ Avec Delphi Community Edition :
 
 ### Ce qui fonctionne directement
 
-✅ **Code métier** : Logique pure Pascal
-✅ **Formulaires simples** : Composants standards
-✅ **Base de données** : SQL standard
-✅ **Calculs** : Mathématiques et algorithmes
-✅ **Fichiers** : I/O standard
+✅ **Code métier** : Logique pure Pascal  
+✅ **Formulaires simples** : Composants standards  
+✅ **Base de données** : SQL standard  
+✅ **Calculs** : Mathématiques et algorithmes  
+✅ **Fichiers** : I/O standard  
 ✅ **Structures** : Classes et records
 
 ### Ce qui demande adaptation
 
-⚠️ **Composants tiers** : Vérifier disponibilité
-⚠️ **Rapports** : FastReport → LazReport/FortesReport
-⚠️ **Bases de données** : BDE → SQLdb
-⚠️ **ActiveX/COM** : Windows uniquement
-⚠️ **Assembleur** : Syntaxe différente
+⚠️ **Composants tiers** : Vérifier disponibilité  
+⚠️ **Rapports** : FastReport → LazReport/FortesReport  
+⚠️ **Bases de données** : BDE → SQLdb  
+⚠️ **ActiveX/COM** : Windows uniquement  
+⚠️ **Assembleur** : Syntaxe différente  
 ⚠️ **Windows API** : Abstraction nécessaire
 
 ### Ce qui n'existe pas
 
-❌ **FireMonkey** : Pas d'équivalent direct
-❌ **DataSnap** : Utiliser mORMot
-❌ **LiveBindings** : Architecture différente
-❌ **FireDAC** : Utiliser Zeos/SQLdb
+❌ **FireMonkey** : Pas d'équivalent direct  
+❌ **DataSnap** : Utiliser mORMot  
+❌ **LiveBindings** : Architecture différente  
+❌ **FireDAC** : Utiliser Zeos/SQLdb  
 ❌ **Certains contrôles** : Ribbon, etc.
 
 ## Les avantages uniques du libre
@@ -531,23 +532,23 @@ Avec le code source, vous pouvez :
 
 ### Choisir Delphi si...
 
-✓ Budget conséquent disponible
-✓ Support commercial requis
-✓ Développement mobile prioritaire
-✓ Équipe déjà formée Delphi
-✓ Composants commerciaux spécifiques nécessaires
-✓ FireMonkey/FMX requis
+✓ Budget conséquent disponible  
+✓ Support commercial requis  
+✓ Développement mobile prioritaire  
+✓ Équipe déjà formée Delphi  
+✓ Composants commerciaux spécifiques nécessaires  
+✓ FireMonkey/FMX requis  
 ✓ Certification/validation vendor nécessaire
 
 ### Choisir Lazarus si...
 
-✓ Budget limité ou nul
-✓ Liberté et indépendance prioritaires
-✓ Multi-plateforme desktop important
-✓ Déploiement massif prévu
-✓ Philosophie open source
-✓ Personnalisation profonde nécessaire
-✓ Pérennité long terme cruciale
+✓ Budget limité ou nul  
+✓ Liberté et indépendance prioritaires  
+✓ Multi-plateforme desktop important  
+✓ Déploiement massif prévu  
+✓ Philosophie open source  
+✓ Personnalisation profonde nécessaire  
+✓ Pérennité long terme cruciale  
 ✓ Apprentissage et compréhension profonde
 
 ## Coexistence et complémentarité
@@ -582,10 +583,10 @@ Grâce à la compatibilité :
 
 Choisir FreePascal/Lazarus plutôt que Delphi n'est pas qu'une question financière. C'est choisir :
 
-**Une philosophie** : Le savoir partagé plutôt que propriétaire
-**Une communauté** : L'entraide plutôt que le support commercial
-**Une vision** : La pérennité plutôt que l'obsolescence programmée
-**Une éthique** : La liberté plutôt que la dépendance
+**Une philosophie** : Le savoir partagé plutôt que propriétaire  
+**Une communauté** : L'entraide plutôt que le support commercial  
+**Une vision** : La pérennité plutôt que l'obsolescence programmée  
+**Une éthique** : La liberté plutôt que la dépendance  
 
 ### L'avenir appartient au libre
 
@@ -602,14 +603,14 @@ FreePascal/Lazarus s'inscrit dans cette mouvance.
 
 Pour un développeur ou une entreprise pragmatique :
 
-**Court terme** : Delphi peut sembler plus simple
-**Long terme** : Lazarus est plus sage
+**Court terme** : Delphi peut sembler plus simple  
+**Long terme** : Lazarus est plus sage  
 
-**Petit projet** : Les deux conviennent
-**Grand projet** : La liberté devient cruciale
+**Petit projet** : Les deux conviennent  
+**Grand projet** : La liberté devient cruciale  
 
-**Seul** : Lazarus suffit amplement
-**En équipe** : Les économies sont massives
+**Seul** : Lazarus suffit amplement  
+**En équipe** : Les économies sont massives  
 
 ### Le mot final
 

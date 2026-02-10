@@ -102,6 +102,8 @@ end.
 - **Assembleur inline** : Syntaxe `asm...end`
 - **Interruptions** : Support des interrupts DOS
 
+> **Attention** : En mode TP, le type `Integer` est de **16 bits** (plage -32768..32767), comme dans le Turbo Pascal original. Dans tous les autres modes (FPC, ObjFPC, Delphi), `Integer` est de **32 bits** (plage -2147483648..2147483647), quel que soit le processeur cible. C'est le **mode** qui détermine la taille d'`Integer`, pas la plateforme.
+
 #### Ce qui n'est PAS disponible
 
 - ❌ Classes et objets modernes
@@ -141,6 +143,7 @@ end;
 var
   Obj: TMyObject;
   P: PMyObject;
+  S: string[20];  { Strings courts obligatoires en mode TP }
 
 begin
   { Syntaxe @ pour adresse }
@@ -148,9 +151,9 @@ begin
   P^.Init(10, 20);
   P^.Show;
 
-  { Strings courts }
-  var S: string[20];
+  { Strings courts (maximum 255 caractères) }
   S := 'Maximum 20 chars';
+  WriteLn(S);
 end.
 ```
 
@@ -158,9 +161,9 @@ end.
 
 #### Quand utiliser le mode TP
 
-✅ **Code legacy DOS** : Maintenir d'anciennes applications
-✅ **Éducation** : Apprendre les bases du Pascal
-✅ **Systèmes embarqués** : Code simple et prévisible
+✅ **Code legacy DOS** : Maintenir d'anciennes applications  
+✅ **Éducation** : Apprendre les bases du Pascal  
+✅ **Systèmes embarqués** : Code simple et prévisible  
 ✅ **Nostalgie** : Recréer l'expérience Turbo Pascal
 
 #### Exemple : Migration d'un programme DOS
@@ -349,6 +352,9 @@ end.
 
 program ObjFPCAdvanced;
 
+uses
+  SysUtils, Math;  { SysUtils requis pour Exception, Math pour Sqrt }
+
 type
   { Génériques (templates) }
   generic TList<T> = class
@@ -440,27 +446,27 @@ end.
 ```pascal
 {$MODE OBJFPC}{$H+}
 
+program VectorDemo;
+
 type
   TVector = record
     X, Y: Double;
-    class operator +(const A, B: TVector): TVector;
-    class operator *(const A: TVector; B: Double): TVector;
-    class operator =(const A, B: TVector): Boolean;
   end;
 
-class operator TVector.+(const A, B: TVector): TVector;
+{ En mode ObjFPC, les opérateurs sont des fonctions globales }
+operator +(const A, B: TVector): TVector;
 begin
   Result.X := A.X + B.X;
   Result.Y := A.Y + B.Y;
 end;
 
-class operator TVector.*(const A: TVector; B: Double): TVector;
+operator *(const A: TVector; B: Double): TVector;
 begin
   Result.X := A.X * B;
   Result.Y := A.Y * B;
 end;
 
-class operator TVector.=(const A, B: TVector): Boolean;
+operator =(const A, B: TVector): Boolean;
 begin
   Result := (A.X = B.X) and (A.Y = B.Y);
 end;
@@ -480,6 +486,8 @@ begin
     WriteLn('Vectors are different');
 end.
 ```
+
+> **Note** : En mode Delphi, les opérateurs se déclarent avec `class operator` à l'intérieur du record. En mode ObjFPC, on utilise des fonctions `operator` globales.
 
 ## Mode Delphi
 
@@ -756,41 +764,68 @@ end.
 | **Inline** | ❌ | ✅ | ✅ | ✅ | ❌ | ❌ |
 | **Variants** | ❌ | ✅ | ✅ | ✅ | ❌ | ❌ |
 
-✅ = Supporté complètement
-⚠️ = Support partiel ou avec options
+✅ = Supporté complètement  
+⚠️ = Support partiel ou avec options  
 ❌ = Non supporté
 
 ### Comportements différents selon le mode
 
 #### Exemple : Gestion de @
 
-```pascal
-program AtOperatorDemo;
+> **Important** : Un seul `{$MODE}` est autorisé par unité ou programme. Les exemples ci-dessous montrent le comportement de `@` selon le mode choisi, chacun dans un programme séparé.
 
+**En mode TP ou FPC :**
+
+```pascal
+{$MODE FPC}
+program AtOperatorTP;
 type
   TProc = procedure;
-
 procedure MyProc;
 begin
   WriteLn('Called');
 end;
+var
+  P: Pointer;
+begin
+  P := @MyProc;      { P = pointeur vers MyProc }
+end.
+```
 
+**En mode ObjFPC :**
+
+```pascal
+{$MODE OBJFPC}
+program AtOperatorObjFPC;
+type
+  TProc = procedure;
+procedure MyProc;
+begin
+  WriteLn('Called');
+end;
+var
+  Proc: TProc;
+begin
+  Proc := @MyProc;          { @ obligatoire pour affecter une procédure }
+  { P := @MyProc;  -- ne compile pas directement, il faut caster }
+end.
+```
+
+**En mode Delphi :**
+
+```pascal
+{$MODE DELPHI}
+program AtOperatorDelphi;
+type
+  TProc = procedure;
+procedure MyProc;
+begin
+  WriteLn('Called');
+end;
 var
   P: Pointer;
   Proc: TProc;
-
 begin
-  {$MODE TP}
-  P := @MyProc;      { P = pointeur vers MyProc }
-
-  {$MODE FPC}
-  P := @MyProc;      { P = pointeur vers MyProc }
-
-  {$MODE OBJFPC}
-  Proc := @MyProc;   { Proc = adresse de MyProc }
-  P := Pointer(@MyProc); { Cast nécessaire pour Pointer }
-
-  {$MODE DELPHI}
   P := @MyProc;      { P = pointeur non-typé }
   Proc := MyProc;    { @ optionnel pour procédures }
 end.
@@ -798,23 +833,17 @@ end.
 
 #### Exemple : Inherited
 
+> **Important** : Un seul `{$MODE}` par unité. Ces exemples montrent le comportement de `inherited` selon le mode, chacun supposant être dans un fichier séparé.
+
 ```pascal
-type
-  TChild = class(TParent)
-    constructor Create;
-  end;
+{ En mode ObjFPC : inherited Create est OBLIGATOIRE }
+inherited Create;
 
-constructor TChild.Create;
-begin
-  {$MODE OBJFPC}
-  inherited Create;  { OBLIGATOIRE en ObjFPC }
+{ En mode Delphi : inherited seul est suffisant }
+inherited;
 
-  {$MODE DELPHI}
-  inherited;         { Suffisant en Delphi }
-
-  {$MODE FPC}
-  inherited Create;  { Recommandé mais pas obligatoire }
-end;
+{ En mode FPC : inherited Create est recommandé mais pas obligatoire }
+inherited Create;
 ```
 
 ## Choix du mode approprié
@@ -892,10 +921,18 @@ Nouveau projet ?
 
 #### Étape 3 : Adapter progressivement
 
+> **Rappel** : On ne peut avoir qu'un seul `{$MODE}` par fichier source. Pour une migration progressive, utilisez des directives conditionnelles `{$IFDEF}` autour des constructions spécifiques, pas autour des modes.
+
 ```pascal
-{$MODE OBJFPC}
-{$IFDEF NEEDSTP}
-  {$MODE TP}  { Sections spécifiques en mode TP }
+{$MODE OBJFPC}{$H+}
+
+{ Adapter les types selon la cible }
+{$IFDEF LEGACY_STRINGS}
+type
+  TMyString = string[255];  { Compatible ShortString }
+{$ELSE}
+type
+  TMyString = string;       { AnsiString en ObjFPC avec $H+ }
 {$ENDIF}
 ```
 

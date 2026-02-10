@@ -308,8 +308,8 @@ Machine principale (ex: Windows)
     └── Lazarus macOS pour tests
 ```
 
-**Avantages** : Tout sur une machine
-**Inconvénients** : Ressources importantes nécessaires
+**Avantages** : Tout sur une machine  
+**Inconvénients** : Ressources importantes nécessaires  
 
 **2. Multi-boot**
 ```
@@ -319,8 +319,8 @@ Même machine physique
 └── Données partagées
 ```
 
-**Avantages** : Performance native
-**Inconvénients** : Redémarrage nécessaire
+**Avantages** : Performance native  
+**Inconvénients** : Redémarrage nécessaire  
 
 **3. Machines multiples**
 ```
@@ -330,8 +330,8 @@ Même machine physique
     Synchronisation via Git
 ```
 
-**Avantages** : Vraie parallélisation
-**Inconvénients** : Coût matériel
+**Avantages** : Vraie parallélisation  
+**Inconvénients** : Coût matériel  
 
 **4. Cross-compilation pure**
 ```
@@ -342,8 +342,8 @@ Machine unique
     └── Win → ARM
 ```
 
-**Avantages** : Plus simple et rapide
-**Inconvénients** : Tests natifs impossibles
+**Avantages** : Plus simple et rapide  
+**Inconvénients** : Tests natifs impossibles  
 
 ### Considérations réseau et proxy
 
@@ -566,10 +566,10 @@ Projets/
 
 L'installation de Lazarus reflète sa philosophie :
 
-**Simplicité** : Pas de processus alambiqué
-**Transparence** : Vous savez ce qui est installé où
-**Flexibilité** : Multiple méthodes possibles
-**Liberté** : Aucune activation ni limitation
+**Simplicité** : Pas de processus alambiqué  
+**Transparence** : Vous savez ce qui est installé où  
+**Flexibilité** : Multiple méthodes possibles  
+**Liberté** : Aucune activation ni limitation  
 
 Cette approche contraste avec les IDE commerciaux qui nécessitent souvent :
 - Création de compte

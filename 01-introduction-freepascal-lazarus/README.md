@@ -300,22 +300,22 @@ Cette formation est organisée en **26 modules progressifs** couvrant :
 
 ### Compétences techniques
 
-✓ **Maîtriser** l'environnement de développement Lazarus sur Windows et Ubuntu
-✓ **Développer** des applications desktop professionnelles multi-plateformes
-✓ **Optimiser** les performances et l'architecture de vos applications
-✓ **Implémenter** des solutions client-serveur et services web
-✓ **Créer** des composants personnalisés réutilisables
-✓ **Déployer** professionnellement sur multiples plateformes
-✓ **Intégrer** des technologies modernes (IA, IoT, Cloud)
+✓ **Maîtriser** l'environnement de développement Lazarus sur Windows et Ubuntu  
+✓ **Développer** des applications desktop professionnelles multi-plateformes  
+✓ **Optimiser** les performances et l'architecture de vos applications  
+✓ **Implémenter** des solutions client-serveur et services web  
+✓ **Créer** des composants personnalisés réutilisables  
+✓ **Déployer** professionnellement sur multiples plateformes  
+✓ **Intégrer** des technologies modernes (IA, IoT, Cloud)  
 ✓ **Migrer** des applications Delphi existantes
 
 ### Compétences projet
 
-✓ **Architecturer** des applications complexes et évolutives
-✓ **Gérer** le cycle de vie complet d'un projet multi-plateforme
-✓ **Automatiser** les builds et déploiements CI/CD
-✓ **Assurer** la qualité par tests automatisés
-✓ **Documenter** et maintenir des projets long terme
+✓ **Architecturer** des applications complexes et évolutives  
+✓ **Gérer** le cycle de vie complet d'un projet multi-plateforme  
+✓ **Automatiser** les builds et déploiements CI/CD  
+✓ **Assurer** la qualité par tests automatisés  
+✓ **Documenter** et maintenir des projets long terme  
 ✓ **Contribuer** à l'écosystème open source
 
 ## Démarrage rapide

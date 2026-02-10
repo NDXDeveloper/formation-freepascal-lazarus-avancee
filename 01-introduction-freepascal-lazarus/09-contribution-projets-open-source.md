@@ -190,7 +190,7 @@ GitLab Issues → Search
 
 ### Format d'un bon rapport de bug
 
-```markdown
+````markdown
 ## Description
 Brève description du problème
 
@@ -224,11 +224,11 @@ end.
 - Screenshots si pertinent
 - Logs complets
 - Workaround si trouvé
-```
+````
 
 ### Exemple de bug bien reporté
 
-```markdown
+````markdown
 Title: TStringGrid.OnDrawCell not called when ScrollBars = ssNone
 
 ## Description
@@ -269,7 +269,7 @@ end;
 
 ## Workaround
 Set ScrollBars := ssAutoVertical and hide scrollbar with Windows API
-```
+````
 
 ## Contribuer du code
 
@@ -698,7 +698,7 @@ msgstr "La valeur doit être positive"
 
 #### Bonnes pratiques
 
-```markdown
+````markdown
 Réponse type utile :
 
 "Bonjour,
@@ -719,7 +719,7 @@ Pour résoudre ce problème, vous pouvez :
 **Documentation** : [Lien vers wiki]
 
 J'espère que cela aide !"
-```
+````
 
 ### Mentorat
 
