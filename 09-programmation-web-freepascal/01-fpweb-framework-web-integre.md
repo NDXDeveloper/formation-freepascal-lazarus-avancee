@@ -197,26 +197,28 @@ fpWeb reconnaît automatiquement les différentes méthodes HTTP (GET, POST, PUT
 
 ```pascal
 procedure HandleUsers(ARequest: TRequest; AResponse: TResponse);
+var
+  Method: string;
 begin
-  case ARequest.Method of
-    'GET':    // Lire la liste des utilisateurs
-      AResponse.Content := '{"users": ["Alice", "Bob"]}';
+  Method := ARequest.Method;
 
-    'POST':   // Créer un nouvel utilisateur
-      begin
-        // Traiter ARequest.Content (données POST)
-        AResponse.Content := '{"status": "created"}';
-      end;
-
-    'PUT':    // Modifier un utilisateur
-      AResponse.Content := '{"status": "updated"}';
-
-    'DELETE': // Supprimer un utilisateur
-      AResponse.Content := '{"status": "deleted"}';
-
-    else
-      AResponse.Code := 405; // Method Not Allowed
-  end;
+  if Method = 'GET' then
+    // Lire la liste des utilisateurs
+    AResponse.Content := '{"users": ["Alice", "Bob"]}'
+  else if Method = 'POST' then
+  begin
+    // Créer un nouvel utilisateur
+    // Traiter ARequest.Content (données POST)
+    AResponse.Content := '{"status": "created"}';
+  end
+  else if Method = 'PUT' then
+    // Modifier un utilisateur
+    AResponse.Content := '{"status": "updated"}'
+  else if Method = 'DELETE' then
+    // Supprimer un utilisateur
+    AResponse.Content := '{"status": "deleted"}'
+  else
+    AResponse.Code := 405; // Method Not Allowed
 
   AResponse.ContentType := 'application/json';
 end;

@@ -530,50 +530,46 @@ begin
       JSONObj := TJSONObject(JSONData);
       MsgType := JSONObj.Get('type', '');
 
-      case MsgType of
-        'set_username':
-          begin
-            NewUsername := JSONObj.Get('username', '');
-            if (NewUsername <> '') and (Length(NewUsername) <= 20) then
-            begin
-              // Notifier le changement de nom
-              ResponseObj := TJSONObject.Create;
-              try
-                ResponseObj.Add('type', 'username_changed');
-                ResponseObj.Add('old_username', User.Username);
-                ResponseObj.Add('new_username', NewUsername);
-                BroadcastMessage(ResponseObj.AsJSON);
-              finally
-                ResponseObj.Free;
-              end;
-
-              User.Username := NewUsername;
-            end;
+      if MsgType = 'set_username' then
+      begin
+        NewUsername := JSONObj.Get('username', '');
+        if (NewUsername <> '') and (Length(NewUsername) <= 20) then
+        begin
+          // Notifier le changement de nom
+          ResponseObj := TJSONObject.Create;
+          try
+            ResponseObj.Add('type', 'username_changed');
+            ResponseObj.Add('old_username', User.Username);
+            ResponseObj.Add('new_username', NewUsername);
+            BroadcastMessage(ResponseObj.AsJSON);
+          finally
+            ResponseObj.Free;
           end;
 
-        'message':
-          begin
-            Content := JSONObj.Get('content', '');
-            if Content <> '' then
-            begin
-              // Diffuser le message à tous
-              ResponseObj := TJSONObject.Create;
-              try
-                ResponseObj.Add('type', 'message');
-                ResponseObj.Add('username', User.Username);
-                ResponseObj.Add('content', Content);
-                ResponseObj.Add('timestamp', FormatDateTime('hh:nn:ss', Now));
+          User.Username := NewUsername;
+        end;
+      end
+      else if MsgType = 'message' then
+      begin
+        Content := JSONObj.Get('content', '');
+        if Content <> '' then
+        begin
+          // Diffuser le message à tous
+          ResponseObj := TJSONObject.Create;
+          try
+            ResponseObj.Add('type', 'message');
+            ResponseObj.Add('username', User.Username);
+            ResponseObj.Add('content', Content);
+            ResponseObj.Add('timestamp', FormatDateTime('hh:nn:ss', Now));
 
-                BroadcastMessage(ResponseObj.AsJSON);
-              finally
-                ResponseObj.Free;
-              end;
-            end;
+            BroadcastMessage(ResponseObj.AsJSON);
+          finally
+            ResponseObj.Free;
           end;
-
-        'get_users':
-          SendUserList(ASocket);
-      end;
+        end;
+      end
+      else if MsgType = 'get_users' then
+        SendUserList(ASocket);
     finally
       JSONData.Free;
     end;
@@ -2372,7 +2368,7 @@ program NotificationServer;
 {$mode objfpc}{$H+}
 
 uses
-  SysUtils, Classes, fpjson, fgl,
+  SysUtils, Classes, Math, fpjson, fgl,
   fphttpapp, httpdefs, httproute,
   fpwebsocket, websocketserver;
 
@@ -2591,23 +2587,23 @@ fpc notification_server.lpr
 WebSockets et Server-Sent Events sont des technologies puissantes pour créer des applications web temps réel avec FreePascal :
 
 ### WebSockets
-✅ **Communication bidirectionnelle** - Client ↔ Serveur
-✅ **Faible latence** - Idéal pour applications interactives
-✅ **Binaire et texte** - Flexibilité des données
+✅ **Communication bidirectionnelle** - Client ↔ Serveur  
+✅ **Faible latence** - Idéal pour applications interactives  
+✅ **Binaire et texte** - Flexibilité des données  
 ✅ **Cas d'usage** : Chat, jeux, collaboration temps réel
 
 ### Server-Sent Events
-✅ **Simplicité** - Plus facile à implémenter
-✅ **Reconnexion automatique** - Robustesse native
-✅ **HTTP standard** - Passe tous les firewalls
+✅ **Simplicité** - Plus facile à implémenter  
+✅ **Reconnexion automatique** - Robustesse native  
+✅ **HTTP standard** - Passe tous les firewalls  
 ✅ **Cas d'usage** : Notifications, dashboards, flux d'actualités
 
 ### Points clés pour la production
 
-🔐 **Sécurité** : Authentification, validation, CORS
-📊 **Monitoring** : Métriques, logs, health checks
-🚀 **Performance** : Keep-alive, gestion des ressources
-🔧 **Infrastructure** : Reverse proxy, systemd, SSL
+🔐 **Sécurité** : Authentification, validation, CORS  
+📊 **Monitoring** : Métriques, logs, health checks  
+🚀 **Performance** : Keep-alive, gestion des ressources  
+🔧 **Infrastructure** : Reverse proxy, systemd, SSL  
 🐛 **Dépannage** : Tests de charge, logging structuré
 
 FreePascal offre des outils robustes pour implémenter ces technologies efficacement, permettant de créer des applications web modernes et performantes avec une communication temps réel fluide.

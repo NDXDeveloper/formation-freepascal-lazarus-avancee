@@ -76,19 +76,19 @@ Réponse ← Apache ←──┼─ Réponse ←──────── Handler
 
 #### Utiliser CGI si :
 
-✅ Vous débutez et voulez la simplicité
-✅ Trafic très faible (quelques requêtes/minute)
-✅ Application qui doit être isolée à chaque exécution
-✅ Prototypage rapide
+✅ Vous débutez et voulez la simplicité  
+✅ Trafic très faible (quelques requêtes/minute)  
+✅ Application qui doit être isolée à chaque exécution  
+✅ Prototypage rapide  
 ✅ Scripts d'administration ponctuels
 
 #### Utiliser FastCGI si :
 
-✅ Application en production
-✅ Trafic moyen à élevé (>50 req/min)
-✅ Besoin de performance
-✅ Connexions base de données à optimiser
-✅ Cache en mémoire souhaité
+✅ Application en production  
+✅ Trafic moyen à élevé (>50 req/min)  
+✅ Besoin de performance  
+✅ Connexions base de données à optimiser  
+✅ Cache en mémoire souhaité  
 ✅ **Recommandé pour 99% des cas réels**
 
 ## Développement CGI avec FreePascal
@@ -489,7 +489,7 @@ uses
 // Gestionnaires de routes
 procedure ShowHome(ARequest: TRequest; AResponse: TResponse);
 begin
-  AResponse.Content := '<h1>Page d\'accueil</h1>';
+  AResponse.Content := '<h1>Page d''accueil</h1>';
 end;
 
 procedure ShowUser(ARequest: TRequest; AResponse: TResponse);
@@ -537,6 +537,7 @@ L'objet `TRequest` fournit toutes les informations :
 procedure AnalyzeRequest(ARequest: TRequest; AResponse: TResponse);
 var
   Info: String;
+  i: Integer;
 begin
   Info := '<h2>Informations de la requête</h2>';
 
@@ -648,6 +649,8 @@ begin
 end;
 
 procedure HandleCachedData(ARequest: TRequest; AResponse: TResponse);
+var
+  i: Integer;
 begin
   RefreshCacheIfNeeded;
 

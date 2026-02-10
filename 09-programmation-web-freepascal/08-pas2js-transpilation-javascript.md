@@ -2787,7 +2787,7 @@ dist/
 ```pascal
 program DeployScript;
 
-{$mode objfpc}
+{$mode objfpc}{$H+}
 
 uses
   SysUtils, Process;
@@ -2829,12 +2829,15 @@ begin
   WriteLn('Déploiement terminé!');
 end;
 
+var
+  Answer: string;
 begin
   try
     PrepareForProduction;
 
     Write('Déployer sur le serveur? (o/n): ');
-    if UpCase(ReadLn[1]) = 'O' then
+    ReadLn(Answer);
+    if (Length(Answer) > 0) and (UpCase(Answer[1]) = 'O') then
       DeployToServer;
   except
     on E: Exception do

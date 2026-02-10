@@ -667,6 +667,7 @@ var
   x, y, dx, dy: Integer;
   SumR, SumG, SumB, Count: Integer;
   KernelSize: Integer;
+  Pixel: TRGBA;
 
   function GetPixel(X, Y: Integer): TRGBA;
   begin
@@ -699,7 +700,7 @@ begin
       begin
         for dx := -KernelSize to KernelSize do
         begin
-          var Pixel := GetPixel(x + dx, y + dy);
+          Pixel := GetPixel(x + dx, y + dy);
           SumR := SumR + Pixel.R;
           SumG := SumG + Pixel.G;
           SumB := SumB + Pixel.B;
@@ -893,6 +894,9 @@ program WasmJSInterop;
 
 {$mode objfpc}
 
+uses
+  SysUtils;
+
 // Déclarer les fonctions JavaScript que WASM peut appeler
 procedure JSConsoleLog(Message: PChar); external 'env' name 'consoleLog';
 procedure JSAlert(Message: PChar); external 'env' name 'showAlert';
@@ -903,7 +907,6 @@ function ProcessWithLogging(Value: Integer): Integer;
   cdecl; export; public name 'processWithLogging';
 var
   StartTime, EndTime: Double;
-  Result: Integer;
 begin
   StartTime := JSGetTimestamp;
   JSConsoleLog('Début du traitement');
@@ -1559,7 +1562,6 @@ function ProcessDataArray(Data: PInteger; Count: Integer): Int64;
   cdecl; export; public name 'processDataArray';
 var
   i: Integer;
-  Result: Int64;
 begin
   Result := 0;
 
@@ -1567,8 +1569,6 @@ begin
   begin
     Result := Result + HeavyComputation(Data[i]);
   end;
-
-  Exit(Result);
 end;
 
 begin
@@ -1998,6 +1998,35 @@ input {
 echo Compilation WebAssembly pour Windows...
 
 REM Compiler le module WASM
-fpc -Twasm -O3 -WmMyModule
+fpc -Twasm -O3 -WmMyModule myprogram.pas
+
+echo Compilation terminée.
+```
+
+**Ubuntu/Linux (build.sh) :**
+
+```bash
+#!/bin/bash
+echo "Compilation WebAssembly pour Linux..."
+
+# Compiler le module WASM
+fpc -Twasm -O3 -WmMyModule myprogram.pas
+
+echo "Compilation terminée."
+```
+
+Les modules WebAssembly compilés (`.wasm`) sont identiques quelle que soit la plateforme de compilation. Le fichier `.wasm` produit sous Windows fonctionnera exactement de la même manière sous Linux et inversement, car WebAssembly est un format portable par définition.
+
+## Conclusion
+
+WebAssembly avec FreePascal ouvre de nouvelles possibilités pour les développeurs Pascal :
+
+1. **Performance proche du natif** dans le navigateur web
+2. **Réutilisation de code** Pascal existant côté client
+3. **Calculs intensifs** (images, mathématiques, cryptographie) déportés dans le navigateur
+4. **Interopérabilité** avec JavaScript et les frameworks web modernes
+5. **Portabilité** totale entre navigateurs et systèmes d'exploitation
+
+La compilation vers WASM reste un domaine en évolution dans l'écosystème FreePascal, mais les fondations sont solides et les cas d'utilisation nombreux.
 
 ⏭️ [Intégration avec frameworks JavaScript](/09-programmation-web-freepascal/10-integration-frameworks-javascript.md)

@@ -235,8 +235,8 @@ Content-Length: 87
 | HEAD | Métadonnées uniquement | ✓ | ✓ |
 | OPTIONS | Méthodes disponibles | ✓ | ✓ |
 
-**Idempotent** : Peut être appelé plusieurs fois avec le même résultat
-**Safe** : Ne modifie pas l'état du serveur
+**Idempotent** : Peut être appelé plusieurs fois avec le même résultat  
+**Safe** : Ne modifie pas l'état du serveur  
 
 #### Codes de statut HTTP essentiels
 

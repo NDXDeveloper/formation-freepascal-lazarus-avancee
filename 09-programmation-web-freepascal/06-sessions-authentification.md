@@ -367,6 +367,7 @@ procedure TLoginModule.HandleLoginPost(ARequest: TRequest; AResponse: TResponse)
 var
   Username, Password: string;
   SessionObj: TCustomSession;
+  HTML: string;
 begin
   // Récupérer les données du formulaire
   Username := ARequest.ContentFields.Values['username'];
@@ -392,7 +393,7 @@ begin
   else
   begin
     // Identifiants incorrects
-    var HTML := LoadFileToString('templates/login.html');
+    HTML := LoadFileToString('templates/login.html');
     HTML := StringReplace(HTML, '{{error_message}}',
                          'Nom d''utilisateur ou mot de passe incorrect', []);
 
@@ -1377,21 +1378,24 @@ end;
 
 function TJWTManager.VerifyToken(const Token: string): TJSONObject;
 var
-  Parts: TStringArray;
   HeaderStr, PayloadStr, SignatureStr: string;
   DataToVerify, ExpectedSignature: string;
   PayloadJSON: string;
+  DotPos, DotPos2: Integer;
 begin
   Result := nil;
 
-  // Séparer les parties du token
-  Parts := Token.Split(['.']);
-  if Length(Parts) <> 3 then
+  // Séparer les parties du token (Header.Payload.Signature)
+  DotPos := Pos('.', Token);
+  if DotPos = 0 then
     Exit;
+  HeaderStr := Copy(Token, 1, DotPos - 1);
 
-  HeaderStr := Parts[0];
-  PayloadStr := Parts[1];
-  SignatureStr := Parts[2];
+  DotPos2 := Pos('.', Token, DotPos + 1);
+  if DotPos2 = 0 then
+    Exit;
+  PayloadStr := Copy(Token, DotPos + 1, DotPos2 - DotPos - 1);
+  SignatureStr := Copy(Token, DotPos2 + 1, Length(Token) - DotPos2);
 
   // Vérifier la signature
   DataToVerify := HeaderStr + '.' + PayloadStr;
@@ -1486,7 +1490,7 @@ begin
   // Récupérer le header Authorization
   AuthHeader := ARequest.GetCustomHeader('Authorization');
 
-  if (AuthHeader = '') or not AuthHeader.StartsWith('Bearer ') then
+  if (AuthHeader = '') or (Copy(AuthHeader, 1, 7) <> 'Bearer ') then
   begin
     AResponse.Code := 401;
     AResponse.Content := '{"error":"Missing or invalid Authorization header"}';
@@ -1803,7 +1807,7 @@ Le rate limiting limite le nombre de tentatives de connexion pour prévenir les 
 
 ```pascal
 uses
-  SysUtils, Classes, Contnrs;
+  SysUtils, Classes, DateUtils, Contnrs;
 
 type
   TLoginAttempt = class

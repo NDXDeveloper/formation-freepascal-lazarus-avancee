@@ -773,7 +773,6 @@ var
 begin
   Line := Message + LineEnding;
   FFileStream.WriteBuffer(Line[1], Length(Line));
-  FFileStream.Flush;
 end;
 
 procedure TLogger.Log(Level: TLogLevel; const Message: string);
@@ -1857,14 +1856,14 @@ Get-NetTCPConnection | Where-Object State -eq Established | Measure-Object
 
 procedure MonitorMemory;
 var
-  MemInfo: TMemoryManagerUsageSummary;
+  HeapStatus: TFPCHeapStatus;
 begin
-  GetMemoryManagerUsageSummary(MemInfo);
+  HeapStatus := GetFPCHeapStatus;
 
-  WriteLn('Mémoire utilisée: ', MemInfo.AllocatedBytes div 1024, ' KB');
-  WriteLn('Mémoire libre: ', MemInfo.FreedBytes div 1024, ' KB');
+  WriteLn('Mémoire utilisée: ', HeapStatus.CurrHeapUsed div 1024, ' KB');
+  WriteLn('Mémoire libre: ', HeapStatus.CurrHeapFree div 1024, ' KB');
 
-  if MemInfo.AllocatedBytes > 500 * 1024 * 1024 then // > 500 MB
+  if HeapStatus.CurrHeapUsed > 500 * 1024 * 1024 then // > 500 MB
     WriteLn('ATTENTION: Utilisation mémoire élevée!');
 end;
 ```
@@ -2145,7 +2144,7 @@ jobs:
 
 **DEPLOYMENT.md :**
 
-```markdown
+````markdown
 # Guide de déploiement MyWebApp
 
 ## Prérequis
@@ -2263,7 +2262,7 @@ C:\inetpub\mywebapp\scripts\rollback.ps1
 - Documentation : https://docs.example.com
 - Issues : https://github.com/example/mywebapp/issues
 - Email : support@example.com
-```
+````
 
 ## 9.11.11 Bonnes pratiques récapitulatives
 

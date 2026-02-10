@@ -613,7 +613,7 @@ var
 begin
   // Vérification simple du token (en production, utiliser JWT)
   AuthHeader := ARequest.GetCustomHeader('Authorization');
-  Result := (AuthHeader <> '') and AuthHeader.StartsWith('Bearer ');
+  Result := (AuthHeader <> '') and (Copy(AuthHeader, 1, 7) = 'Bearer ');
 end;
 
 procedure TGateway.RouteToUserService(ARequest: TRequest; AResponse: TResponse);
@@ -621,6 +621,8 @@ var
   Client: TServiceClient;
   Response: TJSONData;
   Endpoint: string;
+  InputJSON: TJSONObject;
+  Method: string;
 begin
   // Vérifier l'authentification pour les opérations sensibles
   if (ARequest.Method = 'POST') and not IsAuthenticated(ARequest) then
@@ -636,18 +638,20 @@ begin
     // Extraire le endpoint en retirant le préfixe /gateway
     Endpoint := StringReplace(ARequest.PathInfo, '/gateway', '', []);
 
-    case ARequest.Method of
-      'GET':
-        Response := Client.Get(Endpoint);
-      'POST':
-        begin
-          var InputJSON := GetJSON(ARequest.Content) as TJSONObject;
-          Response := Client.Post(Endpoint, InputJSON);
-          InputJSON.Free;
-        end;
+    Method := ARequest.Method;
+    if Method = 'GET' then
+      Response := Client.Get(Endpoint)
+    else if Method = 'POST' then
+    begin
+      InputJSON := GetJSON(ARequest.Content) as TJSONObject;
+      try
+        Response := Client.Post(Endpoint, InputJSON);
+      finally
+        InputJSON.Free;
+      end;
+    end
     else
       Response := nil;
-    end;
 
     if Assigned(Response) then
     try
@@ -673,6 +677,7 @@ var
   Client: TServiceClient;
   Response: TJSONData;
   Endpoint: string;
+  InputJSON: TJSONObject;
 begin
   if not IsAuthenticated(ARequest) then
   begin
@@ -686,16 +691,17 @@ begin
   try
     Endpoint := StringReplace(ARequest.PathInfo, '/gateway', '', []);
 
-    case ARequest.Method of
-      'POST':
-        begin
-          var InputJSON := GetJSON(ARequest.Content) as TJSONObject;
-          Response := Client.Post(Endpoint, InputJSON);
-          InputJSON.Free;
-        end;
+    if ARequest.Method = 'POST' then
+    begin
+      InputJSON := GetJSON(ARequest.Content) as TJSONObject;
+      try
+        Response := Client.Post(Endpoint, InputJSON);
+      finally
+        InputJSON.Free;
+      end;
+    end
     else
       Response := nil;
-    end;
 
     if Assigned(Response) then
     try
@@ -816,7 +822,7 @@ unit ServiceRegistry;
 interface
 
 uses
-  SysUtils, Classes, Generics.Collections, SyncObjs;
+  SysUtils, Classes, DateUtils, Generics.Collections, SyncObjs;
 
 type
   TServiceInfo = class
@@ -1492,7 +1498,7 @@ unit ConfigService;
 interface
 
 uses
-  SysUtils, Classes, fpjson, fphttpclient;
+  SysUtils, Classes, DateUtils, fpjson, fphttpclient;
 
 type
   TConfigManager = class
@@ -1876,7 +1882,7 @@ unit DistributedTracing;
 interface
 
 uses
-  SysUtils, Classes;
+  SysUtils, Classes, DateUtils;
 
 type
   TTraceContext = class
@@ -1943,12 +1949,6 @@ begin
   FSpanID := GenerateSpanID;
   FParentSpanID := '';
 end;
-
-constructor TTraceContext.CreateWithParent(const ServiceName, TraceID,
-                                           ParentSpanID: string);
-begin
-  inherited Create;
-  FServiceName
 
 constructor TTraceContext.CreateWithParent(const ServiceName, TraceID,
                                            ParentSpanID: string);
@@ -2334,7 +2334,7 @@ type
     procedure Dec(Value: Double = 1.0);
     procedure SetValue(Value: Double);
     function GetValue: Double;
-    function Format: string;
+    function FormatMetric: string;
   end;
 
   TMetricsRegistry = class
@@ -2408,7 +2408,7 @@ begin
   end;
 end;
 
-function TMetric.Format: string;
+function TMetric.FormatMetric: string;
 const
   TypeNames: array[TMetricType] of string = ('counter', 'gauge', 'histogram');
 begin
@@ -2481,7 +2481,7 @@ begin
     for i := 0 to FMetrics.Count - 1 do
     begin
       Metric := TMetric(FMetrics.Objects[i]);
-      Result := Result + Metric.Format;
+      Result := Result + Metric.FormatMetric;
     end;
   finally
     FLock.Leave;
@@ -2499,7 +2499,7 @@ program MonitoredService;
 {$mode objfpc}{$H+}
 
 uses
-  SysUtils, fphttpapp, httpdefs, httproute, fpjson, PrometheusMetrics;
+  SysUtils, DateUtils, fphttpapp, httpdefs, httproute, fpjson, PrometheusMetrics;
 
 var
   Metrics: TMetricsRegistry;

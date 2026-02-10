@@ -1621,7 +1621,7 @@ begin
       Client.Send(Message);
     except
       on E: Exception do
-        WriteLn('Erreur lors de l\'envoi au client ', i, ': ', E.Message);
+        WriteLn('Erreur lors de l''envoi au client ', i, ': ', E.Message);
     end;
   end;
 end;
@@ -1658,24 +1658,21 @@ begin
     try
       MessageType := JSONMsg.Get('type', '');
 
-      case MessageType of
-        'ping':
-          begin
-            Response := TJSONObject.Create;
-            try
-              Response.Add('type', 'pong');
-              Response.Add('timestamp', DateTimeToStr(Now));
-              AConnection.Send(Response.AsJSON);
-            finally
-              Response.Free;
-            end;
-          end;
-
-        'subscribe':
-          begin
-            WriteLn('Client abonné aux mises à jour');
-            AConnection.Send('{"type":"subscribed","message":"Abonné aux notifications"}');
-          end;
+      if MessageType = 'ping' then
+      begin
+        Response := TJSONObject.Create;
+        try
+          Response.Add('type', 'pong');
+          Response.Add('timestamp', DateTimeToStr(Now));
+          AConnection.Send(Response.AsJSON);
+        finally
+          Response.Free;
+        end;
+      end
+      else if MessageType = 'subscribe' then
+      begin
+        WriteLn('Client abonné aux mises à jour');
+        AConnection.Send('{"type":"subscribed","message":"Abonné aux notifications"}');
       end;
     finally
       JSONMsg.Free;
@@ -1984,20 +1981,24 @@ end;
 
 function TJWTManager.VerifyToken(const Token: string): TJSONObject;
 var
-  Parts: TStringArray;
   HeaderStr, PayloadStr, SignatureStr: string;
   ExpectedSignature: string;
   PayloadJSON: string;
+  DotPos1, DotPos2: Integer;
 begin
   Result := nil;
 
-  Parts := Token.Split(['.']);
-  if Length(Parts) <> 3 then
+  // Découper le token manuellement (3 parties séparées par '.')
+  DotPos1 := Pos('.', Token);
+  if DotPos1 = 0 then
+    Exit;
+  DotPos2 := Pos('.', Token, DotPos1 + 1);
+  if DotPos2 = 0 then
     Exit;
 
-  HeaderStr := Parts[0];
-  PayloadStr := Parts[1];
-  SignatureStr := Parts[2];
+  HeaderStr := Copy(Token, 1, DotPos1 - 1);
+  PayloadStr := Copy(Token, DotPos1 + 1, DotPos2 - DotPos1 - 1);
+  SignatureStr := Copy(Token, DotPos2 + 1, Length(Token) - DotPos2);
 
   // Vérifier la signature
   ExpectedSignature := Base64URLEncode(HMACSHA256(HeaderStr + '.' + PayloadStr, FSecretKey));
@@ -2124,7 +2125,7 @@ begin
   // Récupérer le header Authorization
   AuthHeader := ARequest.GetCustomHeader('Authorization');
 
-  if (AuthHeader = '') or not AuthHeader.StartsWith('Bearer ') then
+  if (AuthHeader = '') or (Copy(AuthHeader, 1, 7) <> 'Bearer ') then
   begin
     AResponse.Code := 401;
     AResponse.Content := '{"error":"Token manquant"}';
@@ -2466,7 +2467,7 @@ begin
       except
         on E: Exception do
         begin
-          WriteLn('Erreur lors de l\'envoi SSE: ', E.Message);
+          WriteLn('Erreur lors de l''envoi SSE: ', E.Message);
           // Retirer la connexion défaillante
           Connection.Free;
           List.Delete(i);
@@ -2962,7 +2963,7 @@ mon-projet/
 ### Performance
 
 ```pascal
-// Cache simple en mémoire
+// Cache simple en mémoire (nécessite uses DateUtils pour MinutesBetween)
 var
   CachedData: TJSONArray;
   CacheTime: TDateTime;

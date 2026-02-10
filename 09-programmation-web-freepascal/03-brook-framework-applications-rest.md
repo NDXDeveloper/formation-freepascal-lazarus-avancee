@@ -31,13 +31,13 @@
 
 **Avantages de Brook** :
 
-✅ **Syntaxe élégante** - Code lisible et concis
-✅ **Routage puissant** - URLs dynamiques et expressives
-✅ **JSON natif** - Support intégré du format JSON
-✅ **Middlewares** - Logique réutilisable (auth, logs, CORS)
-✅ **Validation** - Validation automatique des données
-✅ **Multi-plateforme** - Windows, Linux, macOS
-✅ **FastCGI natif** - Performances excellentes
+✅ **Syntaxe élégante** - Code lisible et concis  
+✅ **Routage puissant** - URLs dynamiques et expressives  
+✅ **JSON natif** - Support intégré du format JSON  
+✅ **Middlewares** - Logique réutilisable (auth, logs, CORS)  
+✅ **Validation** - Validation automatique des données  
+✅ **Multi-plateforme** - Windows, Linux, macOS  
+✅ **FastCGI natif** - Performances excellentes  
 ✅ **Documentation claire** - Communauté active
 
 **Comparaison avec d'autres solutions** :
@@ -1293,9 +1293,9 @@ begin
 
   if AException is EHTTPError then
     StatusCode := EHTTPError(AException).StatusCode
-  else if AException.Message.Contains('not found') then
+  else if Pos('not found', AException.Message) > 0 then
     StatusCode := 404
-  else if AException.Message.Contains('validation') then
+  else if Pos('validation', AException.Message) > 0 then
     StatusCode := 400;
 
   // Logger l'erreur
@@ -2496,7 +2496,7 @@ begin
   end;
 
   // Format: "Bearer TOKEN"
-  if not AuthHeader.StartsWith('Bearer ') then
+  if Copy(AuthHeader, 1, 7) <> 'Bearer ' then
   begin
     AResponse.SendStatus(401, '{"error":"Invalid authorization format"}', 'application/json');
     Halt;
@@ -2532,21 +2532,21 @@ end;
 
 class function TAuthMiddleware.ValidateToken(const Token: string; out UserID: Integer): Boolean;
 var
-  Parts: TStringArray;
   Payload, Signature, ExpectedSignature, Secret: string;
   Timestamp: Int64;
+  DotPos, ColonPos: Integer;
 begin
   Result := False;
   UserID := 0;
 
-  // Découper le token
-  Parts := Token.Split('.');
-  if Length(Parts) <> 2 then Exit;
+  // Découper le token par '.'
+  DotPos := Pos('.', Token);
+  if DotPos = 0 then Exit;
 
   try
     // Décoder le payload
-    Payload := DecodeStringBase64(Parts[0]);
-    Signature := Parts[1];
+    Payload := DecodeStringBase64(Copy(Token, 1, DotPos - 1));
+    Signature := Copy(Token, DotPos + 1, Length(Token));
 
     // Vérifier la signature
     Secret := 'your-secret-key-change-me';
@@ -2555,11 +2555,11 @@ begin
     if Signature <> ExpectedSignature then Exit;
 
     // Extraire UserID et Timestamp
-    Parts := Payload.Split(':');
-    if Length(Parts) <> 2 then Exit;
+    ColonPos := Pos(':', Payload);
+    if ColonPos = 0 then Exit;
 
-    UserID := StrToInt(Parts[0]);
-    Timestamp := StrToInt64(Parts[1]);
+    UserID := StrToInt(Copy(Payload, 1, ColonPos - 1));
+    Timestamp := StrToInt64(Copy(Payload, ColonPos + 1, Length(Payload)));
 
     // Vérifier l'expiration (24 heures)
     if (DateTimeToUnix(Now) - Timestamp) > 86400 then Exit;
@@ -2704,7 +2704,7 @@ make clean
 
 ### README.md
 
-```markdown
+````markdown
 # API REST Brook Framework
 
 API RESTful moderne construite avec Brook Framework et FreePascal.
@@ -2756,7 +2756,7 @@ Authentifier un utilisateur et obtenir un token JWT.
 Liste tous les utilisateurs (authentification requise).
 
 **Headers:**
-```
+````
 Authorization: Bearer {token}
 ```
 
@@ -2858,7 +2858,10 @@ type
 var
   Cache: TFPHashList;
 
-function GetCachedOrFetch(const Key: string; FetchFunc: TFunc<string>): string;
+type
+  TFetchFunc = function: string;
+
+function GetCachedOrFetch(const Key: string; FetchFunc: TFetchFunc): string;
 var
   Entry: TCacheEntry;
 begin
@@ -2926,12 +2929,12 @@ end;
 
 Brook Framework offre une solution moderne, élégante et performante pour créer des API REST avec FreePascal :
 
-✅ **Syntaxe intuitive** - Code lisible et maintenable
-✅ **Routage puissant** - URLs flexibles avec paramètres
-✅ **JSON natif** - Support complet et facile
-✅ **Middlewares** - Architecture modulaire
-✅ **Performance** - Excellente pour applications web
-✅ **Production-ready** - Déploiement professionnel
+✅ **Syntaxe intuitive** - Code lisible et maintenable  
+✅ **Routage puissant** - URLs flexibles avec paramètres  
+✅ **JSON natif** - Support complet et facile  
+✅ **Middlewares** - Architecture modulaire  
+✅ **Performance** - Excellente pour applications web  
+✅ **Production-ready** - Déploiement professionnel  
 ✅ **Multi-plateforme** - Windows, Linux, macOS
 
 Brook Framework est le choix idéal pour développer des API REST modernes, des microservices et des backends performants avec Free
