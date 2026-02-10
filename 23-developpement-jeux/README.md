@@ -118,7 +118,7 @@ var
   Running: Boolean;
   LastTime, CurrentTime, DeltaTime: Double;
 
-procedure Initialize;
+procedure Initialize;  
 begin
   // Initialiser les ressources, charger les assets
   LoadTextures;
@@ -126,7 +126,7 @@ begin
   InitializeEntities;
 end;
 
-procedure ProcessInput;
+procedure ProcessInput;  
 begin
   // Gérer les entrées clavier, souris, manette
   if KeyPressed(KEY_ESCAPE) then
@@ -136,7 +136,7 @@ begin
     PlayerJump;
 end;
 
-procedure Update(dt: Double);
+procedure Update(dt: Double);  
 begin
   // Mettre à jour la logique du jeu
   UpdatePlayer(dt);
@@ -146,7 +146,7 @@ begin
   UpdateAnimations(dt);
 end;
 
-procedure Render;
+procedure Render;  
 begin
   // Dessiner tout à l'écran
   ClearScreen;
@@ -156,7 +156,7 @@ begin
   SwapBuffers;  // Afficher le frame
 end;
 
-procedure Cleanup;
+procedure Cleanup;  
 begin
   // Libérer les ressources
   FreeTextures;
@@ -199,7 +199,7 @@ Le Delta Time est crucial pour un jeu fluide sur différentes machines :
 
 ```pascal
 // MAUVAIS : Vitesse dépend du framerate
-procedure UpdateWrong;
+procedure UpdateWrong;  
 begin
   PlayerX := PlayerX + 5;  // 5 pixels par frame
   // Sur un PC rapide (120 FPS) : 600 pixels/seconde
@@ -207,7 +207,7 @@ begin
 end;
 
 // BON : Vitesse constante indépendante du framerate
-procedure UpdateCorrect(dt: Double);
+procedure UpdateCorrect(dt: Double);  
 const
   SPEED = 200;  // pixels par seconde
 begin
@@ -243,7 +243,7 @@ type
 var
   CurrentState: TGameState;
 
-procedure Update(dt: Double);
+procedure Update(dt: Double);  
 begin
   case CurrentState of
     gsMenu:
@@ -257,7 +257,7 @@ begin
   end;
 end;
 
-procedure Render;
+procedure Render;  
 begin
   case CurrentState of
     gsMenu:
@@ -479,7 +479,7 @@ end;
 
 **Culling (élimination des objets hors écran)**
 ```pascal
-function IsVisible(X, Y, W, H: Single): Boolean;
+function IsVisible(X, Y, W, H: Single): Boolean;  
 begin
   Result := (X + W >= CameraX) and
             (X <= CameraX + ScreenWidth) and
@@ -536,13 +536,13 @@ end;
 
 ```pascal
 // Interpolation linéaire
-function Lerp(A, B, T: Single): Single;
+function Lerp(A, B, T: Single): Single;  
 begin
   Result := A + (B - A) * T;
 end;
 
 // Limiter une valeur
-function Clamp(Value, Min, Max: Single): Single;
+function Clamp(Value, Min, Max: Single): Single;  
 begin
   if Value < Min then Result := Min
   else if Value > Max then Result := Max
@@ -550,7 +550,7 @@ begin
 end;
 
 // Angle entre deux points
-function AngleBetween(X1, Y1, X2, Y2: Single): Single;
+function AngleBetween(X1, Y1, X2, Y2: Single): Single;  
 begin
   Result := ArcTan2(Y2 - Y1, X2 - X1);
 end;

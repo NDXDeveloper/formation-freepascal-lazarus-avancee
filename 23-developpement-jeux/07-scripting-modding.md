@@ -160,7 +160,7 @@ end.
 Pour permettre à Lua d'appeler des fonctions Pascal :
 
 ```pascal
-function PascalFunction(L: Plua_State): Integer; cdecl;
+function PascalFunction(L: Plua_State): Integer; cdecl;  
 var
   param: Integer;
 begin
@@ -177,7 +177,7 @@ begin
   Result := 1;
 end;
 
-procedure RegisterPascalFunctions(L: Plua_State);
+procedure RegisterPascalFunctions(L: Plua_State);  
 begin
   // Enregistrer la fonction dans Lua
   lua_register(L, 'pascalFunction', @PascalFunction);
@@ -187,7 +187,7 @@ end;
 Utilisation depuis Lua :
 ```lua
 -- Appeler la fonction Pascal
-resultat = pascalFunction(42)
+resultat = pascalFunction(42)  
 print("Résultat : " .. resultat)  -- Affiche 84
 ```
 
@@ -196,7 +196,7 @@ print("Résultat : " .. resultat)  -- Affiche 84
 #### Tables Lua vers Pascal
 
 ```pascal
-procedure ReadLuaTable(L: Plua_State);
+procedure ReadLuaTable(L: Plua_State);  
 var
   key, value: string;
 begin
@@ -220,7 +220,7 @@ end;
 #### Créer des objets Lua depuis Pascal
 
 ```pascal
-procedure CreatePlayerObject(L: Plua_State; PlayerName: string; Health: Integer);
+procedure CreatePlayerObject(L: Plua_State; PlayerName: string; Health: Integer);  
 begin
   lua_newtable(L);
 
@@ -341,7 +341,7 @@ type
 ### Exemple d'implémentation
 
 ```pascal
-procedure TScriptEvent.Trigger(L: Plua_State; params: array of const);
+procedure TScriptEvent.Trigger(L: Plua_State; params: array of const);  
 var
   i: Integer;
   callbackName: string;
@@ -401,7 +401,7 @@ type
     procedure ReloadScript(const Filename: string);
   end;
 
-procedure TScriptWatcher.CheckForChanges;
+procedure TScriptWatcher.CheckForChanges;  
 var
   i: Integer;
   currentTime: TDateTime;
@@ -444,7 +444,7 @@ Lorsque vous permettez l'exécution de scripts, la sécurité est cruciale.
 ### Limiter l'accès aux fonctions dangereuses
 
 ```pascal
-procedure SandboxLuaEnvironment(L: Plua_State);
+procedure SandboxLuaEnvironment(L: Plua_State);  
 begin
   // Désactiver les fonctions dangereuses
   lua_pushnil(L);
@@ -469,13 +469,13 @@ end;
 Pour éviter les scripts infinis :
 
 ```pascal
-procedure SetExecutionTimeout(L: Plua_State; TimeoutMS: Integer);
+procedure SetExecutionTimeout(L: Plua_State; TimeoutMS: Integer);  
 begin
   // Utiliser lua_sethook pour interrompre après un certain temps
   lua_sethook(L, @TimeoutHook, LUA_MASKCOUNT, 100000);
 end;
 
-procedure TimeoutHook(L: Plua_State; ar: Plua_Debug); cdecl;
+procedure TimeoutHook(L: Plua_State; ar: Plua_Debug); cdecl;  
 begin
   // Vérifier si le temps limite est dépassé
   if GetTickCount > StartTime + TimeoutMS then
@@ -486,7 +486,7 @@ end;
 ### Limites de mémoire
 
 ```pascal
-procedure SetMemoryLimit(L: Plua_State; MaxMemoryMB: Integer);
+procedure SetMemoryLimit(L: Plua_State; MaxMemoryMB: Integer);  
 begin
   // Configurer l'allocateur personnalisé avec limite
   lua_setallocf(L, @CustomAllocator, Pointer(MaxMemoryMB));
@@ -503,7 +503,7 @@ Les fichiers JSON sont parfaits pour les configurations de mods :
 uses
   fpjson, jsonparser;
 
-function LoadModConfig(const Filename: string): TJSONObject;
+function LoadModConfig(const Filename: string): TJSONObject;  
 var
   JSONData: TJSONData;
   FileContent: string;
@@ -524,7 +524,7 @@ end;
 uses
   DOM, XMLRead;
 
-procedure LoadModDataFromXML(const Filename: string);
+procedure LoadModDataFromXML(const Filename: string);  
 var
   Doc: TXMLDocument;
   RootNode: TDOMNode;
@@ -551,7 +551,7 @@ type
     DataSize: Cardinal;
   end;
 
-procedure SaveModData(const Filename: string; Data: TModData);
+procedure SaveModData(const Filename: string; Data: TModData);  
 var
   F: TFileStream;
   Header: TModDataHeader;
@@ -577,12 +577,12 @@ Lorsque plusieurs mods sont chargés, des conflits peuvent survenir.
 ### Ordre de chargement
 
 ```pascal
-procedure TModManager.SortModsByLoadOrder;
+procedure TModManager.SortModsByLoadOrder;  
 begin
   FMods.Sort(@CompareModLoadOrder);
 end;
 
-function CompareModLoadOrder(Item1, Item2: Pointer): Integer;
+function CompareModLoadOrder(Item1, Item2: Pointer): Integer;  
 var
   Mod1, Mod2: TMod;
 begin
@@ -603,7 +603,7 @@ type
     FPriority: Integer;
   end;
 
-function TModManager.GetResource(const Path: string): TResourceOverride;
+function TModManager.GetResource(const Path: string): TResourceOverride;  
 var
   i: Integer;
   Override: TResourceOverride;
@@ -646,7 +646,7 @@ type
     procedure AddMessage(const Msg: string);
   end;
 
-procedure TDevConsole.ExecuteCommand(const Command: string);
+procedure TDevConsole.ExecuteCommand(const Command: string);  
 begin
   FHistory.Add(Command);
 
@@ -662,7 +662,7 @@ end;
 ### Commandes intégrées
 
 ```pascal
-procedure RegisterConsoleCommands(L: Plua_State);
+procedure RegisterConsoleCommands(L: Plua_State);  
 begin
   // Recharger tous les scripts
   lua_register(L, 'reload', @CmdReload);
@@ -691,7 +691,7 @@ end
 ### Inspection de variables
 
 ```pascal
-procedure InspectLuaVariable(L: Plua_State; const VarName: string);
+procedure InspectLuaVariable(L: Plua_State; const VarName: string);  
 begin
   lua_getglobal(L, PChar(VarName));
 
@@ -713,7 +713,7 @@ end;
 ### Empaquetage de mods
 
 ```pascal
-procedure PackageMod(const ModPath, OutputFile: string);
+procedure PackageMod(const ModPath, OutputFile: string);  
 var
   Zipper: TZipper;
 begin
@@ -731,7 +731,7 @@ end;
 ### Installation automatique
 
 ```pascal
-procedure InstallMod(const ModFile, ModsDirectory: string);
+procedure InstallMod(const ModFile, ModsDirectory: string);  
 var
   UnZipper: TUnZipper;
   ModName: string;
@@ -758,7 +758,7 @@ Pour intégrer avec des plateformes existantes :
 **Mod.io** : API REST simple  
 
 ```pascal
-procedure UploadModToModIO(const ModPath: string; APIKey: string);
+procedure UploadModToModIO(const ModPath: string; APIKey: string);  
 var
   HTTPClient: TFPHTTPClient;
   FormData: TMultipartFormData;
@@ -797,7 +797,7 @@ Créez une documentation claire :
 const
   MODDING_API_VERSION = '1.0.0';
 
-procedure CheckModCompatibility(Mod: TMod);
+procedure CheckModCompatibility(Mod: TMod);  
 begin
   if Mod.RequiredAPIVersion <> MODDING_API_VERSION then
     ShowWarning('Ce mod nécessite une version différente de l''API');

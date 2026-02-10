@@ -106,7 +106,7 @@ type
     function ReceiveData: string;
   end;
 
-constructor TGameServer.Create(Port: Integer);
+constructor TGameServer.Create(Port: Integer);  
 begin
   FSocket := TTCPBlockSocket.Create;
   FSocket.CreateSocket;
@@ -115,7 +115,7 @@ begin
   FSocket.Listen;
 end;
 
-procedure TGameServer.Listen;
+procedure TGameServer.Listen;  
 var
   ClientSocket: TSocket;
 begin
@@ -129,7 +129,7 @@ begin
     WriteLn('Erreur : ', FSocket.LastErrorDesc);
 end;
 
-function TGameServer.ReceiveData: string;
+function TGameServer.ReceiveData: string;  
 begin
   Result := FSocket.RecvPacket(5000); // Timeout 5 secondes
 
@@ -137,7 +137,7 @@ begin
     WriteLn('Erreur réception : ', FSocket.LastErrorDesc);
 end;
 
-procedure TGameServer.SendData(const Data: string);
+procedure TGameServer.SendData(const Data: string);  
 begin
   FSocket.SendString(Data + #13#10);
 end;
@@ -162,7 +162,7 @@ type
     procedure SendMessage(const Msg: string);
   end;
 
-constructor TGameClient.Create;
+constructor TGameClient.Create;  
 begin
   FTCP := TLTCPComponent.Create(nil);
   FTCP.OnConnect := @OnConnect;
@@ -170,12 +170,12 @@ begin
   FTCP.OnError := @OnError;
 end;
 
-procedure TGameClient.OnConnect(aSocket: TLSocket);
+procedure TGameClient.OnConnect(aSocket: TLSocket);  
 begin
   WriteLn('Connecté au serveur !');
 end;
 
-procedure TGameClient.OnReceive(aSocket: TLSocket);
+procedure TGameClient.OnReceive(aSocket: TLSocket);  
 var
   Data: string;
 begin
@@ -183,12 +183,12 @@ begin
     WriteLn('Reçu : ', Data);
 end;
 
-procedure TGameClient.Connect(const Host: string; Port: Word);
+procedure TGameClient.Connect(const Host: string; Port: Word);  
 begin
   FTCP.Connect(Host, Port);
 end;
 
-procedure TGameClient.SendMessage(const Msg: string);
+procedure TGameClient.SendMessage(const Msg: string);  
 begin
   FTCP.SendMessage(Msg + #13#10);
 end;
@@ -210,14 +210,14 @@ type
   end;
 
 // Sérialisation binaire
-function SerializePosition(const Pos: TPlayerPosition): TBytes;
+function SerializePosition(const Pos: TPlayerPosition): TBytes;  
 begin
   SetLength(Result, SizeOf(TPlayerPosition));
   Move(Pos, Result[0], SizeOf(TPlayerPosition));
 end;
 
 // Désérialisation
-function DeserializePosition(const Data: TBytes): TPlayerPosition;
+function DeserializePosition(const Data: TBytes): TPlayerPosition;  
 begin
   if Length(Data) >= SizeOf(TPlayerPosition) then
     Move(Data[0], Result, SizeOf(TPlayerPosition));
@@ -227,7 +227,7 @@ end;
 uses
   fpjson, jsonparser;
 
-function PositionToJSON(const Pos: TPlayerPosition): string;
+function PositionToJSON(const Pos: TPlayerPosition): string;  
 var
   JSON: TJSONObject;
 begin
@@ -245,7 +245,7 @@ begin
   end;
 end;
 
-function JSONToPosition(const JSONStr: string): TPlayerPosition;
+function JSONToPosition(const JSONStr: string): TPlayerPosition;  
 var
   JSON: TJSONObject;
 begin
@@ -284,7 +284,7 @@ type
     Data: array[0..1023] of Byte;
   end;
 
-function CreateMessage(MsgType: TMessageType; const Data: TBytes): TNetworkMessage;
+function CreateMessage(MsgType: TMessageType; const Data: TBytes): TNetworkMessage;  
 begin
   Result.MsgType := MsgType;
   Result.DataSize := Length(Data);
@@ -295,7 +295,7 @@ begin
   Move(Data[0], Result.Data[0], Result.DataSize);
 end;
 
-procedure HandleMessage(const Msg: TNetworkMessage);
+procedure HandleMessage(const Msg: TNetworkMessage);  
 begin
   case Msg.MsgType of
     mtPlayerJoin:
@@ -340,7 +340,7 @@ type
     procedure HandleClient(Client: TClient);
   end;
 
-constructor TGameServer.Create(Port: Integer);
+constructor TGameServer.Create(Port: Integer);  
 begin
   FClients := TList<TClient>.Create;
   FNextPlayerID := 1;
@@ -354,7 +354,7 @@ begin
   WriteLn('Serveur démarré sur le port ', Port);
 end;
 
-procedure TGameServer.Start;
+procedure TGameServer.Start;  
 var
   ClientSocket: TSocket;
   Client: TClient;
@@ -395,7 +395,7 @@ begin
   end;
 end;
 
-procedure TGameServer.HandleClient(Client: TClient);
+procedure TGameServer.HandleClient(Client: TClient);  
 var
   Data: string;
   Msg: TNetworkMessage;
@@ -426,7 +426,7 @@ begin
   end;
 end;
 
-procedure TGameServer.BroadcastMessage(const Msg: TNetworkMessage);
+procedure TGameServer.BroadcastMessage(const Msg: TNetworkMessage);  
 var
   Client: TClient;
   Data: TBytes;
@@ -458,7 +458,7 @@ type
     procedure SendToClient(const Address: string; const Msg: TNetworkMessage);
   end;
 
-constructor TUDPGameServer.Create(Port: Integer);
+constructor TUDPGameServer.Create(Port: Integer);  
 begin
   FClients := TDictionary<string, TClient>.Create;
 
@@ -469,7 +469,7 @@ begin
   WriteLn('Serveur UDP démarré sur le port ', Port);
 end;
 
-procedure TUDPGameServer.Update;
+procedure TUDPGameServer.Update;  
 var
   Data: string;
   RemoteIP: string;
@@ -543,13 +543,13 @@ type
     procedure Update;
   end;
 
-constructor TGameClient.Create;
+constructor TGameClient.Create;  
 begin
   FSocket := TTCPBlockSocket.Create;
   FConnected := False;
 end;
 
-function TGameClient.Connect(const Host: string; Port: Integer): Boolean;
+function TGameClient.Connect(const Host: string; Port: Integer): Boolean;  
 begin
   WriteLn('Connexion à ', Host, ':', Port);
 
@@ -592,7 +592,7 @@ begin
     WriteLn('Erreur de connexion : ', FSocket.LastErrorDesc);
 end;
 
-procedure TGameClient.SendMessage(const Msg: TNetworkMessage);
+procedure TGameClient.SendMessage(const Msg: TNetworkMessage);  
 var
   Data: TBytes;
 begin
@@ -623,7 +623,7 @@ type
     procedure Update;
   end;
 
-constructor TUDPGameClient.Create;
+constructor TUDPGameClient.Create;  
 begin
   FSocket := TUDPBlockSocket.Create;
   FSocket.CreateSocket;
@@ -631,7 +631,7 @@ begin
   FConnected := False;
 end;
 
-function TUDPGameClient.Connect(const Host: string; Port: Integer): Boolean;
+function TUDPGameClient.Connect(const Host: string; Port: Integer): Boolean;  
 begin
   FServerIP := Host;
   FServerPort := Port;
@@ -643,7 +643,7 @@ begin
   Result := True;
 end;
 
-procedure TUDPGameClient.SendMessage(const Msg: TNetworkMessage);
+procedure TUDPGameClient.SendMessage(const Msg: TNetworkMessage);  
 var
   Data: TBytes;
 begin
@@ -656,7 +656,7 @@ begin
   end;
 end;
 
-procedure TUDPGameClient.Update;
+procedure TUDPGameClient.Update;  
 var
   Data: string;
   Msg: TNetworkMessage;
@@ -712,7 +712,7 @@ begin
     Inc(FSnapshotCount);
 end;
 
-function TNetworkPlayer.GetInterpolatedPosition(CurrentTime: Cardinal): TVector3;
+function TNetworkPlayer.GetInterpolatedPosition(CurrentTime: Cardinal): TVector3;  
 var
   RenderTime: Cardinal;
   I, From, To_: Integer;
@@ -755,7 +755,7 @@ begin
     Result := FSnapshots[0].Position;
 end;
 
-function Lerp(A, B, T: Single): Single;
+function Lerp(A, B, T: Single): Single;  
 begin
   Result := A + (B - A) * T;
 end;
@@ -777,7 +777,7 @@ type
     procedure PredictPosition(var Player: TPlayer);
   end;
 
-procedure TClientPrediction.SendInput(const Input: TPlayerInput);
+procedure TClientPrediction.SendInput(const Input: TPlayerInput);  
 begin
   // Envoyer au serveur
   SendToServer(Input);
@@ -831,7 +831,7 @@ type
     function GetCurrentPing: Integer;
   end;
 
-procedure TPingManager.SendPing;
+procedure TPingManager.SendPing;  
 var
   Msg: TNetworkMessage;
 begin
@@ -840,7 +840,7 @@ begin
   Client.SendMessage(Msg);
 end;
 
-procedure TPingManager.OnPong;
+procedure TPingManager.OnPong;  
 var
   Ping: Integer;
 begin
@@ -854,7 +854,7 @@ begin
   WriteLn('Ping : ', Ping, ' ms');
 end;
 
-function TPingManager.GetAveragePing: Integer;
+function TPingManager.GetAveragePing: Integer;  
 var
   I, Sum: Integer;
 begin
@@ -929,18 +929,18 @@ type
     procedure HandleDisconnect(PlayerID: Integer);
   end;
 
-constructor TConnectionManager.Create(TimeoutMs: Cardinal);
+constructor TConnectionManager.Create(TimeoutMs: Cardinal);  
 begin
   FTimeout := TimeoutMs;
 end;
 
-procedure TConnectionManager.UpdateLastReceived(PlayerID: Integer);
+procedure TConnectionManager.UpdateLastReceived(PlayerID: Integer);  
 begin
   if PlayerID < Length(FLastReceivedTime) then
     FLastReceivedTime[PlayerID] := SDL_GetTicks;
 end;
 
-function TConnectionManager.IsTimedOut(PlayerID: Integer): Boolean;
+function TConnectionManager.IsTimedOut(PlayerID: Integer): Boolean;  
 var
   TimeSinceLastMsg: Cardinal;
 begin
@@ -954,7 +954,7 @@ begin
   Result := TimeSinceLastMsg > FTimeout;
 end;
 
-procedure TConnectionManager.HandleDisconnect(PlayerID: Integer);
+procedure TConnectionManager.HandleDisconnect(PlayerID: Integer);  
 var
   Msg: TNetworkMessage;
 begin
@@ -985,7 +985,7 @@ type
     function ShouldRetry: Boolean;
   end;
 
-procedure TReconnectManager.AttemptReconnect;
+procedure TReconnectManager.AttemptReconnect;  
 begin
   if SDL_GetTicks - FLastAttemptTime < FRetryDelay then
     Exit;
@@ -1091,7 +1091,7 @@ begin
   end;
 end;
 
-function TServerValidator.ValidateShotHit(ShooterID, TargetID: Integer): Boolean;
+function TServerValidator.ValidateShotHit(ShooterID, TargetID: Integer): Boolean;  
 var
   Shooter, Target: TPlayer;
   Distance: Single;
@@ -1159,7 +1159,7 @@ begin
     Stats.HeadshotRatio := Stats.HeadshotRatio * 0.95;
 end;
 
-function TCheatDetector.IsSuspicious(PlayerID: Integer): Boolean;
+function TCheatDetector.IsSuspicious(PlayerID: Integer): Boolean;  
 var
   Stats: PPlayerStats;
   AvgReactionTime: Single;
@@ -1222,7 +1222,7 @@ type
     function ComputeHash(const Data: TBytes): string;
   end;
 
-constructor TSecureNetwork.Create(const Password: string);
+constructor TSecureNetwork.Create(const Password: string);  
 var
   Hash: TDCP_sha256;
 begin
@@ -1241,21 +1241,21 @@ begin
   FCipher.Init(FKey, SizeOf(FKey) * 8, nil);
 end;
 
-function TSecureNetwork.Encrypt(const Data: TBytes): TBytes;
+function TSecureNetwork.Encrypt(const Data: TBytes): TBytes;  
 begin
   SetLength(Result, Length(Data));
   if Length(Data) > 0 then
     FCipher.EncryptCBC(Data[0], Result[0], Length(Data));
 end;
 
-function TSecureNetwork.Decrypt(const Data: TBytes): TBytes;
+function TSecureNetwork.Decrypt(const Data: TBytes): TBytes;  
 begin
   SetLength(Result, Length(Data));
   if Length(Data) > 0 then
     FCipher.DecryptCBC(Data[0], Result[0], Length(Data));
 end;
 
-function TSecureNetwork.ComputeHash(const Data: TBytes): string;
+function TSecureNetwork.ComputeHash(const Data: TBytes): string;  
 var
   Hash: TDCP_sha256;
   Digest: array[0..31] of Byte;
@@ -1276,7 +1276,7 @@ begin
 end;
 
 // Utilisation
-procedure SendSecureMessage(const Msg: TNetworkMessage);
+procedure SendSecureMessage(const Msg: TNetworkMessage);  
 var
   Data, Encrypted: TBytes;
   Hash: string;
@@ -1304,7 +1304,7 @@ end;
 uses
   zstream;
 
-function CompressData(const Data: TBytes): TBytes;
+function CompressData(const Data: TBytes): TBytes;  
 var
   Input, Output: TMemoryStream;
   Compressor: TCompressionStream;
@@ -1331,7 +1331,7 @@ begin
   end;
 end;
 
-function DecompressData(const Data: TBytes): TBytes;
+function DecompressData(const Data: TBytes): TBytes;  
 var
   Input, Output: TMemoryStream;
   Decompressor: TDecompressionStream;
@@ -1373,7 +1373,7 @@ type
     NewHealth: Integer;
   end;
 
-function CreateDeltaUpdate(const Old, New: TPlayer): TPlayerDelta;
+function CreateDeltaUpdate(const Old, New: TPlayer): TPlayerDelta;  
 const
   FLAG_POSITION = 1;
   FLAG_ROTATION = 2;
@@ -1406,7 +1406,7 @@ begin
   end;
 end;
 
-procedure ApplyDelta(var Player: TPlayer; const Delta: TPlayerDelta);
+procedure ApplyDelta(var Player: TPlayer; const Delta: TPlayerDelta);  
 const
   FLAG_POSITION = 1;
   FLAG_ROTATION = 2;
@@ -1437,12 +1437,12 @@ type
     procedure MarkUpdated(PlayerID: Integer);
   end;
 
-constructor TUpdateThrottler.Create(UpdateRateMs: Cardinal);
+constructor TUpdateThrottler.Create(UpdateRateMs: Cardinal);  
 begin
   FUpdateRate := UpdateRateMs;
 end;
 
-function TUpdateThrottler.ShouldSendUpdate(PlayerID: Integer): Boolean;
+function TUpdateThrottler.ShouldSendUpdate(PlayerID: Integer): Boolean;  
 var
   CurrentTime: Cardinal;
 begin
@@ -1454,7 +1454,7 @@ begin
   Result := (CurrentTime - FLastUpdateTime[PlayerID]) >= FUpdateRate;
 end;
 
-procedure TUpdateThrottler.MarkUpdated(PlayerID: Integer);
+procedure TUpdateThrottler.MarkUpdated(PlayerID: Integer);  
 begin
   if PlayerID >= Length(FLastUpdateTime) then
     SetLength(FLastUpdateTime, PlayerID + 1);
@@ -1466,7 +1466,7 @@ end;
 var
   Throttler: TUpdateThrottler;
 
-procedure BroadcastPlayerPositions;
+procedure BroadcastPlayerPositions;  
 var
   I: Integer;
   Player: TPlayer;
@@ -1504,7 +1504,7 @@ type
     function HasMessages: Boolean;
   end;
 
-constructor TPriorityQueue.Create;
+constructor TPriorityQueue.Create;  
 var
   P: TMessagePriority;
 begin
@@ -1512,7 +1512,7 @@ begin
     FQueues[P] := TQueue<TNetworkMessage>.Create;
 end;
 
-function TPriorityQueue.Dequeue: TNetworkMessage;
+function TPriorityQueue.Dequeue: TNetworkMessage;  
 var
   P: TMessagePriority;
 begin
@@ -1531,7 +1531,7 @@ begin
 end;
 
 // Utilisation
-procedure SendGameMessage(const Msg: TNetworkMessage);
+procedure SendGameMessage(const Msg: TNetworkMessage);  
 var
   Priority: TMessagePriority;
 begin
@@ -1571,7 +1571,7 @@ type
     procedure Update;
   end;
 
-procedure TMatchmakingServer.AddPlayer(const Player: TPlayerInfo);
+procedure TMatchmakingServer.AddPlayer(const Player: TPlayerInfo);  
 begin
   WriteLn('Joueur ', Player.Name, ' en attente de partie');
   FWaitingPlayers.Add(Player);
@@ -1581,7 +1581,7 @@ begin
     TryCreateGame;
 end;
 
-procedure TMatchmakingServer.TryCreateGame;
+procedure TMatchmakingServer.TryCreateGame;  
 var
   Game: TGameSession;
   I: Integer;
@@ -1628,7 +1628,7 @@ type
     procedure SendLobbyState;
   end;
 
-function TGameLobby.AddPlayer(const Player: TPlayerInfo): Boolean;
+function TGameLobby.AddPlayer(const Player: TPlayerInfo): Boolean;  
 begin
   Result := False;
 
@@ -1653,7 +1653,7 @@ begin
   Result := True;
 end;
 
-procedure TGameLobby.SendLobbyState;
+procedure TGameLobby.SendLobbyState;  
 var
   Msg: TNetworkMessage;
   Data: TBytes;
@@ -1668,7 +1668,7 @@ begin
     SendToPlayer(Player.ID, Msg);
 end;
 
-procedure TGameLobby.StartGame;
+procedure TGameLobby.StartGame;  
 begin
   if FPlayers.Count < 2 then
   begin
@@ -1698,7 +1698,7 @@ type
     procedure SendHolePunchPacket(const PeerAddress: string; Port: Integer);
   end;
 
-function TNATPunchthrough.ConnectP2P(const PeerID: Integer): Boolean;
+function TNATPunchthrough.ConnectP2P(const PeerID: Integer): Boolean;  
 var
   MyPublicIP: string;
   MyPublicPort: Integer;
@@ -1836,7 +1836,7 @@ begin
   FDelayedMessages := TList.Create;
 end;
 
-procedure TLagSimulator.SendWithLag(const Msg: TNetworkMessage);
+procedure TLagSimulator.SendWithLag(const Msg: TNetworkMessage);  
 var
   Delay: Integer;
   DelayedMsg: TDelayedMessage;
@@ -1857,7 +1857,7 @@ begin
   FDelayedMessages.Add(DelayedMsg);
 end;
 
-procedure TLagSimulator.Update;
+procedure TLagSimulator.Update;  
 var
   I: Integer;
   CurrentTime: Cardinal;
@@ -1895,7 +1895,7 @@ type
     procedure LogEvent(const Event: string);
   end;
 
-constructor TNetworkLogger.Create(const FileName: string);
+constructor TNetworkLogger.Create(const FileName: string);  
 begin
   AssignFile(FLogFile, FileName);
   Rewrite(FLogFile);
@@ -1905,7 +1905,7 @@ begin
   WriteLn(FLogFile, 'Time: ', DateTimeToStr(Now));
 end;
 
-procedure TNetworkLogger.LogSent(const Msg: TNetworkMessage);
+procedure TNetworkLogger.LogSent(const Msg: TNetworkMessage);  
 begin
   if not FEnabled then Exit;
 
@@ -1914,7 +1914,7 @@ begin
   Flush(FLogFile);
 end;
 
-procedure TNetworkLogger.LogReceived(const Msg: TNetworkMessage);
+procedure TNetworkLogger.LogReceived(const Msg: TNetworkMessage);  
 begin
   if not FEnabled then Exit;
 
@@ -1943,19 +1943,19 @@ type
     procedure PrintStats;
   end;
 
-procedure TNetworkStats.RecordSent(Bytes: Integer);
+procedure TNetworkStats.RecordSent(Bytes: Integer);  
 begin
   Inc(FBytesSent, Bytes);
   Inc(FMessagesSent);
 end;
 
-procedure TNetworkStats.RecordReceived(Bytes: Integer);
+procedure TNetworkStats.RecordReceived(Bytes: Integer);  
 begin
   Inc(FBytesReceived, Bytes);
   Inc(FMessagesReceived);
 end;
 
-function TNetworkStats.GetUploadRate: Single;
+function TNetworkStats.GetUploadRate: Single;  
 var
   ElapsedSeconds: Single;
 begin
@@ -1966,7 +1966,7 @@ begin
     Result := 0;
 end;
 
-procedure TNetworkStats.PrintStats;
+procedure TNetworkStats.PrintStats;  
 begin
   WriteLn('=== Network Statistics ===');
   WriteLn('Uptime: ', (SDL_GetTicks - FStartTime) / 1000:0:1, ' seconds');
@@ -2004,14 +2004,14 @@ type
     procedure Render;
   end;
 
-constructor TShooterClient.Create;
+constructor TShooterClient.Create;  
 begin
   FSocket := TUDPBlockSocket.Create;
   FSocket.CreateSocket;
   FSocket.Bind('0.0.0.0', '0');
 end;
 
-procedure TShooterClient.Connect(const Host: string; Port: Integer);
+procedure TShooterClient.Connect(const Host: string; Port: Integer);  
 var
   JoinMsg: TNetworkMessage;
 begin
@@ -2025,7 +2025,7 @@ begin
   WriteLn('Connexion au serveur ', Host, ':', Port);
 end;
 
-procedure TShooterClient.SendInput(const Input: TPlayerInput);
+procedure TShooterClient.SendInput(const Input: TPlayerInput);  
 var
   Msg: TNetworkMessage;
   Data: TBytes;
@@ -2039,7 +2039,7 @@ begin
   FSocket.SendBufferTo(FServerIP, FServerPort, @Msg, SizeOf(Msg));
 end;
 
-procedure TShooterClient.Update;
+procedure TShooterClient.Update;  
 var
   Data: string;
   Msg: TNetworkMessage;
@@ -2073,7 +2073,7 @@ begin
   end;
 end;
 
-procedure TShooterClient.Render;
+procedure TShooterClient.Render;  
 var
   I: Integer;
 begin
@@ -2157,7 +2157,7 @@ type
     procedure BroadcastGameState;
   end;
 
-constructor TShooterServer.Create(Port: Integer);
+constructor TShooterServer.Create(Port: Integer);  
 begin
   FSocket := TUDPBlockSocket.Create;
   FSocket.CreateSocket;
@@ -2169,7 +2169,7 @@ begin
   WriteLn('Serveur démarré sur le port ', Port);
 end;
 
-procedure TShooterServer.Update;
+procedure TShooterServer.Update;  
 var
   Data: string;
   Msg: TNetworkMessage;
@@ -2236,7 +2236,7 @@ begin
   BroadcastGameState;
 end;
 
-procedure TShooterServer.BroadcastGameState;
+procedure TShooterServer.BroadcastGameState;  
 var
   Client: TClientInfo;
   Msg: TNetworkMessage;
@@ -2314,7 +2314,7 @@ begin
   end;
 end;
 
-procedure TTurnBasedGame.NextTurn;
+procedure TTurnBasedGame.NextTurn;  
 begin
   FCurrentTurn := (FCurrentTurn + 1) mod FPlayerCount;
 
@@ -2324,7 +2324,7 @@ begin
   SendTurnNotification;
 end;
 
-procedure TTurnBasedGame.SendTurnNotification;
+procedure TTurnBasedGame.SendTurnNotification;  
 var
   Msg: TNetworkMessage;
 begin
@@ -2358,7 +2358,7 @@ var
   Server: TGameServer;
   Running: Boolean;
 
-procedure HandleSignal(Signal: Integer); cdecl;
+procedure HandleSignal(Signal: Integer); cdecl;  
 begin
   WriteLn('Signal reçu : ', Signal);
   Running := False;
@@ -2398,15 +2398,15 @@ Créer `/etc/systemd/system/gameserver.service` :
 
 ```ini
 [Unit]
-Description=Game Server
+Description=Game Server  
 After=network.target
 
 [Service]
-Type=simple
-User=gameserver
-WorkingDirectory=/opt/gameserver
-ExecStart=/opt/gameserver/server
-Restart=on-failure
+Type=simple  
+User=gameserver  
+WorkingDirectory=/opt/gameserver  
+ExecStart=/opt/gameserver/server  
+Restart=on-failure  
 RestartSec=10
 
 [Install]
@@ -2443,10 +2443,10 @@ RUN apt-get update && apt-get install -y \
 RUN useradd -m -s /bin/bash gameserver
 
 # Copier le serveur
-COPY --chown=gameserver:gameserver server /opt/gameserver/
+COPY --chown=gameserver:gameserver server /opt/gameserver/  
 COPY --chown=gameserver:gameserver config.ini /opt/gameserver/
 
-USER gameserver
+USER gameserver  
 WORKDIR /opt/gameserver
 
 EXPOSE 7777/udp
@@ -2504,7 +2504,7 @@ type
     function GetMetrics: string;
   end;
 
-function TServerMetrics.GetMetrics: string;
+function TServerMetrics.GetMetrics: string;  
 begin
   Result := '# HELP active_connections Number of active connections'#10 +
             '# TYPE active_connections gauge'#10 +
@@ -2518,7 +2518,7 @@ begin
 end;
 
 // Serveur HTTP simple pour exposer les métriques
-procedure ServeMetrics(Port: Integer);
+procedure ServeMetrics(Port: Integer);  
 var
   HTTPServer: THTTPServer;
 begin
@@ -2545,7 +2545,7 @@ type
     function GetStatus: string;
   end;
 
-function THealthCheck.IsHealthy: Boolean;
+function THealthCheck.IsHealthy: Boolean;  
 begin
   Result := (Server <> nil) and
             (Server.IsRunning) and
@@ -2553,7 +2553,7 @@ begin
             (Server.GetAveragePing < 200);
 end;
 
-function THealthCheck.GetStatus: string;
+function THealthCheck.GetStatus: string;  
 var
   JSON: TJSONObject;
 begin
@@ -2760,7 +2760,7 @@ type
 
 implementation
 
-constructor TGameServer.Create(Port: Integer);
+constructor TGameServer.Create(Port: Integer);  
 begin
   FPort := Port;
   FClients := TList.Create;
@@ -2769,7 +2769,7 @@ begin
   FSocket.Bind('0.0.0.0', IntToStr(Port));
 end;
 
-destructor TGameServer.Destroy;
+destructor TGameServer.Destroy;  
 begin
   Stop;
   FSocket.Free;
@@ -2777,19 +2777,19 @@ begin
   inherited;
 end;
 
-procedure TGameServer.Start;
+procedure TGameServer.Start;  
 begin
   FRunning := True;
   WriteLn('Serveur démarré sur le port ', FPort);
 end;
 
-procedure TGameServer.Stop;
+procedure TGameServer.Stop;  
 begin
   FRunning := False;
   WriteLn('Serveur arrêté');
 end;
 
-procedure TGameServer.Update;
+procedure TGameServer.Update;  
 begin
   // Recevoir et traiter les messages
   // Mettre à jour la logique du jeu

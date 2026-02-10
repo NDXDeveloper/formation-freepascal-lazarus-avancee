@@ -108,23 +108,23 @@ type
   ISteamUserStats = Pointer;
 
 // Initialisation
-function SteamAPI_Init: Boolean; cdecl; external STEAM_API_LIB;
-procedure SteamAPI_Shutdown; cdecl; external STEAM_API_LIB;
+function SteamAPI_Init: Boolean; cdecl; external STEAM_API_LIB;  
+procedure SteamAPI_Shutdown; cdecl; external STEAM_API_LIB;  
 procedure SteamAPI_RunCallbacks; cdecl; external STEAM_API_LIB;
 
 // Obtenir les interfaces
-function SteamAPI_GetHSteamUser: HSteamUser; cdecl; external STEAM_API_LIB;
+function SteamAPI_GetHSteamUser: HSteamUser; cdecl; external STEAM_API_LIB;  
 function SteamAPI_GetHSteamPipe: HSteamPipe; cdecl; external STEAM_API_LIB;
 
 // Interface User
-function SteamAPI_ISteamUser_GetSteamID(SelfPtr: ISteamUser): UInt64; cdecl; external STEAM_API_LIB;
+function SteamAPI_ISteamUser_GetSteamID(SelfPtr: ISteamUser): UInt64; cdecl; external STEAM_API_LIB;  
 function SteamAPI_ISteamUser_BLoggedOn(SelfPtr: ISteamUser): Boolean; cdecl; external STEAM_API_LIB;
 
 // Interface Friends
 function SteamAPI_ISteamFriends_GetPersonaName(SelfPtr: ISteamFriends): PChar; cdecl; external STEAM_API_LIB;
 
 // Interface UserStats (succès)
-function SteamAPI_ISteamUserStats_SetAchievement(SelfPtr: ISteamUserStats; pchName: PChar): Boolean; cdecl; external STEAM_API_LIB;
+function SteamAPI_ISteamUserStats_SetAchievement(SelfPtr: ISteamUserStats; pchName: PChar): Boolean; cdecl; external STEAM_API_LIB;  
 function SteamAPI_ISteamUserStats_StoreStats(SelfPtr: ISteamUserStats): Boolean; cdecl; external STEAM_API_LIB;
 
 implementation
@@ -173,21 +173,21 @@ var
 
 implementation
 
-constructor TSteamAPI.Create(AppID: AppId_t);
+constructor TSteamAPI.Create(AppID: AppId_t);  
 begin
   inherited Create;
   FAppID := AppID;
   FInitialized := False;
 end;
 
-destructor TSteamAPI.Destroy;
+destructor TSteamAPI.Destroy;  
 begin
   if FInitialized then
     SteamAPI_Shutdown;
   inherited;
 end;
 
-function TSteamAPI.Initialize: Boolean;
+function TSteamAPI.Initialize: Boolean;  
 begin
   Result := SteamAPI_Init;
   FInitialized := Result;
@@ -196,13 +196,13 @@ begin
     WriteLn('Erreur : Impossible d''initialiser Steam API');
 end;
 
-procedure TSteamAPI.RunCallbacks;
+procedure TSteamAPI.RunCallbacks;  
 begin
   if FInitialized then
     SteamAPI_RunCallbacks;
 end;
 
-function TSteamAPI.GetUserName: string;
+function TSteamAPI.GetUserName: string;  
 var
   Friends: ISteamFriends;
 begin
@@ -217,7 +217,7 @@ begin
   Result := string(SteamAPI_ISteamFriends_GetPersonaName(Friends));
 end;
 
-function TSteamAPI.GetSteamID: UInt64;
+function TSteamAPI.GetSteamID: UInt64;  
 var
   User: ISteamUser;
 begin
@@ -232,7 +232,7 @@ begin
   Result := SteamAPI_ISteamUser_GetSteamID(User);
 end;
 
-function TSteamAPI.IsLoggedOn: Boolean;
+function TSteamAPI.IsLoggedOn: Boolean;  
 var
   User: ISteamUser;
 begin
@@ -247,7 +247,7 @@ begin
   Result := SteamAPI_ISteamUser_BLoggedOn(User);
 end;
 
-function TSteamAPI.UnlockAchievement(const AchievementName: string): Boolean;
+function TSteamAPI.UnlockAchievement(const AchievementName: string): Boolean;  
 var
   UserStats: ISteamUserStats;
 begin
@@ -360,20 +360,20 @@ MonJeu_Linux/
 # build_all.sh
 
 # Nettoyer
-rm -rf builds/
+rm -rf builds/  
 mkdir -p builds/windows builds/linux
 
 # Build Windows
-echo "Building Windows version..."
-fpc -Twin64 -O3 -FEbuilds/windows/ MonJeu.pas
-cp redistributable_bin/win64/steam_api64.dll builds/windows/
+echo "Building Windows version..."  
+fpc -Twin64 -O3 -FEbuilds/windows/ MonJeu.pas  
+cp redistributable_bin/win64/steam_api64.dll builds/windows/  
 cp -r data builds/windows/
 
 # Build Linux
-echo "Building Linux version..."
-fpc -Tlinux -O3 -FEbuilds/linux/ MonJeu.pas
-cp redistributable_bin/linux64/libsteam_api.so builds/linux/
-cp -r data builds/linux/
+echo "Building Linux version..."  
+fpc -Tlinux -O3 -FEbuilds/linux/ MonJeu.pas  
+cp redistributable_bin/linux64/libsteam_api.so builds/linux/  
+cp -r data builds/linux/  
 chmod +x builds/linux/MonJeu
 
 echo "Build complete!"
@@ -594,7 +594,7 @@ Dans la section "Stats & Achievements" :
 #### 2. Implémentation dans le code
 
 ```pascal
-procedure UnlockAchievement(const AchievementID: string);
+procedure UnlockAchievement(const AchievementID: string);  
 begin
   if Steam.Initialized then
   begin
@@ -616,7 +616,7 @@ if Player.CompletedAllLevels then
 ```pascal
 // Créer dans Steamworks d'abord
 
-procedure SubmitScore(LeaderboardName: string; Score: Integer);
+procedure SubmitScore(LeaderboardName: string; Score: Integer);  
 var
   UserStats: ISteamUserStats;
 begin
@@ -638,7 +638,7 @@ end;
 ### Sauvegarde Cloud
 
 ```pascal
-function SaveToCloud(const Filename: string; Data: TBytes): Boolean;
+function SaveToCloud(const Filename: string; Data: TBytes): Boolean;  
 var
   RemoteStorage: ISteamRemoteStorage;
 begin
@@ -654,7 +654,7 @@ begin
   );
 end;
 
-function LoadFromCloud(const Filename: string; out Data: TBytes): Boolean;
+function LoadFromCloud(const Filename: string; out Data: TBytes): Boolean;  
 var
   RemoteStorage: ISteamRemoteStorage;
   Size: Integer;
@@ -687,7 +687,7 @@ L'overlay Steam s'affiche automatiquement (Shift+Tab par défaut).
 Pour ouvrir des pages spécifiques :
 
 ```pascal
-procedure OpenSteamOverlay(const URL: string);
+procedure OpenSteamOverlay(const URL: string);  
 var
   Friends: ISteamFriends;
 begin
@@ -702,7 +702,7 @@ begin
 end;
 
 // Exemples
-OpenSteamOverlay('https://store.steampowered.com/app/480');
+OpenSteamOverlay('https://store.steampowered.com/app/480');  
 OpenSteamOverlay('steamcommunity://friends');
 ```
 
@@ -711,7 +711,7 @@ OpenSteamOverlay('steamcommunity://friends');
 #### Vérifier si un DLC est possédé
 
 ```pascal
-function HasDLC(DLCAppID: AppId_t): Boolean;
+function HasDLC(DLCAppID: AppId_t): Boolean;  
 var
   Apps: ISteamApps;
 begin
@@ -826,7 +826,7 @@ Les joueurs peuvent choisir la branche dans les propriétés du jeu.
 
 ```pascal
 {$IFDEF WINDOWS}
-procedure InitSteamWindows;
+procedure InitSteamWindows;  
 begin
   // Charger steam_api64.dll
   SteamLibHandle := LoadLibrary('steam_api64.dll');
@@ -844,7 +844,7 @@ end;
 
 ```pascal
 {$IFDEF LINUX}
-procedure InitSteamLinux;
+procedure InitSteamLinux;  
 begin
   // Charger libsteam_api.so
   SteamLibHandle := LoadLibrary('libsteam_api.so');
@@ -894,7 +894,7 @@ Accédez aux statistiques détaillées :
 ### Utiliser les stats dans votre jeu
 
 ```pascal
-procedure TrackGameplayStats;
+procedure TrackGameplayStats;  
 var
   UserStats: ISteamUserStats;
 begin

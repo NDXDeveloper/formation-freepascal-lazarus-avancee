@@ -59,7 +59,7 @@ type
     function GetProjectionMatrix(Eye: TEye): TMatrix4x4;
   end;
 
-function TVRCamera.GetEyePosition(Eye: TEye): TVector3;
+function TVRCamera.GetEyePosition(Eye: TEye): TVector3;  
 var
   EyeOffset: Single;
 begin
@@ -72,7 +72,7 @@ begin
   end;
 end;
 
-procedure RenderStereo;
+procedure RenderStereo;  
 begin
   // Rendu pour l'œil gauche
   SetViewport(0, 0, RenderWidth div 2, RenderHeight);
@@ -107,7 +107,7 @@ type
     function GetControllerPose(Hand: TControllerHand): THeadPose; virtual; abstract;
   end;
 
-procedure UpdateVRCamera(Pose: THeadPose);
+procedure UpdateVRCamera(Pose: THeadPose);  
 begin
   Camera.Position := Pose.Position;
   Camera.Rotation := Pose.Orientation;
@@ -127,7 +127,7 @@ const
   TARGET_VR_FPS = 90;
   FRAME_TIME_MS = 1000 div TARGET_VR_FPS;  // ~11ms
 
-procedure VRGameLoop;
+procedure VRGameLoop;  
 var
   FrameStart, FrameTime: QWord;
 begin
@@ -173,7 +173,7 @@ end;
 - Snap rotation (rotation par paliers)
 
 ```pascal
-procedure TeleportPlayer(TargetPosition: TVector3);
+procedure TeleportPlayer(TargetPosition: TVector3);  
 begin
   // Afficher un aperçu de la destination
   ShowTeleportPreview(TargetPosition);
@@ -188,7 +188,7 @@ begin
   FadeScreen(0.2);
 end;
 
-procedure SmoothLocomotion(Direction: TVector3; Speed: Single; DeltaTime: Single);
+procedure SmoothLocomotion(Direction: TVector3; Speed: Single; DeltaTime: Single);  
 begin
   // Ajouter un vignetting pendant le mouvement
   VignetteStrength := Speed / MaxSpeed;
@@ -268,8 +268,8 @@ type
   IVRCompositor = Pointer;
 
 // Initialisation
-function VR_InitInternal(peError: PInteger; eType: Integer): IVRSystem; cdecl; external OPENVR_API_LIB name 'VR_InitInternal';
-procedure VR_ShutdownInternal; cdecl; external OPENVR_API_LIB name 'VR_ShutdownInternal';
+function VR_InitInternal(peError: PInteger; eType: Integer): IVRSystem; cdecl; external OPENVR_API_LIB name 'VR_InitInternal';  
+procedure VR_ShutdownInternal; cdecl; external OPENVR_API_LIB name 'VR_ShutdownInternal';  
 function VR_IsHmdPresent: Boolean; cdecl; external OPENVR_API_LIB name 'VR_IsHmdPresent';
 
 implementation
@@ -315,20 +315,20 @@ var
 
 implementation
 
-constructor TVRSystem.Create;
+constructor TVRSystem.Create;  
 begin
   inherited Create;
   FInitialized := False;
 end;
 
-destructor TVRSystem.Destroy;
+destructor TVRSystem.Destroy;  
 begin
   if FInitialized then
     Shutdown;
   inherited;
 end;
 
-function TVRSystem.Initialize: Boolean;
+function TVRSystem.Initialize: Boolean;  
 var
   Error: EVRInitError;
 begin
@@ -355,7 +355,7 @@ begin
   Result := True;
 end;
 
-procedure TVRSystem.Shutdown;
+procedure TVRSystem.Shutdown;  
 begin
   if FInitialized then
   begin
@@ -364,7 +364,7 @@ begin
   end;
 end;
 
-function TVRSystem.GetDevicePose(DeviceIndex: TrackedDeviceIndex_t): TrackedDevicePose_t;
+function TVRSystem.GetDevicePose(DeviceIndex: TrackedDeviceIndex_t): TrackedDevicePose_t;  
 var
   Poses: array[0..16] of TrackedDevicePose_t;
 begin
@@ -374,7 +374,7 @@ begin
   Result := Poses[DeviceIndex];
 end;
 
-procedure TVRSystem.SubmitFrame(LeftTexture, RightTexture: GLuint);
+procedure TVRSystem.SubmitFrame(LeftTexture, RightTexture: GLuint);  
 var
   LeftBounds, RightBounds: VRTextureBounds_t;
   LeftEye, RightEye: Texture_t;
@@ -416,7 +416,7 @@ uses
 var
   LeftEyeTexture, RightEyeTexture: GLuint;
 
-procedure InitializeVR;
+procedure InitializeVR;  
 begin
   VR := TVRSystem.Create;
 
@@ -429,7 +429,7 @@ begin
   WriteLn('VR initialisée avec succès');
 end;
 
-procedure CreateRenderTextures;
+procedure CreateRenderTextures;  
 begin
   // Créer les textures pour chaque œil
   glGenTextures(1, @LeftEyeTexture);
@@ -448,7 +448,7 @@ begin
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 end;
 
-procedure RenderEye(Eye: TEye; Texture: GLuint);
+procedure RenderEye(Eye: TEye; Texture: GLuint);  
 var
   Pose: TrackedDevicePose_t;
 begin
@@ -469,7 +469,7 @@ begin
   end;
 end;
 
-procedure MainLoop;
+procedure MainLoop;  
 begin
   while Running do
   begin
@@ -520,7 +520,7 @@ type
     procedure Vibrate(Duration: Single; Intensity: Single);
   end;
 
-function TVRController.GetPosition: TVector3;
+function TVRController.GetPosition: TVector3;  
 var
   Matrix: HmdMatrix34_t;
 begin
@@ -531,7 +531,7 @@ begin
   Result.Z := Matrix[2, 3];
 end;
 
-function TVRController.IsButtonPressed(Button: Integer): Boolean;
+function TVRController.IsButtonPressed(Button: Integer): Boolean;  
 var
   State: VRControllerState_t;
 begin
@@ -540,7 +540,7 @@ begin
   Result := (State.ulButtonPressed and (1 shl Button)) <> 0;
 end;
 
-function TVRController.GetTriggerValue: Single;
+function TVRController.GetTriggerValue: Single;  
 var
   State: VRControllerState_t;
 begin
@@ -550,7 +550,7 @@ begin
   Result := State.rAxis[1].x;
 end;
 
-procedure TVRController.Vibrate(Duration: Single; Intensity: Single);
+procedure TVRController.Vibrate(Duration: Single; Intensity: Single);  
 var
   MicroSeconds: Word;
 begin
@@ -576,7 +576,7 @@ type
     procedure Draw;
   end;
 
-function TLaserPointer.Raycast(out HitPoint: TVector3; out HitObject: TGameObject): Boolean;
+function TLaserPointer.Raycast(out HitPoint: TVector3; out HitObject: TGameObject): Boolean;  
 var
   Origin: TVector3;
   Direction: TVector3;
@@ -595,7 +595,7 @@ begin
   Result := PhysicsRaycast(Origin, EndPoint, HitPoint, HitObject);
 end;
 
-procedure TLaserPointer.Draw;
+procedure TLaserPointer.Draw;  
 var
   Origin, EndPoint: TVector3;
   HitPoint: TVector3;
@@ -632,7 +632,7 @@ type
     procedure Update;
   end;
 
-procedure TGrabbableObject.Grab(Controller: TVRController);
+procedure TGrabbableObject.Grab(Controller: TVRController);  
 begin
   FGrabbed := True;
   FGrabbingController := Controller;
@@ -644,7 +644,7 @@ begin
   Controller.Vibrate(0.1, 0.5);
 end;
 
-procedure TGrabbableObject.Release;
+procedure TGrabbableObject.Release;  
 begin
   if FGrabbed then
   begin
@@ -656,7 +656,7 @@ begin
   end;
 end;
 
-procedure TGrabbableObject.Update;
+procedure TGrabbableObject.Update;  
 begin
   if FGrabbed then
   begin
@@ -685,7 +685,7 @@ type
     procedure ShowTeleportPreview(Position: TVector3);
   end;
 
-procedure TTeleportSystem.CalculateTeleportArc;
+procedure TTeleportSystem.CalculateTeleportArc;  
 var
   Origin: TVector3;
   Direction: TVector3;
@@ -727,7 +727,7 @@ begin
   end;
 end;
 
-procedure TTeleportSystem.ExecuteTeleport;
+procedure TTeleportSystem.ExecuteTeleport;  
 var
   TargetPosition: TVector3;
 begin
@@ -803,13 +803,13 @@ type
 
 implementation
 
-constructor TARSystem.Create;
+constructor TARSystem.Create;  
 begin
   inherited Create;
   FCamera := TOpenCVCamera.Create;
 end;
 
-procedure TARSystem.Initialize;
+procedure TARSystem.Initialize;  
 begin
   // Ouvrir la webcam
   FCamera.Open(0);
@@ -818,7 +818,7 @@ begin
   LoadCameraCalibration('camera_calibration.xml', FCameraMatrix, FDistortionCoeffs);
 end;
 
-function TARSystem.DetectMarkers: Integer;
+function TARSystem.DetectMarkers: Integer;  
 var
   Frame: TOpenCVMat;
   GrayFrame: TOpenCVMat;
@@ -850,7 +850,7 @@ begin
   end;
 end;
 
-procedure TARSystem.DrawVirtualObject(MarkerID: Integer; Obj: T3DObject);
+procedure TARSystem.DrawVirtualObject(MarkerID: Integer; Obj: T3DObject);  
 var
   i: Integer;
   Marker: TARMarker;
@@ -893,7 +893,7 @@ var
   AR: TARSystem;
   VirtualCube: T3DCube;
 
-procedure Initialize;
+procedure Initialize;  
 begin
   AR := TARSystem.Create;
   AR.Initialize;
@@ -902,7 +902,7 @@ begin
   VirtualCube.LoadTexture('cube_texture.png');
 end;
 
-procedure MainLoop;
+procedure MainLoop;  
 var
   MarkerCount: Integer;
 begin
@@ -979,26 +979,26 @@ type
 
 implementation
 
-constructor TARCoreWrapper.Create(JNIEnv: PJNIEnv);
+constructor TARCoreWrapper.Create(JNIEnv: PJNIEnv);  
 begin
   inherited Create;
   FJNIEnv := JNIEnv;
 end;
 
-function TARCoreWrapper.Initialize: Boolean;
+function TARCoreWrapper.Initialize: Boolean;  
 begin
   // Créer une session ARCore via JNI
   // Code JNI pour appeler ARCore
   Result := True;
 end;
 
-function TARCoreWrapper.Update: TARFrame;
+function TARCoreWrapper.Update: TARFrame;  
 begin
   // Mettre à jour la frame ARCore
   // Retourner la frame courante
 end;
 
-function TARCoreWrapper.HitTest(ScreenX, ScreenY: Single): TARPose;
+function TARCoreWrapper.HitTest(ScreenX, ScreenY: Single): TARPose;  
 begin
   // Effectuer un hit test pour placer un objet
   // Retourner la pose où placer l'objet
@@ -1041,13 +1041,13 @@ type
 
 implementation
 
-constructor TARKitWrapper.Create;
+constructor TARKitWrapper.Create;  
 begin
   inherited Create;
   FARSession := ARSession.alloc.init;
 end;
 
-procedure TARKitWrapper.Start;
+procedure TARKitWrapper.Start;  
 var
   Config: ARWorldTrackingConfiguration;
 begin
@@ -1057,7 +1057,7 @@ begin
   FARSession.runWithConfiguration(Config);
 end;
 
-function TARKitWrapper.GetCurrentFrame: ARFrame;
+function TARKitWrapper.GetCurrentFrame: ARFrame;  
 begin
   Result := FARSession.currentFrame;
 end;
@@ -1096,7 +1096,7 @@ type
     procedure DrawAllPlanes;
   end;
 
-procedure TPlaneDetector.Update(ARFrame: TARFrame);
+procedure TPlaneDetector.Update(ARFrame: TARFrame);  
 var
   Anchors: TArray;
   i: Integer;
@@ -1125,7 +1125,7 @@ begin
   end;
 end;
 
-procedure TARPlane.Draw;
+procedure TARPlane.Draw;  
 var
   i: Integer;
 begin
@@ -1158,7 +1158,7 @@ type
     procedure DrawObjects;
   end;
 
-function TARObjectPlacer.PlaceObject(ScreenX, ScreenY: Single; Obj: T3DObject): Boolean;
+function TARObjectPlacer.PlaceObject(ScreenX, ScreenY: Single; Obj: T3DObject): Boolean;  
 var
   HitResult: TARHitTestResult;
   WorldPosition: TVector3;
@@ -1186,7 +1186,7 @@ begin
     Result := False;
 end;
 
-procedure TARObjectPlacer.UpdateObjects(ARFrame: TARFrame);
+procedure TARObjectPlacer.UpdateObjects(ARFrame: TARFrame);  
 var
   i: Integer;
   Obj: T3DObject;
@@ -1203,7 +1203,7 @@ begin
   end;
 end;
 
-procedure TARObjectPlacer.DrawObjects;
+procedure TARObjectPlacer.DrawObjects;  
 var
   i: Integer;
   Obj: T3DObject;
@@ -1232,7 +1232,7 @@ type
     procedure ApplyToScene;
   end;
 
-procedure TARLightEstimation.Update(ARFrame: TARFrame);
+procedure TARLightEstimation.Update(ARFrame: TARFrame);  
 var
   LightEstimate: TARLightEstimate;
 begin
@@ -1252,7 +1252,7 @@ begin
   end;
 end;
 
-procedure TARLightEstimation.ApplyToScene;
+procedure TARLightEstimation.ApplyToScene;  
 begin
   // Configurer l'éclairage OpenGL
   glEnable(GL_LIGHTING);
@@ -1286,7 +1286,7 @@ type
     procedure RenderShadows(Objects: TList; Plane: TARPlane);
   end;
 
-procedure TARShadowRenderer.RenderShadows(Objects: TList; Plane: TARPlane);
+procedure TARShadowRenderer.RenderShadows(Objects: TList; Plane: TARPlane);  
 var
   i: Integer;
   Obj: T3DObject;
@@ -1354,7 +1354,7 @@ type
     function GetTrackedImage(const Name: string; out Pose: TMatrix4x4): Boolean;
   end;
 
-procedure TARImageTracker.AddTarget(const Name: string; Image: TBitmap; Width: Single);
+procedure TARImageTracker.AddTarget(const Name: string; Image: TBitmap; Width: Single);  
 var
   Target: TImageTarget;
 begin
@@ -1370,7 +1370,7 @@ begin
   FTargets[High(FTargets)] := Target;
 end;
 
-procedure TARImageTracker.Update(ARFrame: TARFrame);
+procedure TARImageTracker.Update(ARFrame: TARFrame);  
 var
   i: Integer;
   CameraImage: TBitmap;
@@ -1407,7 +1407,7 @@ var
   ImageTracker: TARImageTracker;
   ProductModels: array of T3DModel;
 
-procedure InitializeAR;
+procedure InitializeAR;  
 begin
   AR := TARSystem.Create;
   AR.Initialize;
@@ -1423,7 +1423,7 @@ begin
   ProductModels[1] := Load3DModel('models/product_002.obj');
 end;
 
-procedure MainLoop;
+procedure MainLoop;  
 var
   Frame: TARFrame;
   Pose: TMatrix4x4;
@@ -1479,7 +1479,7 @@ type
     procedure Update;
   end;
 
-constructor TSpatialAudioSource.Create;
+constructor TSpatialAudioSource.Create;  
 begin
   inherited Create;
   alGenSources(1, @FSource);
@@ -1490,13 +1490,13 @@ begin
   alSourcef(FSource, AL_MAX_DISTANCE, 100.0);
 end;
 
-procedure TSpatialAudioSource.SetPosition(Position: TVector3);
+procedure TSpatialAudioSource.SetPosition(Position: TVector3);  
 begin
   FPosition := Position;
   alSource3f(FSource, AL_POSITION, Position.X, Position.Y, Position.Z);
 end;
 
-procedure TSpatialAudioSource.Update;
+procedure TSpatialAudioSource.Update;  
 begin
   // Mettre à jour la position et la vélocité
   alSource3f(FSource, AL_POSITION, FPosition.X, FPosition.Y, FPosition.Z);
@@ -1504,7 +1504,7 @@ begin
 end;
 
 // Listener (joueur/caméra)
-procedure UpdateAudioListener(Camera: TVRCamera);
+procedure UpdateAudioListener(Camera: TVRCamera);  
 var
   Position, Forward, Up: TVector3;
   Orientation: array[0..5] of Single;
@@ -1555,7 +1555,7 @@ type
     OnClick: TNotifyEvent;
   end;
 
-procedure TVRMenu.Draw;
+procedure TVRMenu.Draw;  
 var
   i: Integer;
   Button: TVRButton;
@@ -1588,7 +1588,7 @@ begin
   glPopMatrix;
 end;
 
-function TVRMenu.CheckInteraction(Controller: TVRController): Integer;
+function TVRMenu.CheckInteraction(Controller: TVRController): Integer;  
 var
   i: Integer;
   Ray: TRay;
@@ -1637,7 +1637,7 @@ type
     procedure AddElement(Element: TVRHUDElement);
   end;
 
-procedure TVRHUD.Update(HeadPose: THeadPose);
+procedure TVRHUD.Update(HeadPose: THeadPose);  
 var
   TargetPosition: TVector3;
   ForwardVector: TVector3;
@@ -1653,7 +1653,7 @@ begin
   end;
 end;
 
-procedure TVRHUD.Draw;
+procedure TVRHUD.Draw;  
 var
   i: Integer;
 begin
@@ -1694,7 +1694,7 @@ type
     procedure Render(Eye: TEye);
   end;
 
-procedure TFoveatedRenderer.Render(Eye: TEye);
+procedure TFoveatedRenderer.Render(Eye: TEye);  
 begin
   // Rendre le centre en haute résolution
   glBindFramebuffer(GL_FRAMEBUFFER, FCenterFBO);
@@ -1716,7 +1716,7 @@ end;
 Reprojeter la dernière image si le rendu prend trop de temps.
 
 ```pascal
-procedure AsyncTimewarp(LastFrame: TTexture; CurrentPose, LastPose: THeadPose);
+procedure AsyncTimewarp(LastFrame: TTexture; CurrentPose, LastPose: THeadPose);  
 var
   ReprojectionMatrix: TMatrix4x4;
 begin
@@ -1736,7 +1736,7 @@ end;
 Rendre les deux yeux simultanément avec des extensions OpenGL.
 
 ```pascal
-procedure MultiViewRender;
+procedure MultiViewRender;  
 begin
   // Activer l'extension multi-view
   glEnable(GL_OVR_multiview);
@@ -1771,7 +1771,7 @@ type
     procedure HandleInput(Event: TInputEvent);
   end;
 
-procedure TVRSimulator.Update;
+procedure TVRSimulator.Update;  
 begin
   // Simuler le mouvement de tête avec la souris
   if FMouseLook then
@@ -1807,7 +1807,7 @@ type
     procedure PrintReport;
   end;
 
-procedure TVRPerformanceMonitor.PrintReport;
+procedure TVRPerformanceMonitor.PrintReport;  
 begin
   WriteLn('=== VR Performance Report ===');
   WriteLn('Average FPS: ', GetAverageFPS:0:2);
@@ -1900,7 +1900,7 @@ var
   Artworks: array of TArtwork;
   Gallery: T3DModel;
 
-procedure LoadGallery;
+procedure LoadGallery;  
 var
   i: Integer;
 begin
@@ -1917,7 +1917,7 @@ begin
   end;
 end;
 
-procedure RenderGallery(Eye: TEye);
+procedure RenderGallery(Eye: TEye);  
 begin
   // Dessiner la salle
   Gallery.Draw;
@@ -1939,7 +1939,7 @@ begin
   end;
 end;
 
-procedure CheckInteraction;
+procedure CheckInteraction;  
 var
   Controller: TVRController;
   Ray: TRay;
@@ -1963,7 +1963,7 @@ begin
   end;
 end;
 
-procedure MainLoop;
+procedure MainLoop;  
 begin
   while Running do
   begin
@@ -2015,7 +2015,7 @@ var
   Pieces: array[0..8] of TPuzzlePiece;
   PuzzlePlane: TARPlane;
 
-procedure InitializePuzzle;
+procedure InitializePuzzle;  
 var
   i: Integer;
 begin
@@ -2028,7 +2028,7 @@ begin
   end;
 end;
 
-function FindPlane: Boolean;
+function FindPlane: Boolean;  
 var
   Frame: TARFrame;
 begin
@@ -2039,7 +2039,7 @@ begin
   Result := PuzzlePlane <> nil;
 end;
 
-procedure PlacePuzzleBoard;
+procedure PlacePuzzleBoard;  
 begin
   // Placer le plateau de puzzle sur le plan détecté
   PuzzleBoard.Position := PuzzlePlane.Center;
@@ -2055,7 +2055,7 @@ begin
   end;
 end;
 
-procedure HandleTouch(TouchX, TouchY: Single);
+procedure HandleTouch(TouchX, TouchY: Single);  
 var
   HitResult: TARHitTestResult;
   SelectedPiece: TPuzzlePiece;
@@ -2085,7 +2085,7 @@ begin
   end;
 end;
 
-procedure RenderPuzzle;
+procedure RenderPuzzle;  
 var
   i: Integer;
 begin
@@ -2112,7 +2112,7 @@ begin
   end;
 end;
 
-procedure MainLoop;
+procedure MainLoop;  
 begin
   // Phase 1 : Détecter un plan
   ShowMessage('Scannez une surface plane...');
@@ -2183,7 +2183,7 @@ var
   Score: Integer;
   Combo: Integer;
 
-procedure TPunchingBag.Update(DeltaTime: Single);
+procedure TPunchingBag.Update(DeltaTime: Single);  
 const
   DAMPING = 0.95;
   GRAVITY = 9.81;
@@ -2200,7 +2200,7 @@ begin
   FPosition.Y := 1.5 - Cos(FSwingAngle) * 0.5;
 end;
 
-procedure TPunchingBag.OnHit(HitPosition: TVector3; Force: Single);
+procedure TPunchingBag.OnHit(HitPosition: TVector3; Force: Single);  
 begin
   // Appliquer l'impulsion
   FVelocity := FVelocity + (HitPosition - FPosition).Normalize * Force;
@@ -2215,7 +2215,7 @@ begin
   PlayHitSound(Force);
 end;
 
-procedure SpawnTarget;
+procedure SpawnTarget;  
 var
   Target: TTarget;
   Angle, Distance: Single;
@@ -2240,7 +2240,7 @@ begin
   Targets[High(Targets)] := Target;
 end;
 
-procedure UpdateTargets(DeltaTime: Single);
+procedure UpdateTargets(DeltaTime: Single);  
 var
   i: Integer;
   Target: TTarget;
@@ -2290,7 +2290,7 @@ begin
   end;
 end;
 
-procedure HitTarget(Target: TTarget; Controller: TVRController);
+procedure HitTarget(Target: TTarget; Controller: TVRController);  
 var
   Speed: Single;
 begin
@@ -2304,7 +2304,7 @@ begin
   CreateParticles(Target.Position, Target.Color);
 end;
 
-procedure RenderScene(Eye: TEye);
+procedure RenderScene(Eye: TEye);  
 var
   i: Integer;
 begin
@@ -2337,7 +2337,7 @@ begin
   DrawScoreHUD(Score, Combo);
 end;
 
-procedure MainLoop;
+procedure MainLoop;  
 var
   LastTime, CurrentTime: QWord;
   DeltaTime: Single;
@@ -2421,7 +2421,7 @@ type
     function getViewerPose(refSpace: TXRReferenceSpace): TXRViewerPose;
   end;
 
-procedure InitWebXR;
+procedure InitWebXR;  
 begin
   if navigator.xr.isSessionSupported('immersive-vr') then
   begin
@@ -2469,7 +2469,7 @@ type
   end;
 
 // Foveated rendering basé sur le regard
-procedure RenderWithEyeTracking(EyeTracker: TEyeTracker);
+procedure RenderWithEyeTracking(EyeTracker: TEyeTracker);  
 var
   GazePoint: TVector3;
 begin

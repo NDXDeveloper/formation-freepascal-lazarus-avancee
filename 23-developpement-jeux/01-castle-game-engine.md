@@ -34,9 +34,9 @@ Castle Game Engine est un moteur de jeu 3D open source puissant et mature, spéc
 sudo apt install castle-game-engine
 
 # OU installation manuelle
-cd ~/Downloads
-wget https://castle-engine.io/latest.zip
-unzip latest.zip -d ~/castle-engine
+cd ~/Downloads  
+wget https://castle-engine.io/latest.zip  
+unzip latest.zip -d ~/castle-engine  
 cd ~/castle-engine
 ./compile.sh
 ```
@@ -69,7 +69,7 @@ MonJeu/
 castle-engine create-project --project=MyGame
 
 # Compiler le projet
-cd MyGame
+cd MyGame  
 castle-engine compile
 
 # Lancer le jeu
@@ -92,7 +92,7 @@ castle-engine run
 - Ne dépend pas de la LCL
 
 ```pascal
-program SimpleGame;
+program SimpleGame;  
 uses CastleWindow, CastleScene, CastleViewport;
 
 var
@@ -122,7 +122,7 @@ type
                      var HandleInput: Boolean); override;
   end;
 
-procedure TViewMain.Start;
+procedure TViewMain.Start;  
 begin
   inherited;
   // Initialisation de la vue
@@ -212,7 +212,7 @@ if Scene.AnimationsList.Count > 0 then
 ### Détecter les clics sur les objets
 
 ```pascal
-procedure TViewMain.Press(const Event: TInputPressRelease);
+procedure TViewMain.Press(const Event: TInputPressRelease);  
 var
   HitTransform: TCastleTransform;
 begin
@@ -243,8 +243,8 @@ uses CastleWalkNavigation;
 var
   Navigation: TCastleWalkNavigation;
 
-Navigation := TCastleWalkNavigation.Create(Application);
-Navigation.Gravity := True; // Activation de la gravité
+Navigation := TCastleWalkNavigation.Create(Application);  
+Navigation.Gravity := True; // Activation de la gravité  
 Viewport.Navigation := Navigation;
 ```
 
@@ -263,7 +263,7 @@ Castle Engine intègre un système audio complet avec support du son 3D spatial.
 uses CastleSound;
 
 // Son non-spatial (2D)
-SoundEngine.LoadBuffer('castle-data:/sounds/click.wav');
+SoundEngine.LoadBuffer('castle-data:/sounds/click.wav');  
 SoundEngine.Sound('castle-data:/sounds/click.wav');
 ```
 
@@ -275,9 +275,9 @@ uses CastleSoundEngine;
 var
   Sound: TCastleSound;
 
-Sound := TCastleSound.Create(Application);
-Sound.URL := 'castle-data:/sounds/explosion.wav';
-Sound.Spatial := True;
+Sound := TCastleSound.Create(Application);  
+Sound.URL := 'castle-data:/sounds/explosion.wav';  
+Sound.Spatial := True;  
 Sound.Position := Vector3(10, 0, 5); // Position dans l'espace 3D
 
 SoundEngine.Play(Sound);
@@ -287,7 +287,7 @@ SoundEngine.Play(Sound);
 
 ```pascal
 // Musique en boucle
-SoundEngine.LoopingChannel[0].URL := 'castle-data:/music/background.ogg';
+SoundEngine.LoopingChannel[0].URL := 'castle-data:/music/background.ogg';  
 SoundEngine.LoopingChannel[0].Volume := 0.5; // 50% du volume
 ```
 
@@ -305,27 +305,27 @@ var
   LabelTitle: TCastleLabel;
 
 // Titre
-LabelTitle := TCastleLabel.Create(Application);
-LabelTitle.Caption := 'Mon Super Jeu';
-LabelTitle.Color := Yellow;
-LabelTitle.FontSize := 40;
-LabelTitle.Anchor(hpMiddle);
-LabelTitle.Anchor(vpTop, -100);
+LabelTitle := TCastleLabel.Create(Application);  
+LabelTitle.Caption := 'Mon Super Jeu';  
+LabelTitle.Color := Yellow;  
+LabelTitle.FontSize := 40;  
+LabelTitle.Anchor(hpMiddle);  
+LabelTitle.Anchor(vpTop, -100);  
 Window.Controls.InsertFront(LabelTitle);
 
 // Bouton
-ButtonStart := TCastleButton.Create(Application);
-ButtonStart.Caption := 'Commencer';
-ButtonStart.OnClick := @ButtonStartClick;
-ButtonStart.Anchor(hpMiddle);
-ButtonStart.Anchor(vpMiddle);
+ButtonStart := TCastleButton.Create(Application);  
+ButtonStart.Caption := 'Commencer';  
+ButtonStart.OnClick := @ButtonStartClick;  
+ButtonStart.Anchor(hpMiddle);  
+ButtonStart.Anchor(vpMiddle);  
 Window.Controls.InsertFront(ButtonStart);
 ```
 
 ### Gestion des événements
 
 ```pascal
-procedure TViewMain.ButtonStartClick(Sender: TObject);
+procedure TViewMain.ButtonStartClick(Sender: TObject);  
 begin
   // Changer de vue, démarrer le jeu, etc.
   Container.View := ViewGame;
@@ -346,14 +346,14 @@ var
   Collider: TCastleBoxCollider;
 
 // Créer le corps physique
-RigidBody := TCastleRigidBody.Create(Application);
-RigidBody.Dynamic := True; // Objet mobile
-RigidBody.Gravity := True;
+RigidBody := TCastleRigidBody.Create(Application);  
+RigidBody.Dynamic := True; // Objet mobile  
+RigidBody.Gravity := True;  
 Scene.RigidBody := RigidBody;
 
 // Ajouter un collider (forme de collision)
-Collider := TCastleBoxCollider.Create(Application);
-Collider.Size := Vector3(2, 2, 2);
+Collider := TCastleBoxCollider.Create(Application);  
+Collider.Size := Vector3(2, 2, 2);  
 RigidBody.Collider := Collider;
 ```
 
@@ -385,9 +385,9 @@ uses CastleTransform, CastleParticles;
 var
   ParticleEffect: TCastleParticleEmitter;
 
-ParticleEffect := TCastleParticleEmitter.Create(Application);
-ParticleEffect.Load('castle-data:/effects/explosion.castle-particle-emitter');
-ParticleEffect.Translation := Vector3(0, 5, 0);
+ParticleEffect := TCastleParticleEmitter.Create(Application);  
+ParticleEffect.Load('castle-data:/effects/explosion.castle-particle-emitter');  
+ParticleEffect.Translation := Vector3(0, 5, 0);  
 Viewport.Items.Add(ParticleEffect);
 ```
 
@@ -409,7 +409,7 @@ castle-engine compile --os=linux --cpu=x86_64
 
 ```bash
 # Configuration initiale
-castle-engine auto-generate-textures
+castle-engine auto-generate-textures  
 castle-engine auto-generate-clean
 
 # Compilation

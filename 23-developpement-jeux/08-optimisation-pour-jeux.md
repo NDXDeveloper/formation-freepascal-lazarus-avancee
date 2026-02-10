@@ -64,7 +64,7 @@ type
     property FPS: Integer read FFPS;
   end;
 
-procedure TFPSCounter.Update;
+procedure TFPSCounter.Update;  
 var
   CurrentTime: QWord;
   ElapsedMS: QWord;
@@ -93,7 +93,7 @@ end;
 Le **frame time** est le temps nécessaire pour calculer et afficher une image.
 
 ```pascal
-procedure MeasureFrameTime;
+procedure MeasureFrameTime;  
 var
   StartTime, EndTime: QWord;
   FrameTimeMS: Double;
@@ -130,12 +130,12 @@ type
   end;
 
 // Utilisation
-Profiler.StartSection('Physics');
-UpdatePhysics;
+Profiler.StartSection('Physics');  
+UpdatePhysics;  
 Profiler.EndSection('Physics');
 
-Profiler.StartSection('Rendering');
-RenderScene;
+Profiler.StartSection('Rendering');  
+RenderScene;  
 Profiler.EndSection('Rendering');
 
 Profiler.PrintReport;
@@ -151,7 +151,7 @@ Les allocations mémoire fréquentes ralentissent le jeu.
 
 ```pascal
 // ❌ MAUVAIS : Allocation à chaque frame
-procedure UpdateParticles;
+procedure UpdateParticles;  
 var
   i: Integer;
   Particle: TParticle;
@@ -179,7 +179,7 @@ type
     procedure ReleaseParticle(Particle: TParticle);
   end;
 
-constructor TParticlePool.Create(MaxParticles: Integer);
+constructor TParticlePool.Create(MaxParticles: Integer);  
 var
   i: Integer;
 begin
@@ -189,7 +189,7 @@ begin
   FActiveCount := 0;
 end;
 
-function TParticlePool.GetParticle: TParticle;
+function TParticlePool.GetParticle: TParticle;  
 begin
   if FActiveCount < Length(FPool) then
   begin
@@ -200,7 +200,7 @@ begin
     Result := nil;
 end;
 
-procedure TParticlePool.ReleaseParticle(Particle: TParticle);
+procedure TParticlePool.ReleaseParticle(Particle: TParticle);  
 begin
   // Remettre la particule dans le pool
   Particle.Reset;
@@ -214,7 +214,7 @@ end;
 
 ```pascal
 // ❌ MAUVAIS : Calcul répété
-for i := 0 to EntityCount - 1 do
+for i := 0 to EntityCount - 1 do  
 begin
   Distance := Sqrt(Sqr(Entities[i].X - Player.X) + Sqr(Entities[i].Y - Player.Y));
   if Distance < 100 then
@@ -222,8 +222,8 @@ begin
 end;
 
 // ✅ BON : Comparer les carrés (évite Sqrt)
-SqrRange := 100 * 100;
-for i := 0 to EntityCount - 1 do
+SqrRange := 100 * 100;  
+for i := 0 to EntityCount - 1 do  
 begin
   SqrDistance := Sqr(Entities[i].X - Player.X) + Sqr(Entities[i].Y - Player.Y);
   if SqrDistance < SqrRange then
@@ -235,16 +235,16 @@ end;
 
 ```pascal
 // ❌ MAUVAIS : Continue même après avoir trouvé
-Found := False;
-for i := 0 to 1000 do
+Found := False;  
+for i := 0 to 1000 do  
 begin
   if Items[i].ID = SearchID then
     Found := True;
 end;
 
 // ✅ BON : Sort dès qu'on trouve
-Found := False;
-for i := 0 to 1000 do
+Found := False;  
+for i := 0 to 1000 do  
 begin
   if Items[i].ID = SearchID then
   begin
@@ -282,8 +282,8 @@ type
   end;
 
 // Seuls les objets dans les cellules voisines sont vérifiés
-Grid.GetNearbyEntities(Player.X, Player.Y, NearbyList);
-for i := 0 to NearbyList.Count - 1 do
+Grid.GetNearbyEntities(Player.X, Player.Y, NearbyList);  
+for i := 0 to NearbyList.Count - 1 do  
 begin
   Enemy := TEnemy(NearbyList[i]);
   if CheckCollision(Player, Enemy) then
@@ -305,7 +305,7 @@ type
     procedure Update; virtual;
   end;
 
-procedure TEntity.Update;
+procedure TEntity.Update;  
 begin
   Inc(FFramesSinceUpdate);
 
@@ -318,7 +318,7 @@ begin
 end;
 
 // Utilisation
-DistantEnemy.UpdateInterval := 5;   // Mise à jour tous les 5 frames
+DistantEnemy.UpdateInterval := 5;   // Mise à jour tous les 5 frames  
 NearbyEnemy.UpdateInterval := 1;     // Mise à jour chaque frame
 ```
 
@@ -327,12 +327,12 @@ NearbyEnemy.UpdateInterval := 1;     // Mise à jour chaque frame
 Pour les fonctions appelées très souvent, utilisez `inline`.
 
 ```pascal
-function Distance(X1, Y1, X2, Y2: Single): Single; inline;
+function Distance(X1, Y1, X2, Y2: Single): Single; inline;  
 begin
   Result := Sqrt(Sqr(X2 - X1) + Sqr(Y2 - Y1));
 end;
 
-function SqrDistance(X1, Y1, X2, Y2: Single): Single; inline;
+function SqrDistance(X1, Y1, X2, Y2: Single): Single; inline;  
 begin
   Result := Sqr(X2 - X1) + Sqr(Y2 - Y1);
 end;
@@ -342,7 +342,7 @@ end;
 
 ```pascal
 // ❌ LENT : Conversions répétées
-procedure DrawCircle(X, Y, Radius: Integer);
+procedure DrawCircle(X, Y, Radius: Integer);  
 var
   Angle: Single;
   i: Integer;
@@ -359,7 +359,7 @@ end;
 var
   CosTable, SinTable: array[0..360] of Single;
 
-procedure InitTrigTables;
+procedure InitTrigTables;  
 var
   i: Integer;
 begin
@@ -370,7 +370,7 @@ begin
   end;
 end;
 
-procedure DrawCircle(X, Y, Radius: Integer);
+procedure DrawCircle(X, Y, Radius: Integer);  
 var
   i: Integer;
 begin
@@ -388,17 +388,17 @@ Regrouper les appels de dessin identiques.
 
 ```pascal
 // ❌ MAUVAIS : Un appel par sprite
-for i := 0 to 1000 do
+for i := 0 to 1000 do  
 begin
   SelectTexture(Sprites[i].Texture);
   DrawSprite(Sprites[i]);
 end;
 
 // ✅ BON : Grouper par texture
-SortSpritesByTexture(Sprites);
+SortSpritesByTexture(Sprites);  
 CurrentTexture := nil;
 
-for i := 0 to High(Sprites) do
+for i := 0 to High(Sprites) do  
 begin
   if Sprites[i].Texture <> CurrentTexture then
   begin
@@ -422,7 +422,7 @@ Ne dessiner que ce qui est visible.
 #### Frustum culling
 
 ```pascal
-function IsInView(Entity: TEntity; Camera: TCamera): Boolean;
+function IsInView(Entity: TEntity; Camera: TCamera): Boolean;  
 begin
   Result := (Entity.X + Entity.Width > Camera.X) and
             (Entity.X < Camera.X + Camera.Width) and
@@ -431,7 +431,7 @@ begin
 end;
 
 // Utilisation
-for i := 0 to EntityCount - 1 do
+for i := 0 to EntityCount - 1 do  
 begin
   if IsInView(Entities[i], Camera) then
     DrawEntity(Entities[i]);
@@ -443,7 +443,7 @@ end;
 Ne pas dessiner ce qui est caché derrière d'autres objets.
 
 ```pascal
-procedure RenderWithOcclusion;
+procedure RenderWithOcclusion;  
 begin
   // Trier du plus proche au plus loin
   SortEntitiesByDepth(Entities);
@@ -467,7 +467,7 @@ Utiliser des versions simplifiées pour les objets lointains.
 type
   TLODLevel = (lodHigh, lodMedium, lodLow);
 
-function GetLODLevel(Entity: TEntity; Camera: TCamera): TLODLevel;
+function GetLODLevel(Entity: TEntity; Camera: TCamera): TLODLevel;  
 var
   Distance: Single;
 begin
@@ -481,7 +481,7 @@ begin
     Result := lodLow;
 end;
 
-procedure DrawEntity(Entity: TEntity; LOD: TLODLevel);
+procedure DrawEntity(Entity: TEntity; LOD: TLODLevel);  
 begin
   case LOD of
     lodHigh:   DrawHighDetail(Entity);
@@ -506,7 +506,7 @@ type
     procedure DrawFromAtlas(Index: Integer; X, Y: Integer);
   end;
 
-procedure TTextureAtlas.DrawFromAtlas(Index: Integer; X, Y: Integer);
+procedure TTextureAtlas.DrawFromAtlas(Index: Integer; X, Y: Integer);  
 var
   SrcRect: TRect;
 begin
@@ -552,7 +552,7 @@ L'**overdraw** se produit quand un pixel est dessiné plusieurs fois.
 
 ```pascal
 // Trier par profondeur (Z-order)
-procedure SortByDepth(var Sprites: array of TSprite);
+procedure SortByDepth(var Sprites: array of TSprite);  
 begin
   // Trier du plus loin au plus proche
   QuickSort(Sprites, @CompareDepth);
@@ -584,7 +584,7 @@ type
     procedure CheckMemoryLimit;
   end;
 
-procedure TResourceManager.CheckMemoryLimit;
+procedure TResourceManager.CheckMemoryLimit;  
 begin
   while FCurrentMemory > FMemoryLimit do
   begin
@@ -603,7 +603,7 @@ Utiliser des formats compressés quand c'est possible.
 // OGG pour l'audio (compression avec perte acceptable)
 // ZIP pour les packs de données
 
-procedure LoadCompressedLevel(const Filename: string);
+procedure LoadCompressedLevel(const Filename: string);  
 var
   Unzipper: TUnZipper;
   TempDir: string;
@@ -638,7 +638,7 @@ type
     procedure ClearCache;
   end;
 
-function TPathfindingCache.GetPath(StartX, StartY, EndX, EndY: Integer): TPath;
+function TPathfindingCache.GetPath(StartX, StartY, EndX, EndY: Integer): TPath;  
 var
   Key: string;
 begin
@@ -670,7 +670,7 @@ type
     procedure PlaySound(Sound: TSound; Priority: Integer);
   end;
 
-procedure TAudioManager.PlaySound(Sound: TSound; Priority: Integer);
+procedure TAudioManager.PlaySound(Sound: TSound; Priority: Integer);  
 var
   i, LowestPriorityIndex: Integer;
   LowestPriority: Integer;
@@ -717,7 +717,7 @@ type
     procedure FillBuffer(BufferIndex: Integer);
   end;
 
-procedure TStreamingAudio.Update;
+procedure TStreamingAudio.Update;  
 begin
   if BufferFinished(FCurrentBuffer) then
   begin
@@ -735,13 +735,13 @@ end;
 ```pascal
 {$IFDEF WINDOWS}
 // Désactiver le compositeur Windows pour réduire la latence
-procedure DisableCompositor;
+procedure DisableCompositor;  
 begin
   DwmEnableComposition(DWM_EC_DISABLECOMPOSITION);
 end;
 
 // Augmenter la priorité du processus
-procedure SetHighPriority;
+procedure SetHighPriority;  
 begin
   SetPriorityClass(GetCurrentProcess, HIGH_PRIORITY_CLASS);
 end;
@@ -753,14 +753,14 @@ end;
 ```pascal
 {$IFDEF LINUX}
 // Utiliser des timers haute résolution
-procedure SetHighResolutionTimer;
+procedure SetHighResolutionTimer;  
 begin
   // Configuration spécifique Linux
   clock_gettime(CLOCK_MONOTONIC, @StartTime);
 end;
 
 // Désactiver le compositing (sur X11)
-procedure DisableCompositing;
+procedure DisableCompositing;  
 begin
   // Envoyer des commandes X11 pour désactiver le compositing
   system('xfwm4 --compositor=off');
@@ -788,17 +788,17 @@ valgrind --leak-check=full ./MonJeu
 var
   Frequency, StartCount, EndCount: Int64;
 
-procedure InitPreciseTiming;
+procedure InitPreciseTiming;  
 begin
   QueryPerformanceFrequency(Frequency);
 end;
 
-procedure StartTiming;
+procedure StartTiming;  
 begin
   QueryPerformanceCounter(StartCount);
 end;
 
-function GetElapsedMS: Double;
+function GetElapsedMS: Double;  
 begin
   QueryPerformanceCounter(EndCount);
   Result := ((EndCount - StartCount) * 1000.0) / Frequency;
@@ -817,7 +817,7 @@ var
   LastTime, CurrentTime: QWord;
   DeltaTime: Single;
 
-procedure UpdateGame;
+procedure UpdateGame;  
 begin
   CurrentTime := GetTickCount64;
   DeltaTime := (CurrentTime - LastTime) / 1000.0;  // En secondes
@@ -838,7 +838,7 @@ const
   TARGET_FPS = 60;
   FRAME_TIME = 1000 div TARGET_FPS;  // ~16.67 ms
 
-procedure GameLoop;
+procedure GameLoop;  
 var
   FrameStart, FrameEnd, SleepTime: QWord;
 begin
@@ -864,7 +864,7 @@ Synchroniser avec le rafraîchissement de l'écran.
 
 ```pascal
 // Avec OpenGL
-procedure EnableVSync;
+procedure EnableVSync;  
 begin
   {$IFDEF WINDOWS}
   wglSwapIntervalEXT(1);  // 1 = VSync activé
@@ -882,14 +882,14 @@ end;
 
 ```pascal
 // ❌ LENT : Pathfinding complet chaque frame
-procedure UpdateEnemy;
+procedure UpdateEnemy;  
 begin
   Path := FindPath(Enemy.Position, Player.Position);
   Enemy.FollowPath(Path);
 end;
 
 // ✅ RAPIDE : Pathfinding par intervalles
-procedure UpdateEnemy;
+procedure UpdateEnemy;  
 begin
   Inc(Enemy.FramesSincePathUpdate);
 
@@ -916,7 +916,7 @@ type
     function Evaluate: TNodeStatus; virtual;
   end;
 
-function TBehaviourNode.Evaluate: TNodeStatus;
+function TBehaviourNode.Evaluate: TNodeStatus;  
 begin
   Inc(FLastEvaluation);
 
@@ -945,7 +945,7 @@ type
     procedure Update(DeltaTime: Single);
   end;
 
-procedure TPhysicsBody.Update(DeltaTime: Single);
+procedure TPhysicsBody.Update(DeltaTime: Single);  
 begin
   // Si l'objet bouge peu, le mettre en sommeil
   if (Abs(FVelocity.X) < 0.1) and (Abs(FVelocity.Y) < 0.1) then
@@ -973,7 +973,7 @@ Utiliser une détection en deux phases.
 
 ```pascal
 // Phase 1 : Broad phase (AABB simple)
-function AABBIntersect(A, B: TEntity): Boolean;
+function AABBIntersect(A, B: TEntity): Boolean;  
 begin
   Result := (A.X < B.X + B.Width) and
             (A.X + A.Width > B.X) and
@@ -982,7 +982,7 @@ begin
 end;
 
 // Phase 2 : Narrow phase (collision précise)
-procedure CheckCollisions;
+procedure CheckCollisions;  
 var
   i, j: Integer;
 begin
@@ -1009,7 +1009,7 @@ end;
 var
   SineWave: array[0..359] of Single;
 
-procedure InitTables;
+procedure InitTables;  
 var
   i: Integer;
 begin
@@ -1049,7 +1049,7 @@ HalfWidth := Width * 0.5;
 Pour normaliser des vecteurs rapidement.
 
 ```pascal
-function FastInvSqrt(x: Single): Single;
+function FastInvSqrt(x: Single): Single;  
 var
   i: Integer absolute x;
   xhalf: Single;
@@ -1065,7 +1065,7 @@ end;
 ### 1. Affichage des stats en jeu
 
 ```pascal
-procedure DrawDebugInfo(Canvas: TCanvas);
+procedure DrawDebugInfo(Canvas: TCanvas);  
 begin
   Canvas.TextOut(10, 10, Format('FPS: %d', [FPS]));
   Canvas.TextOut(10, 30, Format('Entities: %d', [EntityCount]));
@@ -1091,7 +1091,7 @@ type
     procedure Draw(Canvas: TCanvas; X, Y, Width, Height: Integer);
   end;
 
-procedure TPerformanceGraph.AddValue(Value: Single);
+procedure TPerformanceGraph.AddValue(Value: Single);  
 begin
   FHistory[FPosition] := Value;
   FPosition := (FPosition + 1) mod 100;
@@ -1100,7 +1100,7 @@ begin
     FMaxValue := Value;
 end;
 
-procedure TPerformanceGraph.Draw(Canvas: TCanvas; X, Y, Width, Height: Integer);
+procedure TPerformanceGraph.Draw(Canvas: TCanvas; X, Y, Width, Height: Integer);  
 var
   i, BarX, BarHeight: Integer;
   Value: Single;
@@ -1139,7 +1139,7 @@ const
   ENABLE_PROFILING = False;
 {$ENDIF}
 
-procedure DrawEntity(Entity: TEntity);
+procedure DrawEntity(Entity: TEntity);  
 begin
   // Rendu normal
   Entity.Draw;
@@ -1172,7 +1172,7 @@ type
     procedure Interpolate(DeltaTime: Single);
   end;
 
-procedure TNetworkEntity.Interpolate(DeltaTime: Single);
+procedure TNetworkEntity.Interpolate(DeltaTime: Single);  
 const
   INTERPOLATION_SPEED = 10.0;
 var
@@ -1212,7 +1212,7 @@ type
     procedure PredictMovement(DeltaTime: Single);
   end;
 
-procedure TPlayerController.OnServerUpdate(ServerPos: TVector2; LastProcessedInput: Integer);
+procedure TPlayerController.OnServerUpdate(ServerPos: TVector2; LastProcessedInput: Integer);  
 var
   i: Integer;
   Input: TPlayerInput;
@@ -1245,7 +1245,7 @@ type
     State: Byte;       // Flags d'état compressés
   end;
 
-procedure CompressSnapshot(Entity: TEntity; out Snapshot: TEntitySnapshot);
+procedure CompressSnapshot(Entity: TEntity; out Snapshot: TEntitySnapshot);  
 begin
   Snapshot.ID := Entity.ID;
   Snapshot.X := Round(Entity.X * 10);  // Précision de 0.1
@@ -1279,7 +1279,7 @@ const
   DELTA_Y     = 2;
   DELTA_ANGLE = 4;
 
-procedure CreateDelta(OldState, NewState: TEntity; out Delta: TEntityDelta);
+procedure CreateDelta(OldState, NewState: TEntity; out Delta: TEntityDelta);  
 begin
   Delta.ID := NewState.ID;
   Delta.ChangedFields := 0;
@@ -1322,7 +1322,7 @@ type
     procedure Draw;
   end;
 
-procedure LoadGameLevel(const Filename: string);
+procedure LoadGameLevel(const Filename: string);  
 begin
   LoadingScreen.StartLoading(5);
 
@@ -1358,14 +1358,14 @@ type
     property Resource: TGameResource read FResource;
   end;
 
-procedure TAsyncLoader.Execute;
+procedure TAsyncLoader.Execute;  
 begin
   // Chargement dans un thread séparé
   FResource := LoadResourceFromFile(FResourcePath);
 end;
 
 // Utilisation
-procedure StartAsyncLoad;
+procedure StartAsyncLoad;  
 begin
   Loader := TAsyncLoader.Create('level_data.dat');
   Loader.Start;
@@ -1399,7 +1399,7 @@ type
     procedure Unload;
   end;
 
-procedure TLevelManager.Update(PlayerX, PlayerY: Integer);
+procedure TLevelManager.Update(PlayerX, PlayerY: Integer);  
 var
   ChunkX, ChunkY: Integer;
   i, j: Integer;
@@ -1484,7 +1484,7 @@ Options :
 
 ```pascal
 {$IFDEF WINDOWS}
-procedure OptimizeForWindows;
+procedure OptimizeForWindows;  
 begin
   // Éviter l'endormissement
   SetThreadExecutionState(ES_CONTINUOUS or ES_SYSTEM_REQUIRED or ES_DISPLAY_REQUIRED);
@@ -1505,7 +1505,7 @@ end;
 
 ```pascal
 {$IFDEF LINUX}
-procedure OptimizeForLinux;
+procedure OptimizeForLinux;  
 begin
   // Verrouiller les pages en mémoire (éviter le swap)
   mlockall(MCL_CURRENT or MCL_FUTURE);
@@ -1523,7 +1523,7 @@ end;
 ### Détection du matériel
 
 ```pascal
-function DetectGPUVendor: string;
+function DetectGPUVendor: string;  
 begin
   {$IFDEF WINDOWS}
   // Utiliser DirectX ou WMI
@@ -1536,7 +1536,7 @@ begin
   {$ENDIF}
 end;
 
-procedure ApplyOptimalSettings;
+procedure ApplyOptimalSettings;  
 var
   Vendor: string;
 begin
@@ -1569,7 +1569,7 @@ type
     ViewDistance: Integer;      // En unités de jeu
   end;
 
-procedure ApplyGraphicsSettings(Settings: TGraphicsSettings);
+procedure ApplyGraphicsSettings(Settings: TGraphicsSettings);  
 begin
   SetResolution(Settings.Resolution);
   SetFullscreen(Settings.Fullscreen);
@@ -1588,7 +1588,7 @@ end;
 ### 2. Détection automatique
 
 ```pascal
-function DetectOptimalSettings: TGraphicsSettings;
+function DetectOptimalSettings: TGraphicsSettings;  
 var
   GPUMemory: Int64;
   CPUCores: Integer;
@@ -1640,7 +1640,7 @@ type
     function GetRecommendedSettings: TGraphicsSettings;
   end;
 
-procedure TBenchmark.Run;
+procedure TBenchmark.Run;  
 var
   FrameTimes: array of Single;
   i: Integer;
@@ -1708,7 +1708,7 @@ type
     procedure Emit(X, Y: Single; Count: Integer);
   end;
 
-procedure TParticleSystem.Update(DeltaTime: Single);
+procedure TParticleSystem.Update(DeltaTime: Single);  
 var
   i: Integer;
   P: ^TParticle;
@@ -1735,7 +1735,7 @@ begin
   end;
 end;
 
-procedure TParticleSystem.Render;
+procedure TParticleSystem.Render;  
 var
   i: Integer;
   Batch: TVertexBatch;
@@ -1771,7 +1771,7 @@ type
     procedure PruneCache;
   end;
 
-function TPathCache.GetPath(StartX, StartY, EndX, EndY: Integer): TPath;
+function TPathCache.GetPath(StartX, StartY, EndX, EndY: Integer): TPath;  
 var
   Key: string;
 begin
@@ -1797,7 +1797,7 @@ begin
   end;
 end;
 
-procedure TPathCache.PruneCache;
+procedure TPathCache.PruneCache;  
 var
   OldestKey: string;
   OldestTime: QWord;
@@ -1840,7 +1840,7 @@ type
     procedure Subdivide;
   end;
 
-procedure TQuadTree.QueryFrustum(const Frustum: TFrustum; Results: TList);
+procedure TQuadTree.QueryFrustum(const Frustum: TFrustum; Results: TList);  
 var
   i: Integer;
   Entity: TEntity;

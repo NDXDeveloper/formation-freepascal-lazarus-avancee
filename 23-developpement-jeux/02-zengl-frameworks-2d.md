@@ -16,7 +16,7 @@ type
 var
   BulletPool: array[0..99] of TBullet;
 
-function GetBullet: Integer;
+function GetBullet: Integer;  
 var
   I: Integer;
 begin
@@ -31,7 +31,7 @@ begin
   end;
 end;
 
-procedure FireBullet(X, Y, VX, VY: Single);
+procedure FireBullet(X, Y, VX, VY: Single);  
 var
   Index: Integer;
 begin
@@ -46,7 +46,7 @@ begin
   end;
 end;
 
-procedure UpdateBullets(dt: Double);
+procedure UpdateBullets(dt: Double);  
 var
   I: Integer;
 begin
@@ -68,7 +68,7 @@ begin
   end;
 end;
 
-procedure DrawBullets;
+procedure DrawBullets;  
 var
   I: Integer;
 begin
@@ -109,7 +109,7 @@ type
     procedure Clear;
   end;
 
-constructor TQuadTreeNode.Create(X, Y, W, H: Single; Capacity: Integer);
+constructor TQuadTreeNode.Create(X, Y, W, H: Single; Capacity: Integer);  
 begin
   FBounds.X := X;
   FBounds.Y := Y;
@@ -120,7 +120,7 @@ begin
   SetLength(FObjects, 0);
 end;
 
-procedure TQuadTreeNode.Subdivide;
+procedure TQuadTreeNode.Subdivide;  
 var
   HalfW, HalfH: Single;
 begin
@@ -140,7 +140,7 @@ begin
   FDivided := True;
 end;
 
-function TQuadTreeNode.Insert(Obj: TGameObject): Boolean;
+function TQuadTreeNode.Insert(Obj: TGameObject): Boolean;  
 var
   I: Integer;
 begin
@@ -223,23 +223,23 @@ type
     procedure HandleInput; override;
   end;
 
-procedure TMenuState.Enter;
+procedure TMenuState.Enter;  
 begin
   FSelectedButton := 0;
   snd_Play(sndMenuMusic, True);
 end;
 
-procedure TMenuState.Exit;
+procedure TMenuState.Exit;  
 begin
   snd_Stop(sndMenuMusic);
 end;
 
-procedure TMenuState.Update(dt: Double);
+procedure TMenuState.Update(dt: Double);  
 begin
   // Logique du menu
 end;
 
-procedure TMenuState.Draw;
+procedure TMenuState.Draw;  
 begin
   // Dessiner le menu
   text_Draw(fntMain, 300, 100, 'SUPER GAME');
@@ -260,7 +260,7 @@ begin
     text_Draw(fntMain, 300, 300, '  Quit');
 end;
 
-procedure TMenuState.HandleInput;
+procedure TMenuState.HandleInput;  
 begin
   if key_Down(K_UP) then
   begin
@@ -300,19 +300,19 @@ type
     procedure HandleInput; override;
   end;
 
-procedure TPlayingState.Enter;
+procedure TPlayingState.Enter;  
 begin
   // Initialiser le niveau
   LoadLevel(CurrentLevel);
   snd_Play(sndGameMusic, True);
 end;
 
-procedure TPlayingState.Exit;
+procedure TPlayingState.Exit;  
 begin
   snd_Stop(sndGameMusic);
 end;
 
-procedure TPlayingState.Update(dt: Double);
+procedure TPlayingState.Update(dt: Double);  
 begin
   // Mettre à jour le jeu
   UpdatePlayer(dt);
@@ -327,7 +327,7 @@ begin
     LoadNextLevel;
 end;
 
-procedure TPlayingState.Draw;
+procedure TPlayingState.Draw;  
 begin
   DrawLevel;
   DrawPlayer;
@@ -336,14 +336,14 @@ begin
   DrawHUD;
 end;
 
-procedure TPlayingState.HandleInput;
+procedure TPlayingState.HandleInput;  
 begin
   if key_Down(K_ESCAPE) then
     GameStateManager.ChangeState(gsPaused);
 end;
 
 // Gestionnaire d'états
-constructor TGameStateManager.Create;
+constructor TGameStateManager.Create;  
 begin
   FCurrentState := nil;
 end;
@@ -354,7 +354,7 @@ begin
   FStates[StateType] := State;
 end;
 
-procedure TGameStateManager.ChangeState(NewState: TGameStateType);
+procedure TGameStateManager.ChangeState(NewState: TGameStateType);  
 begin
   if FCurrentState <> nil then
     FCurrentState.Exit;
@@ -366,19 +366,19 @@ begin
     FCurrentState.Enter;
 end;
 
-procedure TGameStateManager.Update(dt: Double);
+procedure TGameStateManager.Update(dt: Double);  
 begin
   if FCurrentState <> nil then
     FCurrentState.Update(dt);
 end;
 
-procedure TGameStateManager.Draw;
+procedure TGameStateManager.Draw;  
 begin
   if FCurrentState <> nil then
     FCurrentState.Draw;
 end;
 
-procedure TGameStateManager.HandleInput;
+procedure TGameStateManager.HandleInput;  
 begin
   if FCurrentState <> nil then
     FCurrentState.HandleInput;
@@ -394,7 +394,7 @@ uses
   zgl_file,
   zgl_ini;
 
-procedure SaveGameData;
+procedure SaveGameData;  
 var
   Ini: zglTIniFile;
 begin
@@ -409,7 +409,7 @@ begin
   ini_Free(Ini);
 end;
 
-procedure LoadGameData;
+procedure LoadGameData;  
 var
   Ini: zglTIniFile;
 begin
@@ -440,7 +440,7 @@ type
     Inventory: array[0..9] of Integer;
   end;
 
-procedure SaveGame(const FileName: string);
+procedure SaveGame(const FileName: string);  
 var
   F: zglTFile;
   Data: TSaveData;
@@ -458,7 +458,7 @@ begin
   file_Close(F);
 end;
 
-function LoadGame(const FileName: string): Boolean;
+function LoadGame(const FileName: string): Boolean;  
 var
   F: zglTFile;
   Data: TSaveData;
@@ -501,7 +501,7 @@ type
 var
   CameraShake: TCameraShake;
 
-procedure StartCameraShake(Intensity, Duration: Single);
+procedure StartCameraShake(Intensity, Duration: Single);  
 begin
   CameraShake.Active := True;
   CameraShake.Intensity := Intensity;
@@ -509,7 +509,7 @@ begin
   CameraShake.Timer := 0;
 end;
 
-procedure UpdateCameraShake(dt: Double);
+procedure UpdateCameraShake(dt: Double);  
 begin
   if CameraShake.Active then
   begin
@@ -545,7 +545,7 @@ type
 var
   Fade: TFadeEffect;
 
-procedure StartFadeOut(Speed: Single);
+procedure StartFadeOut(Speed: Single);  
 begin
   Fade.Active := True;
   Fade.FadeIn := False;
@@ -553,7 +553,7 @@ begin
   Fade.Speed := Speed;
 end;
 
-procedure StartFadeIn(Speed: Single);
+procedure StartFadeIn(Speed: Single);  
 begin
   Fade.Active := True;
   Fade.FadeIn := True;
@@ -561,7 +561,7 @@ begin
   Fade.Speed := Speed;
 end;
 
-procedure UpdateFade(dt: Double);
+procedure UpdateFade(dt: Double);  
 begin
   if Fade.Active then
   begin
@@ -586,7 +586,7 @@ begin
   end;
 end;
 
-procedure DrawFade;
+procedure DrawFade;  
 begin
   if Fade.Active or (Fade.Alpha > 0) then
   begin
@@ -603,13 +603,13 @@ var
   TimeScale: Single = 1.0;
   TargetTimeScale: Single = 1.0;
 
-procedure SetSlowMotion(Scale: Single; Duration: Single);
+procedure SetSlowMotion(Scale: Single; Duration: Single);  
 begin
   TargetTimeScale := Scale;
   // Utiliser un timer pour revenir à la normale après Duration
 end;
 
-procedure Update(dt: Double);
+procedure Update(dt: Double);  
 var
   AdjustedDt: Double;
 begin
@@ -640,20 +640,20 @@ type
 
   TNodeList = array of TNode;
 
-function Heuristic(X1, Y1, X2, Y2: Integer): Single;
+function Heuristic(X1, Y1, X2, Y2: Integer): Single;  
 begin
   // Distance de Manhattan
   Result := Abs(X1 - X2) + Abs(Y1 - Y2);
 end;
 
-function IsWalkable(X, Y: Integer): Boolean;
+function IsWalkable(X, Y: Integer): Boolean;  
 begin
   Result := (X >= 0) and (X < MAP_WIDTH) and
             (Y >= 0) and (Y < MAP_HEIGHT) and
             (GameMap[Y, X] = 0); // 0 = sol praticable
 end;
 
-function FindPath(StartX, StartY, EndX, EndY: Integer): TNodeList;
+function FindPath(StartX, StartY, EndX, EndY: Integer): TNodeList;  
 var
   OpenList, ClosedList: TNodeList;
   Current: TNode;
@@ -732,7 +732,7 @@ type
 var
   Players: array[0..1] of TPlayer;
 
-procedure InitPlayers;
+procedure InitPlayers;  
 begin
   // Joueur 1 - Clavier
   Players[0].Keys.Up := K_W;
@@ -753,7 +753,7 @@ begin
   Players[1].Y := 300;
 end;
 
-procedure UpdatePlayer(var P: TPlayer; dt: Double);
+procedure UpdatePlayer(var P: TPlayer; dt: Double);  
 begin
   // Mouvement
   if key_Press(P.Keys.Left) then
@@ -778,13 +778,13 @@ begin
     FireBullet(P.X, P.Y, P.VX * 2, P.VY * 2);
 end;
 
-procedure Update(dt: Double);
+procedure Update(dt: Double);  
 begin
   UpdatePlayer(Players[0], dt);
   UpdatePlayer(Players[1], dt);
 end;
 
-procedure Draw;
+procedure Draw;  
 begin
   // Dessiner en split-screen vertical
   // Moitié gauche pour joueur 1
@@ -814,7 +814,7 @@ uses
 var
   Joystick: zglPJoystick;
 
-procedure Init;
+procedure Init;  
 begin
   // Initialiser le support des joysticks
   joy_Init;
@@ -824,7 +824,7 @@ begin
     Joystick := joy_Get(0);
 end;
 
-procedure Update(dt: Double);
+procedure Update(dt: Double);  
 var
   AxisX, AxisY: Single;
 begin
@@ -869,7 +869,7 @@ Créer un fichier `.rc` pour les ressources :
 ```
 1 ICON "icon.ico"
 1 VERSIONINFO
-FILEVERSION 1,0,0,0
+FILEVERSION 1,0,0,0  
 PRODUCTVERSION 1,0,0,0
 {
   BLOCK "StringFileInfo"
@@ -896,19 +896,19 @@ PRODUCTVERSION 1,0,0,0
 fpc -O3 -XX -CX MonJeu.pas
 
 # Créer la structure de dossiers
-mkdir -p MonJeu/data
+mkdir -p MonJeu/data  
 mkdir -p MonJeu/lib
 
 # Copier les fichiers
-cp MonJeu MonJeu/
-cp -r data/* MonJeu/data/
-cp /usr/lib/libogg.so.0 MonJeu/lib/
+cp MonJeu MonJeu/  
+cp -r data/* MonJeu/data/  
+cp /usr/lib/libogg.so.0 MonJeu/lib/  
 cp /usr/lib/libvorbis.so.0 MonJeu/lib/
 
 # Créer un script de lancement
 cat > MonJeu/run.sh << 'EOF'
 #!/bin/bash
-cd "$(dirname "$0")"
+cd "$(dirname "$0")"  
 export LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH
 ./MonJeu
 EOF
@@ -1131,7 +1131,7 @@ var
   FrameTime: Double;
   FPS: Integer;
 
-procedure Init;
+procedure Init;  
 begin
   // Initialiser les managers
   ResourceManager := TResourceManager.Create;
@@ -1155,7 +1155,7 @@ begin
   AudioManager.PlayMusic('menu_music');
 end;
 
-procedure Draw;
+procedure Draw;  
 begin
   // Dessiner l'état actuel
   GameStateManager.Draw;
@@ -1166,7 +1166,7 @@ begin
   {$ENDIF}
 end;
 
-procedure Update(dt: Double);
+procedure Update(dt: Double);  
 begin
   FrameTime := dt;
 
@@ -1183,12 +1183,12 @@ begin
     app_Quit;
 end;
 
-procedure Timer;
+procedure Timer;  
 begin
   FPS := zgl_Get(RENDER_FPS);
 end;
 
-procedure Quit;
+procedure Quit;  
 begin
   // Libérer les ressources
   GameStateManager.Free;
@@ -1280,7 +1280,7 @@ Pour un jeu 2D fluide, visez :
 
 **Profiling** :
 ```pascal
-procedure ProfileSection;
+procedure ProfileSection;  
 var
   StartTime, EndTime: Double;
 begin

@@ -57,7 +57,7 @@ type
     function KeyUp(Key: TSDL_Scancode): Boolean;
   end;
 
-procedure TInputManager.Update;
+procedure TInputManager.Update;  
 var
   KeyboardState: PUInt8;
   I: Integer;
@@ -73,19 +73,19 @@ begin
     FKeyStates[I] := KeyboardState[I] = 1;
 end;
 
-function TInputManager.KeyPressed(Key: TSDL_Scancode): Boolean;
+function TInputManager.KeyPressed(Key: TSDL_Scancode): Boolean;  
 begin
   // Vrai tant que la touche est enfoncée
   Result := FKeyStates[Ord(Key)];
 end;
 
-function TInputManager.KeyDown(Key: TSDL_Scancode): Boolean;
+function TInputManager.KeyDown(Key: TSDL_Scancode): Boolean;  
 begin
   // Vrai seulement au moment de l'appui
   Result := FKeyStates[Ord(Key)] and not FPreviousKeyStates[Ord(Key)];
 end;
 
-function TInputManager.KeyUp(Key: TSDL_Scancode): Boolean;
+function TInputManager.KeyUp(Key: TSDL_Scancode): Boolean;  
 begin
   // Vrai seulement au moment du relâchement
   Result := not FKeyStates[Ord(Key)] and FPreviousKeyStates[Ord(Key)];
@@ -95,7 +95,7 @@ end;
 var
   Input: TInputManager;
 
-procedure Update(dt: Single);
+procedure Update(dt: Single);  
 begin
   Input.Update;
 
@@ -151,7 +151,7 @@ const
 ### Gestion des modificateurs
 
 ```pascal
-function IsModifierPressed(Modifier: TSDL_Keymod): Boolean;
+function IsModifierPressed(Modifier: TSDL_Keymod): Boolean;  
 var
   State: TSDL_Keymod;
 begin
@@ -160,7 +160,7 @@ begin
 end;
 
 // Utilisation
-if Input.KeyDown(SDL_SCANCODE_S) then
+if Input.KeyDown(SDL_SCANCODE_S) then  
 begin
   if IsModifierPressed(KMOD_CTRL) then
     SaveGame  // Ctrl+S
@@ -178,7 +178,7 @@ var
   TextInput: string;
   TextInputActive: Boolean;
 
-procedure HandleTextInput(Event: TSDL_Event);
+procedure HandleTextInput(Event: TSDL_Event);  
 begin
   if Event.type_ = SDL_TEXTINPUT then
   begin
@@ -201,13 +201,13 @@ begin
   end;
 end;
 
-procedure ActivateTextInput;
+procedure ActivateTextInput;  
 begin
   TextInputActive := True;
   SDL_StartTextInput;
 end;
 
-procedure DeactivateTextInput;
+procedure DeactivateTextInput;  
 begin
   TextInputActive := False;
   SDL_StopTextInput;
@@ -229,7 +229,7 @@ type
 var
   Mouse: TMouseState;
 
-procedure UpdateMouse;
+procedure UpdateMouse;  
 var
   ButtonState: UInt32;
 begin
@@ -246,7 +246,7 @@ begin
 end;
 
 // Utilisation pour une caméra FPS
-procedure UpdateCamera(dt: Single);
+procedure UpdateCamera(dt: Single);  
 const
   SENSITIVITY = 0.1;
 begin
@@ -271,7 +271,7 @@ type
 var
   MouseButtons: TMouseButtons;
 
-procedure UpdateMouseButtons;
+procedure UpdateMouseButtons;  
 var
   State: UInt32;
 begin
@@ -288,7 +288,7 @@ begin
   MouseButtons.Right := (State and SDL_BUTTON_RMASK) <> 0;
 end;
 
-function MouseButtonDown(Button: Integer): Boolean;
+function MouseButtonDown(Button: Integer): Boolean;  
 begin
   case Button of
     SDL_BUTTON_LEFT:
@@ -303,7 +303,7 @@ begin
 end;
 
 // Utilisation
-if MouseButtonDown(SDL_BUTTON_LEFT) then
+if MouseButtonDown(SDL_BUTTON_LEFT) then  
 begin
   // Tirer, sélectionner, etc.
   Fire;
@@ -313,7 +313,7 @@ end;
 ### Molette de la souris
 
 ```pascal
-procedure HandleMouseWheel(Event: TSDL_Event);
+procedure HandleMouseWheel(Event: TSDL_Event);  
 var
   WheelY: Integer;
 begin
@@ -340,7 +340,7 @@ end;
 Utile pour les jeux FPS :
 
 ```pascal
-procedure LockMouse;
+procedure LockMouse;  
 begin
   // Cacher le curseur
   SDL_ShowCursor(SDL_DISABLE);
@@ -349,14 +349,14 @@ begin
   SDL_SetRelativeMouseMode(SDL_TRUE);
 end;
 
-procedure UnlockMouse;
+procedure UnlockMouse;  
 begin
   SDL_ShowCursor(SDL_ENABLE);
   SDL_SetRelativeMouseMode(SDL_FALSE);
 end;
 
 // En mode relatif, utilisez directement les deltas
-procedure HandleRelativeMouseMotion(Event: TSDL_Event);
+procedure HandleRelativeMouseMotion(Event: TSDL_Event);  
 begin
   if Event.type_ = SDL_MOUSEMOTION then
   begin
@@ -372,7 +372,7 @@ end;
 var
   CustomCursor: PSDL_Cursor;
 
-procedure LoadCustomCursor(const FileName: string);
+procedure LoadCustomCursor(const FileName: string);  
 var
   Surface: PSDL_Surface;
 begin
@@ -386,7 +386,7 @@ begin
 end;
 
 // Curseur système
-procedure SetSystemCursor(CursorType: TSDL_SystemCursor);
+procedure SetSystemCursor(CursorType: TSDL_SystemCursor);  
 var
   Cursor: PSDL_Cursor;
 begin
@@ -417,7 +417,7 @@ type
     function GetControllerCount: Integer;
   end;
 
-constructor TGamepadManager.Create;
+constructor TGamepadManager.Create;  
 var
   I: Integer;
 begin
@@ -447,7 +447,7 @@ begin
   end;
 end;
 
-destructor TGamepadManager.Destroy;
+destructor TGamepadManager.Destroy;  
 var
   I: Integer;
 begin
@@ -474,7 +474,7 @@ end;
 var
   Gamepad: PSDL_GameController;
 
-procedure Update(dt: Single);
+procedure Update(dt: Single);  
 begin
   Gamepad := GamepadManager.GetController(0);
 
@@ -534,7 +534,7 @@ begin
 end;
 
 // Utilisation pour le mouvement
-procedure UpdatePlayerMovement(dt: Single);
+procedure UpdatePlayerMovement(dt: Single);  
 var
   LeftStickX, LeftStickY: Single;
   RightStickX, RightStickY: Single;
@@ -580,7 +580,7 @@ begin
 end;
 
 // Utilisation
-procedure UpdateVehicle(dt: Single);
+procedure UpdateVehicle(dt: Single);  
 var
   Throttle, Brake: Single;
 begin
@@ -610,19 +610,19 @@ begin
 end;
 
 // Exemples d'utilisation
-procedure OnPlayerHit;
+procedure OnPlayerHit;  
 begin
   // Vibration forte et courte
   Vibrate(Gamepad, 65535, 65535, 200); // 200ms
 end;
 
-procedure OnCarCrash;
+procedure OnCarCrash;  
 begin
   // Vibration progressive
   Vibrate(Gamepad, 40000, 20000, 500); // 500ms
 end;
 
-procedure OnEngineRunning;
+procedure OnEngineRunning;  
 begin
   // Vibration légère continue
   Vibrate(Gamepad, 5000, 3000, 100); // Répéter toutes les 100ms
@@ -632,7 +632,7 @@ end;
 ### Détection de connexion/déconnexion
 
 ```pascal
-procedure HandleControllerEvents(Event: TSDL_Event);
+procedure HandleControllerEvents(Event: TSDL_Event);  
 begin
   case Event.type_ of
     SDL_CONTROLLERDEVICEADDED:
@@ -688,7 +688,7 @@ type
     procedure LoadFromFile(const FileName: string);
   end;
 
-constructor TInputConfig.Create;
+constructor TInputConfig.Create;  
 begin
   // Bindings par défaut
   FBindings[gaUp].Keyboard := SDL_SCANCODE_W;
@@ -714,7 +714,7 @@ begin
   FBindings[gaPause].GamepadButton := SDL_CONTROLLER_BUTTON_START;
 end;
 
-function TInputConfig.IsActionPressed(Action: TGameAction): Boolean;
+function TInputConfig.IsActionPressed(Action: TGameAction): Boolean;  
 var
   Binding: TInputBinding;
 begin
@@ -758,13 +758,13 @@ type
     procedure Draw;
   end;
 
-procedure TKeyBindingUI.StartBinding(Action: TGameAction);
+procedure TKeyBindingUI.StartBinding(Action: TGameAction);  
 begin
   FWaitingForInput := True;
   FCurrentAction := Action;
 end;
 
-procedure TKeyBindingUI.HandleInput(Event: TSDL_Event);
+procedure TKeyBindingUI.HandleInput(Event: TSDL_Event);  
 begin
   if not FWaitingForInput then
     Exit;
@@ -791,7 +791,7 @@ begin
   end;
 end;
 
-procedure TKeyBindingUI.Draw;
+procedure TKeyBindingUI.Draw;  
 begin
   DrawText(100, 100, 'Configuration des touches');
   DrawText(100, 150, 'Déplacement Haut : ' + GetKeyName(InputConfig.GetBinding(gaUp)));
@@ -817,7 +817,7 @@ type
     property UseKeyboard: Boolean read FUseKeyboard;
   end;
 
-procedure UpdateMultiplePlayers(dt: Single);
+procedure UpdateMultiplePlayers(dt: Single);  
 var
   I: Integer;
   Player: TPlayer;
@@ -869,7 +869,7 @@ var
   ActiveTouches: array[0..9] of TTouch;
   TouchCount: Integer;
 
-procedure HandleTouchEvent(Event: TSDL_Event);
+procedure HandleTouchEvent(Event: TSDL_Event);  
 var
   I: Integer;
   Touch: TTouch;
@@ -932,7 +932,7 @@ type
 var
   JumpButton: TVirtualButton;
 
-procedure UpdateVirtualButtons;
+procedure UpdateVirtualButtons;  
 var
   I: Integer;
   Touch: TTouch;
@@ -960,7 +960,7 @@ begin
     PlayerJump;
 end;
 
-procedure DrawVirtualButtons;
+procedure DrawVirtualButtons;  
 var
   Alpha: Byte;
 begin
@@ -991,7 +991,7 @@ type
 var
   VirtualStick: TVirtualJoystick;
 
-procedure InitVirtualJoystick;
+procedure InitVirtualJoystick;  
 begin
   VirtualStick.CenterX := 100;
   VirtualStick.CenterY := ScreenHeight - 100;
@@ -999,7 +999,7 @@ begin
   VirtualStick.Active := False;
 end;
 
-procedure UpdateVirtualJoystick;
+procedure UpdateVirtualJoystick;  
 var
   I: Integer;
   Touch: TTouch;
@@ -1047,7 +1047,7 @@ begin
   end;
 end;
 
-function GetVirtualStickAxis: TVector2;
+function GetVirtualStickAxis: TVector2;  
 var
   DeltaX, DeltaY, Distance: Single;
 begin
@@ -1073,7 +1073,7 @@ begin
   end;
 end;
 
-procedure DrawVirtualJoystick;
+procedure DrawVirtualJoystick;  
 begin
   // Base du joystick
   DrawCircle(VirtualStick.CenterX, VirtualStick.CenterY,
@@ -1085,7 +1085,7 @@ begin
 end;
 
 // Utilisation pour le mouvement
-procedure UpdatePlayerWithVirtualStick(dt: Single);
+procedure UpdatePlayerWithVirtualStick(dt: Single);  
 var
   Axis: TVector2;
 const
@@ -1115,7 +1115,7 @@ type
     function DetectGesture(Event: TSDL_Event): TGestureType;
   end;
 
-function TGestureDetector.DetectGesture(Event: TSDL_Event): TGestureType;
+function TGestureDetector.DetectGesture(Event: TSDL_Event): TGestureType;  
 var
   DeltaX, DeltaY, Distance: Single;
   DeltaTime: Cardinal;
@@ -1178,7 +1178,7 @@ end;
 var
   GestureDetector: TGestureDetector;
 
-procedure HandleGestures;
+procedure HandleGestures;  
 var
   Gesture: TGestureType;
 begin
@@ -1226,7 +1226,7 @@ type
     procedure SetForceFeedback(Force: Single);
   end;
 
-constructor TRacingWheel.Create(DeviceIndex: Integer);
+constructor TRacingWheel.Create(DeviceIndex: Integer);  
 begin
   FJoystick := SDL_JoystickOpen(DeviceIndex);
 
@@ -1253,7 +1253,7 @@ begin
   FBrakeAxis := 3;      // Généralement axe 3
 end;
 
-function TRacingWheel.GetSteeringAngle: Single;
+function TRacingWheel.GetSteeringAngle: Single;  
 var
   Value: Int16;
 begin
@@ -1261,7 +1261,7 @@ begin
   Result := Value / 32767.0; // Normaliser entre -1.0 et 1.0
 end;
 
-function TRacingWheel.GetThrottle: Single;
+function TRacingWheel.GetThrottle: Single;  
 var
   Value: Int16;
 begin
@@ -1269,7 +1269,7 @@ begin
   Result := (Value + 32767) / 65534.0; // Normaliser entre 0.0 et 1.0
 end;
 
-function TRacingWheel.GetBrake: Single;
+function TRacingWheel.GetBrake: Single;  
 var
   Value: Int16;
 begin
@@ -1277,7 +1277,7 @@ begin
   Result := (Value + 32767) / 65534.0; // Normaliser entre 0.0 et 1.0
 end;
 
-procedure TRacingWheel.SetForceFeedback(Force: Single);
+procedure TRacingWheel.SetForceFeedback(Force: Single);  
 var
   Strength: Single;
 begin
@@ -1291,7 +1291,7 @@ begin
 end;
 
 // Utilisation dans un jeu de course
-procedure UpdateRacingGame(dt: Single);
+procedure UpdateRacingGame(dt: Single);  
 var
   Steering, Throttle, Brake: Single;
   TireFriction: Single;
@@ -1334,7 +1334,7 @@ type
     function GetHatDirection: Integer;
   end;
 
-function TFlightStick.GetPitch: Single;
+function TFlightStick.GetPitch: Single;  
 var
   Value: Int16;
 const
@@ -1348,7 +1348,7 @@ begin
   Result := Value / 32767.0;
 end;
 
-function TFlightStick.GetHatDirection: Integer;
+function TFlightStick.GetHatDirection: Integer;  
 begin
   // Hat switch (mini joystick directionnel)
   Result := SDL_JoystickGetHat(FJoystick, 0);
@@ -1358,7 +1358,7 @@ begin
 end;
 
 // Utilisation dans un simulateur de vol
-procedure UpdateFlightSim(dt: Single);
+procedure UpdateFlightSim(dt: Single);  
 var
   Pitch, Roll, Yaw, Throttle: Single;
 begin
@@ -1416,7 +1416,7 @@ type
     procedure LoadFromFile(const FileName: string);
   end;
 
-procedure TInputBuffer.RecordFrame(const Frame: TInputFrame);
+procedure TInputBuffer.RecordFrame(const Frame: TInputFrame);  
 begin
   if FRecording then
   begin
@@ -1425,7 +1425,7 @@ begin
   end;
 end;
 
-procedure TInputBuffer.SaveToFile(const FileName: string);
+procedure TInputBuffer.SaveToFile(const FileName: string);  
 var
   F: File of TInputFrame;
   I: Integer;
@@ -1452,7 +1452,7 @@ type
     function GetCurrentInput: TInputFrame;
   end;
 
-procedure TReplayPlayer.Update;
+procedure TReplayPlayer.Update;  
 begin
   if FPlaying then
   begin
@@ -1467,7 +1467,7 @@ begin
   end;
 end;
 
-function TReplayPlayer.GetCurrentInput: TInputFrame;
+function TReplayPlayer.GetCurrentInput: TInputFrame;  
 begin
   Result := FInputBuffer.GetFrame(FCurrentFrame);
 end;
@@ -1501,14 +1501,14 @@ type
     function CheckCombos: string; // Retourne le nom du combo détecté
   end;
 
-procedure TComboDetector.RecordInput(Action: TGameAction);
+procedure TComboDetector.RecordInput(Action: TGameAction);  
 begin
   FInputHistory[FHistoryIndex].Action := Action;
   FInputHistory[FHistoryIndex].Time := SDL_GetTicks;
   FHistoryIndex := (FHistoryIndex + 1) mod Length(FInputHistory);
 end;
 
-function TComboDetector.CheckCombos: string;
+function TComboDetector.CheckCombos: string;  
 var
   I, J, K: Integer;
   Combo: TCombo;
@@ -1559,7 +1559,7 @@ begin
 end;
 
 // Configuration des combos
-procedure SetupCombos;
+procedure SetupCombos;  
 var
   Hadouken: TCombo;
 begin
@@ -1576,7 +1576,7 @@ begin
 end;
 
 // Utilisation
-procedure Update(dt: Single);
+procedure Update(dt: Single);  
 var
   ComboName: string;
 begin
@@ -1614,7 +1614,7 @@ type
 var
   Accessibility: TAccessibilityOptions;
 
-procedure InitAccessibility;
+procedure InitAccessibility;  
 begin
   Accessibility.AutoAim := False;
   Accessibility.ToggleCrouch := False;
@@ -1624,7 +1624,7 @@ begin
 end;
 
 // Auto-aim pour joueurs avec difficultés de visée
-function GetAutoAimTarget: TEnemy;
+function GetAutoAimTarget: TEnemy;  
 var
   I: Integer;
   Enemy: TEnemy;
@@ -1668,7 +1668,7 @@ end;
 var
   CrouchToggled: Boolean = False;
 
-procedure HandleCrouchInput;
+procedure HandleCrouchInput;  
 begin
   if Accessibility.ToggleCrouch then
   begin
@@ -1695,7 +1695,7 @@ type
 var
   OneHandedMode: TOneHandedLayout;
 
-procedure SetupOneHandedControls(Layout: TOneHandedLayout);
+procedure SetupOneHandedControls(Layout: TOneHandedLayout);  
 begin
   case Layout of
     ohlLeftHand:
@@ -1732,7 +1732,7 @@ end;
 ### Affichage de l'état des contrôles
 
 ```pascal
-procedure DrawInputDebugInfo;
+procedure DrawInputDebugInfo;  
 var
   Y: Integer;
   I: Integer;
@@ -1777,7 +1777,7 @@ begin
   end;
 end;
 
-procedure DrawBar(X, Y, Width, Height: Integer; Value: Single);
+procedure DrawBar(X, Y, Width, Height: Integer; Value: Single);  
 var
   BarWidth: Integer;
   Color: TColor;
@@ -1815,7 +1815,7 @@ type
   end;
 
 // Traiter tous les événements d'un coup
-procedure ProcessAllEvents;
+procedure ProcessAllEvents;  
 var
   Event: TSDL_Event;
   EventPool: TEventPool;
@@ -1859,7 +1859,7 @@ var
 const
   INPUT_POLL_INTERVAL = 8; // Milliseconds (125 Hz)
 
-procedure UpdateInput;
+procedure UpdateInput;  
 var
   CurrentTime: Cardinal;
 begin
@@ -1891,7 +1891,7 @@ type
     function NeedsRollback: Boolean;
   end;
 
-function TInputPrediction.PredictNextInput(const LastInput: TInputFrame): TInputFrame;
+function TInputPrediction.PredictNextInput(const LastInput: TInputFrame): TInputFrame;  
 begin
   // Prédiction simple : répéter la dernière entrée
   Result := LastInput;
@@ -1927,7 +1927,7 @@ type
     function Validate: Boolean;
   end;
 
-procedure TInputTest.LoadTestSequence(const FileName: string);
+procedure TInputTest.LoadTestSequence(const FileName: string);  
 var
   F: File of TInputFrame;
   Frame: TInputFrame;
@@ -1947,7 +1947,7 @@ begin
   CloseFile(F);
 end;
 
-procedure TInputTest.RunTest;
+procedure TInputTest.RunTest;  
 begin
   FCurrentStep := 0;
 
@@ -1964,7 +1964,7 @@ begin
 end;
 
 // Test unitaire pour les combos
-procedure TestComboDetection;
+procedure TestComboDetection;  
 var
   Detector: TComboDetector;
   ComboName: string;
@@ -2012,7 +2012,7 @@ type
     procedure GenerateHeatmap; // Zones où le joueur regarde/clique
   end;
 
-procedure TGameSession.GenerateHeatmap;
+procedure TGameSession.GenerateHeatmap;  
 var
   Heatmap: array[0..SCREEN_WIDTH-1, 0..SCREEN_HEIGHT-1] of Integer;
   I: Integer;
@@ -2043,7 +2043,7 @@ end;
 
 ```pascal
 {$IFDEF WINDOWS}
-procedure InitInputWindows;
+procedure InitInputWindows;  
 begin
   // Configuration spécifique Windows
   SDL_SetHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, '1');
@@ -2051,14 +2051,14 @@ end;
 {$ENDIF}
 
 {$IFDEF LINUX}
-procedure InitInputLinux;
+procedure InitInputLinux;  
 begin
   // Configuration spécifique Linux
   SDL_SetHint(SDL_HINT_LINUX_JOYSTICK_DEADZONES, '1');
 end;
 {$ENDIF}
 
-procedure InitInput;
+procedure InitInput;  
 begin
   SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -2082,7 +2082,7 @@ var
   CurrentScheme: TControlScheme;
   LastInputTime: array[TControlScheme] of Cardinal;
 
-procedure DetectControlScheme;
+procedure DetectControlScheme;  
 begin
   // Détecter automatiquement ce que le joueur utilise
   if SDL_GetTicks - LastInputTime[csGamepad] < 1000 then
@@ -2096,7 +2096,7 @@ begin
   UpdateUIForScheme(CurrentScheme);
 end;
 
-procedure HandleEvent(Event: TSDL_Event);
+procedure HandleEvent(Event: TSDL_Event);  
 begin
   case Event.type_ of
     SDL_KEYDOWN, SDL_MOUSEMOTION:
@@ -2110,7 +2110,7 @@ begin
   end;
 end;
 
-procedure UpdateUIForScheme(Scheme: TControlScheme);
+procedure UpdateUIForScheme(Scheme: TControlScheme);  
 begin
   case Scheme of
     csKeyboardMouse:
@@ -2176,14 +2176,14 @@ type
     procedure UpdateGameLogic;
   end;
 
-constructor TInputController.Create(Model: TInputModel; View: TInputView);
+constructor TInputController.Create(Model: TInputModel; View: TInputView);  
 begin
   FModel := Model;
   FView := View;
   FConfig := TInputConfig.Create;
 end;
 
-procedure TInputController.HandleInput;
+procedure TInputController.HandleInput;  
 begin
   FModel.Update;
 
@@ -2231,13 +2231,13 @@ type
     function IsButtonPressed(const ButtonName: string): Boolean;
   end;
 
-procedure TArduinoInputPlugin.Initialize;
+procedure TArduinoInputPlugin.Initialize;  
 begin
   FSerialPort := TSerialPort.Create('COM3', 9600);
   FSerialPort.Open;
 end;
 
-procedure TArduinoInputPlugin.Update;
+procedure TArduinoInputPlugin.Update;  
 var
   Data: string;
 begin
@@ -2282,7 +2282,7 @@ end;
 **Optimisations clés** :
 ```pascal
 // Éviter de traiter les événements dans plusieurs endroits
-procedure BadPractice;
+procedure BadPractice;  
 begin
   while SDL_PollEvent(@Event) <> 0 do
     HandleEvent1(Event);
@@ -2292,7 +2292,7 @@ begin
 end;
 
 // Centraliser le traitement
-procedure GoodPractice;
+procedure GoodPractice;  
 begin
   while SDL_PollEvent(@Event) <> 0 do
   begin
@@ -2308,14 +2308,14 @@ type
 var
   ActionHandlers: array[TGameAction] of TActionHandler;
 
-procedure InitActionHandlers;
+procedure InitActionHandlers;  
 begin
   ActionHandlers[gaJump] := @PlayerJump;
   ActionHandlers[gaFire] := @PlayerFire;
   ActionHandlers[gaReload] := @PlayerReload;
 end;
 
-procedure ProcessAction(Action: TGameAction);
+procedure ProcessAction(Action: TGameAction);  
 begin
   if Assigned(ActionHandlers[Action]) then
     ActionHandlers[Action];
@@ -2328,7 +2328,7 @@ end;
 
 ```pascal
 // Problème : Drift des sticks analogiques
-function FixStickDrift(Value: Single; Deadzone: Single): Single;
+function FixStickDrift(Value: Single; Deadzone: Single): Single;  
 begin
   if Abs(Value) < Deadzone then
     Result := 0
@@ -2347,7 +2347,7 @@ var
   InputLatency: array[0..99] of Cardinal;
   LatencyIndex: Integer;
 
-procedure MeasureInputLatency;
+procedure MeasureInputLatency;  
 var
   InputTime, RenderTime: Cardinal;
 begin
@@ -2558,7 +2558,7 @@ type
 
 implementation
 
-constructor TGameInput.Create;
+constructor TGameInput.Create;  
 begin
   SDL_Init(SDL_INIT_GAMECONTROLLER);
 
@@ -2568,7 +2568,7 @@ begin
   FConfig := TInputConfig.Create;
 end;
 
-destructor TGameInput.Destroy;
+destructor TGameInput.Destroy;  
 begin
   if FController <> nil then
     SDL_GameControllerClose(FController);
@@ -2577,7 +2577,7 @@ begin
   inherited;
 end;
 
-procedure TGameInput.Update;
+procedure TGameInput.Update;  
 var
   KeyboardState: PUInt8;
   I: Integer;
@@ -2595,7 +2595,7 @@ begin
   SDL_GetMouseState(@FMouseX, @FMouseY);
 end;
 
-function TGameInput.IsActionPressed(Action: TGameAction): Boolean;
+function TGameInput.IsActionPressed(Action: TGameAction): Boolean;  
 begin
   Result := FConfig.IsActionPressed(Action, Self);
 end;

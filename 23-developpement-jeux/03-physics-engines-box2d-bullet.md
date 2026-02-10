@@ -71,11 +71,11 @@ Box2D est le moteur physique 2D le plus populaire au monde, utilisé dans des mi
 sudo apt-get install libbox2d-dev
 
 # Ou compiler depuis les sources
-git clone https://github.com/erincatto/box2d
-cd box2d
-mkdir build && cd build
-cmake ..
-make
+git clone https://github.com/erincatto/box2d  
+cd box2d  
+mkdir build && cd build  
+cmake ..  
+make  
 sudo make install
 ```
 
@@ -139,16 +139,16 @@ var
   BodyDef: b2BodyDef;
 
 // Créer un corps statique (sol)
-BodyDef := b2DefaultBodyDef;
-BodyDef.bodyType := b2_staticBody;
-BodyDef.position := b2Vec2_Make(0.0, -10.0);
+BodyDef := b2DefaultBodyDef;  
+BodyDef.bodyType := b2_staticBody;  
+BodyDef.position := b2Vec2_Make(0.0, -10.0);  
 GroundBody := b2World_CreateBody(World, @BodyDef);
 
 // Créer un corps dynamique (joueur)
-BodyDef := b2DefaultBodyDef;
-BodyDef.bodyType := b2_dynamicBody;
-BodyDef.position := b2Vec2_Make(0.0, 4.0);
-BodyDef.angle := 0.0;
+BodyDef := b2DefaultBodyDef;  
+BodyDef.bodyType := b2_dynamicBody;  
+BodyDef.position := b2Vec2_Make(0.0, 4.0);  
+BodyDef.angle := 0.0;  
 PlayerBody := b2World_CreateBody(World, @BodyDef);
 ```
 
@@ -170,21 +170,21 @@ var
 // Créer une boîte pour le sol
 b2Polygon_SetAsBox(@GroundShape, 50.0, 10.0);
 
-FixtureDef := b2DefaultFixtureDef;
-FixtureDef.shape := @GroundShape;
-FixtureDef.density := 0.0;
+FixtureDef := b2DefaultFixtureDef;  
+FixtureDef.shape := @GroundShape;  
+FixtureDef.density := 0.0;  
 FixtureDef.friction := 0.3;
 
 b2Body_CreateFixture(GroundBody, @FixtureDef);
 
 // Créer un cercle pour le joueur
-CircleShape.center := b2Vec2_Make(0.0, 0.0);
+CircleShape.center := b2Vec2_Make(0.0, 0.0);  
 CircleShape.radius := 0.5;
 
-FixtureDef := b2DefaultFixtureDef;
-FixtureDef.shape := @CircleShape;
-FixtureDef.density := 1.0;      // Masse = densité × surface
-FixtureDef.friction := 0.3;     // 0 = glissant, 1 = rugueux
+FixtureDef := b2DefaultFixtureDef;  
+FixtureDef.shape := @CircleShape;  
+FixtureDef.density := 1.0;      // Masse = densité × surface  
+FixtureDef.friction := 0.3;     // 0 = glissant, 1 = rugueux  
 FixtureDef.restitution := 0.5;  // 0 = pas de rebond, 1 = rebond total
 
 b2Body_CreateFixture(PlayerBody, @FixtureDef);
@@ -277,21 +277,21 @@ const
   METERS_PER_PIXEL = 1.0 / PIXELS_PER_METER;
 
 // Convertir position Box2D vers écran
-function B2ToScreen(const Pos: b2Vec2): TVector2;
+function B2ToScreen(const Pos: b2Vec2): TVector2;  
 begin
   Result.X := Pos.x * PIXELS_PER_METER;
   Result.Y := ScreenHeight - (Pos.y * PIXELS_PER_METER); // Inverser Y
 end;
 
 // Convertir position écran vers Box2D
-function ScreenToB2(const Pos: TVector2): b2Vec2;
+function ScreenToB2(const Pos: TVector2): b2Vec2;  
 begin
   Result.x := Pos.X * METERS_PER_PIXEL;
   Result.y := (ScreenHeight - Pos.Y) * METERS_PER_PIXEL;
 end;
 
 // Exemple d'utilisation
-procedure DrawBody(Body: b2Body);
+procedure DrawBody(Body: b2Body);  
 var
   Pos: b2Vec2;
   ScreenPos: TVector2;
@@ -330,7 +330,7 @@ end;
 
 ```pascal
 // Faire sauter le joueur
-procedure Jump;
+procedure Jump;  
 var
   Impulse: b2Vec2;
 begin
@@ -339,7 +339,7 @@ begin
 end;
 
 // Tir de projectile
-procedure FireBullet(Direction: b2Vec2);
+procedure FireBullet(Direction: b2Vec2);  
 var
   BulletBody: b2Body;
   Velocity: b2Vec2;
@@ -357,7 +357,7 @@ end;
 
 ```pascal
 // Déplacement du joueur (platformer)
-procedure MovePlayer(dt: Single);
+procedure MovePlayer(dt: Single);  
 var
   Vel: b2Vec2;
 const
@@ -390,7 +390,7 @@ type
     procedure PostSolve(Contact: b2Contact; const Impulse: b2ContactImpulse); virtual;
   end;
 
-procedure TMyContactListener.BeginContact(Contact: b2Contact);
+procedure TMyContactListener.BeginContact(Contact: b2Contact);  
 var
   FixtureA, FixtureB: b2Fixture;
   BodyA, BodyB: b2Body;
@@ -448,7 +448,7 @@ begin
 end;
 
 // Dans le callback de collision
-procedure TMyContactListener.BeginContact(Contact: b2Contact);
+procedure TMyContactListener.BeginContact(Contact: b2Contact);  
 var
   ObjA, ObjB: TGameObject;
 begin
@@ -607,7 +607,7 @@ type
     procedure HandleInput;
   end;
 
-constructor TGame.Create;
+constructor TGame.Create;  
 var
   Gravity: b2Vec2;
   BodyDef: b2BodyDef;
@@ -644,7 +644,7 @@ begin
   b2Body_CreateFixture(FPlayer, @FixtureDef);
 end;
 
-procedure TGame.HandleInput;
+procedure TGame.HandleInput;  
 var
   Vel: b2Vec2;
   Impulse: b2Vec2;
@@ -672,7 +672,7 @@ begin
   end;
 end;
 
-procedure TGame.Update(dt: Single);
+procedure TGame.Update(dt: Single);  
 var
   Vel: b2Vec2;
 begin
@@ -684,7 +684,7 @@ begin
   FPlayerOnGround := Abs(Vel.y) < 0.1;
 end;
 
-procedure TGame.Render;
+procedure TGame.Render;  
 var
   Pos: b2Vec2;
   ScreenX, ScreenY: Integer;
@@ -702,7 +702,7 @@ begin
   DrawRect(ScreenX - 13, ScreenY - 26, 26, 52, clBlue);
 end;
 
-destructor TGame.Destroy;
+destructor TGame.Destroy;  
 begin
   b2World_Destroy(FWorld);
   inherited;
@@ -730,11 +730,11 @@ Bullet Physics est un moteur physique 3D professionnel utilisé dans de nombreux
 sudo apt-get install libbullet-dev
 
 # Ou compiler depuis les sources
-git clone https://github.com/bulletphysics/bullet3
-cd bullet3
-mkdir build && cd build
-cmake ..
-make
+git clone https://github.com/bulletphysics/bullet3  
+cd bullet3  
+mkdir build && cd build  
+cmake ..  
+make  
 sudo make install
 ```
 
@@ -757,7 +757,7 @@ type
     procedure Step(TimeStep: Single);
   end;
 
-constructor TBulletWorld.Create;
+constructor TBulletWorld.Create;  
 var
   Gravity: btVector3;
 begin
@@ -784,7 +784,7 @@ begin
   btDynamicsWorld_setGravity(FDynamicsWorld, Gravity);
 end;
 
-procedure TBulletWorld.Step(TimeStep: Single);
+procedure TBulletWorld.Step(TimeStep: Single);  
 begin
   btDynamicsWorld_stepSimulation(FDynamicsWorld, TimeStep, 10, 1.0/60.0);
 end;
@@ -937,7 +937,7 @@ begin
 end;
 
 // Convertir quaternion en angles d'Euler (pour l'affichage)
-function QuaternionToEuler(const Q: TQuaternion): TVector3;
+function QuaternionToEuler(const Q: TQuaternion): TVector3;  
 var
   SinrCosp, CosrCosp, SinyCosp, CosyCosp, SinpValue: Single;
 begin
@@ -964,28 +964,28 @@ end;
 
 ```pascal
 // Appliquer une force au centre
-procedure ApplyForce(Body: btRigidBody; Force: btVector3);
+procedure ApplyForce(Body: btRigidBody; Force: btVector3);  
 begin
   btRigidBody_activate(Body, True); // Réveiller l'objet
   btRigidBody_applyCentralForce(Body, Force);
 end;
 
 // Appliquer une impulsion
-procedure ApplyImpulse(Body: btRigidBody; Impulse: btVector3);
+procedure ApplyImpulse(Body: btRigidBody; Impulse: btVector3);  
 begin
   btRigidBody_activate(Body, True);
   btRigidBody_applyCentralImpulse(Body, Impulse);
 end;
 
 // Appliquer un couple (rotation)
-procedure ApplyTorque(Body: btRigidBody; Torque: btVector3);
+procedure ApplyTorque(Body: btRigidBody; Torque: btVector3);  
 begin
   btRigidBody_activate(Body, True);
   btRigidBody_applyTorque(Body, Torque);
 end;
 
 // Exemple : faire sauter un objet
-procedure Jump(Body: btRigidBody);
+procedure Jump(Body: btRigidBody);  
 var
   Impulse: btVector3;
 begin
@@ -997,7 +997,7 @@ begin
 end;
 
 // Exemple : propulser vers l'avant
-procedure MoveForward(Body: btRigidBody; Speed: Single);
+procedure MoveForward(Body: btRigidBody; Speed: Single);  
 var
   Transform: btTransform;
   Forward, Force: btVector3;
@@ -1028,7 +1028,7 @@ type
     HitFraction: Single;
   end;
 
-function Raycast(World: btDynamicsWorld; const RayFrom, RayTo: TVector3): TRaycastResult;
+function Raycast(World: btDynamicsWorld; const RayFrom, RayTo: TVector3): TRaycastResult;  
 var
   From, To: btVector3;
   Callback: btCollisionWorld_ClosestRayResultCallback;
@@ -1062,7 +1062,7 @@ begin
 end;
 
 // Utilisation pour viser
-procedure ShootRay(PlayerPos, CameraDir: TVector3);
+procedure ShootRay(PlayerPos, CameraDir: TVector3);  
 var
   RayEnd: TVector3;
   Result: TRaycastResult;
@@ -1226,7 +1226,7 @@ begin
   btDynamicsWorld_addAction(World, FController);
 end;
 
-procedure TCharacterController.SetWalkDirection(Direction: TVector3);
+procedure TCharacterController.SetWalkDirection(Direction: TVector3);  
 var
   WalkDir: btVector3;
 begin
@@ -1234,12 +1234,12 @@ begin
   btKinematicCharacterController_setWalkDirection(FController, WalkDir);
 end;
 
-procedure TCharacterController.Jump;
+procedure TCharacterController.Jump;  
 begin
   btKinematicCharacterController_jump(FController);
 end;
 
-function TCharacterController.GetPosition: TVector3;
+function TCharacterController.GetPosition: TVector3;  
 var
   Transform: btTransform;
   Origin: btVector3;
@@ -1252,13 +1252,13 @@ begin
   Result.Z := Origin.z;
 end;
 
-function TCharacterController.IsOnGround: Boolean;
+function TCharacterController.IsOnGround: Boolean;  
 begin
   Result := btKinematicCharacterController_onGround(FController);
 end;
 
 // Utilisation dans la boucle de jeu
-procedure UpdatePlayer(Controller: TCharacterController; dt: Single);
+procedure UpdatePlayer(Controller: TCharacterController; dt: Single);  
 var
   MoveDir: TVector3;
   Speed: Single;
@@ -1310,7 +1310,7 @@ type
     procedure UpdateVehicle;
   end;
 
-constructor TVehicle.Create(World: btDynamicsWorld; ChassisPos: TVector3);
+constructor TVehicle.Create(World: btDynamicsWorld; ChassisPos: TVector3);  
 var
   ChassisShape: btBoxShape;
   ChassisTransform: btTransform;
@@ -1335,7 +1335,7 @@ begin
   btDynamicsWorld_addVehicle(World, FVehicle);
 end;
 
-procedure TVehicle.AddWheel(Position: TVector3; IsFrontWheel: Boolean);
+procedure TVehicle.AddWheel(Position: TVector3; IsFrontWheel: Boolean);  
 var
   ConnectionPoint, WheelDirection, WheelAxle: btVector3;
   SuspensionRestLength, WheelRadius: Single;
@@ -1355,12 +1355,12 @@ begin
                            FTuning, IsFrontWheel);
 end;
 
-procedure TVehicle.ApplyEngineForce(Force: Single; WheelIndex: Integer);
+procedure TVehicle.ApplyEngineForce(Force: Single; WheelIndex: Integer);  
 begin
   btRaycastVehicle_applyEngineForce(FVehicle, Force, WheelIndex);
 end;
 
-procedure TVehicle.SetSteering(Steering: Single; WheelIndex: Integer);
+procedure TVehicle.SetSteering(Steering: Single; WheelIndex: Integer);  
 begin
   btRaycastVehicle_setSteeringValue(FVehicle, Steering, WheelIndex);
 end;
@@ -1380,7 +1380,7 @@ b2World_SetAllowSleeping(World, True);
 btRigidBody_setSleepingThresholds(Body, 0.5, 0.5);
 
 // Forcer le réveil
-b2Body_SetAwake(Body, True);           // Box2D
+b2Body_SetAwake(Body, True);           // Box2D  
 btRigidBody_activate(Body, True);      // Bullet
 ```
 
@@ -1462,7 +1462,7 @@ var
   Accumulator: Double;
   FrameTime: Double;
 
-procedure GameLoop;
+procedure GameLoop;  
 begin
   FrameTime := GetDeltaTime;
   Accumulator := Accumulator + FrameTime;
@@ -1495,7 +1495,7 @@ type
     procedure DrawWorld;
   end;
 
-procedure TDebugDraw.DrawWorld;
+procedure TDebugDraw.DrawWorld;  
 var
   Body: b2Body;
   Fixture: b2Fixture;
@@ -1625,7 +1625,7 @@ b2Body_SetBullet(BulletBody, True);
 **Bullet** :
 ```pascal
 // Activer CCD avec un seuil
-btRigidBody_setCcdMotionThreshold(Body, 1.0);
+btRigidBody_setCcdMotionThreshold(Body, 1.0);  
 btRigidBody_setCcdSweptSphereRadius(Body, 0.2);
 
 // Le corps utilise une sphère de 0.2m de rayon pour la détection
@@ -1646,7 +1646,7 @@ b2Polygon_SetAsBox(@WallShape, 50.0, 0.5); // 50m × 1m
 
 ```pascal
 // Box2D
-procedure LimitVelocity(Body: b2Body; MaxSpeed: Single);
+procedure LimitVelocity(Body: b2Body; MaxSpeed: Single);  
 var
   Vel: b2Vec2;
   Speed: Single;
@@ -1663,7 +1663,7 @@ begin
 end;
 
 // Bullet
-procedure LimitVelocity3D(Body: btRigidBody; MaxSpeed: Single);
+procedure LimitVelocity3D(Body: btRigidBody; MaxSpeed: Single);  
 var
   Vel: btVector3;
   Speed: Single;
@@ -1701,7 +1701,7 @@ PlayerShape := btCapsuleShape_new(0.5, 2.0); // Capsule
 PlayerShape := btBvhTriangleMeshShape_new(ComplexMesh); // Trop lent !
 
 // BON : Mesh seulement pour décor statique
-TerrainShape := btBvhTriangleMeshShape_new(TerrainMesh);
+TerrainShape := btBvhTriangleMeshShape_new(TerrainMesh);  
 TerrainBody := CreateRigidBody(0.0, Transform, TerrainShape); // Masse = 0
 ```
 
@@ -1741,7 +1741,7 @@ end;
 
 **Box2D** :
 ```pascal
-procedure CleanupBox2D;
+procedure CleanupBox2D;  
 var
   Body, NextBody: b2Body;
 begin
@@ -1761,7 +1761,7 @@ end;
 
 **Bullet** :
 ```pascal
-procedure CleanupBullet;
+procedure CleanupBullet;  
 var
   I: Integer;
   Obj: btCollisionObject;
@@ -1994,13 +1994,13 @@ type
     procedure DestroyMarkedBodies;
   end;
 
-procedure TPhysicsManager.MarkForDestruction(Body: b2Body);
+procedure TPhysicsManager.MarkForDestruction(Body: b2Body);  
 begin
   if not FBodiesToDestroy.Contains(Body) then
     FBodiesToDestroy.Add(Body);
 end;
 
-procedure TPhysicsManager.DestroyMarkedBodies;
+procedure TPhysicsManager.DestroyMarkedBodies;  
 var
   Body: b2Body;
 begin
@@ -2011,7 +2011,7 @@ begin
 end;
 
 // Dans la boucle de jeu
-procedure Update(dt: Single);
+procedure Update(dt: Single);  
 begin
   b2World_Step(World, dt, 8, 3);
 
@@ -2020,7 +2020,7 @@ begin
 end;
 
 // Dans un callback de collision
-procedure OnCollision(BulletBody, EnemyBody: b2Body);
+procedure OnCollision(BulletBody, EnemyBody: b2Body);  
 begin
   // NE PAS faire : b2World_DestroyBody(World, BulletBody);
 
@@ -2054,7 +2054,7 @@ const
   MASK_POWERUP  = CAT_PLAYER; // Uniquement avec le joueur
   MASK_SENSOR   = CAT_PLAYER; // Détection uniquement
 
-procedure SetupCollisionFilters;
+procedure SetupCollisionFilters;  
 var
   FixtureDef: b2FixtureDef;
 begin
@@ -2104,7 +2104,7 @@ begin
 end;
 
 // Détecter l'entrée/sortie
-procedure TContactListener.BeginContact(Contact: b2Contact);
+procedure TContactListener.BeginContact(Contact: b2Contact);  
 var
   FixtureA, FixtureB: b2Fixture;
 begin
@@ -2119,7 +2119,7 @@ begin
   end;
 end;
 
-procedure TContactListener.EndContact(Contact: b2Contact);
+procedure TContactListener.EndContact(Contact: b2Contact);  
 begin
   // Le joueur est sorti de la zone
 end;
@@ -2142,7 +2142,7 @@ type
     procedure ApplyForceToLimb(Limb: btRigidBody; Force: btVector3);
   end;
 
-constructor TRagdoll.Create(World: btDynamicsWorld; Position: TVector3);
+constructor TRagdoll.Create(World: btDynamicsWorld; Position: TVector3);  
 var
   Transform: btTransform;
   HeadShape: btSphereShape;
@@ -2199,7 +2199,7 @@ type
     AngularDrag: Single; // Résistance angulaire
   end;
 
-procedure ApplyBuoyancy(Body: btRigidBody; Water: TWaterVolume);
+procedure ApplyBuoyancy(Body: btRigidBody; Water: TWaterVolume);  
 var
   Transform: btTransform;
   Pos: btVector3;
@@ -2281,7 +2281,7 @@ type
     procedure CheckVictory;
   end;
 
-constructor TAngryBirdsGame.Create;
+constructor TAngryBirdsGame.Create;  
 var
   Gravity: b2Vec2;
   Block: b2Body;
@@ -2311,7 +2311,7 @@ begin
   FLaunched := False;
 end;
 
-procedure TAngryBirdsGame.Launch(Direction: TVector2; Power: Single);
+procedure TAngryBirdsGame.Launch(Direction: TVector2; Power: Single);  
 var
   Impulse: b2Vec2;
 begin
@@ -2325,7 +2325,7 @@ begin
   end;
 end;
 
-procedure TAngryBirdsGame.CheckVictory;
+procedure TAngryBirdsGame.CheckVictory;  
 var
   Block: b2Body;
   AllFallen: Boolean;
@@ -2367,7 +2367,7 @@ type
     function AllBallsStopped: Boolean;
   end;
 
-constructor TBilliardGame.Create;
+constructor TBilliardGame.Create;  
 var
   I: Integer;
   BallShape: btSphereShape;
@@ -2415,7 +2415,7 @@ begin
   end;
 end;
 
-procedure TBilliardGame.ShootCueBall(Direction: TVector3; Power: Single);
+procedure TBilliardGame.ShootCueBall(Direction: TVector3; Power: Single);  
 var
   Impulse: btVector3;
 begin
@@ -2435,7 +2435,7 @@ begin
   end;
 end;
 
-function TBilliardGame.AllBallsStopped: Boolean;
+function TBilliardGame.AllBallsStopped: Boolean;  
 var
   I: Integer;
   Vel: btVector3;
@@ -2458,7 +2458,7 @@ begin
   end;
 end;
 
-procedure TBilliardGame.Update(dt: Single);
+procedure TBilliardGame.Update(dt: Single);  
 var
   I: Integer;
   Pos: btVector3;
@@ -2508,7 +2508,7 @@ type
     procedure Update(dt: Single);
   end;
 
-constructor TConstructionGame.Create;
+constructor TConstructionGame.Create;  
 var
   Gravity: b2Vec2;
 begin
@@ -2526,7 +2526,7 @@ begin
   FGoal.Y := 5;
 end;
 
-procedure TConstructionGame.AddNode(X, Y: Single);
+procedure TConstructionGame.AddNode(X, Y: Single);  
 var
   BodyDef: b2BodyDef;
   CircleShape: b2Circle;
@@ -2552,7 +2552,7 @@ begin
   FNodes.Add(Node);
 end;
 
-procedure TConstructionGame.ConnectNodes(NodeA, NodeB: b2Body);
+procedure TConstructionGame.ConnectNodes(NodeA, NodeB: b2Body);  
 var
   JointDef: b2DistanceJointDef;
   Joint: b2DistanceJoint;
@@ -2575,7 +2575,7 @@ begin
   FBeams.Add(Joint);
 end;
 
-procedure TConstructionGame.SpawnBall;
+procedure TConstructionGame.SpawnBall;  
 var
   BodyDef: b2BodyDef;
   CircleShape: b2Circle;
@@ -2599,7 +2599,7 @@ begin
   b2Body_CreateFixture(FBallBody, @FixtureDef);
 end;
 
-function TConstructionGame.CheckSuccess: Boolean;
+function TConstructionGame.CheckSuccess: Boolean;  
 var
   BallPos: b2Vec2;
   Distance: Single;
@@ -2618,7 +2618,7 @@ begin
   Result := Distance < 1.0; // Dans un rayon de 1 mètre
 end;
 
-procedure TConstructionGame.Update(dt: Single);
+procedure TConstructionGame.Update(dt: Single);  
 var
   Beam: b2DistanceJoint;
   Force: Single;
@@ -2669,7 +2669,7 @@ type
     procedure Draw;
   end;
 
-constructor TDestructibleTerrain.Create(Width, Height: Integer);
+constructor TDestructibleTerrain.Create(Width, Height: Integer);  
 var
   X, Y: Integer;
   Gravity: b2Vec2;
@@ -2698,7 +2698,7 @@ begin
   RebuildPhysics;
 end;
 
-procedure TDestructibleTerrain.DestroyCircle(CenterX, CenterY, Radius: Integer);
+procedure TDestructibleTerrain.DestroyCircle(CenterX, CenterY, Radius: Integer);  
 var
   X, Y: Integer;
   Distance: Single;
@@ -2716,7 +2716,7 @@ begin
   RebuildPhysics;
 end;
 
-procedure TDestructibleTerrain.RebuildPhysics;
+procedure TDestructibleTerrain.RebuildPhysics;  
 var
   Chunk: b2Body;
   X, Y: Integer;
@@ -2775,7 +2775,7 @@ begin
   end;
 end;
 
-procedure TDestructibleTerrain.Draw;
+procedure TDestructibleTerrain.Draw;  
 var
   X, Y: Integer;
 begin
@@ -2855,7 +2855,7 @@ end;
 ### Intégration Bullet avec OpenGL
 
 ```pascal
-procedure DrawBulletBody(Body: btRigidBody);
+procedure DrawBulletBody(Body: btRigidBody);  
 var
   Transform: btTransform;
   Origin: btVector3;
@@ -2890,7 +2890,7 @@ begin
   glPopMatrix;
 end;
 
-procedure DrawBox(Shape: btBoxShape);
+procedure DrawBox(Shape: btBoxShape);  
 var
   HalfExtents: btVector3;
 begin
@@ -3003,7 +3003,7 @@ end;
 var
   PhysicsTime: Int64;
 
-procedure MeasurePhysics;
+procedure MeasurePhysics;  
 var
   StartTime, EndTime: Int64;
 begin
@@ -3051,7 +3051,7 @@ type
 var
   TimeScale: Single = 1.0;
 
-procedure UpdatePhysics(dt: Single);
+procedure UpdatePhysics(dt: Single);  
 begin
   // Ralenti (slow motion)
   if KeyPressed(KEY_SHIFT) then
