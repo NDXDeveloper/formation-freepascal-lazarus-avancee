@@ -856,9 +856,9 @@ Ce chapitre 15 va couvrir :
 
 L'Intelligence Artificielle et le Machine Learning avec FreePascal représentent une opportunité unique de combiner :
 
-✅ **Performance** du code natif compilé
-✅ **Portabilité** multi-plateforme (Windows/Ubuntu)
-✅ **Intégration** naturelle dans vos applications existantes
+✅ **Performance** du code natif compilé  
+✅ **Portabilité** multi-plateforme (Windows/Ubuntu)  
+✅ **Intégration** naturelle dans vos applications existantes  
 ✅ **Contrôle** total sur le code et les optimisations
 
 Bien que l'écosystème soit moins mature qu'en Python, FreePascal offre des avantages significatifs pour le **déploiement en production** d'applications IA, particulièrement dans les contextes où la performance, la fiabilité et l'autonomie sont critiques.

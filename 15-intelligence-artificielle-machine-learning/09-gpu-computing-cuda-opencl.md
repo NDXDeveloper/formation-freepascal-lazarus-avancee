@@ -59,9 +59,9 @@ Il existe deux principales technologies pour le calcul GPU :
 
 ### CUDA (Compute Unified Device Architecture)
 
-**Développé par** : NVIDIA
-**Fonctionne sur** : Cartes NVIDIA uniquement
-**Langage** : C-like avec extensions
+**Développé par** : NVIDIA  
+**Fonctionne sur** : Cartes NVIDIA uniquement  
+**Langage** : C-like avec extensions  
 
 **Avantages :**
 - ✅ Très optimisé pour les GPU NVIDIA
@@ -75,9 +75,9 @@ Il existe deux principales technologies pour le calcul GPU :
 
 ### OpenCL (Open Computing Language)
 
-**Développé par** : Khronos Group (standard ouvert)
-**Fonctionne sur** : NVIDIA, AMD, Intel, ARM, CPU
-**Langage** : C99-like
+**Développé par** : Khronos Group (standard ouvert)  
+**Fonctionne sur** : NVIDIA, AMD, Intel, ARM, CPU  
+**Langage** : C99-like  
 
 **Avantages :**
 - ✅ Standard ouvert
@@ -265,12 +265,12 @@ end.
 
 ### Concepts clés
 
-**Platform** : Un vendor (NVIDIA, AMD, Intel)
-**Device** : Un GPU ou CPU disponible
-**Context** : Environnement d'exécution
-**Command Queue** : File d'instructions pour le device
-**Kernel** : Fonction qui s'exécute sur le GPU
-**Buffer** : Mémoire sur le GPU
+**Platform** : Un vendor (NVIDIA, AMD, Intel)  
+**Device** : Un GPU ou CPU disponible  
+**Context** : Environnement d'exécution  
+**Command Queue** : File d'instructions pour le device  
+**Kernel** : Fonction qui s'exécute sur le GPU  
+**Buffer** : Mémoire sur le GPU  
 
 ### Bindings OpenCL pour FreePascal
 

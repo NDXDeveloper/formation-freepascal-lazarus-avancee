@@ -796,9 +796,9 @@ Ces sections fourniront des guides pas-à-pas complets pour mettre en place Pyth
 
 L'intégration de Python avec FreePascal via Python4Lazarus ouvre des possibilités extraordinaires pour le développement d'applications d'Intelligence Artificielle. Cette approche hybride permet de :
 
-🎯 Créer des **interfaces natives performantes** avec Lazarus
-🎯 Exploiter le **riche écosystème IA** de Python
-🎯 **Déployer facilement** sur Windows et Ubuntu
+🎯 Créer des **interfaces natives performantes** avec Lazarus  
+🎯 Exploiter le **riche écosystème IA** de Python  
+🎯 **Déployer facilement** sur Windows et Ubuntu  
 🎯 **Réutiliser** code et modèles existants
 
 Bien que cette approche introduise une certaine complexité, elle offre une flexibilité inégalée et permet d'accélérer considérablement le développement d'applications IA professionnelles avec FreePascal.

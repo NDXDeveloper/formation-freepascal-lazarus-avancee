@@ -1208,7 +1208,8 @@ var
   sl: TStringList;
   i: Integer;
   line, currentClass: string;
-  parts: TStringArray;
+  key, value: string;
+  eqPos: Integer;
   classData: TClassData;
 begin
   // Nettoyer les données existantes
@@ -1234,22 +1235,23 @@ begin
         classData := TClassData.Create;
         FClasses.Add(currentClass, classData);
       end
-      else if Pos('=', line) > 0 then
-      begin
-        parts := line.Split('=');
-        if Length(parts) = 2 then
+      else begin
+        eqPos := Pos('=', line);
+        if eqPos > 0 then
         begin
-          if parts[0] = 'TotalDocuments' then
-            FTotalDocuments := StrToInt(parts[1])
-          else if (classData <> nil) and (parts[0] = 'DocumentCount') then
-            classData.DocumentCount := StrToInt(parts[1])
-          else if (classData <> nil) and (parts[0] = 'TotalWords') then
-            classData.TotalWords := StrToInt(parts[1])
+          key := Copy(line, 1, eqPos - 1);
+          value := Copy(line, eqPos + 1, Length(line) - eqPos);
+          if key = 'TotalDocuments' then
+            FTotalDocuments := StrToInt(value)
+          else if (classData <> nil) and (key = 'DocumentCount') then
+            classData.DocumentCount := StrToInt(value)
+          else if (classData <> nil) and (key = 'TotalWords') then
+            classData.TotalWords := StrToInt(value)
           else if classData <> nil then
           begin
-            classData.WordCount.Add(parts[0], StrToInt(parts[1]));
-            if FVocabulary.IndexOf(parts[0]) < 0 then
-              FVocabulary.Add(parts[0]);
+            classData.WordCount.Add(key, StrToInt(value));
+            if FVocabulary.IndexOf(key) < 0 then
+              FVocabulary.Add(key);
           end;
         end;
       end;
@@ -2307,8 +2309,7 @@ end;
 procedure TSpellChecker.LoadDictionary(const AFileName: string);
 var
   sl: TStringList;
-  i: Integer;
-  parts: TStringArray;
+  i, eqPos: Integer;
 begin
   sl := TStringList.Create;
   try
@@ -2317,9 +2318,10 @@ begin
     for i := 0 to sl.Count - 1 do
     begin
       // Format: mot=fréquence
-      parts := sl[i].Split('=');
-      if Length(parts) = 2 then
-        AddWord(parts[0], StrToIntDef(parts[1], 1))
+      eqPos := Pos('=', sl[i]);
+      if eqPos > 0 then
+        AddWord(Copy(sl[i], 1, eqPos - 1),
+                StrToIntDef(Copy(sl[i], eqPos + 1, Length(sl[i]) - eqPos), 1))
       else
         AddWord(sl[i], 1);
     end;
@@ -2656,9 +2658,8 @@ procedure TFormMain.AnalyzeFrequency;
 var
   tokens, filtered: TStringList;
   mostCommon: TStringList;
-  i: Integer;
+  i, colonPos: Integer;
   item: TListItem;
-  parts: TStringArray;
 begin
   ListViewFrequency.Items.Clear;
 
@@ -2675,12 +2676,13 @@ begin
       try
         for i := 0 to mostCommon.Count - 1 do
         begin
-          parts := mostCommon[i].Split(':');
-          if Length(parts) = 2 then
+          colonPos := Pos(':', mostCommon[i]);
+          if colonPos > 0 then
           begin
             item := ListViewFrequency.Items.Add;
-            item.Caption := Trim(parts[0]);
-            item.SubItems.Add(Trim(parts[1]));
+            item.Caption := Trim(Copy(mostCommon[i], 1, colonPos - 1));
+            item.SubItems.Add(Trim(Copy(mostCommon[i], colonPos + 1,
+              Length(mostCommon[i]) - colonPos)));
           end;
         end;
       finally

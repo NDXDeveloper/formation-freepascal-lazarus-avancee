@@ -10,11 +10,11 @@ Dans cette section, nous allons construire un réseau de neurones **entièrement
 
 **Avantages de cette approche :**
 
-✅ **Compréhension profonde** : Vous comprendrez chaque mécanisme interne
-✅ **Contrôle total** : Aucune dépendance externe, code 100% Pascal
-✅ **Performance** : Code optimisé compilé natif
-✅ **Pédagogique** : Meilleure façon d'apprendre le deep learning
-✅ **Débogage** : Vous maîtrisez tout le code
+✅ **Compréhension profonde** : Vous comprendrez chaque mécanisme interne  
+✅ **Contrôle total** : Aucune dépendance externe, code 100% Pascal  
+✅ **Performance** : Code optimisé compilé natif  
+✅ **Pédagogique** : Meilleure façon d'apprendre le deep learning  
+✅ **Débogage** : Vous maîtrisez tout le code  
 ✅ **Portabilité** : Fonctionne partout où FreePascal fonctionne
 
 **Cas d'usage appropriés :**
@@ -1766,12 +1766,12 @@ end;
 
 ### Ce que vous avez appris
 
-✅ **Architecture** : Structure complète d'un réseau de neurones en Pascal
-✅ **Mathématiques** : Propagation avant et rétropropagation
-✅ **Activations** : Sigmoid, ReLU, Tanh et leurs dérivées
-✅ **Entraînement** : Descente de gradient et backpropagation
-✅ **Optimisations** : Mini-batch, régularisation, dropout, Adam
-✅ **Applications** : XOR, classification d'images
+✅ **Architecture** : Structure complète d'un réseau de neurones en Pascal  
+✅ **Mathématiques** : Propagation avant et rétropropagation  
+✅ **Activations** : Sigmoid, ReLU, Tanh et leurs dérivées  
+✅ **Entraînement** : Descente de gradient et backpropagation  
+✅ **Optimisations** : Mini-batch, régularisation, dropout, Adam  
+✅ **Applications** : XOR, classification d'images  
 ✅ **Débogage** : Vérification de gradients, monitoring
 
 ### Comparaison avec les bibliothèques externes
@@ -2561,12 +2561,12 @@ Tous les fichiers sources présentés dans ce chapitre sont disponibles et peuve
 
 ### Vous maîtrisez maintenant
 
-✅ **Principes fondamentaux** des réseaux de neurones
-✅ **Implémentation complète** en FreePascal from scratch
-✅ **Mathématiques** : propagation avant et arrière
-✅ **Optimisations** : Adam, dropout, batch normalization
-✅ **Applications pratiques** : classification, régression, autoencoders
-✅ **Débogage** : vérification de gradients, monitoring
+✅ **Principes fondamentaux** des réseaux de neurones  
+✅ **Implémentation complète** en FreePascal from scratch  
+✅ **Mathématiques** : propagation avant et arrière  
+✅ **Optimisations** : Adam, dropout, batch normalization  
+✅ **Applications pratiques** : classification, régression, autoencoders  
+✅ **Débogage** : vérification de gradients, monitoring  
 ✅ **Déploiement** : sauvegarde/chargement de modèles
 
 ### Quand utiliser votre implémentation
@@ -2588,9 +2588,9 @@ Tous les fichiers sources présentés dans ce chapitre sont disponibles et peuve
 
 ### Prochaines étapes
 
-**Section 15.3** : Computer Vision avec OpenCV
-**Section 15.4** : NLP et traitement de texte
-**Section 15.5** : Algorithmes génétiques
+**Section 15.3** : Computer Vision avec OpenCV  
+**Section 15.4** : NLP et traitement de texte  
+**Section 15.5** : Algorithmes génétiques  
 
 Vous avez maintenant les fondations solides pour comprendre et implémenter des systèmes d'Intelligence Artificielle en FreePascal ! 🎓🧠🚀
 
