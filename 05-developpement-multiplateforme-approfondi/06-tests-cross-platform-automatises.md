@@ -1007,7 +1007,7 @@ begin
     {$IFDEF UNIX}
       RunTestUnix;
     {$ELSE}
-      Skip('Plateforme non supportée');
+      Ignore('Plateforme non supportée');
     {$ENDIF}
   {$ENDIF}
 end;
@@ -1889,7 +1889,7 @@ begin
     else
     begin
       WriteLn('Windows ancien - Tests de compatibilité');
-      Skip('Fonctionnalités Windows 10+ non disponibles');
+      Ignore('Fonctionnalités Windows 10+ non disponibles');
     end;
   {$ENDIF}
 
@@ -3355,9 +3355,9 @@ Résultat attendu: 120.00 EUR
 
 ## Maintenance
 
-**Dernière mise à jour:** [Date]
-**Responsable:** [Nom]
-**Fréquence de révision:** Mensuelle
+**Dernière mise à jour:** [Date]  
+**Responsable:** [Nom]  
+**Fréquence de révision:** Mensuelle  
 ```
 
 ## Ressources et références utiles

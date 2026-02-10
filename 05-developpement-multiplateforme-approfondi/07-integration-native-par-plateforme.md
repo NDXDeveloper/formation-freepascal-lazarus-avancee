@@ -1296,6 +1296,7 @@ function TThemeManager.GetGTKTheme: string;
 var
   Process: TProcess;
   Output: TStringList;
+  Ini: TIniFile;
 begin
   Result := '';
 
@@ -1318,8 +1319,8 @@ begin
       // Méthode alternative : lire le fichier de configuration GTK
       if FileExists(GetEnvironmentVariable('HOME') + '/.config/gtk-3.0/settings.ini') then
       begin
-        var Ini := TIniFile.Create(GetEnvironmentVariable('HOME') +
-                                   '/.config/gtk-3.0/settings.ini');
+        Ini := TIniFile.Create(GetEnvironmentVariable('HOME') +
+                               '/.config/gtk-3.0/settings.ini');
         try
           Result := Ini.ReadString('Settings', 'gtk-theme-name', '');
         finally

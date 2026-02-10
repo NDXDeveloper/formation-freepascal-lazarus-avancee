@@ -560,11 +560,15 @@ begin
 end;
 
 function TuerProcessus(PID: Integer): Boolean;
+{$IFDEF WINDOWS}
+var
+  hProcess: THandle;
+{$ENDIF}
 begin
   Result := False;
 
   {$IFDEF WINDOWS}
-  var hProcess := OpenProcess(PROCESS_TERMINATE, False, PID);
+  hProcess := OpenProcess(PROCESS_TERMINATE, False, PID);
   if hProcess <> 0 then
   begin
     Result := TerminateProcess(hProcess, 0);
@@ -580,9 +584,13 @@ begin
 end;
 
 function ProcessusExiste(PID: Integer): Boolean;
+{$IFDEF WINDOWS}
+var
+  hProcess: THandle;
+{$ENDIF}
 begin
   {$IFDEF WINDOWS}
-  var hProcess := OpenProcess(PROCESS_QUERY_INFORMATION, False, PID);
+  hProcess := OpenProcess(PROCESS_QUERY_INFORMATION, False, PID);
   Result := hProcess <> 0;
   if Result then
     CloseHandle(hProcess);

@@ -1208,21 +1208,25 @@ begin
 end;
 
 procedure TConfigMigrator.MigrateFrom2_0To2_1;
+var
+  OldLang: string;
+  NewLang: string;
 begin
   // Exemple : Convertir des valeurs
 
   // Convertir l'ancien format de langue (code 2 lettres) vers nouveau (code complet)
-  var OldLang := FConfig.GetValue('General', 'Language', 'en');
-  var NewLang: string;
+  OldLang := FConfig.GetValue('General', 'Language', 'en');
 
-  case OldLang of
-    'en': NewLang := 'en-US';
-    'fr': NewLang := 'fr-FR';
-    'de': NewLang := 'de-DE';
-    'es': NewLang := 'es-ES';
+  if OldLang = 'en' then
+    NewLang := 'en-US'
+  else if OldLang = 'fr' then
+    NewLang := 'fr-FR'
+  else if OldLang = 'de' then
+    NewLang := 'de-DE'
+  else if OldLang = 'es' then
+    NewLang := 'es-ES'
   else
     NewLang := OldLang + '-' + UpperCase(OldLang);
-  end;
 
   FConfig.SetValue('General', 'Language', NewLang);
 
@@ -1232,14 +1236,14 @@ begin
 end;
 
 procedure TConfigMigrator.MigrateFrom2_1To3_0;
+var
+  Sections: TStringList;
+  Keys: TStringList;
+  i, j: Integer;
 begin
   // Exemple : Restructuration majeure
 
   // Déplacer tous les paramètres d'interface vers une nouvelle section
-  var Sections: TStringList;
-  var Keys: TStringList;
-  var i, j: Integer;
-
   Sections := TStringList.Create;
   Keys := TStringList.Create;
   try
@@ -1630,6 +1634,8 @@ end;
 
 function TConfigValidator.ValidatePath(const Value: string;
   const Rule: TConfigRule): Boolean;
+var
+  ExpandedPath: string;
 begin
   // Vérifier si le chemin existe ou est valide
   Result := DirectoryExists(Value) or FileExists(Value);
@@ -1637,7 +1643,7 @@ begin
   if not Result then
   begin
     // Accepter aussi les chemins avec variables d'environnement
-    var ExpandedPath := ExpandFileName(Value);
+    ExpandedPath := ExpandFileName(Value);
     Result := DirectoryExists(ExpandedPath) or FileExists(ExpandedPath);
 
     if not Result then
@@ -1718,6 +1724,8 @@ var
   JsonConfig: TJSONConfig;
 
 procedure InitializeConfiguration;
+var
+  i: Integer;
 begin
   // Créer la configuration unifiée
   Config := TUnifiedConfig.Create('MonApplication');
@@ -1765,7 +1773,7 @@ begin
   if not Validator.Validate(Config) then
   begin
     WriteLn('Erreurs de configuration détectées :');
-    for var i := 0 to Validator.GetErrors.Count - 1 do
+    for i := 0 to Validator.GetErrors.Count - 1 do
       WriteLn('  - ', Validator.GetErrors[i]);
   end;
 
@@ -1773,6 +1781,9 @@ begin
 end;
 
 procedure DemonstrateJSONConfig;
+var
+  RecentFiles: TStringArray;
+  i: Integer;
 begin
   WriteLn('--- Configuration JSON ---');
 
@@ -1796,9 +1807,9 @@ begin
     WriteLn('Taille police : ', JsonConfig.GetValue('user/preferences/fontSize', 10));
 
     // Lire un tableau
-    var RecentFiles := JsonConfig.GetArray('user/recentFiles');
+    RecentFiles := JsonConfig.GetArray('user/recentFiles');
     WriteLn('Fichiers récents :');
-    for var i := 0 to High(RecentFiles) do
+    for i := 0 to High(RecentFiles) do
       WriteLn('  - ', RecentFiles[i]);
 
     // Sauvegarder
@@ -1809,6 +1820,10 @@ begin
 end;
 
 procedure ShowConfigurationInfo;
+var
+  Sections: TStringList;
+  Keys: TStringList;
+  i, j: Integer;
 begin
   WriteLn('=== Information de Configuration ===');
   WriteLn('Chemin de configuration : ', Config.ConfigPath);
@@ -1836,17 +1851,17 @@ begin
   WriteLn('Plein écran : ', Config.GetBoolean('Display', 'FullScreen', False));
 
   // Afficher toutes les sections
-  var Sections := TStringList.Create;
-  var Keys := TStringList.Create;
+  Sections := TStringList.Create;
+  Keys := TStringList.Create;
   try
     Config.GetSections(Sections);
     WriteLn;
     WriteLn('--- Toutes les sections ---');
-    for var i := 0 to Sections.Count - 1 do
+    for i := 0 to Sections.Count - 1 do
     begin
       WriteLn('[', Sections[i], ']');
       Config.GetKeys(Sections[i], Keys);
-      for var j := 0 to Keys.Count - 1 do
+      for j := 0 to Keys.Count - 1 do
         WriteLn('  ', Keys[j], ' = ',
                 Config.GetValue(Sections[i], Keys[j], ''));
     end;
@@ -3047,6 +3062,8 @@ uses
 { TFormConfig }
 
 procedure TFormConfig.FormCreate(Sender: TObject);
+var
+  MasterPassword: string;
 begin
   // Créer les objets de configuration
   FConfig := TUnifiedConfig.Create('MonApplication');
@@ -3054,7 +3071,7 @@ begin
   FExporter := TConfigExporter.Create(FConfig);
 
   // Demander le mot de passe principal pour la configuration sécurisée
-  var MasterPassword := InputBox('Sécurité',
+  MasterPassword := InputBox('Sécurité',
     'Entrez le mot de passe principal :', '');
   if MasterPassword <> '' then
     FSecureConfig := TSecureConfig.Create(FConfig, MasterPassword)
@@ -3146,16 +3163,23 @@ begin
 end;
 
 procedure TFormConfig.LoadConfiguration;
+var
+  Lang: string;
+  Theme: string;
+  LogLevel: string;
 begin
   // Charger les paramètres généraux
-  case FConfig.GetValue('General', 'Language', 'en-US') of
-    'fr-FR': ComboLanguage.ItemIndex := 0;
-    'en-US': ComboLanguage.ItemIndex := 1;
-    'de-DE': ComboLanguage.ItemIndex := 2;
-    'es-ES': ComboLanguage.ItemIndex := 3;
+  Lang := FConfig.GetValue('General', 'Language', 'en-US');
+  if Lang = 'fr-FR' then
+    ComboLanguage.ItemIndex := 0
+  else if Lang = 'en-US' then
+    ComboLanguage.ItemIndex := 1
+  else if Lang = 'de-DE' then
+    ComboLanguage.ItemIndex := 2
+  else if Lang = 'es-ES' then
+    ComboLanguage.ItemIndex := 3
   else
     ComboLanguage.ItemIndex := 1;
-  end;
 
   CheckAutoStart.Checked := FConfig.GetBoolean('General', 'AutoStart', False);
   CheckAutoUpdate.Checked := FConfig.GetBoolean('General', 'AutoUpdate', True);
@@ -3165,7 +3189,7 @@ begin
   SpinWindowHeight.Value := FConfig.GetInteger('Display', 'WindowHeight', 768);
   CheckFullScreen.Checked := FConfig.GetBoolean('Display', 'FullScreen', False);
 
-  var Theme := FConfig.GetValue('Display', 'Theme', 'Default');
+  Theme := FConfig.GetValue('Display', 'Theme', 'Default');
   ComboTheme.ItemIndex := ComboTheme.Items.IndexOf(Theme);
   if ComboTheme.ItemIndex = -1 then
     ComboTheme.ItemIndex := 0;
@@ -3187,7 +3211,7 @@ begin
   // Charger les paramètres avancés
   CheckDebugMode.Checked := FConfig.GetBoolean('Advanced', 'DebugMode', False);
 
-  var LogLevel := FConfig.GetValue('Advanced', 'LogLevel', 'Info');
+  LogLevel := FConfig.GetValue('Advanced', 'LogLevel', 'Info');
   ComboLogLevel.ItemIndex := ComboLogLevel.Items.IndexOf(LogLevel);
   if ComboLogLevel.ItemIndex = -1 then
     ComboLogLevel.ItemIndex := 1;
@@ -3274,6 +3298,10 @@ begin
 end;
 
 procedure TFormConfig.ValidateConfiguration;
+var
+  Errors: TStringList;
+  ErrorMsg: string;
+  i: Integer;
 begin
   // Appliquer les valeurs par défaut si nécessaire
   FValidator.ApplyDefaults(FConfig);
@@ -3281,10 +3309,10 @@ begin
   // Valider la configuration
   if not FValidator.Validate(FConfig) then
   begin
-    var Errors := FValidator.GetErrors;
-    var ErrorMsg := 'Erreurs de configuration détectées :' + #13#10;
+    Errors := FValidator.GetErrors;
+    ErrorMsg := 'Erreurs de configuration détectées :' + #13#10;
 
-    for var i := 0 to Errors.Count - 1 do
+    for i := 0 to Errors.Count - 1 do
       ErrorMsg := ErrorMsg + '• ' + Errors[i] + #13#10;
 
     MessageDlg('Validation', ErrorMsg, mtWarning, [mbOK], 0);
@@ -3427,6 +3455,8 @@ end;
 procedure TFormConfig.BtnImportClick(Sender: TObject);
 var
   OpenDialog: TOpenDialog;
+  Success: Boolean;
+  Ext: string;
 begin
   OpenDialog := TOpenDialog.Create(nil);
   try
@@ -3441,8 +3471,8 @@ begin
       // Faire une sauvegarde avant import
       FConfig.BackupConfig(FConfig.ConfigPath + '.before_import');
 
-      var Success := False;
-      var Ext := LowerCase(ExtractFileExt(OpenDialog.FileName));
+      Success := False;
+      Ext := LowerCase(ExtractFileExt(OpenDialog.FileName));
 
       if Ext = '.ini' then
         Success := FExporter.ImportFromINI(OpenDialog.FileName)
