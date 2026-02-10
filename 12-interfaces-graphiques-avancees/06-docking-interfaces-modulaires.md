@@ -88,7 +88,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TfrmMain.FormCreate(Sender: TObject);
+procedure TfrmMain.FormCreate(Sender: TObject);  
 begin
   // Création du gestionnaire de docking
   FDockMaster := TAnchorDockMaster.Create(Self);
@@ -98,7 +98,7 @@ begin
   CreateDockablePanels;
 end;
 
-procedure TfrmMain.CreateDockablePanels;
+procedure TfrmMain.CreateDockablePanels;  
 var
   Memo: TMemo;
   ListBox: TListBox;
@@ -188,12 +188,12 @@ implementation
 
 {$R *.lfm}
 
-procedure TfrmSimpleDock.FormCreate(Sender: TObject);
+procedure TfrmSimpleDock.FormCreate(Sender: TObject);  
 begin
   SetupPanels;
 end;
 
-procedure TfrmSimpleDock.SetupPanels;
+procedure TfrmSimpleDock.SetupPanels;  
 var
   Memo: TMemo;
   ListBox: TListBox;
@@ -279,7 +279,7 @@ Il est important de permettre aux utilisateurs de sauvegarder leur disposition p
 uses
   IniFiles;
 
-procedure TfrmMain.SaveLayout(const AFileName: string);
+procedure TfrmMain.SaveLayout(const AFileName: string);  
 var
   Ini: TIniFile;
 begin
@@ -306,7 +306,7 @@ begin
   end;
 end;
 
-procedure TfrmMain.LoadLayout(const AFileName: string);
+procedure TfrmMain.LoadLayout(const AFileName: string);  
 var
   Ini: TIniFile;
 begin
@@ -336,12 +336,12 @@ begin
 end;
 
 // Utilisation
-procedure TfrmMain.FormCreate(Sender: TObject);
+procedure TfrmMain.FormCreate(Sender: TObject);  
 begin
   LoadLayout(GetAppConfigFile(False));
 end;
 
-procedure TfrmMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+procedure TfrmMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);  
 begin
   SaveLayout(GetAppConfigFile(False));
 end;
@@ -352,7 +352,7 @@ end;
 Ajoutez un menu pour permettre aux utilisateurs de montrer/cacher les panneaux.
 
 ```pascal
-procedure TfrmMain.CreateViewMenu;
+procedure TfrmMain.CreateViewMenu;  
 var
   MenuItem: TMenuItem;
 begin
@@ -392,28 +392,28 @@ begin
   mnuView.Add(MenuItem);
 end;
 
-procedure TfrmMain.ToggleLeftPanel(Sender: TObject);
+procedure TfrmMain.ToggleLeftPanel(Sender: TObject);  
 begin
   pnlLeft.Visible := not pnlLeft.Visible;
   splLeft.Visible := pnlLeft.Visible;
   (Sender as TMenuItem).Checked := pnlLeft.Visible;
 end;
 
-procedure TfrmMain.ToggleRightPanel(Sender: TObject);
+procedure TfrmMain.ToggleRightPanel(Sender: TObject);  
 begin
   pnlRight.Visible := not pnlRight.Visible;
   splRight.Visible := pnlRight.Visible;
   (Sender as TMenuItem).Checked := pnlRight.Visible;
 end;
 
-procedure TfrmMain.ToggleBottomPanel(Sender: TObject);
+procedure TfrmMain.ToggleBottomPanel(Sender: TObject);  
 begin
   pnlBottom.Visible := not pnlBottom.Visible;
   splBottom.Visible := pnlBottom.Visible;
   (Sender as TMenuItem).Checked := pnlBottom.Visible;
 end;
 
-procedure TfrmMain.ResetLayout(Sender: TObject);
+procedure TfrmMain.ResetLayout(Sender: TObject);  
 begin
   // Réinitialiser aux valeurs par défaut
   pnlLeft.Width := 200;
@@ -438,7 +438,7 @@ Pour créer des panneaux avec plusieurs onglets (comme dans l'IDE Lazarus) :
 uses
   ComCtrls; // Pour TPageControl
 
-procedure TfrmMain.CreateTabbedPanel;
+procedure TfrmMain.CreateTabbedPanel;  
 var
   PageControl: TPageControl;
   TabSheet: TTabSheet;
@@ -503,7 +503,7 @@ Le docking fonctionne de manière similaire sur Windows et Ubuntu, mais il y a q
 ### Code portable
 
 ```pascal
-procedure TfrmMain.ApplyPlatformSpecificSettings;
+procedure TfrmMain.ApplyPlatformSpecificSettings;  
 begin
   {$IFDEF WINDOWS}
   // Ajustements pour Windows
@@ -526,7 +526,7 @@ end;
 ### Sauvegarde du layout avec chemins compatibles
 
 ```pascal
-function TfrmMain.GetConfigFilePath: string;
+function TfrmMain.GetConfigFilePath: string;  
 begin
   {$IFDEF WINDOWS}
   // Windows : %APPDATA%\MonApplication
@@ -622,7 +622,7 @@ implementation
 uses
   IniFiles;
 
-procedure TfrmIDEMain.FormCreate(Sender: TObject);
+procedure TfrmIDEMain.FormCreate(Sender: TObject);  
 begin
   Caption := 'Mon IDE - Interface modulaire';
   Width := 1200;
@@ -633,13 +633,13 @@ begin
   LoadSettings;
 end;
 
-procedure TfrmIDEMain.SetupInterface;
+procedure TfrmIDEMain.SetupInterface;  
 begin
   CreatePanels;
   CreateMenus;
 end;
 
-procedure TfrmIDEMain.CreatePanels;
+procedure TfrmIDEMain.CreatePanels;  
 begin
   // Panneau gauche : Explorateur de projet
   pnlLeft := TPanel.Create(Self);
@@ -707,7 +707,7 @@ begin
   FEditor.Align := alClient;
 end;
 
-procedure TfrmIDEMain.CreateMenus;
+procedure TfrmIDEMain.CreateMenus;  
 var
   MenuItem: TMenuItem;
 begin
@@ -742,7 +742,7 @@ begin
   mnuView.Add(MenuItem);
 end;
 
-procedure TfrmIDEMain.OnTogglePanel(Sender: TObject);
+procedure TfrmIDEMain.OnTogglePanel(Sender: TObject);  
 var
   Tag: Integer;
 begin
@@ -766,7 +766,7 @@ begin
   (Sender as TMenuItem).Checked := not (Sender as TMenuItem).Checked;
 end;
 
-procedure TfrmIDEMain.OnResetLayout(Sender: TObject);
+procedure TfrmIDEMain.OnResetLayout(Sender: TObject);  
 begin
   pnlLeft.Width := 250;
   pnlRight.Width := 300;
@@ -777,7 +777,7 @@ begin
   pnlBottom.Visible := True;
 end;
 
-procedure TfrmIDEMain.LoadSettings;
+procedure TfrmIDEMain.LoadSettings;  
 var
   Ini: TIniFile;
   ConfigFile: string;
@@ -804,7 +804,7 @@ begin
   end;
 end;
 
-procedure TfrmIDEMain.SaveSettings;
+procedure TfrmIDEMain.SaveSettings;  
 var
   Ini: TIniFile;
   ConfigFile: string;
@@ -837,7 +837,7 @@ begin
   end;
 end;
 
-procedure TfrmIDEMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+procedure TfrmIDEMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);  
 begin
   SaveSettings;
 end;
@@ -895,29 +895,29 @@ type
 
 implementation
 
-function TBasePlugin.GetVersion: string;
+function TBasePlugin.GetVersion: string;  
 begin
   Result := '1.0.0';
 end;
 
-function TBasePlugin.GetAuthor: string;
+function TBasePlugin.GetAuthor: string;  
 begin
   Result := 'Anonyme';
 end;
 
-procedure TBasePlugin.Initialize;
+procedure TBasePlugin.Initialize;  
 begin
   // Initialisation par défaut
 end;
 
-procedure TBasePlugin.Finalize;
+procedure TBasePlugin.Finalize;  
 begin
   // Nettoyage par défaut
   if Assigned(FPanel) then
     FPanel.Free;
 end;
 
-procedure TBasePlugin.UpdatePanel;
+procedure TBasePlugin.UpdatePanel;  
 begin
   // Mise à jour par défaut
 end;
@@ -961,14 +961,14 @@ type
 
 implementation
 
-constructor TPluginManager.Create;
+constructor TPluginManager.Create;  
 begin
   inherited Create;
   FPlugins := TInterfaceList.Create;
   FLoadedPanels := TList.Create;
 end;
 
-destructor TPluginManager.Destroy;
+destructor TPluginManager.Destroy;  
 begin
   UnloadAllPlugins;
   FPlugins.Free;
@@ -976,7 +976,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TPluginManager.RegisterPlugin(APlugin: IPlugin);
+procedure TPluginManager.RegisterPlugin(APlugin: IPlugin);  
 begin
   if FPlugins.IndexOf(APlugin) = -1 then
   begin
@@ -985,7 +985,7 @@ begin
   end;
 end;
 
-procedure TPluginManager.UnregisterPlugin(APlugin: IPlugin);
+procedure TPluginManager.UnregisterPlugin(APlugin: IPlugin);  
 var
   Index: Integer;
 begin
@@ -997,17 +997,17 @@ begin
   end;
 end;
 
-function TPluginManager.GetPluginCount: Integer;
+function TPluginManager.GetPluginCount: Integer;  
 begin
   Result := FPlugins.Count;
 end;
 
-function TPluginManager.GetPlugin(Index: Integer): IPlugin;
+function TPluginManager.GetPlugin(Index: Integer): IPlugin;  
 begin
   Result := FPlugins[Index] as IPlugin;
 end;
 
-procedure TPluginManager.LoadAllPlugins(AParentForm: TForm);
+procedure TPluginManager.LoadAllPlugins(AParentForm: TForm);  
 var
   i: Integer;
   Plugin: IPlugin;
@@ -1021,7 +1021,7 @@ begin
   end;
 end;
 
-procedure TPluginManager.UnloadAllPlugins;
+procedure TPluginManager.UnloadAllPlugins;  
 var
   i: Integer;
 begin
@@ -1074,28 +1074,28 @@ implementation
 uses
   Dialogs;
 
-function TLoggerPlugin.GetName: string;
+function TLoggerPlugin.GetName: string;  
 begin
   Result := 'Logger';
 end;
 
-function TLoggerPlugin.GetDescription: string;
+function TLoggerPlugin.GetDescription: string;  
 begin
   Result := 'Journal de bord de l''application';
 end;
 
-function TLoggerPlugin.GetAuthor: string;
+function TLoggerPlugin.GetAuthor: string;  
 begin
   Result := 'Votre Nom';
 end;
 
-procedure TLoggerPlugin.Initialize;
+procedure TLoggerPlugin.Initialize;  
 begin
   inherited Initialize;
   AddLog('Plugin Logger initialisé');
 end;
 
-function TLoggerPlugin.CreatePanel(AParent: TWinControl): TPanel;
+function TLoggerPlugin.CreatePanel(AParent: TWinControl): TPanel;  
 var
   Panel: TPanel;
 begin
@@ -1133,13 +1133,13 @@ begin
   Result := Panel;
 end;
 
-procedure TLoggerPlugin.UpdatePanel;
+procedure TLoggerPlugin.UpdatePanel;  
 begin
   inherited UpdatePanel;
   // Mise à jour si nécessaire
 end;
 
-procedure TLoggerPlugin.AddLog(const AMessage: string);
+procedure TLoggerPlugin.AddLog(const AMessage: string);  
 var
   TimeStamp: string;
 begin
@@ -1150,7 +1150,7 @@ begin
   end;
 end;
 
-procedure TLoggerPlugin.OnClearClick(Sender: TObject);
+procedure TLoggerPlugin.OnClearClick(Sender: TObject);  
 begin
   if MessageDlg('Confirmation', 'Effacer tous les logs ?',
      mtConfirmation, [mbYes, mbNo], 0) = mrYes then
@@ -1160,7 +1160,7 @@ begin
   end;
 end;
 
-procedure TLoggerPlugin.OnSaveClick(Sender: TObject);
+procedure TLoggerPlugin.OnSaveClick(Sender: TObject);  
 var
   SaveDialog: TSaveDialog;
 begin
@@ -1216,7 +1216,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TfrmMainPlugins.FormCreate(Sender: TObject);
+procedure TfrmMainPlugins.FormCreate(Sender: TObject);  
 begin
   Caption := 'Application avec système de plugins';
   Width := 1000;
@@ -1227,12 +1227,12 @@ begin
   CreatePluginsMenu;
 end;
 
-procedure TfrmMainPlugins.FormDestroy(Sender: TObject);
+procedure TfrmMainPlugins.FormDestroy(Sender: TObject);  
 begin
   FPluginManager.Free;
 end;
 
-procedure TfrmMainPlugins.InitializePlugins;
+procedure TfrmMainPlugins.InitializePlugins;  
 begin
   // Création du gestionnaire de plugins
   FPluginManager := TPluginManager.Create;
@@ -1251,7 +1251,7 @@ begin
   FLoggerPlugin.AddLog('Application démarrée');
 end;
 
-procedure TfrmMainPlugins.CreatePluginsMenu;
+procedure TfrmMainPlugins.CreatePluginsMenu;  
 var
   mnuPlugins: TMenuItem;
   MenuItem: TMenuItem;
@@ -1314,14 +1314,14 @@ type
 
 implementation
 
-constructor TDockablePanel.Create(AOwner: TComponent);
+constructor TDockablePanel.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FDragging := False;
   Cursor := crSizeAll;
 end;
 
-procedure TDockablePanel.StartDrag(X, Y: Integer);
+procedure TDockablePanel.StartDrag(X, Y: Integer);  
 begin
   FDragging := True;
   FStartPos := Point(X, Y);
@@ -1336,7 +1336,7 @@ begin
                              Canvas, ClientRect);
 end;
 
-procedure TDockablePanel.DoDrag(X, Y: Integer);
+procedure TDockablePanel.DoDrag(X, Y: Integer);  
 var
   DeltaX, DeltaY: Integer;
 begin
@@ -1350,7 +1350,7 @@ begin
   Top := Top + DeltaY;
 end;
 
-procedure TDockablePanel.EndDrag;
+procedure TDockablePanel.EndDrag;  
 begin
   FDragging := False;
 
@@ -1373,7 +1373,7 @@ begin
     StartDrag(X, Y);
 end;
 
-procedure TDockablePanel.MouseMove(Shift: TShiftState; X, Y: Integer);
+procedure TDockablePanel.MouseMove(Shift: TShiftState; X, Y: Integer);  
 begin
   inherited MouseMove(Shift, X, Y);
 
@@ -1437,13 +1437,13 @@ type
 
 implementation
 
-constructor TDockingThemeManager.Create;
+constructor TDockingThemeManager.Create;  
 begin
   inherited Create;
   FCurrentTheme := dtLight;
 end;
 
-function TDockingThemeManager.GetThemeColors: TThemeColors;
+function TDockingThemeManager.GetThemeColors: TThemeColors;  
 begin
   case FCurrentTheme of
     dtLight:
@@ -1481,7 +1481,7 @@ begin
   end;
 end;
 
-procedure TDockingThemeManager.ApplyTheme(APanel: TPanel);
+procedure TDockingThemeManager.ApplyTheme(APanel: TPanel);  
 var
   Colors: TThemeColors;
 begin
@@ -1492,7 +1492,7 @@ begin
   APanel.BorderColor := Colors.Border;
 end;
 
-procedure TDockingThemeManager.ApplyThemeToForm(AForm: TForm);
+procedure TDockingThemeManager.ApplyThemeToForm(AForm: TForm);  
 var
   i: Integer;
   Colors: TThemeColors;
@@ -1520,7 +1520,7 @@ end.
 ### Utilisation du gestionnaire de thèmes
 
 ```pascal
-procedure TfrmMain.CreateThemeMenu;
+procedure TfrmMain.CreateThemeMenu;  
 var
   mnuTheme: TMenuItem;
   MenuItem: TMenuItem;
@@ -1550,7 +1550,7 @@ begin
   mnuTheme.Add(MenuItem);
 end;
 
-procedure TfrmMain.OnThemeChange(Sender: TObject);
+procedure TfrmMain.OnThemeChange(Sender: TObject);  
 begin
   FThemeManager.CurrentTheme := TDockingTheme((Sender as TMenuItem).Tag);
   FThemeManager.ApplyThemeToForm(Self);
@@ -1562,7 +1562,7 @@ end;
 Pour améliorer l'accessibilité et l'efficacité, ajoutez des raccourcis clavier :
 
 ```pascal
-procedure TfrmMain.SetupKeyboardShortcuts;
+procedure TfrmMain.SetupKeyboardShortcuts;  
 var
   ActionList: TActionList;
   Action: TAction;
@@ -1605,7 +1605,7 @@ begin
   Action.OnExecute := @FocusRightPanel;
 end;
 
-procedure TfrmMain.FocusLeftPanel(Sender: TObject);
+procedure TfrmMain.FocusLeftPanel(Sender: TObject);  
 begin
   if pnlLeft.Visible then
   begin
@@ -1638,7 +1638,7 @@ type
     property Loaded: Boolean read FLoaded;
   end;
 
-procedure TLazyPanel.CheckAndLoad;
+procedure TLazyPanel.CheckAndLoad;  
 begin
   if not FLoaded and Assigned(FOnLoad) then
   begin
@@ -1647,7 +1647,7 @@ begin
   end;
 end;
 
-procedure TLazyPanel.SetVisible(Value: Boolean);
+procedure TLazyPanel.SetVisible(Value: Boolean);  
 begin
   if Value then
     CheckAndLoad;
@@ -1656,7 +1656,7 @@ begin
 end;
 
 // Utilisation
-procedure TfrmMain.CreateLazyPanel;
+procedure TfrmMain.CreateLazyPanel;  
 var
   LazyPanel: TLazyPanel;
 begin
@@ -1668,7 +1668,7 @@ begin
   LazyPanel.OnLoad := @LoadPanelContent;
 end;
 
-procedure TfrmMain.LoadPanelContent(Sender: TObject);
+procedure TfrmMain.LoadPanelContent(Sender: TObject);  
 var
   ListBox: TListBox;
   i: Integer;
@@ -1702,20 +1702,20 @@ type
     function GetLayoutNames: TStringArray;
   end;
 
-constructor TLayoutCache.Create;
+constructor TLayoutCache.Create;  
 begin
   inherited Create;
   FLayouts := TStringList.Create;
   FLayouts.OwnsObjects := True;
 end;
 
-destructor TLayoutCache.Destroy;
+destructor TLayoutCache.Destroy;  
 begin
   FLayouts.Free;
   inherited Destroy;
 end;
 
-procedure TLayoutCache.SaveLayout(const AName: string; ALayout: TStringList);
+procedure TLayoutCache.SaveLayout(const AName: string; ALayout: TStringList);  
 var
   Index: Integer;
   StoredLayout: TStringList;
@@ -1737,7 +1737,7 @@ begin
   end;
 end;
 
-function TLayoutCache.LoadLayout(const AName: string): TStringList;
+function TLayoutCache.LoadLayout(const AName: string): TStringList;  
 var
   Index: Integer;
 begin
@@ -1748,12 +1748,12 @@ begin
     Result.Assign(FLayouts.Objects[Index] as TStringList);
 end;
 
-function TLayoutCache.HasLayout(const AName: string): Boolean;
+function TLayoutCache.HasLayout(const AName: string): Boolean;  
 begin
   Result := FLayouts.IndexOf(AName) <> -1;
 end;
 
-procedure TLayoutCache.DeleteLayout(const AName: string);
+procedure TLayoutCache.DeleteLayout(const AName: string);  
 var
   Index: Integer;
 begin
@@ -1762,7 +1762,7 @@ begin
     FLayouts.Delete(Index);
 end;
 
-function TLayoutCache.GetLayoutNames: TStringArray;
+function TLayoutCache.GetLayoutNames: TStringArray;  
 var
   i: Integer;
 begin
@@ -1780,7 +1780,7 @@ Permettez aux utilisateurs de basculer entre différentes dispositions prédéfi
 type
   TWorkspace = (wsDefault, wsDevelopment, wsDebug, wsDesign, wsCustom);
 
-procedure TfrmMain.ApplyWorkspace(AWorkspace: TWorkspace);
+procedure TfrmMain.ApplyWorkspace(AWorkspace: TWorkspace);  
 begin
   case AWorkspace of
     wsDefault:
@@ -1838,7 +1838,7 @@ begin
   UpdateWorkspaceMenu(AWorkspace);
 end;
 
-procedure TfrmMain.CreateWorkspaceMenu;
+procedure TfrmMain.CreateWorkspaceMenu;  
 var
   mnuWorkspace: TMenuItem;
   MenuItem: TMenuItem;
@@ -1884,7 +1884,7 @@ begin
   mnuWorkspace.Add(MenuItem);
 end;
 
-procedure TfrmMain.OnWorkspaceChange(Sender: TObject);
+procedure TfrmMain.OnWorkspaceChange(Sender: TObject);  
 var
   Workspace: TWorkspace;
 begin
@@ -1892,13 +1892,13 @@ begin
   ApplyWorkspace(Workspace);
 end;
 
-procedure TfrmMain.OnSaveCustomWorkspace(Sender: TObject);
+procedure TfrmMain.OnSaveCustomWorkspace(Sender: TObject);  
 begin
   SaveLayout(GetConfigFilePath);
   ShowMessage('Espace de travail personnalisé sauvegardé !');
 end;
 
-procedure TfrmMain.UpdateWorkspaceMenu(AWorkspace: TWorkspace);
+procedure TfrmMain.UpdateWorkspaceMenu(AWorkspace: TWorkspace);  
 var
   i: Integer;
   MenuItem: TMenuItem;
@@ -1950,7 +1950,7 @@ type
 
 implementation
 
-constructor TAnimatedPanel.Create(AOwner: TComponent);
+constructor TAnimatedPanel.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -1963,13 +1963,13 @@ begin
   FAnimationTimer.OnTimer := @OnAnimationTimer;
 end;
 
-destructor TAnimatedPanel.Destroy;
+destructor TAnimatedPanel.Destroy;  
 begin
   FAnimationTimer.Free;
   inherited Destroy;
 end;
 
-procedure TAnimatedPanel.AnimateWidth(ANewWidth: Integer);
+procedure TAnimatedPanel.AnimateWidth(ANewWidth: Integer);  
 begin
   FTargetWidth := ANewWidth;
   FTargetHeight := Height;
@@ -1977,7 +1977,7 @@ begin
   FAnimationTimer.Enabled := True;
 end;
 
-procedure TAnimatedPanel.AnimateHeight(ANewHeight: Integer);
+procedure TAnimatedPanel.AnimateHeight(ANewHeight: Integer);  
 begin
   FTargetWidth := Width;
   FTargetHeight := ANewHeight;
@@ -1985,7 +1985,7 @@ begin
   FAnimationTimer.Enabled := True;
 end;
 
-procedure TAnimatedPanel.AnimateSize(ANewWidth, ANewHeight: Integer);
+procedure TAnimatedPanel.AnimateSize(ANewWidth, ANewHeight: Integer);  
 begin
   FTargetWidth := ANewWidth;
   FTargetHeight := ANewHeight;
@@ -1993,7 +1993,7 @@ begin
   FAnimationTimer.Enabled := True;
 end;
 
-procedure TAnimatedPanel.OnAnimationTimer(Sender: TObject);
+procedure TAnimatedPanel.OnAnimationTimer(Sender: TObject);  
 var
   DeltaWidth, DeltaHeight: Integer;
   StepWidth, StepHeight: Integer;
@@ -2043,7 +2043,7 @@ end.
 ### Utilisation des animations
 
 ```pascal
-procedure TfrmMain.ToggleLeftPanelAnimated(Sender: TObject);
+procedure TfrmMain.ToggleLeftPanelAnimated(Sender: TObject);  
 var
   AnimPanel: TAnimatedPanel;
 begin
@@ -2122,7 +2122,7 @@ implementation
 uses
   DOM, XMLRead, XMLWrite;
 
-constructor TDockingConfiguration.Create(const AConfigFile: string);
+constructor TDockingConfiguration.Create(const AConfigFile: string);  
 begin
   inherited Create;
   FConfigFile := AConfigFile;
@@ -2144,7 +2144,7 @@ begin
   FPanels[Index].DockSide := ADockSide;
 end;
 
-function TDockingConfiguration.GetPanelConfig(const AName: string): TPanelConfig;
+function TDockingConfiguration.GetPanelConfig(const AName: string): TPanelConfig;  
 var
   i: Integer;
 begin
@@ -2165,7 +2165,7 @@ begin
   Result.DockSide := alLeft;
 end;
 
-procedure TDockingConfiguration.SaveToINI;
+procedure TDockingConfiguration.SaveToINI;  
 var
   Ini: TIniFile;
   i: Integer;
@@ -2189,7 +2189,7 @@ begin
   end;
 end;
 
-procedure TDockingConfiguration.LoadFromINI;
+procedure TDockingConfiguration.LoadFromINI;  
 var
   Ini: TIniFile;
   i, Count: Integer;
@@ -2216,7 +2216,7 @@ begin
   end;
 end;
 
-procedure TDockingConfiguration.SaveToJSON;
+procedure TDockingConfiguration.SaveToJSON;  
 var
   JSONArray: TJSONArray;
   JSONPanel: TJSONObject;
@@ -2248,7 +2248,7 @@ begin
   end;
 end;
 
-procedure TDockingConfiguration.LoadFromJSON;
+procedure TDockingConfiguration.LoadFromJSON;  
 var
   JSONData: TJSONData;
   JSONArray: TJSONArray;
@@ -2288,7 +2288,7 @@ begin
   end;
 end;
 
-procedure TDockingConfiguration.SaveToXML;
+procedure TDockingConfiguration.SaveToXML;  
 var
   Doc: TXMLDocument;
   RootNode, PanelNode: TDOMNode;
@@ -2318,7 +2318,7 @@ begin
   end;
 end;
 
-procedure TDockingConfiguration.LoadFromXML;
+procedure TDockingConfiguration.LoadFromXML;  
 var
   Doc: TXMLDocument;
   RootNode, PanelNode: TDOMNode;
@@ -2383,7 +2383,7 @@ type
     property OnPanelHide: TDockEvent read FOnPanelHide write FOnPanelHide;
   end;
 
-procedure TEnhancedDockManager.DockPanel(APanel: TPanel; ADockSite: TPanel);
+procedure TEnhancedDockManager.DockPanel(APanel: TPanel; ADockSite: TPanel);  
 var
   AllowDock: Boolean;
 begin
@@ -2404,7 +2404,7 @@ begin
     FOnAfterDock(Self, APanel);
 end;
 
-procedure TEnhancedDockManager.UndockPanel(APanel: TPanel);
+procedure TEnhancedDockManager.UndockPanel(APanel: TPanel);  
 var
   AllowUndock: Boolean;
 begin
@@ -2428,7 +2428,7 @@ end;
 ### Utilisation des événements
 
 ```pascal
-procedure TfrmMain.SetupDockManager;
+procedure TfrmMain.SetupDockManager;  
 begin
   FDockManager := TEnhancedDockManager.Create;
 
@@ -2450,14 +2450,14 @@ begin
   end;
 end;
 
-procedure TfrmMain.OnAfterPanelDock(Sender: TObject; APanel: TPanel);
+procedure TfrmMain.OnAfterPanelDock(Sender: TObject; APanel: TPanel);  
 begin
   // Mise à jour après l'ancrage
   UpdateStatusBar('Panneau ' + APanel.Caption + ' ancré');
   SaveLayout(GetConfigFilePath);
 end;
 
-procedure TfrmMain.OnPanelShow(Sender: TObject; APanel: TPanel);
+procedure TfrmMain.OnPanelShow(Sender: TObject; APanel: TPanel);  
 begin
   // Chargement paresseux du contenu
   if not APanel.Tag = 1 then // Pas encore chargé
@@ -2469,7 +2469,7 @@ begin
   UpdateStatusBar('Panneau ' + APanel.Caption + ' affiché');
 end;
 
-procedure TfrmMain.OnPanelHide(Sender: TObject; APanel: TPanel);
+procedure TfrmMain.OnPanelHide(Sender: TObject; APanel: TPanel);  
 begin
   UpdateStatusBar('Panneau ' + APanel.Caption + ' masqué');
 end;
@@ -2504,7 +2504,7 @@ type
     property Dockable: Boolean read FDockable write FDockable;
   end;
 
-constructor TDockableToolBar.Create(AOwner: TComponent);
+constructor TDockableToolBar.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FDockable := True;
@@ -2525,7 +2525,7 @@ begin
   end;
 end;
 
-procedure TDockableToolBar.MouseMove(Shift: TShiftState; X, Y: Integer);
+procedure TDockableToolBar.MouseMove(Shift: TShiftState; X, Y: Integer);  
 begin
   inherited MouseMove(Shift, X, Y);
 
@@ -2548,7 +2548,7 @@ begin
   FDragging := False;
 end;
 
-procedure TDockableToolBar.CreateFloatingForm;
+procedure TDockableToolBar.CreateFloatingForm;  
 begin
   FFloatingForm := TForm.Create(nil);
   FFloatingForm.BorderStyle := bsSizeToolWin;
@@ -2558,7 +2558,7 @@ begin
   FFloatingForm.Position := poDesigned;
 end;
 
-procedure TDockableToolBar.MakeFloating;
+procedure TDockableToolBar.MakeFloating;  
 var
   ScreenPos: TPoint;
 begin
@@ -2577,7 +2577,7 @@ begin
   FFloatingForm.Show;
 end;
 
-procedure TDockableToolBar.DockTo(AParent: TWinControl);
+procedure TDockableToolBar.DockTo(AParent: TWinControl);  
 begin
   if Assigned(FFloatingForm) then
   begin
@@ -2696,7 +2696,7 @@ begin
   end;
 end;
 
-procedure TMultiMonitorDockManager.EnsureVisible(AForm: TForm);
+procedure TMultiMonitorDockManager.EnsureVisible(AForm: TForm);  
 var
   Monitor: TMonitor;
 begin
@@ -2740,7 +2740,7 @@ type
     property Expanded: Boolean read FExpanded;
   end;
 
-constructor TAutoHidePanel.Create(AOwner: TComponent);
+constructor TAutoHidePanel.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -2757,7 +2757,7 @@ begin
   OnMouseLeave := @OnMouseLeavePanel;
 end;
 
-procedure TAutoHidePanel.CreateTabButton;
+procedure TAutoHidePanel.CreateTabButton;  
 begin
   FTabButton := TSpeedButton.Create(Self);
   FTabButton.Parent := Self.Parent;
@@ -2768,7 +2768,7 @@ begin
   FTabButton.Visible := False;
 end;
 
-procedure TAutoHidePanel.EnableAutoHide;
+procedure TAutoHidePanel.EnableAutoHide;  
 begin
   if not FAutoHide then
   begin
@@ -2779,7 +2779,7 @@ begin
   end;
 end;
 
-procedure TAutoHidePanel.DisableAutoHide;
+procedure TAutoHidePanel.DisableAutoHide;  
 begin
   if FAutoHide then
   begin
@@ -2791,7 +2791,7 @@ begin
   end;
 end;
 
-procedure TAutoHidePanel.Expand;
+procedure TAutoHidePanel.Expand;  
 begin
   if not FExpanded then
   begin
@@ -2803,7 +2803,7 @@ begin
   end;
 end;
 
-procedure TAutoHidePanel.Collapse;
+procedure TAutoHidePanel.Collapse;  
 begin
   if FExpanded and FAutoHide then
   begin
@@ -2818,7 +2818,7 @@ begin
   end;
 end;
 
-procedure TAutoHidePanel.OnMouseEnterTab(Sender: TObject);
+procedure TAutoHidePanel.OnMouseEnterTab(Sender: TObject);  
 begin
   if FAutoHide and not FExpanded then
   begin
@@ -2827,7 +2827,7 @@ begin
   end;
 end;
 
-procedure TAutoHidePanel.OnMouseLeavePanel(Sender: TObject);
+procedure TAutoHidePanel.OnMouseLeavePanel(Sender: TObject);  
 begin
   if FAutoHide and FExpanded then
   begin
@@ -2835,7 +2835,7 @@ begin
   end;
 end;
 
-procedure TAutoHidePanel.OnHideTimer(Sender: TObject);
+procedure TAutoHidePanel.OnHideTimer(Sender: TObject);  
 var
   MousePos: TPoint;
 begin
@@ -2875,7 +2875,7 @@ type
     property MaxHistorySize: Integer read FMaxHistorySize write FMaxHistorySize;
   end;
 
-constructor TLayoutHistory.Create;
+constructor TLayoutHistory.Create;  
 begin
   inherited Create;
   FHistory := TList.Create;
@@ -2883,14 +2883,14 @@ begin
   FMaxHistorySize := 20;
 end;
 
-destructor TLayoutHistory.Destroy;
+destructor TLayoutHistory.Destroy;  
 begin
   Clear;
   FHistory.Free;
   inherited Destroy;
 end;
 
-procedure TLayoutHistory.AddLayout(ALayout: TDockingConfiguration);
+procedure TLayoutHistory.AddLayout(ALayout: TDockingConfiguration);  
 var
   i: Integer;
 begin
@@ -2914,17 +2914,17 @@ begin
   end;
 end;
 
-function TLayoutHistory.CanUndo: Boolean;
+function TLayoutHistory.CanUndo: Boolean;  
 begin
   Result := FCurrentIndex > 0;
 end;
 
-function TLayoutHistory.CanRedo: Boolean;
+function TLayoutHistory.CanRedo: Boolean;  
 begin
   Result := FCurrentIndex < FHistory.Count - 1;
 end;
 
-function TLayoutHistory.Undo: TDockingConfiguration;
+function TLayoutHistory.Undo: TDockingConfiguration;  
 begin
   Result := nil;
   if CanUndo then
@@ -2934,7 +2934,7 @@ begin
   end;
 end;
 
-function TLayoutHistory.Redo: TDockingConfiguration;
+function TLayoutHistory.Redo: TDockingConfiguration;  
 begin
   Result := nil;
   if CanRedo then
@@ -2944,7 +2944,7 @@ begin
   end;
 end;
 
-procedure TLayoutHistory.Clear;
+procedure TLayoutHistory.Clear;  
 var
   i: Integer;
 begin
@@ -2980,7 +2980,7 @@ type
 
 implementation
 
-procedure TDockingConfigTest.TestCreateConfiguration;
+procedure TDockingConfigTest.TestCreateConfiguration;  
 var
   Config: TDockingConfiguration;
 begin
@@ -2992,7 +2992,7 @@ begin
   end;
 end;
 
-procedure TDockingConfigTest.TestAddPanel;
+procedure TDockingConfigTest.TestAddPanel;  
 var
   Config: TDockingConfiguration;
   PanelConfig: TPanelConfig;
@@ -3010,7 +3010,7 @@ begin
   end;
 end;
 
-procedure TDockingConfigTest.TestSaveLoadINI;
+procedure TDockingConfigTest.TestSaveLoadINI;  
 var
   Config1, Config2: TDockingConfiguration;
   Panel1, Panel2: TPanelConfig;
@@ -3039,7 +3039,7 @@ begin
   end;
 end;
 
-procedure TDockingConfigTest.TestSaveLoadJSON;
+procedure TDockingConfigTest.TestSaveLoadJSON;  
 var
   Config1, Config2: TDockingConfiguration;
   Panel1, Panel2: TPanelConfig;
@@ -3094,7 +3094,7 @@ type
     property Enabled: Boolean read FEnabled write FEnabled;
   end;
 
-constructor TDockingLogger.Create(const ALogFileName: string);
+constructor TDockingLogger.Create(const ALogFileName: string);  
 begin
   inherited Create;
   FEnabled := True;
@@ -3106,14 +3106,14 @@ begin
     FEnabled := False;
 end;
 
-destructor TDockingLogger.Destroy;
+destructor TDockingLogger.Destroy;  
 begin
   if FEnabled then
     CloseFile(FLogFile);
   inherited Destroy;
 end;
 
-procedure TDockingLogger.Log(const AMessage: string);
+procedure TDockingLogger.Log(const AMessage: string);  
 var
   TimeStamp: string;
 begin
@@ -3124,12 +3124,12 @@ begin
   Flush(FLogFile);
 end;
 
-procedure TDockingLogger.Log(const AFormat: string; const AArgs: array of const);
+procedure TDockingLogger.Log(const AFormat: string; const AArgs: array of const);  
 begin
   Log(Format(AFormat, AArgs));
 end;
 
-procedure TDockingLogger.LogPanelState(APanel: TPanel);
+procedure TDockingLogger.LogPanelState(APanel: TPanel);  
 begin
   if not FEnabled then Exit;
 
@@ -3221,7 +3221,7 @@ implementation
 uses
   IniFiles;
 
-procedure TfrmProfessionalApp.FormCreate(Sender: TObject);
+procedure TfrmProfessionalApp.FormCreate(Sender: TObject);  
 begin
   Caption := 'Application Professionnelle avec Docking';
   Width := 1400;
@@ -3244,7 +3244,7 @@ begin
   LoadPlugins;
 end;
 
-procedure TfrmProfessionalApp.FormShow(Sender: TObject);
+procedure TfrmProfessionalApp.FormShow(Sender: TObject);  
 begin
   LoadSavedLayout;
   FLogger.Log('Layout loaded');
@@ -3266,7 +3266,7 @@ begin
   FDockingConfig.Free;
 end;
 
-procedure TfrmProfessionalApp.CreateInterface;
+procedure TfrmProfessionalApp.CreateInterface;  
 begin
   CreatePanels;
   CreateMenus;
@@ -3274,7 +3274,7 @@ begin
   SetupActions;
 end;
 
-procedure TfrmProfessionalApp.CreatePanels;
+procedure TfrmProfessionalApp.CreatePanels;  
 var
   TreeView: TTreeView;
   Memo: TMemo;
@@ -3342,7 +3342,7 @@ begin
   pnlCenter.BevelOuter := bvNone;
 end;
 
-procedure TfrmProfessionalApp.CreateMenus;
+procedure TfrmProfessionalApp.CreateMenus;  
 var
   MenuItem: TMenuItem;
 begin
@@ -3436,24 +3436,24 @@ begin
   mnuHelp.Add(MenuItem);
 end;
 
-procedure TfrmProfessionalApp.CreateToolbars;
+procedure TfrmProfessionalApp.CreateToolbars;  
 begin
   // À implémenter si nécessaire
 end;
 
-procedure TfrmProfessionalApp.SetupActions;
+procedure TfrmProfessionalApp.SetupActions;  
 begin
   // À implémenter si nécessaire
 end;
 
-procedure TfrmProfessionalApp.LoadPlugins;
+procedure TfrmProfessionalApp.LoadPlugins;  
 begin
   // Charger les plugins disponibles
   FPluginManager.LoadAllPlugins(Self);
   FLogger.Log('Plugins loaded: %d', [FPluginManager.Count]);
 end;
 
-procedure TfrmProfessionalApp.SaveCurrentLayout;
+procedure TfrmProfessionalApp.SaveCurrentLayout;  
 begin
   FDockingConfig.AddPanel('Left', pnlLeft.Visible,
     pnlLeft.Width, pnlLeft.Height, pnlLeft.Align);
@@ -3466,7 +3466,7 @@ begin
   FLogger.Log('Layout saved');
 end;
 
-procedure TfrmProfessionalApp.LoadSavedLayout;
+procedure TfrmProfessionalApp.LoadSavedLayout;  
 var
   LeftConfig, RightConfig, BottomConfig: TPanelConfig;
 begin
@@ -3485,7 +3485,7 @@ begin
   pnlBottom.Visible := BottomConfig.Visible;
 end;
 
-procedure TfrmProfessionalApp.OnTogglePanel(Sender: TObject);
+procedure TfrmProfessionalApp.OnTogglePanel(Sender: TObject);  
 var
   Tag: Integer;
   MenuItem: TMenuItem;
@@ -3517,13 +3517,13 @@ begin
   UpdateStatusBar('Panneau mis à jour');
 end;
 
-procedure TfrmProfessionalApp.OnWorkspaceChange(Sender: TObject);
+procedure TfrmProfessionalApp.OnWorkspaceChange(Sender: TObject);  
 begin
   // Implémenter le changement d'espace de travail
   FLogger.Log('Workspace changed');
 end;
 
-procedure TfrmProfessionalApp.OnThemeChange(Sender: TObject);
+procedure TfrmProfessionalApp.OnThemeChange(Sender: TObject);  
 var
   Theme: TDockingTheme;
 begin
@@ -3535,7 +3535,7 @@ begin
   UpdateStatusBar('Thème modifié');
 end;
 
-procedure TfrmProfessionalApp.OnResetLayout(Sender: TObject);
+procedure TfrmProfessionalApp.OnResetLayout(Sender: TObject);  
 begin
   pnlLeft.Width := 250;
   pnlRight.Width := 300;
@@ -3556,7 +3556,7 @@ begin
   SaveCurrentLayout;
 end;
 
-procedure TfrmProfessionalApp.OnUndo(Sender: TObject);
+procedure TfrmProfessionalApp.OnUndo(Sender: TObject);  
 var
   Config: TDockingConfiguration;
 begin
@@ -3577,7 +3577,7 @@ begin
   end;
 end;
 
-procedure TfrmProfessionalApp.OnRedo(Sender: TObject);
+procedure TfrmProfessionalApp.OnRedo(Sender: TObject);  
 var
   Config: TDockingConfiguration;
 begin
@@ -3598,7 +3598,7 @@ begin
   end;
 end;
 
-procedure TfrmProfessionalApp.OnAbout(Sender: TObject);
+procedure TfrmProfessionalApp.OnAbout(Sender: TObject);  
 begin
   ShowMessage('Application Professionnelle avec Docking' + LineEnding +
               'Version 1.0' + LineEnding +
@@ -3611,7 +3611,7 @@ begin
               '- Historique des modifications');
 end;
 
-procedure TfrmProfessionalApp.UpdateStatusBar(const AMessage: string);
+procedure TfrmProfessionalApp.UpdateStatusBar(const AMessage: string);  
 begin
   if Assigned(StatusBar1) and (StatusBar1.Panels.Count > 0) then
     StatusBar1.Panels[0].Text := AMessage
@@ -3661,7 +3661,7 @@ end.
 ### 1. Performance
 ```pascal
 // ✅ BON : Suspendre les mises à jour pendant les modifications
-procedure TfrmMain.ReorganizePanels;
+procedure TfrmMain.ReorganizePanels;  
 begin
   DisableAutoSizing;
   try
@@ -3675,7 +3675,7 @@ begin
 end;
 
 // ❌ MAUVAIS : Modifications sans suspension
-procedure TfrmMain.ReorganizePanelsBad;
+procedure TfrmMain.ReorganizePanelsBad;  
 begin
   pnlLeft.Width := 300;      // Redessin
   pnlRight.Width := 250;     // Redessin
@@ -3686,7 +3686,7 @@ end;
 ### 2. Sauvegarde sûre
 ```pascal
 // ✅ BON : Gestion des erreurs lors de la sauvegarde
-procedure TfrmMain.SafeSaveLayout;
+procedure TfrmMain.SafeSaveLayout;  
 var
   TempFile, FinalFile: string;
 begin
@@ -3715,7 +3715,7 @@ end;
 ### 3. Compatibilité multi-plateforme
 ```pascal
 // ✅ BON : Chemins compatibles
-function GetConfigPath: string;
+function GetConfigPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('APPDATA') + PathDelim +
@@ -3731,7 +3731,7 @@ begin
 end;
 
 // ❌ MAUVAIS : Chemins codés en dur
-function GetConfigPathBad: string;
+function GetConfigPathBad: string;  
 begin
   Result := 'C:\Users\Admin\AppData\MyApp\'; // Windows uniquement !
 end;
@@ -3740,7 +3740,7 @@ end;
 ### 4. Gestion mémoire
 ```pascal
 // ✅ BON : Libération correcte des ressources
-destructor TDockingManager.Destroy;
+destructor TDockingManager.Destroy;  
 begin
   // Libérer dans l'ordre inverse de création
   FLayoutHistory.Free;
@@ -3752,7 +3752,7 @@ begin
 end;
 
 // ❌ MAUVAIS : Oubli de libération
-destructor TDockingManagerBad.Destroy;
+destructor TDockingManagerBad.Destroy;  
 begin
   inherited Destroy; // Fuite mémoire !
 end;
@@ -3763,42 +3763,42 @@ end;
 ### 1. Ordre des propriétés Align
 ```pascal
 // ❌ PROBLÈME : Mauvais ordre d'alignement
-pnlCenter.Align := alClient;  // Créé en premier
+pnlCenter.Align := alClient;  // Créé en premier  
 pnlLeft.Align := alLeft;      // Le centre est déjà plein !
 
 // ✅ SOLUTION : Bon ordre
-pnlLeft.Align := alLeft;      // Créer d'abord les côtés
-pnlRight.Align := alRight;
-pnlBottom.Align := alBottom;
+pnlLeft.Align := alLeft;      // Créer d'abord les côtés  
+pnlRight.Align := alRight;  
+pnlBottom.Align := alBottom;  
 pnlCenter.Align := alClient;  // Le centre prend ce qui reste
 ```
 
 ### 2. Splitters et panneaux
 ```pascal
 // ❌ PROBLÈME : Splitter créé avant le panneau
-splLeft := TSplitter.Create(Self);
-splLeft.Align := alLeft;
-pnlLeft := TPanel.Create(Self);
+splLeft := TSplitter.Create(Self);  
+splLeft.Align := alLeft;  
+pnlLeft := TPanel.Create(Self);  
 pnlLeft.Align := alLeft;      // Le splitter ne fonctionnera pas bien
 
 // ✅ SOLUTION : Panneau créé avant le splitter
-pnlLeft := TPanel.Create(Self);
-pnlLeft.Align := alLeft;
-splLeft := TSplitter.Create(Self);
+pnlLeft := TPanel.Create(Self);  
+pnlLeft.Align := alLeft;  
+splLeft := TSplitter.Create(Self);  
 splLeft.Align := alLeft;      // Le splitter s'attache au panneau
 ```
 
 ### 3. Visibilité et splitters
 ```pascal
 // ✅ BON : Synchroniser la visibilité
-procedure ToggleLeftPanel;
+procedure ToggleLeftPanel;  
 begin
   pnlLeft.Visible := not pnlLeft.Visible;
   splLeft.Visible := pnlLeft.Visible;  // Synchroniser !
 end;
 
 // ❌ MAUVAIS : Oublier le splitter
-procedure ToggleLeftPanelBad;
+procedure ToggleLeftPanelBad;  
 begin
   pnlLeft.Visible := not pnlLeft.Visible;
   // Le splitter reste visible !
@@ -3926,7 +3926,7 @@ var
 
 implementation
 
-procedure TfrmMinimal.FormCreate(Sender: TObject);
+procedure TfrmMinimal.FormCreate(Sender: TObject);  
 begin
   // Panneau gauche
   pnlLeft := TPanel.Create(Self);

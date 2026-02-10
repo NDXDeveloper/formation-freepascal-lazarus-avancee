@@ -55,7 +55,7 @@ choco install opencv
 
 ```bash
 # Installation des bibliothèques OpenCV
-sudo apt update
+sudo apt update  
 sudo apt install libopencv-dev python3-opencv
 
 # Vérifier l'installation
@@ -66,17 +66,17 @@ pkg-config --modversion opencv4
 
 ```bash
 # Dépendances
-sudo apt install build-essential cmake git pkg-config
+sudo apt install build-essential cmake git pkg-config  
 sudo apt install libgtk-3-dev libavcodec-dev libavformat-dev libswscale-dev
 
 # Télécharger OpenCV
-git clone https://github.com/opencv/opencv.git
-cd opencv
+git clone https://github.com/opencv/opencv.git  
+cd opencv  
 mkdir build && cd build
 
 # Compiler
-cmake ..
-make -j$(nproc)
+cmake ..  
+make -j$(nproc)  
 sudo make install
 ```
 
@@ -133,7 +133,7 @@ OpenCV travaille principalement en **BGR** (Blue-Green-Red), contrairement à RG
 
 ```pascal
 // Conversion d'espaces colorimétriques
-procedure ConvertColorSpace(const src: TMat; var dst: TMat; code: Integer);
+procedure ConvertColorSpace(const src: TMat; var dst: TMat; code: Integer);  
 begin
   cvtColor(src, dst, code);
 end;
@@ -155,7 +155,7 @@ type
     width, height: Integer;
   end;
 
-function GetROI(const img: TMat; roi: TRect): TMat;
+function GetROI(const img: TMat; roi: TRect): TMat;  
 begin
   Result := Mat(img, roi); // Crée une vue sans copie
 end;
@@ -166,7 +166,7 @@ end;
 ### Chargement et sauvegarde d'images
 
 ```pascal
-function LoadImage(const filename: string; flags: Integer = 1): TMat;
+function LoadImage(const filename: string; flags: Integer = 1): TMat;  
 begin
   // flags: 1 = couleur, 0 = niveaux de gris, -1 = avec alpha
   Result := imread(PAnsiChar(AnsiString(filename)), flags);
@@ -175,14 +175,14 @@ begin
     raise Exception.Create('Impossible de charger l''image: ' + filename);
 end;
 
-procedure SaveImage(const filename: string; const img: TMat);
+procedure SaveImage(const filename: string; const img: TMat);  
 begin
   if not imwrite(PAnsiChar(AnsiString(filename)), img) then
     raise Exception.Create('Impossible de sauvegarder l''image: ' + filename);
 end;
 
 // Exemple d'utilisation
-procedure LoadAndSaveExample;
+procedure LoadAndSaveExample;  
 var
   img: TMat;
 begin
@@ -199,7 +199,7 @@ end;
 ### Affichage d'images
 
 ```pascal
-procedure ShowImage(const windowName: string; const img: TMat);
+procedure ShowImage(const windowName: string; const img: TMat);  
 begin
   namedWindow(PAnsiChar(AnsiString(windowName)), WINDOW_AUTOSIZE);
   imshow(PAnsiChar(AnsiString(windowName)), img);
@@ -208,7 +208,7 @@ begin
 end;
 
 // Avec temporisation
-procedure ShowImageTimed(const windowName: string; const img: TMat; delayMs: Integer);
+procedure ShowImageTimed(const windowName: string; const img: TMat; delayMs: Integer);  
 begin
   imshow(PAnsiChar(AnsiString(windowName)), img);
   waitKey(delayMs);
@@ -219,7 +219,7 @@ end;
 
 ```pascal
 // Obtenir la valeur d'un pixel
-function GetPixel(const img: TMat; x, y: Integer): TBGRPixel;
+function GetPixel(const img: TMat; x, y: Integer): TBGRPixel;  
 var
   ptr: PByte;
 begin
@@ -234,7 +234,7 @@ begin
 end;
 
 // Définir la valeur d'un pixel
-procedure SetPixel(var img: TMat; x, y: Integer; color: TBGRPixel);
+procedure SetPixel(var img: TMat; x, y: Integer; color: TBGRPixel);  
 var
   ptr: PByte;
 begin
@@ -266,7 +266,7 @@ begin
 end;
 
 // Exemple : réduction du bruit
-procedure ReduceNoise;
+procedure ReduceNoise;  
 var
   img, blurred: TMat;
 begin
@@ -286,7 +286,7 @@ end;
 Excellent pour éliminer le "sel et poivre" (bruit impulsionnel) :
 
 ```pascal
-procedure ApplyMedianBlur(const src: TMat; var dst: TMat; kernelSize: Integer);
+procedure ApplyMedianBlur(const src: TMat; var dst: TMat; kernelSize: Integer);  
 begin
   medianBlur(src, dst, kernelSize);
 end;
@@ -330,7 +330,7 @@ begin
 end;
 
 // Exemple d'utilisation
-procedure EdgeDetectionExample;
+procedure EdgeDetectionExample;  
 var
   img, edges: TMat;
 begin
@@ -351,7 +351,7 @@ end;
 Détecte les gradients dans différentes directions :
 
 ```pascal
-procedure DetectEdgesSobel(const src: TMat; var dst: TMat);
+procedure DetectEdgesSobel(const src: TMat; var dst: TMat);  
 var
   gray, grad_x, grad_y, abs_grad_x, abs_grad_y: TMat;
 begin
@@ -403,7 +403,7 @@ begin
 end;
 
 // Exemples d'utilisation
-procedure MorphologyExamples;
+procedure MorphologyExamples;  
 var
   img, result: TMat;
 begin
@@ -493,7 +493,7 @@ type
     radius: Integer;  // Rayon
   end;
 
-function DetectCircles(const img: TMat; minRadius, maxRadius: Integer): TArray<TCircle>;
+function DetectCircles(const img: TMat; minRadius, maxRadius: Integer): TArray<TCircle>;  
 var
   gray, circles: TMat;
   i: Integer;
@@ -537,7 +537,7 @@ begin
 end;
 
 // Exemple : dessiner les cercles détectés
-procedure DrawDetectedCircles;
+procedure DrawDetectedCircles;  
 var
   img, display: TMat;
   circles: TArray<TCircle>;
@@ -573,7 +573,7 @@ type
     x1, y1, x2, y2: Integer;
   end;
 
-function DetectLines(const img: TMat; threshold: Integer): TArray<TLine>;
+function DetectLines(const img: TMat; threshold: Integer): TArray<TLine>;  
 var
   gray, edges, lines: TMat;
   i: Integer;
@@ -620,7 +620,7 @@ type
   TContour = array of TPoint;
   TContours = array of TContour;
 
-function FindContours(const img: TMat; mode, method: Integer): TContours;
+function FindContours(const img: TMat; mode, method: Integer): TContours;  
 var
   binary: TMat;
   contours: TSeqOfSeq;
@@ -668,18 +668,18 @@ begin
 end;
 
 // Calculer l'aire et le périmètre d'un contour
-function ContourArea(const contour: TContour): Double;
+function ContourArea(const contour: TContour): Double;  
 begin
   Result := cv.contourArea(contour);
 end;
 
-function ContourPerimeter(const contour: TContour; closed: Boolean = True): Double;
+function ContourPerimeter(const contour: TContour; closed: Boolean = True): Double;  
 begin
   Result := cv.arcLength(contour, closed);
 end;
 
 // Approximer un contour (simplification)
-function ApproximateContour(const contour: TContour; epsilon: Double): TContour;
+function ApproximateContour(const contour: TContour; epsilon: Double): TContour;  
 var
   approx: TContour;
 begin
@@ -708,20 +708,20 @@ type
       minNeighbors: Integer = 3): TArray<TRect>;
   end;
 
-constructor TFaceDetector.Create;
+constructor TFaceDetector.Create;  
 begin
   inherited;
   FCascade := TCascadeClassifier.Create;
   FInitialized := False;
 end;
 
-destructor TFaceDetector.Destroy;
+destructor TFaceDetector.Destroy;  
 begin
   FCascade.Free;
   inherited;
 end;
 
-function TFaceDetector.LoadCascade(const filename: string): Boolean;
+function TFaceDetector.LoadCascade(const filename: string): Boolean;  
 begin
   FInitialized := FCascade.load(PAnsiChar(AnsiString(filename)));
   Result := FInitialized;
@@ -759,7 +759,7 @@ begin
 end;
 
 // Exemple d'utilisation
-procedure DetectFacesExample;
+procedure DetectFacesExample;  
 var
   detector: TFaceDetector;
   img, display: TMat;
@@ -808,7 +808,7 @@ end;
 ### Détection des yeux
 
 ```pascal
-procedure DetectFacesAndEyes;
+procedure DetectFacesAndEyes;  
 var
   faceCascade, eyeCascade: TCascadeClassifier;
   img, gray, faceROI: TMat;
@@ -887,26 +887,26 @@ type
     procedure SetProperty(propId: Integer; value: Double);
   end;
 
-constructor TVideoCapture.Create;
+constructor TVideoCapture.Create;  
 begin
   inherited;
   FCapture := cv.VideoCapture_Create;
   FOpened := False;
 end;
 
-function TVideoCapture.Open(deviceIndex: Integer): Boolean;
+function TVideoCapture.Open(deviceIndex: Integer): Boolean;  
 begin
   FOpened := cv.VideoCapture_Open(FCapture, deviceIndex);
   Result := FOpened;
 end;
 
-function TVideoCapture.Read(var frame: TMat): Boolean;
+function TVideoCapture.Read(var frame: TMat): Boolean;  
 begin
   Result := cv.VideoCapture_Read(FCapture, frame);
 end;
 
 // Exemple : capture et traitement en temps réel
-procedure LiveVideoProcessing;
+procedure LiveVideoProcessing;  
 var
   cap: TVideoCapture;
   frame, processed: TMat;
@@ -968,7 +968,7 @@ type
     procedure Release;
   end;
 
-constructor TVideoWriter.Create;
+constructor TVideoWriter.Create;  
 begin
   inherited;
   FWriter := cv.VideoWriter_Create;
@@ -981,13 +981,13 @@ begin
     fourcc, fps, frameSize, isColor);
 end;
 
-procedure TVideoWriter.Write(const frame: TMat);
+procedure TVideoWriter.Write(const frame: TMat);  
 begin
   cv.VideoWriter_Write(FWriter, frame);
 end;
 
 // Codes FOURCC courants
-function MakeFourCC(c1, c2, c3, c4: Char): Integer;
+function MakeFourCC(c1, c2, c3, c4: Char): Integer;  
 begin
   Result := Ord(c1) or (Ord(c2) shl 8) or (Ord(c3) shl 16) or (Ord(c4) shl 24);
 end;
@@ -999,7 +999,7 @@ const
   FOURCC_H264 = $34363248;  // H.264
 
 // Exemple : enregistrer une vidéo depuis la webcam
-procedure RecordWebcam;
+procedure RecordWebcam;  
 var
   cap: TVideoCapture;
   writer: TVideoWriter;
@@ -1068,7 +1068,7 @@ end;
 ### Analyse de vidéo existante
 
 ```pascal
-procedure AnalyzeVideo(const filename: string);
+procedure AnalyzeVideo(const filename: string);  
 var
   cap: TVideoCapture;
   frame: TMat;
@@ -1131,13 +1131,13 @@ type
     function Track(const frame: TMat): TRect;
   end;
 
-procedure TColorTracker.SetColorRange(hMin, hMax, sMin, sMax, vMin, vMax: Integer);
+procedure TColorTracker.SetColorRange(hMin, hMax, sMin, sMax, vMin, vMax: Integer);  
 begin
   FLowerBound := Scalar(hMin, sMin, vMin);
   FUpperBound := Scalar(hMax, sMax, vMax);
 end;
 
-function TColorTracker.Track(const frame: TMat): TRect;
+function TColorTracker.Track(const frame: TMat): TRect;  
 var
   hsv, mask: TMat;
   contours: TContours;
@@ -1183,7 +1183,7 @@ begin
 end;
 
 // Exemple : suivre un objet rouge
-procedure TrackRedObject;
+procedure TrackRedObject;  
 var
   cap: TVideoCapture;
   tracker: TColorTracker;
@@ -1241,7 +1241,7 @@ OpenCV propose plusieurs algorithmes de suivi d'objets :
 type
   TTrackerType = (ttBOOSTING, ttMIL, ttKCF, ttTLD, ttMEDIANFLOW, ttMOSSE, ttCSRT);
 
-function CreateTracker(trackerType: TTrackerType): TTracker;
+function CreateTracker(trackerType: TTrackerType): TTracker;  
 begin
   case trackerType of
     ttBOOSTING: Result := TrackerBoosting_create;
@@ -1256,7 +1256,7 @@ begin
   end;
 end;
 
-procedure TrackObjectWithAlgorithm;
+procedure TrackObjectWithAlgorithm;  
 var
   cap: TVideoCapture;
   tracker: TTracker;
@@ -1329,20 +1329,20 @@ type
     function GetMotionRegions(const motionMask: TMat): TArray<TRect>;
   end;
 
-constructor TMotionDetector.Create(threshold: Integer);
+constructor TMotionDetector.Create(threshold: Integer);  
 begin
   inherited Create;
   FThreshold := threshold;
 end;
 
-destructor TMotionDetector.Destroy;
+destructor TMotionDetector.Destroy;  
 begin
   if FPreviousFrame.data <> nil then
     FPreviousFrame.release;
   inherited;
 end;
 
-function TMotionDetector.DetectMotion(const currentFrame: TMat): TMat;
+function TMotionDetector.DetectMotion(const currentFrame: TMat): TMat;  
 var
   gray, diff: TMat;
 begin
@@ -1376,7 +1376,7 @@ begin
   diff.release;
 end;
 
-function TMotionDetector.GetMotionRegions(const motionMask: TMat): TArray<TRect>;
+function TMotionDetector.GetMotionRegions(const motionMask: TMat): TArray<TRect>;  
 var
   contours: TContours;
   i: Integer;
@@ -1407,7 +1407,7 @@ begin
 end;
 
 // Exemple : détection de mouvement en temps réel
-procedure LiveMotionDetection;
+procedure LiveMotionDetection;  
 var
   cap: TVideoCapture;
   detector: TMotionDetector;
@@ -1475,14 +1475,14 @@ type
     function GetBackgroundImage: TMat;
   end;
 
-constructor TBackgroundSubtractor.Create;
+constructor TBackgroundSubtractor.Create;  
 begin
   inherited;
   // MOG2 : méthode basée sur des mélanges de gaussiennes
   FSubtractor := createBackgroundSubtractorMOG2(500, 16, True);
 end;
 
-destructor TBackgroundSubtractor.Destroy;
+destructor TBackgroundSubtractor.Destroy;  
 begin
   FSubtractor.release;
   inherited;
@@ -1494,13 +1494,13 @@ begin
   FSubtractor.apply(frame, fgMask, learningRate);
 end;
 
-function TBackgroundSubtractor.GetBackgroundImage: TMat;
+function TBackgroundSubtractor.GetBackgroundImage: TMat;  
 begin
   FSubtractor.getBackgroundImage(Result);
 end;
 
 // Exemple : suivi d'objets en mouvement avec soustraction de fond
-procedure BackgroundSubtractionDemo;
+procedure BackgroundSubtractionDemo;  
 var
   cap: TVideoCapture;
   subtractor: TBackgroundSubtractor;
@@ -1566,7 +1566,7 @@ end;
 ### Prétraitement pour OCR
 
 ```pascal
-procedure PrepareImageForOCR(const src: TMat; var dst: TMat);
+procedure PrepareImageForOCR(const src: TMat; var dst: TMat);  
 var
   gray, thresh: TMat;
 begin
@@ -1604,7 +1604,7 @@ const
   TESSERACT_PATH = '/usr/bin/';
 {$ENDIF}
 
-procedure ExtractTextFromImage(const imagePath: string);
+procedure ExtractTextFromImage(const imagePath: string);  
 var
   img, processed: TMat;
   outputFile: string;
@@ -1665,13 +1665,13 @@ type
     procedure ComputeDisparity(const left, right: TMat; var disparity: TMat);
   end;
 
-constructor TStereoMatcher.Create(numDisparities, blockSize: Integer);
+constructor TStereoMatcher.Create(numDisparities, blockSize: Integer);  
 begin
   inherited Create;
   FStereo := StereoBM_create(numDisparities, blockSize);
 end;
 
-destructor TStereoMatcher.Destroy;
+destructor TStereoMatcher.Destroy;  
 begin
   FStereo.release;
   inherited;
@@ -1701,7 +1701,7 @@ begin
 end;
 
 // Exemple avec deux caméras
-procedure StereoVisionDemo;
+procedure StereoVisionDemo;  
 var
   capLeft, capRight: TVideoCapture;
   stereo: TStereoMatcher;
@@ -1764,7 +1764,7 @@ end;
 uses
   MTProcs;
 
-procedure ParallelFrameProcessing(frames: TArray<TMat>);
+procedure ParallelFrameProcessing(frames: TArray<TMat>);  
 begin
   ProcThreadPool.DoParallelLocalProc(
     procedure(Index: PtrInt; ThreadIndex: Integer; Data: Pointer)
@@ -1788,7 +1788,7 @@ end;
 uses
   cv.cuda;
 
-procedure ProcessWithGPU(const src: TMat; var dst: TMat);
+procedure ProcessWithGPU(const src: TMat; var dst: TMat);  
 var
   d_src, d_dst: TGpuMat;
 begin
@@ -1813,7 +1813,7 @@ end;
 // Conseils d'optimisation :
 
 // 1. Réutiliser les matrices au lieu de les recréer
-procedure OptimizedProcessing;
+procedure OptimizedProcessing;  
 var
   frame, gray, result: TMat;
   i: Integer;
@@ -1839,7 +1839,7 @@ begin
 end;
 
 // 2. Réduire la résolution quand c'est possible
-procedure ProcessLowRes(const src: TMat; var dst: TMat);
+procedure ProcessLowRes(const src: TMat; var dst: TMat);  
 var
   small, processed: TMat;
 begin
@@ -1857,7 +1857,7 @@ begin
 end;
 
 // 3. Utiliser des régions d'intérêt (ROI)
-procedure ProcessROI(const src: TMat);
+procedure ProcessROI(const src: TMat);  
 var
   roi: TMat;
   roiRect: TRect;
@@ -1873,7 +1873,7 @@ begin
 end;
 
 // 4. Mesurer les performances
-procedure BenchmarkOperation;
+procedure BenchmarkOperation;  
 var
   img: TMat;
   startTime, endTime: TDateTime;
@@ -1914,7 +1914,7 @@ type
     procedure LoadModel(const filename: string);
   end;
 
-constructor TSVMClassifier.Create;
+constructor TSVMClassifier.Create;  
 begin
   inherited;
   FSVM := SVM_create;
@@ -1925,13 +1925,13 @@ begin
   FSVM.setTermCriteria(TermCriteria(TermCriteria_MAX_ITER, 100, 1e-6));
 end;
 
-destructor TSVMClassifier.Destroy;
+destructor TSVMClassifier.Destroy;  
 begin
   FSVM.release;
   inherited;
 end;
 
-procedure TSVMClassifier.Train(const trainData, labels: TMat);
+procedure TSVMClassifier.Train(const trainData, labels: TMat);  
 var
   trainDataPtr: TTrainDataPtr;
 begin
@@ -1944,23 +1944,23 @@ begin
   end;
 end;
 
-function TSVMClassifier.Predict(const sample: TMat): Single;
+function TSVMClassifier.Predict(const sample: TMat): Single;  
 begin
   Result := FSVM.predict(sample);
 end;
 
-procedure TSVMClassifier.SaveModel(const filename: string);
+procedure TSVMClassifier.SaveModel(const filename: string);  
 begin
   FSVM.save(PAnsiChar(AnsiString(filename)));
 end;
 
-procedure TSVMClassifier.LoadModel(const filename: string);
+procedure TSVMClassifier.LoadModel(const filename: string);  
 begin
   FSVM := Algorithm.load_SVM(PAnsiChar(AnsiString(filename)));
 end;
 
 // Exemple : Classification de chiffres manuscrits
-procedure TrainDigitClassifier;
+procedure TrainDigitClassifier;  
 var
   classifier: TSVMClassifier;
   trainData, labels: TMat;
@@ -2012,7 +2012,7 @@ begin
 end;
 
 // Utiliser le classificateur
-procedure ClassifyDigit(const imagePath: string);
+procedure ClassifyDigit(const imagePath: string);  
 var
   classifier: TSVMClassifier;
   img: TMat;
@@ -2057,20 +2057,20 @@ type
     function Predict(const sample: TMat): Single;
   end;
 
-constructor TKNNClassifier.Create(k: Integer);
+constructor TKNNClassifier.Create(k: Integer);  
 begin
   inherited Create;
   FKNN := KNearest_create;
   FKNN.setDefaultK(k);
 end;
 
-destructor TKNNClassifier.Destroy;
+destructor TKNNClassifier.Destroy;  
 begin
   FKNN.release;
   inherited;
 end;
 
-procedure TKNNClassifier.Train(const trainData, labels: TMat);
+procedure TKNNClassifier.Train(const trainData, labels: TMat);  
 var
   trainDataPtr: TTrainDataPtr;
 begin
@@ -2082,7 +2082,7 @@ begin
   end;
 end;
 
-function TKNNClassifier.Predict(const sample: TMat): Single;
+function TKNNClassifier.Predict(const sample: TMat): Single;  
 var
   results: TMat;
 begin
@@ -2099,7 +2099,7 @@ end;
 ### Clustering avec K-Means
 
 ```pascal
-procedure PerformKMeansClustering(const data: TMat; k: Integer);
+procedure PerformKMeansClustering(const data: TMat; k: Integer);  
 var
   labels, centers: TMat;
   criteria: TTermCriteria;
@@ -2120,7 +2120,7 @@ begin
 end;
 
 // Exemple : Segmentation d'image par couleur
-procedure SegmentImageByColor(const imagePath: string; numColors: Integer);
+procedure SegmentImageByColor(const imagePath: string; numColors: Integer);  
 var
   img, reshaped, labels, centers: TMat;
   i, j, classLabel: Integer;  { label est un mot réservé en Pascal }
@@ -2187,7 +2187,7 @@ type
     procedure SetInputParams(inputSize: TSize; mean: TScalar; scale: Double);
   end;
 
-constructor TDNNModel.Create;
+constructor TDNNModel.Create;  
 begin
   inherited;
   FInputSize := Size(224, 224); // Taille par défaut
@@ -2195,13 +2195,13 @@ begin
   FScale := 1.0;
 end;
 
-destructor TDNNModel.Destroy;
+destructor TDNNModel.Destroy;  
 begin
   FNet.release;
   inherited;
 end;
 
-function TDNNModel.LoadCaffe(const prototxt, caffeModel: string): Boolean;
+function TDNNModel.LoadCaffe(const prototxt, caffeModel: string): Boolean;  
 begin
   try
     FNet := readNetFromCaffe(PAnsiChar(AnsiString(prototxt)),
@@ -2212,7 +2212,7 @@ begin
   end;
 end;
 
-function TDNNModel.LoadTensorFlow(const model: string): Boolean;
+function TDNNModel.LoadTensorFlow(const model: string): Boolean;  
 begin
   try
     FNet := readNetFromTensorflow(PAnsiChar(AnsiString(model)));
@@ -2222,7 +2222,7 @@ begin
   end;
 end;
 
-function TDNNModel.LoadONNX(const model: string): Boolean;
+function TDNNModel.LoadONNX(const model: string): Boolean;  
 begin
   try
     FNet := readNetFromONNX(PAnsiChar(AnsiString(model)));
@@ -2232,14 +2232,14 @@ begin
   end;
 end;
 
-procedure TDNNModel.SetInputParams(inputSize: TSize; mean: TScalar; scale: Double);
+procedure TDNNModel.SetInputParams(inputSize: TSize; mean: TScalar; scale: Double);  
 begin
   FInputSize := inputSize;
   FMean := mean;
   FScale := scale;
 end;
 
-function TDNNModel.Predict(const img: TMat): TMat;
+function TDNNModel.Predict(const img: TMat): TMat;  
 var
   blob: TMat;
 begin
@@ -2259,7 +2259,7 @@ end;
 ### Classification d'images avec un réseau pré-entraîné
 
 ```pascal
-procedure ClassifyImageWithDNN(const imagePath: string);
+procedure ClassifyImageWithDNN(const imagePath: string);  
 var
   model: TDNNModel;
   img, prediction: TMat;
@@ -2337,7 +2337,7 @@ type
     box: TRect;
   end;
 
-constructor TYOLODetector.Create(confThreshold, nmsThreshold: Single);
+constructor TYOLODetector.Create(confThreshold, nmsThreshold: Single);  
 begin
   inherited Create;
   FConfThreshold := confThreshold;
@@ -2345,14 +2345,14 @@ begin
   FOutputLayers := TStringList.Create;
 end;
 
-destructor TYOLODetector.Destroy;
+destructor TYOLODetector.Destroy;  
 begin
   FNet.release;
   FOutputLayers.Free;
   inherited;
 end;
 
-function TYOLODetector.LoadModel(const cfg, weights: string): Boolean;
+function TYOLODetector.LoadModel(const cfg, weights: string): Boolean;  
 var
   outNames: TVector<String>;
   i: Integer;
@@ -2373,7 +2373,7 @@ begin
   end;
 end;
 
-function TYOLODetector.Detect(const img: TMat): TArray<TDetection>;
+function TYOLODetector.Detect(const img: TMat): TArray<TDetection>;  
 var
   blob: TMat;
   outputs: TVector<TMat>;
@@ -2459,7 +2459,7 @@ begin
 end;
 
 // Exemple d'utilisation
-procedure DetectObjectsInImage(const imagePath: string);
+procedure DetectObjectsInImage(const imagePath: string);  
 var
   detector: TYOLODetector;
   img, display: TMat;
@@ -2535,7 +2535,7 @@ type
       const cameraMatrix, distCoeffs: TMat);
   end;
 
-constructor TCameraCalibrator.Create(boardSize: TSize; squareSize: Single);
+constructor TCameraCalibrator.Create(boardSize: TSize; squareSize: Single);  
 begin
   inherited Create;
   FBoardSize := boardSize;
@@ -2544,14 +2544,14 @@ begin
   FImagePoints := TVector<TVector<TPoint2f>>.Create;
 end;
 
-destructor TCameraCalibrator.Destroy;
+destructor TCameraCalibrator.Destroy;  
 begin
   FObjectPoints.Free;
   FImagePoints.Free;
   inherited;
 end;
 
-function TCameraCalibrator.AddCheckerboardImage(const img: TMat): Boolean;
+function TCameraCalibrator.AddCheckerboardImage(const img: TMat): Boolean;  
 var
   gray: TMat;
   corners: TVector<TPoint2f>;
@@ -2616,7 +2616,7 @@ begin
 end;
 
 // Exemple complet de calibration
-procedure CalibrateCamera;
+procedure CalibrateCamera;  
 var
   calibrator: TCameraCalibrator;
   img: TMat;
@@ -2673,7 +2673,7 @@ const
   OPENCV_DATA_PATH = '/usr/share/opencv4/';
 {$ENDIF}
 
-function GetHaarCascadePath(const cascadeName: string): string;
+function GetHaarCascadePath(const cascadeName: string): string;  
 begin
   {$IFDEF WINDOWS}
   Result := OPENCV_DATA_PATH + 'haarcascades\' + cascadeName;
@@ -2686,7 +2686,7 @@ end;
 ### Configuration de la capture vidéo
 
 ```pascal
-procedure ConfigureVideoCapture(cap: TVideoCapture);
+procedure ConfigureVideoCapture(cap: TVideoCapture);  
 begin
   {$IFDEF WINDOWS}
   // Utiliser DirectShow sur Windows
@@ -2706,7 +2706,7 @@ end;
 ### Accélération matérielle
 
 ```pascal
-procedure EnableHardwareAcceleration;
+procedure EnableHardwareAcceleration;  
 begin
   {$IFDEF WINDOWS}
   // CUDA sur Windows (si disponible)
@@ -2760,7 +2760,7 @@ type
     procedure Stop;
   end;
 
-constructor TSurveillanceSystem.Create;
+constructor TSurveillanceSystem.Create;  
 begin
   inherited;
   FCapture := TVideoCapture.Create;
@@ -2785,7 +2785,7 @@ begin
     Rewrite(FLogFile);
 end;
 
-destructor TSurveillanceSystem.Destroy;
+destructor TSurveillanceSystem.Destroy;  
 begin
   Stop;
   FCapture.Free;
@@ -2799,7 +2799,7 @@ begin
   inherited;
 end;
 
-function TSurveillanceSystem.Initialize: Boolean;
+function TSurveillanceSystem.Initialize: Boolean;  
 var
   cascadePath: string;
 begin
@@ -2834,7 +2834,7 @@ begin
   Result := True;
 end;
 
-procedure TSurveillanceSystem.LogEvent(const msg: string);
+procedure TSurveillanceSystem.LogEvent(const msg: string);  
 var
   timestamp: string;
 begin
@@ -2844,7 +2844,7 @@ begin
   WriteLn(Format('[%s] %s', [timestamp, msg]));
 end;
 
-procedure TSurveillanceSystem.SaveSnapshot(const frame: TMat; const reason: string);
+procedure TSurveillanceSystem.SaveSnapshot(const frame: TMat; const reason: string);  
 var
   filename: string;
   timestamp: string;
@@ -2856,7 +2856,7 @@ begin
   LogEvent(Format('Snapshot sauvegardé : %s', [filename]));
 end;
 
-procedure TSurveillanceSystem.StartRecording(const frame: TMat);
+procedure TSurveillanceSystem.StartRecording(const frame: TMat);  
 var
   filename: string;
   timestamp: string;
@@ -2892,7 +2892,7 @@ begin
   end;
 end;
 
-procedure TSurveillanceSystem.StopRecording;
+procedure TSurveillanceSystem.StopRecording;  
 begin
   if not FRecording then Exit;
 
@@ -2902,7 +2902,7 @@ begin
   LogEvent('Enregistrement arrêté');
 end;
 
-procedure TSurveillanceSystem.DetectAndAlertMotion(const frame: TMat);
+procedure TSurveillanceSystem.DetectAndAlertMotion(const frame: TMat);  
 var
   motionMask: TMat;
   regions: TArray<TRect>;
@@ -2940,7 +2940,7 @@ begin
   motionMask.release;
 end;
 
-procedure TSurveillanceSystem.ProcessFrame(const frame: TMat);
+procedure TSurveillanceSystem.ProcessFrame(const frame: TMat);  
 var
   gray: TMat;
   faces: TVectorOfRect;
@@ -3005,7 +3005,7 @@ begin
   display.release;
 end;
 
-procedure TSurveillanceSystem.Run;
+procedure TSurveillanceSystem.Run;  
 var
   frame: TMat;
   key: Integer;
@@ -3063,7 +3063,7 @@ begin
   destroyAllWindows;
 end;
 
-procedure TSurveillanceSystem.Stop;
+procedure TSurveillanceSystem.Stop;  
 begin
   if FRecording then
     StopRecording;
@@ -3124,7 +3124,7 @@ type
 
 implementation
 
-constructor TLicensePlateDetector.Create;
+constructor TLicensePlateDetector.Create;  
 begin
   inherited;
   // Dimensions typiques d'une plaque européenne (en pixels, image 640x480)
@@ -3134,7 +3134,7 @@ begin
   FMaxPlateHeight := 60;
 end;
 
-function TLicensePlateDetector.IsValidPlateSize(const rect: TRect): Boolean;
+function TLicensePlateDetector.IsValidPlateSize(const rect: TRect): Boolean;  
 begin
   Result := (rect.width >= FMinPlateWidth) and
             (rect.width <= FMaxPlateWidth) and
@@ -3142,7 +3142,7 @@ begin
             (rect.height <= FMaxPlateHeight);
 end;
 
-function TLicensePlateDetector.IsValidAspectRatio(const rect: TRect): Boolean;
+function TLicensePlateDetector.IsValidAspectRatio(const rect: TRect): Boolean;  
 var
   aspectRatio: Double;
 begin
@@ -3152,7 +3152,7 @@ begin
   Result := (aspectRatio >= 2.0) and (aspectRatio <= 6.0);
 end;
 
-function TLicensePlateDetector.PreprocessImage(const src: TMat): TMat;
+function TLicensePlateDetector.PreprocessImage(const src: TMat): TMat;  
 var
   gray, blur, morph, binary: TMat;
   kernel: TMat;
@@ -3181,7 +3181,7 @@ begin
   kernel.release;
 end;
 
-function TLicensePlateDetector.FindPlateContours(const binary: TMat): TContours;
+function TLicensePlateDetector.FindPlateContours(const binary: TMat): TContours;  
 var
   allContours: TContours;
   i: Integer;
@@ -3216,7 +3216,7 @@ begin
   end;
 end;
 
-function TLicensePlateDetector.DetectPlates(const img: TMat): TArray<TPlateRegion>;
+function TLicensePlateDetector.DetectPlates(const img: TMat): TArray<TPlateRegion>;  
 var
   preprocessed: TMat;
   contours: TContours;
@@ -3278,7 +3278,7 @@ end;
 end.
 
 // Exemple d'utilisation
-procedure RecognizeLicensePlate(const imagePath: string);
+procedure RecognizeLicensePlate(const imagePath: string);  
 var
   detector: TLicensePlateDetector;
   img, display, plateImg: TMat;
@@ -3363,19 +3363,19 @@ Télécharger depuis : https://github.com/opencv/opencv/wiki/Model-Zoo
 
 ```bash
 # Windows
-mkdir C:\opencv\models
+mkdir C:\opencv\models  
 cd C:\opencv\models
 
 # Télécharger un modèle (exemple : MobileNet-SSD)
-curl -O https://github.com/chuanqi305/MobileNet-SSD/raw/master/mobilenet_iter_73000.caffemodel
+curl -O https://github.com/chuanqi305/MobileNet-SSD/raw/master/mobilenet_iter_73000.caffemodel  
 curl -O https://github.com/chuanqi305/MobileNet-SSD/raw/master/deploy.prototxt
 
 # Ubuntu
-mkdir ~/opencv_models
+mkdir ~/opencv_models  
 cd ~/opencv_models
 
 # Télécharger
-wget https://github.com/chuanqi305/MobileNet-SSD/raw/master/mobilenet_iter_73000.caffemodel
+wget https://github.com/chuanqi305/MobileNet-SSD/raw/master/mobilenet_iter_73000.caffemodel  
 wget https://github.com/chuanqi305/MobileNet-SSD/raw/master/deploy.prototxt
 ```
 
@@ -3385,7 +3385,7 @@ wget https://github.com/chuanqi305/MobileNet-SSD/raw/master/deploy.prototxt
 
 ```pascal
 // TOUJOURS libérer les ressources
-procedure GoodMemoryManagement;
+procedure GoodMemoryManagement;  
 var
   img: TMat;
 begin
@@ -3405,7 +3405,7 @@ end;
 var
   gGrayBuffer: TMat; // Variable globale
 
-procedure FastProcessing(const img: TMat);
+procedure FastProcessing(const img: TMat);  
 begin
   if gGrayBuffer.empty then
     gGrayBuffer := Mat.create;
@@ -3418,7 +3418,7 @@ end;
 ### 3. Gestion d'erreurs
 
 ```pascal
-procedure SafeImageProcessing(const filename: string);
+procedure SafeImageProcessing(const filename: string);  
 var
   img: TMat;
 begin
@@ -3445,7 +3445,7 @@ end;
 ### 4. Logging et débogage
 
 ```pascal
-procedure DebugImage(const img: TMat; const name: string);
+procedure DebugImage(const img: TMat; const name: string);  
 begin
   WriteLn(Format('%s - Type: %d, Taille: %dx%d, Canaux: %d',
     [name, img.type_, img.cols, img.rows, img.channels]));
@@ -3458,7 +3458,7 @@ end;
 ### 5. Tests unitaires
 
 ```pascal
-procedure TestImageProcessing;
+procedure TestImageProcessing;  
 var
   img, result: TMat;
   expected: TMat;

@@ -134,8 +134,8 @@ end;
 ### Remplir avec une couleur
 
 ```pascal
-Bmp.Fill(BGRA(200, 220, 255));          // Fond bleu clair
-Bmp.Fill(BGRA(255, 255, 255, 128));     // Blanc semi-transparent
+Bmp.Fill(BGRA(200, 220, 255));          // Fond bleu clair  
+Bmp.Fill(BGRA(255, 255, 255, 128));     // Blanc semi-transparent  
 Bmp.FillTransparent;                     // Remplir en transparent
 ```
 
@@ -292,9 +292,9 @@ Bmp.TextOut(50, 50, 'Hello BGRABitmap!', BGRA(0, 0, 0));
 ### Texte avec police personnalisée
 
 ```pascal
-Bmp.FontName := 'Arial';
-Bmp.FontHeight := 24;
-Bmp.FontStyle := [fsBold];
+Bmp.FontName := 'Arial';  
+Bmp.FontHeight := 24;  
+Bmp.FontStyle := [fsBold];  
 Bmp.FontQuality := fqFineAntialiasing;  // Meilleur anti-aliasing
 
 Bmp.TextOut(50, 50, 'Texte de qualité', BGRA(0, 0, 128));
@@ -497,7 +497,7 @@ BGRAReplace(Bmp, Bmp.FilterSharpen(10));
 
 ```pascal
 // Luminosité (-255 à +255)
-Bmp.ApplyGlobalOpacity(200);  // Plus clair
+Bmp.ApplyGlobalOpacity(200);  // Plus clair  
 Bmp.LinearNegative;           // Négatif
 
 // Contraste
@@ -558,7 +558,7 @@ end;
 ### Courbes de Bézier
 
 ```pascal
-Path := TBGRAPath.Create;
+Path := TBGRAPath.Create;  
 try
   Path.moveTo(50, 150);
 
@@ -584,7 +584,7 @@ end;
 ### Arcs et cercles
 
 ```pascal
-Path := TBGRAPath.Create;
+Path := TBGRAPath.Create;  
 try
   // Arc
   Path.arc(150, 150, 80, 0, Pi);  // Centre, rayon, angle début, angle fin
@@ -625,7 +625,7 @@ end;
 ### Exemples d'utilisation
 
 ```pascal
-Canvas2D := TBGRACanvas2D.Create(Bmp);
+Canvas2D := TBGRACanvas2D.Create(Bmp);  
 try
   // Styles
   Canvas2D.fillStyle := 'rgba(255, 0, 0, 0.5)';
@@ -679,17 +679,17 @@ type
     procedure Redraw;
   end;
 
-procedure TMyForm.FormCreate(Sender: TObject);
+procedure TMyForm.FormCreate(Sender: TObject);  
 begin
   FBuffer := TBGRABitmap.Create(ClientWidth, ClientHeight);
 end;
 
-procedure TMyForm.FormDestroy(Sender: TObject);
+procedure TMyForm.FormDestroy(Sender: TObject);  
 begin
   FBuffer.Free;
 end;
 
-procedure TMyForm.Redraw;
+procedure TMyForm.Redraw;  
 begin
   // Réutiliser le même buffer
   FBuffer.Fill(BGRAWhite);
@@ -717,7 +717,7 @@ Comprendre les modes de dessin améliore les performances :
 ### Dessiner un TBGRABitmap sur un Canvas
 
 ```pascal
-procedure TForm1.FormPaint(Sender: TObject);
+procedure TForm1.FormPaint(Sender: TObject);  
 var
   Bmp: TBGRABitmap;
 begin
@@ -737,7 +737,7 @@ end;
 ### Utiliser avec TPaintBox
 
 ```pascal
-procedure TForm1.PaintBox1Paint(Sender: TObject);
+procedure TForm1.PaintBox1Paint(Sender: TObject);  
 var
   Bmp: TBGRABitmap;
 begin
@@ -870,29 +870,29 @@ uses
 
 {$R *.lfm}
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   FImage := TBGRABitmap.Create(PaintBox1.Width, PaintBox1.Height);
   FImage.Fill(BGRAWhite);
   FImage.TextOut(50, 50, 'Chargez une image...', BGRABlack);
 end;
 
-procedure TForm1.FormDestroy(Sender: TObject);
+procedure TForm1.FormDestroy(Sender: TObject);  
 begin
   FImage.Free;
 end;
 
-procedure TForm1.PaintBox1Paint(Sender: TObject);
+procedure TForm1.PaintBox1Paint(Sender: TObject);  
 begin
   FImage.Draw(PaintBox1.Canvas, 0, 0, False);
 end;
 
-procedure TForm1.UpdateDisplay;
+procedure TForm1.UpdateDisplay;  
 begin
   PaintBox1.Invalidate;
 end;
 
-procedure TForm1.LoadButtonClick(Sender: TObject);
+procedure TForm1.LoadButtonClick(Sender: TObject);  
 var
   LoadedImage: TBGRABitmap;
 begin
@@ -914,7 +914,7 @@ begin
   end;
 end;
 
-procedure TForm1.SaveButtonClick(Sender: TObject);
+procedure TForm1.SaveButtonClick(Sender: TObject);  
 begin
   if SaveDialog1.Execute then
   begin
@@ -923,21 +923,21 @@ begin
   end;
 end;
 
-procedure TForm1.BlurButtonClick(Sender: TObject);
+procedure TForm1.BlurButtonClick(Sender: TObject);  
 begin
   // Appliquer un flou gaussien
   BGRAReplace(FImage, FImage.FilterBlurRadial(10, rbFast));
   UpdateDisplay;
 end;
 
-procedure TForm1.GrayscaleButtonClick(Sender: TObject);
+procedure TForm1.GrayscaleButtonClick(Sender: TObject);  
 begin
   // Convertir en niveaux de gris
   BGRAReplace(FImage, FImage.FilterGrayscale);
   UpdateDisplay;
 end;
 
-procedure TForm1.RotateButtonClick(Sender: TObject);
+procedure TForm1.RotateButtonClick(Sender: TObject);  
 var
   Rotated: TBGRABitmap;
 begin
@@ -1237,13 +1237,13 @@ begin
   FColumns := FSheet.Width div FSpriteWidth;
 end;
 
-destructor TSpriteSheet.Destroy;
+destructor TSpriteSheet.Destroy;  
 begin
   FSheet.Free;
   inherited;
 end;
 
-function TSpriteSheet.GetSprite(AIndex: Integer): TBGRABitmap;
+function TSpriteSheet.GetSprite(AIndex: Integer): TBGRABitmap;  
 var
   Col, Row: Integer;
   SourceRect: TRect;
@@ -1264,7 +1264,7 @@ begin
   Result.ClipRect := SourceRect;
 end;
 
-procedure TSpriteSheet.DrawSprite(ACanvas: TCanvas; AIndex, X, Y: Integer);
+procedure TSpriteSheet.DrawSprite(ACanvas: TCanvas; AIndex, X, Y: Integer);  
 var
   Sprite: TBGRABitmap;
 begin
@@ -1313,19 +1313,19 @@ begin
   FTimer.Enabled := True;
 end;
 
-destructor TAnimatedSprite.Destroy;
+destructor TAnimatedSprite.Destroy;  
 begin
   FTimer.Free;
   inherited;
 end;
 
-procedure TAnimatedSprite.OnTimer(Sender: TObject);
+procedure TAnimatedSprite.OnTimer(Sender: TObject);  
 begin
   FCurrentFrame := (FCurrentFrame + 1) mod FFrameCount;
   FPaintBox.Invalidate;
 end;
 
-procedure TAnimatedSprite.Draw(ACanvas: TCanvas);
+procedure TAnimatedSprite.Draw(ACanvas: TCanvas);  
 begin
   FSpriteSheet.DrawSprite(ACanvas, FCurrentFrame, FX, FY);
 end;
@@ -1358,13 +1358,13 @@ type
     procedure Draw(ABitmap: TBGRABitmap);
   end;
 
-constructor TParticleSystem.Create;
+constructor TParticleSystem.Create;  
 begin
   SetLength(FParticles, 1000);
   FCount := 0;
 end;
 
-procedure TParticleSystem.AddParticle(AX, AY: Single; AColor: TBGRAPixel);
+procedure TParticleSystem.AddParticle(AX, AY: Single; AColor: TBGRAPixel);  
 begin
   if FCount >= Length(FParticles) then Exit;
 
@@ -1381,7 +1381,7 @@ begin
   Inc(FCount);
 end;
 
-procedure TParticleSystem.Update(DeltaTime: Single);
+procedure TParticleSystem.Update(DeltaTime: Single);  
 var
   i: Integer;
 begin
@@ -1409,7 +1409,7 @@ begin
   end;
 end;
 
-procedure TParticleSystem.Draw(ABitmap: TBGRABitmap);
+procedure TParticleSystem.Draw(ABitmap: TBGRABitmap);  
 var
   i: Integer;
   C: TBGRAPixel;
@@ -1436,7 +1436,7 @@ end;
 #### Créer une texture procédurale
 
 ```pascal
-function CreateNoiseTexture(AWidth, AHeight: Integer): TBGRABitmap;
+function CreateNoiseTexture(AWidth, AHeight: Integer): TBGRABitmap;  
 var
   x, y: Integer;
   Noise: Byte;
@@ -1467,7 +1467,7 @@ end;
 #### Texture répétée (tiling)
 
 ```pascal
-procedure TileTexture(ATarget: TBGRABitmap; ATexture: TBGRABitmap);
+procedure TileTexture(ATarget: TBGRABitmap; ATexture: TBGRABitmap);  
 var
   x, y: Integer;
 begin
@@ -1610,7 +1610,7 @@ ApplyConvolutionFilter(Bmp, SharpenKernel, 1);
 Pour des opérations massives, l'accès direct est plus rapide :
 
 ```pascal
-procedure InvertColors(ABitmap: TBGRABitmap);
+procedure InvertColors(ABitmap: TBGRABitmap);  
 var
   p: PBGRAPixel;
   n: Integer;
@@ -1636,7 +1636,7 @@ end;
 #### Scan lines pour traitement par ligne
 
 ```pascal
-procedure AdjustBrightness(ABitmap: TBGRABitmap; ADelta: Integer);
+procedure AdjustBrightness(ABitmap: TBGRABitmap; ADelta: Integer);  
 var
   y, x: Integer;
   p: PBGRAPixel;
@@ -1664,7 +1664,7 @@ end;
 uses
   DateUtils;
 
-procedure BenchmarkOperation;
+procedure BenchmarkOperation;  
 var
   Bmp: TBGRABitmap;
   StartTime, EndTime: TDateTime;
@@ -1876,7 +1876,7 @@ type
 
 implementation
 
-constructor TThumbnailMaker.Create;
+constructor TThumbnailMaker.Create;  
 begin
   FWidth := 200;
   FHeight := 150;
@@ -1884,7 +1884,7 @@ begin
   FStyle := tsBordered;
 end;
 
-function TThumbnailMaker.CreateThumbnail(const ASourceFile: string): TBGRABitmap;
+function TThumbnailMaker.CreateThumbnail(const ASourceFile: string): TBGRABitmap;  
 var
   Original, Resized: TBGRABitmap;
   Ratio: Double;
@@ -1919,7 +1919,7 @@ begin
   end;
 end;
 
-function TThumbnailMaker.CreateThumbnailWithStyle(ASource: TBGRABitmap): TBGRABitmap;
+function TThumbnailMaker.CreateThumbnailWithStyle(ASource: TBGRABitmap): TBGRABitmap;  
 var
   Shadow: TBGRABitmap;
   Mask, Rounded: TBGRABitmap;
@@ -1979,7 +1979,7 @@ begin
   end;
 end;
 
-procedure TThumbnailMaker.SaveThumbnail(const ASourceFile, ADestFile: string);
+procedure TThumbnailMaker.SaveThumbnail(const ASourceFile, ADestFile: string);  
 var
   Thumb: TBGRABitmap;
 begin
@@ -2056,7 +2056,7 @@ type
 
 implementation
 
-constructor TBarChart.Create(AWidth, AHeight: Integer);
+constructor TBarChart.Create(AWidth, AHeight: Integer);  
 begin
   FWidth := AWidth;
   FHeight := AHeight;
@@ -2065,7 +2065,7 @@ begin
   FTitle := 'Graphique';
 end;
 
-function TBarChart.Generate(const AData: TChartDataArray): TBGRABitmap;
+function TBarChart.Generate(const AData: TChartDataArray): TBGRABitmap;  
 var
   i: Integer;
   MaxValue: Double;
@@ -2159,7 +2159,7 @@ type
     property Title: string read FTitle write FTitle;
   end;
 
-function TPieChart.Generate(const AData: TChartDataArray): TBGRABitmap;
+function TPieChart.Generate(const AData: TChartDataArray): TBGRABitmap;  
 var
   i, j: Integer;
   Total, CurrentAngle, SliceAngle: Double;
@@ -2347,7 +2347,7 @@ implementation
 uses
   FileUtil;
 
-constructor TWatermarkMaker.Create;
+constructor TWatermarkMaker.Create;  
 begin
   FText := '© Copyright';
   FPosition := wpBottomRight;
@@ -2356,7 +2356,7 @@ begin
   FMargin := 20;
 end;
 
-procedure TWatermarkMaker.ApplyTextWatermark(ABitmap: TBGRABitmap);
+procedure TWatermarkMaker.ApplyTextWatermark(ABitmap: TBGRABitmap);  
 var
   X, Y: Integer;
   TextSize: TSize;
@@ -2606,7 +2606,7 @@ type
 
 implementation
 
-constructor TStylizedButton.Create(AWidth, AHeight: Integer);
+constructor TStylizedButton.Create(AWidth, AHeight: Integer);  
 begin
   FWidth := AWidth;
   FHeight := AHeight;
@@ -2615,7 +2615,7 @@ begin
   FBaseColor := BGRA(70, 130, 200);
 end;
 
-function TStylizedButton.Generate(AState: TButtonState): TBGRABitmap;
+function TStylizedButton.Generate(AState: TButtonState): TBGRABitmap;  
 var
   Color1, Color2: TBGRAPixel;
   TextSize: TSize;
@@ -2838,7 +2838,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   FOriginalImage := nil;
   FDisplayImage := TBGRABitmap.Create(PaintBox1.Width, PaintBox1.Height);
@@ -2860,7 +2860,7 @@ begin
   ContrastTrackBar.Position := 0;
 end;
 
-procedure TMainForm.FormDestroy(Sender: TObject);
+procedure TMainForm.FormDestroy(Sender: TObject);  
 begin
   if Assigned(FOriginalImage) then
     FOriginalImage.Free;
@@ -2869,7 +2869,7 @@ begin
   FDisplayImage.Free;
 end;
 
-procedure TMainForm.LoadImage(const AFileName: string);
+procedure TMainForm.LoadImage(const AFileName: string);  
 var
   Loaded: TBGRABitmap;
   Ratio: Double;
@@ -2911,7 +2911,7 @@ begin
   end;
 end;
 
-procedure TMainForm.UpdateDisplay;
+procedure TMainForm.UpdateDisplay;  
 var
   X, Y: Integer;
 begin
@@ -2927,7 +2927,7 @@ begin
   PaintBox1.Invalidate;
 end;
 
-procedure TMainForm.ApplyEffect(const AEffectName: string);
+procedure TMainForm.ApplyEffect(const AEffectName: string);  
 var
   p: PBGRAPixel;
   n: Integer;
@@ -2971,7 +2971,7 @@ begin
   UpdateDisplay;
 end;
 
-procedure TMainForm.ApplyBrightnessContrast;
+procedure TMainForm.ApplyBrightnessContrast;  
 var
   p: PBGRAPixel;
   n: Integer;
@@ -3014,7 +3014,7 @@ begin
   FModifiedImage.InvalidateBitmap;
 end;
 
-procedure TMainForm.OpenButtonClick(Sender: TObject);
+procedure TMainForm.OpenButtonClick(Sender: TObject);  
 begin
   if OpenDialog1.Execute then
   begin
@@ -3023,7 +3023,7 @@ begin
   end;
 end;
 
-procedure TMainForm.SaveButtonClick(Sender: TObject);
+procedure TMainForm.SaveButtonClick(Sender: TObject);  
 begin
   if not Assigned(FModifiedImage) then
   begin
@@ -3035,7 +3035,7 @@ begin
     FModifiedImage.SaveToFile(SaveDialog1.FileName);
 end;
 
-procedure TMainForm.ResetButtonClick(Sender: TObject);
+procedure TMainForm.ResetButtonClick(Sender: TObject);  
 begin
   if not Assigned(FOriginalImage) then Exit;
 
@@ -3050,12 +3050,12 @@ begin
   UpdateDisplay;
 end;
 
-procedure TMainForm.ApplyButtonClick(Sender: TObject);
+procedure TMainForm.ApplyButtonClick(Sender: TObject);  
 begin
   ApplyEffect(EffectComboBox.Text);
 end;
 
-procedure TMainForm.BrightnessTrackBarChange(Sender: TObject);
+procedure TMainForm.BrightnessTrackBarChange(Sender: TObject);  
 begin
   if not Assigned(FOriginalImage) then Exit;
 
@@ -3066,12 +3066,12 @@ begin
   ApplyEffect(EffectComboBox.Text);
 end;
 
-procedure TMainForm.ContrastTrackBarChange(Sender: TObject);
+procedure TMainForm.ContrastTrackBarChange(Sender: TObject);  
 begin
   BrightnessTrackBarChange(Sender);
 end;
 
-procedure TMainForm.PaintBox1Paint(Sender: TObject);
+procedure TMainForm.PaintBox1Paint(Sender: TObject);  
 begin
   FDisplayImage.Draw(PaintBox1.Canvas, 0, 0, False);
 end;
@@ -3100,7 +3100,7 @@ type
     procedure Clear;
   end;
 
-constructor TImageCache.Create(AMaxSizeMB: Integer);
+constructor TImageCache.Create(AMaxSizeMB: Integer);  
 begin
   FCache := TStringList.Create;
   FCache.OwnsObjects := True;
@@ -3108,14 +3108,14 @@ begin
   FCacheSize := 0;
 end;
 
-destructor TImageCache.Destroy;
+destructor TImageCache.Destroy;  
 begin
   Clear;
   FCache.Free;
   inherited;
 end;
 
-function TImageCache.GetImage(const AKey: string): TBGRABitmap;
+function TImageCache.GetImage(const AKey: string): TBGRABitmap;  
 var
   Index: Integer;
 begin
@@ -3126,7 +3126,7 @@ begin
     Result := nil;
 end;
 
-procedure TImageCache.AddImage(const AKey: string; AImage: TBGRABitmap);
+procedure TImageCache.AddImage(const AKey: string; AImage: TBGRABitmap);  
 var
   Cached: TBGRABitmap;
   ImageSize: Int64;
@@ -3147,7 +3147,7 @@ begin
   FCacheSize := FCacheSize + ImageSize;
 end;
 
-procedure TImageCache.Clear;
+procedure TImageCache.Clear;  
 begin
   FCache.Clear;
   FCacheSize := 0;
@@ -3183,7 +3183,7 @@ begin
   FOnComplete := AOnComplete;
 end;
 
-procedure TImageProcessThread.Execute;
+procedure TImageProcessThread.Execute;  
 var
   Image: TBGRABitmap;
 begin
@@ -3203,20 +3203,20 @@ begin
   Synchronize(@DoComplete);
 end;
 
-procedure TImageProcessThread.DoComplete;
+procedure TImageProcessThread.DoComplete;  
 begin
   if Assigned(FOnComplete) then
     FOnComplete(Self);
 end;
 
 // Utilisation
-procedure TForm1.ProcessImageAsync;
+procedure TForm1.ProcessImageAsync;  
 begin
   TImageProcessThread.Create('input.jpg', 'output.jpg', 'blur',
     @OnProcessComplete);
 end;
 
-procedure TForm1.OnProcessComplete(Sender: TObject);
+procedure TForm1.OnProcessComplete(Sender: TObject);  
 begin
   ShowMessage('Traitement terminé !');
 end;
@@ -3226,7 +3226,7 @@ end;
 
 ```pascal
 // Exemple conceptuel - nécessite fpReport ou une bibliothèque PDF
-procedure ExportImageToPDF(AImage: TBGRABitmap; const APDFFile: string);
+procedure ExportImageToPDF(AImage: TBGRABitmap; const APDFFile: string);  
 var
   TempFile: string;
 begin
@@ -3245,7 +3245,7 @@ end;
 
 ```pascal
 // Détection basique de zones de couleur chair
-function DetectSkinTones(AImage: TBGRABitmap): TBGRABitmap;
+function DetectSkinTones(AImage: TBGRABitmap): TBGRABitmap;  
 var
   x, y: Integer;
   p: TBGRAPixel;
@@ -3332,7 +3332,7 @@ end;
 ### 2. Base de données avec images BLOB
 
 ```pascal
-procedure SaveImageToDatabase(AImage: TBGRABitmap; AQuery: TSQLQuery);
+procedure SaveImageToDatabase(AImage: TBGRABitmap; AQuery: TSQLQuery);  
 var
   Stream: TMemoryStream;
 begin
@@ -3349,7 +3349,7 @@ begin
   end;
 end;
 
-function LoadImageFromDatabase(AQuery: TSQLQuery): TBGRABitmap;
+function LoadImageFromDatabase(AQuery: TSQLQuery): TBGRABitmap;  
 var
   Stream: TMemoryStream;
 begin

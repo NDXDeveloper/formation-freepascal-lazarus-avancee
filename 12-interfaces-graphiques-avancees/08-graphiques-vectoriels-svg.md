@@ -124,7 +124,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TfrmSVGViewer.FormCreate(Sender: TObject);
+procedure TfrmSVGViewer.FormCreate(Sender: TObject);  
 begin
   Caption := 'Visualiseur SVG';
   Width := 800;
@@ -136,12 +136,12 @@ begin
   SetupInterface;
 end;
 
-procedure TfrmSVGViewer.FormDestroy(Sender: TObject);
+procedure TfrmSVGViewer.FormDestroy(Sender: TObject);  
 begin
   FSVG.Free;
 end;
 
-procedure TfrmSVGViewer.SetupInterface;
+procedure TfrmSVGViewer.SetupInterface;  
 var
   MainMenu: TMainMenu;
   MenuItem, SubItem: TMenuItem;
@@ -173,7 +173,7 @@ begin
   FPaintBox.OnPaint := @OnPaintBoxPaint;
 end;
 
-procedure TfrmSVGViewer.OnOpenSVGClick(Sender: TObject);
+procedure TfrmSVGViewer.OnOpenSVGClick(Sender: TObject);  
 var
   OpenDialog: TOpenDialog;
 begin
@@ -187,7 +187,7 @@ begin
   end;
 end;
 
-procedure TfrmSVGViewer.LoadSVGFile(const AFileName: string);
+procedure TfrmSVGViewer.LoadSVGFile(const AFileName: string);  
 begin
   if FileExists(AFileName) then
   begin
@@ -197,7 +197,7 @@ begin
   end;
 end;
 
-procedure TfrmSVGViewer.LoadSVGString(const ASVGContent: string);
+procedure TfrmSVGViewer.LoadSVGString(const ASVGContent: string);  
 var
   Stream: TStringStream;
 begin
@@ -210,7 +210,7 @@ begin
   end;
 end;
 
-procedure TfrmSVGViewer.OnPaintBoxPaint(Sender: TObject);
+procedure TfrmSVGViewer.OnPaintBoxPaint(Sender: TObject);  
 var
   Bitmap: TBGRABitmap;
 begin
@@ -228,7 +228,7 @@ begin
   end;
 end;
 
-procedure TfrmSVGViewer.RenderSVG(AWidth, AHeight: Integer);
+procedure TfrmSVGViewer.RenderSVG(AWidth, AHeight: Integer);  
 begin
   FPaintBox.Width := AWidth;
   FPaintBox.Height := AHeight;
@@ -295,7 +295,7 @@ type
 
 implementation
 
-constructor TSVGGenerator.Create(AWidth, AHeight: Integer);
+constructor TSVGGenerator.Create(AWidth, AHeight: Integer);  
 begin
   inherited Create;
   FSVG := TStringList.Create;
@@ -308,13 +308,13 @@ begin
                   [FWidth, FHeight]));
 end;
 
-destructor TSVGGenerator.Destroy;
+destructor TSVGGenerator.Destroy;  
 begin
   FSVG.Free;
   inherited Destroy;
 end;
 
-function TSVGGenerator.ColorToSVG(AColor: TColor): string;
+function TSVGGenerator.ColorToSVG(AColor: TColor): string;  
 var
   R, G, B: Byte;
 begin
@@ -399,7 +399,7 @@ begin
   FSVG.Add('  ' + Line);
 end;
 
-procedure TSVGGenerator.BeginGroup(const AID: string);
+procedure TSVGGenerator.BeginGroup(const AID: string);  
 begin
   if AID <> '' then
     FSVG.Add(Format('  <g id="%s">', [AID]))
@@ -407,22 +407,22 @@ begin
     FSVG.Add('  <g>');
 end;
 
-procedure TSVGGenerator.EndGroup;
+procedure TSVGGenerator.EndGroup;  
 begin
   FSVG.Add('  </g>');
 end;
 
-procedure TSVGGenerator.AddTransform(const ATransform: string);
+procedure TSVGGenerator.AddTransform(const ATransform: string);  
 begin
   FSVG.Add(Format('  <g transform="%s">', [ATransform]));
 end;
 
-function TSVGGenerator.GetSVG: string;
+function TSVGGenerator.GetSVG: string;  
 begin
   Result := FSVG.Text + '</svg>';
 end;
 
-procedure TSVGGenerator.SaveToFile(const AFileName: string);
+procedure TSVGGenerator.SaveToFile(const AFileName: string);  
 var
   Output: TStringList;
 begin
@@ -435,7 +435,7 @@ begin
   end;
 end;
 
-procedure TSVGGenerator.Clear;
+procedure TSVGGenerator.Clear;  
 begin
   FSVG.Clear;
   FSVG.Add('<?xml version="1.0" encoding="UTF-8"?>');
@@ -451,7 +451,7 @@ end.
 ### Créer un logo simple
 
 ```pascal
-procedure CreateSimpleLogo;
+procedure CreateSimpleLogo;  
 var
   SVG: TSVGGenerator;
 begin
@@ -480,7 +480,7 @@ end;
 ### Créer un graphique en barres
 
 ```pascal
-procedure CreateBarChart;
+procedure CreateBarChart;  
 var
   SVG: TSVGGenerator;
   i: Integer;
@@ -532,7 +532,7 @@ end;
 ### Créer un diagramme de flux
 
 ```pascal
-procedure CreateFlowchart;
+procedure CreateFlowchart;  
 var
   SVG: TSVGGenerator;
 begin
@@ -590,22 +590,22 @@ Les chemins sont l'élément le plus puissant de SVG, permettant de dessiner n'i
 ### Commandes de chemin
 
 ```
-M = Move To (déplacer vers)
-L = Line To (ligne vers)
-H = Horizontal Line To
-V = Vertical Line To
-C = Cubic Bézier Curve
-S = Smooth Cubic Bézier Curve
-Q = Quadratic Bézier Curve
-T = Smooth Quadratic Bézier Curve
-A = Elliptical Arc
+M = Move To (déplacer vers)  
+L = Line To (ligne vers)  
+H = Horizontal Line To  
+V = Vertical Line To  
+C = Cubic Bézier Curve  
+S = Smooth Cubic Bézier Curve  
+Q = Quadratic Bézier Curve  
+T = Smooth Quadratic Bézier Curve  
+A = Elliptical Arc  
 Z = Close Path (fermer le chemin)
 ```
 
 ### Exemples de chemins
 
 ```pascal
-procedure CreatePathExamples;
+procedure CreatePathExamples;  
 var
   SVG: TSVGGenerator;
 begin
@@ -634,7 +634,7 @@ end;
 ### Types de transformations
 
 ```pascal
-procedure CreateTransformations;
+procedure CreateTransformations;  
 var
   SVG: TSVGGenerator;
 begin
@@ -679,7 +679,7 @@ end;
 ### Gradient linéaire
 
 ```pascal
-procedure CreateGradientExample;
+procedure CreateGradientExample;  
 var
   SVG: TStringList;
 begin
@@ -710,7 +710,7 @@ end;
 ### Gradient radial
 
 ```pascal
-procedure CreateRadialGradient;
+procedure CreateRadialGradient;  
 var
   SVG: TStringList;
 begin
@@ -779,37 +779,37 @@ type
 
 implementation
 
-constructor TCanvasRecorder.Create(AWidth, AHeight: Integer);
+constructor TCanvasRecorder.Create(AWidth, AHeight: Integer);  
 begin
   inherited Create;
   FSVG := TSVGGenerator.Create(AWidth, AHeight);
   FRecording := False;
 end;
 
-destructor TCanvasRecorder.Destroy;
+destructor TCanvasRecorder.Destroy;  
 begin
   FSVG.Free;
   inherited Destroy;
 end;
 
-procedure TCanvasRecorder.StartRecording;
+procedure TCanvasRecorder.StartRecording;  
 begin
   FRecording := True;
   FSVG.Clear;
 end;
 
-procedure TCanvasRecorder.StopRecording;
+procedure TCanvasRecorder.StopRecording;  
 begin
   FRecording := False;
 end;
 
-procedure TCanvasRecorder.Rectangle(X1, Y1, X2, Y2: Integer);
+procedure TCanvasRecorder.Rectangle(X1, Y1, X2, Y2: Integer);  
 begin
   if FRecording then
     FSVG.AddRectangle(X1, Y1, X2 - X1, Y2 - Y1, clWhite, clBlack, 1);
 end;
 
-procedure TCanvasRecorder.Ellipse(X1, Y1, X2, Y2: Integer);
+procedure TCanvasRecorder.Ellipse(X1, Y1, X2, Y2: Integer);  
 var
   CX, CY, RX, RY: Integer;
 begin
@@ -823,29 +823,29 @@ begin
   end;
 end;
 
-procedure TCanvasRecorder.TextOut(X, Y: Integer; const Text: string);
+procedure TCanvasRecorder.TextOut(X, Y: Integer; const Text: string);  
 begin
   if FRecording then
     FSVG.AddText(X, Y, Text, 12, clBlack);
 end;
 
-function TCanvasRecorder.GetSVG: string;
+function TCanvasRecorder.GetSVG: string;  
 begin
   Result := FSVG.GetSVG;
 end;
 
-procedure TCanvasRecorder.SaveToFile(const AFileName: string);
+procedure TCanvasRecorder.SaveToFile(const AFileName: string);  
 begin
   FSVG.SaveToFile(AFileName);
 end;
 
-procedure TCanvasRecorder.MoveTo(X, Y: Integer);
+procedure TCanvasRecorder.MoveTo(X, Y: Integer);  
 begin
   // Pour implémenter le dessin de chemins
   // Stocker la position actuelle
 end;
 
-procedure TCanvasRecorder.LineTo(X, Y: Integer);
+procedure TCanvasRecorder.LineTo(X, Y: Integer);  
 begin
   // Dessiner une ligne depuis la dernière position
   if FRecording then
@@ -931,7 +931,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TfrmSVGEditor.FormCreate(Sender: TObject);
+procedure TfrmSVGEditor.FormCreate(Sender: TObject);  
 begin
   Caption := 'Éditeur SVG';
   Width := 1000;
@@ -948,7 +948,7 @@ begin
   SetupInterface;
 end;
 
-procedure TfrmSVGEditor.FormDestroy(Sender: TObject);
+procedure TfrmSVGEditor.FormDestroy(Sender: TObject);  
 var
   i: Integer;
 begin
@@ -957,14 +957,14 @@ begin
   FShapes.Free;
 end;
 
-procedure TfrmSVGEditor.SetupInterface;
+procedure TfrmSVGEditor.SetupInterface;  
 begin
   CreateToolbar;
   CreatePropertiesPanel;
   CreateCanvas;
 end;
 
-procedure TfrmSVGEditor.CreateToolbar;
+procedure TfrmSVGEditor.CreateToolbar;  
 var
   Toolbar: TToolBar;
   Btn: TToolButton;
@@ -1012,7 +1012,7 @@ begin
   Btn.OnClick := @OnClearAllClick;
 end;
 
-procedure TfrmSVGEditor.CreateCanvas;
+procedure TfrmSVGEditor.CreateCanvas;  
 var
   Panel: TPanel;
 begin
@@ -1032,7 +1032,7 @@ begin
   FCanvas.Color := clWhite;
 end;
 
-procedure TfrmSVGEditor.CreatePropertiesPanel;
+procedure TfrmSVGEditor.CreatePropertiesPanel;  
 var
   Panel: TPanel;
   Label1: TLabel;
@@ -1111,7 +1111,7 @@ begin
   WidthSpin.OnChange := @OnWidthSpinChange;
 end;
 
-procedure TfrmSVGEditor.OnExportSVGClick(Sender: TObject);
+procedure TfrmSVGEditor.OnExportSVGClick(Sender: TObject);  
 var
   SaveDialog: TSaveDialog;
 begin
@@ -1126,19 +1126,19 @@ begin
   end;
 end;
 
-procedure TfrmSVGEditor.OnClearAllClick(Sender: TObject);
+procedure TfrmSVGEditor.OnClearAllClick(Sender: TObject);  
 begin
   if MessageDlg('Confirmation', 'Effacer tout ?',
      mtConfirmation, [mbYes, mbNo], 0) = mrYes then
     ClearCanvas;
 end;
 
-procedure TfrmSVGEditor.OnWidthSpinChange(Sender: TObject);
+procedure TfrmSVGEditor.OnWidthSpinChange(Sender: TObject);  
 begin
   FStrokeWidth := TSpinEdit(Sender).Value;
 end;
 
-procedure TfrmSVGEditor.OnToolSelect(Sender: TObject);
+procedure TfrmSVGEditor.OnToolSelect(Sender: TObject);  
 begin
   FCurrentTool := TDrawingTool((Sender as TToolButton).Tag);
   FCanvas.Cursor := crCross;
@@ -1147,7 +1147,7 @@ begin
     FCanvas.Cursor := crDefault;
 end;
 
-procedure TfrmSVGEditor.OnColorChange(Sender: TObject);
+procedure TfrmSVGEditor.OnColorChange(Sender: TObject);  
 begin
   if (Sender as TColorBox).Name = 'FillColor' then
     FFillColor := (Sender as TColorBox).Selected
@@ -1216,7 +1216,7 @@ begin
   end;
 end;
 
-procedure TfrmSVGEditor.OnCanvasPaint(Sender: TObject);
+procedure TfrmSVGEditor.OnCanvasPaint(Sender: TObject);  
 var
   i: Integer;
 begin
@@ -1229,7 +1229,7 @@ begin
     DrawShape(FCanvas.Canvas, FCurrentShape);
 end;
 
-procedure TfrmSVGEditor.DrawShape(ACanvas: TCanvas; AShape: TSVGShape);
+procedure TfrmSVGEditor.DrawShape(ACanvas: TCanvas; AShape: TSVGShape);  
 var
   R: TRect;
   CX, CY, Radius: Integer;
@@ -1271,7 +1271,7 @@ begin
   end;
 end;
 
-procedure TfrmSVGEditor.ExportToSVG(const AFileName: string);
+procedure TfrmSVGEditor.ExportToSVG(const AFileName: string);  
 var
   SVG: TSVGGenerator;
   i: Integer;
@@ -1322,7 +1322,7 @@ begin
   end;
 end;
 
-procedure TfrmSVGEditor.ClearCanvas;
+procedure TfrmSVGEditor.ClearCanvas;  
 var
   i: Integer;
 begin
@@ -1363,7 +1363,7 @@ implementation
 uses
   RegExpr;
 
-class function TSVGOptimizer.RemoveComments(const ASVG: string): string;
+class function TSVGOptimizer.RemoveComments(const ASVG: string): string;  
 var
   Regex: TRegExpr;
 begin
@@ -1377,7 +1377,7 @@ begin
   end;
 end;
 
-class function TSVGOptimizer.SimplifyNumbers(const ASVG: string): string;
+class function TSVGOptimizer.SimplifyNumbers(const ASVG: string): string;  
 var
   Regex: TRegExpr;
 begin
@@ -1396,7 +1396,7 @@ begin
   end;
 end;
 
-class function TSVGOptimizer.RemoveWhitespace(const ASVG: string): string;
+class function TSVGOptimizer.RemoveWhitespace(const ASVG: string): string;  
 var
   Lines: TStringList;
   i: Integer;
@@ -1419,7 +1419,7 @@ begin
   end;
 end;
 
-class function TSVGOptimizer.OptimizeSVG(const ASVG: string): string;
+class function TSVGOptimizer.OptimizeSVG(const ASVG: string): string;  
 begin
   Result := ASVG;
   Result := RemoveComments(Result);
@@ -1435,7 +1435,7 @@ end.
 Les SVG peuvent contenir des animations :
 
 ```pascal
-procedure CreateAnimatedSVG;
+procedure CreateAnimatedSVG;  
 var
   SVG: TStringList;
 begin
@@ -1472,7 +1472,7 @@ end;
 Les filtres permettent des effets visuels avancés :
 
 ```pascal
-procedure CreateSVGWithFilters;
+procedure CreateSVGWithFilters;  
 var
   SVG: TStringList;
 begin
@@ -1538,7 +1538,7 @@ type
 
 implementation
 
-class function TBitmapTracer.TraceSimple(ABitmap: TBitmap): string;
+class function TBitmapTracer.TraceSimple(ABitmap: TBitmap): string;  
 var
   SVG: TSVGGenerator;
   x, y: Integer;
@@ -1650,14 +1650,14 @@ type
 
 implementation
 
-constructor TSVGElement.Create;
+constructor TSVGElement.Create;  
 begin
   inherited Create;
   Attributes := TStringList.Create;
   Children := TList.Create;
 end;
 
-destructor TSVGElement.Destroy;
+destructor TSVGElement.Destroy;  
 var
   i: Integer;
 begin
@@ -1668,20 +1668,20 @@ begin
   inherited Destroy;
 end;
 
-constructor TSVGParser.Create;
+constructor TSVGParser.Create;  
 begin
   inherited Create;
   FRoot := nil;
 end;
 
-destructor TSVGParser.Destroy;
+destructor TSVGParser.Destroy;  
 begin
   if Assigned(FRoot) then
     FRoot.Free;
   inherited Destroy;
 end;
 
-procedure TSVGParser.LoadFromFile(const AFileName: string);
+procedure TSVGParser.LoadFromFile(const AFileName: string);  
 var
   Doc: TXMLDocument;
 begin
@@ -1700,7 +1700,7 @@ begin
   end;
 end;
 
-procedure TSVGParser.LoadFromString(const ASVG: string);
+procedure TSVGParser.LoadFromString(const ASVG: string);  
 var
   Stream: TStringStream;
   Doc: TXMLDocument;
@@ -1725,7 +1725,7 @@ begin
   end;
 end;
 
-procedure TSVGParser.ParseNode(ANode: TDOMNode; AParent: TSVGElement);
+procedure TSVGParser.ParseNode(ANode: TDOMNode; AParent: TSVGElement);  
 var
   i: Integer;
   Element: TSVGElement;
@@ -1794,7 +1794,7 @@ type
 
 implementation
 
-class function TSVGPlatformHelper.GetDefaultFont: string;
+class function TSVGPlatformHelper.GetDefaultFont: string;  
 begin
   {$IFDEF WINDOWS}
   Result := 'Arial';
@@ -1805,7 +1805,7 @@ begin
   {$ENDIF}
 end;
 
-class function TSVGPlatformHelper.GetFontPath(const AFontName: string): string;
+class function TSVGPlatformHelper.GetFontPath(const AFontName: string): string;  
 begin
   {$IFDEF WINDOWS}
   Result := 'C:\Windows\Fonts\' + AFontName + '.ttf';
@@ -1819,12 +1819,12 @@ begin
     Result := '';
 end;
 
-class function TSVGPlatformHelper.NormalizePath(const APath: string): string;
+class function TSVGPlatformHelper.NormalizePath(const APath: string): string;  
 begin
   Result := StringReplace(APath, '\', '/', [rfReplaceAll]);
 end;
 
-class procedure TSVGPlatformHelper.ConfigureSVGExport(var ASettings: TSVGExportSettings);
+class procedure TSVGPlatformHelper.ConfigureSVGExport(var ASettings: TSVGExportSettings);  
 begin
   // Configuration spécifique à la plateforme
   ASettings.FontName := GetDefaultFont;
@@ -2107,7 +2107,7 @@ end.
 ### Créer un tableau de bord SVG
 
 ```pascal
-procedure CreateDashboard;
+procedure CreateDashboard;  
 var
   SVG: TSVGGenerator;
 begin
@@ -2161,7 +2161,7 @@ end;
 ### Créer une carte mentale
 
 ```pascal
-procedure CreateMindMap;
+procedure CreateMindMap;  
 var
   SVG: TSVGGenerator;
 begin
@@ -2223,7 +2223,7 @@ end;
 
 ```pascal
 // ✅ BON : Utiliser des groupes pour organiser
-procedure CreateOrganizedSVG;
+procedure CreateOrganizedSVG;  
 var
   SVG: TStringList;
 begin
@@ -2250,7 +2250,7 @@ begin
 end;
 
 // ❌ MAUVAIS : Tout mélangé sans organisation
-procedure CreateMessySVG;
+procedure CreateMessySVG;  
 var
   SVG: TStringList;
 begin
@@ -2307,11 +2307,11 @@ end;
 
 ```pascal
 // ✅ BON : Ajouter des descriptions
-SVG.Add('<svg>');
-SVG.Add('  <title>Logo de l''entreprise</title>');
-SVG.Add('  <desc>Un cercle bleu avec le texte "ACME" au centre</desc>');
-SVG.Add('  <circle cx="100" cy="100" r="50" fill="blue"/>');
-SVG.Add('  <text x="75" y="105">ACME</text>');
+SVG.Add('<svg>');  
+SVG.Add('  <title>Logo de l''entreprise</title>');  
+SVG.Add('  <desc>Un cercle bleu avec le texte "ACME" au centre</desc>');  
+SVG.Add('  <circle cx="100" cy="100" r="50" fill="blue"/>');  
+SVG.Add('  <text x="75" y="105">ACME</text>');  
 SVG.Add('</svg>');
 ```
 
@@ -2370,7 +2370,7 @@ program SVGMasterExample;
 uses
   SysUtils, SVGGenerator, SVGShapes;
 
-procedure CreateCompleteSVG;
+procedure CreateCompleteSVG;  
 var
   SVG: TSVGGenerator;
 begin
@@ -2522,20 +2522,20 @@ type
 
 implementation
 
-constructor TReportGenerator.Create;
+constructor TReportGenerator.Create;  
 begin
   inherited Create;
   FSVG := TSVGGenerator.Create(800, 1200);
   FCurrentY := 50;
 end;
 
-destructor TReportGenerator.Destroy;
+destructor TReportGenerator.Destroy;  
 begin
   FSVG.Free;
   inherited Destroy;
 end;
 
-procedure TReportGenerator.StartReport(const ATitle: string);
+procedure TReportGenerator.StartReport(const ATitle: string);  
 begin
   // Fond
   FSVG.AddRectangle(0, 0, 800, 1200, clWhite, clNone);
@@ -2549,13 +2549,13 @@ begin
   FCurrentY := FCurrentY + 30;
 end;
 
-procedure TReportGenerator.AddSection(const ATitle: string);
+procedure TReportGenerator.AddSection(const ATitle: string);  
 begin
   FSVG.AddText(50, FCurrentY, ATitle, 20, clBlack);
   FCurrentY := FCurrentY + 35;
 end;
 
-procedure TReportGenerator.AddParagraph(const AText: string);
+procedure TReportGenerator.AddParagraph(const AText: string);  
 begin
   FSVG.AddText(50, FCurrentY, AText, 12, clBlack);
   FCurrentY := FCurrentY + 20;
@@ -2590,7 +2590,7 @@ begin
   FCurrentY := FCurrentY + 200;
 end;
 
-procedure TReportGenerator.AddTable(AData: array of array of string);
+procedure TReportGenerator.AddTable(AData: array of array of string);  
 var
   Row, Col: Integer;
   CellWidth, CellHeight: Integer;
@@ -2622,7 +2622,7 @@ begin
   FCurrentY := FCurrentY + ((High(AData) + 1) * CellHeight) + 30;
 end;
 
-procedure TReportGenerator.SaveReport(const AFileName: string);
+procedure TReportGenerator.SaveReport(const AFileName: string);  
 begin
   FSVG.SaveToFile(AFileName);
 end;
@@ -2666,14 +2666,14 @@ implementation
 uses
   DateUtils;
 
-constructor TLiveChartSVG.Create(AMaxPoints: Integer);
+constructor TLiveChartSVG.Create(AMaxPoints: Integer);  
 begin
   inherited Create;
   FMaxPoints := AMaxPoints;
   SetLength(FDataPoints, 0);
 end;
 
-procedure TLiveChartSVG.AddDataPoint(AValue: Double);
+procedure TLiveChartSVG.AddDataPoint(AValue: Double);  
 var
   Len: Integer;
 begin
@@ -2695,12 +2695,12 @@ begin
   end;
 end;
 
-procedure TLiveChartSVG.ClearData;
+procedure TLiveChartSVG.ClearData;  
 begin
   SetLength(FDataPoints, 0);
 end;
 
-function TLiveChartSVG.GenerateSVG: string;
+function TLiveChartSVG.GenerateSVG: string;  
 var
   SVG: TSVGGenerator;
   i: Integer;
@@ -2782,7 +2782,7 @@ begin
   end;
 end;
 
-procedure TLiveChartSVG.SaveToFile(const AFileName: string);
+procedure TLiveChartSVG.SaveToFile(const AFileName: string);  
 var
   Output: TStringList;
 begin
@@ -2847,21 +2847,21 @@ type
 
 implementation
 
-destructor TUMLClass.Destroy;
+destructor TUMLClass.Destroy;  
 begin
   Attributes.Free;
   Methods.Free;
   inherited Destroy;
 end;
 
-constructor TUMLDiagramGenerator.Create;
+constructor TUMLDiagramGenerator.Create;  
 begin
   inherited Create;
   FClasses := TList.Create;
   SetLength(FRelations, 0);
 end;
 
-destructor TUMLDiagramGenerator.Destroy;
+destructor TUMLDiagramGenerator.Destroy;  
 var
   i: Integer;
 begin
@@ -2973,7 +2973,7 @@ begin
   end;
 end;
 
-procedure TUMLDiagramGenerator.GenerateDiagram(const AFileName: string);
+procedure TUMLDiagramGenerator.GenerateDiagram(const AFileName: string);  
 var
   SVG: TSVGGenerator;
   i: Integer;
@@ -3021,7 +3021,7 @@ end.
 
 ```pascal
 // ✅ Vérifier la structure XML
-procedure ValidateSVG(const AFileName: string);
+procedure ValidateSVG(const AFileName: string);  
 var
   Doc: TXMLDocument;
 begin
@@ -3060,7 +3060,7 @@ end;
 
 ```pascal
 // ✅ Optimiser avant sauvegarde
-procedure OptimizeAndSave(ASVG: TSVGGenerator; const AFileName: string);
+procedure OptimizeAndSave(ASVG: TSVGGenerator; const AFileName: string);  
 var
   SVGContent: string;
   Optimizer: TSVGOptimizer;

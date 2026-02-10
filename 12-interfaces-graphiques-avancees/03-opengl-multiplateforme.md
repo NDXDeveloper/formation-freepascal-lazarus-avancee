@@ -120,7 +120,7 @@ type
     procedure OpenGLControl1Paint(Sender: TObject);
   end;
 
-procedure TForm1.OpenGLControl1Paint(Sender: TObject);
+procedure TForm1.OpenGLControl1Paint(Sender: TObject);  
 begin
   // Effacer l'écran
   glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
@@ -288,7 +288,7 @@ Pour utiliser OpenGL avec Lazarus, vous aurez besoin de :
 #### Sur Ubuntu/Linux
 ```bash
 # Installer les bibliothèques de développement OpenGL
-sudo apt-get update
+sudo apt-get update  
 sudo apt-get install libgl1-mesa-dev libglu1-mesa-dev
 
 # Vérifier l'installation
@@ -337,19 +337,19 @@ implementation
 
 {$R *.lfm}
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   InitOpenGL;
 end;
 
-procedure TForm1.InitOpenGL;
+procedure TForm1.InitOpenGL;  
 begin
   // Configuration initiale OpenGL
   glClearColor(0.2, 0.3, 0.4, 1.0);  // Couleur de fond (bleu foncé)
   glEnable(GL_DEPTH_TEST);            // Activer le test de profondeur
 end;
 
-procedure TForm1.OpenGLControl1Paint(Sender: TObject);
+procedure TForm1.OpenGLControl1Paint(Sender: TObject);  
 begin
   // Effacer l'écran
   glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
@@ -440,7 +440,7 @@ OpenGLControl1.SwapBuffers;
 Dans une application OpenGL typique :
 
 ```pascal
-procedure TForm1.IdleLoop(Sender: TObject; var Done: Boolean);
+procedure TForm1.IdleLoop(Sender: TObject; var Done: Boolean);  
 begin
   // Mettre à jour la logique
   UpdateScene(DeltaTime);
@@ -451,7 +451,7 @@ begin
   Done := False;  // Continue la boucle
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   Application.OnIdle := @IdleLoop;
 end;
@@ -462,7 +462,7 @@ end;
 Le **viewport** définit la zone de dessin :
 
 ```pascal
-procedure TForm1.OpenGLControl1Resize(Sender: TObject);
+procedure TForm1.OpenGLControl1Resize(Sender: TObject);  
 var
   W, H: Integer;
 begin
@@ -497,10 +497,10 @@ OpenGL utilise trois matrices pour transformer les objets :
 - Vue de la caméra
 
 ```pascal
-glMatrixMode(GL_MODELVIEW);
-glLoadIdentity;
-glTranslatef(2.0, 0.0, -5.0);  // Déplacer
-glRotatef(45.0, 0.0, 1.0, 0.0); // Rotation 45° autour Y
+glMatrixMode(GL_MODELVIEW);  
+glLoadIdentity;  
+glTranslatef(2.0, 0.0, -5.0);  // Déplacer  
+glRotatef(45.0, 0.0, 1.0, 0.0); // Rotation 45° autour Y  
 glScalef(2.0, 2.0, 2.0);        // Agrandir 2×
 ```
 
@@ -509,7 +509,7 @@ glScalef(2.0, 2.0, 2.0);        // Agrandir 2×
 - Perspective ou orthographique
 
 ```pascal
-glMatrixMode(GL_PROJECTION);
+glMatrixMode(GL_PROJECTION);  
 glLoadIdentity;
 
 // Projection perspective (3D réaliste)
@@ -569,7 +569,7 @@ glEnd;
 
 ```pascal
 // Activer l'éclairage
-glEnable(GL_LIGHTING);
+glEnable(GL_LIGHTING);  
 glEnable(GL_LIGHT0);
 
 // Définir une source de lumière
@@ -603,7 +603,7 @@ end;
 #### 1. **Réduction des appels OpenGL**
 ```pascal
 // ❌ MAUVAIS : Beaucoup d'appels
-for i := 0 to 1000 do
+for i := 0 to 1000 do  
 begin
   glBegin(GL_TRIANGLES);
     // Un seul triangle
@@ -633,7 +633,7 @@ end;
 
 #### 3. **Culling (élimination des faces cachées)**
 ```pascal
-glEnable(GL_CULL_FACE);
+glEnable(GL_CULL_FACE);  
 glCullFace(GL_BACK);  // Ne pas dessiner les faces arrière
 ```
 
@@ -674,7 +674,7 @@ Le code OpenGL est **naturellement portable** :
 
 ```pascal
 // Ce code fonctionne identiquement sur Windows et Linux
-procedure RenderScene;
+procedure RenderScene;  
 begin
   glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
   glLoadIdentity;
@@ -717,7 +717,7 @@ if Load_GL_version_2_0 then
 ### Vérification du support
 
 ```pascal
-procedure CheckOpenGLVersion;
+procedure CheckOpenGLVersion;  
 var
   Version, Vendor, Renderer: PChar;
 begin

@@ -205,7 +205,7 @@ vkcube
 cd "C:\VulkanSDK\<version>\Bin"
 
 # Tester
-vulkaninfo
+vulkaninfo  
 vkcube
 ```
 
@@ -213,7 +213,7 @@ vkcube
 
 ```bash
 # Installer le runtime Vulkan
-sudo apt-get update
+sudo apt-get update  
 sudo apt-get install vulkan-tools libvulkan-dev
 
 # Installer les couches de validation
@@ -226,7 +226,7 @@ sudo apt-get install nvidia-driver-525  # Ou version récente
 sudo apt-get install mesa-vulkan-drivers
 
 # Vérifier
-vulkaninfo
+vulkaninfo  
 vkcube
 ```
 
@@ -334,12 +334,12 @@ Vulkan ne synchronise RIEN automatiquement. Le développeur doit gérer :
 vkAcquireNextImageKHR(..., imageAvailableSemaphore, ...);
 
 // Soumettre commandes avec dépendances
-SubmitInfo.waitSemaphores := [imageAvailableSemaphore];
-SubmitInfo.signalSemaphores := [renderFinishedSemaphore];
+SubmitInfo.waitSemaphores := [imageAvailableSemaphore];  
+SubmitInfo.signalSemaphores := [renderFinishedSemaphore];  
 vkQueueSubmit(..., fence);
 
 // Présenter quand le rendu est fini
-PresentInfo.waitSemaphores := [renderFinishedSemaphore];
+PresentInfo.waitSemaphores := [renderFinishedSemaphore];  
 vkQueuePresentKHR(...);
 
 // Attendre sur CPU que GPU finisse
@@ -390,7 +390,7 @@ type
 
 implementation
 
-constructor TVulkanApp.Create;
+constructor TVulkanApp.Create;  
 begin
   inherited Create;
   // Initialisation des handles
@@ -398,7 +398,7 @@ begin
   FDevice := VK_NULL_HANDLE;
 end;
 
-procedure TVulkanApp.Initialize;
+procedure TVulkanApp.Initialize;  
 begin
   WriteLn('Initialisation Vulkan...');
 
@@ -412,7 +412,7 @@ begin
   WriteLn('Vulkan initialisé avec succès');
 end;
 
-procedure TVulkanApp.CreateInstance;
+procedure TVulkanApp.CreateInstance;  
 var
   AppInfo: TVkApplicationInfo;
   CreateInfo: TVkInstanceCreateInfo;
@@ -437,7 +437,7 @@ begin
   WriteLn('Instance Vulkan créée');
 end;
 
-procedure TVulkanApp.SelectPhysicalDevice;
+procedure TVulkanApp.SelectPhysicalDevice;  
 var
   DeviceCount: UInt32;
   Devices: array of TVkPhysicalDevice;
@@ -457,7 +457,7 @@ begin
   WriteLn(Format('%d GPU(s) trouvé(s)', [DeviceCount]));
 end;
 
-procedure TVulkanApp.CreateLogicalDevice;
+procedure TVulkanApp.CreateLogicalDevice;  
 var
   QueueCreateInfo: TVkDeviceQueueCreateInfo;
   DeviceCreateInfo: TVkDeviceCreateInfo;
@@ -487,7 +487,7 @@ begin
   WriteLn('Logical device créé');
 end;
 
-procedure TVulkanApp.CreateCommandPool;
+procedure TVulkanApp.CreateCommandPool;  
 var
   PoolInfo: TVkCommandPoolCreateInfo;
 begin
@@ -502,14 +502,14 @@ begin
   WriteLn('Command pool créé');
 end;
 
-procedure TVulkanApp.CreatePipeline;
+procedure TVulkanApp.CreatePipeline;  
 begin
   // TRÈS SIMPLIFIÉ : La vraie création de pipeline est complexe
   // Nécessite shaders compilés (SPIR-V), états de rendu, etc.
   WriteLn('Pipeline créé (simplifié)');
 end;
 
-procedure TVulkanApp.RecordCommandBuffer;
+procedure TVulkanApp.RecordCommandBuffer;  
 var
   AllocInfo: TVkCommandBufferAllocateInfo;
   BeginInfo: TVkCommandBufferBeginInfo;
@@ -538,7 +538,7 @@ begin
   WriteLn('Command buffer enregistré');
 end;
 
-procedure TVulkanApp.RenderFrame;
+procedure TVulkanApp.RenderFrame;  
 var
   SubmitInfo: TVkSubmitInfo;
 begin
@@ -552,7 +552,7 @@ begin
   vkQueueWaitIdle(FQueue);  // Attendre que le GPU finisse
 end;
 
-procedure TVulkanApp.Cleanup;
+procedure TVulkanApp.Cleanup;  
 begin
   if FDevice <> VK_NULL_HANDLE then
   begin
@@ -566,7 +566,7 @@ begin
   WriteLn('Nettoyage Vulkan terminé');
 end;
 
-destructor TVulkanApp.Destroy;
+destructor TVulkanApp.Destroy;  
 begin
   Cleanup;
   inherited Destroy;
@@ -619,7 +619,7 @@ end.
 ```glsl
 #version 450
 
-layout(location = 0) in vec3 inPosition;
+layout(location = 0) in vec3 inPosition;  
 layout(location = 1) in vec3 inColor;
 
 layout(location = 0) out vec3 fragColor;
@@ -651,7 +651,7 @@ sudo apt-get install glslang-tools  # Linux
 # Ou inclus dans Vulkan SDK (Windows)
 
 # Compiler
-glslangValidator -V vertex.glsl -o vertex.spv
+glslangValidator -V vertex.glsl -o vertex.spv  
 glslangValidator -V fragment.glsl -o fragment.spv
 
 # Vérifier

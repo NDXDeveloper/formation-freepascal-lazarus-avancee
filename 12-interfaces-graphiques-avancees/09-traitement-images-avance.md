@@ -58,7 +58,7 @@ Le traitement d'images est un domaine fascinant qui permet de manipuler, analyse
 uses
   BGRABitmap, BGRABitmapTypes;
 
-procedure TForm1.LoadImageFile(const FileName: string);
+procedure TForm1.LoadImageFile(const FileName: string);  
 var
   Bitmap: TBGRABitmap;
 begin
@@ -79,7 +79,7 @@ end;
 Le redimensionnement d'images nécessite différents algorithmes selon l'usage :
 
 ```pascal
-procedure ResizeImage(Source: TBGRABitmap; NewWidth, NewHeight: Integer): TBGRABitmap;
+procedure ResizeImage(Source: TBGRABitmap; NewWidth, NewHeight: Integer): TBGRABitmap;  
 begin
   // Méthode 1 : Redimensionnement simple (rapide)
   Result := Source.Resample(NewWidth, NewHeight);
@@ -99,13 +99,13 @@ end;
 ### Rotation et transformations
 
 ```pascal
-procedure RotateImage(Source: TBGRABitmap; AngleDegrees: Single): TBGRABitmap;
+procedure RotateImage(Source: TBGRABitmap; AngleDegrees: Single): TBGRABitmap;  
 begin
   // Rotation avec anti-aliasing
   Result := Source.RotateCW(AngleDegrees);
 end;
 
-procedure FlipImage(Source: TBGRABitmap; Horizontal: Boolean): TBGRABitmap;
+procedure FlipImage(Source: TBGRABitmap; Horizontal: Boolean): TBGRABitmap;  
 begin
   Result := TBGRABitmap.Create(Source.Width, Source.Height);
   if Horizontal then
@@ -118,7 +118,7 @@ end;
 ### Recadrage (Crop)
 
 ```pascal
-function CropImage(Source: TBGRABitmap; X, Y, Width, Height: Integer): TBGRABitmap;
+function CropImage(Source: TBGRABitmap; X, Y, Width, Height: Integer): TBGRABitmap;  
 var
   CropRect: TRect;
 begin
@@ -134,7 +134,7 @@ end;
 Le flou adoucit l'image en mélangeant les pixels adjacents :
 
 ```pascal
-procedure ApplyBlur(Bitmap: TBGRABitmap; Radius: Single);
+procedure ApplyBlur(Bitmap: TBGRABitmap; Radius: Single);  
 begin
   // Flou gaussien - naturel et professionnel
   BGRAReplace(Bitmap, Bitmap.FilterBlurRadial(Radius, rbFast));
@@ -155,7 +155,7 @@ end;
 La netteté accentue les contours et détails :
 
 ```pascal
-procedure ApplySharpen(Bitmap: TBGRABitmap; Amount: Single);
+procedure ApplySharpen(Bitmap: TBGRABitmap; Amount: Single);  
 begin
   // Amount : 0.1 à 2.0 typiquement
   BGRAReplace(Bitmap, Bitmap.FilterSharpen(Amount));
@@ -234,7 +234,7 @@ end;
 #### Effet Sépia (ancien)
 
 ```pascal
-procedure ApplySepia(Bitmap: TBGRABitmap);
+procedure ApplySepia(Bitmap: TBGRABitmap);  
 var
   x, y: Integer;
   p: PBGRAPixel;
@@ -262,7 +262,7 @@ end;
 #### Niveaux de gris
 
 ```pascal
-procedure ConvertToGrayscale(Bitmap: TBGRABitmap);
+procedure ConvertToGrayscale(Bitmap: TBGRABitmap);  
 var
   x, y: Integer;
   p: PBGRAPixel;
@@ -288,7 +288,7 @@ end;
 #### Effet Négatif
 
 ```pascal
-procedure ApplyNegative(Bitmap: TBGRABitmap);
+procedure ApplyNegative(Bitmap: TBGRABitmap);  
 var
   x, y: Integer;
   p: PBGRAPixel;
@@ -315,7 +315,7 @@ end;
 La détection de contours identifie les zones de changement rapide d'intensité :
 
 ```pascal
-function DetectEdges(Source: TBGRABitmap): TBGRABitmap;
+function DetectEdges(Source: TBGRABitmap): TBGRABitmap;  
 var
   Sobel: TBGRABitmap;
 begin
@@ -370,7 +370,7 @@ end;
 Améliore le contraste en redistribuant les valeurs :
 
 ```pascal
-procedure EqualizeHistogram(Bitmap: TBGRABitmap);
+procedure EqualizeHistogram(Bitmap: TBGRABitmap);  
 var
   Hist: THistogram;
   CDF: array[0..255] of Integer;
@@ -547,7 +547,7 @@ type
     property Y: Integer read FY write FY;
   end;
 
-procedure ComposeLayers(Layers: TList; Output: TBGRABitmap);
+procedure ComposeLayers(Layers: TList; Output: TBGRABitmap);  
 var
   i: Integer;
   Layer: TImageLayer;
@@ -619,7 +619,7 @@ type
 ### Optimisation mémoire
 
 ```pascal
-procedure ProcessLargeImage(const FileName: string);
+procedure ProcessLargeImage(const FileName: string);  
 var
   Stream: TFileStream;
   Reader: TFPReaderPNG;
@@ -666,7 +666,7 @@ end;
 ### Polices et rendu de texte
 
 ```pascal
-procedure SetupFontRendering;
+procedure SetupFontRendering;  
 begin
   {$IFDEF WINDOWS}
   // Windows : GDI+
@@ -683,7 +683,7 @@ end;
 ### Accélération matérielle
 
 ```pascal
-procedure EnableHardwareAcceleration;
+procedure EnableHardwareAcceleration;  
 begin
   {$IFDEF WINDOWS}
   // Direct2D sur Windows
@@ -735,7 +735,7 @@ type
 
 implementation
 
-procedure TFormImageEditor.BtnLoadClick(Sender: TObject);
+procedure TFormImageEditor.BtnLoadClick(Sender: TObject);  
 var
   OpenDialog: TOpenDialog;
 begin
@@ -753,7 +753,7 @@ begin
   end;
 end;
 
-procedure TFormImageEditor.ApplyAdjustments(Sender: TObject);
+procedure TFormImageEditor.ApplyAdjustments(Sender: TObject);  
 begin
   if FOriginal = nil then Exit;
 
@@ -768,7 +768,7 @@ begin
   UpdateDisplay;
 end;
 
-procedure TFormImageEditor.UpdateDisplay;
+procedure TFormImageEditor.UpdateDisplay;  
 begin
   if FCurrent <> nil then
     ImageDisplay.Picture.Assign(FCurrent.Bitmap);

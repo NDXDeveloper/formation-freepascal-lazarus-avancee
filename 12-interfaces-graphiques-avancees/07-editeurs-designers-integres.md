@@ -103,7 +103,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TfrmCodeEditor.FormCreate(Sender: TObject);
+procedure TfrmCodeEditor.FormCreate(Sender: TObject);  
 begin
   Caption := 'Éditeur de Code';
   Width := 1000;
@@ -116,7 +116,7 @@ begin
   ConfigureEditorOptions;
 end;
 
-procedure TfrmCodeEditor.SetupEditor;
+procedure TfrmCodeEditor.SetupEditor;  
 begin
   // Création de l'éditeur principal
   FSynEdit := TSynEdit.Create(Self);
@@ -141,7 +141,7 @@ begin
   FSynEdit.Options := FSynEdit.Options + [eoTrimTrailingSpaces];
 end;
 
-procedure TfrmCodeEditor.SetupHighlighters;
+procedure TfrmCodeEditor.SetupHighlighters;  
 begin
   // Highlighter Pascal
   FHighlighterPascal := TSynPasSyn.Create(Self);
@@ -156,7 +156,7 @@ begin
   FSynEdit.Highlighter := FHighlighterPascal;
 end;
 
-procedure TfrmCodeEditor.SetupCompletion;
+procedure TfrmCodeEditor.SetupCompletion;  
 begin
   // Auto-complétion
   FSynCompletion := TSynCompletion.Create(Self);
@@ -181,7 +181,7 @@ begin
   FSynCompletion.ItemList.Add('finally');
 end;
 
-procedure TfrmCodeEditor.ConfigureEditorOptions;
+procedure TfrmCodeEditor.ConfigureEditorOptions;  
 begin
   // Couleurs personnalisées
   FSynEdit.Color := clWhite;
@@ -198,7 +198,7 @@ begin
   FSynEdit.Gutter.Color := RGB(240, 240, 240);
 end;
 
-procedure TfrmCodeEditor.LoadFile(const AFileName: string);
+procedure TfrmCodeEditor.LoadFile(const AFileName: string);  
 begin
   if FileExists(AFileName) then
   begin
@@ -215,12 +215,12 @@ begin
   end;
 end;
 
-procedure TfrmCodeEditor.SaveFile(const AFileName: string);
+procedure TfrmCodeEditor.SaveFile(const AFileName: string);  
 begin
   FSynEdit.Lines.SaveToFile(AFileName);
 end;
 
-procedure TfrmCodeEditor.SetLanguage(const ALanguage: string);
+procedure TfrmCodeEditor.SetLanguage(const ALanguage: string);  
 begin
   if ALanguage = 'Pascal' then
     FSynEdit.Highlighter := FHighlighterPascal
@@ -240,7 +240,7 @@ end.
 #### Pliage de code (Code Folding)
 
 ```pascal
-procedure TfrmCodeEditor.EnableCodeFolding;
+procedure TfrmCodeEditor.EnableCodeFolding;  
 begin
   FSynEdit.Options := FSynEdit.Options + [eoFoldedCopyPaste];
 
@@ -276,14 +276,14 @@ type
     procedure FindNext;
   end;
 
-constructor TCodeEditorSearch.Create(AEditor: TSynEdit);
+constructor TCodeEditorSearch.Create(AEditor: TSynEdit);  
 begin
   inherited Create;
   FEditor := AEditor;
   FSearchEngine := TSynEditSearch.Create;
 end;
 
-destructor TCodeEditorSearch.Destroy;
+destructor TCodeEditorSearch.Destroy;  
 begin
   FSearchEngine.Free;
   inherited Destroy;
@@ -371,7 +371,7 @@ begin
   Result := FoundCount;
 end;
 
-procedure TCodeEditorSearch.FindNext;
+procedure TCodeEditorSearch.FindNext;  
 begin
   // Réutiliser la dernière recherche
   if FSearchEngine.Pattern <> '' then
@@ -386,18 +386,18 @@ end;
 #### Marqueurs et signets
 
 ```pascal
-procedure TfrmCodeEditor.AddBookmark(ALine: Integer);
+procedure TfrmCodeEditor.AddBookmark(ALine: Integer);  
 begin
   // Ajouter un signet à la ligne spécifiée
   FSynEdit.SetBookMark(ALine, ALine, 0);
 end;
 
-procedure TfrmCodeEditor.RemoveBookmark(ALine: Integer);
+procedure TfrmCodeEditor.RemoveBookmark(ALine: Integer);  
 begin
   FSynEdit.ClearBookMark(ALine);
 end;
 
-procedure TfrmCodeEditor.NextBookmark;
+procedure TfrmCodeEditor.NextBookmark;  
 var
   i, CurrentLine: Integer;
 begin
@@ -482,7 +482,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TfrmRichEditor.FormCreate(Sender: TObject);
+procedure TfrmRichEditor.FormCreate(Sender: TObject);  
 begin
   Caption := 'Éditeur de Texte Riche';
   Width := 900;
@@ -494,7 +494,7 @@ begin
   CreateFormatButtons;
 end;
 
-procedure TfrmRichEditor.SetupToolbar;
+procedure TfrmRichEditor.SetupToolbar;  
 begin
   FToolbar := TToolBar.Create(Self);
   FToolbar.Parent := Self;
@@ -504,7 +504,7 @@ begin
   FToolbar.Images := nil; // Vous pouvez ajouter une ImageList
 end;
 
-procedure TfrmRichEditor.SetupRichEdit;
+procedure TfrmRichEditor.SetupRichEdit;  
 begin
   FRichEdit := TRichMemo.Create(Self);
   FRichEdit.Parent := Self;
@@ -517,7 +517,7 @@ begin
   FRichEdit.Font.Size := 11;
 end;
 
-procedure TfrmRichEditor.CreateFormatButtons;
+procedure TfrmRichEditor.CreateFormatButtons;  
 var
   Separator: TToolButton;
 begin
@@ -618,7 +618,7 @@ begin
   FAlignRightBtn.OnClick := @OnAlignClick;
 end;
 
-procedure TfrmRichEditor.OnBoldClick(Sender: TObject);
+procedure TfrmRichEditor.OnBoldClick(Sender: TObject);  
 var
   Style: TFontStyles;
 begin
@@ -633,7 +633,7 @@ begin
   end;
 end;
 
-procedure TfrmRichEditor.OnItalicClick(Sender: TObject);
+procedure TfrmRichEditor.OnItalicClick(Sender: TObject);  
 var
   Style: TFontStyles;
 begin
@@ -648,7 +648,7 @@ begin
   end;
 end;
 
-procedure TfrmRichEditor.OnUnderlineClick(Sender: TObject);
+procedure TfrmRichEditor.OnUnderlineClick(Sender: TObject);  
 var
   Style: TFontStyles;
 begin
@@ -663,7 +663,7 @@ begin
   end;
 end;
 
-procedure TfrmRichEditor.OnColorClick(Sender: TObject);
+procedure TfrmRichEditor.OnColorClick(Sender: TObject);  
 var
   ColorDialog: TColorDialog;
 begin
@@ -679,7 +679,7 @@ begin
   end;
 end;
 
-procedure TfrmRichEditor.OnFontChange(Sender: TObject);
+procedure TfrmRichEditor.OnFontChange(Sender: TObject);  
 begin
   if FFontCombo.ItemIndex >= 0 then
   begin
@@ -690,7 +690,7 @@ begin
   end;
 end;
 
-procedure TfrmRichEditor.OnFontSizeChange(Sender: TObject);
+procedure TfrmRichEditor.OnFontSizeChange(Sender: TObject);  
 var
   Size: Integer;
 begin
@@ -704,7 +704,7 @@ begin
   end;
 end;
 
-procedure TfrmRichEditor.OnAlignClick(Sender: TObject);
+procedure TfrmRichEditor.OnAlignClick(Sender: TObject);  
 var
   Alignment: TAlignment;
 begin
@@ -712,7 +712,7 @@ begin
   FRichEdit.Paragraph.Alignment := Alignment;
 end;
 
-procedure TfrmRichEditor.OnSelectionChange(Sender: TObject);
+procedure TfrmRichEditor.OnSelectionChange(Sender: TObject);  
 begin
   // Mettre à jour les boutons selon la sélection
   if FRichEdit.SelLength > 0 then
@@ -727,13 +727,13 @@ begin
   end;
 end;
 
-procedure TfrmRichEditor.LoadRTF(const AFileName: string);
+procedure TfrmRichEditor.LoadRTF(const AFileName: string);  
 begin
   if FileExists(AFileName) then
     FRichEdit.Lines.LoadFromFile(AFileName);
 end;
 
-procedure TfrmRichEditor.SaveRTF(const AFileName: string);
+procedure TfrmRichEditor.SaveRTF(const AFileName: string);  
 begin
   FRichEdit.Lines.SaveToFile(AFileName);
 end;
@@ -809,7 +809,7 @@ implementation
 uses
   IniFiles;
 
-procedure TfrmFormDesigner.FormCreate(Sender: TObject);
+procedure TfrmFormDesigner.FormCreate(Sender: TObject);  
 begin
   Caption := 'Designer de Formulaires';
   Width := 1200;
@@ -824,7 +824,7 @@ begin
   SetupInterface;
 end;
 
-procedure TfrmFormDesigner.FormDestroy(Sender: TObject);
+procedure TfrmFormDesigner.FormDestroy(Sender: TObject);  
 var
   i: Integer;
 begin
@@ -833,7 +833,7 @@ begin
   FComponents.Free;
 end;
 
-procedure TfrmFormDesigner.SetupInterface;
+procedure TfrmFormDesigner.SetupInterface;  
 begin
   CreateToolbox;
   CreatePropertyGrid;
@@ -850,7 +850,7 @@ begin
   FDesignPanel.OnPaint := @OnDesignPanelPaint;
 end;
 
-procedure TfrmFormDesigner.CreateToolbox;
+procedure TfrmFormDesigner.CreateToolbox;  
 var
   Panel: TPanel;
   Btn: TSpeedButton;
@@ -937,7 +937,7 @@ begin
   Btn.OnClick := @OnToolboxButtonClick;
 end;
 
-procedure TfrmFormDesigner.CreatePropertyGrid;
+procedure TfrmFormDesigner.CreatePropertyGrid;  
 var
   Panel: TPanel;
   Column: TListColumn;
@@ -979,7 +979,7 @@ begin
   Column.Width := 140;
 end;
 
-procedure TfrmFormDesigner.OnToolboxButtonClick(Sender: TObject);
+procedure TfrmFormDesigner.OnToolboxButtonClick(Sender: TObject);  
 var
   ComponentType: Integer;
 begin
@@ -1077,7 +1077,7 @@ begin
   FResizing := False;
 end;
 
-procedure TfrmFormDesigner.OnDesignPanelPaint(Sender: TObject);
+procedure TfrmFormDesigner.OnDesignPanelPaint(Sender: TObject);  
 var
   i: Integer;
   DesignComp: TDesignerComponent;
@@ -1152,7 +1152,7 @@ begin
   SelectComponent(DesignComp);
 end;
 
-procedure TfrmFormDesigner.SelectComponent(AComponent: TDesignerComponent);
+procedure TfrmFormDesigner.SelectComponent(AComponent: TDesignerComponent);  
 var
   i: Integer;
 begin
@@ -1175,7 +1175,7 @@ begin
   FDesignPanel.Invalidate;
 end;
 
-procedure TfrmFormDesigner.DrawSelectionHandles(ACanvas: TCanvas; ARect: TRect);
+procedure TfrmFormDesigner.DrawSelectionHandles(ACanvas: TCanvas; ARect: TRect);  
 const
   HandleSize = 6;
 var
@@ -1216,7 +1216,7 @@ begin
   end;
 end;
 
-procedure TfrmFormDesigner.UpdatePropertyGrid;
+procedure TfrmFormDesigner.UpdatePropertyGrid;  
 var
   Item: TListItem;
 begin
@@ -1270,7 +1270,7 @@ begin
   end;
 end;
 
-procedure TfrmFormDesigner.SaveDesign(const AFileName: string);
+procedure TfrmFormDesigner.SaveDesign(const AFileName: string);  
 var
   Ini: TIniFile;
   i: Integer;
@@ -1304,7 +1304,7 @@ begin
   end;
 end;
 
-procedure TfrmFormDesigner.LoadDesign(const AFileName: string);
+procedure TfrmFormDesigner.LoadDesign(const AFileName: string);  
 var
   Ini: TIniFile;
   i, Count: Integer;
@@ -1465,7 +1465,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TfrmSQLQueryBuilder.FormCreate(Sender: TObject);
+procedure TfrmSQLQueryBuilder.FormCreate(Sender: TObject);  
 begin
   Caption := 'Constructeur de Requêtes SQL';
   Width := 900;
@@ -1480,7 +1480,7 @@ begin
   SetupInterface;
 end;
 
-procedure TfrmSQLQueryBuilder.SetupInterface;
+procedure TfrmSQLQueryBuilder.SetupInterface;  
 var
   MainPanel: TPanel;
   TopPanel: TPanel;
@@ -1523,7 +1523,7 @@ begin
   CreateSQLPreview;
 end;
 
-procedure TfrmSQLQueryBuilder.CreateTablesPanel;
+procedure TfrmSQLQueryBuilder.CreateTablesPanel;  
 var
   Page: TPage;
   Panel: TPanel;
@@ -1548,7 +1548,7 @@ begin
   FTablesListBox.OnClick := @OnTableSelect;
 end;
 
-procedure TfrmSQLQueryBuilder.CreateColumnsPanel;
+procedure TfrmSQLQueryBuilder.CreateColumnsPanel;  
 var
   Page: TPage;
   Panel: TPanel;
@@ -1573,7 +1573,7 @@ begin
   FColumnsListBox.OnClickCheck := @OnColumnCheck;
 end;
 
-procedure TfrmSQLQueryBuilder.CreateWherePanel;
+procedure TfrmSQLQueryBuilder.CreateWherePanel;  
 var
   Page: TPage;
   Panel, ButtonPanel: TPanel;
@@ -1609,7 +1609,7 @@ begin
   Btn.OnClick := @OnAddWhereCondition;
 end;
 
-procedure TfrmSQLQueryBuilder.CreateOrderByPanel;
+procedure TfrmSQLQueryBuilder.CreateOrderByPanel;  
 var
   Page: TPage;
   Panel: TPanel;
@@ -1629,7 +1629,7 @@ begin
   Label1.Height := 25;
 end;
 
-procedure TfrmSQLQueryBuilder.CreateSQLPreview;
+procedure TfrmSQLQueryBuilder.CreateSQLPreview;  
 var
   Page: TPage;
   Panel, ButtonPanel: TPanel;
@@ -1673,7 +1673,7 @@ begin
   Btn.OnClick := @OnGenerateSQL;
 end;
 
-procedure TfrmSQLQueryBuilder.OnTableSelect(Sender: TObject);
+procedure TfrmSQLQueryBuilder.OnTableSelect(Sender: TObject);  
 begin
   if FTablesListBox.ItemIndex >= 0 then
   begin
@@ -1692,7 +1692,7 @@ begin
   end;
 end;
 
-procedure TfrmSQLQueryBuilder.OnColumnCheck(Sender: TObject);
+procedure TfrmSQLQueryBuilder.OnColumnCheck(Sender: TObject);  
 var
   i: Integer;
 begin
@@ -1705,7 +1705,7 @@ begin
   end;
 end;
 
-procedure TfrmSQLQueryBuilder.OnQueryTypeChange(Sender: TObject);
+procedure TfrmSQLQueryBuilder.OnQueryTypeChange(Sender: TObject);  
 var
   Index: Integer;
 begin
@@ -1724,7 +1724,7 @@ begin
   FOrderByColumns.Clear;
 end;
 
-procedure TfrmSQLQueryBuilder.OnAddWhereCondition(Sender: TObject);
+procedure TfrmSQLQueryBuilder.OnAddWhereCondition(Sender: TObject);  
 var
   Panel: TPanel;
   ComboColumn, ComboOperator: TComboBox;
@@ -1791,12 +1791,12 @@ begin
   FWhereConditions.Add('condition');
 end;
 
-procedure TfrmSQLQueryBuilder.OnDeleteWhereCondition(Sender: TObject);
+procedure TfrmSQLQueryBuilder.OnDeleteWhereCondition(Sender: TObject);  
 begin
   TPanel(TButton(Sender).Tag).Free;
 end;
 
-procedure TfrmSQLQueryBuilder.OnGenerateSQL(Sender: TObject);
+procedure TfrmSQLQueryBuilder.OnGenerateSQL(Sender: TObject);  
 var
   SQL: string;
 begin
@@ -1810,7 +1810,7 @@ begin
   FSQLMemo.Lines.Text := SQL;
 end;
 
-function TfrmSQLQueryBuilder.BuildSelectQuery: string;
+function TfrmSQLQueryBuilder.BuildSelectQuery: string;  
 var
   SQL: string;
   i: Integer;
@@ -1861,7 +1861,7 @@ begin
   Result := SQL;
 end;
 
-function TfrmSQLQueryBuilder.BuildInsertQuery: string;
+function TfrmSQLQueryBuilder.BuildInsertQuery: string;  
 var
   SQL: string;
   i: Integer;
@@ -1896,7 +1896,7 @@ begin
   Result := SQL;
 end;
 
-function TfrmSQLQueryBuilder.BuildUpdateQuery: string;
+function TfrmSQLQueryBuilder.BuildUpdateQuery: string;  
 var
   SQL: string;
   i: Integer;
@@ -1924,7 +1924,7 @@ begin
   Result := SQL;
 end;
 
-function TfrmSQLQueryBuilder.BuildDeleteQuery: string;
+function TfrmSQLQueryBuilder.BuildDeleteQuery: string;  
 var
   SQL: string;
 begin
@@ -1934,18 +1934,18 @@ begin
   Result := SQL;
 end;
 
-procedure TfrmSQLQueryBuilder.LoadTables(ATables: TStrings);
+procedure TfrmSQLQueryBuilder.LoadTables(ATables: TStrings);  
 begin
   FTablesListBox.Items.Assign(ATables);
 end;
 
-procedure TfrmSQLQueryBuilder.LoadColumns(ATable: string; AColumns: TStrings);
+procedure TfrmSQLQueryBuilder.LoadColumns(ATable: string; AColumns: TStrings);  
 begin
   FSelectedTable := ATable;
   FColumnsListBox.Items.Assign(AColumns);
 end;
 
-function TfrmSQLQueryBuilder.GetGeneratedSQL: string;
+function TfrmSQLQueryBuilder.GetGeneratedSQL: string;  
 begin
   Result := FSQLMemo.Lines.Text;
 end;
@@ -2039,7 +2039,7 @@ implementation
 uses
   IniFiles, IntfGraphics, FPImage, FPWritePNG;
 
-procedure TfrmDiagramEditor.FormCreate(Sender: TObject);
+procedure TfrmDiagramEditor.FormCreate(Sender: TObject);  
 begin
   Caption := 'Éditeur de Diagrammes';
   Width := 1000;
@@ -2055,7 +2055,7 @@ begin
   SetupInterface;
 end;
 
-procedure TfrmDiagramEditor.FormDestroy(Sender: TObject);
+procedure TfrmDiagramEditor.FormDestroy(Sender: TObject);  
 var
   i: Integer;
 begin
@@ -2068,7 +2068,7 @@ begin
   FConnections.Free;
 end;
 
-procedure TfrmDiagramEditor.SetupInterface;
+procedure TfrmDiagramEditor.SetupInterface;  
 begin
   CreateToolbox;
 
@@ -2085,7 +2085,7 @@ begin
   FCanvas.DoubleBuffered := True;
 end;
 
-procedure TfrmDiagramEditor.CreateToolbox;
+procedure TfrmDiagramEditor.CreateToolbox;  
 var
   Panel: TPanel;
   Btn: TSpeedButton;
@@ -2187,7 +2187,7 @@ begin
   Btn.OnClick := @OnConnectClick;
 end;
 
-procedure TfrmDiagramEditor.OnAddNodeClick(Sender: TObject);
+procedure TfrmDiagramEditor.OnAddNodeClick(Sender: TObject);  
 var
   NodeType: TNodeType;
 begin
@@ -2196,7 +2196,7 @@ begin
   FCanvas.Tag := Ord(NodeType);
 end;
 
-procedure TfrmDiagramEditor.OnConnectClick(Sender: TObject);
+procedure TfrmDiagramEditor.OnConnectClick(Sender: TObject);  
 begin
   FConnecting := True;
   FCanvas.Cursor := crHandPoint;
@@ -2288,7 +2288,7 @@ begin
   FDragging := False;
 end;
 
-procedure TfrmDiagramEditor.OnCanvasPaint(Sender: TObject);
+procedure TfrmDiagramEditor.OnCanvasPaint(Sender: TObject);  
 var
   i: Integer;
 begin
@@ -2303,7 +2303,7 @@ end;
 
 procedure DrawArrow(ACanvas: TCanvas; X, Y, FromX, FromY: Integer); forward;
 
-procedure TfrmDiagramEditor.DrawNode(ACanvas: TCanvas; ANode: TDiagramNode);
+procedure TfrmDiagramEditor.DrawNode(ACanvas: TCanvas; ANode: TDiagramNode);  
 var
   R: TRect;
   Points: array[0..3] of TPoint;
@@ -2410,7 +2410,7 @@ begin
   DrawArrow(ACanvas, X2, Y2, X1, Y1);
 end;
 
-procedure DrawArrow(ACanvas: TCanvas; X, Y, FromX, FromY: Integer);
+procedure DrawArrow(ACanvas: TCanvas; X, Y, FromX, FromY: Integer);  
 var
   Angle: Double;
   ArrowSize: Integer;
@@ -2435,7 +2435,7 @@ begin
   ACanvas.LineTo(P2.X, P2.Y);
 end;
 
-function TfrmDiagramEditor.FindNodeAt(X, Y: Integer): TDiagramNode;
+function TfrmDiagramEditor.FindNodeAt(X, Y: Integer): TDiagramNode;  
 var
   i: Integer;
   Node: TDiagramNode;
@@ -2456,7 +2456,7 @@ begin
   end;
 end;
 
-procedure TfrmDiagramEditor.AddNode(AType: TNodeType; X, Y: Integer);
+procedure TfrmDiagramEditor.AddNode(AType: TNodeType; X, Y: Integer);  
 var
   Node: TDiagramNode;
 begin
@@ -2501,7 +2501,7 @@ begin
   FCanvas.Invalidate;
 end;
 
-procedure TfrmDiagramEditor.AddConnection(AFrom, ATo: TDiagramNode);
+procedure TfrmDiagramEditor.AddConnection(AFrom, ATo: TDiagramNode);  
 var
   Connection: TDiagramConnection;
 begin
@@ -2516,7 +2516,7 @@ begin
   FCanvas.Invalidate;
 end;
 
-procedure TfrmDiagramEditor.SaveDiagram(const AFileName: string);
+procedure TfrmDiagramEditor.SaveDiagram(const AFileName: string);  
 var
   Ini: TIniFile;
   i: Integer;
@@ -2561,7 +2561,7 @@ begin
   end;
 end;
 
-procedure TfrmDiagramEditor.LoadDiagram(const AFileName: string);
+procedure TfrmDiagramEditor.LoadDiagram(const AFileName: string);  
 var
   Ini: TIniFile;
   i, NodeCount, ConnCount: Integer;
@@ -2633,7 +2633,7 @@ begin
   FCanvas.Invalidate;
 end;
 
-procedure TfrmDiagramEditor.ExportToPNG(const AFileName: string);
+procedure TfrmDiagramEditor.ExportToPNG(const AFileName: string);  
 var
   Bitmap: TBitmap;
   IntfImg: TLazIntfImage;
@@ -2749,7 +2749,7 @@ implementation
 uses
   IniFiles, LCLType;
 
-procedure TfrmColorPaletteEditor.FormCreate(Sender: TObject);
+procedure TfrmColorPaletteEditor.FormCreate(Sender: TObject);  
 begin
   Caption := 'Éditeur de Palettes de Couleurs';
   Width := 900;
@@ -2765,14 +2765,14 @@ begin
   AddPalette('Palette par défaut');
 end;
 
-procedure TfrmColorPaletteEditor.SetupInterface;
+procedure TfrmColorPaletteEditor.SetupInterface;  
 begin
   CreatePaletteList;
   CreateColorGrid;
   CreateColorControls;
 end;
 
-procedure TfrmColorPaletteEditor.CreatePaletteList;
+procedure TfrmColorPaletteEditor.CreatePaletteList;  
 var
   Panel: TPanel;
   Label1: TLabel;
@@ -2822,7 +2822,7 @@ begin
   BtnDelete.Width := 85;
 end;
 
-procedure TfrmColorPaletteEditor.CreateColorGrid;
+procedure TfrmColorPaletteEditor.CreateColorGrid;  
 var
   Panel: TPanel;
   Label1: TLabel;
@@ -2856,7 +2856,7 @@ begin
   FColorGrid.OnSelectCell := @OnColorGridSelectCell;
 end;
 
-procedure TfrmColorPaletteEditor.CreateColorControls;
+procedure TfrmColorPaletteEditor.CreateColorControls;  
 var
   Panel, SubPanel: TPanel;
   Label1: TLabel;
@@ -3008,7 +3008,7 @@ begin
   end;
 end;
 
-procedure TfrmColorPaletteEditor.OnNewPalette(Sender: TObject);
+procedure TfrmColorPaletteEditor.OnNewPalette(Sender: TObject);  
 var
   PaletteName: string;
 begin
@@ -3017,13 +3017,13 @@ begin
     AddPalette(PaletteName);
 end;
 
-procedure TfrmColorPaletteEditor.OnAddColorClick(Sender: TObject);
+procedure TfrmColorPaletteEditor.OnAddColorClick(Sender: TObject);  
 begin
   if Assigned(FCurrentPalette) then
     AddColorToPalette(FColorPreview.Color);
 end;
 
-procedure TfrmColorPaletteEditor.OnPaletteSelect(Sender: TObject);
+procedure TfrmColorPaletteEditor.OnPaletteSelect(Sender: TObject);  
 var
   Index: Integer;
 begin
@@ -3083,14 +3083,14 @@ begin
   end;
 end;
 
-procedure TfrmColorPaletteEditor.OnColorPickerChange(Sender: TObject);
+procedure TfrmColorPaletteEditor.OnColorPickerChange(Sender: TObject);  
 begin
   UpdateColorPreview(FColorPicker.Selected);
   UpdateRGBSpins(FColorPicker.Selected);
   UpdateHexEdit(FColorPicker.Selected);
 end;
 
-procedure TfrmColorPaletteEditor.OnRGBChange(Sender: TObject);
+procedure TfrmColorPaletteEditor.OnRGBChange(Sender: TObject);  
 var
   NewColor: TColor;
 begin
@@ -3100,7 +3100,7 @@ begin
   FColorPicker.Selected := NewColor;
 end;
 
-procedure TfrmColorPaletteEditor.OnHexChange(Sender: TObject);
+procedure TfrmColorPaletteEditor.OnHexChange(Sender: TObject);  
 var
   HexStr: string;
   NewColor: TColor;
@@ -3119,7 +3119,7 @@ begin
   end;
 end;
 
-procedure TfrmColorPaletteEditor.UpdateColorPreview(AColor: TColor);
+procedure TfrmColorPaletteEditor.UpdateColorPreview(AColor: TColor);  
 begin
   FColorPreview.Color := AColor;
 
@@ -3127,7 +3127,7 @@ begin
   FColorPreview.Caption := ColorToString(AColor);
 end;
 
-procedure TfrmColorPaletteEditor.UpdateRGBSpins(AColor: TColor);
+procedure TfrmColorPaletteEditor.UpdateRGBSpins(AColor: TColor);  
 var
   R, G, B: Byte;
 begin
@@ -3146,7 +3146,7 @@ begin
   FBlueSpin.OnChange := @OnRGBChange;
 end;
 
-procedure TfrmColorPaletteEditor.UpdateHexEdit(AColor: TColor);
+procedure TfrmColorPaletteEditor.UpdateHexEdit(AColor: TColor);  
 var
   R, G, B: Byte;
 begin
@@ -3157,7 +3157,7 @@ begin
   FHexEdit.OnChange := @OnHexChange;
 end;
 
-procedure TfrmColorPaletteEditor.AddPalette(const AName: string);
+procedure TfrmColorPaletteEditor.AddPalette(const AName: string);  
 var
   Palette: TColorPalette;
 begin
@@ -3172,7 +3172,7 @@ begin
   FCurrentPalette := Palette;
 end;
 
-procedure TfrmColorPaletteEditor.AddColorToPalette(AColor: TColor);
+procedure TfrmColorPaletteEditor.AddColorToPalette(AColor: TColor);  
 var
   Index: Integer;
 begin
@@ -3185,7 +3185,7 @@ begin
   FColorGrid.Invalidate;
 end;
 
-procedure TfrmColorPaletteEditor.SavePalettes(const AFileName: string);
+procedure TfrmColorPaletteEditor.SavePalettes(const AFileName: string);  
 var
   Ini: TIniFile;
   i, j: Integer;
@@ -3214,7 +3214,7 @@ begin
   end;
 end;
 
-procedure TfrmColorPaletteEditor.LoadPalettes(const AFileName: string);
+procedure TfrmColorPaletteEditor.LoadPalettes(const AFileName: string);  
 begin
   // À implémenter : charger depuis le fichier
 end;
@@ -3228,20 +3228,20 @@ end.
 
 ```pascal
 // ✅ BON : Utiliser le double buffering pour éviter le scintillement
-procedure TCustomEditor.SetupCanvas;
+procedure TCustomEditor.SetupCanvas;  
 begin
   FCanvas.DoubleBuffered := True;
   FCanvas.OnPaint := @OnCanvasPaint;
 end;
 
 // ✅ BON : Invalider seulement la zone modifiée
-procedure TCustomEditor.UpdateRegion(ARect: TRect);
+procedure TCustomEditor.UpdateRegion(ARect: TRect);  
 begin
   InvalidateRect(FCanvas.Handle, @ARect, False);
 end;
 
 // ❌ MAUVAIS : Tout redessiner à chaque modification
-procedure TCustomEditor.UpdateBad;
+procedure TCustomEditor.UpdateBad;  
 begin
   FCanvas.Invalidate; // Redessine tout !
 end;
@@ -3272,7 +3272,7 @@ type
     function CanRedo: Boolean;
   end;
 
-constructor TUndoManager.Create;
+constructor TUndoManager.Create;  
 begin
   inherited Create;
   FUndoStack := TList.Create;
@@ -3280,7 +3280,7 @@ begin
   FMaxUndoLevels := 50;
 end;
 
-destructor TUndoManager.Destroy;
+destructor TUndoManager.Destroy;  
 begin
   // Libérer les commandes
   while FUndoStack.Count > 0 do
@@ -3300,7 +3300,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TUndoManager.ExecuteCommand(ACommand: TEditorCommand);
+procedure TUndoManager.ExecuteCommand(ACommand: TEditorCommand);  
 begin
   // Exécuter la commande
   ACommand.Execute;
@@ -3323,7 +3323,7 @@ begin
   end;
 end;
 
-procedure TUndoManager.Undo;
+procedure TUndoManager.Undo;  
 var
   Command: TEditorCommand;
 begin
@@ -3337,7 +3337,7 @@ begin
   end;
 end;
 
-procedure TUndoManager.Redo;
+procedure TUndoManager.Redo;  
 var
   Command: TEditorCommand;
 begin
@@ -3351,12 +3351,12 @@ begin
   end;
 end;
 
-function TUndoManager.CanUndo: Boolean;
+function TUndoManager.CanUndo: Boolean;  
 begin
   Result := FUndoStack.Count > 0;
 end;
 
-function TUndoManager.CanRedo: Boolean;
+function TUndoManager.CanRedo: Boolean;  
 begin
   Result := FRedoStack.Count > 0;
 end;
@@ -3386,7 +3386,7 @@ type
     property AutoSaveInterval: Integer read FAutoSaveInterval write FAutoSaveInterval;
   end;
 
-constructor TAutoSaveManager.Create(AEditor: TObject);
+constructor TAutoSaveManager.Create(AEditor: TObject);  
 begin
   inherited Create;
   FEditor := AEditor;
@@ -3407,13 +3407,13 @@ begin
   FTimer.Enabled := False;
 end;
 
-destructor TAutoSaveManager.Destroy;
+destructor TAutoSaveManager.Destroy;  
 begin
   FTimer.Free;
   inherited Destroy;
 end;
 
-procedure TAutoSaveManager.OnTimer(Sender: TObject);
+procedure TAutoSaveManager.OnTimer(Sender: TObject);  
 var
   FileName: string;
 begin
@@ -3430,17 +3430,17 @@ begin
   end;
 end;
 
-procedure TAutoSaveManager.Start;
+procedure TAutoSaveManager.Start;  
 begin
   FTimer.Enabled := True;
 end;
 
-procedure TAutoSaveManager.Stop;
+procedure TAutoSaveManager.Stop;  
 begin
   FTimer.Enabled := False;
 end;
 
-procedure TAutoSaveManager.MarkModified;
+procedure TAutoSaveManager.MarkModified;  
 begin
   FModified := True;
 end;
@@ -3473,7 +3473,7 @@ type
     function GetAllErrors: string;
   end;
 
-function TEmailValidationRule.Validate(const AValue: string): Boolean;
+function TEmailValidationRule.Validate(const AValue: string): Boolean;  
 var
   AtPos: Integer;
 begin
@@ -3483,19 +3483,19 @@ begin
             (Pos('.', AValue) > AtPos);
 end;
 
-function TEmailValidationRule.GetErrorMessage: string;
+function TEmailValidationRule.GetErrorMessage: string;  
 begin
   Result := 'Adresse email invalide';
 end;
 
-constructor TValidator.Create;
+constructor TValidator.Create;  
 begin
   inherited Create;
   FRules := TList.Create;
   FErrorMessages := TStringList.Create;
 end;
 
-destructor TValidator.Destroy;
+destructor TValidator.Destroy;  
 var
   i: Integer;
 begin
@@ -3506,12 +3506,12 @@ begin
   inherited Destroy;
 end;
 
-procedure TValidator.AddRule(ARule: TValidationRule);
+procedure TValidator.AddRule(ARule: TValidationRule);  
 begin
   FRules.Add(ARule);
 end;
 
-function TValidator.ValidateValue(const AValue: string): Boolean;
+function TValidator.ValidateValue(const AValue: string): Boolean;  
 var
   i: Integer;
   Rule: TValidationRule;
@@ -3530,7 +3530,7 @@ begin
   end;
 end;
 
-function TValidator.GetAllErrors: string;
+function TValidator.GetAllErrors: string;  
 begin
   Result := FErrorMessages.Text;
 end;
@@ -3656,7 +3656,7 @@ implementation
 uses
   IniFiles, StrUtils;
 
-procedure TfrmTemplateEditor.FormCreate(Sender: TObject);
+procedure TfrmTemplateEditor.FormCreate(Sender: TObject);  
 begin
   Caption := 'Éditeur de Modèles';
   Width := 1100;
@@ -3669,7 +3669,7 @@ begin
   SetupInterface;
 end;
 
-procedure TfrmTemplateEditor.SetupInterface;
+procedure TfrmTemplateEditor.SetupInterface;  
 begin
   CreateTemplateList;
   CreateEditor;
@@ -3677,7 +3677,7 @@ begin
   CreatePreview;
 end;
 
-procedure TfrmTemplateEditor.CreateTemplateList;
+procedure TfrmTemplateEditor.CreateTemplateList;  
 var
   Panel: TPanel;
   Label1: TLabel;
@@ -3728,7 +3728,7 @@ begin
   BtnNew.OnClick := @OnNewTemplate;
 end;
 
-procedure TfrmTemplateEditor.CreateEditor;
+procedure TfrmTemplateEditor.CreateEditor;  
 var
   Panel: TPanel;
   Label1: TLabel;
@@ -3755,7 +3755,7 @@ begin
   FEditor.WordWrap := False;
 end;
 
-procedure TfrmTemplateEditor.CreateVariablePanel;
+procedure TfrmTemplateEditor.CreateVariablePanel;  
 var
   Panel: TPanel;
   Label1: TLabel;
@@ -3793,7 +3793,7 @@ begin
   BtnInsert.OnClick := @OnInsertVariable;
 end;
 
-procedure TfrmTemplateEditor.CreatePreview;
+procedure TfrmTemplateEditor.CreatePreview;  
 var
   Splitter: TSplitter;
   Panel: TPanel;
@@ -3840,7 +3840,7 @@ begin
   BtnGenerate.OnClick := @OnGeneratePreview;
 end;
 
-procedure TfrmTemplateEditor.OnNewTemplate(Sender: TObject);
+procedure TfrmTemplateEditor.OnNewTemplate(Sender: TObject);  
 var
   TemplateName: string;
 begin
@@ -3849,7 +3849,7 @@ begin
     AddTemplate(TemplateName, 'Général');
 end;
 
-procedure TfrmTemplateEditor.OnTemplateSelect(Sender: TObject);
+procedure TfrmTemplateEditor.OnTemplateSelect(Sender: TObject);  
 var
   Item: TListItem;
 begin
@@ -3862,7 +3862,7 @@ begin
   end;
 end;
 
-procedure TfrmTemplateEditor.OnEditorChange(Sender: TObject);
+procedure TfrmTemplateEditor.OnEditorChange(Sender: TObject);  
 begin
   if Assigned(FCurrentTemplate) then
   begin
@@ -3871,7 +3871,7 @@ begin
   end;
 end;
 
-procedure TfrmTemplateEditor.OnInsertVariable(Sender: TObject);
+procedure TfrmTemplateEditor.OnInsertVariable(Sender: TObject);  
 var
   VarName: string;
 begin
@@ -3883,7 +3883,7 @@ begin
   end;
 end;
 
-procedure TfrmTemplateEditor.OnGeneratePreview(Sender: TObject);
+procedure TfrmTemplateEditor.OnGeneratePreview(Sender: TObject);  
 var
   Values: TStringList;
   i: Integer;
@@ -3911,7 +3911,7 @@ begin
   end;
 end;
 
-procedure TfrmTemplateEditor.ParseVariables;
+procedure TfrmTemplateEditor.ParseVariables;  
 var
   Content: string;
   StartPos, EndPos: Integer;
@@ -3960,7 +3960,7 @@ begin
   end;
 end;
 
-procedure TfrmTemplateEditor.AddTemplate(const AName, ACategory: string);
+procedure TfrmTemplateEditor.AddTemplate(const AName, ACategory: string);  
 var
   Template: TTemplate;
   Item: TListItem;
@@ -3981,7 +3981,7 @@ begin
   FTemplateList.Selected := Item;
 end;
 
-procedure TfrmTemplateEditor.SaveTemplates(const AFileName: string);
+procedure TfrmTemplateEditor.SaveTemplates(const AFileName: string);  
 var
   Ini: TIniFile;
   i: Integer;
@@ -4006,7 +4006,7 @@ begin
   end;
 end;
 
-procedure TfrmTemplateEditor.LoadTemplates(const AFileName: string);
+procedure TfrmTemplateEditor.LoadTemplates(const AFileName: string);  
 begin
   // À implémenter
 end;
@@ -4043,7 +4043,7 @@ implementation
 uses
   Forms;
 
-class function TPlatformHelper.GetDefaultFont: string;
+class function TPlatformHelper.GetDefaultFont: string;  
 begin
   {$IFDEF WINDOWS}
   Result := 'Consolas';
@@ -4054,7 +4054,7 @@ begin
   {$ENDIF}
 end;
 
-class function TPlatformHelper.GetDefaultFontSize: Integer;
+class function TPlatformHelper.GetDefaultFontSize: Integer;  
 begin
   {$IFDEF WINDOWS}
   Result := 10;
@@ -4065,7 +4065,7 @@ begin
   {$ENDIF}
 end;
 
-class function TPlatformHelper.GetConfigPath: string;
+class function TPlatformHelper.GetConfigPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('APPDATA') + PathDelim + 'MyEditor' + PathDelim;
@@ -4079,7 +4079,7 @@ begin
   ForceDirectories(Result);
 end;
 
-class function TPlatformHelper.GetTempPath: string;
+class function TPlatformHelper.GetTempPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('TEMP') + PathDelim;
@@ -4090,7 +4090,7 @@ begin
   {$ENDIF}
 end;
 
-class procedure TPlatformHelper.ConfigureEditor(AEditor: TObject);
+class procedure TPlatformHelper.ConfigureEditor(AEditor: TObject);  
 begin
   // Configuration spécifique à la plateforme
   {$IFDEF WINDOWS}
@@ -4154,25 +4154,25 @@ end.
 
 ```pascal
 // ❌ MAUVAIS : Redessiner tout à chaque modification
-procedure OnChange;
+procedure OnChange;  
 begin
   Invalidate; // Redessine TOUT !
 end;
 
 // ✅ BON : Invalider seulement la zone modifiée
-procedure OnChange;
+procedure OnChange;  
 begin
   InvalidateRect(Handle, @ModifiedRect, False);
 end;
 
 // ❌ MAUVAIS : Pas de limite sur l'historique
-procedure AddToUndo(ACommand: TCommand);
+procedure AddToUndo(ACommand: TCommand);  
 begin
   FUndoList.Add(ACommand); // Fuite mémoire potentielle !
 end;
 
 // ✅ BON : Limiter la taille de l'historique
-procedure AddToUndo(ACommand: TCommand);
+procedure AddToUndo(ACommand: TCommand);  
 begin
   FUndoList.Add(ACommand);
   while FUndoList.Count > FMaxUndoLevels do
@@ -4240,7 +4240,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TfrmSimpleEditor.FormCreate(Sender: TObject);
+procedure TfrmSimpleEditor.FormCreate(Sender: TObject);  
 begin
   Caption := 'Éditeur Simple';
   Width := 800;
@@ -4258,7 +4258,7 @@ begin
   CreateMenu;
 end;
 
-procedure TfrmSimpleEditor.CreateMenu;
+procedure TfrmSimpleEditor.CreateMenu;  
 var
   mnuFile: TMenuItem;
   Item: TMenuItem;
@@ -4289,7 +4289,7 @@ begin
   mnuFile.Add(Item);
 end;
 
-procedure TfrmSimpleEditor.OnNew(Sender: TObject);
+procedure TfrmSimpleEditor.OnNew(Sender: TObject);  
 begin
   if FModified then
   begin
@@ -4304,7 +4304,7 @@ begin
   Caption := 'Éditeur Simple - Sans titre';
 end;
 
-procedure TfrmSimpleEditor.OnOpen(Sender: TObject);
+procedure TfrmSimpleEditor.OnOpen(Sender: TObject);  
 var
   OpenDialog: TOpenDialog;
 begin
@@ -4322,7 +4322,7 @@ begin
   end;
 end;
 
-procedure TfrmSimpleEditor.OnSave(Sender: TObject);
+procedure TfrmSimpleEditor.OnSave(Sender: TObject);  
 var
   SaveDialog: TSaveDialog;
 begin
@@ -4344,7 +4344,7 @@ begin
   Caption := 'Éditeur Simple - ' + ExtractFileName(FFileName);
 end;
 
-procedure TfrmSimpleEditor.OnEditorChange(Sender: TObject);
+procedure TfrmSimpleEditor.OnEditorChange(Sender: TObject);  
 begin
   FModified := True;
   if FFileName <> '' then
@@ -4433,7 +4433,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TfrmRegexEditor.FormCreate(Sender: TObject);
+procedure TfrmRegexEditor.FormCreate(Sender: TObject);  
 begin
   Caption := 'Testeur d''Expressions Régulières';
   Width := 1000;
@@ -4445,12 +4445,12 @@ begin
   SetupInterface;
 end;
 
-procedure TfrmRegexEditor.FormDestroy(Sender: TObject);
+procedure TfrmRegexEditor.FormDestroy(Sender: TObject);  
 begin
   FRegex.Free;
 end;
 
-procedure TfrmRegexEditor.SetupInterface;
+procedure TfrmRegexEditor.SetupInterface;  
 begin
   CreatePatternPanel;
   CreateOptionsPanel;
@@ -4459,7 +4459,7 @@ begin
   CreateQuickReferencePanel;
 end;
 
-procedure TfrmRegexEditor.CreatePatternPanel;
+procedure TfrmRegexEditor.CreatePatternPanel;  
 var
   Panel: TPanel;
   Label1: TLabel;
@@ -4505,7 +4505,7 @@ begin
   Label1.Font.Color := clGray;
 end;
 
-procedure TfrmRegexEditor.CreateOptionsPanel;
+procedure TfrmRegexEditor.CreateOptionsPanel;  
 var
   Panel: TPanel;
 begin
@@ -4532,7 +4532,7 @@ begin
   FMultiLineCheck.OnClick := @OnOptionsChange;
 end;
 
-procedure TfrmRegexEditor.CreateTestTextPanel;
+procedure TfrmRegexEditor.CreateTestTextPanel;  
 var
   Panel: TPanel;
   Label1: TLabel;
@@ -4564,7 +4564,7 @@ begin
     'Date: 03/10/2025';
 end;
 
-procedure TfrmRegexEditor.CreateResultsPanel;
+procedure TfrmRegexEditor.CreateResultsPanel;  
 var
   Splitter: TSplitter;
   Panel, SubPanel: TPanel;
@@ -4638,7 +4638,7 @@ begin
   FResultsMemo.Color := RGB(250, 250, 250);
 end;
 
-procedure TfrmRegexEditor.CreateQuickReferencePanel;
+procedure TfrmRegexEditor.CreateQuickReferencePanel;  
 var
   Panel: TPanel;
   Memo: TMemo;
@@ -4706,24 +4706,24 @@ begin
   Memo.Lines.Add('  \d{2}/\d{2}/\d{4}');
 end;
 
-procedure TfrmRegexEditor.OnPatternChange(Sender: TObject);
+procedure TfrmRegexEditor.OnPatternChange(Sender: TObject);  
 begin
   // La validation se fait au clic sur "Tester"
 end;
 
-procedure TfrmRegexEditor.OnTestTextChange(Sender: TObject);
+procedure TfrmRegexEditor.OnTestTextChange(Sender: TObject);  
 begin
   // Auto-test si le pattern est valide
   if FPatternEdit.Text <> '' then
     OnTestRegex(nil);
 end;
 
-procedure TfrmRegexEditor.OnOptionsChange(Sender: TObject);
+procedure TfrmRegexEditor.OnOptionsChange(Sender: TObject);  
 begin
   OnTestRegex(nil);
 end;
 
-procedure TfrmRegexEditor.OnTestRegex(Sender: TObject);
+procedure TfrmRegexEditor.OnTestRegex(Sender: TObject);  
 begin
   if FPatternEdit.Text = '' then
   begin
@@ -4762,7 +4762,7 @@ begin
   end;
 end;
 
-procedure TfrmRegexEditor.DisplayMatches;
+procedure TfrmRegexEditor.DisplayMatches;  
 var
   TestText: string;
   MatchCount: Integer;
@@ -4833,13 +4833,13 @@ begin
   end;
 end;
 
-procedure TfrmRegexEditor.HighlightMatches;
+procedure TfrmRegexEditor.HighlightMatches;  
 begin
   // Note : La mise en évidence dans TMemo est limitée
   // Pour un vrai éditeur, utiliser SynEdit avec un highlighter personnalisé
 end;
 
-procedure TfrmRegexEditor.ShowError(const AMessage: string);
+procedure TfrmRegexEditor.ShowError(const AMessage: string);  
 begin
   // Afficher dans la barre d'état ou un label
   Application.MessageBox(PChar(AMessage), 'Erreur', MB_OK or MB_ICONERROR);
@@ -4902,7 +4902,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TfrmMathFormulaEditor.FormCreate(Sender: TObject);
+procedure TfrmMathFormulaEditor.FormCreate(Sender: TObject);  
 begin
   Caption := 'Éditeur de Formules Mathématiques';
   Width := 800;
@@ -4919,13 +4919,13 @@ begin
   SetupInterface;
 end;
 
-destructor TfrmMathFormulaEditor.Destroy;
+destructor TfrmMathFormulaEditor.Destroy;  
 begin
   FVariables.Free;
   inherited Destroy;
 end;
 
-procedure TfrmMathFormulaEditor.SetupInterface;
+procedure TfrmMathFormulaEditor.SetupInterface;  
 begin
   CreateFormulaPanel;
   CreateButtonsPanel;
@@ -4933,7 +4933,7 @@ begin
   CreateHistoryPanel;
 end;
 
-procedure TfrmMathFormulaEditor.CreateFormulaPanel;
+procedure TfrmMathFormulaEditor.CreateFormulaPanel;  
 var
   Panel: TPanel;
   Label1: TLabel;
@@ -4988,7 +4988,7 @@ begin
   FResultLabel.Caption := '0';
 end;
 
-procedure TfrmMathFormulaEditor.CreateButtonsPanel;
+procedure TfrmMathFormulaEditor.CreateButtonsPanel;  
 var
   Panel: TPanel;
   Btn: TSpeedButton;
@@ -5055,7 +5055,7 @@ begin
   AddButton('pow', 335, Y, 206);
 end;
 
-procedure TfrmMathFormulaEditor.CreateVariablesPanel;
+procedure TfrmMathFormulaEditor.CreateVariablesPanel;  
 var
   Panel: TPanel;
   Label1: TLabel;
@@ -5101,7 +5101,7 @@ begin
   end;
 end;
 
-procedure TfrmMathFormulaEditor.CreateHistoryPanel;
+procedure TfrmMathFormulaEditor.CreateHistoryPanel;  
 var
   Panel: TPanel;
   Label1: TLabel;
@@ -5126,12 +5126,12 @@ begin
   FHistoryMemo.Font.Name := 'Courier New';
 end;
 
-procedure TfrmMathFormulaEditor.OnVariableChange(Sender: TObject);
+procedure TfrmMathFormulaEditor.OnVariableChange(Sender: TObject);  
 begin
   FVariables.Values[Copy(TEdit(Sender).Name, 5, 100)] := TEdit(Sender).Text;
 end;
 
-procedure TfrmMathFormulaEditor.OnFormulaChange(Sender: TObject);
+procedure TfrmMathFormulaEditor.OnFormulaChange(Sender: TObject);  
 begin
   // Validation en temps réel (optionnel)
   if ValidateFormula(FFormulaEdit.Text) then
@@ -5140,7 +5140,7 @@ begin
     FFormulaEdit.Font.Color := clRed;
 end;
 
-procedure TfrmMathFormulaEditor.OnCalculate(Sender: TObject);
+procedure TfrmMathFormulaEditor.OnCalculate(Sender: TObject);  
 var
   Result: Double;
   Formula: string;
@@ -5169,7 +5169,7 @@ begin
   end;
 end;
 
-procedure TfrmMathFormulaEditor.OnInsertOperator(Sender: TObject);
+procedure TfrmMathFormulaEditor.OnInsertOperator(Sender: TObject);  
 var
   OperatorStr: string;
 begin
@@ -5187,7 +5187,7 @@ begin
   FFormulaEdit.SetFocus;
 end;
 
-procedure TfrmMathFormulaEditor.OnInsertFunction(Sender: TObject);
+procedure TfrmMathFormulaEditor.OnInsertFunction(Sender: TObject);  
 var
   Func: string;
 begin
@@ -5212,7 +5212,7 @@ begin
   FFormulaEdit.SelStart := FFormulaEdit.SelStart - Length(Func) + Pos('(', Func);
 end;
 
-function TfrmMathFormulaEditor.ValidateFormula(const AFormula: string): Boolean;
+function TfrmMathFormulaEditor.ValidateFormula(const AFormula: string): Boolean;  
 var
   OpenParen, CloseParen: Integer;
   i: Integer;
@@ -5236,7 +5236,7 @@ end;
 
 function EvaluateSimpleExpression(const AExpr: string): Double; forward;
 
-function TfrmMathFormulaEditor.EvaluateFormula(const AFormula: string): Double;
+function TfrmMathFormulaEditor.EvaluateFormula(const AFormula: string): Double;  
 var
   Formula: string;
   i: Integer;
@@ -5259,7 +5259,7 @@ begin
   Result := EvaluateSimpleExpression(Formula);
 end;
 
-function EvaluateSimpleExpression(const AExpr: string): Double;
+function EvaluateSimpleExpression(const AExpr: string): Double;  
 var
   Expr: string;
 begin
@@ -5274,7 +5274,7 @@ begin
   Result := 0; // Placeholder
 end;
 
-procedure TfrmMathFormulaEditor.ShowResult(AValue: Double);
+procedure TfrmMathFormulaEditor.ShowResult(AValue: Double);  
 begin
   FResultLabel.Caption := FloatToStrF(AValue, ffGeneral, 15, 6);
   FResultLabel.Font.Color := clBlue;
@@ -5366,14 +5366,14 @@ begin
   FText := AText;
 end;
 
-procedure TInsertTextCommand.Execute;
+procedure TInsertTextCommand.Execute;  
 begin
   FEditor.SelStart := FPosition;
   FEditor.SelLength := 0;
   FEditor.SelText := FText;
 end;
 
-procedure TInsertTextCommand.Undo;
+procedure TInsertTextCommand.Undo;  
 begin
   FEditor.SelStart := FPosition;
   FEditor.SelLength := Length(FText);
@@ -5404,25 +5404,25 @@ type
     procedure NotifySelectionChanged;
   end;
 
-constructor TEditorSubject.Create;
+constructor TEditorSubject.Create;  
 begin
   inherited Create;
   FObservers := TInterfaceList.Create;
 end;
 
-destructor TEditorSubject.Destroy;
+destructor TEditorSubject.Destroy;  
 begin
   FObservers.Free;
   inherited Destroy;
 end;
 
-procedure TEditorSubject.Attach(AObserver: IEditorObserver);
+procedure TEditorSubject.Attach(AObserver: IEditorObserver);  
 begin
   if FObservers.IndexOf(AObserver) = -1 then
     FObservers.Add(AObserver);
 end;
 
-procedure TEditorSubject.NotifyContentChanged;
+procedure TEditorSubject.NotifyContentChanged;  
 var
   i: Integer;
 begin
@@ -5450,7 +5450,7 @@ type
     procedure Paint; override;
   end;
 
-procedure TVirtualEditor.RenderVisibleLines;
+procedure TVirtualEditor.RenderVisibleLines;  
 var
   i, LineIndex: Integer;
   Y: Integer;
@@ -5487,7 +5487,7 @@ type
     procedure UpdateCache(AContent: string; ARenderFunc: TRenderProc);
   end;
 
-procedure TRenderCache.UpdateCache(AContent: string; ARenderFunc: TRenderProc);
+procedure TRenderCache.UpdateCache(AContent: string; ARenderFunc: TRenderProc);  
 begin
   if not FCacheValid or (AContent <> FLastContent) then
   begin
@@ -5514,7 +5514,7 @@ type
     procedure LoadFileProgressively(const AFileName: string);
   end;
 
-procedure TProgressiveLoader.LoadFileProgressively(const AFileName: string);
+procedure TProgressiveLoader.LoadFileProgressively(const AFileName: string);  
 begin
   FCurrentLine := 0;
   FChunkSize := 100; // Charger 100 lignes à la fois
@@ -5522,7 +5522,7 @@ begin
   FLoadTimer.Enabled := True;
 end;
 
-procedure TProgressiveLoader.OnLoadTimer(Sender: TObject);
+procedure TProgressiveLoader.OnLoadTimer(Sender: TObject);  
 var
   i: Integer;
 begin

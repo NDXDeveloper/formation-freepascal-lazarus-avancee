@@ -200,7 +200,7 @@ Le cycle de vie du dessin dans une application Lazarus :
 **Événement OnPaint** : C'est le point d'entrée principal pour tout dessin personnalisé.
 
 ```pascal
-procedure TForm1.FormPaint(Sender: TObject);
+procedure TForm1.FormPaint(Sender: TObject);  
 begin
   // Votre code de dessin ici
   Canvas.TextOut(10, 10, 'Hello World');
@@ -247,7 +247,7 @@ end;
 Dessiner directement à chaque frame :
 
 ```pascal
-procedure TForm1.PaintBox1Paint(Sender: TObject);
+procedure TForm1.PaintBox1Paint(Sender: TObject);  
 begin
   // Effacer le fond (TCanvas n'a pas de méthode Clear)
   Canvas.Brush.Color := clWhite;
@@ -277,7 +277,7 @@ type
 var
   Objects: TObjectList<TGraphicObject>;
 
-procedure TForm1.PaintBox1Paint(Sender: TObject);
+procedure TForm1.PaintBox1Paint(Sender: TObject);  
 var
   Obj: TGraphicObject;
 begin
@@ -297,7 +297,7 @@ Dessiner hors écran puis copier d'un coup :
 var
   Buffer: TBitmap;
 
-procedure TForm1.PaintBox1Paint(Sender: TObject);
+procedure TForm1.PaintBox1Paint(Sender: TObject);  
 begin
   if not Assigned(Buffer) then
     Buffer := TBitmap.Create;
@@ -334,7 +334,7 @@ end;
 #### 1. ClipRect - Dessiner uniquement la zone visible
 
 ```pascal
-procedure TForm1.Paint;
+procedure TForm1.Paint;  
 var
   ClipR: TRect;
 begin
@@ -357,7 +357,7 @@ type
     procedure InvalidateRect(const R: TRect);
   end;
 
-procedure TMyControl.InvalidateRect(const R: TRect);
+procedure TMyControl.InvalidateRect(const R: TRect);  
 begin
   FDirtyRegion := R;
   Invalidate;  // Demander un redessin
@@ -371,7 +371,7 @@ var
   CachedBitmap: TBitmap;
   NeedRedraw: Boolean;
 
-procedure TForm1.Paint;
+procedure TForm1.Paint;  
 begin
   if NeedRedraw then
   begin
@@ -388,7 +388,7 @@ end;
 #### 4. Culling - Ne pas traiter les objets hors écran
 
 ```pascal
-procedure DrawVisibleObjects;
+procedure DrawVisibleObjects;  
 var
   Obj: TGraphicObject;
 begin
@@ -441,7 +441,7 @@ Canvas.Font.Quality := fqClearType;
 
 ```pascal
 // Ce code fonctionne identiquement partout
-procedure DrawCrossPlatform(ACanvas: TCanvas);
+procedure DrawCrossPlatform(ACanvas: TCanvas);  
 begin
   ACanvas.Pen.Color := clBlue;
   ACanvas.Pen.Width := 2;
@@ -495,7 +495,7 @@ images/
 ```
 
 ```pascal
-function LoadScaledImage(const ABaseName: string): TPicture;
+function LoadScaledImage(const ABaseName: string): TPicture;  
 var
   ScaleFactor: Integer;
   FileName: string;
@@ -519,8 +519,8 @@ end;
 
 ```pascal
 // Utiliser les couleurs système
-Canvas.Brush.Color := clWindow;        // Fond de fenêtre
-Canvas.Font.Color := clWindowText;     // Texte de fenêtre
+Canvas.Brush.Color := clWindow;        // Fond de fenêtre  
+Canvas.Font.Color := clWindowText;     // Texte de fenêtre  
 Canvas.Pen.Color := clBtnFace;         // Face de bouton
 ```
 
@@ -528,7 +528,7 @@ Canvas.Pen.Color := clBtnFace;         // Face de bouton
 
 ```pascal
 // Vérifier le contraste
-function HasGoodContrast(ForeColor, BackColor: TColor): Boolean;
+function HasGoodContrast(ForeColor, BackColor: TColor): Boolean;  
 var
   ForeRGB, BackRGB: TColorRGB;
   Luminance1, Luminance2: Double;
@@ -607,7 +607,7 @@ type
   end;
 
 // Enregistrement pour utilisation dans l'IDE
-procedure Register;
+procedure Register;  
 begin
   RegisterComponents('MyComponents', [TCustomChart]);
 end;
@@ -623,7 +623,7 @@ end;
 uses
   DateUtils;
 
-procedure MeasureRenderTime;
+procedure MeasureRenderTime;  
 var
   StartTime, EndTime: TDateTime;
   Duration: Int64;
@@ -648,18 +648,18 @@ end;
 var
   DrawCallCount: Integer;
 
-procedure IncrementDrawCalls;
+procedure IncrementDrawCalls;  
 begin
   Inc(DrawCallCount);
 end;
 
-procedure ResetCounters;
+procedure ResetCounters;  
 begin
   DrawCallCount := 0;
 end;
 
 // Dans OnPaint
-procedure TForm1.Paint;
+procedure TForm1.Paint;  
 begin
   ResetCounters;
 

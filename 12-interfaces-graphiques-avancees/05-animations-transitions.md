@@ -79,7 +79,7 @@ var
   FLastTime: TDateTime;
   FDeltaTime: Double;
 
-procedure UpdateDeltaTime;
+procedure UpdateDeltaTime;  
 var
   CurrentTime: TDateTime;
 begin
@@ -88,7 +88,7 @@ begin
   FLastTime := CurrentTime;
 end;
 
-procedure UpdateAnimation;
+procedure UpdateAnimation;  
 begin
   UpdateDeltaTime;
 
@@ -110,7 +110,7 @@ Les **fonctions d'interpolation** (ou **easing functions**) contrôlent la vites
 ### Interpolation linéaire (basique)
 
 ```pascal
-function LinearInterpolation(AStart, AEnd, ATime: Double): Double;
+function LinearInterpolation(AStart, AEnd, ATime: Double): Double;  
 begin
   Result := AStart + (AEnd - AStart) * ATime;
   // ATime = 0.0 → Result = AStart
@@ -125,12 +125,12 @@ end;
 #### 1. Ease In (Accélération)
 Commence lentement, accélère :
 ```pascal
-function EaseInQuad(t: Double): Double;
+function EaseInQuad(t: Double): Double;  
 begin
   Result := t * t;
 end;
 
-function EaseInCubic(t: Double): Double;
+function EaseInCubic(t: Double): Double;  
 begin
   Result := t * t * t;
 end;
@@ -139,12 +139,12 @@ end;
 #### 2. Ease Out (Décélération)
 Commence vite, ralentit :
 ```pascal
-function EaseOutQuad(t: Double): Double;
+function EaseOutQuad(t: Double): Double;  
 begin
   Result := t * (2 - t);
 end;
 
-function EaseOutCubic(t: Double): Double;
+function EaseOutCubic(t: Double): Double;  
 var
   f: Double;
 begin
@@ -156,7 +156,7 @@ end;
 #### 3. Ease In-Out (Accélération puis décélération)
 Commence lentement, accélère au milieu, ralentit à la fin :
 ```pascal
-function EaseInOutQuad(t: Double): Double;
+function EaseInOutQuad(t: Double): Double;  
 begin
   if t < 0.5 then
     Result := 2 * t * t
@@ -164,7 +164,7 @@ begin
     Result := -1 + (4 - 2 * t) * t;
 end;
 
-function EaseInOutCubic(t: Double): Double;
+function EaseInOutCubic(t: Double): Double;  
 begin
   if t < 0.5 then
     Result := 4 * t * t * t
@@ -178,7 +178,7 @@ end;
 
 #### 4. Elastic (Rebond élastique)
 ```pascal
-function EaseOutElastic(t: Double): Double;
+function EaseOutElastic(t: Double): Double;  
 const
   c4 = (2 * Pi) / 3;
 begin
@@ -193,7 +193,7 @@ end;
 
 #### 5. Bounce (Rebond)
 ```pascal
-function EaseOutBounce(t: Double): Double;
+function EaseOutBounce(t: Double): Double;  
 const
   n1 = 7.5625;
   d1 = 2.75;
@@ -265,7 +265,7 @@ type
     property EasingFunction: function(t: Double): Double write FEasingFunction;
   end;
 
-constructor TAnimation.Create(AStart, AEnd, ADuration: Double);
+constructor TAnimation.Create(AStart, AEnd, ADuration: Double);  
 begin
   FStartValue := AStart;
   FEndValue := AEnd;
@@ -276,14 +276,14 @@ begin
   FEasingFunction := nil;  // Linéaire par défaut
 end;
 
-procedure TAnimation.Start;
+procedure TAnimation.Start;  
 begin
   FState := asRunning;
   FElapsedTime := 0;
   FCurrentValue := FStartValue;
 end;
 
-procedure TAnimation.Update(ADeltaTime: Double);
+procedure TAnimation.Update(ADeltaTime: Double);  
 var
   t: Double;
 begin
@@ -310,7 +310,7 @@ begin
   end;
 end;
 
-procedure TAnimation.Reset;
+procedure TAnimation.Reset;  
 begin
   FElapsedTime := 0;
   FCurrentValue := FStartValue;
@@ -333,7 +333,7 @@ type
     procedure PaintBox1Paint(Sender: TObject);
   end;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   FLastTime := Now;
 
@@ -351,7 +351,7 @@ begin
   Timer1.Enabled := True;
 end;
 
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TForm1.Timer1Timer(Sender: TObject);  
 var
   CurrentTime: TDateTime;
   DeltaTime: Double;
@@ -375,7 +375,7 @@ begin
   end;
 end;
 
-procedure TForm1.PaintBox1Paint(Sender: TObject);
+procedure TForm1.PaintBox1Paint(Sender: TObject);  
 var
   X: Integer;
   Alpha: Byte;
@@ -421,26 +421,26 @@ type
     procedure Draw(ACanvas: TCanvas; X, Y: Integer);
   end;
 
-constructor TFadeAnimation.Create(ABitmap: TBGRABitmap);
+constructor TFadeAnimation.Create(ABitmap: TBGRABitmap);  
 begin
   FBitmap := ABitmap;
   FAlpha := 255;
   FFading := False;
 end;
 
-procedure TFadeAnimation.FadeIn(ASpeed: Double);
+procedure TFadeAnimation.FadeIn(ASpeed: Double);  
 begin
   FSpeed := ASpeed;
   FFading := True;
 end;
 
-procedure TFadeAnimation.FadeOut(ASpeed: Double);
+procedure TFadeAnimation.FadeOut(ASpeed: Double);  
 begin
   FSpeed := -ASpeed;
   FFading := True;
 end;
 
-procedure TFadeAnimation.Update(ADeltaTime: Double);
+procedure TFadeAnimation.Update(ADeltaTime: Double);  
 begin
   if not FFading then
     Exit;
@@ -460,7 +460,7 @@ begin
   end;
 end;
 
-procedure TFadeAnimation.Draw(ACanvas: TCanvas; X, Y: Integer);
+procedure TFadeAnimation.Draw(ACanvas: TCanvas; X, Y: Integer);  
 var
   Temp: TBGRABitmap;
 begin
@@ -490,19 +490,19 @@ type
     procedure Draw(ACanvas: TCanvas; X, Y: Integer);
   end;
 
-constructor TRotationAnimation.Create(ABitmap: TBGRABitmap);
+constructor TRotationAnimation.Create(ABitmap: TBGRABitmap);  
 begin
   FOriginalBitmap := ABitmap;
   FAngle := 0;
   FRotationSpeed := 0;
 end;
 
-procedure TRotationAnimation.SetSpeed(ASpeed: Double);
+procedure TRotationAnimation.SetSpeed(ASpeed: Double);  
 begin
   FRotationSpeed := ASpeed;  // Degrés par seconde
 end;
 
-procedure TRotationAnimation.Update(ADeltaTime: Double);
+procedure TRotationAnimation.Update(ADeltaTime: Double);  
 begin
   FAngle := FAngle + FRotationSpeed * ADeltaTime;
 
@@ -513,7 +513,7 @@ begin
     FAngle := FAngle + 360;
 end;
 
-procedure TRotationAnimation.Draw(ACanvas: TCanvas; X, Y: Integer);
+procedure TRotationAnimation.Draw(ACanvas: TCanvas; X, Y: Integer);  
 var
   Rotated: TBGRABitmap;
 begin
@@ -546,14 +546,14 @@ type
     procedure Draw(ACanvas: TCanvas; X, Y: Integer);
   end;
 
-constructor TScaleAnimation.Create(ABitmap: TBGRABitmap);
+constructor TScaleAnimation.Create(ABitmap: TBGRABitmap);  
 begin
   FOriginalBitmap := ABitmap;
   FScale := 1.0;
   FTargetScale := 1.0;
 end;
 
-procedure TScaleAnimation.ScaleTo(ATargetScale, ADuration: Double);
+procedure TScaleAnimation.ScaleTo(ATargetScale, ADuration: Double);  
 begin
   FTargetScale := ATargetScale;
   if ADuration > 0 then
@@ -562,7 +562,7 @@ begin
     FScale := ATargetScale;
 end;
 
-procedure TScaleAnimation.Update(ADeltaTime: Double);
+procedure TScaleAnimation.Update(ADeltaTime: Double);  
 begin
   if Abs(FScale - FTargetScale) < 0.01 then
   begin
@@ -579,7 +579,7 @@ begin
     FScale := FTargetScale;
 end;
 
-procedure TScaleAnimation.Draw(ACanvas: TCanvas; X, Y: Integer);
+procedure TScaleAnimation.Draw(ACanvas: TCanvas; X, Y: Integer);  
 var
   Scaled: TBGRABitmap;
   NewWidth, NewHeight: Integer;
@@ -651,30 +651,30 @@ begin
   FPlaying := False;
 end;
 
-destructor TSpriteAnimation.Destroy;
+destructor TSpriteAnimation.Destroy;  
 begin
   FSpriteSheet.Free;
   inherited;
 end;
 
-procedure TSpriteAnimation.Play(ALoop: Boolean);
+procedure TSpriteAnimation.Play(ALoop: Boolean);  
 begin
   FPlaying := True;
   FLoop := ALoop;
 end;
 
-procedure TSpriteAnimation.Stop;
+procedure TSpriteAnimation.Stop;  
 begin
   FPlaying := False;
 end;
 
-procedure TSpriteAnimation.Reset;
+procedure TSpriteAnimation.Reset;  
 begin
   FCurrentFrame := 0;
   FElapsedTime := 0;
 end;
 
-procedure TSpriteAnimation.Update(ADeltaTime: Double);
+procedure TSpriteAnimation.Update(ADeltaTime: Double);  
 begin
   if not FPlaying then
     Exit;
@@ -699,7 +699,7 @@ begin
   end;
 end;
 
-procedure TSpriteAnimation.Draw(ACanvas: TCanvas; X, Y: Integer);
+procedure TSpriteAnimation.Draw(ACanvas: TCanvas; X, Y: Integer);  
 var
   SourceRect: TRect;
   Frame: TBGRABitmap;
@@ -728,20 +728,20 @@ end;
 var
   PlayerAnimation: TSpriteAnimation;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   // Sprite sheet avec 8 frames de 64x64 pixels, 0.1s par frame
   PlayerAnimation := TSpriteAnimation.Create('player_walk.png', 64, 64, 8, 0.1);
   PlayerAnimation.Play(True);  // Boucle
 end;
 
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TForm1.Timer1Timer(Sender: TObject);  
 begin
   PlayerAnimation.Update(DeltaTime);
   PaintBox1.Invalidate;
 end;
 
-procedure TForm1.PaintBox1Paint(Sender: TObject);
+procedure TForm1.PaintBox1Paint(Sender: TObject);  
 begin
   PlayerAnimation.Draw(PaintBox1.Canvas, 100, 100);
 end;
@@ -781,7 +781,7 @@ type
     property Gravity: Double read FGravity write FGravity;
   end;
 
-constructor TParticleSystem.Create(AMaxParticles: Integer);
+constructor TParticleSystem.Create(AMaxParticles: Integer);  
 begin
   FMaxParticles := AMaxParticles;
   SetLength(FParticles, FMaxParticles);
@@ -789,7 +789,7 @@ begin
   FGravity := 98.0;  // Pixels par seconde²
 end;
 
-procedure TParticleSystem.Emit(AX, AY: Double; ACount: Integer);
+procedure TParticleSystem.Emit(AX, AY: Double; ACount: Integer);  
 var
   i: Integer;
   Angle, Speed: Double;
@@ -821,7 +821,7 @@ begin
   end;
 end;
 
-procedure TParticleSystem.Update(ADeltaTime: Double);
+procedure TParticleSystem.Update(ADeltaTime: Double);  
 var
   i: Integer;
 begin
@@ -853,7 +853,7 @@ begin
   end;
 end;
 
-procedure TParticleSystem.Draw(ABitmap: TBGRABitmap);
+procedure TParticleSystem.Draw(ABitmap: TBGRABitmap);  
 var
   i: Integer;
   Alpha: Byte;
@@ -894,7 +894,7 @@ type
     procedure Reset;
   end;
 
-constructor TSineWaveAnimation.Create(AAmplitude, AFrequency: Double);
+constructor TSineWaveAnimation.Create(AAmplitude, AFrequency: Double);  
 begin
   FAmplitude := AAmplitude;
   FFrequency := AFrequency;
@@ -902,17 +902,17 @@ begin
   FTime := 0;
 end;
 
-procedure TSineWaveAnimation.Update(ADeltaTime: Double);
+procedure TSineWaveAnimation.Update(ADeltaTime: Double);  
 begin
   FTime := FTime + ADeltaTime;
 end;
 
-function TSineWaveAnimation.GetValue: Double;
+function TSineWaveAnimation.GetValue: Double;  
 begin
   Result := FAmplitude * Sin(2 * Pi * FFrequency * FTime + FPhase);
 end;
 
-procedure TSineWaveAnimation.Reset;
+procedure TSineWaveAnimation.Reset;  
 begin
   FTime := 0;
 end;
@@ -922,19 +922,19 @@ var
   WaveAnim: TSineWaveAnimation;
   BaseY: Integer;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   WaveAnim := TSineWaveAnimation.Create(50, 0.5);  // Amplitude 50px, freq 0.5Hz
   BaseY := 200;
 end;
 
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TForm1.Timer1Timer(Sender: TObject);  
 begin
   WaveAnim.Update(DeltaTime);
   PaintBox1.Invalidate;
 end;
 
-procedure TForm1.PaintBox1Paint(Sender: TObject);
+procedure TForm1.PaintBox1Paint(Sender: TObject);  
 var
   Y: Integer;
 begin
@@ -946,7 +946,7 @@ end;
 ### Courbes de Bézier animées
 
 ```pascal
-function CubicBezier(P0, P1, P2, P3: TPointF; t: Double): TPointF;
+function CubicBezier(P0, P1, P2, P3: TPointF; t: Double): TPointF;  
 var
   u, uu, uuu, tt, ttt: Double;
 begin
@@ -973,7 +973,7 @@ type
     function IsComplete: Boolean;
   end;
 
-constructor TBezierAnimation.Create(const P0, P1, P2, P3: TPointF; ADuration: Double);
+constructor TBezierAnimation.Create(const P0, P1, P2, P3: TPointF; ADuration: Double);  
 begin
   FP0 := P0;
   FP1 := P1;
@@ -983,14 +983,14 @@ begin
   FTime := 0;
 end;
 
-procedure TBezierAnimation.Update(ADeltaTime: Double);
+procedure TBezierAnimation.Update(ADeltaTime: Double);  
 begin
   FTime := FTime + ADeltaTime;
   if FTime > FDuration then
     FTime := FDuration;
 end;
 
-function TBezierAnimation.GetPosition: TPointF;
+function TBezierAnimation.GetPosition: TPointF;  
 var
   t: Double;
 begin
@@ -1002,7 +1002,7 @@ begin
   Result := CubicBezier(FP0, FP1, FP2, FP3, t);
 end;
 
-function TBezierAnimation.IsComplete: Boolean;
+function TBezierAnimation.IsComplete: Boolean;  
 begin
   Result := FTime >= FDuration;
 end;
@@ -1011,7 +1011,7 @@ end;
 var
   BezierAnim: TBezierAnimation;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   BezierAnim := TBezierAnimation.Create(
     PointF(50, 300),    // Point de départ
@@ -1022,7 +1022,7 @@ begin
   );
 end;
 
-procedure TForm1.PaintBox1Paint(Sender: TObject);
+procedure TForm1.PaintBox1Paint(Sender: TObject);  
 var
   Pos: TPointF;
 begin
@@ -1073,7 +1073,7 @@ type
     property Progress: Double read FProgress;
   end;
 
-constructor TScreenTransition.Create(ADuration: Double);
+constructor TScreenTransition.Create(ADuration: Double);  
 begin
   FDuration := ADuration;
   FActive := False;
@@ -1081,13 +1081,13 @@ begin
   FTargetBitmap := nil;
 end;
 
-destructor TScreenTransition.Destroy;
+destructor TScreenTransition.Destroy;  
 begin
   // Ne pas libérer les bitmaps source/target (ils appartiennent à l'appelant)
   inherited;
 end;
 
-procedure TScreenTransition.Start(ASource, ATarget: TBGRABitmap; AType: TTransitionType);
+procedure TScreenTransition.Start(ASource, ATarget: TBGRABitmap; AType: TTransitionType);  
 begin
   FSourceBitmap := ASource;
   FTargetBitmap := ATarget;
@@ -1097,7 +1097,7 @@ begin
   FActive := True;
 end;
 
-procedure TScreenTransition.Update(ADeltaTime: Double);
+procedure TScreenTransition.Update(ADeltaTime: Double);  
 begin
   if not FActive then
     Exit;
@@ -1112,7 +1112,7 @@ begin
   end;
 end;
 
-procedure TScreenTransition.Draw(ABitmap: TBGRABitmap);
+procedure TScreenTransition.Draw(ABitmap: TBGRABitmap);  
 var
   t: Double;
   OffsetX, OffsetY: Integer;
@@ -1287,14 +1287,14 @@ type
     property Active: Boolean read FActive;
   end;
 
-constructor TControlAnimation.Create(AControl: TControl);
+constructor TControlAnimation.Create(AControl: TControl);  
 begin
   FControl := AControl;
   FActive := False;
   FEasing := @EaseInOutQuad;
 end;
 
-procedure TControlAnimation.MoveTo(ALeft, ATop: Integer; ADuration: Double);
+procedure TControlAnimation.MoveTo(ALeft, ATop: Integer; ADuration: Double);  
 begin
   FStartLeft := FControl.Left;
   FStartTop := FControl.Top;
@@ -1306,7 +1306,7 @@ begin
   FActive := True;
 end;
 
-procedure TControlAnimation.Update(ADeltaTime: Double);
+procedure TControlAnimation.Update(ADeltaTime: Double);  
 var
   t: Double;
 begin
@@ -1334,18 +1334,18 @@ end;
 var
   ButtonAnim: TControlAnimation;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   ButtonAnim := TControlAnimation.Create(Button1);
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
+procedure TForm1.Button2Click(Sender: TObject);  
 begin
   // Animer Button1 vers une nouvelle position
   ButtonAnim.MoveTo(300, 200, 1.0);
 end;
 
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TForm1.Timer1Timer(Sender: TObject);  
 begin
   ButtonAnim.Update(DeltaTime);
 end;
@@ -1370,13 +1370,13 @@ type
     procedure Update(ADeltaTime: Double);
   end;
 
-constructor TControlSizeAnimation.Create(AControl: TControl);
+constructor TControlSizeAnimation.Create(AControl: TControl);  
 begin
   FControl := AControl;
   FActive := False;
 end;
 
-procedure TControlSizeAnimation.ResizeTo(AWidth, AHeight: Integer; ADuration: Double);
+procedure TControlSizeAnimation.ResizeTo(AWidth, AHeight: Integer; ADuration: Double);  
 begin
   FStartWidth := FControl.Width;
   FStartHeight := FControl.Height;
@@ -1388,7 +1388,7 @@ begin
   FActive := True;
 end;
 
-procedure TControlSizeAnimation.Update(ADeltaTime: Double);
+procedure TControlSizeAnimation.Update(ADeltaTime: Double);  
 var
   t: Double;
 begin
@@ -1430,7 +1430,7 @@ type
     procedure ApplyToOpenGL;
   end;
 
-constructor T3DRotationAnimation.Create;
+constructor T3DRotationAnimation.Create;  
 begin
   FAngleX := 0;
   FAngleY := 0;
@@ -1440,14 +1440,14 @@ begin
   FSpeedZ := 0;
 end;
 
-procedure T3DRotationAnimation.SetSpeed(ASpeedX, ASpeedY, ASpeedZ: Double);
+procedure T3DRotationAnimation.SetSpeed(ASpeedX, ASpeedY, ASpeedZ: Double);  
 begin
   FSpeedX := ASpeedX;
   FSpeedY := ASpeedY;
   FSpeedZ := ASpeedZ;
 end;
 
-procedure T3DRotationAnimation.Update(ADeltaTime: Double);
+procedure T3DRotationAnimation.Update(ADeltaTime: Double);  
 begin
   FAngleX := FAngleX + FSpeedX * ADeltaTime;
   FAngleY := FAngleY + FSpeedY * ADeltaTime;
@@ -1459,7 +1459,7 @@ begin
   while FAngleZ >= 360 do FAngleZ := FAngleZ - 360;
 end;
 
-procedure T3DRotationAnimation.ApplyToOpenGL;
+procedure T3DRotationAnimation.ApplyToOpenGL;  
 begin
   glRotatef(FAngleX, 1.0, 0.0, 0.0);
   glRotatef(FAngleY, 0.0, 1.0, 0.0);
@@ -1470,13 +1470,13 @@ end;
 var
   RotAnim: T3DRotationAnimation;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   RotAnim := T3DRotationAnimation.Create;
   RotAnim.SetSpeed(30, 45, 0);  // Rotation en degrés/seconde
 end;
 
-procedure TForm1.OpenGLControl1Paint(Sender: TObject);
+procedure TForm1.OpenGLControl1Paint(Sender: TObject);  
 begin
   glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
   glLoadIdentity;
@@ -1490,7 +1490,7 @@ begin
   OpenGLControl1.SwapBuffers;
 end;
 
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TForm1.Timer1Timer(Sender: TObject);  
 begin
   RotAnim.Update(DeltaTime);
   OpenGLControl1.Invalidate;
@@ -1519,31 +1519,31 @@ type
     procedure Clear;
   end;
 
-constructor TAnimationManager.Create;
+constructor TAnimationManager.Create;  
 begin
   FAnimations := TList.Create;
   FLastTime := Now;
 end;
 
-destructor TAnimationManager.Destroy;
+destructor TAnimationManager.Destroy;  
 begin
   Clear;
   FAnimations.Free;
   inherited;
 end;
 
-procedure TAnimationManager.Add(AAnimation: TObject);
+procedure TAnimationManager.Add(AAnimation: TObject);  
 begin
   if FAnimations.IndexOf(AAnimation) < 0 then
     FAnimations.Add(AAnimation);
 end;
 
-procedure TAnimationManager.Remove(AAnimation: TObject);
+procedure TAnimationManager.Remove(AAnimation: TObject);  
 begin
   FAnimations.Remove(AAnimation);
 end;
 
-procedure TAnimationManager.Update;
+procedure TAnimationManager.Update;  
 var
   CurrentTime: TDateTime;
   DeltaTime: Double;
@@ -1569,7 +1569,7 @@ begin
   end;
 end;
 
-procedure TAnimationManager.Clear;
+procedure TAnimationManager.Clear;  
 var
   i: Integer;
 begin
@@ -1583,7 +1583,7 @@ end;
 var
   AnimationManager: TAnimationManager;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 var
   Anim: TAnimation;
 begin
@@ -1601,13 +1601,13 @@ begin
   Timer1.Enabled := True;
 end;
 
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TForm1.Timer1Timer(Sender: TObject);  
 begin
   AnimationManager.Update;
   PaintBox1.Invalidate;
 end;
 
-procedure TForm1.FormDestroy(Sender: TObject);
+procedure TForm1.FormDestroy(Sender: TObject);  
 begin
   AnimationManager.Free;
 end;
@@ -1633,7 +1633,7 @@ type
 var
   DirtyRegions: array of TDirtyRect;
 
-procedure MarkDirty(X, Y, Width, Height: Integer);
+procedure MarkDirty(X, Y, Width, Height: Integer);  
 var
   i: Integer;
 begin
@@ -1647,7 +1647,7 @@ begin
   DirtyRegions[i].Dirty := True;
 end;
 
-procedure RedrawDirtyRegions(ACanvas: TCanvas);
+procedure RedrawDirtyRegions(ACanvas: TCanvas);  
 var
   i: Integer;
   R: TRect;
@@ -1690,14 +1690,14 @@ type
     procedure Release(AIndex: Integer);
   end;
 
-constructor TParticlePool.Create(ASize: Integer);
+constructor TParticlePool.Create(ASize: Integer);  
 begin
   SetLength(FPool, ASize);
   SetLength(FActive, ASize);
   FillChar(FActive[0], Length(FActive), 0);
 end;
 
-function TParticlePool.Acquire: Integer;
+function TParticlePool.Acquire: Integer;  
 var
   i: Integer;
 begin
@@ -1713,7 +1713,7 @@ begin
   end;
 end;
 
-procedure TParticlePool.Release(AIndex: Integer);
+procedure TParticlePool.Release(AIndex: Integer);  
 begin
   if (AIndex >= 0) and (AIndex < Length(FActive)) then
     FActive[AIndex] := False;
@@ -1725,7 +1725,7 @@ end;
 Réduire la qualité pour les objets lointains :
 
 ```pascal
-procedure DrawAnimatedObject(X, Y: Integer; Distance: Double);
+procedure DrawAnimatedObject(X, Y: Integer; Distance: Double);  
 var
   Detail: Integer;
 begin
@@ -1763,14 +1763,14 @@ type
     function GetFPS: Integer;
   end;
 
-constructor TFPSCounter.Create;
+constructor TFPSCounter.Create;  
 begin
   FFrameCount := 0;
   FFPS := 0;
   FLastTime := Now;
 end;
 
-procedure TFPSCounter.Update;
+procedure TFPSCounter.Update;  
 var
   CurrentTime: TDateTime;
   Elapsed: Int64;
@@ -1787,7 +1787,7 @@ begin
   end;
 end;
 
-function TFPSCounter.GetFPS: Integer;
+function TFPSCounter.GetFPS: Integer;  
 begin
   Result := FFPS;
 end;
@@ -1796,12 +1796,12 @@ end;
 var
   FPSCounter: TFPSCounter;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   FPSCounter := TFPSCounter.Create;
 end;
 
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TForm1.Timer1Timer(Sender: TObject);  
 begin
   FPSCounter.Update;
   Caption := Format('FPS: %d', [FPSCounter.GetFPS]);
@@ -1814,7 +1814,7 @@ end;
 var
   DebugMode: Boolean = False;
 
-procedure DrawDebugInfo(ACanvas: TCanvas);
+procedure DrawDebugInfo(ACanvas: TCanvas);  
 begin
   if not DebugMode then
     Exit;
@@ -2011,7 +2011,7 @@ implementation
 {$R *.lfm}
 
 // Fonctions d'easing
-function EaseOutBounce(t: Double): Double;
+function EaseOutBounce(t: Double): Double;  
 const
   n1 = 7.5625;
   d1 = 2.75;
@@ -2035,7 +2035,7 @@ begin
   end;
 end;
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   FBuffer := TBGRABitmap.Create(PaintBox1.Width, PaintBox1.Height);
   FLastTime := Now;
@@ -2049,12 +2049,12 @@ begin
   Timer1.Enabled := True;
 end;
 
-procedure TMainForm.FormDestroy(Sender: TObject);
+procedure TMainForm.FormDestroy(Sender: TObject);  
 begin
   FBuffer.Free;
 end;
 
-procedure TMainForm.ResetAnimations;
+procedure TMainForm.ResetAnimations;  
 begin
   // Réinitialiser toutes les animations
   FBallY := 50;
@@ -2075,7 +2075,7 @@ begin
   FRotateActive := False;
 end;
 
-procedure TMainForm.UpdateDeltaTime;
+procedure TMainForm.UpdateDeltaTime;  
 var
   CurrentTime: TDateTime;
 begin
@@ -2089,7 +2089,7 @@ begin
   FLastTime := CurrentTime;
 end;
 
-procedure TMainForm.UpdateFPS;
+procedure TMainForm.UpdateFPS;  
 var
   CurrentTime: TDateTime;
   Elapsed: Int64;
@@ -2107,7 +2107,7 @@ begin
   end;
 end;
 
-procedure TMainForm.UpdateBounce;
+procedure TMainForm.UpdateBounce;  
 var
   FloorY: Double;
 begin
@@ -2137,7 +2137,7 @@ begin
   end;
 end;
 
-procedure TMainForm.UpdateFade;
+procedure TMainForm.UpdateFade;  
 begin
   if not FFadeActive then
     Exit;
@@ -2157,7 +2157,7 @@ begin
   end;
 end;
 
-procedure TMainForm.UpdateParticles;
+procedure TMainForm.UpdateParticles;  
 var
   i: Integer;
 begin
@@ -2188,7 +2188,7 @@ begin
   end;
 end;
 
-procedure TMainForm.UpdateRotation;
+procedure TMainForm.UpdateRotation;  
 begin
   if not FRotateActive then
     Exit;
@@ -2200,7 +2200,7 @@ begin
     FRotateAngle := FRotateAngle - 360;
 end;
 
-procedure TMainForm.DrawBounce;
+procedure TMainForm.DrawBounce;  
 var
   X: Integer;
 begin
@@ -2217,7 +2217,7 @@ begin
     FBuffer.Width, FBuffer.Height - 50, BGRA(100, 100, 100), 2);
 end;
 
-procedure TMainForm.DrawFade;
+procedure TMainForm.DrawFade;  
 var
   CenterX, CenterY: Integer;
   Alpha: Byte;
@@ -2230,7 +2230,7 @@ begin
     BGRA(100, 200, 255, Alpha));
 end;
 
-procedure TMainForm.DrawParticles;
+procedure TMainForm.DrawParticles;  
 var
   i: Integer;
   Alpha: Byte;
@@ -2248,7 +2248,7 @@ begin
   end;
 end;
 
-procedure TMainForm.DrawRotation;
+procedure TMainForm.DrawRotation;  
 var
   CenterX, CenterY: Integer;
   Rotated: TBGRABitmap;
@@ -2280,7 +2280,7 @@ begin
   end;
 end;
 
-procedure TMainForm.DrawDebugInfo;
+procedure TMainForm.DrawDebugInfo;  
 begin
   if not CheckBoxDebug.Checked then
     Exit;
@@ -2301,7 +2301,7 @@ begin
     BGRAWhite);
 end;
 
-procedure TMainForm.EmitParticles(AX, AY: Integer; Count: Integer);
+procedure TMainForm.EmitParticles(AX, AY: Integer; Count: Integer);  
 var
   i: Integer;
   Angle, Speed: Double;
@@ -2331,7 +2331,7 @@ begin
   end;
 end;
 
-procedure TMainForm.Timer1Timer(Sender: TObject);
+procedure TMainForm.Timer1Timer(Sender: TObject);  
 begin
   UpdateDeltaTime;
 
@@ -2347,7 +2347,7 @@ begin
   PaintBox1.Invalidate;
 end;
 
-procedure TMainForm.PaintBox1Paint(Sender: TObject);
+procedure TMainForm.PaintBox1Paint(Sender: TObject);  
 begin
   // Fond
   FBuffer.Fill(BGRA(20, 20, 40));
@@ -2372,26 +2372,26 @@ begin
   FBuffer.Draw(PaintBox1.Canvas, 0, 0, False);
 end;
 
-procedure TMainForm.ButtonBounceClick(Sender: TObject);
+procedure TMainForm.ButtonBounceClick(Sender: TObject);  
 begin
   FBallY := 50;
   FBallVelocity := 0;
   FBallActive := True;
 end;
 
-procedure TMainForm.ButtonFadeClick(Sender: TObject);
+procedure TMainForm.ButtonFadeClick(Sender: TObject);  
 begin
   FFadeActive := not FFadeActive;
   if FFadeActive then
     FFadeDirection := -1;  // Commencer par fade out
 end;
 
-procedure TMainForm.ButtonParticlesClick(Sender: TObject);
+procedure TMainForm.ButtonParticlesClick(Sender: TObject);  
 begin
   EmitParticles(FBuffer.Width div 2, FBuffer.Height div 2, 50);
 end;
 
-procedure TMainForm.ButtonRotateClick(Sender: TObject);
+procedure TMainForm.ButtonRotateClick(Sender: TObject);  
 begin
   FRotateActive := not FRotateActive;
   if FRotateActive then
@@ -2400,7 +2400,7 @@ begin
     FRotateSpeed := 0;
 end;
 
-procedure TMainForm.ButtonResetClick(Sender: TObject);
+procedure TMainForm.ButtonResetClick(Sender: TObject);  
 begin
   ResetAnimations;
 end;

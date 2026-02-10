@@ -70,7 +70,7 @@ Avant de commencer, il faut vérifier si votre système supporte l'accélératio
 uses
   Windows, Classes, SysUtils;
 
-procedure DetectGPUWindows;
+procedure DetectGPUWindows;  
 var
   regKey: HKEY;
   deviceName: string;
@@ -104,7 +104,7 @@ begin
 end;
 
 // Alternative : via WMI
-procedure DetectGPUWMI;
+procedure DetectGPUWMI;  
 var
   query: string;
 begin
@@ -120,7 +120,7 @@ end;
 uses
   Process, Classes, SysUtils, Math;
 
-procedure DetectGPULinux;
+procedure DetectGPULinux;  
 var
   outputList: TStringList;
   output: string;
@@ -298,20 +298,20 @@ end;
 lspci | grep -i nvidia
 
 # 2. Ajouter le dépôt NVIDIA
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb  
 sudo dpkg -i cuda-keyring_1.0-1_all.deb
 
 # 3. Mettre à jour et installer
-sudo apt update
+sudo apt update  
 sudo apt install cuda
 
 # 4. Configurer les variables d'environnement
-echo 'export PATH=/usr/local/cuda/bin:$PATH' >> ~/.bashrc
-echo 'export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
+echo 'export PATH=/usr/local/cuda/bin:$PATH' >> ~/.bashrc  
+echo 'export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc  
 source ~/.bashrc
 
 # 5. Vérifier l'installation
-nvcc --version
+nvcc --version  
 nvidia-smi
 ```
 
@@ -343,7 +343,7 @@ const
 
 ```bash
 # 1. Installer les headers OpenCL
-sudo apt update
+sudo apt update  
 sudo apt install opencl-headers
 
 # 2. Installer le runtime selon votre GPU
@@ -397,8 +397,8 @@ const
   cudaErrorMemoryAllocation = 2;
 
 // Déclarations de fonctions CUDA
-function cudaMalloc(var devPtr: Pointer; size: NativeUInt): cudaError_t; cdecl; external CUDA_DLL;
-function cudaFree(devPtr: Pointer): cudaError_t; cdecl; external CUDA_DLL;
+function cudaMalloc(var devPtr: Pointer; size: NativeUInt): cudaError_t; cdecl; external CUDA_DLL;  
+function cudaFree(devPtr: Pointer): cudaError_t; cdecl; external CUDA_DLL;  
 function cudaMemcpy(dst, src: Pointer; count: NativeUInt; kind: Integer): cudaError_t; cdecl; external CUDA_DLL;
 
 const
@@ -448,7 +448,7 @@ type
   TFloatArray = array[0..N-1] of Single;
   PFloatArray = ^TFloatArray;
 
-procedure VectorAddCPU(const a, b: TFloatArray; var c: TFloatArray);
+procedure VectorAddCPU(const a, b: TFloatArray; var c: TFloatArray);  
 var
   i: Integer;
 begin
@@ -456,7 +456,7 @@ begin
     c[i] := a[i] + b[i];
 end;
 
-procedure VectorAddGPU(const a, b: TFloatArray; var c: TFloatArray);
+procedure VectorAddGPU(const a, b: TFloatArray; var c: TFloatArray);  
 var
   d_a, d_b, d_c: Pointer;
   size: NativeUInt;
@@ -511,7 +511,7 @@ begin
   end;
 end;
 
-procedure BenchmarkComparison;
+procedure BenchmarkComparison;  
 var
   a, b, c_cpu, c_gpu: PFloatArray;
   i: Integer;
@@ -631,7 +631,7 @@ extern "C" {
 
 Compiler :
 ```bash
-nvcc -shared -o cuda_wrapper.dll cuda_wrapper.cu  # Windows
+nvcc -shared -o cuda_wrapper.dll cuda_wrapper.cu  # Windows  
 nvcc -shared -fPIC -o libcuda_wrapper.so cuda_wrapper.cu  # Linux
 ```
 
@@ -797,7 +797,7 @@ type
     property Queue: cl_command_queue read FQueue;
   end;
 
-constructor TOpenCLContext.Create;
+constructor TOpenCLContext.Create;  
 var
   err: cl_int;
   numPlatforms, numDevices: cl_uint;
@@ -827,7 +827,7 @@ begin
   WriteLn('Contexte OpenCL créé avec succès');
 end;
 
-destructor TOpenCLContext.Destroy;
+destructor TOpenCLContext.Destroy;  
 begin
   if FQueue <> nil then
     clReleaseCommandQueue(FQueue);
@@ -836,7 +836,7 @@ begin
   inherited;
 end;
 
-function TOpenCLContext.CreateBuffer(size: NativeUInt; flags: cl_ulong): cl_mem;
+function TOpenCLContext.CreateBuffer(size: NativeUInt; flags: cl_ulong): cl_mem;  
 var
   err: cl_int;
 begin
@@ -845,7 +845,7 @@ begin
     raise Exception.Create(Format('Erreur création buffer : %d', [err]));
 end;
 
-function TOpenCLContext.CreateProgram(const source: string): cl_program;
+function TOpenCLContext.CreateProgram(const source: string): cl_program;  
 var
   err: cl_int;
   sourcePtr: PAnsiChar;
@@ -864,7 +864,7 @@ begin
     raise Exception.Create('Erreur compilation programme OpenCL');
 end;
 
-function TOpenCLContext.CreateKernel(prog: cl_program; const name: string): cl_kernel;
+function TOpenCLContext.CreateKernel(prog: cl_program; const name: string): cl_kernel;  
 var
   err: cl_int;
 begin
@@ -873,7 +873,7 @@ begin
     raise Exception.Create(Format('Erreur création kernel "%s"', [name]));
 end;
 
-procedure TOpenCLContext.WriteBuffer(buffer: cl_mem; size: NativeUInt; data: Pointer);
+procedure TOpenCLContext.WriteBuffer(buffer: cl_mem; size: NativeUInt; data: Pointer);  
 var
   err: cl_int;
 begin
@@ -882,7 +882,7 @@ begin
     raise Exception.Create('Erreur écriture buffer');
 end;
 
-procedure TOpenCLContext.ReadBuffer(buffer: cl_mem; size: NativeUInt; data: Pointer);
+procedure TOpenCLContext.ReadBuffer(buffer: cl_mem; size: NativeUInt; data: Pointer);  
 var
   err: cl_int;
 begin
@@ -891,7 +891,7 @@ begin
     raise Exception.Create('Erreur lecture buffer');
 end;
 
-procedure TOpenCLContext.ExecuteKernel(kernel: cl_kernel; globalSize, localSize: NativeUInt);
+procedure TOpenCLContext.ExecuteKernel(kernel: cl_kernel; globalSize, localSize: NativeUInt);  
 var
   err: cl_int;
   global, local: size_t;
@@ -904,13 +904,13 @@ begin
     raise Exception.Create(Format('Erreur exécution kernel : %d', [err]));
 end;
 
-procedure TOpenCLContext.Finish;
+procedure TOpenCLContext.Finish;  
 begin
   clFinish(FQueue);
 end;
 
 // Programme principal
-procedure VectorAddWithOpenCL;
+procedure VectorAddWithOpenCL;  
 const
   N = 1000000;
 type
@@ -1034,7 +1034,7 @@ OpenCV inclut un module GPU optimisé qui utilise CUDA ou OpenCL automatiquement
 uses
   ocv.core, ocv.imgproc, ocv.highgui;
 
-procedure ConfigureOpenCVGPU;
+procedure ConfigureOpenCVGPU;  
 begin
   {$IFDEF USE_CUDA}
   // Vérifier CUDA
@@ -1073,7 +1073,7 @@ uses
   SysUtils, DateUtils,
   ocv.core, ocv.imgproc, ocv.highgui;
 
-procedure ProcessImageCPU(const src: TMat; var dst: TMat);
+procedure ProcessImageCPU(const src: TMat; var dst: TMat);  
 var
   temp: TMat;
 begin
@@ -1087,7 +1087,7 @@ begin
 end;
 
 {$IFDEF USE_CUDA}
-procedure ProcessImageGPU_CUDA(const src: TMat; var dst: TMat);
+procedure ProcessImageGPU_CUDA(const src: TMat; var dst: TMat);  
 var
   d_src, d_temp, d_dst: TGpuMat;
 begin
@@ -1109,7 +1109,7 @@ end;
 {$ENDIF}
 
 {$IFDEF USE_OPENCL}
-procedure ProcessImageGPU_OpenCL(const src: TMat; var dst: TMat);
+procedure ProcessImageGPU_OpenCL(const src: TMat; var dst: TMat);  
 var
   u_src, u_temp, u_dst: TUMat;
 begin
@@ -1129,7 +1129,7 @@ begin
 end;
 {$ENDIF}
 
-procedure BenchmarkImageProcessing;
+procedure BenchmarkImageProcessing;  
 var
   src, dst_cpu, dst_gpu: TMat;
   startTime, endTime: TDateTime;
@@ -1227,30 +1227,30 @@ type
     property Handle: cudaStream_t read FStream;
   end;
 
-constructor TCUDAStream.Create;
+constructor TCUDAStream.Create;  
 begin
   inherited;
   cudaStreamCreate(@FStream);
 end;
 
-destructor TCUDAStream.Destroy;
+destructor TCUDAStream.Destroy;  
 begin
   cudaStreamDestroy(FStream);
   inherited;
 end;
 
-procedure TCUDAStream.AsyncMemcpy(dst, src: Pointer; size: NativeUInt; kind: Integer);
+procedure TCUDAStream.AsyncMemcpy(dst, src: Pointer; size: NativeUInt; kind: Integer);  
 begin
   cudaMemcpyAsync(dst, src, size, kind, FStream);
 end;
 
-procedure TCUDAStream.Synchronize;
+procedure TCUDAStream.Synchronize;  
 begin
   cudaStreamSynchronize(FStream);
 end;
 
 // Exemple d'utilisation
-procedure PipelinedProcessing;
+procedure PipelinedProcessing;  
 var
   stream1, stream2: TCUDAStream;
   hostData1, hostData2: Pointer;
@@ -1302,7 +1302,7 @@ La mémoire paginée permet des transferts plus rapides entre CPU et GPU.
 
 ```pascal
 {$IFDEF USE_CUDA}
-procedure UsePinnedMemory;
+procedure UsePinnedMemory;  
 var
   hostData: Pointer;
   deviceData: Pointer;
@@ -1339,7 +1339,7 @@ CUDA 6.0+ supporte la mémoire unifiée qui simplifie la gestion mémoire.
 
 ```pascal
 {$IFDEF USE_CUDA}
-procedure UseUnifiedMemory;
+procedure UseUnifiedMemory;  
 var
   data: PSingle;
   size: NativeUInt;
@@ -1431,7 +1431,7 @@ type
     procedure Run;
   end;
 
-constructor TGPUVideoProcessor.Create(deviceIndex: Integer; useGPU: Boolean);
+constructor TGPUVideoProcessor.Create(deviceIndex: Integer; useGPU: Boolean);  
 begin
   inherited Create;
   FCapture := TVideoCapture.Create;
@@ -1447,13 +1447,13 @@ begin
   end;
 end;
 
-destructor TGPUVideoProcessor.Destroy;
+destructor TGPUVideoProcessor.Destroy;  
 begin
   FCapture.Free;
   inherited;
 end;
 
-procedure TGPUVideoProcessor.Run;
+procedure TGPUVideoProcessor.Run;  
 var
   frame, processed: TMat;
   {$IFDEF USE_OPENCL}
@@ -1594,7 +1594,7 @@ const
 type
   TMatrix = array of Single;
 
-procedure InitializeMatrix(var M: TMatrix; size: Integer);
+procedure InitializeMatrix(var M: TMatrix; size: Integer);  
 var
   i: Integer;
 begin
@@ -1603,7 +1603,7 @@ begin
     M[i] := Random;
 end;
 
-procedure MatrixMultiplyCPU(const A, B: TMatrix; var C: TMatrix; N: Integer);
+procedure MatrixMultiplyCPU(const A, B: TMatrix; var C: TMatrix; N: Integer);  
 var
   i, j, k: Integer;
 begin
@@ -1616,7 +1616,7 @@ begin
     end;
 end;
 
-procedure BenchmarkMatrixMultiply;
+procedure BenchmarkMatrixMultiply;  
 var
   A, B, C_cpu, C_gpu: TMatrix;
   startTime, endTime: TDateTime;
@@ -1668,7 +1668,7 @@ begin
     WriteLn('✗ Erreurs détectées !');
 end;
 
-procedure MatrixMultiplyGPU(const A, B: TMatrix; var C: TMatrix; N: Integer);
+procedure MatrixMultiplyGPU(const A, B: TMatrix; var C: TMatrix; N: Integer);  
 var
   ctx: TOpenCLContext;
   d_A, d_B, d_C: cl_mem;
@@ -1733,7 +1733,7 @@ begin
   end;
 end;
 
-function VerifyResults(const A, B: TMatrix; N: Integer): Boolean;
+function VerifyResults(const A, B: TMatrix; N: Integer): Boolean;  
 var
   i, samples: Integer;
   maxError: Single;
@@ -1825,13 +1825,13 @@ begin
   {$ENDIF}
 end;
 
-destructor TBatchProcessor.Destroy;
+destructor TBatchProcessor.Destroy;  
 begin
   FInputFiles.Free;
   inherited;
 end;
 
-procedure TBatchProcessor.ProcessSingleImage(const inputPath, outputPath: string);
+procedure TBatchProcessor.ProcessSingleImage(const inputPath, outputPath: string);  
 var
   src, dst: TMat;
   {$IFDEF USE_OPENCL}
@@ -1874,7 +1874,7 @@ begin
   end;
 end;
 
-procedure TBatchProcessor.Execute;
+procedure TBatchProcessor.Execute;  
 var
   i: Integer;
   inputPath, outputPath, filename: string;
@@ -1984,26 +1984,26 @@ type
     function Stop: Single; // Retourne le temps en ms
   end;
 
-constructor TCUDAProfiler.Create;
+constructor TCUDAProfiler.Create;  
 begin
   inherited;
   cudaEventCreate(@FStartEvent);
   cudaEventCreate(@FStopEvent);
 end;
 
-destructor TCUDAProfiler.Destroy;
+destructor TCUDAProfiler.Destroy;  
 begin
   cudaEventDestroy(FStartEvent);
   cudaEventDestroy(FStopEvent);
   inherited;
 end;
 
-procedure TCUDAProfiler.Start;
+procedure TCUDAProfiler.Start;  
 begin
   cudaEventRecord(FStartEvent, 0);
 end;
 
-function TCUDAProfiler.Stop: Single;
+function TCUDAProfiler.Stop: Single;  
 var
   elapsedTime: Single;
 begin
@@ -2014,7 +2014,7 @@ begin
 end;
 
 // Exemple d'utilisation
-procedure ProfileKernel;
+procedure ProfileKernel;  
 var
   profiler: TCUDAProfiler;
   time: Single;
@@ -2038,7 +2038,7 @@ end;
 ### Débogage CUDA
 
 ```pascal
-function CheckCUDAError(err: cudaError_t; const operation: string): Boolean;
+function CheckCUDAError(err: cudaError_t; const operation: string): Boolean;  
 begin
   Result := err = cudaSuccess;
   if not Result then
@@ -2048,7 +2048,7 @@ begin
   end;
 end;
 
-procedure SafeCUDAOperation;
+procedure SafeCUDAOperation;  
 var
   devicePtr: Pointer;
   size: NativeUInt;
@@ -2076,7 +2076,7 @@ end;
 ### Débogage OpenCL
 
 ```pascal
-function GetCLErrorString(err: cl_int): string;
+function GetCLErrorString(err: cl_int): string;  
 begin
   case err of
     CL_SUCCESS: Result := 'CL_SUCCESS';
@@ -2093,14 +2093,14 @@ begin
   end;
 end;
 
-procedure CheckCLError(err: cl_int; const operation: string);
+procedure CheckCLError(err: cl_int; const operation: string);  
 begin
   if err <> CL_SUCCESS then
     raise Exception.Create(Format('OpenCL Error in %s: %s',
       [operation, GetCLErrorString(err)]));
 end;
 
-procedure GetProgramBuildLog(program_: cl_program; device: cl_device_id);
+procedure GetProgramBuildLog(program_: cl_program; device: cl_device_id);  
 var
   logSize: size_t;
   log: AnsiString;
@@ -2185,7 +2185,7 @@ Voici des résultats typiques de performance GPU vs CPU pour différentes tâche
 
 ```pascal
 // ❌ MAUVAIS : Trop de transferts
-procedure BadGPUCode;
+procedure BadGPUCode;  
 var
   i: Integer;
   hostData, deviceData: Pointer;
@@ -2208,7 +2208,7 @@ begin
 end;
 
 // ✅ BON : Minimiser les transferts
-procedure GoodGPUCode;
+procedure GoodGPUCode;  
 var
   hostData, deviceData: Pointer;
 begin
@@ -2246,14 +2246,14 @@ type
     procedure FreeAllBuffers;
   end;
 
-constructor TGPUResourceManager.Create(ctx: TOpenCLContext);
+constructor TGPUResourceManager.Create(ctx: TOpenCLContext);  
 begin
   inherited Create;
   FContext := ctx;
   FAllocatedBuffers := TFPList.Create;
 end;
 
-destructor TGPUResourceManager.Destroy;
+destructor TGPUResourceManager.Destroy;  
 begin
   FreeAllBuffers;
   FAllocatedBuffers.Free;
@@ -2267,7 +2267,7 @@ begin
   FAllocatedBuffers.Add(Result);
 end;
 
-procedure TGPUResourceManager.FreeAllBuffers;
+procedure TGPUResourceManager.FreeAllBuffers;  
 var
   buffer: cl_mem;
 begin
@@ -2277,7 +2277,7 @@ begin
 end;
 
 // Utilisation
-procedure UseResourceManager;
+procedure UseResourceManager;  
 var
   ctx: TOpenCLContext;
   manager: TGPUResourceManager;
@@ -2317,7 +2317,7 @@ type
     procedure Compute(const input: TSingleArray; var output: TSingleArray);
   end;
 
-constructor TComputeEngine.Create;
+constructor TComputeEngine.Create;  
 begin
   inherited;
   // Vérifier la disponibilité du GPU
@@ -2379,7 +2379,7 @@ const
   OPENCL_PATH = '/usr/lib/x86_64-linux-gnu/';
 {$ENDIF}
 
-procedure ConfigurePaths;
+procedure ConfigurePaths;  
 begin
   {$IFDEF WINDOWS}
   // Ajouter au PATH si nécessaire
@@ -2720,7 +2720,7 @@ type
     procedure SaveResultsToFile(const filename: string);
   end;
 
-constructor TGPUBenchmark.Create;
+constructor TGPUBenchmark.Create;  
 begin
   inherited;
   FGPUAvailable := CheckCUDAAvailable or CheckOpenCLAvailable;
@@ -2757,7 +2757,7 @@ begin
   FResults[High(FResults)] := result;
 end;
 
-function TGPUBenchmark.BenchmarkVectorAdd: TBenchmarkResult;
+function TGPUBenchmark.BenchmarkVectorAdd: TBenchmarkResult;  
 const
   N = 10000000; // 10 millions
 var
@@ -2819,7 +2819,7 @@ begin
   WriteLn;
 end;
 
-function TGPUBenchmark.BenchmarkMatrixMultiply: TBenchmarkResult;
+function TGPUBenchmark.BenchmarkMatrixMultiply: TBenchmarkResult;  
 const
   N = 512;
 var
@@ -2864,7 +2864,7 @@ begin
   WriteLn;
 end;
 
-function TGPUBenchmark.BenchmarkImageProcessing: TBenchmarkResult;
+function TGPUBenchmark.BenchmarkImageProcessing: TBenchmarkResult;  
 var
   startTime, endTime: TDateTime;
   timeCPU, timeGPU: Double;
@@ -2906,7 +2906,7 @@ begin
   WriteLn;
 end;
 
-procedure TGPUBenchmark.RunAllBenchmarks;
+procedure TGPUBenchmark.RunAllBenchmarks;  
 begin
   WriteLn('Démarrage des benchmarks...');
   WriteLn;
@@ -2919,7 +2919,7 @@ begin
   WriteLn;
 end;
 
-procedure TGPUBenchmark.PrintResults;
+procedure TGPUBenchmark.PrintResults;  
 var
   i: Integer;
   totalSpeedup: Double;
@@ -2968,7 +2968,7 @@ begin
   WriteLn;
 end;
 
-procedure TGPUBenchmark.SaveResultsToFile(const filename: string);
+procedure TGPUBenchmark.SaveResultsToFile(const filename: string);  
 var
   f: TextFile;
   i: Integer;

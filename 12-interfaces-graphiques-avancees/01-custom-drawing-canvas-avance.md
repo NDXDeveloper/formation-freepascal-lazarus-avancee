@@ -33,7 +33,7 @@ Le Canvas est accessible principalement dans deux contextes :
 2. **En dehors de OnPaint** (moins recommandé, peut causer des problèmes de rafraîchissement)
 
 ```pascal
-procedure TForm1.FormPaint(Sender: TObject);
+procedure TForm1.FormPaint(Sender: TObject);  
 begin
   // Le Canvas du formulaire est accessible directement
   Canvas.TextOut(10, 10, 'Bonjour depuis le Canvas !');
@@ -48,7 +48,7 @@ C'est **l'événement le plus important** pour le custom drawing. Il est déclen
 - Vous appelez la méthode `Invalidate` ou `Refresh`
 
 ```pascal
-procedure TForm1.PaintBox1Paint(Sender: TObject);
+procedure TForm1.PaintBox1Paint(Sender: TObject);  
 begin
   with PaintBox1.Canvas do
   begin
@@ -74,8 +74,8 @@ end;
 Le `Pen` contrôle **comment sont dessinées les lignes et les contours** des formes.
 
 ```pascal
-Canvas.Pen.Color := clRed;        // Couleur du trait
-Canvas.Pen.Width := 3;             // Épaisseur du trait (en pixels)
+Canvas.Pen.Color := clRed;        // Couleur du trait  
+Canvas.Pen.Width := 3;             // Épaisseur du trait (en pixels)  
 Canvas.Pen.Style := psSolid;       // Style : psSolid, psDash, psDot, psDashDot, etc.
 ```
 
@@ -91,7 +91,7 @@ Canvas.Pen.Style := psSolid;       // Style : psSolid, psDash, psDot, psDashDot,
 Le `Brush` contrôle **comment sont remplies les formes** (l'intérieur).
 
 ```pascal
-Canvas.Brush.Color := clYellow;    // Couleur de remplissage
+Canvas.Brush.Color := clYellow;    // Couleur de remplissage  
 Canvas.Brush.Style := bsSolid;     // Style de remplissage
 ```
 
@@ -107,9 +107,9 @@ Canvas.Brush.Style := bsSolid;     // Style de remplissage
 Le `Font` contrôle l'apparence du texte.
 
 ```pascal
-Canvas.Font.Name := 'Arial';       // Nom de la police
-Canvas.Font.Size := 14;            // Taille en points
-Canvas.Font.Color := clBlack;      // Couleur du texte
+Canvas.Font.Name := 'Arial';       // Nom de la police  
+Canvas.Font.Size := 14;            // Taille en points  
+Canvas.Font.Color := clBlack;      // Couleur du texte  
 Canvas.Font.Style := [fsBold];     // Style : fsBold, fsItalic, fsUnderline, fsStrikeOut
 ```
 
@@ -124,7 +124,7 @@ Canvas.Font.Style := [fsBold];     // Style : fsBold, fsItalic, fsUnderline, fsS
 Canvas.Line(10, 10, 200, 150);
 
 // OU en déplaçant le "curseur" puis en traçant
-Canvas.MoveTo(10, 10);      // Déplace le point de départ
+Canvas.MoveTo(10, 10);      // Déplace le point de départ  
 Canvas.LineTo(200, 150);    // Trace jusqu'au point d'arrivée
 ```
 
@@ -289,7 +289,7 @@ end;
 Le `ClipRect` est la zone qui doit être redessinée. Optimisez vos dessins en ne redessinant que cette zone.
 
 ```pascal
-procedure TForm1.PaintBox1Paint(Sender: TObject);
+procedure TForm1.PaintBox1Paint(Sender: TObject);  
 var
   ClipR: TRect;
 begin
@@ -308,9 +308,9 @@ end;
 Le `CopyMode` définit comment les pixels sont combinés lors du dessin.
 
 ```pascal
-Canvas.CopyMode := cmSrcCopy;    // Mode par défaut : copie directe
-Canvas.CopyMode := cmSrcAnd;     // ET logique
-Canvas.CopyMode := cmSrcInvert;  // Inverse les couleurs
+Canvas.CopyMode := cmSrcCopy;    // Mode par défaut : copie directe  
+Canvas.CopyMode := cmSrcAnd;     // ET logique  
+Canvas.CopyMode := cmSrcInvert;  // Inverse les couleurs  
 Canvas.CopyMode := cmSrcPaint;   // OU logique
 ```
 
@@ -333,7 +333,7 @@ FreePascal/Lazarus offre des transformations basiques selon la plateforme :
 
 ```pascal
 // Exemple de rotation manuelle (calculs trigonométriques)
-function RotatePoint(const Point: TPoint; const Center: TPoint; Angle: Double): TPoint;
+function RotatePoint(const Point: TPoint; const Center: TPoint; Angle: Double): TPoint;  
 var
   S, C: Double;
   DX, DY: Integer;
@@ -356,7 +356,7 @@ end;
 Lazarus fournit de nombreuses couleurs prédéfinies :
 
 ```pascal
-clBlack, clWhite, clRed, clGreen, clBlue, clYellow, clAqua, clFuchsia,
+clBlack, clWhite, clRed, clGreen, clBlue, clYellow, clAqua, clFuchsia,  
 clGray, clMaroon, clNavy, clOlive, clPurple, clTeal, clSilver, clLime
 ```
 
@@ -405,7 +405,7 @@ end;
 
 ```pascal
 // ❌ MAUVAIS : création répétée d'objets
-procedure TForm1.PaintBox1Paint(Sender: TObject);
+procedure TForm1.PaintBox1Paint(Sender: TObject);  
 var
   Bmp: TBitmap;
   i: Integer;
@@ -424,7 +424,7 @@ begin
 end;
 
 // ✅ BON : réutilisation d'objets
-procedure TForm1.PaintBox1Paint(Sender: TObject);
+procedure TForm1.PaintBox1Paint(Sender: TObject);  
 var
   Bmp: TBitmap;
   i: Integer;
@@ -461,7 +461,7 @@ Le Canvas est bien abstrait par la LCL, mais quelques différences subsistent :
 ### Code portable
 
 ```pascal
-procedure DrawSomething(ACanvas: TCanvas);
+procedure DrawSomething(ACanvas: TCanvas);  
 begin
   // Ce code fonctionne identiquement sur Windows et Linux
   ACanvas.Brush.Color := clLightBlue;
@@ -504,7 +504,7 @@ begin
   PB.OnPaint := @MyPaintBoxPaint;
 end;
 
-procedure TForm1.MyPaintBoxPaint(Sender: TObject);
+procedure TForm1.MyPaintBoxPaint(Sender: TObject);  
 begin
   with (Sender as TPaintBox).Canvas do
   begin
@@ -523,8 +523,8 @@ end;
 Permet d'afficher et manipuler des images avec accès au Canvas.
 
 ```pascal
-Image1.Picture.LoadFromFile('photo.jpg');
-Image1.Canvas.Pen.Color := clRed;
+Image1.Picture.LoadFromFile('photo.jpg');  
+Image1.Canvas.Pen.Color := clRed;  
 Image1.Canvas.Rectangle(10, 10, 100, 100);  // Dessiner par-dessus l'image
 ```
 
@@ -589,7 +589,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   FDrawing := False;
   FBuffer := TBitmap.Create;
@@ -603,7 +603,7 @@ begin
   // DoubleBuffered n'a pas d'effet. On utilise FBuffer à la place.
 end;
 
-procedure TForm1.FormDestroy(Sender: TObject);
+procedure TForm1.FormDestroy(Sender: TObject);  
 begin
   FBuffer.Free;
 end;
@@ -625,7 +625,7 @@ begin
     FDrawing := False;
 end;
 
-procedure TForm1.PaintBox1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+procedure TForm1.PaintBox1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);  
 begin
   if FDrawing then
   begin
@@ -640,13 +640,13 @@ begin
   end;
 end;
 
-procedure TForm1.PaintBox1Paint(Sender: TObject);
+procedure TForm1.PaintBox1Paint(Sender: TObject);  
 begin
   // Copier le buffer sur le PaintBox
   PaintBox1.Canvas.Draw(0, 0, FBuffer);
 end;
 
-procedure TForm1.ClearButtonClick(Sender: TObject);
+procedure TForm1.ClearButtonClick(Sender: TObject);  
 begin
   FBuffer.Canvas.Brush.Color := clWhite;
   FBuffer.Canvas.FillRect(Rect(0, 0, FBuffer.Width, FBuffer.Height));
