@@ -573,10 +573,10 @@ L'objectif n'est pas d'atteindre zéro alerte, mais de **détecter les vrais pro
 
 **Points clés à retenir :**
 
-✅ L'analyse statique détecte les bugs sans exécuter le code
-✅ Le compilateur FPC offre déjà de bonnes analyses de base
-✅ Les scripts personnalisés sont efficaces et portables
-✅ L'analyse doit être intégrée au processus de développement
+✅ L'analyse statique détecte les bugs sans exécuter le code  
+✅ Le compilateur FPC offre déjà de bonnes analyses de base  
+✅ Les scripts personnalisés sont efficaces et portables  
+✅ L'analyse doit être intégrée au processus de développement  
 ✅ La qualité du code est un effort continu, pas un objectif ponctuel
 
 ⏭️ [Tests de performance et benchmarking](/18-tests-qualite-code/06-tests-performance-benchmarking.md)

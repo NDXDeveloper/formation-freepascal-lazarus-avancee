@@ -1786,17 +1786,17 @@ done
 ### 3. Interpréter les résultats
 
 **Signes de bon comportement :**
-✅ Temps de réponse stable sous charge
-✅ Utilisation CPU linéaire avec la charge
-✅ Mémoire stable (pas de fuite)
-✅ Taux d'erreur < 1%
+✅ Temps de réponse stable sous charge  
+✅ Utilisation CPU linéaire avec la charge  
+✅ Mémoire stable (pas de fuite)  
+✅ Taux d'erreur < 1%  
 ✅ Dégradation gracieuse sous forte charge
 
 **Signes de problème :**
-⚠️ Temps de réponse qui augmente exponentiellement
-⚠️ Utilisation mémoire qui croît sans cesse
-⚠️ CPU à 100% avec peu de charge
-⚠️ Beaucoup d'erreurs ou de timeouts
+⚠️ Temps de réponse qui augmente exponentiellement  
+⚠️ Utilisation mémoire qui croît sans cesse  
+⚠️ CPU à 100% avec peu de charge  
+⚠️ Beaucoup d'erreurs ou de timeouts  
 ⚠️ Plantage du système sous charge
 
 **Exemple d'analyse :**
@@ -2345,11 +2345,11 @@ Les tests de charge et de stress sont essentiels pour garantir la fiabilité de 
 
 **Points clés à retenir :**
 
-✅ **Testez tôt et régulièrement** : Ne pas attendre la mise en production
-✅ **Simulez des scénarios réalistes** : Pas seulement des charges synthétiques
-✅ **Surveillez tout** : CPU, mémoire, disque, réseau, logs
-✅ **Automatisez** : Intégrez les tests dans votre CI/CD
-✅ **Documentez** : Gardez un historique des résultats
+✅ **Testez tôt et régulièrement** : Ne pas attendre la mise en production  
+✅ **Simulez des scénarios réalistes** : Pas seulement des charges synthétiques  
+✅ **Surveillez tout** : CPU, mémoire, disque, réseau, logs  
+✅ **Automatisez** : Intégrez les tests dans votre CI/CD  
+✅ **Documentez** : Gardez un historique des résultats  
 ✅ **Agissez** : Utilisez les résultats pour optimiser
 
 **Différences Windows/Ubuntu :**

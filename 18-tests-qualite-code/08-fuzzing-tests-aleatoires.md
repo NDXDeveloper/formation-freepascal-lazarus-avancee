@@ -168,15 +168,22 @@ uses
 // Fonction à tester : Parser une liste de nombres séparés par des virgules
 function ParseNumberList(const input: string): TStringList;
 var
-  parts: TStringArray;
+  parts: TStringList;
   i: Integer;
 begin
   Result := TStringList.Create;
 
   // Bug potentiel : pas de validation
-  parts := input.Split(',');
-  for i := 0 to High(parts) do
-    Result.Add(IntToStr(StrToInt(Trim(parts[i]))));
+  parts := TStringList.Create;
+  try
+    parts.Delimiter := ',';
+    parts.StrictDelimiter := True;
+    parts.DelimitedText := input;
+    for i := 0 to parts.Count - 1 do
+      Result.Add(IntToStr(StrToInt(Trim(parts[i]))));
+  finally
+    parts.Free;
+  end;
 end;
 
 procedure FuzzParser;
@@ -272,7 +279,7 @@ Erreurs trouvées: 12
 ```pascal
 function ParseNumberListSecure(const input: string): TStringList;
 var
-  parts: TStringArray;
+  parts: TStringList;
   i, num: Integer;
   part: string;
 begin
@@ -281,17 +288,24 @@ begin
   if Trim(input) = '' then
     Exit;
 
-  parts := input.Split(',');
-  for i := 0 to High(parts) do
-  begin
-    part := Trim(parts[i]);
-    if part = '' then
-      Continue;  // Ignorer les parties vides
+  parts := TStringList.Create;
+  try
+    parts.Delimiter := ',';
+    parts.StrictDelimiter := True;
+    parts.DelimitedText := input;
+    for i := 0 to parts.Count - 1 do
+    begin
+      part := Trim(parts[i]);
+      if part = '' then
+        Continue;  // Ignorer les parties vides
 
-    if not TryStrToInt(part, num) then
-      raise Exception.CreateFmt('Valeur invalide: "%s"', [part]);
+      if not TryStrToInt(part, num) then
+        raise Exception.CreateFmt('Valeur invalide: "%s"', [part]);
 
-    Result.Add(IntToStr(num));
+      Result.Add(IntToStr(num));
+    end;
+  finally
+    parts.Free;
   end;
 end;
 ```
@@ -1857,21 +1871,21 @@ end.
 ### Limites du fuzzing
 
 **Ce que le fuzzing peut trouver :**
-✅ Crashes et plantages
-✅ Débordements de buffer
-✅ Exceptions non gérées
-✅ Fuites mémoire
-✅ Boucles infinies (avec timeout)
-✅ Injections (SQL, XSS, etc.)
-✅ Problèmes de validation d'entrées
+✅ Crashes et plantages  
+✅ Débordements de buffer  
+✅ Exceptions non gérées  
+✅ Fuites mémoire  
+✅ Boucles infinies (avec timeout)  
+✅ Injections (SQL, XSS, etc.)  
+✅ Problèmes de validation d'entrées  
 ✅ Erreurs de format
 
 **Ce que le fuzzing ne peut PAS trouver facilement :**
-❌ Bugs logiques complexes
-❌ Problèmes de concurrence (race conditions)
-❌ Bugs dépendant d'un état spécifique
-❌ Vulnérabilités nécessitant une séquence précise
-❌ Problèmes de permissions ou d'authentification
+❌ Bugs logiques complexes  
+❌ Problèmes de concurrence (race conditions)  
+❌ Bugs dépendant d'un état spécifique  
+❌ Vulnérabilités nécessitant une séquence précise  
+❌ Problèmes de permissions ou d'authentification  
 ❌ Bugs nécessitant un contexte métier
 
 ### Quand utiliser le fuzzing
@@ -2481,10 +2495,10 @@ Le fuzzing est une technique puissante pour améliorer la robustesse et la sécu
 
 **Points clés à retenir :**
 
-✅ **Complément essentiel** : Le fuzzing ne remplace pas les tests unitaires, il les complète
-✅ **Découverte automatique** : Trouve des bugs impossibles à imaginer manuellement
-✅ **Sécurité** : Particulièrement efficace pour détecter les vulnérabilités
-✅ **Facile à démarrer** : Peut commencer avec des scripts simples
+✅ **Complément essentiel** : Le fuzzing ne remplace pas les tests unitaires, il les complète  
+✅ **Découverte automatique** : Trouve des bugs impossibles à imaginer manuellement  
+✅ **Sécurité** : Particulièrement efficace pour détecter les vulnérabilités  
+✅ **Facile à démarrer** : Peut commencer avec des scripts simples  
 ✅ **Évolutif** : Peut être sophistiqué avec outils spécialisés
 
 **Stratégie recommandée :**

@@ -163,7 +163,7 @@ begin
   if not DirectoryExists(FCheminBase) then
     ForceDirectories(FCheminBase);
 
-  FCheminFichiersTest := FCheminBase + 'fichiers\';
+  FCheminFichiersTest := FCheminBase + 'fichiers' + PathDelim;
   ForceDirectories(FCheminFichiersTest);
 
   // Charger la configuration
@@ -853,36 +853,6 @@ Pour les API externes (services web, API REST), vous avez deux options :
 ### Exemple avec une API REST
 
 ```pascal
-unit TestIntegrationAPI;
-
-{$mode objfpc}{$H+}
-
-interface
-
-uses
-  Classes, SysUtils, fpcunit, testregistry,
-  fphttpclient, fpjson, jsonparser,
-  ClientAPI;
-
-type
-  TTestIntegrationAPI = class(TTestCase)
-  private
-    FClient: TClientAPI;
-    FURLBase: String;
-  protected
-    procedure SetUp; override;
-    procedure TearDown; override;
-  published
-    procedure TestConnexionAPI;
-    procedure TestRecupererUtilisateur;
-    procedure TestCreerUtilisateur;
-    procedure TestModifierUtilisateur;
-    procedure TestSupprimerUtilisateur;
-    procedure TestGestionErreurs;
-  end;
-
-implementation
-
 unit TestIntegrationAPI;
 
 {$mode objfpc}{$H+}

@@ -1039,7 +1039,7 @@ function LoadConfig(const FileName: string): Boolean; deprecated;
 
 **`intro.txt` :**
 
-```markdown
+````markdown
 # Mon Projet FreePascal
 
 ## Description
@@ -1081,7 +1081,7 @@ end.
 ## Licence
 
 Ce projet est sous licence MIT. Voir LICENSE.txt pour plus de détails.
-```
+````
 
 ### Index des modules
 
@@ -2672,11 +2672,11 @@ La documentation automatique est un élément crucial pour la réussite de tout 
 
 **Points clés à retenir :**
 
-✅ **Documenter en écrivant le code** : Ne pas reporter la documentation à plus tard
-✅ **Utiliser PasDoc** : Outil standard pour FreePascal, simple et efficace
-✅ **Automatiser** : Scripts, CI/CD, hooks Git pour maintenir à jour
-✅ **Plusieurs formats** : HTML pour le web, Markdown pour GitHub, PDF pour impression
-✅ **Multi-audience** : Documentation développeur ET utilisateur final
+✅ **Documenter en écrivant le code** : Ne pas reporter la documentation à plus tard  
+✅ **Utiliser PasDoc** : Outil standard pour FreePascal, simple et efficace  
+✅ **Automatiser** : Scripts, CI/CD, hooks Git pour maintenir à jour  
+✅ **Plusieurs formats** : HTML pour le web, Markdown pour GitHub, PDF pour impression  
+✅ **Multi-audience** : Documentation développeur ET utilisateur final  
 ✅ **Maintenir à jour** : La documentation obsolète est pire que pas de documentation
 
 **Stratégie de documentation recommandée :**

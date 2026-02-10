@@ -1825,10 +1825,10 @@ Measure-Command { .\programme.exe }
 
 Le benchmarking est essentiel pour :
 
-✅ **Identifier** les goulots d'étranglement
-✅ **Comparer** différentes implémentations
-✅ **Valider** les optimisations
-✅ **Détecter** les régressions
+✅ **Identifier** les goulots d'étranglement  
+✅ **Comparer** différentes implémentations  
+✅ **Valider** les optimisations  
+✅ **Détecter** les régressions  
 ✅ **Garantir** les performances requises
 
 **Points clés à retenir :**
