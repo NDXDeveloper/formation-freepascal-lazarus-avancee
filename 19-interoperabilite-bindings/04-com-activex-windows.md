@@ -329,7 +329,7 @@ uses
 
 procedure CreerDocument;
 var
-  WordApp, Doc, Paragraph: Variant;
+  WordApp, Doc, Paragraph, Table: Variant;
 begin
   // Créer une instance de Word
   WordApp := CreateOleObject('Word.Application');
@@ -355,7 +355,7 @@ begin
 
   // Ajouter un tableau
   Doc.Content.InsertParagraphAfter;
-  var Table := Doc.Tables.Add(Doc.Paragraphs.Last.Range, 3, 2);
+  Table := Doc.Tables.Add(Doc.Paragraphs.Last.Range, 3, 2);
   Table.Borders.Enable := True;
 
   Table.Cell(1, 1).Range.Text := 'Élément';
@@ -454,7 +454,8 @@ uses
 
 procedure OuvrirPageWeb;
 var
-  IE: Variant;
+  IE, Document, Links: Variant;
+  Msg: TMsg;
 begin
   // Créer une instance d'Internet Explorer
   IE := CreateOleObject('InternetExplorer.Application');
@@ -468,7 +469,6 @@ begin
   begin
     Sleep(100);
     // Traiter les messages Windows pour éviter le blocage
-    var Msg: TMsg;
     while PeekMessage(Msg, 0, 0, 0, PM_REMOVE) do
     begin
       TranslateMessage(Msg);
@@ -479,11 +479,11 @@ begin
   WriteLn('Page chargée !');
 
   // Accéder au contenu HTML
-  var Document := IE.Document;
+  Document := IE.Document;
   WriteLn('Titre de la page : ', Document.Title);
 
   // Exemple : Récupérer tous les liens
-  var Links := Document.getElementsByTagName('a');
+  Links := Document.getElementsByTagName('a');
   WriteLn('Nombre de liens : ', Links.length);
 
   WriteLn('Appuyez sur Entrée pour fermer le navigateur...');
@@ -625,6 +625,8 @@ var
   oEnum: IEnumVariant;
   Value: OleVariant;
   Fetched: Cardinal;
+  PID, Name: string;
+  Memory: Int64;
 begin
   CoInitialize(nil);
   try
@@ -642,9 +644,9 @@ begin
     while oEnum.Next(1, Value, Fetched) = S_OK do
     begin
       Obj := Value;
-      var PID := VarToStr(Obj.ProcessId);
-      var Name := VarToStr(Obj.Name);
-      var Memory: Int64 := 0;
+      PID := VarToStr(Obj.ProcessId);
+      Name := VarToStr(Obj.Name);
+      Memory := 0;
 
       try
         Memory := Obj.WorkingSetSize div 1024; // En Ko
@@ -1033,7 +1035,7 @@ end.
 ```pascal
 library DataComServer;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 uses
   ComObj, ComServ, SysUtils, Windows, ActiveX, Classes, Generics.Collections;
@@ -1373,6 +1375,7 @@ var
   Value: OleVariant;
   Fetched: Cardinal;
   Count: Integer;
+  Name, State, StartMode: string;
 begin
   CoInitialize(nil);
   try
@@ -1393,9 +1396,9 @@ begin
     begin
       Obj := Value;
 
-      var Name := VarToStr(Obj.DisplayName);
-      var State := VarToStr(Obj.State);
-      var StartMode := VarToStr(Obj.StartMode);
+      Name := VarToStr(Obj.DisplayName);
+      State := VarToStr(Obj.State);
+      StartMode := VarToStr(Obj.StartMode);
 
       // Tronquer le nom s'il est trop long
       if Length(Name) > 30 then
@@ -1493,6 +1496,7 @@ procedure ListerUtilisateursAD;
 var
   Connection, Command, RecordSet: Variant;
   Count: Integer;
+  Name, Email, Phone: string;
 begin
   CoInitialize(nil);
   try
@@ -1522,9 +1526,9 @@ begin
     Count := 0;
     while not RecordSet.EOF do
     begin
-      var Name := VarToStr(RecordSet.Fields['cn'].Value);
-      var Email := VarToStr(RecordSet.Fields['mail'].Value);
-      var Phone := VarToStr(RecordSet.Fields['telephoneNumber'].Value);
+      Name := VarToStr(RecordSet.Fields['cn'].Value);
+      Email := VarToStr(RecordSet.Fields['mail'].Value);
+      Phone := VarToStr(RecordSet.Fields['telephoneNumber'].Value);
 
       WriteLn(Format('%-30s %-35s %-15s', [Name, Email, Phone]));
 
@@ -1599,6 +1603,7 @@ end;
 procedure TesterGestionErreurs;
 var
   Obj: Variant;
+  TextFile: Variant;
 begin
   WriteLn('=== Test gestion d''erreurs COM ===');
   WriteLn;
@@ -1639,7 +1644,7 @@ begin
   WriteLn('Test 3 : Paramètre invalide');
   try
     Obj := CreateOleObject('Scripting.FileSystemObject');
-    var File := Obj.OpenTextFile('', 1); // Chemin vide
+    TextFile := Obj.OpenTextFile('', 1); // Chemin vide
   except
     on E: Exception do
       WriteLn('  Exception : ', E.Message);
@@ -1878,6 +1883,7 @@ end;
 var
   Tracer: TComTracer;
   Excel: Variant;
+  Workbook: Variant;
 
 begin
   Tracer := TComTracer.Create('com_trace.log');
@@ -1898,7 +1904,7 @@ begin
     Excel.Visible := True;
 
     Tracer.Log('Créer un classeur');
-    var Workbook := Excel.Workbooks.Add;
+    Workbook := Excel.Workbooks.Add;
 
     Tracer.Log('Écrire dans une cellule');
     Excel.Worksheets[1].Cells[1, 1].Value := 'Test';
@@ -1942,13 +1948,14 @@ end;
 procedure TestFuites;
 var
   Excel: Variant;
+  Workbook: Variant;
 begin
   WriteLn('Création Excel...');
   Excel := CreateOleObject('Excel.Application');
   AfficherCompteurRef(Excel);
 
   WriteLn('Création classeur...');
-  var Workbook := Excel.Workbooks.Add;
+  Workbook := Excel.Workbooks.Add;
   AfficherCompteurRef(Excel);
 
   WriteLn('Libération classeur...');
@@ -2360,6 +2367,8 @@ var
   Destinataires: TStringList;
   i: Integer;
   OutputFile: string;
+  Ligne, Nom, Email, Ville: string;
+  P1, P2: Integer;
 begin
   Destinataires := TStringList.Create;
   try
@@ -2374,10 +2383,13 @@ begin
     try
       for i := 0 to Destinataires.Count - 1 do
       begin
-        var Parts := Destinataires[i].Split(['|']);
-        var Nom := Parts[0];
-        var Email := Parts[1];
-        var Ville := Parts[2];
+        Ligne := Destinataires[i];
+        P1 := Pos('|', Ligne);
+        Nom := Copy(Ligne, 1, P1 - 1);
+        Delete(Ligne, 1, P1);
+        P2 := Pos('|', Ligne);
+        Email := Copy(Ligne, 1, P2 - 1);
+        Ville := Copy(Ligne, P2 + 1, Length(Ligne));
 
         // Créer un nouveau document
         Doc := Word.Documents.Add;
@@ -2580,6 +2592,7 @@ end;
 procedure DesactiverMacros;
 var
   Excel: Variant;
+  Workbook: Variant;
 begin
   Excel := CreateOleObject('Excel.Application');
   try
@@ -2587,7 +2600,7 @@ begin
     Excel.AutomationSecurity := 3; // msoAutomationSecurityForceDisable
 
     // Ouvrir un fichier
-    var Workbook := Excel.Workbooks.Open('fichier.xlsx');
+    Workbook := Excel.Workbooks.Open('fichier.xlsx');
 
     // Traitement...
 

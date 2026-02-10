@@ -952,36 +952,36 @@ function ProcessRequest(const Req: TRequest): TJSONObject;
 begin
   Result := TJSONObject.Create;
 
-  case Req.Action of
-    'add':
-      begin
-        Result.Add('result', Req.A + Req.B);
-        Result.Add('success', True);
-      end;
-    'multiply':
-      begin
-        Result.Add('result', Req.A * Req.B);
-        Result.Add('success', True);
-      end;
-    'subtract':
-      begin
-        Result.Add('result', Req.A - Req.B);
-        Result.Add('success', True);
-      end;
-    'divide':
-      begin
-        if Req.B <> 0 then
-        begin
-          Result.Add('result', Req.A / Req.B);
-          Result.Add('success', True);
-        end
-        else
-        begin
-          Result.Add('success', False);
-          Result.Add('error', 'Division par zéro');
-        end;
-      end;
+  if Req.Action = 'add' then
+  begin
+    Result.Add('result', Req.A + Req.B);
+    Result.Add('success', True);
+  end
+  else if Req.Action = 'multiply' then
+  begin
+    Result.Add('result', Req.A * Req.B);
+    Result.Add('success', True);
+  end
+  else if Req.Action = 'subtract' then
+  begin
+    Result.Add('result', Req.A - Req.B);
+    Result.Add('success', True);
+  end
+  else if Req.Action = 'divide' then
+  begin
+    if Req.B <> 0 then
+    begin
+      Result.Add('result', Req.A / Req.B);
+      Result.Add('success', True);
+    end
+    else
+    begin
+      Result.Add('success', False);
+      Result.Add('error', 'Division par zéro');
+    end;
+  end
   else
+  begin
     Result.Add('success', False);
     Result.Add('error', 'Action inconnue: ' + Req.Action);
   end;

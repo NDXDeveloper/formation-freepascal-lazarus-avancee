@@ -399,8 +399,8 @@ begin
 end;
 ```
 
-**Avantages** : Pas de problème de libération
-**Inconvénients** : Le client doit connaître la taille nécessaire
+**Avantages** : Pas de problème de libération  
+**Inconvénients** : Le client doit connaître la taille nécessaire  
 
 **Stratégie 2 : La bibliothèque alloue et fournit un destructeur**
 
@@ -424,8 +424,8 @@ begin
 end;
 ```
 
-**Avantages** : Taille dynamique, encapsulation
-**Inconvénients** : Deux fonctions nécessaires
+**Avantages** : Taille dynamique, encapsulation  
+**Inconvénients** : Deux fonctions nécessaires  
 
 **Stratégie 3 : Handles opaques**
 
@@ -438,8 +438,8 @@ procedure CloseHandle(h: TMyHandle); cdecl;
 function UseHandle(h: TMyHandle; data: Integer): Integer; cdecl;
 ```
 
-**Avantages** : Abstraction complète, type-safe
-**Inconvénients** : Plus verbeux
+**Avantages** : Abstraction complète, type-safe  
+**Inconvénients** : Plus verbeux  
 
 ### Versioning et compatibilité
 

@@ -79,20 +79,20 @@ end.
 #### Bindings manuels
 Écrits à la main, fonction par fonction.
 
-**Avantages** : Contrôle total, optimisé
-**Inconvénients** : Très long, risque d'erreurs, difficile à maintenir
+**Avantages** : Contrôle total, optimisé  
+**Inconvénients** : Très long, risque d'erreurs, difficile à maintenir  
 
 #### Bindings semi-automatiques
 Générés automatiquement puis modifiés manuellement.
 
-**Avantages** : Base solide, gain de temps
-**Inconvénients** : Nécessite ajustements manuels
+**Avantages** : Base solide, gain de temps  
+**Inconvénients** : Nécessite ajustements manuels  
 
 #### Bindings automatiques
 Entièrement générés par un outil.
 
-**Avantages** : Très rapide, facile à mettre à jour
-**Inconvénients** : Moins de contrôle, peut nécessiter corrections
+**Avantages** : Très rapide, facile à mettre à jour  
+**Inconvénients** : Moins de contrôle, peut nécessiter corrections  
 
 ---
 

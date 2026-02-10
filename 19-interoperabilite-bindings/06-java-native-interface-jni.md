@@ -1152,13 +1152,15 @@ var
   CachedClass: jclass = nil;
 
 procedure Java_CacheDemo_callMethod(env: PJNIEnv; obj: jobject); cdecl;
+var
+  localClass: jclass;
 begin
   // Initialiser le cache si nécessaire
   if CachedMethodID = nil then
   begin
     if CachedClass = nil then
     begin
-      var localClass := env^^.FindClass(env, 'com/example/MyClass');
+      localClass := env^^.FindClass(env, 'com/example/MyClass');
       CachedClass := env^^.NewGlobalRef(env, localClass);
       env^^.DeleteLocalRef(env, localClass);
     end;

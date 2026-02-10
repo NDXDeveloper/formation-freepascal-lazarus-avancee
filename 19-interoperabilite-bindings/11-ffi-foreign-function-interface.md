@@ -2727,9 +2727,9 @@ function c_function(x: Integer): Integer; cdecl; external 'lib.so';
 
 **Lectures recommandées** :
 
-📖 "Expert Pascal Programming" - Marco Cantù
-📖 "Mastering FreePascal" - Community
-📖 FreePascal Documentation officielle
+📖 "Expert Pascal Programming" - Marco Cantù  
+📖 "Mastering FreePascal" - Community  
+📖 FreePascal Documentation officielle  
 📖 "The Art of Assembly Language" - Randall Hyde
 
 ---

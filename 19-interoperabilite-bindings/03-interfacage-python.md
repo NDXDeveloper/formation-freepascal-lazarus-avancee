@@ -531,7 +531,7 @@ begin
     '    print("  Toute expression Python valide")',
     '',
     'print("Console Python intégrée dans FreePascal")',
-    'print("Tapez aide() pour obtenir de l\'aide")',
+    'print("Tapez aide() pour obtenir de l''aide")',
     'print(f"Python {sys.version}")',
     'print()'
   ]);
@@ -1214,6 +1214,8 @@ type
 function TraiterRequete(const Requete: TRequete): TJSONObject;
 var
   a, b: Double;
+  n, i: Integer;
+  fact: Int64;
 begin
   Result := TJSONObject.Create;
 
@@ -1234,9 +1236,9 @@ begin
     end
     else if Requete.Action = 'factorielle' then
     begin
-      var n := Requete.Parametres.Get('n', 0);
-      var fact: Int64 := 1;
-      for var i := 2 to n do
+      n := Requete.Parametres.Get('n', 0);
+      fact := 1;
+      for i := 2 to n do
         fact := fact * i;
       Result.Add('resultat', fact);
       Result.Add('succes', True);
@@ -1262,6 +1264,7 @@ var
   JSON: TJSONData;
   Requete: TRequete;
   Reponse: TJSONObject;
+  c: Char;
 
 begin
   Server := TInetServer.Create('127.0.0.1', 9090);
@@ -1279,7 +1282,6 @@ begin
         // Lire la requête
         Ligne := '';
         repeat
-          var c: Char;
           if Client.Read(c, 1) = 1 then
             Ligne := Ligne + c;
         until (c = #10) or (Client.Position >= Client.Size);
@@ -3048,7 +3050,7 @@ end.
 ### Documentation utilisateur
 
 **README.md** :
-```markdown
+````markdown
 # Application FreePascal/Python
 
 Cette application combine FreePascal et Python pour offrir performance et flexibilité.
@@ -3137,7 +3139,7 @@ L'application utilise trois types d'interfaçage:
 ## Dépannage
 
 ### Python non trouvé
-```
+````
 Erreur: Unable to load Python DLL
 ```
 **Solution**: Ajoutez Python au PATH ou définissez PYTHONHOME
@@ -3362,18 +3364,18 @@ end.
 
 #### Avantages de l'approche hybride
 
-✅ **Performance** : Code critique en Pascal, prototypage en Python
-✅ **Écosystème** : Accès aux bibliothèques Python tout en gardant Pascal
-✅ **Flexibilité** : Choisir le bon outil pour chaque tâche
-✅ **Maintenabilité** : Code séparé par responsabilité
+✅ **Performance** : Code critique en Pascal, prototypage en Python  
+✅ **Écosystème** : Accès aux bibliothèques Python tout en gardant Pascal  
+✅ **Flexibilité** : Choisir le bon outil pour chaque tâche  
+✅ **Maintenabilité** : Code séparé par responsabilité  
 ✅ **Évolutivité** : Faire évoluer chaque partie indépendamment
 
 #### Défis à anticiper
 
-⚠️ **Complexité** : Plus de technologies = plus à maintenir
-⚠️ **Débogage** : Tracer les bugs à travers les langages
-⚠️ **Performance** : Overhead de communication entre langages
-⚠️ **Déploiement** : Gérer les dépendances multiples
+⚠️ **Complexité** : Plus de technologies = plus à maintenir  
+⚠️ **Débogage** : Tracer les bugs à travers les langages  
+⚠️ **Performance** : Overhead de communication entre langages  
+⚠️ **Déploiement** : Gérer les dépendances multiples  
 ⚠️ **Formation** : Équipe doit maîtriser les deux langages
 
 ### Derniers conseils pratiques

@@ -376,6 +376,7 @@ var
   Lecteurs: TStringList;
   Lecteur: string;
   Choix: Integer;
+  i: Integer;
 
 begin
   WriteLn('=== Contrôle de lecteur multimédia via D-Bus ===');
@@ -392,7 +393,7 @@ begin
     end;
 
     WriteLn('Lecteurs détectés :');
-    for var i := 0 to Lecteurs.Count - 1 do
+    for i := 0 to Lecteurs.Count - 1 do
       WriteLn(Format('  %d. %s', [i + 1, Lecteurs[i]]));
     WriteLn;
 
@@ -661,7 +662,11 @@ program TestDBusHelper;
 {$mode objfpc}{$H+}
 
 uses
-  SysUtils, DBusHelper;
+  SysUtils, Math, DBusHelper;
+
+var
+  Services: TStringList;
+  i: Integer;
 
 begin
   WriteLn('=== Test DBus Helper ===');
@@ -681,11 +686,11 @@ begin
 
   // Test 2 : Lister les services
   WriteLn('Test 2 : Services disponibles sur le bus de session');
-  var Services := TDBusHelper.ListNames(dbtSession);
+  Services := TDBusHelper.ListNames(dbtSession);
   try
     WriteLn('Nombre de services : ', Services.Count);
     WriteLn('Quelques exemples :');
-    for var i := 0 to Min(9, Services.Count - 1) do
+    for i := 0 to Min(9, Services.Count - 1) do
       WriteLn('  ', Services[i]);
   finally
     Services.Free;
@@ -824,10 +829,12 @@ uses
   SysUtils, DBusHelper;
 
 procedure ListerServices;
+var
+  Output: string;
 begin
   WriteLn('Liste des unités systemd :');
 
-  var Output := TDBusHelper.Call(
+  Output := TDBusHelper.Call(
     dbtSystem,
     'org.freedesktop.systemd1',
     '/org/freedesktop/systemd1',
@@ -1528,6 +1535,8 @@ var
   Lecteur: TLecteurMedia;
   Services: TStringList;
   BusName: string;
+  i: Integer;
+  Commande: string;
 
 begin
   WriteLn('=== Contrôle lecteur multimédia ===');
@@ -1537,7 +1546,7 @@ begin
   Services := TDBusHelper.ListNames(dbtSession);
   try
     BusName := '';
-    for var i := 0 to Services.Count - 1 do
+    for i := 0 to Services.Count - 1 do
     begin
       if Pos('org.mpris.MediaPlayer2', Services[i]) > 0 then
       begin
@@ -1566,20 +1575,23 @@ begin
     WriteLn;
     WriteLn('Commandes disponibles : play, pause, stop, next, prev, info, quit');
 
-    var Commande: string;
     repeat
       Write('> ');
       ReadLn(Commande);
       Commande := LowerCase(Trim(Commande));
 
-      case Commande of
-        'play': Lecteur.Play;
-        'pause': Lecteur.Pause;
-        'stop': Lecteur.Stop;
-        'next': Lecteur.Next;
-        'prev', 'previous': Lecteur.Previous;
-        'info': Lecteur.AfficherInfo;
-      end;
+      if Commande = 'play' then
+        Lecteur.Play
+      else if Commande = 'pause' then
+        Lecteur.Pause
+      else if Commande = 'stop' then
+        Lecteur.Stop
+      else if Commande = 'next' then
+        Lecteur.Next
+      else if (Commande = 'prev') or (Commande = 'previous') then
+        Lecteur.Previous
+      else if Commande = 'info' then
+        Lecteur.AfficherInfo;
 
     until Commande = 'quit';
 
@@ -1642,6 +1654,8 @@ begin
 end;
 
 procedure TesterAccesSystemBus;
+var
+  Output: string;
 begin
   WriteLn('=== Test d''accès au System Bus ===');
   WriteLn;
@@ -1655,7 +1669,7 @@ begin
   WriteLn('Tentative d''accès à systemd...');
 
   try
-    var Output := TDBusHelper.Call(
+    Output := TDBusHelper.Call(
       dbtSystem,
       'org.freedesktop.systemd1',
       '/org/freedesktop/systemd1',
@@ -2172,23 +2186,29 @@ end;
 
 ```pascal
 // ❌ Mauvais : Appel synchrone dans le thread UI
-Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);
+var
+  Res: string;
 begin
-  var Result := DBusLongOperation(); // Bloque l'UI !
-  ShowMessage(Result);
+  Res := DBusLongOperation; // Bloque l'UI !
+  ShowMessage(Res);
 end;
 
-// ✅ Bon : Asynchrone
-Button1Click(Sender: TObject);
+// ✅ Bon : Asynchrone (utiliser un thread dédié)
+// Note : les procédures anonymes nécessitent {$modeswitch anonymousfunctions}
+// ou {$mode delphi} pour la syntaxe ci-dessous
+procedure TForm1.Button1Click(Sender: TObject);
 begin
   TThread.CreateAnonymousThread(
     procedure
+    var
+      Res: string;
     begin
-      var Result := DBusLongOperation();
+      Res := DBusLongOperation;
       TThread.Synchronize(nil,
         procedure
         begin
-          ShowMessage(Result);
+          ShowMessage(Res);
         end
       );
     end
@@ -2284,6 +2304,8 @@ type
 
 // Utilisation
 var
+  Player: TMediaPlayerProxy;
+begin
   Player := TMediaPlayerProxy.Create('org.mpris.MediaPlayer2.spotify');
   Player.Play;
 ```
@@ -2341,6 +2363,7 @@ uses
 var
   TestsPasses: Integer = 0;
   TestsTotal: Integer = 0;
+  Services: TStringList;
 
 procedure Test(const Nom: string; Resultat: Boolean);
 begin
@@ -2372,7 +2395,7 @@ begin
   end;
 
   // Test 3 : Lister les services
-  var Services := TDBusHelper.ListNames(dbtSession);
+  Services := TDBusHelper.ListNames(dbtSession);
   try
     Test('Lister les services', Services.Count > 0);
   finally
@@ -2430,6 +2453,7 @@ jobs:
 #### 1. Mise en cache des connexions
 
 ```pascal
+// Note : nécessite {$mode delphi} pour TDictionary de Generics.Collections
 type
   TDBusConnectionPool = class
   private
@@ -2443,18 +2467,21 @@ type
 #### 2. Appels asynchrones
 
 ```pascal
-procedure CallAsync(const Method: string; OnComplete: TProc<string>);
+// Note : nécessite {$mode delphi} ou {$modeswitch anonymousfunctions}
+// TProc<string> n'existe pas en FPC standard, définir :
+// type TStringProc = reference to procedure(const S: string);
+procedure CallAsync(const Method: string; OnComplete: TStringProc);
 begin
   TThread.CreateAnonymousThread(
     procedure
     var
-      Result: string;
+      Res: string;
     begin
-      Result := TDBusHelper.Call(...);
+      Res := TDBusHelper.Call(...);
       TThread.Queue(nil,
         procedure
         begin
-          OnComplete(Result);
+          OnComplete(Res);
         end
       );
     end
