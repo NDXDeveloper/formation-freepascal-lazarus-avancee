@@ -761,6 +761,14 @@ procedure LoadDotEnv(const FileName: string = '.env');
 
 implementation
 
+uses
+  {$IFDEF WINDOWS}
+  Windows
+  {$ENDIF}
+  {$IFDEF UNIX}
+  Unix
+  {$ENDIF};
+
 procedure LoadDotEnv(const FileName: string);
 var
   EnvFile: TStringList;
@@ -794,7 +802,12 @@ begin
           Value := Copy(Value, 2, Length(Value) - 2);
 
         // Définir la variable d'environnement
+        {$IFDEF WINDOWS}
         SetEnvironmentVariable(PChar(Key), PChar(Value));
+        {$ENDIF}
+        {$IFDEF UNIX}
+        fpSetEnv(PChar(Key), PChar(Value), 1);
+        {$ENDIF}
       end;
     end;
   finally
@@ -960,25 +973,32 @@ end;
 
 function TJSONConfig.NavigateToPath(const Path: string): TJSONData;
 var
-  Parts: TStringArray;
+  Parts: TStringList;
   i: Integer;
   Current: TJSONData;
 begin
-  Parts := Path.Split('.');
-  Current := FJSON;
+  Parts := TStringList.Create;
+  try
+    Parts.Delimiter := '.';
+    Parts.StrictDelimiter := True;
+    Parts.DelimitedText := Path;
+    Current := FJSON;
 
-  for i := 0 to High(Parts) do
-  begin
-    if Current is TJSONObject then
-      Current := TJSONObject(Current).Find(Parts[i])
-    else
-      Exit(nil);
+    for i := 0 to Parts.Count - 1 do
+    begin
+      if Current is TJSONObject then
+        Current := TJSONObject(Current).Find(Parts[i])
+      else
+        Exit(nil);
 
-    if Current = nil then
-      Exit(nil);
+      if Current = nil then
+        Exit(nil);
+    end;
+
+    Result := Current;
+  finally
+    Parts.Free;
   end;
-
-  Result := Current;
 end;
 
 function TJSONConfig.GetString(const Path: string; const DefaultValue: string): string;
@@ -2017,22 +2037,29 @@ end;
 
 function TConfigValidator.ValidateIPAddress(const Value: string): Boolean;
 var
-  Parts: TStringArray;
+  Parts: TStringList;
   i, PartValue: Integer;
 begin
-  Parts := Value.Split('.');
-  Result := Length(Parts) = 4;
+  Parts := TStringList.Create;
+  try
+    Parts.Delimiter := '.';
+    Parts.StrictDelimiter := True;
+    Parts.DelimitedText := Value;
+    Result := Parts.Count = 4;
 
-  if Result then
-  begin
-    for i := 0 to 3 do
+    if Result then
     begin
-      if not TryStrToInt(Parts[i], PartValue) then
-        Exit(False);
+      for i := 0 to 3 do
+      begin
+        if not TryStrToInt(Parts[i], PartValue) then
+          Exit(False);
 
-      if (PartValue < 0) or (PartValue > 255) then
-        Exit(False);
+        if (PartValue < 0) or (PartValue > 255) then
+          Exit(False);
+      end;
     end;
+  finally
+    Parts.Free;
   end;
 end;
 
@@ -2653,7 +2680,7 @@ Configuration chargée:
 
 Créez un fichier **CONFIG.md** dans votre projet :
 
-```markdown
+````markdown
 # Guide de Configuration
 
 ## Variables d'environnement
@@ -2730,7 +2757,7 @@ Au démarrage, l'application valide:
 - Cohérence entre les paramètres
 
 En cas d'erreur, l'application affiche un message clair et s'arrête.
-```
+````
 
 ## Outils CLI pour la configuration
 

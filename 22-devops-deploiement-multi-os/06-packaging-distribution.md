@@ -726,11 +726,11 @@ Gardez ces principes à l'esprit tout au long de ce chapitre :
 Le packaging et la distribution peuvent sembler intimidants au début, mais avec ce guide complet, vous allez transformer vos applications FreePascal/Lazarus en produits professionnels prêts pour la distribution mondiale.
 
 **Ce que vous allez accomplir :**
-✅ Créer des installateurs Windows professionnels
-✅ Packager pour toutes les distributions Linux
-✅ Automatiser le processus de release
-✅ Distribuer via multiples canaux
-✅ Gérer les mises à jour efficacement
+✅ Créer des installateurs Windows professionnels  
+✅ Packager pour toutes les distributions Linux  
+✅ Automatiser le processus de release  
+✅ Distribuer via multiples canaux  
+✅ Gérer les mises à jour efficacement  
 ✅ Offrir une expérience utilisateur exceptionnelle
 
 **Conseil de départ :**

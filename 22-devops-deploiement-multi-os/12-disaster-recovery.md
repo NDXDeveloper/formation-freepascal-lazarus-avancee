@@ -499,16 +499,16 @@ procedure TSQLiteBackupManager.CleanOldBackups;
 var
   SearchRec: TSearchRec;
   FilePath: string;
-  FileAge: TDateTime;
+  BackupAge: TDateTime;
 begin
   if FindFirst(IncludeTrailingPathDelimiter(FBackupDir) + 'backup_*.db',
                faAnyFile, SearchRec) = 0 then
   begin
     repeat
       FilePath := IncludeTrailingPathDelimiter(FBackupDir) + SearchRec.Name;
-      FileAge := FileDateToDateTime(FileAge(FilePath));
+      BackupAge := FileDateToDateTime(SysUtils.FileAge(FilePath));
 
-      if DaysBetween(Now, FileAge) > FRetentionDays then
+      if DaysBetween(Now, BackupAge) > FRetentionDays then
       begin
         DeleteFile(FilePath);
         WriteLn('✓ Ancien backup supprimé: ', SearchRec.Name);
@@ -806,9 +806,9 @@ mail -s "Test de backup réussi - $APP_NAME" admin@example.com < "$LOG_FILE"
 # Plan de Reprise Après Sinistre (DRP)
 ## Application: MyFreePascalApp
 
-**Version**: 1.0
-**Date**: 2025-10-08
-**Responsable**: Équipe DevOps
+**Version**: 1.0  
+**Date**: 2025-10-08  
+**Responsable**: Équipe DevOps  
 
 ---
 
@@ -824,26 +824,26 @@ mail -s "Test de backup réussi - $APP_NAME" admin@example.com < "$LOG_FILE"
 ## 2. Architecture système
 
 ```
-┌─────────────────┐
-│   Load Balancer │
-│   (HAProxy)     │
-└────────┬────────┘
-         │
-    ┌────┴────┐
-    │         │
-┌───▼──┐   ┌──▼───┐
-│ App  │   │ App  │
-│  #1  │   │  #2  │
-└───┬──┘   └──┬───┘
-    │         │
-    └────┬────┘
-         │
-    ┌────▼─────┐
-    │PostgreSQL│
-    └────┬─────┘
-         │
-    ┌────▼────┐
-    │  Redis  │
+┌─────────────────┐  
+│   Load Balancer │  
+│   (HAProxy)     │  
+└────────┬────────┘  
+         │  
+    ┌────┴────┐  
+    │         │  
+┌───▼──┐   ┌──▼───┐  
+│ App  │   │ App  │  
+│  #1  │   │  #2  │  
+└───┬──┘   └──┬───┘  
+    │         │  
+    └────┬────┘  
+         │  
+    ┌────▼─────┐  
+    │PostgreSQL│  
+    └────┬─────┘  
+         │  
+    ┌────▼────┐  
+    │  Redis  │  
     └─────────┘
 ```
 
@@ -925,8 +925,8 @@ mail -s "Test de backup réussi - $APP_NAME" admin@example.com < "$LOG_FILE"
    - Opération critique (création commande)
    - Vérifier les logs
 
-**Durée estimée**: 1-2 heures
-**Perte de données**: Jusqu'à 1 heure (dernier backup)
+**Durée estimée**: 1-2 heures  
+**Perte de données**: Jusqu'à 1 heure (dernier backup)  
 
 ### 5.3 Sinistre complet du datacenter
 
@@ -964,8 +964,8 @@ mail -s "Test de backup réussi - $APP_NAME" admin@example.com < "$LOG_FILE"
    - Clients (via status page)
    - Management
 
-**Durée estimée**: 4-6 heures
-**Perte de données**: 1-2 heures
+**Durée estimée**: 4-6 heures  
+**Perte de données**: 1-2 heures  
 
 ### 5.4 Attaque ransomware
 
@@ -1002,8 +1002,8 @@ mail -s "Test de backup réussi - $APP_NAME" admin@example.com < "$LOG_FILE"
    - Comment l'attaque est-elle arrivée?
    - Autres systèmes compromis?
 
-**Durée estimée**: 1-3 jours
-**Impact**: Potentiellement critique
+**Durée estimée**: 1-3 jours  
+**Impact**: Potentiellement critique  
 
 ## 6. Post-incident
 
@@ -1030,8 +1030,8 @@ mail -s "Test de backup réussi - $APP_NAME" admin@example.com < "$LOG_FILE"
 
 ---
 
-**Dernière mise à jour**: 2025-10-08
-**Prochaine révision**: 2026-01-08
+**Dernière mise à jour**: 2025-10-08  
+**Prochaine révision**: 2026-01-08  
 ```
 
 ## Monitoring et alertes
@@ -1188,17 +1188,18 @@ end;
 procedure TBackupMonitor.SendAlert(const Health: TBackupHealth);
 var
   AProcess: TProcess;
-  Subject, Body: string;
+  Subject, Body, StatusStr: string;
 begin
   if Health.Status = bsOK then
     Exit;
 
-  Subject := 'Alerte Backup - ' +
-             case Health.Status of
-               bsWarning: 'WARNING';
-               bsCritical: 'CRITICAL';
-               else 'UNKNOWN';
-             end;
+  case Health.Status of
+    bsWarning: StatusStr := 'WARNING';
+    bsCritical: StatusStr := 'CRITICAL';
+  else
+    StatusStr := 'UNKNOWN';
+  end;
+  Subject := 'Alerte Backup - ' + StatusStr;
 
   Body := Format(
     'Status: %s' + LineEnding +

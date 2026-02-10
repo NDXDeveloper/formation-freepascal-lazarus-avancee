@@ -1245,16 +1245,18 @@ procedure HandleRequest(Sender: TObject;
   var Request: TFPHTTPConnectionRequest;
   var Response: TFPHTTPConnectionResponse);
 begin
-  case Request.URI of
-    '/health': HandleHealth(Response);
-    '/ready': HandleReadiness(Response);
-    '/':
-    begin
-      Response.Code := 200;
-      Response.Content := '{"message":"API FreePascal","version":"1.0.0"}';
-      Response.ContentType := 'application/json';
-    end;
+  if Request.URI = '/health' then
+    HandleHealth(Response)
+  else if Request.URI = '/ready' then
+    HandleReadiness(Response)
+  else if Request.URI = '/' then
+  begin
+    Response.Code := 200;
+    Response.Content := '{"message":"API FreePascal","version":"1.0.0"}';
+    Response.ContentType := 'application/json';
+  end
   else
+  begin
     Response.Code := 404;
     Response.Content := '{"error":"Not Found"}';
     Response.ContentType := 'application/json';
@@ -2085,15 +2087,15 @@ Vous maîtrisez maintenant l'orchestration Kubernetes pour vos applications Free
 
 **Ce que vous avez appris :**
 
-✅ **Concepts fondamentaux** de Kubernetes
-✅ **Déploiement d'applications** FreePascal
-✅ **Gestion de la configuration** (ConfigMap, Secret)
-✅ **Stockage persistant** avec PV/PVC
-✅ **Scaling automatique** avec HPA
-✅ **Mises à jour sans interruption** (Rolling Updates)
-✅ **Monitoring et logging** avec Prometheus/Grafana
-✅ **Sécurité** (RBAC, Network Policies)
-✅ **Helm** pour packaging
+✅ **Concepts fondamentaux** de Kubernetes  
+✅ **Déploiement d'applications** FreePascal  
+✅ **Gestion de la configuration** (ConfigMap, Secret)  
+✅ **Stockage persistant** avec PV/PVC  
+✅ **Scaling automatique** avec HPA  
+✅ **Mises à jour sans interruption** (Rolling Updates)  
+✅ **Monitoring et logging** avec Prometheus/Grafana  
+✅ **Sécurité** (RBAC, Network Policies)  
+✅ **Helm** pour packaging  
 ✅ **Bonnes pratiques** professionnelles
 
 **Prochaines étapes :**

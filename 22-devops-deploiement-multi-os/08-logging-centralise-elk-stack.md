@@ -633,13 +633,15 @@ Pour éviter de remplir le disque :
 ```pascal
 procedure RotateLogFile(const BaseFileName: string; MaxSizeMB: Integer);
 var
-  FileSize: Int64;
+  SR: TSearchRec;
+  SizeMB: Int64;
   NewName: string;
 begin
-  if FileExists(BaseFileName) then
+  if FindFirst(BaseFileName, faAnyFile, SR) = 0 then
   begin
-    FileSize := FileSize(BaseFileName) div (1024 * 1024); // En MB
-    if FileSize > MaxSizeMB then
+    SizeMB := SR.Size div (1024 * 1024); // En MB
+    FindClose(SR);
+    if SizeMB > MaxSizeMB then
     begin
       NewName := BaseFileName + '.' + FormatDateTime('yyyymmdd-hhnnss', Now);
       RenameFile(BaseFileName, NewName);

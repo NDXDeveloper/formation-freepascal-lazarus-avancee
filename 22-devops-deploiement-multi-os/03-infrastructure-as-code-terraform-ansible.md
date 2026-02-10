@@ -10,8 +10,8 @@ Imaginez que vous devez configurer 10 serveurs pour héberger votre application 
 3. Configurer chaque service manuellement
 4. Répéter le processus pour chaque serveur
 
-**Temps nécessaire :** Plusieurs heures, voire jours
-**Risques :** Erreurs humaines, configurations incohérentes, documentation obsolète
+**Temps nécessaire :** Plusieurs heures, voire jours  
+**Risques :** Erreurs humaines, configurations incohérentes, documentation obsolète  
 
 **Avec l'Infrastructure as Code (IaC)**, vous écrivez du **code** qui décrit votre infrastructure. Ce code :
 - Peut être versionné avec Git
@@ -1919,7 +1919,7 @@ with Diagram("FreePascal Infrastructure", show=False):
 ### 3. Runbooks
 
 **Fichier : `docs/runbooks/deploy.md`**
-```markdown
+````markdown
 # Runbook: Déploiement d'une nouvelle version
 
 ## Prérequis
@@ -1963,7 +1963,7 @@ ansible-playbook playbooks/rollback.yml
 ## Contacts d'urgence
 - Ops Team: ops@example.com
 - On-call: +33 6 XX XX XX XX
-```
+````
 
 ## Monitoring de l'infrastructure
 
@@ -2031,25 +2031,25 @@ Vous maîtrisez maintenant l'Infrastructure as Code avec Terraform et Ansible po
 
 **Ce que vous avez appris :**
 
-✅ **Terraform** pour provisionner l'infrastructure
-✅ **Ansible** pour configurer les serveurs
-✅ **Intégration Terraform + Ansible**
-✅ **Gestion des secrets** avec Ansible Vault
-✅ **Environments multiples** (dev, staging, production)
-✅ **CI/CD** pour l'infrastructure
-✅ **Testing** de l'infrastructure
-✅ **Backup et Disaster Recovery**
-✅ **Documentation automatique**
+✅ **Terraform** pour provisionner l'infrastructure  
+✅ **Ansible** pour configurer les serveurs  
+✅ **Intégration Terraform + Ansible**  
+✅ **Gestion des secrets** avec Ansible Vault  
+✅ **Environments multiples** (dev, staging, production)  
+✅ **CI/CD** pour l'infrastructure  
+✅ **Testing** de l'infrastructure  
+✅ **Backup et Disaster Recovery**  
+✅ **Documentation automatique**  
 ✅ **Monitoring** de l'infrastructure
 
 **Avantages de l'IaC :**
 
-🚀 **Rapidité** : Infrastructure en minutes au lieu de jours
-🔄 **Reproductibilité** : Même configuration partout
-📝 **Documentation** : Le code est la doc
-🔒 **Sécurité** : Configuration vérifiée et testée
-👥 **Collaboration** : Code review de l'infra
-💾 **Versionning** : Historique complet avec Git
+🚀 **Rapidité** : Infrastructure en minutes au lieu de jours  
+🔄 **Reproductibilité** : Même configuration partout  
+📝 **Documentation** : Le code est la doc  
+🔒 **Sécurité** : Configuration vérifiée et testée  
+👥 **Collaboration** : Code review de l'infra  
+💾 **Versionning** : Historique complet avec Git  
 🔧 **Maintenance** : Changements contrôlés et tracés
 
 **Prochaines étapes :**

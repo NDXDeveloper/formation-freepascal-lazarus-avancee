@@ -241,14 +241,16 @@ uses
 
 type
   { TMetricsHandler }
-  TMetricsHandler = class(TFPHTTPConnectionHandler)
+  TMetricsHandler = class
   public
-    procedure HandleRequest(ARequest: TFPHTTPConnectionRequest;
-      AResponse: TFPHTTPConnectionResponse); override;
+    procedure HandleRequest(Sender: TObject;
+      var ARequest: TFPHTTPConnectionRequest;
+      var AResponse: TFPHTTPConnectionResponse);
   end;
 
 var
   Server: TFPHTTPServer;
+  Handler: TMetricsHandler;
   // Nos métriques
   RequetesTotal: Int64 = 0;
   ErreursTotal: Int64 = 0;
@@ -256,8 +258,9 @@ var
 
 { TMetricsHandler }
 
-procedure TMetricsHandler.HandleRequest(ARequest: TFPHTTPConnectionRequest;
-  AResponse: TFPHTTPConnectionResponse);
+procedure TMetricsHandler.HandleRequest(Sender: TObject;
+  var ARequest: TFPHTTPConnectionRequest;
+  var AResponse: TFPHTTPConnectionResponse);
 var
   Metriques: TStringList;
 begin
@@ -298,10 +301,11 @@ begin
 end;
 
 begin
+  Handler := TMetricsHandler.Create;
   Server := TFPHTTPServer.Create(nil);
   try
     Server.Port := 8080;
-    Server.OnRequest := @TMetricsHandler(nil).HandleRequest;
+    Server.OnRequest := @Handler.HandleRequest;
 
     WriteLn('Serveur de métriques démarré sur http://localhost:8080');
     WriteLn('Métriques disponibles sur http://localhost:8080/metrics');
@@ -311,6 +315,7 @@ begin
     ReadLn;
   finally
     Server.Free;
+    Handler.Free;
   end;
 end.
 ```
@@ -1496,7 +1501,7 @@ initialization
   FormMetrics := TFormMetrics.Create;
 
 finalization
-  // FormMetrics sera libéré automatiquement
+  FormMetrics.Free;
 
 end.
 ```
@@ -1787,8 +1792,8 @@ nssm status Prometheus
 ### Problèmes courants
 
 #### 1. "Context deadline exceeded"
-**Cause :** Prometheus n'arrive pas à scraper dans le délai imparti
-**Solution :** Augmentez le timeout :
+**Cause :** Prometheus n'arrive pas à scraper dans le délai imparti  
+**Solution :** Augmentez le timeout :  
 ```yaml
 scrape_configs:
   - job_name: 'mon_application'

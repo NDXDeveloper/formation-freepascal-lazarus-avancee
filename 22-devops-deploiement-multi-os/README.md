@@ -350,8 +350,8 @@ Temps entre le début du développement et la mise en production.
 
 Combien de fois vous déployez en production.
 
-**Équipes performantes :** Plusieurs fois par jour
-**Équipes traditionnelles :** Une fois par mois ou trimestre
+**Équipes performantes :** Plusieurs fois par jour  
+**Équipes traditionnelles :** Une fois par mois ou trimestre  
 
 **3. Mean Time to Recovery (MTTR)**
 
@@ -441,10 +441,10 @@ Moins de ressources que pour des langages mainstream.
 
 **Connaissances requises :**
 
-✅ Maîtrise de FreePascal/Lazarus
-✅ Bases de Git (commit, push, pull, branches)
-✅ Utilisation du terminal (Bash sur Ubuntu, PowerShell sur Windows)
-✅ Compréhension des systèmes de fichiers Windows et Linux
+✅ Maîtrise de FreePascal/Lazarus  
+✅ Bases de Git (commit, push, pull, branches)  
+✅ Utilisation du terminal (Bash sur Ubuntu, PowerShell sur Windows)  
+✅ Compréhension des systèmes de fichiers Windows et Linux  
 ✅ Notions de réseaux (IP, ports, HTTP)
 
 **Logiciels à installer :**
@@ -542,15 +542,15 @@ Ce chapitre est organisé de manière progressive :
 
 À la fin de ce chapitre, vous serez capable de :
 
-✅ **Conteneuriser** une application FreePascal/Lazarus complète
-✅ **Automatiser** la compilation pour Windows et Ubuntu
-✅ **Créer** un pipeline CI/CD fonctionnel
-✅ **Déployer** automatiquement sur plusieurs environnements
-✅ **Monitorer** vos applications en production
-✅ **Gérer** les configurations et secrets de manière sécurisée
-✅ **Packager** vos applications pour différentes distributions
-✅ **Mettre en place** une infrastructure reproductible
-✅ **Implémenter** des stratégies de déploiement avancées
+✅ **Conteneuriser** une application FreePascal/Lazarus complète  
+✅ **Automatiser** la compilation pour Windows et Ubuntu  
+✅ **Créer** un pipeline CI/CD fonctionnel  
+✅ **Déployer** automatiquement sur plusieurs environnements  
+✅ **Monitorer** vos applications en production  
+✅ **Gérer** les configurations et secrets de manière sécurisée  
+✅ **Packager** vos applications pour différentes distributions  
+✅ **Mettre en place** une infrastructure reproductible  
+✅ **Implémenter** des stratégies de déploiement avancées  
 ✅ **Résoudre** rapidement les incidents en production
 
 ### Exemple de projet fil rouge
@@ -567,14 +567,14 @@ Une application de gestion de tâches FreePascal/Lazarus avec :
 
 **Évolution du projet :**
 
-**Étape 1 (22.1)** : Conteneurisation de l'application
-**Étape 2 (22.2)** : Déploiement avec Kubernetes
-**Étape 3 (22.3)** : Infrastructure automatisée
-**Étape 4 (22.4)** : Pipeline CI/CD complet
-**Étape 5 (22.5)** : Build automatique Windows/Ubuntu
-**Étape 6 (22.6)** : Création d'installateurs
-**Étape 7 (22.7-22.8)** : Monitoring et logs
-**Étape 8 (22.9-22.12)** : Déploiement avancé et résilience
+**Étape 1 (22.1)** : Conteneurisation de l'application  
+**Étape 2 (22.2)** : Déploiement avec Kubernetes  
+**Étape 3 (22.3)** : Infrastructure automatisée  
+**Étape 4 (22.4)** : Pipeline CI/CD complet  
+**Étape 5 (22.5)** : Build automatique Windows/Ubuntu  
+**Étape 6 (22.6)** : Création d'installateurs  
+**Étape 7 (22.7-22.8)** : Monitoring et logs  
+**Étape 8 (22.9-22.12)** : Déploiement avancé et résilience  
 
 Ce projet vous servira de référence pour vos propres applications.
 

@@ -19,9 +19,9 @@ Vous avez développé une excellente application FreePascal/Lazarus. Vous savez 
 9. Vérifier que tout fonctionne
 ```
 
-**Temps nécessaire :** 30-60 minutes
-**Risque d'erreur :** Élevé
-**Ennui :** Maximum 😴
+**Temps nécessaire :** 30-60 minutes  
+**Risque d'erreur :** Élevé  
+**Ennui :** Maximum 😴  
 
 **Avec un pipeline CI/CD :**
 ```
@@ -30,9 +30,9 @@ Vous avez développé une excellente application FreePascal/Lazarus. Vous savez 
 3. Tout est fait automatiquement !
 ```
 
-**Temps nécessaire :** 5-15 minutes (automatique)
-**Risque d'erreur :** Minimal
-**Satisfaction :** Maximum 😊
+**Temps nécessaire :** 5-15 minutes (automatique)  
+**Risque d'erreur :** Minimal  
+**Satisfaction :** Maximum 😊  
 
 ### Qu'est-ce que le CI/CD ?
 
@@ -1330,7 +1330,7 @@ program TestMain;
 {$mode objfpc}{$H+}
 
 uses
-  SysUtils, fpcunit, testregistry, testreport;
+  SysUtils, fpcunit, testregistry, consoletestrunner;
 
 type
   TTestCalculator = class(TTestCase)
@@ -1350,23 +1350,17 @@ begin
 end;
 
 var
-  TestSuite: TTestSuite;
+  App: TTestRunner;
 begin
-  TestSuite := TTestSuite.Create('Tests principaux');
-  TestSuite.AddTestSuiteFromClass(TTestCalculator);
-
-  with TTestRunner.Create(nil) do
+  RegisterTest(TTestCalculator);
+  App := TTestRunner.Create(nil);
   try
-    AddTest(TestSuite);
-    // Format XML pour intégration CI
-    XMLResultsWriter.WriteResult('test-results.xml');
-
-    if Run then
-      Halt(0)
-    else
-      Halt(1);
+    // Paramètres pour sortie XML (intégration CI)
+    // Lancer avec : ./test_runner --format=xml --file=test-results.xml
+    App.Initialize;
+    App.Run;
   finally
-    Free;
+    App.Free;
   end;
 end.
 ```
@@ -1380,7 +1374,7 @@ program TestIntegration;
 {$mode objfpc}{$H+}
 
 uses
-  SysUtils, sqldb, pqconnection, fpcunit, testregistry;
+  SysUtils, sqldb, pqconnection, fpcunit, testregistry, consoletestrunner;
 
 type
   TTestDatabase = class(TTestCase)
@@ -1435,10 +1429,17 @@ end;
 
 // ... autres tests ...
 
+var
+  App: TTestRunner;
 begin
-  // Exécuter les tests
   RegisterTest(TTestDatabase);
-  RunRegisteredTests;
+  App := TTestRunner.Create(nil);
+  try
+    App.Initialize;
+    App.Run;
+  finally
+    App.Free;
+  end;
 end.
 ```
 
@@ -1737,24 +1738,24 @@ Vous maîtrisez maintenant les pipelines CI/CD pour vos applications FreePascal/
 
 **Ce que vous avez appris :**
 
-✅ **GitHub Actions** pour CI/CD cloud
-✅ **GitLab CI** comme alternative intégrée
-✅ **Jenkins** pour solution auto-hébergée
-✅ **Scripts de déploiement** robustes
-✅ **Blue-Green & Canary** deployments
-✅ **Tests automatisés** à tous les niveaux
-✅ **Monitoring** du pipeline
-✅ **Gestion des environnements**
-✅ **Bonnes pratiques** professionnelles
+✅ **GitHub Actions** pour CI/CD cloud  
+✅ **GitLab CI** comme alternative intégrée  
+✅ **Jenkins** pour solution auto-hébergée  
+✅ **Scripts de déploiement** robustes  
+✅ **Blue-Green & Canary** deployments  
+✅ **Tests automatisés** à tous les niveaux  
+✅ **Monitoring** du pipeline  
+✅ **Gestion des environnements**  
+✅ **Bonnes pratiques** professionnelles  
 ✅ **Métriques DORA** pour mesurer la performance
 
 **Bénéfices du CI/CD :**
 
-🚀 **Rapidité** : Déploiements en minutes
-🔒 **Fiabilité** : Tests automatiques avant déploiement
-📊 **Visibilité** : Traçabilité complète
-🔄 **Agilité** : Rollback rapide si problème
-😌 **Sérénité** : Moins de stress, plus de confiance
+🚀 **Rapidité** : Déploiements en minutes  
+🔒 **Fiabilité** : Tests automatiques avant déploiement  
+📊 **Visibilité** : Traçabilité complète  
+🔄 **Agilité** : Rollback rapide si problème  
+😌 **Sérénité** : Moins de stress, plus de confiance  
 👥 **Collaboration** : Processus standardisé pour toute l'équipe
 
 **Prochaines étapes :**

@@ -25,12 +25,12 @@ Avec les feature flags, c'est comme installer des interrupteurs pour chaque nouv
 
 **Avantages** :
 
-✅ **Déploiement sans risque** : Vous pouvez déployer du code incomplet ou expérimental sans l'activer
-✅ **Rollback instantané** : Désactivez une fonctionnalité problématique en 1 seconde, sans redéploiement
-✅ **Tests en production** : Activez pour un petit groupe d'utilisateurs avant le déploiement général
-✅ **Déploiement progressif** : 10% des utilisateurs, puis 50%, puis 100%
-✅ **Personnalisation** : Fonctionnalités différentes selon le type d'utilisateur
-✅ **A/B Testing** : Comparer différentes versions d'une fonctionnalité
+✅ **Déploiement sans risque** : Vous pouvez déployer du code incomplet ou expérimental sans l'activer  
+✅ **Rollback instantané** : Désactivez une fonctionnalité problématique en 1 seconde, sans redéploiement  
+✅ **Tests en production** : Activez pour un petit groupe d'utilisateurs avant le déploiement général  
+✅ **Déploiement progressif** : 10% des utilisateurs, puis 50%, puis 100%  
+✅ **Personnalisation** : Fonctionnalités différentes selon le type d'utilisateur  
+✅ **A/B Testing** : Comparer différentes versions d'une fonctionnalité  
 ✅ **Dark launching** : Tester la charge d'une nouvelle fonctionnalité sans l'exposer aux utilisateurs
 
 **Cas d'usage concrets** :
@@ -77,11 +77,13 @@ if FeatureFlags.IsEnabled('maintenance_mode') then
 **But** : A/B testing et expériences utilisateur
 
 ```pascal
-case FeatureFlags.GetVariant('button_color_test') of
-  'red': ShowRedButton;
-  'blue': ShowBlueButton;
-  'green': ShowGreenButton;
-end;
+Variant := FeatureFlags.GetVariant('button_color_test');
+if Variant = 'red' then
+  ShowRedButton
+else if Variant = 'blue' then
+  ShowBlueButton
+else if Variant = 'green' then
+  ShowGreenButton;
 ```
 
 **Durée de vie** : Temporaire - supprimé après l'expérience
@@ -858,21 +860,19 @@ begin
   // Obtenir le variant assigné à cet utilisateur
   Variant := FFManager.GetVariant('button_color_test', User);
 
-  case Variant of
-    'blue':
-      begin
-        ButtonBuy.Color := clBlue;
-        TrackEvent('button_shown', 'variant', 'blue');
-      end;
-    'red':
-      begin
-        ButtonBuy.Color := clRed;
-        TrackEvent('button_shown', 'variant', 'red');
-      end;
+  if Variant = 'blue' then
+  begin
+    ButtonBuy.Color := clBlue;
+    TrackEvent('button_shown', 'variant', 'blue');
+  end
+  else if Variant = 'red' then
+  begin
+    ButtonBuy.Color := clRed;
+    TrackEvent('button_shown', 'variant', 'red');
+  end
   else
     // Fallback sur le contrôle
     ButtonBuy.Color := clBlue;
-  end;
 end;
 ```
 
@@ -1022,23 +1022,23 @@ begin
   FCurrentVariant := FFManager.GetVariant('button_color_test', FCurrentUser);
 
   // Appliquer le variant
-  case FCurrentVariant of
-    'blue':
-      begin
-        ButtonBuy.Color := clBlue;
-        ButtonBuy.Font.Color := clWhite;
-      end;
-    'red':
-      begin
-        ButtonBuy.Color := clRed;
-        ButtonBuy.Font.Color := clWhite;
-      end;
-    'green':
-      begin
-        ButtonBuy.Color := clGreen;
-        ButtonBuy.Font.Color := clWhite;
-      end;
+  if FCurrentVariant = 'blue' then
+  begin
+    ButtonBuy.Color := clBlue;
+    ButtonBuy.Font.Color := clWhite;
+  end
+  else if FCurrentVariant = 'red' then
+  begin
+    ButtonBuy.Color := clRed;
+    ButtonBuy.Font.Color := clWhite;
+  end
+  else if FCurrentVariant = 'green' then
+  begin
+    ButtonBuy.Color := clGreen;
+    ButtonBuy.Font.Color := clWhite;
+  end
   else
+  begin
     // Contrôle par défaut
     ButtonBuy.Color := clBlue;
   end;
