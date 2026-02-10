@@ -71,6 +71,8 @@ uses
   Classes, SysUtils, MTProcs;
 ```
 
+> **Note** : Certains exemples de ce chapitre utilisent des procédures anonymes (`procedure(Index: Integer) begin ... end`) avec `DoParallel`. En mode ObjFPC, cela nécessite `{$modeswitch anonymousfunctions}` (FPC 3.3.1+). L'API réelle de MTProcs utilise des callbacks avec la signature `procedure(Index: PtrInt; Data: Pointer; Item: TMultiThreadProcItem)`. Les exemples sont simplifiés pour la lisibilité.
+
 ### Configuration de base
 
 ```pascal
@@ -582,7 +584,7 @@ end.
 
 ```pascal
 uses
-  MTProcs, Math;
+  MTProcs, Math, SysUtils, DateUtils;
 
 procedure MergeSort(var Data: array of Integer; Left, Right: Integer);
 var
@@ -684,7 +686,7 @@ end.
 
 ```pascal
 uses
-  MTProcs, Math, SyncObjs;
+  MTProcs, Math, SysUtils, DateUtils, SyncObjs;
 
 function CalculerPiParallel(NombreEchantillons: Int64): Double;
 var
@@ -760,7 +762,7 @@ end.
 
 ```pascal
 uses
-  MTProcs, Classes, SysUtils;
+  MTProcs, Classes, SysUtils, FileUtil; // FileUtil pour FindAllFiles
 
 type
   TSearchResult = record
@@ -1124,12 +1126,26 @@ type
   TStage1Queue = specialize TThreadedQueue<TDataItem>;
   TStage2Queue = specialize TThreadedQueue<TDataItem>;
 
+  TPipeline = class;
+
+  { Thread générique pour les étapes du pipeline
+    (CreateAnonymousThread ne peut pas prendre une méthode) }
+  TPipelineStageThread = class(TThread)
+  private
+    FPipeline: TPipeline;
+    FStageIndex: Integer;
+  protected
+    procedure Execute; override;
+  public
+    constructor Create(APipeline: TPipeline; AStageIndex: Integer);
+  end;
+
   TPipeline = class
   private
     FStage1Queue: TStage1Queue;
     FStage2Queue: TStage2Queue;
     FOutputQueue: TStage2Queue;
-    FWorkers: array[0..2] of TThread;
+    FWorkers: array[0..2] of TPipelineStageThread;
     FRunning: Boolean;
 
     procedure Stage1Worker;
@@ -1146,6 +1162,27 @@ type
   end;
 
 implementation
+
+{ TPipelineStageThread }
+
+constructor TPipelineStageThread.Create(APipeline: TPipeline; AStageIndex: Integer);
+begin
+  inherited Create(False); // Démarrer immédiatement
+  FPipeline := APipeline;
+  FStageIndex := AStageIndex;
+  FreeOnTerminate := False;
+end;
+
+procedure TPipelineStageThread.Execute;
+begin
+  case FStageIndex of
+    0: FPipeline.Stage1Worker;
+    1: FPipeline.Stage2Worker;
+    2: FPipeline.Stage3Worker;
+  end;
+end;
+
+{ TPipeline }
 
 constructor TPipeline.Create;
 begin
@@ -1217,13 +1254,9 @@ procedure TPipeline.Start;
 begin
   FRunning := True;
 
-  FWorkers[0] := TThread.CreateAnonymousThread(@Stage1Worker);
-  FWorkers[1] := TThread.CreateAnonymousThread(@Stage2Worker);
-  FWorkers[2] := TThread.CreateAnonymousThread(@Stage3Worker);
-
-  FWorkers[0].Start;
-  FWorkers[1].Start;
-  FWorkers[2].Start;
+  FWorkers[0] := TPipelineStageThread.Create(Self, 0);
+  FWorkers[1] := TPipelineStageThread.Create(Self, 1);
+  FWorkers[2] := TPipelineStageThread.Create(Self, 2);
 end;
 
 procedure TPipeline.Stop;
@@ -1377,7 +1410,7 @@ Implémentation parallèle du tri rapide.
 
 ```pascal
 uses
-  MTProcs;
+  MTProcs, SysUtils, DateUtils;
 
 procedure ParallelQuickSort(var Data: array of Integer; Left, Right: Integer);
 const
@@ -1553,7 +1586,7 @@ end;
 
 ```pascal
 uses
-  MTProcs, SyncObjs, SysUtils;
+  MTProcs, SyncObjs, SysUtils, DateUtils;
 
 type
   TThreadActivity = record
@@ -1873,6 +1906,8 @@ unit SimpleParallel;
 interface
 
 type
+  TProcedureIndex = procedure(Index: Integer);
+
   TSimpleParallel = class
   public
     class procedure &For(StartIndex, EndIndex: Integer; Proc: TProcedureIndex);
@@ -1883,11 +1918,43 @@ implementation
 uses
   Classes, Math;
 
+type
+  { Thread nommé au lieu de CreateAnonymousThread
+    (évite crash WaitFor/Free et bug de closure sur i) }
+  TParallelForThread = class(TThread)
+  private
+    FStartIdx, FEndIdx: Integer;
+    FProc: TProcedureIndex;
+  protected
+    procedure Execute; override;
+  public
+    constructor Create(AStartIdx, AEndIdx: Integer; AProc: TProcedureIndex);
+  end;
+
+constructor TParallelForThread.Create(AStartIdx, AEndIdx: Integer;
+  AProc: TProcedureIndex);
+begin
+  inherited Create(False);
+  FStartIdx := AStartIdx;
+  FEndIdx := AEndIdx;
+  FProc := AProc;
+  FreeOnTerminate := False;
+end;
+
+procedure TParallelForThread.Execute;
+var
+  j: Integer;
+begin
+  for j := FStartIdx to FEndIdx do
+    FProc(j);
+end;
+
 class procedure TSimpleParallel.&For(StartIndex, EndIndex: Integer;
   Proc: TProcedureIndex);
 var
   ThreadCount, ChunkSize, i: Integer;
-  Threads: array of TThread;
+  StartIdx, EndIdx: Integer;
+  Threads: array of TParallelForThread;
 begin
   ThreadCount := TThread.ProcessorCount;
   ChunkSize := (EndIndex - StartIndex + 1 + ThreadCount - 1) div ThreadCount;
@@ -1895,19 +1962,9 @@ begin
 
   for i := 0 to ThreadCount - 1 do
   begin
-    Threads[i] := TThread.CreateAnonymousThread(
-      procedure
-      var
-        StartIdx, EndIdx, j: Integer;
-      begin
-        StartIdx := StartIndex + i * ChunkSize;
-        EndIdx := Min(StartIdx + ChunkSize - 1, EndIndex);
-
-        for j := StartIdx to EndIdx do
-          Proc(j);
-      end
-    );
-    Threads[i].Start;
+    StartIdx := StartIndex + i * ChunkSize;
+    EndIdx := Min(StartIdx + ChunkSize - 1, EndIndex);
+    Threads[i] := TParallelForThread.Create(StartIdx, EndIdx, Proc);
   end;
 
   for i := 0 to ThreadCount - 1 do

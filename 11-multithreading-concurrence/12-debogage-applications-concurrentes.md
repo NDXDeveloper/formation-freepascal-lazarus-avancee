@@ -338,22 +338,32 @@ end;
 - Affiche tous les threads actifs avec leur ID, état, et position
 
 ```pascal
-// Code pour afficher manuellement les threads
+{ Note : TThread.GetThreadList / ReleaseThreadList n'existent pas en FPC
+  (API Delphi uniquement). En FPC, on maintient sa propre liste de threads. }
+
+var
+  GlobalThreadList: TThreadList;  // TThreadList de Classes est thread-safe
+
+// Chaque thread s'enregistre dans Execute :
+//   GlobalThreadList.Add(Self);
+// Et se désenregistre à la fin :
+//   GlobalThreadList.Remove(Self);
+
 procedure ShowActiveThreads;
 var
   i: Integer;
-  ThreadList: TList;
+  List: TList;
 begin
-  ThreadList := TThread.GetThreadList;
+  List := GlobalThreadList.LockList;
   try
     WriteLn('=== Threads actifs ===');
-    for i := 0 to ThreadList.Count - 1 do
+    for i := 0 to List.Count - 1 do
     begin
       WriteLn(Format('Thread %d: ID=%d',
-        [i, TThread(ThreadList[i]).ThreadID]));
+        [i, TThread(List[i]).ThreadID]));
     end;
   finally
-    TThread.ReleaseThreadList;
+    GlobalThreadList.UnlockList;
   end;
 end;
 ```
@@ -519,7 +529,7 @@ unit DeadlockDetection;
 interface
 
 uses
-  SyncObjs, SysUtils;
+  SyncObjs, SysUtils, DateUtils;
 
 type
   TDeadlockDetector = class
@@ -985,21 +995,29 @@ end;
 ### 3. Utiliser des structures thread-safe
 
 ```pascal
+{ Note : Ce snippet utilise {$mode delphi} pour la syntaxe générique
+  TThreadSafeList<T>. En {$mode objfpc}, utiliser generic/specialize. }
+
+{$mode delphi}{$H+}
+
+uses
+  Classes, SysUtils, SyncObjs, Generics.Collections;
+
 // Au lieu de protéger manuellement chaque accès...
 var
-  MyList: TList;
+  MyList: TList<Integer>;
   MyListLock: TCriticalSection;
 
 // ...utiliser une structure thread-safe
 type
   TThreadSafeList<T> = class
   private
-    FList: TList;
+    FList: TList<T>;
     FLock: TCriticalSection;
   public
     constructor Create;
     destructor Destroy; override;
-    procedure Add(Item: T);
+    procedure Add(const Item: T);
     function Get(Index: Integer): T;
     function Count: Integer;
   end;
@@ -1007,7 +1025,7 @@ type
 constructor TThreadSafeList<T>.Create;
 begin
   inherited;
-  FList := TList.Create;
+  FList := TList<T>.Create;
   FLock := TCriticalSection.Create;
 end;
 
@@ -1018,7 +1036,7 @@ begin
   inherited;
 end;
 
-procedure TThreadSafeList<T>.Add(Item: T);
+procedure TThreadSafeList<T>.Add(const Item: T);
 begin
   FLock.Enter;
   try
@@ -1039,7 +1057,7 @@ unit ConcurrencyTests;
 interface
 
 uses
-  fpcunit, testregistry, Classes, SysUtils;
+  fpcunit, testregistry, Classes, SysUtils, DateUtils;
 
 type
   TConcurrencyTest = class(TTestCase)
@@ -1198,6 +1216,8 @@ implementation
 
 uses
   DateUtils;
+
+function GetStackTrace: string; forward;
 
 constructor TSyncValidator.Create;
 begin
@@ -1521,12 +1541,17 @@ type
     TimeStamp: TDateTime;
   end;
 
+  { Note : TThread.GetThreadList / ReleaseThreadList n'existent pas en FPC.
+    On passe une TThreadList externe que l'application alimente elle-même
+    (chaque thread s'enregistre/se désenregistre via Add/Remove). }
+
   TThreadSnapshot = class
   private
     FStates: specialize TList<TThreadState>;
     FLock: TCriticalSection;
+    FThreadRegistry: TThreadList;  // Liste externe de threads enregistrés
   public
-    constructor Create;
+    constructor Create(AThreadRegistry: TThreadList);
     destructor Destroy; override;
 
     procedure CaptureSnapshot;
@@ -1539,9 +1564,10 @@ implementation
 uses
   DateUtils;
 
-constructor TThreadSnapshot.Create;
+constructor TThreadSnapshot.Create(AThreadRegistry: TThreadList);
 begin
   inherited Create;
+  FThreadRegistry := AThreadRegistry;
   FStates := specialize TList<TThreadState>.Create;
   FLock := TCriticalSection.Create;
 end;
@@ -1555,7 +1581,7 @@ end;
 
 procedure TThreadSnapshot.CaptureSnapshot;
 var
-  ThreadList: TList;
+  List: TList;
   i: Integer;
   State: TThreadState;
   Thread: TThread;
@@ -1564,22 +1590,20 @@ begin
   try
     Clear;
 
-    ThreadList := TThread.GetThreadList;
+    List := FThreadRegistry.LockList;
     try
       WriteLn(Format('=== Snapshot capturé: %d threads actifs ===',
-        [ThreadList.Count]));
+        [List.Count]));
 
-      for i := 0 to ThreadList.Count - 1 do
+      for i := 0 to List.Count - 1 do
       begin
-        Thread := TThread(ThreadList[i]);
+        Thread := TThread(List[i]);
 
         State.ThreadID := Thread.ThreadID;
         State.ThreadName := Thread.ClassName;
 
         if Thread.Finished then
           State.State := 'Terminé'
-        else if Thread.Suspended then
-          State.State := 'Suspendu'
         else
           State.State := 'En cours';
 
@@ -1593,7 +1617,7 @@ begin
           [State.ThreadID, State.ThreadName, State.State]));
       end;
     finally
-      TThread.ReleaseThreadList;
+      FThreadRegistry.UnlockList;
     end;
   finally
     FLock.Leave;
@@ -1652,15 +1676,16 @@ end.
 **Utilisation :**
 
 ```pascal
-uses ThreadSnapshot;
+uses Classes, ThreadSnapshot;
 
 var
+  ThreadRegistry: TThreadList;
   Snapshot: TThreadSnapshot;
 
 // Dans votre code de débogage
 procedure CaptureSystemState;
 begin
-  Snapshot := TThreadSnapshot.Create;
+  Snapshot := TThreadSnapshot.Create(ThreadRegistry);
   try
     Snapshot.CaptureSnapshot;
     Snapshot.SaveToFile('thread_snapshot.txt');
@@ -1671,8 +1696,14 @@ end;
 
 // Appeler périodiquement ou sur signal
 begin
-  // Installation d'un handler de signal (Linux) ou Ctrl+Break (Windows)
-  CaptureSystemState;
+  ThreadRegistry := TThreadList.Create;
+  try
+    // Les threads s'enregistrent via ThreadRegistry.Add(Self) dans Execute
+    // et se désenregistrent via ThreadRegistry.Remove(Self) à la fin
+    CaptureSystemState;
+  finally
+    ThreadRegistry.Free;
+  end;
 end.
 ```
 

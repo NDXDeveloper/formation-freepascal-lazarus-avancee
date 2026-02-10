@@ -91,6 +91,7 @@ end;
 unit CrossPlatformTest;
 
 {$mode objfpc}{$H+}
+{$modeswitch anonymousfunctions}
 
 interface
 
@@ -153,7 +154,7 @@ begin
     begin
       while MilliSecondsBetween(Now, StartTime) < 1000 do
       begin
-        InterlockedIncrement64(Counter1);
+        InterlockedExchangeAdd64(Counter1, 1);
         Sleep(0);
       end;
     end
@@ -164,12 +165,14 @@ begin
     begin
       while MilliSecondsBetween(Now, StartTime) < 1000 do
       begin
-        InterlockedIncrement64(Counter2);
+        InterlockedExchangeAdd64(Counter2, 1);
         Sleep(0);
       end;
     end
   );
 
+  Thread1.FreeOnTerminate := False;
+  Thread2.FreeOnTerminate := False;
   Thread1.Start;
   Thread2.Start;
   Thread1.WaitFor;
@@ -202,7 +205,7 @@ begin
     procedure
     begin
       while MilliSecondsBetween(Now, StartTime) < 2000 do
-        InterlockedIncrement64(CountHigh);
+        InterlockedExchangeAdd64(CountHigh, 1);
     end
   );
   HighPriority.Priority := tpHigher;
@@ -211,11 +214,13 @@ begin
     procedure
     begin
       while MilliSecondsBetween(Now, StartTime) < 2000 do
-        InterlockedIncrement64(CountLow);
+        InterlockedExchangeAdd64(CountLow, 1);
     end
   );
   LowPriority.Priority := tpLower;
 
+  HighPriority.FreeOnTerminate := False;
+  LowPriority.FreeOnTerminate := False;
   HighPriority.Start;
   LowPriority.Start;
   HighPriority.WaitFor;
@@ -349,7 +354,8 @@ unit HighPerfServer;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils
+  {$IFDEF WINDOWS}, Windows{$ENDIF};
 
 type
   TServerThread = class(TThread)
@@ -408,7 +414,8 @@ unit InteractiveApp;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils
+  {$IFDEF LINUX}, BaseUnix{$ENDIF};
 
 type
   TUIThread = class(TThread)
@@ -580,8 +587,11 @@ end;
 
 ```pascal
 // Trop de threads
+// Note : CreateAnonymousThread avec procédures anonymes nécessite
+// {$modeswitch anonymousfunctions} en mode ObjFPC (FPC 3.3.1+)
 var
   Threads: array[0..99] of TThread; // 100 threads !
+  i: Integer;
 
 begin
   for i := 0 to 99 do
@@ -606,6 +616,7 @@ end;
 var
   OptimalThreadCount: Integer;
   Threads: array of TThread;
+  i: Integer;
 
 begin
   OptimalThreadCount := TThread.ProcessorCount;

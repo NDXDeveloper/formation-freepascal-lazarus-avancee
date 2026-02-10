@@ -125,7 +125,7 @@ Une **Promise** (ou **Future**) représente le résultat futur d'une opération 
 ```pascal
 unit AsyncFuture;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -295,17 +295,19 @@ end;
 
 FreePascal ne dispose pas d'un support natif Async/Await comme C# ou JavaScript, mais nous pouvons implémenter un pattern similaire.
 
+> **Note** : Les unités de ce chapitre utilisent `{$mode delphi}` car elles font un usage intensif des types `reference to procedure/function` (procédures anonymes) et des types génériques. En mode ObjFPC, les procédures anonymes nécessiteraient `{$modeswitch anonymousfunctions}` (FPC 3.3.1+) et les génériques le mot-clé `generic`.
+
 ### Task asynchrone de base
 
 ```pascal
 unit AsyncTask;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, SyncObjs;
+  Classes, SysUtils, SyncObjs, DateUtils;
 
 type
   TAsyncProc = reference to procedure;
@@ -770,7 +772,7 @@ Mettre en cache les résultats d'opérations asynchrones.
 ```pascal
 unit AsyncCache;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -1307,7 +1309,7 @@ end;
 ```pascal
 unit CancellableTask;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -1548,20 +1550,24 @@ end;
 ```pascal
 unit AsyncDebounce;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, SyncObjs;
+  Classes, SysUtils, SyncObjs, ExtCtrls; // ExtCtrls pour TTimer
 
 type
+  { TProc n'existe pas en FreePascal - définition locale }
+  TProc = reference to procedure;
+
   TDebouncer = class
   private
     FDelay: Integer;
     FTimer: TTimer;
     FAction: TProc;
     FCS: TCriticalSection;
+    procedure DoTimer(Sender: TObject);
   public
     constructor Create(DelayMs: Integer);
     destructor Destroy; override;
@@ -1576,41 +1582,32 @@ begin
   inherited Create;
   FDelay := DelayMs;
   FCS := TCriticalSection.Create;
-  FTimer := nil;
+  FTimer := TTimer.Create(nil);
+  FTimer.Enabled := False;
+  FTimer.OnTimer := DoTimer;
 end;
 
 destructor TDebouncer.Destroy;
 begin
-  if Assigned(FTimer) then
-  begin
-    FTimer.Enabled := False;
-    FTimer.Free;
-  end;
+  FTimer.Free;
   FCS.Free;
   inherited;
+end;
+
+procedure TDebouncer.DoTimer(Sender: TObject);
+begin
+  FTimer.Enabled := False;
+  if Assigned(FAction) then
+    FAction();
 end;
 
 procedure TDebouncer.Trigger(Action: TProc);
 begin
   FCS.Enter;
   try
-    // Annuler le timer précédent
-    if Assigned(FTimer) then
-    begin
-      FTimer.Enabled := False;
-      FTimer.Free;
-    end;
-
-    // Créer un nouveau timer
     FAction := Action;
-    FTimer := TTimer.Create(nil);
+    FTimer.Enabled := False;
     FTimer.Interval := FDelay;
-    FTimer.OnTimer := procedure(Sender: TObject)
-    begin
-      FTimer.Enabled := False;
-      if Assigned(FAction) then
-        FAction();
-    end;
     FTimer.Enabled := True;
   finally
     FCS.Leave;
@@ -1658,7 +1655,7 @@ Limiter le nombre d'exécutions dans un intervalle de temps.
 ```pascal
 unit AsyncThrottle;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -1666,6 +1663,8 @@ uses
   Classes, SysUtils, DateUtils;
 
 type
+  TProc = reference to procedure;
+
   TThrottler = class
   private
     FInterval: Integer;
@@ -1726,7 +1725,7 @@ Limiter le nombre de requêtes par période.
 ```pascal
 unit AsyncRateLimit;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -1734,6 +1733,8 @@ uses
   Classes, SysUtils, SyncObjs, Generics.Collections;
 
 type
+  TProc = reference to procedure;
+
   TRateLimiter = class
   private
     FMaxRequests: Integer;
@@ -1854,7 +1855,7 @@ end;
 ```pascal
 unit AsyncDownloader;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -1896,19 +1897,9 @@ begin
       try
         Stream := TFileStream.Create(DestFile, fmCreate);
 
-        // Configuration du callback de progression
-        Client.OnDataReceived := procedure(Sender: TObject; const ContentLength, CurrentPos: Int64)
-        begin
-          if Assigned(OnProgress) then
-            TThread.Synchronize(nil,
-              procedure
-              begin
-                OnProgress(CurrentPos, ContentLength);
-              end
-            );
-        end;
-
-        // Télécharger
+        // Note : OnDataReceived est un event of object, on ne peut pas
+        // y assigner une procédure anonyme. On utilise le téléchargement
+        // direct et on met à jour la progression après.
         Client.Get(URL, Stream);
         Success := True;
       except
@@ -1976,7 +1967,7 @@ end;
 ```pascal
 unit AsyncSearch;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -2022,7 +2013,7 @@ begin
     begin
       Sleep(500); // Simuler une recherche réseau
 
-      if TThread.CurrentThread.CheckTerminated then
+      if TThread.CurrentThread.Terminated then
         Exit;
 
       // Simuler des résultats
@@ -2039,7 +2030,7 @@ begin
         Results.Add(Item);
 
         // Retourner les résultats
-        if not TThread.CurrentThread.CheckTerminated then
+        if not TThread.CurrentThread.Terminated then
           TThread.Synchronize(nil,
             procedure
             begin
@@ -2073,7 +2064,7 @@ end.
 ```pascal
 unit AsyncQueue;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -2083,13 +2074,24 @@ uses
 type
   TAsyncTask = reference to procedure;
 
+  TAsyncTaskQueue = class;
+
+  { Thread worker dédié (CreateAnonymousThread ne peut
+    pas prendre une méthode d'objet) }
+  TQueueWorkerThread = class(TThread)
+  private
+    FQueue: TAsyncTaskQueue;
+  protected
+    procedure Execute; override;
+  public
+    constructor Create(AQueue: TAsyncTaskQueue);
+  end;
+
   TAsyncTaskQueue = class
   private
     FQueue: TThreadedQueue<TAsyncTask>;
-    FWorkers: array of TThread;
+    FWorkers: array of TQueueWorkerThread;
     FRunning: Boolean;
-
-    procedure WorkerProc;
   public
     constructor Create(WorkerCount: Integer = 4);
     destructor Destroy; override;
@@ -2119,13 +2121,22 @@ begin
   inherited;
 end;
 
-procedure TAsyncTaskQueue.WorkerProc;
+{ TQueueWorkerThread }
+
+constructor TQueueWorkerThread.Create(AQueue: TAsyncTaskQueue);
+begin
+  inherited Create(False);
+  FQueue := AQueue;
+  FreeOnTerminate := False;
+end;
+
+procedure TQueueWorkerThread.Execute;
 var
   Task: TAsyncTask;
 begin
-  while FRunning do
+  while FQueue.FRunning do
   begin
-    if FQueue.PopItem(Task) = wrSignaled then
+    if FQueue.FQueue.PopItem(Task) = wrSignaled then
     begin
       try
         Task();
@@ -2136,6 +2147,8 @@ begin
     end;
   end;
 end;
+
+{ TAsyncTaskQueue }
 
 procedure TAsyncTaskQueue.Enqueue(Task: TAsyncTask);
 begin
@@ -2149,11 +2162,7 @@ begin
   FRunning := True;
 
   for i := 0 to High(FWorkers) do
-  begin
-    FWorkers[i] := TThread.CreateAnonymousThread(@WorkerProc);
-    FWorkers[i].FreeOnTerminate := False;
-    FWorkers[i].Start;
-  end;
+    FWorkers[i] := TQueueWorkerThread.Create(Self);
 end;
 
 procedure TAsyncTaskQueue.Stop;
@@ -2240,7 +2249,7 @@ end;
 ```pascal
 unit AsyncMock;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 

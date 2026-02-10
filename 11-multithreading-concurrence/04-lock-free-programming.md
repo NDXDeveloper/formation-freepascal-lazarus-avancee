@@ -895,7 +895,7 @@ procedure TBackoffStrategy.Wait;
 begin
   // Attente exponentielle
   Sleep(FCurrentWait);
-  FCurrentWait := Min(FCurrentWait * 2, FMaxWait);
+  FCurrentWait := Min(FCurrentWait * 2, FMaxWait); // uses Math
 end;
 
 procedure TBackoffStrategy.Reset;
@@ -1031,6 +1031,8 @@ type
 
 ### 4. Tester exhaustivement
 
+> **Note** : Les exemples de tests ci-dessous utilisent `TThread.CreateAnonymousThread` avec des procédures anonymes, ce qui nécessite `{$modeswitch anonymousfunctions}` (FPC 3.3.1+). En alternative, créer des classes `TThread` nommées.
+
 ```pascal
 // Test de stress avec plusieurs threads
 procedure StressTest;
@@ -1090,8 +1092,8 @@ end;
 
 // 2. Compteurs de statistiques
 var
-  CASAttempts: Int64 = 0;
-  CASSuccesses: Int64 = 0;
+  CASAttempts: Integer = 0;   // Integer car InterlockedIncrement = Longint
+  CASSuccesses: Integer = 0;
 
 procedure TrackCAS(Success: Boolean);
 begin
@@ -1428,14 +1430,25 @@ type
     Next: PLogEntry;
   end;
 
+  TLockFreeLogger = class;
+
+  { Thread d'écriture dédié (CreateAnonymousThread ne peut
+    pas prendre une méthode d'objet comme paramètre) }
+  TLogWriterThread = class(TThread)
+  private
+    FLogger: TLockFreeLogger;
+  protected
+    procedure Execute; override;
+  public
+    constructor Create(ALogger: TLockFreeLogger);
+  end;
+
   TLockFreeLogger = class
   private
     FHead: PLogEntry;
-    FWriterThread: TThread;
+    FWriterThread: TLogWriterThread;
     FRunning: Boolean;
     FFile: TextFile;
-
-    procedure ProcessEntries;
   public
     constructor Create(const FileName: string);
     destructor Destroy; override;
@@ -1445,6 +1458,51 @@ type
   end;
 
 implementation
+
+{ TLogWriterThread }
+
+constructor TLogWriterThread.Create(ALogger: TLockFreeLogger);
+begin
+  inherited Create(False); // Démarrer immédiatement
+  FLogger := ALogger;
+  FreeOnTerminate := False;
+end;
+
+procedure TLogWriterThread.Execute;
+var
+  Entry, NextEntry: PLogEntry;
+  LevelStr: string;
+begin
+  while FLogger.FRunning do
+  begin
+    // Extraire toutes les entrées
+    Entry := InterlockedExchange(Pointer(FLogger.FHead), nil);
+
+    // Écrire dans le fichier
+    while Entry <> nil do
+    begin
+      case Entry^.Level of
+        llDebug:   LevelStr := 'DEBUG';
+        llInfo:    LevelStr := 'INFO';
+        llWarning: LevelStr := 'WARNING';
+        llError:   LevelStr := 'ERROR';
+      end;
+
+      WriteLn(FLogger.FFile, Format('[%s] [%s] [Thread %d] %s',
+        [FormatDateTime('yyyy-mm-dd hh:nn:ss', Entry^.Timestamp),
+         LevelStr,
+         Entry^.ThreadID,
+         Entry^.Message]));
+
+      NextEntry := Entry^.Next;
+      Dispose(Entry);
+      Entry := NextEntry;
+    end;
+
+    System.Flush(FLogger.FFile);
+    Sleep(10);
+  end;
+end;
 
 { TLockFreeLogger }
 
@@ -1458,9 +1516,8 @@ begin
   AssignFile(FFile, FileName);
   Rewrite(FFile);
 
-  // Thread d'écriture asynchrone
-  FWriterThread := TThread.CreateAnonymousThread(@ProcessEntries);
-  FWriterThread.Start;
+  // Thread d'écriture dédié
+  FWriterThread := TLogWriterThread.Create(Self);
 end;
 
 destructor TLockFreeLogger.Destroy;
@@ -1496,42 +1553,6 @@ begin
     Pointer(Entry),
     Pointer(OldHead)
   ) = Pointer(OldHead);
-end;
-
-procedure TLockFreeLogger.ProcessEntries;
-var
-  Entry, NextEntry: PLogEntry;
-  LevelStr: string;
-begin
-  while FRunning do
-  begin
-    // Extraire toutes les entrées
-    Entry := InterlockedExchange(Pointer(FHead), nil);
-
-    // Écrire dans le fichier
-    while Entry <> nil do
-    begin
-      case Entry^.Level of
-        llDebug:   LevelStr := 'DEBUG';
-        llInfo:    LevelStr := 'INFO';
-        llWarning: LevelStr := 'WARNING';
-        llError:   LevelStr := 'ERROR';
-      end;
-
-      WriteLn(FFile, Format('[%s] [%s] [Thread %d] %s',
-        [FormatDateTime('yyyy-mm-dd hh:nn:ss', Entry^.Timestamp),
-         LevelStr,
-         Entry^.ThreadID,
-         Entry^.Message]));
-
-      NextEntry := Entry^.Next;
-      Dispose(Entry);
-      Entry := NextEntry;
-    end;
-
-    System.Flush(FFile);
-    Sleep(10);
-  end;
 end;
 
 procedure TLockFreeLogger.Flush;
@@ -1584,7 +1605,7 @@ Buffer circulaire pour streaming de données.
 ```pascal
 unit LockFreeRingBuffer;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}  // mode delphi pour déclaration de type générique
 
 interface
 
@@ -1848,7 +1869,7 @@ begin
   while not CAS(...) do
   begin
     Sleep(Backoff);
-    Backoff := Min(Backoff * 2, 100);
+    Backoff := Min(Backoff * 2, 100); // uses Math
   end;
 end;
 ```
@@ -1907,7 +1928,7 @@ var
   StartTime: TDateTime;
   Threads: array[0..7] of TThread;
   i: Integer;
-  Operations: Int64;
+  Operations: Integer;  // Integer car InterlockedIncrement = Longint
 begin
   Stack := TLockFreeStack.Create;
   Operations := 0;
@@ -1921,7 +1942,7 @@ begin
       var
         Data: Pointer;
       begin
-        while SecondsBetween(Now, StartTime) < DURATION_SEC do
+        while SecondsBetween(Now, StartTime) < DURATION_SEC do // uses DateUtils
         begin
           if Random(2) = 0 then
             Stack.Push(Pointer(Random(1000)))

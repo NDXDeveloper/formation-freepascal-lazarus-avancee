@@ -187,8 +187,8 @@ begin
   // Obtenir les masques d'affinité
   if GetProcessAffinityMask(GetCurrentProcess, ProcessAffinityMask, SystemAffinityMask) then
   begin
-    WriteLn('Masque d''affinité du processus : ', IntToBin(ProcessAffinityMask, 64));
-    WriteLn('Masque d''affinité du système : ', IntToBin(SystemAffinityMask, 64));
+    WriteLn('Masque d''affinité du processus : ', BinStr(ProcessAffinityMask, 64));
+    WriteLn('Masque d''affinité du système : ', BinStr(SystemAffinityMask, 64));
   end;
 end;
 ```
@@ -398,14 +398,18 @@ uses
   {$ENDIF};
 
 type
+  {$IFDEF UNIX}
+  TCpuSetBits = record
+    __bits: array[0..15] of QWord;
+  end;
+  {$ENDIF}
+
   TCPUSet = record
     {$IFDEF WINDOWS}
     Mask: NativeUInt;
     {$ENDIF}
     {$IFDEF UNIX}
-    CpuSet: record
-      __bits: array[0..15] of QWord;
-    end;
+    CpuSet: TCpuSetBits;
     {$ENDIF}
   end;
 
@@ -420,9 +424,9 @@ implementation
 
 {$IFDEF UNIX}
 function sched_setaffinity(pid: pid_t; cpusetsize: size_t;
-  const mask: TCPUSet.CpuSet): cint; cdecl; external 'c' name 'sched_setaffinity';
+  const mask: TCpuSetBits): cint; cdecl; external 'c' name 'sched_setaffinity';
 function sched_getaffinity(pid: pid_t; cpusetsize: size_t;
-  var mask: TCPUSet.CpuSet): cint; cdecl; external 'c' name 'sched_getaffinity';
+  var mask: TCpuSetBits): cint; cdecl; external 'c' name 'sched_getaffinity';
 {$ENDIF}
 
 function GetCPUCount: Integer;

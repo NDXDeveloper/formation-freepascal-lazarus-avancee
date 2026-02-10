@@ -347,7 +347,7 @@ Appliquer une fonction à tous les éléments d'un tableau.
 ```pascal
 unit ParallelMap;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -404,7 +404,7 @@ Agréger tous les éléments d'un tableau.
 ```pascal
 unit ParallelReduce;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -498,6 +498,7 @@ Tri rapide parallèle.
 unit ParallelQuickSort;
 
 {$mode objfpc}{$H+}
+{$modeswitch anonymousfunctions}
 
 interface
 
@@ -600,9 +601,11 @@ end.
 Répartition dynamique du travail entre les threads.
 
 ```pascal
+> **Note :** Les unités utilisant des types génériques (`TThreadedQueue<T>`, etc.) de `Generics.Collections` sont compilées en `{$mode delphi}` pour simplifier la syntaxe. Les unités utilisant des procédures anonymes avec `ProcThreadPool.DoParallel` nécessitent `{$modeswitch anonymousfunctions}` en `{$mode objfpc}` (FPC 3.3.1+).
+
 unit WorkStealing;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -749,17 +752,25 @@ end;
 procedure TWorkStealingPool.Start;
 var
   i: Integer;
+
+  // Fonction locale pour capturer la valeur de i correctement
+  function CreateWorkerThread(WorkerID: Integer): TThread;
+  begin
+    Result := TThread.CreateAnonymousThread(
+      procedure
+      begin
+        WorkerProc(WorkerID);
+      end
+    );
+    Result.FreeOnTerminate := False; // Nécessaire pour WaitFor+Free dans Stop
+  end;
+
 begin
   FRunning := True;
 
   for i := 0 to High(FWorkers) do
   begin
-    FWorkers[i] := TThread.CreateAnonymousThread(
-      procedure
-      begin
-        WorkerProc(i);
-      end
-    );
+    FWorkers[i] := CreateWorkerThread(i);
     FWorkers[i].Start;
   end;
 end;
@@ -1159,7 +1170,7 @@ begin
       LocalSum := 0;
       for j := 1 to 1000000 do
         LocalSum := LocalSum + j;
-      InterlockedAdd(Sum, LocalSum);
+      InterlockedExchangeAdd(Sum, LocalSum);
     end,
     0, TThread.ProcessorCount - 1
   );
@@ -1184,11 +1195,12 @@ end;
 unit ImageProcessingMulticore;
 
 {$mode objfpc}{$H+}
+{$modeswitch anonymousfunctions}
 
 interface
 
 uses
-  Classes, SysUtils, Graphics, MTProcs;
+  Classes, SysUtils, Math, Graphics, MTProcs;
 
 type
   TRGB = record
@@ -1309,11 +1321,12 @@ end.
 unit MatrixMultiplication;
 
 {$mode objfpc}{$H+}
+{$modeswitch anonymousfunctions}
 
 interface
 
 uses
-  Classes, SysUtils, MTProcs;
+  Classes, SysUtils, Math, MTProcs;
 
 type
   TMatrix = array of array of Double;
@@ -1414,11 +1427,12 @@ end.
 unit ParallelSearch;
 
 {$mode objfpc}{$H+}
+{$modeswitch anonymousfunctions}
 
 interface
 
 uses
-  Classes, SysUtils, MTProcs, SyncObjs;
+  Classes, SysUtils, Math, MTProcs, SyncObjs;
 
 function ParallelLinearSearch(const Data: array of Integer;
   Target: Integer): Integer;
@@ -1531,6 +1545,7 @@ end.
 unit ParallelCompression;
 
 {$mode objfpc}{$H+}
+{$modeswitch anonymousfunctions}
 
 interface
 

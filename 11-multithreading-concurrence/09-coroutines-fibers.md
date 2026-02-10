@@ -199,10 +199,12 @@ end.
 
 Un **générateur** est une coroutine qui produit une séquence de valeurs.
 
+> **Note :** Les unités utilisant des types génériques (`TGenerator<T>`, `TList<T>`, etc.) sont compilées en `{$mode delphi}` pour simplifier la syntaxe des génériques. En `{$mode objfpc}`, il faudrait préfixer chaque utilisation avec le mot-clé `specialize`.
+
 ```pascal
 unit Generators;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -210,9 +212,12 @@ uses
   Classes, SysUtils;
 
 type
+  TIntArray = array of Integer; // Type utilisé par TPermutationGenerator
+
   TGenerator<T> = class
+  protected
+    FCurrentValue: T;  // protected : accessible par les classes dérivées
   private
-    FCurrentValue: T;
     FFinished: Boolean;
     FIndex: Integer;
   protected
@@ -570,7 +575,7 @@ Les **itérateurs** sont une forme de générateurs qui parcourent des collectio
 ```pascal
 unit CustomIterators;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -578,6 +583,9 @@ uses
   Classes, SysUtils, Generics.Collections;
 
 type
+  // TPredicate<T> n'existe pas en FPC (type Delphi System.SysUtils)
+  TPredicate<T> = reference to function(const Value: T): Boolean;
+
   TIterator<T> = class
   protected
     function GetCurrent: T; virtual; abstract;
@@ -895,6 +903,9 @@ Chaîner plusieurs générateurs pour transformer des données.
 
 ```pascal
 type
+  // TFunc<TIn, TOut> n'existe pas en FPC (type Delphi)
+  TFunc<TIn, TOut> = reference to function(const Value: TIn): TOut;
+
   TMapGenerator<TIn, TOut> = class(TGenerator<TOut>)
   private
     FSource: TGenerator<TIn>;
@@ -1398,7 +1409,7 @@ end.
 ```pascal
 unit ProducerConsumerGen;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -1811,7 +1822,7 @@ unit CoroutineBenchmark;
 interface
 
 uses
-  Classes, SysUtils, DateUtils;
+  Classes, SysUtils, DateUtils, Generators;
 
 type
   TBenchmarkResult = record
@@ -1821,11 +1832,13 @@ type
     IterationsPerSecond: Double;
   end;
 
-function BenchmarkGenerator(Gen: TGenerator; Iterations: Integer): TBenchmarkResult;
+// Note : TGenerator étant générique, cette fonction est typiquement
+// spécialisée pour un type concret, par exemple TGenerator<Integer>
+function BenchmarkGenerator(Gen: TRangeGenerator; Iterations: Integer): TBenchmarkResult;
 
 implementation
 
-function BenchmarkGenerator(Gen: TGenerator; Iterations: Integer): TBenchmarkResult;
+function BenchmarkGenerator(Gen: TRangeGenerator; Iterations: Integer): TBenchmarkResult;
 var
   StartTime, EndTime: TDateTime;
   i: Integer;
@@ -1862,6 +1875,7 @@ procedure CompareApproaches;
 var
   StartTime: TDateTime;
   i, Sum: Integer;
+  Gen: TRangeGenerator;
 begin
   WriteLn('=== Comparaison Thread vs Générateur ===');
 
@@ -1873,7 +1887,7 @@ begin
   WriteLn('Boucle simple : ', MilliSecondsBetween(Now, StartTime), ' ms');
 
   // Approche 2 : Générateur
-  var Gen := TRangeGenerator.Create(1, 1000000);
+  Gen := TRangeGenerator.Create(1, 1000000);
   try
     StartTime := Now;
     Sum := 0;

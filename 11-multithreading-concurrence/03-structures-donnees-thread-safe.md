@@ -244,10 +244,12 @@ end;
 
 Créons notre propre liste thread-safe pour mieux comprendre les mécanismes.
 
+> **Note** : Les unités qui définissent leurs propres types génériques utilisent `{$mode delphi}` car la syntaxe des génériques y est plus naturelle (`TMyClass<T>` au lieu de `generic TMyClass<T>` / `specialize TMyClass<T>` en mode ObjFPC).
+
 ```pascal
 unit CustomThreadSafeList;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -456,7 +458,7 @@ Un dictionnaire (clé-valeur) est très utile pour stocker des données indexée
 ```pascal
 unit ThreadSafeDictionary;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -646,12 +648,12 @@ Les files d'attente sont essentielles pour la communication entre threads (patte
 ```pascal
 unit ThreadSafeQueue;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, SyncObjs, Generics.Collections;
+  Classes, SysUtils, SyncObjs, DateUtils, Generics.Collections;
 
 type
   TThreadSafeQueue<T> = class
@@ -868,7 +870,7 @@ Une pile LIFO (Last In, First Out) thread-safe.
 ```pascal
 unit ThreadSafeStack;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -1088,7 +1090,7 @@ Un exemple plus complexe : un cache avec gestion d'expiration.
 ```pascal
 unit ThreadSafeCache;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -1286,7 +1288,7 @@ Un pool d'objets réutilisables pour éviter les créations/destructions fréque
 ```pascal
 unit ThreadSafeObjectPool;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -1473,7 +1475,7 @@ Utile pour les flux de données en temps réel (audio, vidéo, capteurs).
 ```pascal
 unit ThreadSafeCircularBuffer;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -1739,19 +1741,22 @@ type
 
 ```pascal
 type
+  { TProc<T> n'existe pas en FreePascal - on définit un type imbriqué }
   TThreadSafeObserver<T> = class
+  public type
+    TNotifyProc = procedure(const Data: T);
   private
-    FObservers: TThreadSafeList<TProc<T>>;
+    FObservers: TThreadSafeList<TNotifyProc>;
   public
-    procedure Subscribe(Observer: TProc<T>);
-    procedure Unsubscribe(Observer: TProc<T>);
+    procedure Subscribe(Observer: TNotifyProc);
+    procedure Unsubscribe(Observer: TNotifyProc);
     procedure Notify(const Data: T);
   end;
 
 procedure TThreadSafeObserver<T>.Notify(const Data: T);
 var
-  List: TList<TProc<T>>;
-  Observer: TProc<T>;
+  List: TList<TNotifyProc>;
+  Observer: TNotifyProc;
 begin
   List := FObservers.Lock;
   try

@@ -283,16 +283,16 @@ Jour 8-10 : Maîtrise 11.7-11.10 (optimisation)
 
 Tout au long du module, nous construirons progressivement une **application de traitement d'images** qui évoluera avec chaque chapitre :
 
-**Chapitre 11.1** : Version simple avec un thread de traitement
-**Chapitre 11.2** : Thread pool pour traiter plusieurs images
-**Chapitre 11.3** : File d'attente thread-safe pour les tâches
-**Chapitre 11.4** : Compteurs lock-free pour les statistiques
-**Chapitre 11.5** : Filtres parallèles avec MTProcs
-**Chapitre 11.6** : Chargement asynchrone des images
-**Chapitre 11.7** : Optimisation par plateforme
-**Chapitre 11.8** : Architecture acteurs pour le pipeline
-**Chapitre 11.9** : Générateurs pour le streaming d'images
-**Chapitre 11.10** : Optimisation multicœur finale
+**Chapitre 11.1** : Version simple avec un thread de traitement  
+**Chapitre 11.2** : Thread pool pour traiter plusieurs images  
+**Chapitre 11.3** : File d'attente thread-safe pour les tâches  
+**Chapitre 11.4** : Compteurs lock-free pour les statistiques  
+**Chapitre 11.5** : Filtres parallèles avec MTProcs  
+**Chapitre 11.6** : Chargement asynchrone des images  
+**Chapitre 11.7** : Optimisation par plateforme  
+**Chapitre 11.8** : Architecture acteurs pour le pipeline  
+**Chapitre 11.9** : Générateurs pour le streaming d'images  
+**Chapitre 11.10** : Optimisation multicœur finale  
 
 ```
 Version initiale (séquentielle) :

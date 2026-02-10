@@ -316,14 +316,17 @@ type
   // Énumération des priorités
   TTaskPriority = (tpLow, tpNormal, tpHigh, tpCritical);
 
+  // Type pour une procédure sans paramètre
+  TPoolProc = procedure of object;
+
   // Tâche avancée avec priorité et données
   TAdvancedTask = class
   private
     FPriority: TTaskPriority;
-    FProc: TProc;
+    FProc: TPoolProc;
     FData: Pointer;
   public
-    constructor Create(AProc: TProc; APriority: TTaskPriority = tpNormal; AData: Pointer = nil);
+    constructor Create(AProc: TPoolProc; APriority: TTaskPriority = tpNormal; AData: Pointer = nil);
     procedure Execute;
 
     property Priority: TTaskPriority read FPriority;
@@ -349,7 +352,7 @@ type
     constructor Create(AWorkerCount: Integer);
     destructor Destroy; override;
 
-    procedure Execute(AProc: TProc; APriority: TTaskPriority = tpNormal);
+    procedure Execute(AProc: TPoolProc; APriority: TTaskPriority = tpNormal);
     procedure WaitForAll;
     function GetActiveTaskCount: Integer;
   end;
@@ -358,7 +361,7 @@ implementation
 
 { TAdvancedTask }
 
-constructor TAdvancedTask.Create(AProc: TProc; APriority: TTaskPriority; AData: Pointer);
+constructor TAdvancedTask.Create(AProc: TPoolProc; APriority: TTaskPriority; AData: Pointer);
 begin
   inherited Create;
   FProc := AProc;
@@ -418,7 +421,7 @@ begin
   inherited;
 end;
 
-procedure TAdvancedThreadPool.Execute(AProc: TProc; APriority: TTaskPriority);
+procedure TAdvancedThreadPool.Execute(AProc: TPoolProc; APriority: TTaskPriority);
 var
   Task: TAdvancedTask;
   List: TList<TAdvancedTask>;
@@ -694,16 +697,16 @@ type
   // Tâche avec callback
   TCallbackTask = class
   private
-    FProc: TProc;
+    FProc: TTaskProc;  // TTaskProc = procedure of object (défini plus haut)
     FCallback: TTaskCallback;
     FOnMainThread: Boolean;
   public
-    constructor Create(AProc: TProc; ACallback: TTaskCallback;
+    constructor Create(AProc: TTaskProc; ACallback: TTaskCallback;
       AOnMainThread: Boolean = True);
     procedure Execute;
   end;
 
-constructor TCallbackTask.Create(AProc: TProc; ACallback: TTaskCallback;
+constructor TCallbackTask.Create(AProc: TTaskProc; ACallback: TTaskCallback;
   AOnMainThread: Boolean);
 begin
   inherited Create;
@@ -732,41 +735,51 @@ begin
     end;
   end;
 
+  // Stocker les résultats pour le callback synchronisé
+  FLastSuccess := Success;
+  FLastError := ErrorMsg;
+
   // Exécuter le callback
   if Assigned(FCallback) then
   begin
     if FOnMainThread then
-      TThread.Synchronize(nil, procedure
-      begin
-        FCallback(Success, ErrorMsg);
-      end)
+      TThread.Synchronize(nil, @DoCallback)
     else
       FCallback(Success, ErrorMsg);
   end;
 end;
+
+procedure TCallbackTask.DoCallback;
+begin
+  if Assigned(FCallback) then
+    FCallback(FLastSuccess, FLastError);
+end;
 ```
+
+> **Note :** Les procédures anonymes (`procedure ... begin ... end`) nécessitent `{$modeswitch anonymousfunctions}` et `{$modeswitch functionreferences}` en mode ObjFPC (FPC 3.3.1+). Sans ces directives, utilisez des méthodes nommées comme `DoCallback` ci-dessus.
 
 ### Utilisation avec callback
 
 ```pascal
-procedure TForm1.ExecuterAvecCallback;
+procedure TForm1.TraitementLong;
 begin
-  Pool.Execute(
-    // La tâche
-    procedure
-    begin
-      Sleep(2000); // Traitement long
-    end,
+  Sleep(2000); // Traitement long
+end;
 
-    // Le callback
-    procedure(Success: Boolean; const ErrorMsg: string)
-    begin
-      if Success then
-        ShowMessage('Tâche terminée avec succès')
-      else
-        ShowMessage('Erreur : ' + ErrorMsg);
-    end
-  );
+procedure TForm1.OnTaskComplete(Success: Boolean; const ErrorMsg: string);
+begin
+  if Success then
+    ShowMessage('Tâche terminée avec succès')
+  else
+    ShowMessage('Erreur : ' + ErrorMsg);
+end;
+
+procedure TForm1.ExecuterAvecCallback;
+var
+  Task: TCallbackTask;
+begin
+  Task := TCallbackTask.Create(@TraitementLong, @OnTaskComplete, True);
+  Task.Execute;
 end;
 ```
 
@@ -858,10 +871,10 @@ begin
 
             // Optionnel : notifier via callback
             if Assigned(Task.OnError) then
-              TThread.Synchronize(nil, procedure
-              begin
-                Task.OnError(E.Message);
-              end);
+            begin
+              FLastErrorMsg := E.Message;
+              TThread.Synchronize(nil, @NotifyError);
+            end;
           end;
         end;
       finally
@@ -995,19 +1008,10 @@ Pool := TThreadPool.Create(TThread.ProcessorCount * 2);
 ```pascal
 // ❌ Tâches trop simples
 for i := 1 to 10000 do
-  Pool.Execute(procedure
-  begin
-    x := i * 2; // Trop simple pour justifier un thread
-  end);
+  Pool.AddTask(@CalculerDouble); // Trop simple pour justifier un thread
 
-// ✅ Grouper les petites tâches
-Pool.Execute(procedure
-var
-  i: Integer;
-begin
-  for i := 1 to 10000 do
-    x := i * 2;
-end);
+// ✅ Grouper les petites tâches en un seul appel
+Pool.AddTask(@CalculerTousLesDoubles);
 ```
 
 ### 3. Toujours nettoyer proprement
@@ -1026,6 +1030,9 @@ end;
 ### 4. Gérer les timeouts
 
 ```pascal
+uses
+  SysUtils, DateUtils;  // MilliSecondsBetween nécessite DateUtils
+
 // Implémenter un timeout pour les tâches longues
 type
   TTimeoutTask = class
@@ -1124,6 +1131,7 @@ Imaginons que vous devez traiter 100 fichiers images (redimensionnement, convers
 unit BatchImageProcessor;
 
 {$mode objfpc}{$H+}
+{$modeswitch anonymousfunctions}  // Nécessaire pour les procédures anonymes
 
 interface
 
@@ -1353,13 +1361,25 @@ type
 
   TRequestHandler = procedure(Request: THTTPRequest; Response: THTTPResponse) of object;
 
+  TWebServer = class;
+
+  // Thread d'écoute dédié (au lieu de CreateAnonymousThread)
+  TListenThread = class(TThread)
+  private
+    FServer: TWebServer;
+  protected
+    procedure Execute; override;
+  public
+    constructor Create(AServer: TWebServer);
+  end;
+
   TWebServer = class
   private
     FPool: TSimpleThreadPool;
     FSocket: TTCPBlockSocket;
     FPort: Integer;
     FRunning: Boolean;
-    FListenThread: TThread;
+    FListenThread: TListenThread;
     FHandler: TRequestHandler;
 
     procedure HandleConnection(ClientSocket: TTCPBlockSocket);
@@ -1438,40 +1458,45 @@ begin
   inherited;
 end;
 
+{ TListenThread }
+
+constructor TListenThread.Create(AServer: TWebServer);
+begin
+  inherited Create(True); // Créer suspendu
+  FServer := AServer;
+  FreeOnTerminate := False;
+end;
+
+procedure TListenThread.Execute;
+var
+  ClientSocket: TTCPBlockSocket;
+begin
+  FServer.FSocket.CreateSocket;
+  FServer.FSocket.SetLinger(True, 10000);
+  FServer.FSocket.Bind('0.0.0.0', IntToStr(FServer.FPort));
+  FServer.FSocket.Listen;
+
+  while FServer.FRunning and (not Terminated) do
+  begin
+    if FServer.FSocket.CanRead(1000) then
+    begin
+      ClientSocket := TTCPBlockSocket.Create;
+      ClientSocket.Socket := FServer.FSocket.Accept;
+
+      if FServer.FSocket.LastError = 0 then
+        FServer.HandleConnection(ClientSocket)
+      else
+        ClientSocket.Free;
+    end;
+  end;
+end;
+
+{ TWebServer }
+
 procedure TWebServer.Start;
 begin
   FRunning := True;
-
-  FListenThread := TThread.CreateAnonymousThread(procedure
-  var
-    ClientSocket: TTCPBlockSocket;
-  begin
-    FSocket.CreateSocket;
-    FSocket.SetLinger(True, 10000);
-    FSocket.Bind('0.0.0.0', IntToStr(FPort));
-    FSocket.Listen;
-
-    while FRunning do
-    begin
-      if FSocket.CanRead(1000) then
-      begin
-        ClientSocket := TTCPBlockSocket.Create;
-        ClientSocket.Socket := FSocket.Accept;
-
-        if FSocket.LastError = 0 then
-        begin
-          // Traiter la connexion dans le pool
-          FPool.AddTask(procedure
-          begin
-            HandleConnection(ClientSocket);
-          end);
-        end
-        else
-          ClientSocket.Free;
-      end;
-    end;
-  end);
-
+  FListenThread := TListenThread.Create(Self);
   FListenThread.Start;
 end;
 
@@ -1529,7 +1554,7 @@ procedure TWebServer.ParseRequest(const Data: string; Request: THTTPRequest);
 var
   Lines: TStringList;
   FirstLine: string;
-  Parts: TStringArray;
+  SpacePos: Integer;
 begin
   Lines := TStringList.Create;
   try
@@ -1538,12 +1563,19 @@ begin
     if Lines.Count > 0 then
     begin
       FirstLine := Lines[0];
-      Parts := FirstLine.Split([' ']);
 
-      if Length(Parts) >= 2 then
+      // Parser "GET /path HTTP/1.1" manuellement
+      SpacePos := Pos(' ', FirstLine);
+      if SpacePos > 0 then
       begin
-        Request.Method := Parts[0];
-        Request.URI := Parts[1];
+        Request.Method := Copy(FirstLine, 1, SpacePos - 1);
+        Delete(FirstLine, 1, SpacePos);
+
+        SpacePos := Pos(' ', FirstLine);
+        if SpacePos > 0 then
+          Request.URI := Copy(FirstLine, 1, SpacePos - 1)
+        else
+          Request.URI := FirstLine;
       end;
 
       // Parser les headers (simplifié)
@@ -1600,6 +1632,7 @@ Calculs mathématiques intensifs en parallèle.
 unit ParallelMath;
 
 {$mode objfpc}{$H+}
+{$modeswitch anonymousfunctions}  // Nécessaire pour les procédures anonymes ci-dessous
 
 interface
 
@@ -1611,6 +1644,9 @@ type
     StartIndex: Integer;
     EndIndex: Integer;
   end;
+
+  // Type de fonction de transformation (remplace TFunc<Double, Double> de Delphi)
+  TDoubleTransformFunc = function(const Value: Double): Double;
 
   TParallelCalculator = class
   private
@@ -1625,7 +1661,7 @@ type
 
     function ParallelSum(const Data: array of Double): Double;
     procedure ParallelTransform(var Data: array of Double;
-      TransformFunc: TFunc<Double, Double>);
+      TransformFunc: TDoubleTransformFunc);
   end;
 
 implementation
@@ -1696,7 +1732,7 @@ begin
 end;
 
 procedure TParallelCalculator.ParallelTransform(var Data: array of Double;
-  TransformFunc: TFunc<Double, Double>);
+  TransformFunc: TDoubleTransformFunc);
 var
   i: Integer;
 begin
@@ -1758,6 +1794,9 @@ end;
 ### Détection de deadlocks
 
 ```pascal
+uses
+  SysUtils, SyncObjs, DateUtils;  // MilliSecondsBetween nécessite DateUtils
+
 type
   TDeadlockDetector = class
   private
@@ -1786,6 +1825,9 @@ end;
 ### Mesurer les performances
 
 ```pascal
+uses
+  SysUtils, DateUtils;  // MilliSecondsBetween nécessite DateUtils
+
 type
   TPoolBenchmark = class
   private

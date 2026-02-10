@@ -117,10 +117,12 @@ type
 
 ### Structure de l'acteur
 
+> **Note :** Les unités utilisant des types génériques (`TThreadedQueue<T>`, `TDictionary<K,V>`, `TList<T>`, etc.) de `Generics.Collections` sont compilées en `{$mode delphi}` pour simplifier la syntaxe des génériques. En `{$mode objfpc}`, il faudrait préfixer chaque utilisation avec le mot-clé `specialize`.
+
 ```pascal
 unit ActorSystem;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -151,6 +153,7 @@ type
     procedure Post(Msg: TMessage);
     function Receive(out Msg: TMessage; Timeout: Cardinal = INFINITE): Boolean;
     function IsEmpty: Boolean;
+    function Count: Integer;
   end;
 
   // Acteur de base
@@ -223,6 +226,11 @@ begin
   Result := FQueue.TotalItemsPushed = FQueue.TotalItemsPopped;
 end;
 
+function TMailbox.Count: Integer;
+begin
+  Result := FQueue.TotalItemsPushed - FQueue.TotalItemsPopped;
+end;
+
 { TActor }
 
 constructor TActor.Create(const AName: string);
@@ -251,7 +259,14 @@ begin
   PreStart;
 
   // Créer le thread de traitement
-  FThread := TThread.CreateAnonymousThread(@ProcessMessages);
+  // Note : On utilise CreateAnonymousThread avec une procédure anonyme
+  // (supporté en {$mode delphi}), qui capture Self pour appeler ProcessMessages
+  FThread := TThread.CreateAnonymousThread(
+    procedure
+    begin
+      ProcessMessages;
+    end
+  );
   FThread.FreeOnTerminate := False;
   FThread.Start;
 end;
@@ -402,12 +417,12 @@ Communication synchrone entre acteurs avec attente de réponse.
 ```pascal
 unit RequestReplyPattern;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, SyncObjs, ActorSystem;
+  Classes, SysUtils, SyncObjs, Generics.Collections, ActorSystem;
 
 type
   // Message de requête avec ID
@@ -551,7 +566,7 @@ Le modèle des acteurs permet de créer des hiérarchies de supervision pour la 
 ```pascal
 unit SupervisionPattern;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -672,7 +687,7 @@ Communication un-vers-plusieurs avec abonnements.
 ```pascal
 unit PubSubPattern;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -828,7 +843,8 @@ procedure TSubscriberActor.Receive(Msg: TMessage);
 begin
   if Msg is TPublishMessage then
     WriteLn(Format('[%s] Reçu sur "%s" : %s',
-      [Name, TPublishMessage(Msg).Topic, VarToStr(TPublishMessage(Msg).Data)]));
+      [Name, TPublishMessage(Msg).Topic,
+       VarToStr(TPublishMessage(Msg).Data)])); // VarToStr nécessite uses Variants
 end;
 
 var
@@ -867,7 +883,7 @@ Un système de chat distribué utilisant le modèle des acteurs.
 ```pascal
 unit ChatSystem;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -1145,7 +1161,7 @@ Distribution intelligente des messages vers plusieurs acteurs.
 ```pascal
 unit RouterPattern;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -1648,7 +1664,7 @@ end.
 ```pascal
 unit MessagePool;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
