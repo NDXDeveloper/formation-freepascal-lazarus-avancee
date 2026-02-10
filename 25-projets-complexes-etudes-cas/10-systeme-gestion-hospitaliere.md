@@ -280,14 +280,14 @@ Les index sont cruciaux pour un SGH performant :
 
 ```sql
 -- Index sur les recherches fréquentes
-CREATE INDEX idx_patients_nom ON patients(nom, prenom);
-CREATE INDEX idx_patients_numero ON patients(numero_dossier);
-CREATE INDEX idx_patients_date_naiss ON patients(date_naissance);
-CREATE INDEX idx_consultations_date ON consultations(date_consultation);
-CREATE INDEX idx_consultations_patient ON consultations(id_patient);
-CREATE INDEX idx_rdv_date ON rendez_vous(date_rdv);
-CREATE INDEX idx_rdv_personnel ON rendez_vous(id_personnel);
-CREATE INDEX idx_audit_date ON audit_log(date_action);
+CREATE INDEX idx_patients_nom ON patients(nom, prenom);  
+CREATE INDEX idx_patients_numero ON patients(numero_dossier);  
+CREATE INDEX idx_patients_date_naiss ON patients(date_naissance);  
+CREATE INDEX idx_consultations_date ON consultations(date_consultation);  
+CREATE INDEX idx_consultations_patient ON consultations(id_patient);  
+CREATE INDEX idx_rdv_date ON rendez_vous(date_rdv);  
+CREATE INDEX idx_rdv_personnel ON rendez_vous(id_personnel);  
+CREATE INDEX idx_audit_date ON audit_log(date_action);  
 CREATE INDEX idx_audit_user ON audit_log(id_utilisateur);
 
 -- Index full-text pour recherche dans les notes
@@ -392,49 +392,49 @@ implementation
 
 { TPatient }
 
-constructor TPatient.Create;
+constructor TPatient.Create;  
 begin
   inherited Create;
   FAllergies := TStringList.Create;
 end;
 
-destructor TPatient.Destroy;
+destructor TPatient.Destroy;  
 begin
   FAllergies.Free;
   inherited Destroy;
 end;
 
-function TPatient.GetAge: Integer;
+function TPatient.GetAge: Integer;  
 begin
   Result := YearsBetween(Now, FDateNaissance);
 end;
 
-function TPatient.GetNomComplet: string;
+function TPatient.GetNomComplet: string;  
 begin
   Result := FNom + ' ' + FPrenom;
 end;
 
-function TPatient.EstMineur: Boolean;
+function TPatient.EstMineur: Boolean;  
 begin
   Result := GetAge < 18;
 end;
 
 { TConsultation }
 
-constructor TConsultation.Create;
+constructor TConsultation.Create;  
 begin
   inherited Create;
   FDateConsultation := Now;
   FStatut := 'En cours';
 end;
 
-destructor TConsultation.Destroy;
+destructor TConsultation.Destroy;  
 begin
   // Ne pas libérer Patient et Medecin car gérés ailleurs
   inherited Destroy;
 end;
 
-function TConsultation.EstTerminee: Boolean;
+function TConsultation.EstTerminee: Boolean;  
 begin
   Result := FStatut = 'Terminée';
 end;
@@ -476,7 +476,7 @@ type
 
 implementation
 
-constructor TPatientDAO.Create(AConnection: TDatabaseConnection);
+constructor TPatientDAO.Create(AConnection: TDatabaseConnection);  
 begin
   inherited Create;
   FConnection := AConnection;
@@ -485,13 +485,13 @@ begin
   FQuery.Transaction := FConnection.Transaction;
 end;
 
-destructor TPatientDAO.Destroy;
+destructor TPatientDAO.Destroy;  
 begin
   FQuery.Free;
   inherited Destroy;
 end;
 
-function TPatientDAO.GetById(AId: Integer): TPatient;
+function TPatientDAO.GetById(AId: Integer): TPatient;  
 begin
   Result := nil;
   FQuery.Close;
@@ -515,7 +515,7 @@ begin
   FQuery.Close;
 end;
 
-function TPatientDAO.Search(ANom, APrenom: string): TList;
+function TPatientDAO.Search(ANom, APrenom: string): TList;  
 var
   Patient: TPatient;
 begin
@@ -542,7 +542,7 @@ begin
   FQuery.Close;
 end;
 
-function TPatientDAO.Insert(APatient: TPatient): Integer;
+function TPatientDAO.Insert(APatient: TPatient): Integer;  
 begin
   FQuery.Close;
   FQuery.SQL.Text :=
@@ -605,7 +605,7 @@ type
 
 implementation
 
-constructor TDatabaseConnection.Create;
+constructor TDatabaseConnection.Create;  
 begin
   inherited Create;
   FConnection := TPQConnection.Create(nil);
@@ -615,7 +615,7 @@ begin
   FConnected := False;
 end;
 
-destructor TDatabaseConnection.Destroy;
+destructor TDatabaseConnection.Destroy;  
 begin
   Disconnect;
   FTransaction.Free;
@@ -623,7 +623,7 @@ begin
   inherited Destroy;
 end;
 
-function TDatabaseConnection.GetLibraryPath: string;
+function TDatabaseConnection.GetLibraryPath: string;  
 begin
   {$IFDEF WINDOWS}
     // Sous Windows, chercher libpq.dll
@@ -670,7 +670,7 @@ begin
   end;
 end;
 
-procedure TDatabaseConnection.Disconnect;
+procedure TDatabaseConnection.Disconnect;  
 begin
   if FConnected then
   begin
@@ -681,7 +681,7 @@ begin
   end;
 end;
 
-function TDatabaseConnection.IsConnected: Boolean;
+function TDatabaseConnection.IsConnected: Boolean;  
 begin
   Result := FConnected and FConnection.Connected;
 end;
@@ -749,7 +749,7 @@ uses
 
 {$R *.lfm}
 
-procedure TfrmMain.FormCreate(Sender: TObject);
+procedure TfrmMain.FormCreate(Sender: TObject);  
 begin
   // Initialiser la connexion
   FDatabase := TDatabaseConnection.Create;
@@ -767,12 +767,12 @@ begin
   end;
 end;
 
-procedure TfrmMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+procedure TfrmMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);  
 begin
   FDatabase.Free;
 end;
 
-procedure TfrmMain.mnuPatientNouveauClick(Sender: TObject);
+procedure TfrmMain.mnuPatientNouveauClick(Sender: TObject);  
 var
   frmPatient: TfrmPatient;
 begin
@@ -785,7 +785,7 @@ begin
   end;
 end;
 
-procedure TfrmMain.mnuPatientRechercheClick(Sender: TObject);
+procedure TfrmMain.mnuPatientRechercheClick(Sender: TObject);  
 var
   frmSearch: TfrmPatientSearch;
 begin
@@ -854,7 +854,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TfrmPatient.FormCreate(Sender: TObject);
+procedure TfrmPatient.FormCreate(Sender: TObject);  
 begin
   FPatient := TPatient.Create;
 
@@ -869,7 +869,7 @@ begin
     'AB+', 'AB-', 'O+', 'O-']);
 end;
 
-function TfrmPatient.ValiderFormulaire: Boolean;
+function TfrmPatient.ValiderFormulaire: Boolean;  
 begin
   Result := True;
 
@@ -904,7 +904,7 @@ begin
   end;
 end;
 
-procedure TfrmPatient.btnSauvegarderClick(Sender: TObject);
+procedure TfrmPatient.btnSauvegarderClick(Sender: TObject);  
 begin
   if not ValiderFormulaire then
     Exit;
@@ -938,7 +938,7 @@ begin
   end;
 end;
 
-procedure TfrmPatient.btnAnnulerClick(Sender: TObject);
+procedure TfrmPatient.btnAnnulerClick(Sender: TObject);  
 begin
   ModalResult := mrCancel;
 end;
@@ -985,7 +985,7 @@ uses UHospitalModel, UPatientForm;
 
 {$R *.lfm}
 
-procedure TfrmPatientSearch.FormCreate(Sender: TObject);
+procedure TfrmPatientSearch.FormCreate(Sender: TObject);  
 begin
   // Configuration de la grille
   grdResultats.ColCount := 7;
@@ -1001,7 +1001,7 @@ begin
   FResultats := TList.Create;
 end;
 
-procedure TfrmPatientSearch.btnRechercherClick(Sender: TObject);
+procedure TfrmPatientSearch.btnRechercherClick(Sender: TObject);  
 var
   DAO: TPatientDAO;
 begin
@@ -1020,7 +1020,7 @@ begin
   end;
 end;
 
-procedure TfrmPatientSearch.AfficherResultats;
+procedure TfrmPatientSearch.AfficherResultats;  
 var
   i: Integer;
   Patient: TPatient;
@@ -1104,51 +1104,51 @@ implementation
 
 { TUtilisateur }
 
-constructor TUtilisateur.Create;
+constructor TUtilisateur.Create;  
 begin
   inherited Create;
   FPermissions := TStringList.Create;
 end;
 
-destructor TUtilisateur.Destroy;
+destructor TUtilisateur.Destroy;  
 begin
   FPermissions.Free;
   inherited Destroy;
 end;
 
-function TUtilisateur.APermission(APermission: string): Boolean;
+function TUtilisateur.APermission(APermission: string): Boolean;  
 begin
   Result := FPermissions.IndexOf(APermission) >= 0;
 end;
 
 { TAuthenticationManager }
 
-constructor TAuthenticationManager.Create(ADatabase: TDatabaseConnection);
+constructor TAuthenticationManager.Create(ADatabase: TDatabaseConnection);  
 begin
   inherited Create;
   FDatabase := ADatabase;
   FUtilisateurActuel := nil;
 end;
 
-destructor TAuthenticationManager.Destroy;
+destructor TAuthenticationManager.Destroy;  
 begin
   if Assigned(FUtilisateurActuel) then
     FUtilisateurActuel.Free;
   inherited Destroy;
 end;
 
-function TAuthenticationManager.HashPassword(APassword: string): string;
+function TAuthenticationManager.HashPassword(APassword: string): string;  
 begin
   // Utiliser SHA256 en production, SHA1 ici pour simplicité
   Result := SHA1Print(SHA1String(APassword));
 end;
 
-function TAuthenticationManager.VerifyPassword(APassword, AHash: string): Boolean;
+function TAuthenticationManager.VerifyPassword(APassword, AHash: string): Boolean;  
 begin
   Result := HashPassword(APassword) = AHash;
 end;
 
-function TAuthenticationManager.Login(AUsername, APassword: string): Boolean;
+function TAuthenticationManager.Login(AUsername, APassword: string): Boolean;  
 var
   Query: TSQLQuery;
   PasswordHash: string;
@@ -1196,7 +1196,7 @@ begin
   end;
 end;
 
-procedure TAuthenticationManager.Logout;
+procedure TAuthenticationManager.Logout;  
 begin
   if Assigned(FUtilisateurActuel) then
   begin
@@ -1205,7 +1205,7 @@ begin
   end;
 end;
 
-function TAuthenticationManager.IsLoggedIn: Boolean;
+function TAuthenticationManager.IsLoggedIn: Boolean;  
 begin
   Result := Assigned(FUtilisateurActuel);
 end;
@@ -1248,7 +1248,7 @@ type
 
 implementation
 
-constructor TAuditManager.Create(ADatabase: TDatabaseConnection);
+constructor TAuditManager.Create(ADatabase: TDatabaseConnection);  
 begin
   inherited Create;
   FDatabase := ADatabase;
@@ -1290,7 +1290,7 @@ begin
   end;
 end;
 
-procedure TAuditManager.LogAccesPatient(AIdPatient: Integer);
+procedure TAuditManager.LogAccesPatient(AIdPatient: Integer);  
 begin
   LogAction('SELECT', 'patients', AIdPatient);
 end;
@@ -1330,24 +1330,24 @@ type
 
 implementation
 
-constructor TPermissionManager.Create(AUtilisateur: TUtilisateur);
+constructor TPermissionManager.Create(AUtilisateur: TUtilisateur);  
 begin
   inherited Create;
   FUtilisateur := AUtilisateur;
 end;
 
-function TPermissionManager.PeutCreerPatient: Boolean;
+function TPermissionManager.PeutCreerPatient: Boolean;  
 begin
   // Tous sauf laborantin peuvent créer des patients
   Result := FUtilisateur.Role in [urAdmin, urMedecin, urInfirmier, urSecretaire];
 end;
 
-function TPermissionManager.PeutModifierPatient: Boolean;
+function TPermissionManager.PeutModifierPatient: Boolean;  
 begin
   Result := FUtilisateur.Role in [urAdmin, urMedecin, urSecretaire];
 end;
 
-function TPermissionManager.PeutConsulterDossierMedical(AIdPatient: Integer): Boolean;
+function TPermissionManager.PeutConsulterDossierMedical(AIdPatient: Integer): Boolean;  
 begin
   // Les médecins et infirmiers peuvent consulter les dossiers
   Result := FUtilisateur.Role in [urAdmin, urMedecin, urInfirmier];
@@ -1355,18 +1355,18 @@ begin
   // TODO: Vérifier si le médecin est affecté à ce patient
 end;
 
-function TPermissionManager.PeutPrescrire: Boolean;
+function TPermissionManager.PeutPrescrire: Boolean;  
 begin
   // Seuls les médecins peuvent prescrire
   Result := FUtilisateur.Role in [urAdmin, urMedecin];
 end;
 
-function TPermissionManager.PeutAccederFacturation: Boolean;
+function TPermissionManager.PeutAccederFacturation: Boolean;  
 begin
   Result := FUtilisateur.Role in [urAdmin, urSecretaire];
 end;
 
-function TPermissionManager.PeutAccederAdministration: Boolean;
+function TPermissionManager.PeutAccederAdministration: Boolean;  
 begin
   Result := FUtilisateur.Role = urAdmin;
 end;
@@ -1441,14 +1441,14 @@ implementation
 
 { TPrescription }
 
-constructor TPrescription.Create;
+constructor TPrescription.Create;  
 begin
   inherited Create;
   FLignes := TList.Create;
   FDatePrescription := Now;
 end;
 
-destructor TPrescription.Destroy;
+destructor TPrescription.Destroy;  
 var
   i: Integer;
 begin
@@ -1458,12 +1458,12 @@ begin
   inherited Destroy;
 end;
 
-procedure TPrescription.AjouterLigne(ALigne: TLignePrescription);
+procedure TPrescription.AjouterLigne(ALigne: TLignePrescription);  
 begin
   FLignes.Add(ALigne);
 end;
 
-function TPrescription.VerifierInteractions: TStringList;
+function TPrescription.VerifierInteractions: TStringList;  
 var
   i, j: Integer;
 begin
@@ -1478,7 +1478,7 @@ begin
     end;
 end;
 
-function TPrescription.VerifierAllergies: TStringList;
+function TPrescription.VerifierAllergies: TStringList;  
 var
   i, j: Integer;
   Ligne: TLignePrescription;
@@ -1550,7 +1550,7 @@ type
 
 implementation
 
-constructor TPlanningManager.Create(ADatabase: TDatabaseConnection);
+constructor TPlanningManager.Create(ADatabase: TDatabaseConnection);  
 begin
   inherited Create;
   FDatabase := ADatabase;
@@ -1639,13 +1639,13 @@ implementation
 
 uses fpjson, jsonparser;
 
-constructor TRGPDManager.Create(ADatabase: TDatabaseConnection);
+constructor TRGPDManager.Create(ADatabase: TDatabaseConnection);  
 begin
   inherited Create;
   FDatabase := ADatabase;
 end;
 
-function TRGPDManager.ExporterDonneesPatient(AIdPatient: Integer): string;
+function TRGPDManager.ExporterDonneesPatient(AIdPatient: Integer): string;  
 var
   JSON: TJSONObject;
   Query: TSQLQuery;
@@ -1681,7 +1681,7 @@ begin
   end;
 end;
 
-function TRGPDManager.AnonymiserPatient(AIdPatient: Integer): Boolean;
+function TRGPDManager.AnonymiserPatient(AIdPatient: Integer): Boolean;  
 var
   Query: TSQLQuery;
 begin
@@ -1767,14 +1767,14 @@ implementation
 4. **Installateur** (Inno Setup) :
 ```
 [Setup]
-AppName=Système Gestion Hospitalière
-AppVersion=1.0
-DefaultDirName={pf}\SGHopital
+AppName=Système Gestion Hospitalière  
+AppVersion=1.0  
+DefaultDirName={pf}\SGHopital  
 DefaultGroupName=SGH
 
 [Files]
-Source: "SGHopital.exe"; DestDir: "{app}"
-Source: "libpq.dll"; DestDir: "{app}"
+Source: "SGHopital.exe"; DestDir: "{app}"  
+Source: "libpq.dll"; DestDir: "{app}"  
 Source: "config.ini"; DestDir: "{app}"; Flags: onlyifdoesntexist
 
 [Icons]
@@ -1802,16 +1802,16 @@ sudo apt install libpq5 libssl1.1 libgtk2.0-0
 Créer `/etc/systemd/system/sgh-hopital.service` :
 ```ini
 [Unit]
-Description=Système de Gestion Hospitalière
+Description=Système de Gestion Hospitalière  
 After=postgresql.service network.target
 
 [Service]
-Type=simple
-User=sgh
-Group=sgh
-WorkingDirectory=/opt/sgh-hopital
-ExecStart=/opt/sgh-hopital/SGHopital --server-mode
-Restart=always
+Type=simple  
+User=sgh  
+Group=sgh  
+WorkingDirectory=/opt/sgh-hopital  
+ExecStart=/opt/sgh-hopital/SGHopital --server-mode  
+Restart=always  
 RestartSec=10
 
 [Install]
@@ -1820,7 +1820,7 @@ WantedBy=multi-user.target
 
 Activer :
 ```bash
-sudo systemctl enable sgh-hopital
+sudo systemctl enable sgh-hopital  
 sudo systemctl start sgh-hopital
 ```
 
@@ -1841,13 +1841,13 @@ sgh-hopital_1.0-1/
 
 Fichier `control` :
 ```
-Package: sgh-hopital
-Version: 1.0-1
-Section: medical
-Priority: optional
-Architecture: amd64
-Depends: libpq5, libssl1.1, libgtk2.0-0
-Maintainer: Votre Nom <email@example.com>
+Package: sgh-hopital  
+Version: 1.0-1  
+Section: medical  
+Priority: optional  
+Architecture: amd64  
+Depends: libpq5, libssl1.1, libgtk2.0-0  
+Maintainer: Votre Nom <email@example.com>  
 Description: Système de Gestion Hospitalière
  Application complète de gestion d'établissement hospitalier
 ```
@@ -1865,7 +1865,7 @@ Pour un système utilisé par de nombreux utilisateurs simultanément :
 
 ```pascal
 // Utiliser des requêtes préparées
-procedure TPatientDAO.PrepareStatements;
+procedure TPatientDAO.PrepareStatements;  
 begin
   FQuerySelect.SQL.Text := 'SELECT * FROM patients WHERE id_patient = $1';
   FQuerySelect.Prepare;
@@ -2006,7 +2006,7 @@ type
 
 implementation
 
-procedure TPatientDAOTest.SetUp;
+procedure TPatientDAOTest.SetUp;  
 begin
   // Connexion base de test
   FDatabase := TDatabaseConnection.Create;
@@ -2014,13 +2014,13 @@ begin
   FDAO := TPatientDAO.Create(FDatabase);
 end;
 
-procedure TPatientDAOTest.TearDown;
+procedure TPatientDAOTest.TearDown;  
 begin
   FDAO.Free;
   FDatabase.Free;
 end;
 
-procedure TPatientDAOTest.TestInsertPatient;
+procedure TPatientDAOTest.TestInsertPatient;  
 var
   Patient: TPatient;
   Id: Integer;

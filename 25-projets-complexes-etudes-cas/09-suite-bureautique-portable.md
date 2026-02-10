@@ -117,7 +117,7 @@ type
     property CanRedo: Boolean read GetCanRedo;
   end;
 
-constructor TBaseDocument.Create;
+constructor TBaseDocument.Create;  
 begin
   inherited Create;
   FState := dsNew;
@@ -127,7 +127,7 @@ begin
   FAuthor := GetEnvironmentVariable('USERNAME');
 end;
 
-procedure TBaseDocument.SetModified(Value: Boolean);
+procedure TBaseDocument.SetModified(Value: Boolean);  
 begin
   if FModified <> Value then
   begin
@@ -140,7 +140,7 @@ begin
   end;
 end;
 
-function TBaseDocument.Close: Boolean;
+function TBaseDocument.Close: Boolean;  
 begin
   Result := True;
   if FModified then
@@ -188,7 +188,7 @@ type
     function GetRedoDescription: string;
   end;
 
-constructor TCommandManager.Create(AMaxLevels: Integer);
+constructor TCommandManager.Create(AMaxLevels: Integer);  
 begin
   inherited Create;
   FMaxUndoLevels := AMaxLevels;
@@ -196,7 +196,7 @@ begin
   FRedoStack := TStack<TCommand>.Create;
 end;
 
-destructor TCommandManager.Destroy;
+destructor TCommandManager.Destroy;  
 begin
   Clear;
   FUndoStack.Free;
@@ -204,7 +204,7 @@ begin
   inherited;
 end;
 
-procedure TCommandManager.ExecuteCommand(ACommand: TCommand);
+procedure TCommandManager.ExecuteCommand(ACommand: TCommand);  
 begin
   if ACommand.Execute then
   begin
@@ -225,7 +225,7 @@ begin
     ACommand.Free;
 end;
 
-procedure TCommandManager.Undo;
+procedure TCommandManager.Undo;  
 var
   Cmd: TCommand;
 begin
@@ -239,7 +239,7 @@ begin
   end;
 end;
 
-procedure TCommandManager.Redo;
+procedure TCommandManager.Redo;  
 var
   Cmd: TCommand;
 begin
@@ -253,12 +253,12 @@ begin
   end;
 end;
 
-function TCommandManager.CanUndo: Boolean;
+function TCommandManager.CanUndo: Boolean;  
 begin
   Result := FUndoStack.Count > 0;
 end;
 
-function TCommandManager.CanRedo: Boolean;
+function TCommandManager.CanRedo: Boolean;  
 begin
   Result := FRedoStack.Count > 0;
 end;
@@ -296,14 +296,14 @@ type
     procedure UpdateZoom(Zoom: Integer);
   end;
 
-constructor TOfficeToolbar.Create(AOwner: TComponent);
+constructor TOfficeToolbar.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   ShowCaptions := True;
   CreateStandardButtons;
 end;
 
-procedure TOfficeToolbar.CreateStandardButtons;
+procedure TOfficeToolbar.CreateStandardButtons;  
 var
   Btn: TToolButton;
 begin
@@ -407,7 +407,7 @@ type
     property Paragraphs: TObjectList<TParagraph> read FParagraphs;
   end;
 
-constructor TTextDocument.Create;
+constructor TTextDocument.Create;  
 begin
   inherited Create;
   FParagraphs := TObjectList<TParagraph>.Create(True);
@@ -422,14 +422,14 @@ begin
   FDefaultStyle.Color := clBlack;
 end;
 
-destructor TTextDocument.Destroy;
+destructor TTextDocument.Destroy;  
 begin
   FCommandManager.Free;
   FParagraphs.Free;
   inherited;
 end;
 
-function TTextDocument.AddParagraph(const AText: string): TParagraph;
+function TTextDocument.AddParagraph(const AText: string): TParagraph;  
 begin
   Result := TParagraph.Create;
   Result.Text := AText;
@@ -474,14 +474,14 @@ type
     property Document: TTextDocument read FDocument;
   end;
 
-constructor TTextEditor.Create(AOwner: TComponent);
+constructor TTextEditor.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FDocument := TTextDocument.Create;
   SetupUI;
 end;
 
-procedure TTextEditor.SetupUI;
+procedure TTextEditor.SetupUI;  
 begin
   Caption := 'Traitement de Texte - Sans titre';
   Width := 800;
@@ -512,7 +512,7 @@ begin
   UpdateUI;
 end;
 
-procedure TTextEditor.OnBoldClick(Sender: TObject);
+procedure TTextEditor.OnBoldClick(Sender: TObject);  
 begin
   if FEditor.SelLength > 0 then
   begin
@@ -525,7 +525,7 @@ begin
   end;
 end;
 
-procedure TTextEditor.OnSaveClick(Sender: TObject);
+procedure TTextEditor.OnSaveClick(Sender: TObject);  
 begin
   if FDocument.FileName = '' then
     OnSaveAsClick(Sender)
@@ -728,7 +728,7 @@ type
     property ActiveSheet: TWorksheet read FActiveSheet;
   end;
 
-constructor TWorksheet.Create(const AName: string);
+constructor TWorksheet.Create(const AName: string);  
 begin
   inherited Create;
   FName := AName;
@@ -737,12 +737,12 @@ begin
   FColumnCount := 26;
 end;
 
-function TWorksheet.GetCellKey(Row, Col: Integer): string;
+function TWorksheet.GetCellKey(Row, Col: Integer): string;  
 begin
   Result := Format('%d:%d', [Row, Col]);
 end;
 
-function TWorksheet.GetCell(Row, Col: Integer): TCell;
+function TWorksheet.GetCell(Row, Col: Integer): TCell;  
 var
   Key: string;
 begin
@@ -754,7 +754,7 @@ begin
   end;
 end;
 
-procedure TWorksheet.SetCellValue(Row, Col: Integer; const Value: Variant);
+procedure TWorksheet.SetCellValue(Row, Col: Integer; const Value: Variant);  
 var
   Cell: TCell;
 begin
@@ -781,13 +781,13 @@ type
     function Evaluate(const Formula: string): Variant;
   end;
 
-constructor TFormulaEngine.Create(AWorksheet: TWorksheet);
+constructor TFormulaEngine.Create(AWorksheet: TWorksheet);  
 begin
   inherited Create;
   FWorksheet := AWorksheet;
 end;
 
-function TFormulaEngine.Evaluate(const Formula: string): Variant;
+function TFormulaEngine.Evaluate(const Formula: string): Variant;  
 var
   AST: TASTNode;
 begin
@@ -810,7 +810,7 @@ begin
   end;
 end;
 
-function TFormulaEngine.GetCellReference(const Ref: string): Variant;
+function TFormulaEngine.GetCellReference(const Ref: string): Variant;  
 var
   Col: string;
   Row: Integer;
@@ -855,7 +855,7 @@ type
     procedure SetWorksheet(AWorksheet: TWorksheet);
   end;
 
-constructor TSpreadsheetGrid.Create(AOwner: TComponent);
+constructor TSpreadsheetGrid.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -879,7 +879,7 @@ begin
   OnSelectCell := OnCellSelect;
 end;
 
-procedure TSpreadsheetGrid.OnCellSelect(Sender: TObject; aCol, aRow: Integer);
+procedure TSpreadsheetGrid.OnCellSelect(Sender: TObject; aCol, aRow: Integer);  
 var
   Cell: TCell;
 begin
@@ -977,7 +977,7 @@ type
     property CurrentSlide: Integer read FCurrentSlide write FCurrentSlide;
   end;
 
-constructor TSlide.Create;
+constructor TSlide.Create;  
 begin
   inherited Create;
   FObjects := TObjectList<TSlideObject>.Create(True);
@@ -985,7 +985,7 @@ begin
   FTransition := 'Aucune';
 end;
 
-procedure TSlide.Draw(Canvas: TCanvas);
+procedure TSlide.Draw(Canvas: TCanvas);  
 var
   Obj: TSlideObject;
 begin
@@ -1001,7 +1001,7 @@ begin
   end;
 end;
 
-procedure TTextBox.Draw(Canvas: TCanvas);
+procedure TTextBox.Draw(Canvas: TCanvas);  
 var
   R: TRect;
 begin
@@ -1012,7 +1012,7 @@ begin
   Canvas.TextRect(R, FLeft + 5, FTop + 5, FText);
 end;
 
-procedure TImageBox.Draw(Canvas: TCanvas);
+procedure TImageBox.Draw(Canvas: TCanvas);  
 var
   R: TRect;
 begin
@@ -1056,14 +1056,14 @@ type
     procedure StartPresentation;
   end;
 
-constructor TPresentationEditor.Create(AOwner: TComponent);
+constructor TPresentationEditor.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FDocument := TPresentationDocument.Create;
   SetupUI;
 end;
 
-procedure TPresentationEditor.SetupUI;
+procedure TPresentationEditor.SetupUI;  
 begin
   Caption := 'Éditeur de Présentation';
   Width := 1024;
@@ -1098,7 +1098,7 @@ begin
   FToolPanel.Width := 200;
 end;
 
-procedure TPresentationEditor.OnCanvasPaint(Sender: TObject);
+procedure TPresentationEditor.OnCanvasPaint(Sender: TObject);  
 var
   CurrentSlide: TSlide;
 begin
@@ -1110,7 +1110,7 @@ begin
   end;
 end;
 
-procedure TPresentationEditor.StartPresentation;
+procedure TPresentationEditor.StartPresentation;  
 var
   PresentationForm: TForm;
   PaintBox: TPaintBox;
@@ -1236,7 +1236,7 @@ type
     property Tables: TObjectList<TTableDef> read FTables;
   end;
 
-constructor TTableDef.Create(const AName: string);
+constructor TTableDef.Create(const AName: string);  
 begin
   inherited Create;
   FName := AName;
@@ -1275,7 +1275,7 @@ type
     destructor Destroy; override;
   end;
 
-procedure TDatabaseManager.SetupUI;
+procedure TDatabaseManager.SetupUI;  
 var
   Splitter: TSplitter;
 begin
@@ -1470,7 +1470,7 @@ type
     property Plugins: TList<IOfficePlugin> read FPlugins;
   end;
 
-constructor TPluginManager.Create;
+constructor TPluginManager.Create;  
 begin
   inherited Create;
   FPlugins := TList<IOfficePlugin>.Create;
@@ -1483,7 +1483,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TPluginManager.LoadAllPlugins;
+procedure TPluginManager.LoadAllPlugins;  
 var
   SearchRec: TSearchRec;
   PluginFile: string;
@@ -1530,7 +1530,7 @@ type
     procedure AddToDictionary(const Word: string);
   end;
 
-constructor TSpellCheckerPlugin.Create;
+constructor TSpellCheckerPlugin.Create;  
 begin
   inherited Create;
   FDictionary := TStringList.Create;
@@ -1538,7 +1538,7 @@ begin
   LoadDictionary('fr-FR');
 end;
 
-procedure TSpellCheckerPlugin.LoadDictionary(const Language: string);
+procedure TSpellCheckerPlugin.LoadDictionary(const Language: string);  
 var
   DictFile: string;
 begin
@@ -1553,12 +1553,12 @@ begin
     FDictionary.LoadFromFile(DictFile);
 end;
 
-function TSpellCheckerPlugin.CheckWord(const Word: string): Boolean;
+function TSpellCheckerPlugin.CheckWord(const Word: string): Boolean;  
 begin
   Result := FDictionary.IndexOf(LowerCase(Word)) >= 0;
 end;
 
-function TSpellCheckerPlugin.GetSuggestions(const Word: string): TStringList;
+function TSpellCheckerPlugin.GetSuggestions(const Word: string): TStringList;  
 var
   i: Integer;
   DictWord: string;
@@ -1606,13 +1606,13 @@ type
     procedure Publish(const Msg: TOfficeMessage);
   end;
 
-constructor TMessageBus.Create;
+constructor TMessageBus.Create;  
 begin
   inherited Create;
   FSubscribers := TDictionary<string, TList<TNotifyEvent>>.Create;
 end;
 
-procedure TMessageBus.Publish(const Msg: TOfficeMessage);
+procedure TMessageBus.Publish(const Msg: TOfficeMessage);  
 var
   Handlers: TList<TNotifyEvent>;
   Handler: TNotifyEvent;
@@ -1652,14 +1652,14 @@ type
     function GetTable: TStringGrid;
   end;
 
-class function TOfficeClipboard.Instance: TOfficeClipboard;
+class function TOfficeClipboard.Instance: TOfficeClipboard;  
 begin
   if not Assigned(FInstance) then
     FInstance := TOfficeClipboard.Create;
   Result := FInstance;
 end;
 
-procedure TOfficeClipboard.SetText(const Text: string);
+procedure TOfficeClipboard.SetText(const Text: string);  
 var
   Stream: TStringStream;
 begin
@@ -1671,7 +1671,7 @@ begin
   end;
 end;
 
-function TOfficeClipboard.GetText: string;
+function TOfficeClipboard.GetText: string;  
 var
   Stream: TStream;
   StringStream: TStringStream;
@@ -1721,7 +1721,7 @@ type
     procedure SetBoolean(const Key: string; Value: Boolean);
   end;
 
-constructor TOfficeSettings.Create;
+constructor TOfficeSettings.Create;  
 begin
   inherited Create;
   FSettings := TJSONObject.Create;
@@ -1736,7 +1736,7 @@ begin
   Load;
 end;
 
-procedure TOfficeSettings.Load;
+procedure TOfficeSettings.Load;  
 var
   JSONStr: string;
   JSONParser: TJSONParser;
@@ -1766,7 +1766,7 @@ begin
   end;
 end;
 
-procedure TOfficeSettings.Save;
+procedure TOfficeSettings.Save;  
 var
   JSONStr: string;
   Dir: string;
@@ -1806,7 +1806,7 @@ type
     class function NormalizePath(const Path: string): string;
   end;
 
-class function TPathManager.GetDocumentsPath: string;
+class function TPathManager.GetDocumentsPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('USERPROFILE') + '\Documents\';
@@ -1816,7 +1816,7 @@ begin
   {$ENDIF}
 end;
 
-class function TPathManager.GetUserDataPath: string;
+class function TPathManager.GetUserDataPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('APPDATA') + '\OfficeSuite\';
@@ -1829,7 +1829,7 @@ begin
     ForceDirectories(Result);
 end;
 
-class function TPathManager.NormalizePath(const Path: string): string;
+class function TPathManager.NormalizePath(const Path: string): string;  
 begin
   Result := Path;
   {$IFDEF WINDOWS}
@@ -1862,7 +1862,7 @@ type
     property CurrentTheme: string read FCurrentTheme;
   end;
 
-procedure TThemeManager.ApplyTheme(const ThemeName: string);
+procedure TThemeManager.ApplyTheme(const ThemeName: string);  
 var
   Theme: TTheme;
   i: Integer;
@@ -1877,7 +1877,7 @@ begin
   end;
 end;
 
-procedure TThemeManager.ApplyThemeToForm(Form: TForm; Theme: TTheme);
+procedure TThemeManager.ApplyThemeToForm(Form: TForm; Theme: TTheme);  
 var
   i: Integer;
   Component: TComponent;
@@ -1925,7 +1925,7 @@ type
     procedure BroadcastChange(const Change: TDocumentChange);
   end;
 
-procedure TCollaborationClient.BroadcastChange(const Change: TDocumentChange);
+procedure TCollaborationClient.BroadcastChange(const Change: TDocumentChange);  
 var
   JSONMsg: TJSONObject;
 begin
@@ -2013,14 +2013,14 @@ type
     property IndexPath: string read FIndexPath write FIndexPath;
   end;
 
-constructor TGlobalSearch.Create;
+constructor TGlobalSearch.Create;  
 begin
   inherited Create;
   FIndex := TDictionary<string, TList<TSearchResult>>.Create;
   FIndexPath := TPathManager.GetUserDataPath + 'search.idx';
 end;
 
-destructor TGlobalSearch.Destroy;
+destructor TGlobalSearch.Destroy;  
 var
   List: TList<TSearchResult>;
 begin
@@ -2030,7 +2030,7 @@ begin
   inherited;
 end;
 
-procedure TGlobalSearch.IndexDocument(const FileName: string);
+procedure TGlobalSearch.IndexDocument(const FileName: string);  
 var
   Content: TStringList;
   Words: TStringList;
@@ -2077,7 +2077,7 @@ begin
   end;
 end;
 
-function TGlobalSearch.Search(const Query: string): TArray<TSearchResult>;
+function TGlobalSearch.Search(const Query: string): TArray<TSearchResult>;  
 var
   Words: TStringList;
   Word: string;
@@ -2194,14 +2194,14 @@ type
     property Recording: Boolean read FRecording;
   end;
 
-constructor TMacro.Create(const AName: string);
+constructor TMacro.Create(const AName: string);  
 begin
   inherited Create;
   FName := AName;
   FActions := TObjectList<TMacroAction>.Create(True);
 end;
 
-procedure TMacro.Execute;
+procedure TMacro.Execute;  
 var
   Action: TMacroAction;
 begin
@@ -2217,7 +2217,7 @@ begin
   end;
 end;
 
-procedure TMacro.SaveToFile(const FileName: string);
+procedure TMacro.SaveToFile(const FileName: string);  
 var
   JSONObj: TJSONObject;
   JSONArray: TJSONArray;
@@ -2280,14 +2280,14 @@ type
     procedure Execute; override;
   end;
 
-constructor TInsertTextAction.Create(const AText: string);
+constructor TInsertTextAction.Create(const AText: string);  
 begin
   inherited Create('InsertText');
   FText := AText;
   FParameters.Add('text', FText);
 end;
 
-procedure TInsertTextAction.Execute;
+procedure TInsertTextAction.Execute;  
 var
   ActiveEditor: TTextEditor;
 begin
@@ -2342,7 +2342,7 @@ type
     property Templates: TObjectList<TDocumentTemplate> read FTemplates;
   end;
 
-constructor TTemplateManager.Create;
+constructor TTemplateManager.Create;  
 begin
   inherited Create;
   FTemplates := TObjectList<TDocumentTemplate>.Create(True);
@@ -2354,7 +2354,7 @@ begin
   LoadTemplates;
 end;
 
-procedure TTemplateManager.LoadTemplates;
+procedure TTemplateManager.LoadTemplates;  
 var
   SearchRec: TSearchRec;
   Template: TDocumentTemplate;
@@ -2420,14 +2420,14 @@ type
     class function ShowDialog(out Template: TDocumentTemplate): Boolean;
   end;
 
-constructor TTemplateDialog.Create(AOwner: TComponent);
+constructor TTemplateDialog.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   SetupUI;
   PopulateTemplates;
 end;
 
-procedure TTemplateDialog.SetupUI;
+procedure TTemplateDialog.SetupUI;  
 var
   Panel: TPanel;
   ButtonPanel: TPanel;
@@ -2543,7 +2543,7 @@ type
     property Settings: TPrintSettings read FSettings write FSettings;
   end;
 
-constructor TPrintManager.Create;
+constructor TPrintManager.Create;  
 begin
   inherited Create;
   FPrinterSetupDialog := TPrinterSetupDialog.Create(nil);
@@ -2551,7 +2551,7 @@ begin
   InitializeDefaults;
 end;
 
-procedure TPrintManager.InitializeDefaults;
+procedure TPrintManager.InitializeDefaults;  
 begin
   FSettings.PageSize := 'A4';
   FSettings.Orientation := 'Portrait';
@@ -2564,7 +2564,7 @@ begin
   FSettings.Copies := 1;
 end;
 
-procedure TPrintManager.PrintDocument(Document: TBaseDocument);
+procedure TPrintManager.PrintDocument(Document: TBaseDocument);  
 var
   Printer: TPrinter;
   Page: Integer;
@@ -2592,7 +2592,7 @@ begin
   end;
 end;
 
-procedure TPrintManager.PrintPreview(Document: TBaseDocument);
+procedure TPrintManager.PrintPreview(Document: TBaseDocument);  
 var
   PreviewForm: TForm;
   ScrollBox: TScrollBox;
@@ -2669,18 +2669,18 @@ type
     function Export(Document: TBaseDocument; const FileName: string): Boolean;
   end;
 
-function TDOCXHandler.GetFormatName: string;
+function TDOCXHandler.GetFormatName: string;  
 begin
   Result := 'Microsoft Word Document';
 end;
 
-function TDOCXHandler.GetExtensions: TStringDynArray;
+function TDOCXHandler.GetExtensions: TStringDynArray;  
 begin
   SetLength(Result, 1);
   Result[0] := '.docx';
 end;
 
-function TDOCXHandler.Import(const FileName: string): TBaseDocument;
+function TDOCXHandler.Import(const FileName: string): TBaseDocument;  
 var
   Zip: TUnZipper;
   XMLDoc: TXMLDocument;
@@ -2802,28 +2802,28 @@ end;
 
 ```pascal
 [Setup]
-AppName=Suite Bureautique
-AppVersion=1.0
-DefaultDirName={pf}\OfficeSuite
-DefaultGroupName=Suite Bureautique
-OutputDir=.\Output
+AppName=Suite Bureautique  
+AppVersion=1.0  
+DefaultDirName={pf}\OfficeSuite  
+DefaultGroupName=Suite Bureautique  
+OutputDir=.\Output  
 OutputBaseFilename=OfficeSuiteSetup
 
 [Files]
-Source: "bin\Windows\*"; DestDir: "{app}"; Flags: recursesubdirs
-Source: "templates\*"; DestDir: "{app}\templates"; Flags: recursesubdirs
+Source: "bin\Windows\*"; DestDir: "{app}"; Flags: recursesubdirs  
+Source: "templates\*"; DestDir: "{app}\templates"; Flags: recursesubdirs  
 Source: "plugins\*"; DestDir: "{app}\plugins"; Flags: recursesubdirs
 
 [Icons]
-Name: "{group}\Traitement de Texte"; Filename: "{app}\texteditor.exe"
-Name: "{group}\Tableur"; Filename: "{app}\spreadsheet.exe"
-Name: "{group}\Présentation"; Filename: "{app}\presentation.exe"
+Name: "{group}\Traitement de Texte"; Filename: "{app}\texteditor.exe"  
+Name: "{group}\Tableur"; Filename: "{app}\spreadsheet.exe"  
+Name: "{group}\Présentation"; Filename: "{app}\presentation.exe"  
 Name: "{group}\Base de Données"; Filename: "{app}\database.exe"
 
 [Registry]
-Root: HKCR; Subkey: ".odt"; ValueType: string; ValueData: "OfficeSuite.Document"
-Root: HKCR; Subkey: "OfficeSuite.Document"; ValueType: string; ValueData: "Document OfficeSuite"
-Root: HKCR; Subkey: "OfficeSuite.Document\DefaultIcon"; ValueType: string; ValueData: "{app}\texteditor.exe,0"
+Root: HKCR; Subkey: ".odt"; ValueType: string; ValueData: "OfficeSuite.Document"  
+Root: HKCR; Subkey: "OfficeSuite.Document"; ValueType: string; ValueData: "Document OfficeSuite"  
+Root: HKCR; Subkey: "OfficeSuite.Document\DefaultIcon"; ValueType: string; ValueData: "{app}\texteditor.exe,0"  
 Root: HKCR; Subkey: "OfficeSuite.Document\shell\open\command"; ValueType: string; ValueData: """{app}\texteditor.exe"" ""%1"""
 ```
 
@@ -2833,46 +2833,46 @@ Root: HKCR; Subkey: "OfficeSuite.Document\shell\open\command"; ValueType: string
 #!/bin/bash
 # install.sh - Script d'installation pour Ubuntu
 
-INSTALL_DIR="/opt/officesuite"
-BIN_DIR="/usr/local/bin"
-DESKTOP_DIR="/usr/share/applications"
+INSTALL_DIR="/opt/officesuite"  
+BIN_DIR="/usr/local/bin"  
+DESKTOP_DIR="/usr/share/applications"  
 ICON_DIR="/usr/share/icons/hicolor/256x256/apps"
 
 echo "Installation de la Suite Bureautique..."
 
 # Créer les répertoires
-sudo mkdir -p "$INSTALL_DIR"
+sudo mkdir -p "$INSTALL_DIR"  
 sudo mkdir -p "$ICON_DIR"
 
 # Copier les fichiers
-sudo cp -r bin/Linux/* "$INSTALL_DIR/"
-sudo cp -r templates "$INSTALL_DIR/"
-sudo cp -r plugins "$INSTALL_DIR/"
+sudo cp -r bin/Linux/* "$INSTALL_DIR/"  
+sudo cp -r templates "$INSTALL_DIR/"  
+sudo cp -r plugins "$INSTALL_DIR/"  
 sudo cp icons/* "$ICON_DIR/"
 
 # Créer des liens symboliques
-sudo ln -sf "$INSTALL_DIR/texteditor" "$BIN_DIR/officesuite-text"
-sudo ln -sf "$INSTALL_DIR/spreadsheet" "$BIN_DIR/officesuite-calc"
-sudo ln -sf "$INSTALL_DIR/presentation" "$BIN_DIR/officesuite-present"
+sudo ln -sf "$INSTALL_DIR/texteditor" "$BIN_DIR/officesuite-text"  
+sudo ln -sf "$INSTALL_DIR/spreadsheet" "$BIN_DIR/officesuite-calc"  
+sudo ln -sf "$INSTALL_DIR/presentation" "$BIN_DIR/officesuite-present"  
 sudo ln -sf "$INSTALL_DIR/database" "$BIN_DIR/officesuite-db"
 
 # Créer les entrées de menu
 cat > /tmp/texteditor.desktop << EOF
 [Desktop Entry]
-Name=Traitement de Texte
-Comment=Éditeur de documents texte
-Exec=officesuite-text %F
-Icon=officesuite-text
-Terminal=false
-Type=Application
-Categories=Office;WordProcessor;
-MimeType=application/vnd.oasis.opendocument.text;application/msword;
+Name=Traitement de Texte  
+Comment=Éditeur de documents texte  
+Exec=officesuite-text %F  
+Icon=officesuite-text  
+Terminal=false  
+Type=Application  
+Categories=Office;WordProcessor;  
+MimeType=application/vnd.oasis.opendocument.text;application/msword;  
 EOF
 
 sudo mv /tmp/texteditor.desktop "$DESKTOP_DIR/"
 
 # Mettre à jour la base de données MIME
-sudo update-desktop-database
+sudo update-desktop-database  
 sudo update-mime-database /usr/share/mime
 
 echo "Installation terminée!"
@@ -2882,29 +2882,29 @@ echo "Installation terminée!"
 
 ```bash
 # Créer la structure du package
-mkdir -p officesuite_1.0-1/DEBIAN
-mkdir -p officesuite_1.0-1/opt/officesuite
-mkdir -p officesuite_1.0-1/usr/share/applications
+mkdir -p officesuite_1.0-1/DEBIAN  
+mkdir -p officesuite_1.0-1/opt/officesuite  
+mkdir -p officesuite_1.0-1/usr/share/applications  
 mkdir -p officesuite_1.0-1/usr/share/icons
 
 # Créer le fichier control
-cat > officesuite_1.0-1/DEBIAN/control << EOF
-Package: officesuite
-Version: 1.0-1
-Section: office
-Priority: optional
-Architecture: amd64
-Depends: libgtk-3-0, libsqlite3-0
-Maintainer: Votre Nom <email@example.com>
+cat > officesuite_1.0-1/DEBIAN/control << EOF  
+Package: officesuite  
+Version: 1.0-1  
+Section: office  
+Priority: optional  
+Architecture: amd64  
+Depends: libgtk-3-0, libsqlite3-0  
+Maintainer: Votre Nom <email@example.com>  
 Description: Suite bureautique complète
  Suite bureautique incluant traitement de texte,
  tableur, présentation et base de données.
 EOF
 
 # Copier les fichiers
-cp -r bin/Linux/* officesuite_1.0-1/opt/officesuite/
-cp -r templates officesuite_1.0-1/opt/officesuite/
-cp *.desktop officesuite_1.0-1/usr/share/applications/
+cp -r bin/Linux/* officesuite_1.0-1/opt/officesuite/  
+cp -r templates officesuite_1.0-1/opt/officesuite/  
+cp *.desktop officesuite_1.0-1/usr/share/applications/  
 cp icons/* officesuite_1.0-1/usr/share/icons/
 
 # Créer le package
@@ -2943,14 +2943,14 @@ type
     property CurrentVersion: string read FCurrentVersion;
   end;
 
-constructor TUpdateChecker.Create(const AUpdateURL: string);
+constructor TUpdateChecker.Create(const AUpdateURL: string);  
 begin
   inherited Create;
   FUpdateURL := AUpdateURL;
   FCurrentVersion := GetCurrentVersion;
 end;
 
-function TUpdateChecker.CheckForUpdates: Boolean;
+function TUpdateChecker.CheckForUpdates: Boolean;  
 var
   HTTP: TFPHTTPClient;
   Response: string;
@@ -2982,7 +2982,7 @@ begin
   end;
 end;
 
-function TUpdateChecker.GetUpdateInfo: TUpdateInfo;
+function TUpdateChecker.GetUpdateInfo: TUpdateInfo;  
 var
   HTTP: TFPHTTPClient;
   Response: string;
@@ -3012,7 +3012,7 @@ begin
   end;
 end;
 
-procedure TUpdateChecker.DownloadUpdate(const Info: TUpdateInfo);
+procedure TUpdateChecker.DownloadUpdate(const Info: TUpdateInfo);  
 var
   HTTP: TFPHTTPClient;
   DownloadStream: TFileStream;
@@ -3127,7 +3127,7 @@ begin
   {$ENDIF}
 end;
 
-function TUpdateChecker.CompareVersions(V1, V2: string): Integer;
+function TUpdateChecker.CompareVersions(V1, V2: string): Integer;  
 var
   Parts1, Parts2: TStringList;
   i, Num1, Num2: Integer;
@@ -3199,7 +3199,7 @@ begin
   SetupUI;
 end;
 
-procedure TUpdateDialog.SetupUI;
+procedure TUpdateDialog.SetupUI;  
 var
   TitleLabel: TLabel;
   VersionLabel: TLabel;
@@ -3302,17 +3302,17 @@ begin
   FSkipBtn.Enabled := not FUpdateInfo.Critical;
 end;
 
-procedure TUpdateDialog.OnUpdateClick(Sender: TObject);
+procedure TUpdateDialog.OnUpdateClick(Sender: TObject);  
 begin
   ModalResult := mrYes;
 end;
 
-procedure TUpdateDialog.OnLaterClick(Sender: TObject);
+procedure TUpdateDialog.OnLaterClick(Sender: TObject);  
 begin
   ModalResult := mrNo;
 end;
 
-procedure TUpdateDialog.OnSkipClick(Sender: TObject);
+procedure TUpdateDialog.OnSkipClick(Sender: TObject);  
 begin
   ModalResult := mrIgnore;
 end;
@@ -3372,7 +3372,7 @@ type
     property License: TLicenseInfo read FLicense;
   end;
 
-constructor TLicenseManager.Create;
+constructor TLicenseManager.Create;  
 begin
   inherited Create;
 
@@ -3387,7 +3387,7 @@ begin
   LoadLicense;
 end;
 
-function TLicenseManager.GenerateMachineID: string;
+function TLicenseManager.GenerateMachineID: string;  
 var
   {$IFDEF WINDOWS}
   VolumeSerialNumber: DWORD;
@@ -3426,7 +3426,7 @@ begin
   {$ENDIF}
 end;
 
-function TLicenseManager.ValidateLicenseKey(const Key: string): Boolean;
+function TLicenseManager.ValidateLicenseKey(const Key: string): Boolean;  
 var
   Parts: TStringList;
   CheckSum: Integer;
@@ -3533,14 +3533,14 @@ begin
   end;
 end;
 
-function TLicenseManager.IsLicenseValid: Boolean;
+function TLicenseManager.IsLicenseValid: Boolean;  
 begin
   Result := FLicense.Activated and
             (FLicense.MachineID = GenerateMachineID) and
             ((FLicense.LicenseType = ltTrial) or (FLicense.ExpiryDate > Now));
 end;
 
-function TLicenseManager.GetDaysRemaining: Integer;
+function TLicenseManager.GetDaysRemaining: Integer;  
 begin
   if FLicense.LicenseType = ltTrial then
     Result := DaysBetween(Now, FLicense.ExpiryDate)
@@ -3570,7 +3570,7 @@ type
     class function ShowDialog(out LicenseManager: TLicenseManager): Boolean;
   end;
 
-procedure TActivationDialog.SetupUI;
+procedure TActivationDialog.SetupUI;  
 var
   Panel: TPanel;
   Label1, Label2, Label3: TLabel;
@@ -3661,7 +3661,7 @@ begin
   FTrialBtn.OnClick := OnTrialClick;
 end;
 
-procedure TActivationDialog.OnActivateClick(Sender: TObject);
+procedure TActivationDialog.OnActivateClick(Sender: TObject);  
 var
   LicMgr: TLicenseManager;
 begin
@@ -3693,7 +3693,7 @@ begin
   end;
 end;
 
-procedure TActivationDialog.OnTrialClick(Sender: TObject);
+procedure TActivationDialog.OnTrialClick(Sender: TObject);  
 var
   LicMgr: TLicenseManager;
 begin
@@ -3748,7 +3748,7 @@ type
     property Anonymous: Boolean read FAnonymous write FAnonymous;
   end;
 
-constructor TTelemetryManager.Create;
+constructor TTelemetryManager.Create;  
 begin
   inherited Create;
   FEvents := TList<TTelemetryEvent>.Create;
@@ -3781,7 +3781,7 @@ begin
     SendBatch;
 end;
 
-procedure TTelemetryManager.TrackFeatureUsage(const Feature: string);
+procedure TTelemetryManager.TrackFeatureUsage(const Feature: string);  
 var
   Data: TJSONObject;
 begin
@@ -3794,7 +3794,7 @@ begin
   end;
 end;
 
-procedure TTelemetryManager.SendBatch;
+procedure TTelemetryManager.SendBatch;  
 var
   HTTP: TFPHTTPClient;
   JSONArray: TJSONArray;
@@ -3861,13 +3861,13 @@ type
     property Enabled: Boolean read FEnabled write FEnabled;
   end;
 
-constructor TCrashReporter.Create;
+constructor TCrashReporter.Create;  
 begin
   inherited Create;
   FEnabled := TOfficeSettings.Instance.GetBoolean('crash_reporting', True);
 end;
 
-function TCrashReporter.GatherSystemInfo: TJSONObject;
+function TCrashReporter.GatherSystemInfo: TJSONObject;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -3910,7 +3910,7 @@ begin
   Result.Add('memory_available', GetAvailableMemory);
 end;
 
-function TCrashReporter.GatherApplicationState: TJSONObject;
+function TCrashReporter.GatherApplicationState: TJSONObject;  
 var
   i: Integer;
   FormList: TJSONArray;
@@ -3934,7 +3934,7 @@ begin
   Result.Add('last_action', GetLastUserAction);
 end;
 
-procedure TCrashReporter.ReportException(E: Exception; const Context: string);
+procedure TCrashReporter.ReportException(E: Exception; const Context: string);  
 var
   HTTP: TFPHTTPClient;
   Report: TJSONObject;
@@ -3991,7 +3991,7 @@ begin
   end;
 end;
 
-procedure SaveCrashReportLocally(Report: TJSONObject);
+procedure SaveCrashReportLocally(Report: TJSONObject);  
 var
   CrashDir: string;
   FileName: string;
@@ -4038,7 +4038,7 @@ type
     property CurrentLanguage: string read FCurrentLanguage;
   end;
 
-constructor TLanguageManager.Create;
+constructor TLanguageManager.Create;  
 var
   SearchRec: TSearchRec;
   LangDir: string;
@@ -4065,7 +4065,7 @@ begin
   LoadLanguage(FCurrentLanguage);
 end;
 
-destructor TLanguageManager.Destroy;
+destructor TLanguageManager.Destroy;  
 var
   Dict: TDictionary<string, string>;
 begin
@@ -4076,7 +4076,7 @@ begin
   inherited;
 end;
 
-procedure TLanguageManager.LoadLanguage(const LanguageCode: string);
+procedure TLanguageManager.LoadLanguage(const LanguageCode: string);  
 var
   FileName: string;
 begin
@@ -4089,7 +4089,7 @@ begin
     ShowMessage('Fichier de langue non trouvé : ' + LanguageCode);
 end;
 
-procedure TLanguageManager.LoadTranslationFile(const FileName: string);
+procedure TLanguageManager.LoadTranslationFile(const FileName: string);  
 var
   JSONStr: string;
   JSONData: TJSONObject;
@@ -4124,7 +4124,7 @@ begin
   end;
 end;
 
-function TLanguageManager.Translate(const Key: string): string;
+function TLanguageManager.Translate(const Key: string): string;  
 var
   Dict: TDictionary<string, string>;
 begin
@@ -4143,7 +4143,7 @@ begin
   Result := Format(Translate(Key), Args);
 end;
 
-procedure TLanguageManager.SetLanguage(const LanguageCode: string);
+procedure TLanguageManager.SetLanguage(const LanguageCode: string);  
 begin
   if FAvailableLanguages.IndexOf(LanguageCode) >= 0 then
   begin
@@ -4231,7 +4231,7 @@ end;
 ### Utilisation dans l'Interface
 
 ```pascal
-procedure TMainForm.CreateMenu;
+procedure TMainForm.CreateMenu;  
 var
   Lang: TLanguageManager;
 begin
@@ -4274,7 +4274,7 @@ type
     procedure SearchHelp(const Query: string);
   end;
 
-constructor THelpSystem.Create;
+constructor THelpSystem.Create;  
 begin
   inherited Create;
 
@@ -4286,7 +4286,7 @@ begin
   {$ENDIF}
 end;
 
-procedure THelpSystem.ShowHelp(const Context: string);
+procedure THelpSystem.ShowHelp(const Context: string);  
 begin
   if not Assigned(FHelpBrowser) then
   begin
@@ -4316,7 +4316,7 @@ begin
   FHelpBrowser.Show;
 end;
 
-procedure THelpSystem.ShowContextHelp(Control: TControl);
+procedure THelpSystem.ShowContextHelp(Control: TControl);  
 var
   HelpContext: string;
 begin
@@ -4352,7 +4352,7 @@ type
     class function ShowWizard: Boolean;
   end;
 
-constructor TWelcomeWizard.Create(AOwner: TComponent);
+constructor TWelcomeWizard.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -4399,7 +4399,7 @@ begin
   FFinishBtn.Visible := False;
 end;
 
-procedure TWelcomeWizard.SetupPages;
+procedure TWelcomeWizard.SetupPages;  
 var
   Page: TTabSheet;
   Panel: TPanel;
@@ -4490,7 +4490,7 @@ begin
     CheckListBox.Checked[i] := True;
 end;
 
-procedure TWelcomeWizard.OnNextClick(Sender: TObject);
+procedure TWelcomeWizard.OnNextClick(Sender: TObject);  
 begin
   if FCurrentPage < FPageControl.PageCount - 1 then
   begin
@@ -4507,7 +4507,7 @@ begin
   end;
 end;
 
-procedure TWelcomeWizard.OnBackClick(Sender: TObject);
+procedure TWelcomeWizard.OnBackClick(Sender: TObject);  
 begin
   if FCurrentPage > 0 then
   begin
@@ -4522,7 +4522,7 @@ begin
   end;
 end;
 
-procedure TWelcomeWizard.OnFinishClick(Sender: TObject);
+procedure TWelcomeWizard.OnFinishClick(Sender: TObject);  
 begin
   // Sauvegarder les préférences
   TOfficeSettings.Instance.SetBoolean('first_run', False);
@@ -4531,7 +4531,7 @@ begin
   ModalResult := mrOK;
 end;
 
-class function TWelcomeWizard.ShowWizard: Boolean;
+class function TWelcomeWizard.ShowWizard: Boolean;  
 var
   Wizard: TWelcomeWizard;
 begin
@@ -4654,13 +4654,13 @@ type
     constructor Create(AOwner: TComponent); override;
   end;
 
-constructor TMainLauncherForm.Create(AOwner: TComponent);
+constructor TMainLauncherForm.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   SetupUI;
 end;
 
-procedure TMainLauncherForm.SetupUI;
+procedure TMainLauncherForm.SetupUI;  
 var
   Panel: TPanel;
   Btn: TButton;
@@ -4753,7 +4753,7 @@ begin
   LoadRecentFiles(RecentList);
 end;
 
-procedure TMainLauncherForm.OnTextEditorClick(Sender: TObject);
+procedure TMainLauncherForm.OnTextEditorClick(Sender: TObject);  
 var
   Editor: TTextEditor;
 begin
@@ -4761,7 +4761,7 @@ begin
   Editor.Show;
 end;
 
-procedure TMainLauncherForm.OnSpreadsheetClick(Sender: TObject);
+procedure TMainLauncherForm.OnSpreadsheetClick(Sender: TObject);  
 var
   Spreadsheet: TSpreadsheetForm;
 begin
@@ -4769,7 +4769,7 @@ begin
   Spreadsheet.Show;
 end;
 
-procedure TMainLauncherForm.OnPresentationClick(Sender: TObject);
+procedure TMainLauncherForm.OnPresentationClick(Sender: TObject);  
 var
   Presentation: TPresentationEditor;
 begin
@@ -4777,7 +4777,7 @@ begin
   Presentation.Show;
 end;
 
-procedure TMainLauncherForm.OnDatabaseClick(Sender: TObject);
+procedure TMainLauncherForm.OnDatabaseClick(Sender: TObject);  
 var
   Database: TDatabaseManager;
 begin
@@ -4785,7 +4785,7 @@ begin
   Database.Show;
 end;
 
-procedure TMainLauncherForm.OnRecentFileClick(Sender: TObject);
+procedure TMainLauncherForm.OnRecentFileClick(Sender: TObject);  
 var
   RecentList: TListBox;
   FileName: string;
@@ -4829,7 +4829,7 @@ begin
   end;
 end;
 
-procedure LoadRecentFiles(ListBox: TListBox);
+procedure LoadRecentFiles(ListBox: TListBox);  
 var
   Settings: TOfficeSettings;
   RecentFiles: TJSONArray;
@@ -4853,7 +4853,7 @@ begin
   end;
 end;
 
-procedure AddToRecentFiles(const FileName: string);
+procedure AddToRecentFiles(const FileName: string);  
 var
   Settings: TOfficeSettings;
   RecentFiles: TJSONArray;
@@ -4928,7 +4928,7 @@ implementation
 
 { TTestTextDocument }
 
-procedure TTestTextDocument.TestCreateDocument;
+procedure TTestTextDocument.TestCreateDocument;  
 var
   Doc: TTextDocument;
 begin
@@ -4942,7 +4942,7 @@ begin
   end;
 end;
 
-procedure TTestTextDocument.TestSaveAndLoad;
+procedure TTestTextDocument.TestSaveAndLoad;  
 var
   Doc1, Doc2: TTextDocument;
   TempFile: string;
@@ -4973,7 +4973,7 @@ begin
   end;
 end;
 
-procedure TTestTextDocument.TestUndoRedo;
+procedure TTestTextDocument.TestUndoRedo;  
 var
   Doc: TTextDocument;
 begin
@@ -4996,7 +4996,7 @@ begin
   end;
 end;
 
-procedure TTestTextDocument.TestModifiedFlag;
+procedure TTestTextDocument.TestModifiedFlag;  
 var
   Doc: TTextDocument;
 begin
@@ -5016,7 +5016,7 @@ end;
 
 { TTestSpreadsheetDocument }
 
-procedure TTestSpreadsheetDocument.TestCreateWorksheet;
+procedure TTestSpreadsheetDocument.TestCreateWorksheet;  
 var
   Doc: TSpreadsheetDocument;
   Sheet: TWorksheet;
@@ -5032,7 +5032,7 @@ begin
   end;
 end;
 
-procedure TTestSpreadsheetDocument.TestCellOperations;
+procedure TTestSpreadsheetDocument.TestCellOperations;  
 var
   Doc: TSpreadsheetDocument;
   Sheet: TWorksheet;
@@ -5051,7 +5051,7 @@ begin
   end;
 end;
 
-procedure TTestSpreadsheetDocument.TestFormulas;
+procedure TTestSpreadsheetDocument.TestFormulas;  
 var
   Doc: TSpreadsheetDocument;
   Sheet: TWorksheet;
@@ -5113,7 +5113,7 @@ implementation
 
 { TTestImportExport }
 
-procedure TTestImportExport.TestODTImportExport;
+procedure TTestImportExport.TestODTImportExport;  
 var
   Doc1, Doc2: TTextDocument;
   Handler: TODTHandler;
@@ -5196,14 +5196,14 @@ La Suite Bureautique est une solution complète et multi-plateforme pour tous vo
 #### Méthode 1 : Package DEB
 
 ```bash
-sudo dpkg -i officesuite_1.0-1_amd64.deb
+sudo dpkg -i officesuite_1.0-1_amd64.deb  
 sudo apt-get install -f
 ```
 
 #### Méthode 2 : Script d'installation
 
 ```bash
-chmod +x install.sh
+chmod +x install.sh  
 sudo ./install.sh
 ```
 

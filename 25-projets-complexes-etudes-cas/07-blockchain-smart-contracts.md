@@ -119,7 +119,7 @@ uses
 
 { TTransaction }
 
-constructor TTransaction.Create(const AFrom, ATo: string; AAmount: Double);
+constructor TTransaction.Create(const AFrom, ATo: string; AAmount: Double);  
 begin
   inherited Create;
   FFrom := AFrom;
@@ -129,13 +129,13 @@ begin
   FSignature := '';
 end;
 
-function TTransaction.ToString: string;
+function TTransaction.ToString: string;  
 begin
   Result := Format('%s->%s:%.8f@%s',
     [FFrom, FTo, FAmount, DateTimeToStr(FTimestamp)]);
 end;
 
-function TTransaction.CalculateHash: string;
+function TTransaction.CalculateHash: string;  
 var
   Data: string;
 begin
@@ -143,7 +143,7 @@ begin
   Result := SHA256Print(SHA256String(Data));
 end;
 
-function TTransaction.IsValid: Boolean;
+function TTransaction.IsValid: Boolean;  
 begin
   // Vérifications de base
   Result := (FFrom <> '') and (FTo <> '') and (FAmount > 0);
@@ -155,7 +155,7 @@ end;
 
 { TBlock }
 
-constructor TBlock.Create(AIndex: Integer; const APreviousHash: string);
+constructor TBlock.Create(AIndex: Integer; const APreviousHash: string);  
 begin
   inherited Create;
   FIndex := AIndex;
@@ -168,19 +168,19 @@ begin
   FDifficulty := 0;
 end;
 
-destructor TBlock.Destroy;
+destructor TBlock.Destroy;  
 begin
   FTransactions.Free;
   inherited Destroy;
 end;
 
-procedure TBlock.AddTransaction(ATransaction: TTransaction);
+procedure TBlock.AddTransaction(ATransaction: TTransaction);  
 begin
   if ATransaction.IsValid then
     FTransactions.Add(ATransaction);
 end;
 
-function TBlock.CalculateHash: string;
+function TBlock.CalculateHash: string;  
 var
   Data: string;
   i: Integer;
@@ -199,7 +199,7 @@ begin
   Result := SHA256Print(SHA256String(Data));
 end;
 
-function TBlock.Mine(ADifficulty: Integer): Boolean;
+function TBlock.Mine(ADifficulty: Integer): Boolean;  
 var
   Target: string;
   i: Integer;
@@ -235,7 +235,7 @@ begin
   Result := True;
 end;
 
-function TBlock.IsValid: Boolean;
+function TBlock.IsValid: Boolean;  
 var
   i: Integer;
 begin
@@ -314,7 +314,7 @@ implementation
 uses
   DateUtils;
 
-constructor TBlockchain.Create(ADifficulty: Integer);
+constructor TBlockchain.Create(ADifficulty: Integer);  
 begin
   inherited Create;
   FChain := TBlockList.Create(True);
@@ -329,7 +329,7 @@ begin
   WriteLn('Blockchain créée avec le bloc genesis');
 end;
 
-destructor TBlockchain.Destroy;
+destructor TBlockchain.Destroy;  
 begin
   FBalances.Free;
   FPendingTransactions.Free;
@@ -337,7 +337,7 @@ begin
   inherited Destroy;
 end;
 
-function TBlockchain.GetGenesisBlock: TBlock;
+function TBlockchain.GetGenesisBlock: TBlock;  
 var
   GenesisBlock: TBlock;
   GenesisTx: TTransaction;
@@ -354,7 +354,7 @@ begin
   Result := GenesisBlock;
 end;
 
-function TBlockchain.GetLastBlock: TBlock;
+function TBlockchain.GetLastBlock: TBlock;  
 begin
   if FChain.Count > 0 then
     Result := FChain[FChain.Count - 1]
@@ -362,7 +362,7 @@ begin
     Result := nil;
 end;
 
-function TBlockchain.GetBlockByIndex(Index: Integer): TBlock;
+function TBlockchain.GetBlockByIndex(Index: Integer): TBlock;  
 begin
   if (Index >= 0) and (Index < FChain.Count) then
     Result := FChain[Index]
@@ -370,7 +370,7 @@ begin
     Result := nil;
 end;
 
-procedure TBlockchain.AddTransaction(ATransaction: TTransaction);
+procedure TBlockchain.AddTransaction(ATransaction: TTransaction);  
 begin
   if not ATransaction.IsValid then
   begin
@@ -390,7 +390,7 @@ begin
     [ATransaction.FromAddress, ATransaction.ToAddress, ATransaction.Amount]));
 end;
 
-function TBlockchain.MinePendingTransactions(const MinerAddress: string): Boolean;
+function TBlockchain.MinePendingTransactions(const MinerAddress: string): Boolean;  
 var
   NewBlock: TBlock;
   i: Integer;
@@ -435,7 +435,7 @@ begin
     WriteLn('Échec du minage du bloc');
 end;
 
-function TBlockchain.IsChainValid: Boolean;
+function TBlockchain.IsChainValid: Boolean;  
 var
   i: Integer;
   CurrentBlock, PreviousBlock: TBlock;
@@ -473,7 +473,7 @@ begin
   WriteLn('✓ La blockchain est valide !');
 end;
 
-procedure TBlockchain.UpdateBalances;
+procedure TBlockchain.UpdateBalances;  
 var
   i, j: Integer;
   Block: TBlock;
@@ -508,7 +508,7 @@ begin
   end;
 end;
 
-function TBlockchain.GetBalance(const Address: string): Double;
+function TBlockchain.GetBalance(const Address: string): Double;  
 var
   Index: Integer;
 begin
@@ -519,7 +519,7 @@ begin
     Result := 0.0;
 end;
 
-procedure TBlockchain.PrintChain;
+procedure TBlockchain.PrintChain;  
 var
   i, j: Integer;
   Block: TBlock;
@@ -551,7 +551,7 @@ begin
   WriteLn('');
 end;
 
-procedure TBlockchain.PrintBalances;
+procedure TBlockchain.PrintBalances;  
 var
   i: Integer;
 begin
@@ -728,7 +728,7 @@ uses
 
 { TContractEvent }
 
-constructor TContractEvent.Create(const AName, AData: string);
+constructor TContractEvent.Create(const AName, AData: string);  
 begin
   inherited Create;
   FName := AName;
@@ -738,7 +738,7 @@ end;
 
 { TSmartContractBase }
 
-constructor TSmartContractBase.Create(const AOwner: string);
+constructor TSmartContractBase.Create(const AOwner: string);  
 var
   GUID: TGUID;
 begin
@@ -755,14 +755,14 @@ begin
   FCreationTime := Now;
 end;
 
-destructor TSmartContractBase.Destroy;
+destructor TSmartContractBase.Destroy;  
 begin
   FEvents.Free;
   FStorage.Free;
   inherited Destroy;
 end;
 
-procedure TSmartContractBase.EmitEvent(const EventName, EventData: string);
+procedure TSmartContractBase.EmitEvent(const EventName, EventData: string);  
 var
   Event: TContractEvent;
 begin
@@ -771,7 +771,7 @@ begin
   WriteLn(Format('[EVENT] %s: %s', [EventName, EventData]));
 end;
 
-function TSmartContractBase.GetStorageValue(const Key: string): string;
+function TSmartContractBase.GetStorageValue(const Key: string): string;  
 var
   Index: Integer;
 begin
@@ -782,7 +782,7 @@ begin
     Result := '';
 end;
 
-procedure TSmartContractBase.SetStorageValue(const Key, Value: string);
+procedure TSmartContractBase.SetStorageValue(const Key, Value: string);  
 begin
   if FStorage.IndexOf(Key) >= 0 then
     FStorage[Key] := Value
@@ -790,7 +790,7 @@ begin
     FStorage.Add(Key, Value);
 end;
 
-function TSmartContractBase.GetContractInfo: string;
+function TSmartContractBase.GetContractInfo: string;  
 begin
   Result := Format('Contract Address: %s' + LineEnding +
                    'Owner: %s' + LineEnding +
@@ -866,13 +866,13 @@ begin
   EmitEvent('TokenCreated', Format('%s (%s) - Supply: %.2f', [FName, FSymbol, FTotalSupply]));
 end;
 
-destructor TTokenContract.Destroy;
+destructor TTokenContract.Destroy;  
 begin
   FBalances.Free;
   inherited Destroy;
 end;
 
-function TTokenContract.Execute(const Method: string; const Params: array of string): string;
+function TTokenContract.Execute(const Method: string; const Params: array of string): string;  
 begin
   Result := '';
 
@@ -915,7 +915,7 @@ begin
     Result := 'UNKNOWN_METHOD';
 end;
 
-function TTokenContract.BalanceOf(const Account: string): Double;
+function TTokenContract.BalanceOf(const Account: string): Double;  
 var
   Index: Integer;
 begin
@@ -926,7 +926,7 @@ begin
     Result := 0.0;
 end;
 
-function TTokenContract.Transfer(const FromAddress, ToAddress: string; Amount: Double): Boolean;
+function TTokenContract.Transfer(const FromAddress, ToAddress: string; Amount: Double): Boolean;  
 var
   FromBalance: Double;
 begin
@@ -960,7 +960,7 @@ begin
   Result := True;
 end;
 
-function TTokenContract.Mint(const ToAddress: string; Amount: Double): Boolean;
+function TTokenContract.Mint(const ToAddress: string; Amount: Double): Boolean;  
 begin
   Result := False;
 
@@ -981,7 +981,7 @@ begin
   Result := True;
 end;
 
-function TTokenContract.Burn(const FromAddress: string; Amount: Double): Boolean;
+function TTokenContract.Burn(const FromAddress: string; Amount: Double): Boolean;  
 var
   Balance: Double;
 begin
@@ -1066,7 +1066,7 @@ uses
 
 { TProposal }
 
-constructor TProposal.Create(AID: Integer; const ADescription: string);
+constructor TProposal.Create(AID: Integer; const ADescription: string);  
 begin
   inherited Create;
   ID := AID;
@@ -1077,7 +1077,7 @@ end;
 
 { TVotingContract }
 
-constructor TVotingContract.Create(const AOwner: string);
+constructor TVotingContract.Create(const AOwner: string);  
 begin
   inherited Create(AOwner);
 
@@ -1089,14 +1089,14 @@ begin
   EmitEvent('VotingContractCreated', 'New voting contract initialized');
 end;
 
-destructor TVotingContract.Destroy;
+destructor TVotingContract.Destroy;  
 begin
   FVoters.Free;
   FProposals.Free;
   inherited Destroy;
 end;
 
-function TVotingContract.Execute(const Method: string; const Params: array of string): string;
+function TVotingContract.Execute(const Method: string; const Params: array of string): string;  
 begin
   Result := '';
 
@@ -1139,7 +1139,7 @@ begin
     Result := 'UNKNOWN_METHOD';
 end;
 
-procedure TVotingContract.AddProposal(const Description: string);
+procedure TVotingContract.AddProposal(const Description: string);  
 var
   Proposal: TProposal;
 begin
@@ -1150,7 +1150,7 @@ begin
     [Proposal.ID, Description]));
 end;
 
-function TVotingContract.Vote(const VoterAddress: string; ProposalID: Integer): Boolean;
+function TVotingContract.Vote(const VoterAddress: string; ProposalID: Integer): Boolean;  
 begin
   Result := False;
 
@@ -1193,7 +1193,7 @@ begin
   Result := True;
 end;
 
-function TVotingContract.GetWinner: TProposal;
+function TVotingContract.GetWinner: TProposal;  
 var
   i, MaxVotes: Integer;
 begin
@@ -1210,7 +1210,7 @@ begin
   end;
 end;
 
-procedure TVotingContract.OpenVoting(DurationMinutes: Integer);
+procedure TVotingContract.OpenVoting(DurationMinutes: Integer);  
 begin
   FVotingOpen := True;
   FVotingEndTime := IncMinute(Now, DurationMinutes);
@@ -1218,7 +1218,7 @@ begin
   EmitEvent('VotingOpened', Format('Voting period: %d minutes', [DurationMinutes]));
 end;
 
-procedure TVotingContract.CloseVoting;
+procedure TVotingContract.CloseVoting;  
 var
   Winner: TProposal;
 begin
@@ -1232,7 +1232,7 @@ begin
     EmitEvent('VotingClosed', 'No votes recorded');
 end;
 
-function TVotingContract.GetResults: string;
+function TVotingContract.GetResults: string;  
 var
   i: Integer;
 begin
@@ -1316,7 +1316,7 @@ uses
 
 { TBid }
 
-constructor TBid.Create(const ABidder: string; AAmount: Double);
+constructor TBid.Create(const ABidder: string; AAmount: Double);  
 begin
   inherited Create;
   Bidder := ABidder;
@@ -1347,13 +1347,13 @@ begin
     [AItemDescription, AMinimumBid, ADurationMinutes]));
 end;
 
-destructor TAuctionContract.Destroy;
+destructor TAuctionContract.Destroy;  
 begin
   FBids.Free;
   inherited Destroy;
 end;
 
-function TAuctionContract.Execute(const Method: string; const Params: array of string): string;
+function TAuctionContract.Execute(const Method: string; const Params: array of string): string;  
 begin
   Result := '';
 
@@ -1383,7 +1383,7 @@ begin
     Result := 'UNKNOWN_METHOD';
 end;
 
-function TAuctionContract.PlaceBid(const BidderAddress: string; Amount: Double): Boolean;
+function TAuctionContract.PlaceBid(const BidderAddress: string; Amount: Double): Boolean;  
 var
   NewBid: TBid;
 begin
@@ -1430,7 +1430,7 @@ begin
   Result := True;
 end;
 
-function TAuctionContract.EndAuction: string;
+function TAuctionContract.EndAuction: string;  
 begin
   if not FIsActive then
   begin
@@ -1454,12 +1454,12 @@ begin
   end;
 end;
 
-function TAuctionContract.GetHighestBid: Double;
+function TAuctionContract.GetHighestBid: Double;  
 begin
   Result := FHighestBid;
 end;
 
-function TAuctionContract.GetTimeRemaining: Integer;
+function TAuctionContract.GetTimeRemaining: Integer;  
 begin
   if Now >= FAuctionEndTime then
     Result := 0
@@ -1505,14 +1505,14 @@ type
 
 implementation
 
-constructor TContractManager.Create(ABlockchain: TBlockchain);
+constructor TContractManager.Create(ABlockchain: TBlockchain);  
 begin
   inherited Create;
   FBlockchain := ABlockchain;
   FContracts := TContractRegistry.Create;
 end;
 
-destructor TContractManager.Destroy;
+destructor TContractManager.Destroy;  
 var
   i: Integer;
 begin
@@ -1524,7 +1524,7 @@ begin
   inherited Destroy;
 end;
 
-function TContractManager.DeployContract(AContract: TSmartContractBase): string;
+function TContractManager.DeployContract(AContract: TSmartContractBase): string;  
 var
   DeployTx: TTransaction;
 begin
@@ -1540,7 +1540,7 @@ begin
   WriteLn(Format('Contract deployed at address: %s', [Result]));
 end;
 
-function TContractManager.GetContract(const Address: string): TSmartContractBase;
+function TContractManager.GetContract(const Address: string): TSmartContractBase;  
 var
   Index: Integer;
 begin
@@ -1573,7 +1573,7 @@ begin
   FBlockchain.AddTransaction(ExecuteTx);
 end;
 
-procedure TContractManager.ListContracts;
+procedure TContractManager.ListContracts;  
 var
   i: Integer;
 begin
@@ -1819,7 +1819,7 @@ implementation
 
 { TValidator }
 
-constructor TValidator.Create(const AAddress: string; AStake: Double);
+constructor TValidator.Create(const AAddress: string; AStake: Double);  
 begin
   inherited Create;
   Address := AAddress;
@@ -1830,20 +1830,20 @@ end;
 
 { TProofOfStake }
 
-constructor TProofOfStake.Create(AMinimumStake: Double);
+constructor TProofOfStake.Create(AMinimumStake: Double);  
 begin
   inherited Create;
   FValidators := TValidatorList.Create(True);
   FMinimumStake := AMinimumStake;
 end;
 
-destructor TProofOfStake.Destroy;
+destructor TProofOfStake.Destroy;  
 begin
   FValidators.Free;
   inherited Destroy;
 end;
 
-procedure TProofOfStake.RegisterValidator(const Address: string; Stake: Double);
+procedure TProofOfStake.RegisterValidator(const Address: string; Stake: Double);  
 var
   Validator: TValidator;
 begin
@@ -1860,7 +1860,7 @@ begin
     [Address, Stake]));
 end;
 
-function TProofOfStake.CalculateProbability(Validator: TValidator): Double;
+function TProofOfStake.CalculateProbability(Validator: TValidator): Double;  
 var
   TotalStake: Double;
   i: Integer;
@@ -1881,7 +1881,7 @@ begin
     Result := 0;
 end;
 
-function TProofOfStake.SelectValidator: TValidator;
+function TProofOfStake.SelectValidator: TValidator;  
 var
   i: Integer;
   RandomValue, CumulativeProbability: Double;
@@ -1927,7 +1927,7 @@ begin
   end;
 end;
 
-function TProofOfStake.ValidateBlock(Validator: TValidator; Block: TBlock): Boolean;
+function TProofOfStake.ValidateBlock(Validator: TValidator; Block: TBlock): Boolean;  
 begin
   Result := False;
 
@@ -2051,7 +2051,7 @@ uses
 
 { TPeerInfo }
 
-constructor TPeerInfo.Create(const AAddress: string; APort: Integer);
+constructor TPeerInfo.Create(const AAddress: string; APort: Integer);  
 begin
   inherited Create;
   Address := AAddress;
@@ -2063,7 +2063,7 @@ end;
 
 { TNetworkMessage }
 
-constructor TNetworkMessage.Create(AType: TMessageType; const AData, ASender: string);
+constructor TNetworkMessage.Create(AType: TMessageType; const AData, ASender: string);  
 begin
   inherited Create;
   FMessageType := AType;
@@ -2072,7 +2072,7 @@ begin
   FTimestamp := Now;
 end;
 
-function TNetworkMessage.Serialize: string;
+function TNetworkMessage.Serialize: string;  
 var
   JSON: TJSONObject;
 begin
@@ -2088,7 +2088,7 @@ begin
   end;
 end;
 
-procedure TNetworkMessage.Deserialize(const AData: string);
+procedure TNetworkMessage.Deserialize(const AData: string);  
 var
   JSON: TJSONObject;
   Parser: TJSONParser;
@@ -2111,7 +2111,7 @@ end;
 
 { TBlockchainNode }
 
-constructor TBlockchainNode.Create(ABlockchain: TBlockchain; APort: Integer);
+constructor TBlockchainNode.Create(ABlockchain: TBlockchain; APort: Integer);  
 var
   GUID: TGUID;
 begin
@@ -2130,7 +2130,7 @@ begin
   WriteLn(Format('Nœud créé: %s sur le port %d', [FNodeAddress, FListenPort]));
 end;
 
-destructor TBlockchainNode.Destroy;
+destructor TBlockchainNode.Destroy;  
 begin
   Stop;
   FListenSocket.Free;
@@ -2138,7 +2138,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TBlockchainNode.Start;
+procedure TBlockchainNode.Start;  
 var
   ClientSocket: TSocket;
 begin
@@ -2166,14 +2166,14 @@ begin
   end;
 end;
 
-procedure TBlockchainNode.Stop;
+procedure TBlockchainNode.Stop;  
 begin
   FRunning := False;
   FListenSocket.CloseSocket;
   WriteLn('Nœud arrêté');
 end;
 
-procedure TBlockchainNode.HandleConnection(ClientSocket: TSocket);
+procedure TBlockchainNode.HandleConnection(ClientSocket: TSocket);  
 var
   Socket: TTCPBlockSocket;
   Buffer: array[0..4095] of Byte;
@@ -2206,7 +2206,7 @@ begin
   end;
 end;
 
-procedure TBlockchainNode.ProcessMessage(const Msg: TNetworkMessage; ClientSocket: TSocket);
+procedure TBlockchainNode.ProcessMessage(const Msg: TNetworkMessage; ClientSocket: TSocket);  
 var
   Response: TNetworkMessage;
   Socket: TTCPBlockSocket;
@@ -2264,7 +2264,7 @@ begin
   end;
 end;
 
-procedure TBlockchainNode.ConnectToPeer(const Address: string; Port: Integer);
+procedure TBlockchainNode.ConnectToPeer(const Address: string; Port: Integer);  
 var
   Socket: TTCPBlockSocket;
   Msg: TNetworkMessage;
@@ -2301,7 +2301,7 @@ begin
   end;
 end;
 
-procedure TBlockchainNode.DisconnectPeer(const Address: string);
+procedure TBlockchainNode.DisconnectPeer(const Address: string);  
 var
   i: Integer;
 begin
@@ -2316,7 +2316,7 @@ begin
   end;
 end;
 
-procedure TBlockchainNode.BroadcastMessage(const Msg: TNetworkMessage);
+procedure TBlockchainNode.BroadcastMessage(const Msg: TNetworkMessage);  
 var
   i: Integer;
   Socket: TTCPBlockSocket;
@@ -2345,7 +2345,7 @@ begin
   end;
 end;
 
-procedure TBlockchainNode.BroadcastNewBlock(Block: TBlock);
+procedure TBlockchainNode.BroadcastNewBlock(Block: TBlock);  
 var
   Msg: TNetworkMessage;
   BlockData: string;
@@ -2361,7 +2361,7 @@ begin
   end;
 end;
 
-procedure TBlockchainNode.BroadcastTransaction(Transaction: TTransaction);
+procedure TBlockchainNode.BroadcastTransaction(Transaction: TTransaction);  
 var
   Msg: TNetworkMessage;
   TxData: string;
@@ -2376,7 +2376,7 @@ begin
   end;
 end;
 
-procedure TBlockchainNode.SyncBlockchain;
+procedure TBlockchainNode.SyncBlockchain;  
 var
   Msg: TNetworkMessage;
 begin
@@ -2390,7 +2390,7 @@ begin
   end;
 end;
 
-procedure TBlockchainNode.DiscoverPeers;
+procedure TBlockchainNode.DiscoverPeers;  
 var
   Msg: TNetworkMessage;
 begin
@@ -2458,7 +2458,7 @@ implementation
 uses
   base64;
 
-constructor TCryptoWallet.Create;
+constructor TCryptoWallet.Create;  
 begin
   inherited Create;
 
@@ -2472,7 +2472,7 @@ begin
   WriteLn('Adresse: ', FKeyPair.Address);
 end;
 
-function TCryptoWallet.GeneratePrivateKey: string;
+function TCryptoWallet.GeneratePrivateKey: string;  
 var
   i: Integer;
   RandomBytes: array[0..31] of Byte;
@@ -2486,20 +2486,20 @@ begin
   Result := SHA256Print(SHA256Buffer(@RandomBytes, 32));
 end;
 
-function TCryptoWallet.DerivePublicKey(const PrivateKey: string): string;
+function TCryptoWallet.DerivePublicKey(const PrivateKey: string): string;  
 begin
   // Dans une vraie implémentation, on utiliserait ECDSA
   // Ici, simplification: hash de la clé privée
   Result := SHA256Print(SHA256String('PUBLIC_' + PrivateKey));
 end;
 
-function TCryptoWallet.DeriveAddress(const PublicKey: string): string;
+function TCryptoWallet.DeriveAddress(const PublicKey: string): string;  
 begin
   // Adresse = hash de la clé publique (préfixé par "0x")
   Result := '0x' + Copy(SHA256Print(SHA256String(PublicKey)), 1, 40);
 end;
 
-function TCryptoWallet.SignTransaction(Transaction: TTransaction): string;
+function TCryptoWallet.SignTransaction(Transaction: TTransaction): string;  
 var
   TxHash: string;
   SignatureData: string;
@@ -2515,7 +2515,7 @@ begin
   Transaction.Signature := Result;
 end;
 
-function TCryptoWallet.VerifySignature(Transaction: TTransaction): Boolean;
+function TCryptoWallet.VerifySignature(Transaction: TTransaction): Boolean;  
 var
   ExpectedSignature: string;
   TxHash: string;
@@ -2529,7 +2529,7 @@ begin
   Result := ExpectedSignature = Transaction.Signature;
 end;
 
-procedure TCryptoWallet.ExportKeys(const Filename: string);
+procedure TCryptoWallet.ExportKeys(const Filename: string);  
 var
   F: TextFile;
 begin
@@ -2551,7 +2551,7 @@ begin
   end;
 end;
 
-procedure TCryptoWallet.ImportKeys(const Filename: string);
+procedure TCryptoWallet.ImportKeys(const Filename: string);  
 var
   F: TextFile;
   Line, Key, Value: string;
@@ -2675,7 +2675,7 @@ implementation
 uses
   Clipbrd;
 
-procedure TFormWallet.FormCreate(Sender: TObject);
+procedure TFormWallet.FormCreate(Sender: TObject);  
 begin
   // Créer le wallet et la blockchain
   FWallet := TCryptoWallet.Create;
@@ -2706,13 +2706,13 @@ begin
   UpdateBlockchainView;
 end;
 
-procedure TFormWallet.FormDestroy(Sender: TObject);
+procedure TFormWallet.FormDestroy(Sender: TObject);  
 begin
   FBlockchain.Free;
   FWallet.Free;
 end;
 
-procedure TFormWallet.ButtonSendClick(Sender: TObject);
+procedure TFormWallet.ButtonSendClick(Sender: TObject);  
 var
   Recipient: string;
   Amount: Double;
@@ -2754,20 +2754,20 @@ begin
   UpdateTransactionsList;
 end;
 
-procedure TFormWallet.ButtonCopyAddressClick(Sender: TObject);
+procedure TFormWallet.ButtonCopyAddressClick(Sender: TObject);  
 begin
   Clipboard.AsText := FWallet.Address;
   ShowMessage('Adresse copiée dans le presse-papier');
 end;
 
-procedure TFormWallet.ButtonRefreshClick(Sender: TObject);
+procedure TFormWallet.ButtonRefreshClick(Sender: TObject);  
 begin
   UpdateBalance;
   UpdateTransactionsList;
   UpdateBlockchainView;
 end;
 
-procedure TFormWallet.ButtonMineClick(Sender: TObject);
+procedure TFormWallet.ButtonMineClick(Sender: TObject);  
 begin
   ButtonMine.Enabled := False;
   try
@@ -2787,7 +2787,7 @@ begin
   end;
 end;
 
-procedure TFormWallet.MenuExportKeysClick(Sender: TObject);
+procedure TFormWallet.MenuExportKeysClick(Sender: TObject);  
 var
   SaveDialog: TSaveDialog;
 begin
@@ -2806,7 +2806,7 @@ begin
   end;
 end;
 
-procedure TFormWallet.MenuImportKeysClick(Sender: TObject);
+procedure TFormWallet.MenuImportKeysClick(Sender: TObject);  
 var
   OpenDialog: TOpenDialog;
 begin
@@ -2827,14 +2827,14 @@ begin
   end;
 end;
 
-procedure TFormWallet.UpdateBalance;
+procedure TFormWallet.UpdateBalance;  
 begin
   // Calculer le solde en parcourant la blockchain
   FWallet.Balance := 0; // Calculer depuis la blockchain
   LabelBalance.Caption := Format('Solde: %.2f', [FWallet.Balance]);
 end;
 
-procedure TFormWallet.UpdateTransactionsList;
+procedure TFormWallet.UpdateTransactionsList;  
 var
   i, j: Integer;
   Block: TBlock;
@@ -2872,7 +2872,7 @@ begin
   end;
 end;
 
-procedure TFormWallet.UpdateBlockchainView;
+procedure TFormWallet.UpdateBlockchainView;  
 var
   i: Integer;
   Block: TBlock;
@@ -2948,7 +2948,7 @@ implementation
 
 { TMerkleNode }
 
-constructor TMerkleNode.Create(const AHash: string);
+constructor TMerkleNode.Create(const AHash: string);  
 begin
   inherited Create;
   Hash := AHash;
@@ -2956,7 +2956,7 @@ begin
   Right := nil;
 end;
 
-destructor TMerkleNode.Destroy;
+destructor TMerkleNode.Destroy;  
 begin
   if Assigned(Left) then
     Left.Free;
@@ -2967,7 +2967,7 @@ end;
 
 { TMerkleTree }
 
-constructor TMerkleTree.Create(const TransactionHashes: array of string);
+constructor TMerkleTree.Create(const TransactionHashes: array of string);  
 var
   i: Integer;
 begin
@@ -2987,7 +2987,7 @@ begin
   FRoot := BuildTree(FLeaves);
 end;
 
-destructor TMerkleTree.Destroy;
+destructor TMerkleTree.Destroy;  
 begin
   if Assigned(FRoot) then
     FRoot.Free;
@@ -2995,7 +2995,7 @@ begin
   inherited Destroy;
 end;
 
-function TMerkleTree.CombineHashes(const Left, Right: string): string;
+function TMerkleTree.CombineHashes(const Left, Right: string): string;  
 var
   Combined: string;
 begin
@@ -3003,7 +3003,7 @@ begin
   Result := SHA256Print(SHA256String(Combined));
 end;
 
-function TMerkleTree.BuildTree(Hashes: THashList): TMerkleNode;
+function TMerkleTree.BuildTree(Hashes: THashList): TMerkleNode;  
 var
   NewLevel: THashList;
   i: Integer;
@@ -3037,7 +3037,7 @@ begin
   end;
 end;
 
-function TMerkleTree.GetRootHash: string;
+function TMerkleTree.GetRootHash: string;  
 begin
   if Assigned(FRoot) then
     Result := FRoot.Hash
@@ -3045,7 +3045,7 @@ begin
     Result := '';
 end;
 
-function TMerkleTree.GenerateProof(const TxHash: string): THashList;
+function TMerkleTree.GenerateProof(const TxHash: string): THashList;  
 var
   Index: Integer;
 begin
@@ -3155,7 +3155,7 @@ begin
   FreeOnTerminate := False;
 end;
 
-procedure TMinerThread.Execute;
+procedure TMinerThread.Execute;  
 var
   Target: string;
   CurrentNonce: Int64;
@@ -3188,7 +3188,7 @@ end;
 
 { TMiningPool }
 
-constructor TMiningPool.Create(AThreadCount: Integer);
+constructor TMiningPool.Create(AThreadCount: Integer);  
 begin
   inherited Create;
   FThreadCount := AThreadCount;
@@ -3197,14 +3197,14 @@ begin
   SetLength(FThreads, FThreadCount);
 end;
 
-destructor TMiningPool.Destroy;
+destructor TMiningPool.Destroy;  
 begin
   StopMining;
   FLock.Free;
   inherited Destroy;
 end;
 
-function TMiningPool.MineBlock(Block: TBlock; Difficulty: Integer): Boolean;
+function TMiningPool.MineBlock(Block: TBlock; Difficulty: Integer): Boolean;  
 var
   i: Integer;
   NonceRange: Int64;
@@ -3262,7 +3262,7 @@ begin
   end;
 end;
 
-procedure TMiningPool.StopMining;
+procedure TMiningPool.StopMining;  
 var
   i: Integer;
 begin
@@ -3326,7 +3326,7 @@ type
 
 implementation
 
-constructor TFoodTraceabilityContract.Create(const AOwner: string);
+constructor TFoodTraceabilityContract.Create(const AOwner: string);  
 begin
   inherited Create(AOwner);
   SetLength(FProducts, 0);
@@ -3398,7 +3398,7 @@ begin
     [ProductID, Name, Origin]));
 end;
 
-procedure TFoodTraceabilityContract.TransferOwnership(const ProductID, NewOwner: string);
+procedure TFoodTraceabilityContract.TransferOwnership(const ProductID, NewOwner: string);  
 var
   i: Integer;
 begin
@@ -3439,7 +3439,7 @@ begin
   end;
 end;
 
-function TFoodTraceabilityContract.GetProductHistory(const ProductID: string): string;
+function TFoodTraceabilityContract.GetProductHistory(const ProductID: string): string;  
 var
   i: Integer;
 begin
@@ -3472,7 +3472,7 @@ begin
   Result := 'Product not found';
 end;
 
-function TFoodTraceabilityContract.VerifyAuthenticity(const ProductID: string): Boolean;
+function TFoodTraceabilityContract.VerifyAuthenticity(const ProductID: string): Boolean;  
 var
   i: Integer;
 begin
@@ -3552,7 +3552,7 @@ uses
 
 { TCandidate }
 
-constructor TCandidate.Create(AID: Integer; const AName, AParty: string);
+constructor TCandidate.Create(AID: Integer; const AName, AParty: string);  
 begin
   inherited Create;
   ID := AID;
@@ -3579,7 +3579,7 @@ begin
     [DateTimeToStr(StartTime), DateTimeToStr(EndTime)]));
 end;
 
-destructor TSecureVotingContract.Destroy;
+destructor TSecureVotingContract.Destroy;  
 begin
   FCandidates.Free;
   inherited Destroy;
@@ -3624,7 +3624,7 @@ begin
     Result := 'UNKNOWN_METHOD';
 end;
 
-procedure TSecureVotingContract.AddCandidate(const Name, Party: string);
+procedure TSecureVotingContract.AddCandidate(const Name, Party: string);  
 var
   Candidate: TCandidate;
 begin
@@ -3634,7 +3634,7 @@ begin
   EmitEvent('CandidateAdded', Format('%s (%s)', [Name, Party]));
 end;
 
-procedure TSecureVotingContract.RegisterVoter(const VoterID: string);
+procedure TSecureVotingContract.RegisterVoter(const VoterID: string);  
 var
   Voter: TVoterRecord;
 begin
@@ -3705,7 +3705,7 @@ begin
   WriteLn('Électeur non enregistré');
 end;
 
-function TSecureVotingContract.GetResults: string;
+function TSecureVotingContract.GetResults: string;  
 var
   i, TotalVotes: Integer;
 begin
@@ -3735,13 +3735,13 @@ begin
   end;
 end;
 
-procedure TSecureVotingContract.CloseVoting;
+procedure TSecureVotingContract.CloseVoting;  
 begin
   FIsVotingOpen := False;
   EmitEvent('VotingClosed', 'Le vote est maintenant fermé');
 end;
 
-function TSecureVotingContract.IsVotingActive: Boolean;
+function TSecureVotingContract.IsVotingActive: Boolean;  
 begin
   Result := (Now >= FVotingStartTime) and
             (Now <= FVotingEndTime) and
@@ -3926,7 +3926,7 @@ type
 
 implementation
 
-constructor TDocumentCertificationContract.Create(const AOwner: string);
+constructor TDocumentCertificationContract.Create(const AOwner: string);  
 begin
   inherited Create(AOwner);
   SetLength(FDocuments, 0);
@@ -4033,7 +4033,7 @@ begin
   end;
 end;
 
-procedure TDocumentCertificationContract.RevokeDocument(const DocumentHash: string);
+procedure TDocumentCertificationContract.RevokeDocument(const DocumentHash: string);  
 var
   i: Integer;
 begin
@@ -4091,7 +4091,7 @@ type
 
 implementation
 
-constructor TIPContract.Create(const AOwner: string);
+constructor TIPContract.Create(const AOwner: string);  
 begin
   inherited Create(AOwner);
   SetLength(FRegistrations, 0);
@@ -4136,7 +4136,7 @@ begin
     Result := 'UNKNOWN_METHOD';
 end;
 
-procedure TIPContract.RegisterWork(const Title, WorkContent, IPType, Description: string);
+procedure TIPContract.RegisterWork(const Title, WorkContent, IPType, Description: string);  
 var
   Registration: TIPRegistration;
 begin
@@ -4164,7 +4164,7 @@ begin
     [IPType, Title, Registration.Author]));
 end;
 
-function TIPContract.CheckPriorArt(const WorkContent: string): Boolean;
+function TIPContract.CheckPriorArt(const WorkContent: string): Boolean;  
 var
   i: Integer;
   WorkHash: string;
@@ -4182,7 +4182,7 @@ begin
   end;
 end;
 
-function TIPContract.TransferRights(const WorkHash, NewOwner: string): Boolean;
+function TIPContract.TransferRights(const WorkHash, NewOwner: string): Boolean;  
 var
   i: Integer;
 begin
@@ -4202,7 +4202,7 @@ begin
   end;
 end;
 
-function TIPContract.GetRegistrationInfo(const WorkHash: string): string;
+function TIPContract.GetRegistrationInfo(const WorkHash: string): string;  
 var
   i: Integer;
 begin
@@ -4240,18 +4240,18 @@ end.
 @echo off
 REM Script de compilation et déploiement Windows
 
-echo Compilation de la blockchain...
+echo Compilation de la blockchain...  
 fpc -O3 -CX -XX -Xs blockchain_main.pas
 
-echo Creation du repertoire de deploiement...
-mkdir deploy\windows
-copy blockchain_main.exe deploy\windows\
+echo Creation du repertoire de deploiement...  
+mkdir deploy\windows  
+copy blockchain_main.exe deploy\windows\  
 copy *.dll deploy\windows\
 
 echo Creation de l'installateur...
 "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" blockchain_setup.iss
 
-echo Deploiement termine!
+echo Deploiement termine!  
 pause
 ```
 
@@ -4261,18 +4261,18 @@ pause
 #!/bin/bash
 # Script de compilation et déploiement Linux
 
-echo "Compilation de la blockchain..."
+echo "Compilation de la blockchain..."  
 fpc -O3 -CX -XX -Xs blockchain_main.pas
 
-echo "Création du paquet..."
-mkdir -p deploy/linux/usr/local/bin
-mkdir -p deploy/linux/usr/share/blockchain
+echo "Création du paquet..."  
+mkdir -p deploy/linux/usr/local/bin  
+mkdir -p deploy/linux/usr/share/blockchain  
 mkdir -p deploy/linux/etc/blockchain
 
-cp blockchain_main deploy/linux/usr/local/bin/
+cp blockchain_main deploy/linux/usr/local/bin/  
 cp config.ini deploy/linux/etc/blockchain/
 
-echo "Création du .deb..."
+echo "Création du .deb..."  
 dpkg-deb --build deploy/linux blockchain-1.0.0-amd64.deb
 
 echo "Déploiement terminé!"
@@ -4310,23 +4310,23 @@ type
 
 implementation
 
-procedure TBlockchainTest.SetUp;
+procedure TBlockchainTest.SetUp;  
 begin
   FBlockchain := TBlockchain.Create(2); // Difficulté faible pour les tests
 end;
 
-procedure TBlockchainTest.TearDown;
+procedure TBlockchainTest.TearDown;  
 begin
   FBlockchain.Free;
 end;
 
-procedure TBlockchainTest.TestCreateBlockchain;
+procedure TBlockchainTest.TestCreateBlockchain;  
 begin
   AssertNotNull('Blockchain créée', FBlockchain);
   AssertEquals('Un bloc genesis existe', 1, FBlockchain.Chain.Count);
 end;
 
-procedure TBlockchainTest.TestAddTransaction;
+procedure TBlockchainTest.TestAddTransaction;  
 var
   Tx: TTransaction;
   InitialCount: Integer;
@@ -4339,7 +4339,7 @@ begin
   AssertTrue('Transaction ajoutée', True);
 end;
 
-procedure TBlockchainTest.TestMineBlock;
+procedure TBlockchainTest.TestMineBlock;  
 var
   Tx: TTransaction;
   InitialCount: Integer;
@@ -4353,7 +4353,7 @@ begin
   AssertEquals('Nouveau bloc ajouté', InitialCount + 1, FBlockchain.Chain.Count);
 end;
 
-procedure TBlockchainTest.TestValidateChain;
+procedure TBlockchainTest.TestValidateChain;  
 var
   Tx: TTransaction;
 begin
@@ -4364,7 +4364,7 @@ begin
   AssertTrue('Blockchain valide', FBlockchain.IsChainValid);
 end;
 
-procedure TBlockchainTest.TestDoubleSpend;
+procedure TBlockchainTest.TestDoubleSpend;  
 var
   Tx1, Tx2: TTransaction;
 begin
@@ -4432,7 +4432,7 @@ implementation
 uses
   DateUtils;
 
-constructor TBlockchainMetrics.Create;
+constructor TBlockchainMetrics.Create;  
 begin
   inherited Create;
   FTotalBlocks := 0;
@@ -4443,33 +4443,33 @@ begin
   FStartTime := Now;
 end;
 
-procedure TBlockchainMetrics.IncrementBlocks;
+procedure TBlockchainMetrics.IncrementBlocks;  
 begin
   Inc(FTotalBlocks);
 end;
 
-procedure TBlockchainMetrics.IncrementTransactions(Count: Integer);
+procedure TBlockchainMetrics.IncrementTransactions(Count: Integer);  
 begin
   FTotalTransactions := FTotalTransactions + Count;
 end;
 
-procedure TBlockchainMetrics.UpdateHashRate(NewHashRate: Double);
+procedure TBlockchainMetrics.UpdateHashRate(NewHashRate: Double);  
 begin
   FTotalHashRate := NewHashRate;
 end;
 
-procedure TBlockchainMetrics.UpdateBlockTime(BlockTime: Double);
+procedure TBlockchainMetrics.UpdateBlockTime(BlockTime: Double);  
 begin
   // Moyenne mobile
   FAvgBlockTime := (FAvgBlockTime * 0.9) + (BlockTime * 0.1);
 end;
 
-procedure TBlockchainMetrics.SetNodeCount(Count: Integer);
+procedure TBlockchainMetrics.SetNodeCount(Count: Integer);  
 begin
   FNetworkNodes := Count;
 end;
 
-function TBlockchainMetrics.GetMetricsReport: string;
+function TBlockchainMetrics.GetMetricsReport: string;  
 begin
   Result := '═══════════════════════════════════════' + LineEnding;
   Result := Result + '      MÉTRIQUES BLOCKCHAIN' + LineEnding;
@@ -4483,7 +4483,7 @@ begin
   Result := Result + '═══════════════════════════════════════';
 end;
 
-function TBlockchainMetrics.GetUptime: string;
+function TBlockchainMetrics.GetUptime: string;  
 var
   Duration: TDateTime;
   Days, Hours, Minutes, Seconds: Integer;

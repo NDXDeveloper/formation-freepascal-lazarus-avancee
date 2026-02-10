@@ -157,7 +157,7 @@ type
 implementation
 
 {$IFDEF WINDOWS}
-function TMetricsCollector.GetCPUUsageWindows: Double;
+function TMetricsCollector.GetCPUUsageWindows: Double;  
 var
   SystemTimes: TSystemTimes;
   IdleTime, KernelTime, UserTime: TFileTime;
@@ -181,7 +181,7 @@ end;
 {$ENDIF}
 
 {$IFDEF UNIX}
-function TMetricsCollector.GetCPUUsageLinux: Double;
+function TMetricsCollector.GetCPUUsageLinux: Double;  
 var
   F: TextFile;
   Line: string;
@@ -219,7 +219,7 @@ begin
 end;
 {$ENDIF}
 
-function TMetricsCollector.GetCPUUsage: Double;
+function TMetricsCollector.GetCPUUsage: Double;  
 begin
   {$IFDEF WINDOWS}
   Result := GetCPUUsageWindows;
@@ -293,7 +293,7 @@ begin
 end;
 
 {$IFDEF UNIX}
-function TMetricsCollector.GetSystemUptime: Int64;
+function TMetricsCollector.GetSystemUptime: Int64;  
 var
   F: TextFile;
   Line: string;
@@ -316,7 +316,7 @@ end;
 {$ENDIF}
 
 {$IFDEF WINDOWS}
-function TMetricsCollector.GetSystemUptime: Int64;
+function TMetricsCollector.GetSystemUptime: Int64;  
 begin
   Result := GetTickCount64 div 1000; // Convertir ms en secondes
 end;
@@ -376,7 +376,7 @@ type
 
 implementation
 
-constructor TMonitorMessage.Create;
+constructor TMonitorMessage.Create;  
 begin
   inherited Create;
   FillChar(FHeader, SizeOf(FHeader), 0);
@@ -384,13 +384,13 @@ begin
   FHeader.Timestamp := DateTimeToUnix(Now);
 end;
 
-procedure TMonitorMessage.SetData(const AData: TBytes);
+procedure TMonitorMessage.SetData(const AData: TBytes);  
 begin
   FData := Copy(AData);
   FHeader.DataLength := Length(FData);
 end;
 
-function TMonitorMessage.Serialize: TBytes;
+function TMonitorMessage.Serialize: TBytes;  
 var
   TotalSize: Integer;
 begin
@@ -405,7 +405,7 @@ begin
     Move(FData[0], Result[SizeOf(TMessageHeader)], Length(FData));
 end;
 
-procedure TMonitorMessage.Deserialize(const ABytes: TBytes);
+procedure TMonitorMessage.Deserialize(const ABytes: TBytes);  
 begin
   if Length(ABytes) < SizeOf(TMessageHeader) then
     raise Exception.Create('Message trop court');
@@ -461,7 +461,7 @@ type
 
 implementation
 
-constructor TMonitorAgentClient.Create(const AHost: string; APort: Integer);
+constructor TMonitorAgentClient.Create(const AHost: string; APort: Integer);  
 begin
   inherited Create;
   FSocket := TTCPBlockSocket.Create;
@@ -471,14 +471,14 @@ begin
   FAgentID := GenerateAgentID;
 end;
 
-destructor TMonitorAgentClient.Destroy;
+destructor TMonitorAgentClient.Destroy;  
 begin
   Disconnect;
   FSocket.Free;
   inherited Destroy;
 end;
 
-function TMonitorAgentClient.GenerateAgentID: string;
+function TMonitorAgentClient.GenerateAgentID: string;  
 var
   GUID: TGUID;
 begin
@@ -486,7 +486,7 @@ begin
   Result := GUIDToString(GUID);
 end;
 
-function TMonitorAgentClient.Connect: Boolean;
+function TMonitorAgentClient.Connect: Boolean;  
 begin
   FSocket.Connect(FServerHost, IntToStr(FServerPort));
   Result := FSocket.LastError = 0;
@@ -499,7 +499,7 @@ begin
   end;
 end;
 
-procedure TMonitorAgentClient.Disconnect;
+procedure TMonitorAgentClient.Disconnect;  
 begin
   if FConnected then
   begin
@@ -508,7 +508,7 @@ begin
   end;
 end;
 
-function TMonitorAgentClient.SendMetrics(const AMetrics: TBytes): Boolean;
+function TMonitorAgentClient.SendMetrics(const AMetrics: TBytes): Boolean;  
 var
   Msg: TMonitorMessage;
   Data: TBytes;
@@ -537,7 +537,7 @@ begin
   end;
 end;
 
-function TMonitorAgentClient.SendHeartbeat: Boolean;
+function TMonitorAgentClient.SendHeartbeat: Boolean;  
 var
   Msg: TMonitorMessage;
   Data: TBytes;
@@ -607,21 +607,21 @@ type
 
 implementation
 
-constructor TMonitorAgentService.Create(const AServiceName: string);
+constructor TMonitorAgentService.Create(const AServiceName: string);  
 begin
   inherited Create;
   FServiceName := AServiceName;
   FStopEvent := CreateEvent(nil, True, False, nil);
 end;
 
-destructor TMonitorAgentService.Destroy;
+destructor TMonitorAgentService.Destroy;  
 begin
   if FStopEvent <> 0 then
     CloseHandle(FStopEvent);
   inherited Destroy;
 end;
 
-procedure TMonitorAgentService.ReportStatus(dwCurrentState, dwWin32ExitCode, dwWaitHint: DWORD);
+procedure TMonitorAgentService.ReportStatus(dwCurrentState, dwWin32ExitCode, dwWaitHint: DWORD);  
 begin
   FServiceStatus.dwCurrentState := dwCurrentState;
   FServiceStatus.dwWin32ExitCode := dwWin32ExitCode;
@@ -635,7 +635,7 @@ begin
   SetServiceStatus(FServiceStatusHandle, FServiceStatus);
 end;
 
-procedure TMonitorAgentService.ServiceMain(argc: DWORD; argv: PLPSTR);
+procedure TMonitorAgentService.ServiceMain(argc: DWORD; argv: PLPSTR);  
 begin
   // Enregistrer le handler de contrôle
   FServiceStatusHandle := RegisterServiceCtrlHandler(
@@ -663,7 +663,7 @@ begin
   ReportStatus(SERVICE_STOPPED, NO_ERROR, 0);
 end;
 
-procedure TMonitorAgentService.ServiceCtrlHandler(dwControl: DWORD);
+procedure TMonitorAgentService.ServiceCtrlHandler(dwControl: DWORD);  
 begin
   case dwControl of
     SERVICE_CONTROL_STOP:
@@ -676,7 +676,7 @@ begin
   end;
 end;
 
-class function TMonitorAgentService.Install: Boolean;
+class function TMonitorAgentService.Install: Boolean;  
 var
   SCManager, Service: SC_HANDLE;
   ServicePath: string;
@@ -711,7 +711,7 @@ begin
   end;
 end;
 
-class function TMonitorAgentService.Uninstall: Boolean;
+class function TMonitorAgentService.Uninstall: Boolean;  
 var
   SCManager, Service: SC_HANDLE;
 begin
@@ -775,20 +775,20 @@ type
 
 implementation
 
-constructor TMonitorAgentDaemon.Create;
+constructor TMonitorAgentDaemon.Create;  
 begin
   inherited Create;
   FRunning := False;
   FPidFile := '/var/run/monitoragent.pid';
 end;
 
-destructor TMonitorAgentDaemon.Destroy;
+destructor TMonitorAgentDaemon.Destroy;  
 begin
   RemovePidFile;
   inherited Destroy;
 end;
 
-procedure TMonitorAgentDaemon.Daemonize;
+procedure TMonitorAgentDaemon.Daemonize;  
 var
   pid: TPid;
 begin
@@ -822,7 +822,7 @@ begin
   FpClose(STDERR_FILENO);
 end;
 
-procedure TMonitorAgentDaemon.WritePidFile;
+procedure TMonitorAgentDaemon.WritePidFile;  
 var
   F: TextFile;
 begin
@@ -836,13 +836,13 @@ begin
   end;
 end;
 
-procedure TMonitorAgentDaemon.RemovePidFile;
+procedure TMonitorAgentDaemon.RemovePidFile;  
 begin
   if FileExists(FPidFile) then
     DeleteFile(FPidFile);
 end;
 
-procedure TMonitorAgentDaemon.SignalHandler(Signal: Integer);
+procedure TMonitorAgentDaemon.SignalHandler(Signal: Integer);  
 begin
   case Signal of
     SIGTERM, SIGINT:
@@ -856,7 +856,7 @@ begin
   end;
 end;
 
-procedure TMonitorAgentDaemon.Run;
+procedure TMonitorAgentDaemon.Run;  
 begin
   Daemonize;
   WritePidFile;
@@ -876,7 +876,7 @@ begin
   end;
 end;
 
-procedure TMonitorAgentDaemon.Stop;
+procedure TMonitorAgentDaemon.Stop;  
 begin
   FRunning := False;
 end;
@@ -889,14 +889,14 @@ Fichier de configuration systemd (`/etc/systemd/system/monitoragent.service`) :
 
 ```ini
 [Unit]
-Description=Monitor Agent Service
+Description=Monitor Agent Service  
 After=network.target
 
 [Service]
-Type=forking
-ExecStart=/usr/local/bin/monitoragent
-PIDFile=/var/run/monitoragent.pid
-Restart=on-failure
+Type=forking  
+ExecStart=/usr/local/bin/monitoragent  
+PIDFile=/var/run/monitoragent.pid  
+Restart=on-failure  
 RestartSec=10
 
 [Install]
@@ -970,7 +970,7 @@ implementation
 
 { TClientThread }
 
-constructor TClientThread.Create(ASocket: TSocket; AServer: TObject);
+constructor TClientThread.Create(ASocket: TSocket; AServer: TObject);  
 begin
   inherited Create(True);
   FSocket := TTCPBlockSocket.Create;
@@ -980,13 +980,13 @@ begin
   Resume;
 end;
 
-destructor TClientThread.Destroy;
+destructor TClientThread.Destroy;  
 begin
   FSocket.Free;
   inherited Destroy;
 end;
 
-procedure TClientThread.Execute;
+procedure TClientThread.Execute;  
 var
   Buffer: array[0..4095] of Byte;
   BytesRead: Integer;
@@ -1016,7 +1016,7 @@ end;
 
 { TMonitorServer }
 
-constructor TMonitorServer.Create(APort: Integer);
+constructor TMonitorServer.Create(APort: Integer);  
 begin
   inherited Create;
   FListenSocket := TTCPBlockSocket.Create;
@@ -1026,7 +1026,7 @@ begin
   InitCriticalSection(FAgentsLock);
 end;
 
-destructor TMonitorServer.Destroy;
+destructor TMonitorServer.Destroy;  
 begin
   Stop;
   DoneCriticalSection(FAgentsLock);
@@ -1035,7 +1035,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TMonitorServer.Start;
+procedure TMonitorServer.Start;  
 var
   ClientSocket: TSocket;
 begin
@@ -1062,13 +1062,13 @@ begin
   end;
 end;
 
-procedure TMonitorServer.Stop;
+procedure TMonitorServer.Stop;  
 begin
   FRunning := False;
   FListenSocket.CloseSocket;
 end;
 
-procedure TMonitorServer.HandleMessage(const Msg: TMonitorMessage; ClientIP: string);
+procedure TMonitorServer.HandleMessage(const Msg: TMonitorMessage; ClientIP: string);  
 var
   AgentID: string;
 begin
@@ -1098,13 +1098,13 @@ begin
   end;
 end;
 
-procedure TMonitorServer.StoreMetrics(const AgentID: string; const Data: TBytes);
+procedure TMonitorServer.StoreMetrics(const AgentID: string; const Data: TBytes);  
 begin
   // Ici, on stockerait les métriques dans la base de données
   // Implémentation avec SQLdb dans la section suivante
 end;
 
-function TMonitorServer.GetAgentList: TAgentList;
+function TMonitorServer.GetAgentList: TAgentList;  
 begin
   EnterCriticalSection(FAgentsLock);
   try
@@ -1114,7 +1114,7 @@ begin
   end;
 end;
 
-procedure TMonitorServer.RegisterAgent(const AgentID, Hostname, IPAddress: string);
+procedure TMonitorServer.RegisterAgent(const AgentID, Hostname, IPAddress: string);  
 var
   Agent: TAgentInfo;
   i: Integer;
@@ -1149,7 +1149,7 @@ begin
   end;
 end;
 
-procedure TMonitorServer.UpdateAgentStatus(const AgentID: string; IsOnline: Boolean);
+procedure TMonitorServer.UpdateAgentStatus(const AgentID: string; IsOnline: Boolean);  
 var
   i: Integer;
 begin
@@ -1210,7 +1210,7 @@ CREATE TABLE system_metrics (
 );
 
 -- Index pour optimiser les requêtes
-CREATE INDEX idx_metrics_agent_timestamp ON system_metrics(agent_id, timestamp DESC);
+CREATE INDEX idx_metrics_agent_timestamp ON system_metrics(agent_id, timestamp DESC);  
 CREATE INDEX idx_metrics_timestamp ON system_metrics(timestamp DESC);
 
 -- Table des alertes
@@ -1303,7 +1303,7 @@ type
 
 implementation
 
-constructor TMonitorDatabase.Create(const ADatabaseType: string);
+constructor TMonitorDatabase.Create(const ADatabaseType: string);  
 begin
   inherited Create;
   FDatabaseType := LowerCase(ADatabaseType);
@@ -1323,7 +1323,7 @@ begin
   FQuery.Transaction := FTransaction;
 end;
 
-destructor TMonitorDatabase.Destroy;
+destructor TMonitorDatabase.Destroy;  
 begin
   Disconnect;
   FQuery.Free;
@@ -1332,12 +1332,12 @@ begin
   inherited Destroy;
 end;
 
-procedure TMonitorDatabase.InitializeSQLite(const AFilename: string);
+procedure TMonitorDatabase.InitializeSQLite(const AFilename: string);  
 begin
   TSQLite3Connection(FConnection).DatabaseName := AFilename;
 end;
 
-procedure TMonitorDatabase.InitializePostgreSQL(const AHost, ADatabase, AUser, APassword: string);
+procedure TMonitorDatabase.InitializePostgreSQL(const AHost, ADatabase, AUser, APassword: string);  
 begin
   with TPQConnection(FConnection) do
   begin
@@ -1348,7 +1348,7 @@ begin
   end;
 end;
 
-procedure TMonitorDatabase.Connect(const AParams: array of string);
+procedure TMonitorDatabase.Connect(const AParams: array of string);  
 begin
   case FDatabaseType of
     'sqlite':
@@ -1372,7 +1372,7 @@ begin
   FTransaction.Active := True;
 end;
 
-procedure TMonitorDatabase.Disconnect;
+procedure TMonitorDatabase.Disconnect;  
 begin
   if FTransaction.Active then
     FTransaction.Commit;
@@ -1380,7 +1380,7 @@ begin
     FConnection.Close;
 end;
 
-procedure TMonitorDatabase.InsertMetric(const AMetric: TMetricRecord);
+procedure TMonitorDatabase.InsertMetric(const AMetric: TMetricRecord);  
 var
   SQL: string;
 begin
@@ -1412,7 +1412,7 @@ begin
   FTransaction.Commit;
 end;
 
-procedure TMonitorDatabase.InsertAgent(const AgentID, Hostname, IPAddress, OSType, OSVersion: string);
+procedure TMonitorDatabase.InsertAgent(const AgentID, Hostname, IPAddress, OSType, OSVersion: string);  
 var
   SQL: string;
 begin
@@ -1433,7 +1433,7 @@ begin
   FTransaction.Commit;
 end;
 
-procedure TMonitorDatabase.UpdateAgentStatus(const AgentID: string; IsOnline: Boolean);
+procedure TMonitorDatabase.UpdateAgentStatus(const AgentID: string; IsOnline: Boolean);  
 var
   SQL: string;
 begin
@@ -1448,7 +1448,7 @@ begin
   FTransaction.Commit;
 end;
 
-function TMonitorDatabase.GetLatestMetrics(const AgentID: string; Count: Integer): TStringList;
+function TMonitorDatabase.GetLatestMetrics(const AgentID: string; Count: Integer): TStringList;  
 var
   SQL: string;
 begin
@@ -1511,7 +1511,7 @@ begin
   end;
 end;
 
-function TMonitorDatabase.GetAllAgents: TStringList;
+function TMonitorDatabase.GetAllAgents: TStringList;  
 var
   SQL: string;
 begin
@@ -1558,7 +1558,7 @@ begin
   FTransaction.Commit;
 end;
 
-function TMonitorDatabase.GetUnresolvedAlerts: TStringList;
+function TMonitorDatabase.GetUnresolvedAlerts: TStringList;  
 var
   SQL: string;
 begin
@@ -1627,7 +1627,7 @@ type
 
 implementation
 
-constructor TMonitorAPIServer.Create(ADatabase: TMonitorDatabase; APort: Integer);
+constructor TMonitorAPIServer.Create(ADatabase: TMonitorDatabase; APort: Integer);  
 begin
   inherited Create;
   FDatabase := ADatabase;
@@ -1640,13 +1640,13 @@ begin
   HTTPRouter.RegisterRoute('/api/agent/:agentid', rmGet, @HandleGetAgentDetails);
 end;
 
-destructor TMonitorAPIServer.Destroy;
+destructor TMonitorAPIServer.Destroy;  
 begin
   Stop;
   inherited Destroy;
 end;
 
-procedure TMonitorAPIServer.HandleGetAgents(ARequest: TRequest; AResponse: TResponse);
+procedure TMonitorAPIServer.HandleGetAgents(ARequest: TRequest; AResponse: TResponse);  
 var
   Agents: TStringList;
   JSONArray: TJSONArray;
@@ -1685,7 +1685,7 @@ begin
   end;
 end;
 
-procedure TMonitorAPIServer.HandleGetMetrics(ARequest: TRequest; AResponse: TResponse);
+procedure TMonitorAPIServer.HandleGetMetrics(ARequest: TRequest; AResponse: TResponse);  
 var
   AgentID: string;
   Metrics: TStringList;
@@ -1727,7 +1727,7 @@ begin
   end;
 end;
 
-procedure TMonitorAPIServer.HandleGetAlerts(ARequest: TRequest; AResponse: TResponse);
+procedure TMonitorAPIServer.HandleGetAlerts(ARequest: TRequest; AResponse: TResponse);  
 var
   Alerts: TStringList;
   JSONArray: TJSONArray;
@@ -1751,7 +1751,7 @@ begin
   end;
 end;
 
-procedure TMonitorAPIServer.HandleGetAgentDetails(ARequest: TRequest; AResponse: TResponse);
+procedure TMonitorAPIServer.HandleGetAgentDetails(ARequest: TRequest; AResponse: TResponse);  
 var
   AgentID: string;
   JSONObj: TJSONObject;
@@ -1772,7 +1772,7 @@ begin
   end;
 end;
 
-procedure TMonitorAPIServer.Start;
+procedure TMonitorAPIServer.Start;  
 begin
   Application.Port := FPort;
   Application.Initialize;
@@ -1780,7 +1780,7 @@ begin
   Application.Run;
 end;
 
-procedure TMonitorAPIServer.Stop;
+procedure TMonitorAPIServer.Stop;  
 begin
   Application.Terminate;
 end;
@@ -1860,7 +1860,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   FAPIBaseURL := 'http://localhost:8080/api';
   FHTTPClient := TFPHTTPClient.Create(nil);
@@ -1913,22 +1913,22 @@ begin
   LoadAlerts;
 end;
 
-procedure TFormMain.FormDestroy(Sender: TObject);
+procedure TFormMain.FormDestroy(Sender: TObject);  
 begin
   FHTTPClient.Free;
 end;
 
-procedure TFormMain.ButtonRefreshAgentsClick(Sender: TObject);
+procedure TFormMain.ButtonRefreshAgentsClick(Sender: TObject);  
 begin
   LoadAgents;
 end;
 
-procedure TFormMain.ButtonRefreshAlertsClick(Sender: TObject);
+procedure TFormMain.ButtonRefreshAlertsClick(Sender: TObject);  
 begin
   LoadAlerts;
 end;
 
-procedure TFormMain.TimerRefreshTimer(Sender: TObject);
+procedure TFormMain.TimerRefreshTimer(Sender: TObject);  
 begin
   // Rafraîchissement automatique
   if PageControl1.ActivePage = TabSheetDashboard then
@@ -1942,7 +1942,7 @@ begin
     LoadAlerts;
 end;
 
-procedure TFormMain.ListViewAgentsDblClick(Sender: TObject);
+procedure TFormMain.ListViewAgentsDblClick(Sender: TObject);  
 begin
   if ListViewAgents.Selected <> nil then
   begin
@@ -1952,7 +1952,7 @@ begin
   end;
 end;
 
-function TFormMain.GetJSONFromAPI(const Endpoint: string): TJSONData;
+function TFormMain.GetJSONFromAPI(const Endpoint: string): TJSONData;  
 var
   Response: string;
   Parser: TJSONParser;
@@ -1974,7 +1974,7 @@ begin
   end;
 end;
 
-procedure TFormMain.LoadAgents;
+procedure TFormMain.LoadAgents;  
 var
   JSONData: TJSONData;
   JSONArray: TJSONArray;
@@ -2019,7 +2019,7 @@ begin
   end;
 end;
 
-procedure TFormMain.LoadAlerts;
+procedure TFormMain.LoadAlerts;  
 var
   JSONData: TJSONData;
   JSONArray: TJSONArray;
@@ -2056,7 +2056,7 @@ begin
   end;
 end;
 
-procedure TFormMain.LoadMetrics(const AgentID: string);
+procedure TFormMain.LoadMetrics(const AgentID: string);  
 var
   JSONData: TJSONData;
   JSONArray: TJSONArray;
@@ -2076,7 +2076,7 @@ begin
   end;
 end;
 
-procedure TFormMain.UpdateCharts(const MetricsJSON: TJSONArray);
+procedure TFormMain.UpdateCharts(const MetricsJSON: TJSONArray);  
 var
   i: Integer;
   JSONObj: TJSONObject;
@@ -2194,7 +2194,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TFormAgentDetails.FormCreate(Sender: TObject);
+procedure TFormAgentDetails.FormCreate(Sender: TObject);  
 begin
   // Configuration de la grille des processus
   with StringGridProcesses do
@@ -2217,7 +2217,7 @@ begin
   end;
 end;
 
-procedure TFormAgentDetails.ShowAgentDetails(const AAgentID: string);
+procedure TFormAgentDetails.ShowAgentDetails(const AAgentID: string);  
 begin
   FAgentID := AAgentID;
   LoadAgentInfo;
@@ -2226,7 +2226,7 @@ begin
   Show;
 end;
 
-procedure TFormAgentDetails.LoadAgentInfo;
+procedure TFormAgentDetails.LoadAgentInfo;  
 begin
   // Charger les informations de base de l'agent depuis l'API
   LabelHostname.Caption := 'Hostname: server-01.example.com';
@@ -2240,14 +2240,14 @@ begin
   UpdateGauges(45.2, 68.5, 72.3);
 end;
 
-procedure TFormAgentDetails.UpdateGauges(CPU, Memory, Disk: Double);
+procedure TFormAgentDetails.UpdateGauges(CPU, Memory, Disk: Double);  
 begin
   GaugeCPU.Position := Round(CPU);
   GaugeMemory.Position := Round(Memory);
   GaugeDisk.Position := Round(Disk);
 end;
 
-procedure TFormAgentDetails.LoadProcesses;
+procedure TFormAgentDetails.LoadProcesses;  
 var
   i: Integer;
 begin
@@ -2264,12 +2264,12 @@ begin
   end;
 end;
 
-procedure TFormAgentDetails.ButtonRefreshProcessesClick(Sender: TObject);
+procedure TFormAgentDetails.ButtonRefreshProcessesClick(Sender: TObject);  
 begin
   LoadProcesses;
 end;
 
-procedure TFormAgentDetails.LoadLogs;
+procedure TFormAgentDetails.LoadLogs;  
 begin
   // Charger les logs récents depuis l'API
   MemoLogs.Lines.Clear;
@@ -2279,7 +2279,7 @@ begin
   MemoLogs.Lines.Add('[' + FormatDateTime('yyyy-mm-dd hh:nn:ss', Now) + '] Monitoring agent connected');
 end;
 
-procedure TFormAgentDetails.ButtonRefreshLogsClick(Sender: TObject);
+procedure TFormAgentDetails.ButtonRefreshLogsClick(Sender: TObject);  
 begin
   LoadLogs;
 end;
@@ -2352,7 +2352,7 @@ implementation
 uses
   DateUtils;
 
-constructor TAlertEngine.Create(ADatabase: TMonitorDatabase);
+constructor TAlertEngine.Create(ADatabase: TMonitorDatabase);  
 begin
   inherited Create;
   FDatabase := ADatabase;
@@ -2360,13 +2360,13 @@ begin
   FAlertCooldown := 300; // 5 minutes par défaut
 end;
 
-destructor TAlertEngine.Destroy;
+destructor TAlertEngine.Destroy;  
 begin
   FRules.Free;
   inherited Destroy;
 end;
 
-procedure TAlertEngine.LoadRules;
+procedure TAlertEngine.LoadRules;  
 var
   Rule: TAlertRule;
 begin
@@ -2411,7 +2411,7 @@ begin
   FRules.Add(Rule);
 end;
 
-procedure TAlertEngine.AddRule(const Rule: TAlertRule);
+procedure TAlertEngine.AddRule(const Rule: TAlertRule);  
 begin
   FRules.Add(Rule);
 end;
@@ -2442,7 +2442,7 @@ begin
     Result := asInfo;
 end;
 
-procedure TAlertEngine.CheckMetrics(const AgentID: string; const MetricData: TMetricRecord);
+procedure TAlertEngine.CheckMetrics(const AgentID: string; const MetricData: TMetricRecord);  
 var
   i: Integer;
   Rule: TAlertRule;
@@ -2547,7 +2547,7 @@ begin
   WriteLn(Format('[%s] %s: %s', [SeverityStr, AgentID, Message]));
 end;
 
-procedure TAlertEngine.SetAlertCooldown(Seconds: Integer);
+procedure TAlertEngine.SetAlertCooldown(Seconds: Integer);  
 begin
   FAlertCooldown := Seconds;
 end;
@@ -2621,24 +2621,24 @@ implementation
 uses
   fpjson, jsonparser;
 
-constructor TNotificationSystem.Create;
+constructor TNotificationSystem.Create;  
 begin
   inherited Create;
   SetLength(FConfigs, 0);
 end;
 
-destructor TNotificationSystem.Destroy;
+destructor TNotificationSystem.Destroy;  
 begin
   inherited Destroy;
 end;
 
-procedure TNotificationSystem.AddChannel(const Config: TNotificationConfig);
+procedure TNotificationSystem.AddChannel(const Config: TNotificationConfig);  
 begin
   SetLength(FConfigs, Length(FConfigs) + 1);
   FConfigs[High(FConfigs)] := Config;
 end;
 
-procedure TNotificationSystem.SendNotification(const Title, Message: string; Severity: string);
+procedure TNotificationSystem.SendNotification(const Title, Message: string; Severity: string);  
 var
   i: Integer;
   FullMessage: string;
@@ -2786,12 +2786,12 @@ end.
 @echo off
 REM Script de déploiement MonitorAgent pour Windows
 
-echo ========================================
-echo Installation de MonitorAgent
+echo ========================================  
+echo Installation de MonitorAgent  
 echo ========================================
 
-REM Vérifier les privilèges administrateur
-net session >nul 2>&1
+REM Vérifier les privilèges administrateur  
+net session >nul 2>&1  
 if %errorLevel% neq 0 (
     echo Ce script necessite les privileges administrateur
     echo Veuillez executer en tant qu'administrateur
@@ -2799,47 +2799,47 @@ if %errorLevel% neq 0 (
     exit /b 1
 )
 
-REM Définir les variables
-set INSTALL_DIR=C:\Program Files\MonitorAgent
-set SERVICE_NAME=MonitorAgent
+REM Définir les variables  
+set INSTALL_DIR=C:\Program Files\MonitorAgent  
+set SERVICE_NAME=MonitorAgent  
 set CONFIG_FILE=%INSTALL_DIR%\config.ini
 
-REM Créer le répertoire d'installation
-echo Creation du repertoire d'installation...
+REM Créer le répertoire d'installation  
+echo Creation du repertoire d'installation...  
 if not exist "%INSTALL_DIR%" (
     mkdir "%INSTALL_DIR%"
 )
 
-REM Copier les fichiers
-echo Copie des fichiers...
-copy /Y monitoragent.exe "%INSTALL_DIR%\"
-copy /Y config.ini "%INSTALL_DIR%\"
+REM Copier les fichiers  
+echo Copie des fichiers...  
+copy /Y monitoragent.exe "%INSTALL_DIR%\"  
+copy /Y config.ini "%INSTALL_DIR%\"  
 copy /Y *.dll "%INSTALL_DIR%\"
 
-REM Créer le fichier de configuration par défaut
+REM Créer le fichier de configuration par défaut  
 echo Creation du fichier de configuration...
 (
-echo [Server]
-echo Host=monitoring.example.com
-echo Port=9100
-echo UseTLS=false
-echo
-echo [Agent]
-echo CollectionInterval=30
-echo SendInterval=60
-echo
-echo [Logging]
-echo LogLevel=INFO
+echo [Server]  
+echo Host=monitoring.example.com  
+echo Port=9100  
+echo UseTLS=false  
+echo  
+echo [Agent]  
+echo CollectionInterval=30  
+echo SendInterval=60  
+echo  
+echo [Logging]  
+echo LogLevel=INFO  
 echo LogFile=%INSTALL_DIR%\logs\agent.log
 ) > "%CONFIG_FILE%"
 
-REM Créer le répertoire des logs
+REM Créer le répertoire des logs  
 if not exist "%INSTALL_DIR%\logs" (
     mkdir "%INSTALL_DIR%\logs"
 )
 
-REM Installer le service
-echo Installation du service Windows...
+REM Installer le service  
+echo Installation du service Windows...  
 sc create %SERVICE_NAME% binPath= "%INSTALL_DIR%\monitoragent.exe" start= auto DisplayName= "Monitor Agent Service"
 
 if %errorLevel% equ 0 (
@@ -2864,22 +2864,22 @@ if %errorLevel% equ 0 (
     echo Erreur lors de l'installation du service
 )
 
-REM Ajouter une règle de pare-feu
-echo Configuration du pare-feu Windows...
+REM Ajouter une règle de pare-feu  
+echo Configuration du pare-feu Windows...  
 netsh advfirewall firewall add rule name="MonitorAgent" dir=out action=allow program="%INSTALL_DIR%\monitoragent.exe" enable=yes
 
-echo.
-echo ========================================
-echo Installation terminee
-echo ========================================
-echo.
-echo Le service MonitorAgent a ete installe dans: %INSTALL_DIR%
-echo Configuration: %CONFIG_FILE%
-echo.
-echo Pour verifier le statut: sc query %SERVICE_NAME%
-echo Pour arreter le service: net stop %SERVICE_NAME%
-echo Pour demarrer le service: net start %SERVICE_NAME%
-echo.
+echo.  
+echo ========================================  
+echo Installation terminee  
+echo ========================================  
+echo.  
+echo Le service MonitorAgent a ete installe dans: %INSTALL_DIR%  
+echo Configuration: %CONFIG_FILE%  
+echo.  
+echo Pour verifier le statut: sc query %SERVICE_NAME%  
+echo Pour arreter le service: net stop %SERVICE_NAME%  
+echo Pour demarrer le service: net start %SERVICE_NAME%  
+echo.  
 pause
 ```
 
@@ -2889,38 +2889,38 @@ pause
 @echo off
 REM Script de désinstallation MonitorAgent pour Windows
 
-echo ========================================
-echo Desinstallation de MonitorAgent
+echo ========================================  
+echo Desinstallation de MonitorAgent  
 echo ========================================
 
-REM Vérifier les privilèges administrateur
-net session >nul 2>&1
+REM Vérifier les privilèges administrateur  
+net session >nul 2>&1  
 if %errorLevel% neq 0 (
     echo Ce script necessite les privileges administrateur
     pause
     exit /b 1
 )
 
-set SERVICE_NAME=MonitorAgent
+set SERVICE_NAME=MonitorAgent  
 set INSTALL_DIR=C:\Program Files\MonitorAgent
 
-REM Arrêter le service
-echo Arret du service...
+REM Arrêter le service  
+echo Arret du service...  
 net stop %SERVICE_NAME%
 
-REM Attendre que le service soit complètement arrêté
+REM Attendre que le service soit complètement arrêté  
 timeout /t 2 /nobreak
 
-REM Supprimer le service
-echo Suppression du service...
+REM Supprimer le service  
+echo Suppression du service...  
 sc delete %SERVICE_NAME%
 
-REM Supprimer la règle de pare-feu
-echo Suppression de la regle de pare-feu...
+REM Supprimer la règle de pare-feu  
+echo Suppression de la regle de pare-feu...  
 netsh advfirewall firewall delete rule name="MonitorAgent"
 
-REM Demander si on doit supprimer les fichiers
-set /p DELETE_FILES="Supprimer les fichiers d'installation? (O/N): "
+REM Demander si on doit supprimer les fichiers  
+set /p DELETE_FILES="Supprimer les fichiers d'installation? (O/N): "  
 if /i "%DELETE_FILES%"=="O" (
     echo Suppression des fichiers...
     rmdir /S /Q "%INSTALL_DIR%"
@@ -2929,10 +2929,10 @@ if /i "%DELETE_FILES%"=="O" (
     echo Fichiers conserves dans %INSTALL_DIR%
 )
 
-echo.
-echo ========================================
-echo Desinstallation terminee
-echo ========================================
+echo.  
+echo ========================================  
+echo Desinstallation terminee  
+echo ========================================  
 pause
 ```
 
@@ -2944,8 +2944,8 @@ pause
 
 set -e
 
-echo "========================================"
-echo "Installation de MonitorAgent"
+echo "========================================"  
+echo "Installation de MonitorAgent"  
 echo "========================================"
 
 # Vérifier les privilèges root
@@ -2956,82 +2956,82 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Définir les variables
-INSTALL_DIR="/usr/local/bin"
-CONFIG_DIR="/etc/monitoragent"
-LOG_DIR="/var/log/monitoragent"
-SERVICE_NAME="monitoragent"
+INSTALL_DIR="/usr/local/bin"  
+CONFIG_DIR="/etc/monitoragent"  
+LOG_DIR="/var/log/monitoragent"  
+SERVICE_NAME="monitoragent"  
 SYSTEMD_DIR="/etc/systemd/system"
 
 # Créer les répertoires nécessaires
-echo "Création des répertoires..."
-mkdir -p "$CONFIG_DIR"
+echo "Création des répertoires..."  
+mkdir -p "$CONFIG_DIR"  
 mkdir -p "$LOG_DIR"
 
 # Copier les fichiers
-echo "Copie des fichiers..."
-cp monitoragent "$INSTALL_DIR/"
+echo "Copie des fichiers..."  
+cp monitoragent "$INSTALL_DIR/"  
 chmod +x "$INSTALL_DIR/monitoragent"
 
 # Créer le fichier de configuration
-echo "Création du fichier de configuration..."
+echo "Création du fichier de configuration..."  
 cat > "$CONFIG_DIR/config.ini" << EOF
 [Server]
-Host=monitoring.example.com
-Port=9100
+Host=monitoring.example.com  
+Port=9100  
 UseTLS=false
 
 [Agent]
-CollectionInterval=30
+CollectionInterval=30  
 SendInterval=60
 
 [Logging]
-LogLevel=INFO
-LogFile=$LOG_DIR/agent.log
+LogLevel=INFO  
+LogFile=$LOG_DIR/agent.log  
 EOF
 
 # Créer le fichier de service systemd
-echo "Création du service systemd..."
+echo "Création du service systemd..."  
 cat > "$SYSTEMD_DIR/$SERVICE_NAME.service" << EOF
 [Unit]
-Description=Monitor Agent Service
-After=network.target
+Description=Monitor Agent Service  
+After=network.target  
 Wants=network-online.target
 
 [Service]
-Type=simple
-User=root
-ExecStart=$INSTALL_DIR/monitoragent -config $CONFIG_DIR/config.ini
-Restart=on-failure
-RestartSec=10
-StandardOutput=journal
-StandardError=journal
+Type=simple  
+User=root  
+ExecStart=$INSTALL_DIR/monitoragent -config $CONFIG_DIR/config.ini  
+Restart=on-failure  
+RestartSec=10  
+StandardOutput=journal  
+StandardError=journal  
 SyslogIdentifier=monitoragent
 
 # Sécurité
-NoNewPrivileges=true
-PrivateTmp=true
-ProtectSystem=strict
-ProtectHome=true
+NoNewPrivileges=true  
+PrivateTmp=true  
+ProtectSystem=strict  
+ProtectHome=true  
 ReadWritePaths=$LOG_DIR
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=multi-user.target  
 EOF
 
 # Recharger systemd
-echo "Rechargement de systemd..."
+echo "Rechargement de systemd..."  
 systemctl daemon-reload
 
 # Activer le service au démarrage
-echo "Activation du service au démarrage..."
+echo "Activation du service au démarrage..."  
 systemctl enable $SERVICE_NAME
 
 # Démarrer le service
-echo "Démarrage du service..."
+echo "Démarrage du service..."  
 systemctl start $SERVICE_NAME
 
 # Vérifier le statut
-sleep 2
+sleep 2  
 if systemctl is-active --quiet $SERVICE_NAME; then
     echo "Service démarré avec succès"
     systemctl status $SERVICE_NAME --no-pager
@@ -3047,21 +3047,21 @@ if command -v ufw &> /dev/null; then
     ufw allow out 9100/tcp comment 'MonitorAgent'
 fi
 
-echo ""
-echo "========================================"
-echo "Installation terminée"
-echo "========================================"
-echo ""
-echo "Le service MonitorAgent a été installé"
-echo "Configuration: $CONFIG_DIR/config.ini"
-echo "Logs: $LOG_DIR/agent.log"
-echo ""
-echo "Commandes utiles:"
-echo "  Statut:     systemctl status $SERVICE_NAME"
-echo "  Arrêter:    systemctl stop $SERVICE_NAME"
-echo "  Démarrer:   systemctl start $SERVICE_NAME"
-echo "  Redémarrer: systemctl restart $SERVICE_NAME"
-echo "  Logs:       journalctl -u $SERVICE_NAME -f"
+echo ""  
+echo "========================================"  
+echo "Installation terminée"  
+echo "========================================"  
+echo ""  
+echo "Le service MonitorAgent a été installé"  
+echo "Configuration: $CONFIG_DIR/config.ini"  
+echo "Logs: $LOG_DIR/agent.log"  
+echo ""  
+echo "Commandes utiles:"  
+echo "  Statut:     systemctl status $SERVICE_NAME"  
+echo "  Arrêter:    systemctl stop $SERVICE_NAME"  
+echo "  Démarrer:   systemctl start $SERVICE_NAME"  
+echo "  Redémarrer: systemctl restart $SERVICE_NAME"  
+echo "  Logs:       journalctl -u $SERVICE_NAME -f"  
 echo ""
 ```
 
@@ -3073,8 +3073,8 @@ echo ""
 
 set -e
 
-echo "========================================"
-echo "Désinstallation de MonitorAgent"
+echo "========================================"  
+echo "Désinstallation de MonitorAgent"  
 echo "========================================"
 
 # Vérifier les privilèges root
@@ -3083,33 +3083,33 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-SERVICE_NAME="monitoragent"
-INSTALL_DIR="/usr/local/bin"
-CONFIG_DIR="/etc/monitoragent"
-LOG_DIR="/var/log/monitoragent"
+SERVICE_NAME="monitoragent"  
+INSTALL_DIR="/usr/local/bin"  
+CONFIG_DIR="/etc/monitoragent"  
+LOG_DIR="/var/log/monitoragent"  
 SYSTEMD_DIR="/etc/systemd/system"
 
 # Arrêter le service
-echo "Arrêt du service..."
+echo "Arrêt du service..."  
 systemctl stop $SERVICE_NAME || true
 
 # Désactiver le service
-echo "Désactivation du service..."
+echo "Désactivation du service..."  
 systemctl disable $SERVICE_NAME || true
 
 # Supprimer le fichier de service
-echo "Suppression du fichier de service..."
+echo "Suppression du fichier de service..."  
 rm -f "$SYSTEMD_DIR/$SERVICE_NAME.service"
 
 # Recharger systemd
 systemctl daemon-reload
 
 # Supprimer l'exécutable
-echo "Suppression de l'exécutable..."
+echo "Suppression de l'exécutable..."  
 rm -f "$INSTALL_DIR/monitoragent"
 
 # Demander si on doit supprimer les fichiers de configuration
-read -p "Supprimer les fichiers de configuration? (o/N): " DELETE_CONFIG
+read -p "Supprimer les fichiers de configuration? (o/N): " DELETE_CONFIG  
 if [[ "$DELETE_CONFIG" =~ ^[oO]$ ]]; then
     echo "Suppression de la configuration..."
     rm -rf "$CONFIG_DIR"
@@ -3119,7 +3119,7 @@ else
 fi
 
 # Demander si on doit supprimer les logs
-read -p "Supprimer les logs? (o/N): " DELETE_LOGS
+read -p "Supprimer les logs? (o/N): " DELETE_LOGS  
 if [[ "$DELETE_LOGS" =~ ^[oO]$ ]]; then
     echo "Suppression des logs..."
     rm -rf "$LOG_DIR"
@@ -3134,9 +3134,9 @@ if command -v ufw &> /dev/null; then
     ufw delete allow out 9100/tcp || true
 fi
 
-echo ""
-echo "========================================"
-echo "Désinstallation terminée"
+echo ""  
+echo "========================================"  
+echo "Désinstallation terminée"  
 echo "========================================"
 ```
 
@@ -3147,23 +3147,23 @@ echo "========================================"
 ```ini
 [Server]
 # Adresse du serveur de monitoring
-Host=monitoring.example.com
+Host=monitoring.example.com  
 Port=9100
 
 # Utiliser TLS/SSL pour la connexion
-UseTLS=true
-TLSCertFile=/etc/monitoragent/certs/client.crt
-TLSKeyFile=/etc/monitoragent/certs/client.key
+UseTLS=true  
+TLSCertFile=/etc/monitoragent/certs/client.crt  
+TLSKeyFile=/etc/monitoragent/certs/client.key  
 TLSCAFile=/etc/monitoragent/certs/ca.crt
 
 # Timeout de connexion (secondes)
-ConnectionTimeout=10
-ReadTimeout=30
+ConnectionTimeout=10  
+ReadTimeout=30  
 WriteTimeout=30
 
 # Reconnexion automatique
-AutoReconnect=true
-ReconnectInterval=30
+AutoReconnect=true  
+ReconnectInterval=30  
 MaxReconnectAttempts=10
 
 [Agent]
@@ -3180,19 +3180,19 @@ CollectionInterval=30
 SendInterval=60
 
 # Mode batch: envoyer plusieurs métriques en une fois
-BatchMode=true
+BatchMode=true  
 BatchSize=10
 
 # Buffer des métriques en cas de déconnexion
-BufferMetrics=true
+BufferMetrics=true  
 MaxBufferSize=1000
 
 # Métriques à collecter (true/false)
-CollectCPU=true
-CollectMemory=true
-CollectDisk=true
-CollectNetwork=true
-CollectProcesses=false
+CollectCPU=true  
+CollectMemory=true  
+CollectDisk=true  
+CollectNetwork=true  
+CollectProcesses=false  
 CollectServices=false
 
 # Disques à surveiller (séparés par des virgules, * pour tous)
@@ -3209,25 +3209,25 @@ LogLevel=INFO
 LogFile=/var/log/monitoragent/agent.log
 
 # Rotation des logs
-LogRotate=true
-LogMaxSize=10485760  # 10 MB
-LogMaxBackups=5
+LogRotate=true  
+LogMaxSize=10485760  # 10 MB  
+LogMaxBackups=5  
 LogMaxAge=30  # jours
 
 # Format des logs: text, json
 LogFormat=text
 
 # Logs vers syslog (Linux uniquement)
-LogToSyslog=false
+LogToSyslog=false  
 SyslogFacility=daemon
 
 [Security]
 # Authentification par token
-UseAuthentication=true
+UseAuthentication=true  
 AuthToken=your-secret-token-here
 
 # Chiffrement des données
-EncryptData=false
+EncryptData=false  
 EncryptionKey=
 
 [Performance]
@@ -3248,15 +3248,15 @@ MaxMemoryUsage=100
 EnableLocalAlerts=true
 
 # Seuils d'alerte CPU
-CPUWarningThreshold=80
+CPUWarningThreshold=80  
 CPUCriticalThreshold=95
 
 # Seuils d'alerte mémoire
-MemoryWarningThreshold=85
+MemoryWarningThreshold=85  
 MemoryCriticalThreshold=95
 
 # Seuils d'alerte disque
-DiskWarningThreshold=80
+DiskWarningThreshold=80  
 DiskCriticalThreshold=90
 
 # Actions en cas d'alerte critique
@@ -3281,13 +3281,13 @@ RunAsGroup=root
 ```ini
 [Server]
 # Port d'écoute pour les agents
-ListenPort=9100
+ListenPort=9100  
 ListenAddress=0.0.0.0
 
 # TLS/SSL
-UseTLS=true
-TLSCertFile=/etc/monitorserver/certs/server.crt
-TLSKeyFile=/etc/monitorserver/certs/server.key
+UseTLS=true  
+TLSCertFile=/etc/monitorserver/certs/server.crt  
+TLSKeyFile=/etc/monitorserver/certs/server.key  
 TLSCAFile=/etc/monitorserver/certs/ca.crt
 
 # Timeout
@@ -3304,44 +3304,44 @@ Type=postgresql
 SQLitePath=/var/lib/monitorserver/monitoring.db
 
 # PostgreSQL
-PGHost=localhost
-PGPort=5432
-PGDatabase=monitoring
-PGUser=monitoruser
-PGPassword=secure-password
+PGHost=localhost  
+PGPort=5432  
+PGDatabase=monitoring  
+PGUser=monitoruser  
+PGPassword=secure-password  
 PGSSLMode=require
 
 # MySQL
-MySQLHost=localhost
-MySQLPort=3306
-MySQLDatabase=monitoring
-MySQLUser=monitoruser
+MySQLHost=localhost  
+MySQLPort=3306  
+MySQLDatabase=monitoring  
+MySQLUser=monitoruser  
 MySQLPassword=secure-password
 
 # Pool de connexions
-DBPoolSize=10
+DBPoolSize=10  
 DBMaxOpenConns=50
 
 # Rétention des données
-RetentionDays=90
+RetentionDays=90  
 CleanupInterval=86400  # secondes (1 jour)
 
 [API]
 # API REST
-EnableAPI=true
-APIPort=8080
+EnableAPI=true  
+APIPort=8080  
 APIAddress=0.0.0.0
 
 # Authentification API
-APIAuthentication=true
+APIAuthentication=true  
 APITokens=/etc/monitorserver/api-tokens.txt
 
 # CORS
-EnableCORS=true
+EnableCORS=true  
 CORSOrigins=*
 
 # Rate limiting
-RateLimit=100  # requêtes par minute
+RateLimit=100  # requêtes par minute  
 RateLimitBurst=20
 
 [Alerts]
@@ -3356,33 +3356,33 @@ AlertCooldown=300
 
 [Notifications]
 # Email
-EnableEmail=true
-SMTPHost=smtp.gmail.com
-SMTPPort=587
-SMTPUser=alerts@example.com
-SMTPPassword=app-password
-SMTPFrom=monitoring@example.com
+EnableEmail=true  
+SMTPHost=smtp.gmail.com  
+SMTPPort=587  
+SMTPUser=alerts@example.com  
+SMTPPassword=app-password  
+SMTPFrom=monitoring@example.com  
 EmailTo=admin@example.com,ops@example.com
 
 # Slack
-EnableSlack=false
-SlackWebhookURL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
+EnableSlack=false  
+SlackWebhookURL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL  
 SlackChannel=#monitoring
 
 # Webhook personnalisé
-EnableWebhook=false
-WebhookURL=https://your-webhook-endpoint.com/alert
+EnableWebhook=false  
+WebhookURL=https://your-webhook-endpoint.com/alert  
 WebhookMethod=POST
 
 # PagerDuty
-EnablePagerDuty=false
+EnablePagerDuty=false  
 PagerDutyIntegrationKey=your-integration-key
 
 [Logging]
-LogLevel=INFO
-LogFile=/var/log/monitorserver/server.log
-LogRotate=true
-LogMaxSize=52428800  # 50 MB
+LogLevel=INFO  
+LogFile=/var/log/monitorserver/server.log  
+LogRotate=true  
+LogMaxSize=52428800  # 50 MB  
 LogMaxBackups=10
 
 [Performance]
@@ -3393,12 +3393,12 @@ MetricsWorkers=4
 AlertWorkers=2
 
 # Cache en mémoire
-EnableCache=true
-CacheSize=1000  # nombre d'éléments
+EnableCache=true  
+CacheSize=1000  # nombre d'éléments  
 CacheTTL=300  # secondes
 
 [Advanced]
-Debug=false
+Debug=false  
 PIDFile=/var/run/monitorserver.pid
 ```
 
@@ -3438,7 +3438,7 @@ implementation
 uses
   DateUtils;
 
-constructor TMetricsCache.Create(ACacheTimeout: Integer);
+constructor TMetricsCache.Create(ACacheTimeout: Integer);  
 begin
   inherited Create;
   FCacheTimeout := ACacheTimeout;
@@ -3448,7 +3448,7 @@ begin
   FCachedMemory := 0;
 end;
 
-function TMetricsCache.GetCPU(Collector: TMetricsCollector): Double;
+function TMetricsCache.GetCPU(Collector: TMetricsCollector): Double;  
 begin
   // Utiliser le cache si les données sont récentes
   if SecondsBetween(Now, FLastCPUMeasurement) < FCacheTimeout then
@@ -3463,7 +3463,7 @@ begin
   end;
 end;
 
-function TMetricsCache.GetMemory(Collector: TMetricsCollector): Int64;
+function TMetricsCache.GetMemory(Collector: TMetricsCollector): Int64;  
 var
   Total, Used, Available: Int64;
 begin
@@ -3501,12 +3501,12 @@ interface
 uses
   Classes, SysUtils, zstream;
 
-function CompressData(const Data: TBytes): TBytes;
+function CompressData(const Data: TBytes): TBytes;  
 function DecompressData(const Data: TBytes): TBytes;
 
 implementation
 
-function CompressData(const Data: TBytes): TBytes;
+function CompressData(const Data: TBytes): TBytes;  
 var
   InputStream: TMemoryStream;
   OutputStream: TMemoryStream;
@@ -3534,7 +3534,7 @@ begin
   end;
 end;
 
-function DecompressData(const Data: TBytes): TBytes;
+function DecompressData(const Data: TBytes): TBytes;  
 var
   InputStream: TMemoryStream;
   OutputStream: TMemoryStream;
@@ -3612,7 +3612,7 @@ implementation
 uses
   DateUtils;
 
-constructor THAMonitorServer.Create(APort: Integer; const ANodeID: string);
+constructor THAMonitorServer.Create(APort: Integer; const ANodeID: string);  
 begin
   inherited Create(APort);
   FThisNodeID := ANodeID;
@@ -3621,7 +3621,7 @@ begin
   SetLength(FNodes, 0);
 end;
 
-procedure THAMonitorServer.RegisterNode(const NodeID, IPAddress: string; Port: Integer);
+procedure THAMonitorServer.RegisterNode(const NodeID, IPAddress: string; Port: Integer);  
 var
   Node: TServerNode;
 begin
@@ -3635,14 +3635,14 @@ begin
   FNodes[High(FNodes)] := Node;
 end;
 
-procedure THAMonitorServer.SendHeartbeat;
+procedure THAMonitorServer.SendHeartbeat;  
 begin
   // Envoyer un heartbeat aux autres nœuds
   // Implémentation via TCP ou UDP multicast
   WriteLn('Envoi heartbeat depuis ', FThisNodeID);
 end;
 
-procedure THAMonitorServer.CheckOtherNodes;
+procedure THAMonitorServer.CheckOtherNodes;  
 var
   i: Integer;
   PrimaryFound: Boolean;
@@ -3676,21 +3676,21 @@ begin
   end;
 end;
 
-procedure THAMonitorServer.PromoteToPrimary;
+procedure THAMonitorServer.PromoteToPrimary;  
 begin
   FIsPrimary := True;
   WriteLn('Ce nœud est maintenant PRIMARY');
   // Démarrer l'acceptation des connexions clients
 end;
 
-procedure THAMonitorServer.DemoteToSecondary;
+procedure THAMonitorServer.DemoteToSecondary;  
 begin
   FIsPrimary := False;
   WriteLn('Ce nœud est maintenant SECONDARY');
   // Arrêter l'acceptation des connexions clients
 end;
 
-procedure THAMonitorServer.RunHA;
+procedure THAMonitorServer.RunHA;  
 begin
   while FRunning do
   begin

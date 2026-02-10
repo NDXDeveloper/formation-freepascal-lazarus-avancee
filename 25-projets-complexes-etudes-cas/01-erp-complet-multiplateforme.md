@@ -95,7 +95,7 @@ Les chemins de fichiers sont différents entre Windows et Linux. Utilisez toujou
 uses
   SysUtils, FileUtil;
 
-function GetConfigPath: string;
+function GetConfigPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('APPDATA') + PathDelim + 'MonERP' + PathDelim;
@@ -109,7 +109,7 @@ begin
     ForceDirectories(Result);
 end;
 
-function GetDatabasePath: string;
+function GetDatabasePath: string;  
 begin
   Result := GetConfigPath + 'database' + PathDelim;
 end;
@@ -129,7 +129,7 @@ Choisissez une base de données multi-plateforme. Recommandations :
 uses
   sqldb, pqconnection;
 
-procedure TDataModule.ConnectDatabase;
+procedure TDataModule.ConnectDatabase;  
 begin
   Connection := TPQConnection.Create(nil);
   Connection.HostName := 'localhost';
@@ -154,7 +154,7 @@ end;
 uses
   sqldb, sqlite3conn;
 
-procedure TDataModule.ConnectSQLite;
+procedure TDataModule.ConnectSQLite;  
 begin
   Connection := TSQLite3Connection.Create(nil);
   Connection.DatabaseName := GetDatabasePath + 'monerp.db';
@@ -174,12 +174,12 @@ type
     procedure AdjustForPlatform;
   end;
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   AdjustForPlatform;
 end;
 
-procedure TMainForm.AdjustForPlatform;
+procedure TMainForm.AdjustForPlatform;  
 begin
   {$IFDEF WINDOWS}
   // Windows utilise Segoe UI par défaut
@@ -208,7 +208,7 @@ Pour les rapports multi-plateformes, plusieurs solutions :
 uses
   LR_Class, LR_DBSet;
 
-procedure TFactureForm.ImprimerFacture;
+procedure TFactureForm.ImprimerFacture;  
 var
   Report: TfrReport;
 begin
@@ -227,7 +227,7 @@ end;
 uses
   fpreport, fpreportpdfexport;
 
-procedure GenererPDF(const NomFichier: string);
+procedure GenererPDF(const NomFichier: string);  
 var
   Report: TFPReport;
   Exporter: TFPReportExportPDF;
@@ -367,7 +367,7 @@ type
 
 implementation
 
-function TCustomer.Save(Connection: TSQLConnection): Boolean;
+function TCustomer.Save(Connection: TSQLConnection): Boolean;  
 var
   Query: TSQLQuery;
 begin
@@ -421,7 +421,7 @@ begin
   Query.Free;
 end;
 
-class function TCustomer.LoadById(Connection: TSQLConnection; AId: Integer): TCustomer;
+class function TCustomer.LoadById(Connection: TSQLConnection; AId: Integer): TCustomer;  
 var
   Query: TSQLQuery;
 begin
@@ -448,7 +448,7 @@ begin
   end;
 end;
 
-function TCustomer.Delete(Connection: TSQLConnection): Boolean;
+function TCustomer.Delete(Connection: TSQLConnection): Boolean;  
 var
   Query: TSQLQuery;
 begin
@@ -532,19 +532,19 @@ implementation
 
 { TInvoiceLine }
 
-function TInvoiceLine.GetLineTotal: Double;
+function TInvoiceLine.GetLineTotal: Double;  
 begin
   Result := FQuantity * FUnitPrice;
 end;
 
-function TInvoiceLine.GetVatAmount: Double;
+function TInvoiceLine.GetVatAmount: Double;  
 begin
   Result := GetLineTotal * (FVatRate / 100);
 end;
 
 { TInvoice }
 
-constructor TInvoice.Create;
+constructor TInvoice.Create;  
 begin
   inherited Create;
   FLines := TList.Create;
@@ -552,7 +552,7 @@ begin
   FDueDate := Date + 30; // 30 jours par défaut
 end;
 
-destructor TInvoice.Destroy;
+destructor TInvoice.Destroy;  
 var
   i: Integer;
 begin
@@ -562,12 +562,12 @@ begin
   inherited Destroy;
 end;
 
-procedure TInvoice.AddLine(ALine: TInvoiceLine);
+procedure TInvoice.AddLine(ALine: TInvoiceLine);  
 begin
   FLines.Add(ALine);
 end;
 
-function TInvoice.GetTotalHT: Double;
+function TInvoice.GetTotalHT: Double;  
 var
   i: Integer;
 begin
@@ -576,7 +576,7 @@ begin
     Result := Result + TInvoiceLine(FLines[i]).GetLineTotal;
 end;
 
-function TInvoice.GetTotalVAT: Double;
+function TInvoice.GetTotalVAT: Double;  
 var
   i: Integer;
 begin
@@ -585,12 +585,12 @@ begin
     Result := Result + TInvoiceLine(FLines[i]).GetVatAmount;
 end;
 
-function TInvoice.GetTotalTTC: Double;
+function TInvoice.GetTotalTTC: Double;  
 begin
   Result := GetTotalHT + GetTotalVAT;
 end;
 
-function TInvoice.Save(Connection: TSQLConnection): Boolean;
+function TInvoice.Save(Connection: TSQLConnection): Boolean;  
 var
   Query: TSQLQuery;
   i: Integer;
@@ -715,7 +715,7 @@ type
 
 implementation
 
-class function TSecurityManager.HashPassword(const Password: string): string;
+class function TSecurityManager.HashPassword(const Password: string): string;  
 begin
   // Utiliser SHA256 ou mieux, bcrypt en production
   Result := SHA1Print(SHA1String(Password));
@@ -810,7 +810,7 @@ type
 
 implementation
 
-constructor TAppConfig.Create;
+constructor TAppConfig.Create;  
 begin
   inherited Create;
 
@@ -827,28 +827,28 @@ begin
   FIniFile := TIniFile.Create(FConfigPath);
 end;
 
-destructor TAppConfig.Destroy;
+destructor TAppConfig.Destroy;  
 begin
   FIniFile.Free;
   inherited Destroy;
 end;
 
-function TAppConfig.GetDatabaseHost: string;
+function TAppConfig.GetDatabaseHost: string;  
 begin
   Result := FIniFile.ReadString('Database', 'Host', 'localhost');
 end;
 
-function TAppConfig.GetDatabaseName: string;
+function TAppConfig.GetDatabaseName: string;  
 begin
   Result := FIniFile.ReadString('Database', 'Name', 'monerp');
 end;
 
-function TAppConfig.GetDatabaseUser: string;
+function TAppConfig.GetDatabaseUser: string;  
 begin
   Result := FIniFile.ReadString('Database', 'User', 'erp_user');
 end;
 
-procedure TAppConfig.SetDatabaseHost(const Value: string);
+procedure TAppConfig.SetDatabaseHost(const Value: string);  
 begin
   FIniFile.WriteString('Database', 'Host', Value);
 end;
@@ -860,24 +860,24 @@ end.
 
 ```batch
 @echo off
-echo Installation de MonERP pour Windows
+echo Installation de MonERP pour Windows  
 echo ====================================
 
-REM Créer les répertoires
-mkdir "%APPDATA%\MonERP"
-mkdir "%APPDATA%\MonERP\reports"
+REM Créer les répertoires  
+mkdir "%APPDATA%\MonERP"  
+mkdir "%APPDATA%\MonERP\reports"  
 mkdir "%APPDATA%\MonERP\database"
 
-REM Copier les fichiers
-copy MonERP.exe "%APPDATA%\MonERP\"
-copy *.dll "%APPDATA%\MonERP\"
+REM Copier les fichiers  
+copy MonERP.exe "%APPDATA%\MonERP\"  
+copy *.dll "%APPDATA%\MonERP\"  
 copy reports\*.* "%APPDATA%\MonERP\reports\"
 
-REM Créer un raccourci sur le bureau
-echo Creating desktop shortcut...
+REM Créer un raccourci sur le bureau  
+echo Creating desktop shortcut...  
 powershell "$s=(New-Object -COM WScript.Shell).CreateShortcut('%userprofile%\Desktop\MonERP.lnk');$s.TargetPath='%APPDATA%\MonERP\MonERP.exe';$s.Save()"
 
-echo Installation terminee!
+echo Installation terminee!  
 pause
 ```
 
@@ -885,33 +885,33 @@ pause
 
 ```bash
 #!/bin/bash
-echo "Installation de MonERP pour Linux"
+echo "Installation de MonERP pour Linux"  
 echo "=================================="
 
 # Créer les répertoires
-mkdir -p ~/.monerp
-mkdir -p ~/.monerp/reports
+mkdir -p ~/.monerp  
+mkdir -p ~/.monerp/reports  
 mkdir -p ~/.monerp/database
 
 # Copier les fichiers
-cp monerp ~/.monerp/
-chmod +x ~/.monerp/monerp
+cp monerp ~/.monerp/  
+chmod +x ~/.monerp/monerp  
 cp reports/* ~/.monerp/reports/
 
 # Créer un fichier .desktop
 cat > ~/.local/share/applications/monerp.desktop << EOF
 [Desktop Entry]
-Version=1.0
-Type=Application
-Name=MonERP
-Comment=Système de gestion d'entreprise
-Exec=$HOME/.monerp/monerp
-Icon=$HOME/.monerp/icon.png
-Terminal=false
-Categories=Office;
+Version=1.0  
+Type=Application  
+Name=MonERP  
+Comment=Système de gestion d'entreprise  
+Exec=$HOME/.monerp/monerp  
+Icon=$HOME/.monerp/icon.png  
+Terminal=false  
+Categories=Office;  
 EOF
 
-echo "Installation terminée!"
+echo "Installation terminée!"  
 echo "Lancez MonERP depuis le menu des applications"
 ```
 
@@ -955,20 +955,20 @@ type
 
 implementation
 
-constructor TDataCache.Create;
+constructor TDataCache.Create;  
 begin
   inherited Create;
   FCache := TDictionary<string, TCachedItem>.Create;
 end;
 
-destructor TDataCache.Destroy;
+destructor TDataCache.Destroy;  
 begin
   Clear;
   FCache.Free;
   inherited Destroy;
 end;
 
-procedure TDataCache.Put(const Key: string; Data: TObject; DurationMinutes: Integer);
+procedure TDataCache.Put(const Key: string; Data: TObject; DurationMinutes: Integer);  
 var
   Item: TCachedItem;
 begin
@@ -989,7 +989,7 @@ begin
   Item.Expiry := Now + (DurationMinutes / (24 * 60));
 end;
 
-function TDataCache.Get(const Key: string): TObject;
+function TDataCache.Get(const Key: string): TObject;  
 var
   Item: TCachedItem;
 begin
@@ -1009,12 +1009,12 @@ begin
   end;
 end;
 
-function TDataCache.Has(const Key: string): Boolean;
+function TDataCache.Has(const Key: string): Boolean;  
 begin
   Result := Get(Key) <> nil;
 end;
 
-procedure TDataCache.Clear;
+procedure TDataCache.Clear;  
 var
   Item: TCachedItem;
 begin
@@ -1026,7 +1026,7 @@ begin
   FCache.Clear;
 end;
 
-procedure TDataCache.CleanExpired;
+procedure TDataCache.CleanExpired;  
 var
   KeysToRemove: TStringList;
   Key: string;
@@ -1126,7 +1126,7 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TConnectionPool.Destroy;
+destructor TConnectionPool.Destroy;  
 var
   i: Integer;
 begin
@@ -1139,7 +1139,7 @@ begin
   inherited Destroy;
 end;
 
-function TConnectionPool.CreateConnection: TSQLConnection;
+function TConnectionPool.CreateConnection: TSQLConnection;  
 var
   Conn: TPQConnection;
 begin
@@ -1154,7 +1154,7 @@ begin
   Result := Conn;
 end;
 
-function TConnectionPool.AcquireConnection: TSQLConnection;
+function TConnectionPool.AcquireConnection: TSQLConnection;  
 begin
   FLock.Enter;
   try
@@ -1182,7 +1182,7 @@ begin
   end;
 end;
 
-procedure TConnectionPool.ReleaseConnection(Connection: TSQLConnection);
+procedure TConnectionPool.ReleaseConnection(Connection: TSQLConnection);  
 begin
   FLock.Enter;
   try
@@ -1223,7 +1223,7 @@ type
 
 implementation
 
-constructor TTransactionScope.Create(ATransaction: TSQLTransaction);
+constructor TTransactionScope.Create(ATransaction: TSQLTransaction);  
 begin
   inherited Create;
   FTransaction := ATransaction;
@@ -1231,20 +1231,20 @@ begin
   FTransaction.StartTransaction;
 end;
 
-destructor TTransactionScope.Destroy;
+destructor TTransactionScope.Destroy;  
 begin
   if not FCommitted then
     FTransaction.Rollback;
   inherited Destroy;
 end;
 
-procedure TTransactionScope.Commit;
+procedure TTransactionScope.Commit;  
 begin
   FTransaction.Commit;
   FCommitted := True;
 end;
 
-procedure TTransactionScope.Rollback;
+procedure TTransactionScope.Rollback;  
 begin
   FTransaction.Rollback;
   FCommitted := True;
@@ -1331,7 +1331,7 @@ implementation
 uses
   CustomerForm, InvoiceForm, Configuration;
 
-procedure TfrmMain.FormCreate(Sender: TObject);
+procedure TfrmMain.FormCreate(Sender: TObject);  
 begin
   Caption := 'MonERP - Système de Gestion Intégré';
 
@@ -1349,12 +1349,12 @@ begin
   UpdateStatusBar;
 end;
 
-procedure TfrmMain.FormDestroy(Sender: TObject);
+procedure TfrmMain.FormDestroy(Sender: TObject);  
 begin
   SaveUserPreferences;
 end;
 
-procedure TfrmMain.LoadUserPreferences;
+procedure TfrmMain.LoadUserPreferences;  
 var
   Config: TAppConfig;
 begin
@@ -1373,7 +1373,7 @@ begin
   end;
 end;
 
-procedure TfrmMain.SaveUserPreferences;
+procedure TfrmMain.SaveUserPreferences;  
 var
   Config: TAppConfig;
 begin
@@ -1393,7 +1393,7 @@ begin
   end;
 end;
 
-procedure TfrmMain.UpdateStatusBar;
+procedure TfrmMain.UpdateStatusBar;  
 begin
   if Assigned(FCurrentUser) then
     StatusBar.Panels[0].Text := 'Utilisateur: ' + FCurrentUser.Username
@@ -1404,7 +1404,7 @@ begin
   StatusBar.Panels[2].Text := FormatDateTime('dd/mm/yyyy hh:nn', Now);
 end;
 
-procedure TfrmMain.mnuSalesCustomersClick(Sender: TObject);
+procedure TfrmMain.mnuSalesCustomersClick(Sender: TObject);  
 var
   TabSheet: TTabSheet;
   CustomerForm: TfrmCustomers;
@@ -1424,7 +1424,7 @@ begin
   PageControl.ActivePage := TabSheet;
 end;
 
-procedure TfrmMain.mnuSalesInvoicesClick(Sender: TObject);
+procedure TfrmMain.mnuSalesInvoicesClick(Sender: TObject);  
 var
   TabSheet: TTabSheet;
   InvoiceForm: TfrmInvoices;
@@ -1442,7 +1442,7 @@ begin
   PageControl.ActivePage := TabSheet;
 end;
 
-procedure TfrmMain.mnuFileExitClick(Sender: TObject);
+procedure TfrmMain.mnuFileExitClick(Sender: TObject);  
 begin
   Close;
 end;
@@ -1497,13 +1497,13 @@ implementation
 uses
   CustomerEditForm, DataModule;
 
-procedure TfrmCustomers.FormCreate(Sender: TObject);
+procedure TfrmCustomers.FormCreate(Sender: TObject);  
 begin
   ConfigureGrid;
   LoadCustomers;
 end;
 
-procedure TfrmCustomers.ConfigureGrid;
+procedure TfrmCustomers.ConfigureGrid;  
 begin
   gridCustomers.RowCount := 1;
   gridCustomers.ColCount := 6;
@@ -1530,7 +1530,7 @@ begin
   gridCustomers.Options := gridCustomers.Options + [goRowSelect];
 end;
 
-procedure TfrmCustomers.LoadCustomers(const SearchTerm: string);
+procedure TfrmCustomers.LoadCustomers(const SearchTerm: string);  
 var
   Row: Integer;
 begin
@@ -1579,12 +1579,12 @@ begin
   end;
 end;
 
-procedure TfrmCustomers.btnSearchClick(Sender: TObject);
+procedure TfrmCustomers.btnSearchClick(Sender: TObject);  
 begin
   LoadCustomers(edtSearch.Text);
 end;
 
-procedure TfrmCustomers.btnNewClick(Sender: TObject);
+procedure TfrmCustomers.btnNewClick(Sender: TObject);  
 var
   EditForm: TfrmCustomerEdit;
 begin
@@ -1597,7 +1597,7 @@ begin
   end;
 end;
 
-procedure TfrmCustomers.btnEditClick(Sender: TObject);
+procedure TfrmCustomers.btnEditClick(Sender: TObject);  
 var
   EditForm: TfrmCustomerEdit;
   CustomerId: Integer;
@@ -1619,7 +1619,7 @@ begin
   end;
 end;
 
-procedure TfrmCustomers.btnDeleteClick(Sender: TObject);
+procedure TfrmCustomers.btnDeleteClick(Sender: TObject);  
 var
   CustomerId: Integer;
   Customer: TCustomer;
@@ -1649,12 +1649,12 @@ begin
   end;
 end;
 
-procedure TfrmCustomers.gridCustomersDblClick(Sender: TObject);
+procedure TfrmCustomers.gridCustomersDblClick(Sender: TObject);  
 begin
   btnEditClick(Sender);
 end;
 
-function TfrmCustomers.GetSelectedCustomerId: Integer;
+function TfrmCustomers.GetSelectedCustomerId: Integer;  
 begin
   Result := 0;
   if (gridCustomers.Row > 0) and (gridCustomers.RowCount > 1) then
@@ -1702,14 +1702,14 @@ type
 
 implementation
 
-constructor TBaseReport.Create;
+constructor TBaseReport.Create;  
 begin
   inherited Create;
   FReportDate := Now;
   FCompanyName := 'Ma Société';
 end;
 
-procedure TBaseReport.DrawHeader(Canvas: TCanvas; Width: Integer);
+procedure TBaseReport.DrawHeader(Canvas: TCanvas; Width: Integer);  
 begin
   Canvas.Font.Size := 16;
   Canvas.Font.Style := [fsBold];
@@ -1728,7 +1728,7 @@ begin
   Canvas.Line(50, 110, Width - 50, 110);
 end;
 
-procedure TBaseReport.DrawFooter(Canvas: TCanvas; Width, Y: Integer);
+procedure TBaseReport.DrawFooter(Canvas: TCanvas; Width, Y: Integer);  
 begin
   Canvas.Font.Size := 8;
   Canvas.TextOut(50, Y,
@@ -1736,7 +1736,7 @@ begin
   Canvas.TextOut(Width - 150, Y, 'Page 1');
 end;
 
-procedure TBaseReport.Generate(Format: TReportFormat; const FileName: string);
+procedure TBaseReport.Generate(Format: TReportFormat; const FileName: string);  
 begin
   case Format of
     rfPrint: Print;
@@ -1746,7 +1746,7 @@ begin
   end;
 end;
 
-procedure TBaseReport.Print;
+procedure TBaseReport.Print;  
 var
   PrinterCanvas: TCanvas;
 begin
@@ -1796,14 +1796,14 @@ type
 
 implementation
 
-constructor TCustomerListReport.Create;
+constructor TCustomerListReport.Create;  
 begin
   inherited Create;
   FCustomers := TList.Create;
   FTitle := 'Liste des Clients';
 end;
 
-destructor TCustomerListReport.Destroy;
+destructor TCustomerListReport.Destroy;  
 var
   i: Integer;
 begin
@@ -1813,7 +1813,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TCustomerListReport.LoadCustomers(Connection: TSQLConnection);
+procedure TCustomerListReport.LoadCustomers(Connection: TSQLConnection);  
 var
   Query: TSQLQuery;
   Customer: TCustomer;
@@ -1848,7 +1848,7 @@ begin
   end;
 end;
 
-procedure TCustomerListReport.DrawContent(Canvas: TCanvas; Width, StartY: Integer);
+procedure TCustomerListReport.DrawContent(Canvas: TCanvas; Width, StartY: Integer);  
 var
   i, Y: Integer;
   Customer: TCustomer;
@@ -1944,14 +1944,14 @@ implementation
 var
   GlobalLogger: TLogger = nil;
 
-function GetLogger: TLogger;
+function GetLogger: TLogger;  
 begin
   if GlobalLogger = nil then
     GlobalLogger := TLogger.Create;
   Result := GlobalLogger;
 end;
 
-constructor TLogger.Create;
+constructor TLogger.Create;  
 begin
   inherited Create;
   FLock := TCriticalSection.Create;
@@ -1969,19 +1969,19 @@ begin
   ForceDirectories(FLogPath);
 end;
 
-destructor TLogger.Destroy;
+destructor TLogger.Destroy;  
 begin
   FLock.Free;
   inherited Destroy;
 end;
 
-function TLogger.GetLogFileName: string;
+function TLogger.GetLogFileName: string;  
 begin
   Result := FLogPath + 'monerp_' +
             FormatDateTime('yyyymmdd', Date) + '.log';
 end;
 
-function TLogger.LogLevelToString(Level: TLogLevel): string;
+function TLogger.LogLevelToString(Level: TLogLevel): string;  
 begin
   case Level of
     llDebug: Result := 'DEBUG';
@@ -1992,7 +1992,7 @@ begin
   end;
 end;
 
-procedure TLogger.Log(Level: TLogLevel; const Message: string);
+procedure TLogger.Log(Level: TLogLevel; const Message: string);  
 var
   LogLine: string;
 begin
@@ -2024,27 +2024,27 @@ begin
   end;
 end;
 
-procedure TLogger.Debug(const Message: string);
+procedure TLogger.Debug(const Message: string);  
 begin
   Log(llDebug, Message);
 end;
 
-procedure TLogger.Info(const Message: string);
+procedure TLogger.Info(const Message: string);  
 begin
   Log(llInfo, Message);
 end;
 
-procedure TLogger.Warning(const Message: string);
+procedure TLogger.Warning(const Message: string);  
 begin
   Log(llWarning, Message);
 end;
 
-procedure TLogger.Error(const Message: string);
+procedure TLogger.Error(const Message: string);  
 begin
   Log(llError, Message);
 end;
 
-procedure TLogger.Fatal(const Message: string);
+procedure TLogger.Fatal(const Message: string);  
 begin
   Log(llFatal, Message);
 end;
@@ -2227,8 +2227,8 @@ CREATE TABLE audit_log (
     ip_address VARCHAR(45)
 );
 
-CREATE INDEX idx_audit_table_record ON audit_log(table_name, record_id);
-CREATE INDEX idx_audit_date ON audit_log(action_date);
+CREATE INDEX idx_audit_table_record ON audit_log(table_name, record_id);  
+CREATE INDEX idx_audit_date ON audit_log(action_date);  
 CREATE INDEX idx_audit_user ON audit_log(user_id);
 ```
 
@@ -2317,12 +2317,12 @@ implementation
 
 { TRole }
 
-function TRole.HasPermission(Permission: TPermission): Boolean;
+function TRole.HasPermission(Permission: TPermission): Boolean;  
 begin
   Result := Permission in FPermissions;
 end;
 
-function TRole.Save(Connection: TSQLConnection): Boolean;
+function TRole.Save(Connection: TSQLConnection): Boolean;  
 var
   Query: TSQLQuery;
   PermStr: string;
@@ -2378,7 +2378,7 @@ begin
   Query.Free;
 end;
 
-class function TRole.LoadById(Connection: TSQLConnection; AId: Integer): TRole;
+class function TRole.LoadById(Connection: TSQLConnection; AId: Integer): TRole;  
 var
   Query: TSQLQuery;
   PermStr: string;
@@ -2420,14 +2420,14 @@ end;
 
 { TUserPermissions }
 
-constructor TUserPermissions.Create(AUserId: Integer);
+constructor TUserPermissions.Create(AUserId: Integer);  
 begin
   inherited Create;
   FUserId := AUserId;
   FRoles := TList.Create;
 end;
 
-destructor TUserPermissions.Destroy;
+destructor TUserPermissions.Destroy;  
 var
   i: Integer;
 begin
@@ -2437,7 +2437,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TUserPermissions.LoadRoles(Connection: TSQLConnection);
+procedure TUserPermissions.LoadRoles(Connection: TSQLConnection);  
 var
   Query: TSQLQuery;
   Role: TRole;
@@ -2470,7 +2470,7 @@ begin
   end;
 end;
 
-function TUserPermissions.HasPermission(Permission: TPermission): Boolean;
+function TUserPermissions.HasPermission(Permission: TPermission): Boolean;  
 var
   i: Integer;
 begin
@@ -2517,7 +2517,7 @@ INSERT INTO roles (name, permissions) VALUES
 **Utilisation des permissions dans les formulaires :**
 
 ```pascal
-procedure TfrmCustomers.FormCreate(Sender: TObject);
+procedure TfrmCustomers.FormCreate(Sender: TObject);  
 var
   Perms: TUserPermissions;
 begin
@@ -2828,7 +2828,7 @@ begin
   end;
 end;
 
-function TBackupManager.RestoreBackup(const BackupFile: string): Boolean;
+function TBackupManager.RestoreBackup(const BackupFile: string): Boolean;  
 var
   PgRestorePath: string;
 begin
@@ -2861,7 +2861,7 @@ begin
     GetLogger.Error('Échec de la restauration');
 end;
 
-procedure TBackupManager.CleanOldBackups(DaysToKeep: Integer);
+procedure TBackupManager.CleanOldBackups(DaysToKeep: Integer);  
 var
   SearchRec: TSearchRec;
   FileAge: TDateTime;
@@ -2932,7 +2932,7 @@ implementation
 uses
   Logger;
 
-constructor TScheduledBackup.Create(AOwner: TComponent);
+constructor TScheduledBackup.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -2950,14 +2950,14 @@ begin
   FEnabled := False;
 end;
 
-destructor TScheduledBackup.Destroy;
+destructor TScheduledBackup.Destroy;  
 begin
   FTimer.Free;
   FBackupManager.Free;
   inherited Destroy;
 end;
 
-procedure TScheduledBackup.OnTimerTick(Sender: TObject);
+procedure TScheduledBackup.OnTimerTick(Sender: TObject);  
 var
   CurrentHour, CurrentMinute, CurrentSecond, CurrentMS: Word;
 begin
@@ -2978,7 +2978,7 @@ begin
   end;
 end;
 
-procedure TScheduledBackup.SetEnabled(AValue: Boolean);
+procedure TScheduledBackup.SetEnabled(AValue: Boolean);  
 begin
   if FEnabled = AValue then
     Exit;
@@ -2992,17 +2992,17 @@ begin
     GetLogger.Info('Planificateur de sauvegarde désactivé');
 end;
 
-procedure TScheduledBackup.StartScheduler;
+procedure TScheduledBackup.StartScheduler;  
 begin
   Enabled := True;
 end;
 
-procedure TScheduledBackup.StopScheduler;
+procedure TScheduledBackup.StopScheduler;  
 begin
   Enabled := False;
 end;
 
-procedure TScheduledBackup.ExecuteBackupNow;
+procedure TScheduledBackup.ExecuteBackupNow;  
 begin
   GetLogger.Info('Début de la sauvegarde...');
 
@@ -3079,7 +3079,7 @@ uses
 
 { TMigration }
 
-constructor TMigration.Create(AVersion: Integer; const ADescription: string);
+constructor TMigration.Create(AVersion: Integer; const ADescription: string);  
 begin
   inherited Create;
   FVersion := AVersion;
@@ -3088,24 +3088,24 @@ begin
   FDownScript := TStringList.Create;
 end;
 
-destructor TMigration.Destroy;
+destructor TMigration.Destroy;  
 begin
   FUpScript.Free;
   FDownScript.Free;
   inherited Destroy;
 end;
 
-procedure TMigration.AddUpStatement(const SQL: string);
+procedure TMigration.AddUpStatement(const SQL: string);  
 begin
   FUpScript.Add(SQL);
 end;
 
-procedure TMigration.AddDownStatement(const SQL: string);
+procedure TMigration.AddDownStatement(const SQL: string);  
 begin
   FDownScript.Add(SQL);
 end;
 
-function TMigration.Execute(Connection: TSQLConnection; Up: Boolean): Boolean;
+function TMigration.Execute(Connection: TSQLConnection; Up: Boolean): Boolean;  
 var
   Query: TSQLQuery;
   Scripts: TStringList;
@@ -3156,13 +3156,13 @@ end;
 
 { TDatabaseVersionManager }
 
-constructor TDatabaseVersionManager.Create;
+constructor TDatabaseVersionManager.Create;  
 begin
   inherited Create;
   FMigrations := TList.Create;
 end;
 
-destructor TDatabaseVersionManager.Destroy;
+destructor TDatabaseVersionManager.Destroy;  
 var
   i: Integer;
 begin
@@ -3172,7 +3172,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TDatabaseVersionManager.EnsureVersionTable(Connection: TSQLConnection);
+procedure TDatabaseVersionManager.EnsureVersionTable(Connection: TSQLConnection);  
 var
   Query: TSQLQuery;
 begin
@@ -3194,7 +3194,7 @@ begin
   Query.Free;
 end;
 
-function TDatabaseVersionManager.GetCurrentVersion(Connection: TSQLConnection): Integer;
+function TDatabaseVersionManager.GetCurrentVersion(Connection: TSQLConnection): Integer;  
 var
   Query: TSQLQuery;
 begin
@@ -3213,7 +3213,7 @@ begin
   end;
 end;
 
-procedure TDatabaseVersionManager.SetVersion(Connection: TSQLConnection; Version: Integer);
+procedure TDatabaseVersionManager.SetVersion(Connection: TSQLConnection; Version: Integer);  
 var
   Query: TSQLQuery;
   Migration: TMigration;
@@ -3238,7 +3238,7 @@ begin
   Query.Free;
 end;
 
-procedure TDatabaseVersionManager.RegisterMigration(Migration: TMigration);
+procedure TDatabaseVersionManager.RegisterMigration(Migration: TMigration);  
 begin
   FMigrations.Add(Migration);
 end;
@@ -3333,7 +3333,7 @@ begin
   GetLogger.Info('Rollback effectué avec succès');
 end;
 
-function TDatabaseVersionManager.GetDatabaseVersion(Connection: TSQLConnection): Integer;
+function TDatabaseVersionManager.GetDatabaseVersion(Connection: TSQLConnection): Integer;  
 begin
   EnsureVersionTable(Connection);
   Result := GetCurrentVersion(Connection);
@@ -3488,7 +3488,7 @@ implementation
 
 { TNotification }
 
-function TNotification.Save(Connection: TSQLConnection): Boolean;
+function TNotification.Save(Connection: TSQLConnection): Boolean;  
 var
   Query: TSQLQuery;
   TypeStr: string;
@@ -3692,7 +3692,7 @@ CREATE TABLE notifications (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_notifications_user ON notifications(user_id);
+CREATE INDEX idx_notifications_user ON notifications(user_id);  
 CREATE INDEX idx_notifications_read ON notifications(user_id, is_read);
 ```
 

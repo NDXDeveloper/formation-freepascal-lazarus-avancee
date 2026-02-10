@@ -320,7 +320,7 @@ type
 La fenêtre doit être positionnée intelligemment selon l'OS :
 
 ```pascal
-procedure TCompletionWindow.Show(AEditor: TSynEdit; APosition: TPoint);
+procedure TCompletionWindow.Show(AEditor: TSynEdit; APosition: TPoint);  
 var
   ScreenPos: TPoint;
   WorkArea: TRect;
@@ -389,7 +389,7 @@ FreePascal inclut l'unité **RegExpr** qui fonctionne de manière identique sur 
 uses
   RegExpr;
 
-function TSearchEngine.FindWithRegex(const APattern, AText: string): Boolean;
+function TSearchEngine.FindWithRegex(const APattern, AText: string): Boolean;  
 var
   RegEx: TRegExpr;
 begin
@@ -408,7 +408,7 @@ end;
 La recherche incrémentale met en surbrillance les résultats pendant la frappe :
 
 ```pascal
-procedure TMainForm.SearchEditChange(Sender: TObject);
+procedure TMainForm.SearchEditChange(Sender: TObject);  
 var
   SearchText: string;
 begin
@@ -462,7 +462,7 @@ type
 L'arborescence doit afficher la structure du projet avec des icônes appropriées :
 
 ```pascal
-procedure TProjectPanel.BuildFileTree(AProject: TProject);
+procedure TProjectPanel.BuildFileTree(AProject: TProject);  
 var
   RootNode, FileNode: TTreeNode;
   ProjectFile: TProjectFile;
@@ -490,7 +490,7 @@ begin
   end;
 end;
 
-function TProjectPanel.GetIconForFile(const AFileName: string): Integer;
+function TProjectPanel.GetIconForFile(const AFileName: string): Integer;  
 var
   Ext: string;
 begin
@@ -529,7 +529,7 @@ type
     function CheckForChanges: Boolean;
   end;
 
-constructor TFileWatcher.Create(const ADirectory: string);
+constructor TFileWatcher.Create(const ADirectory: string);  
 begin
   FDirectory := ADirectory;
   FHandle := FindFirstChangeNotification(
@@ -586,7 +586,7 @@ type
     procedure ReadOutput;
   end;
 
-constructor TIntegratedTerminal.Create(AOwner: TComponent);
+constructor TIntegratedTerminal.Create(AOwner: TComponent);  
 begin
   inherited Create;
 
@@ -601,7 +601,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TIntegratedTerminal.ExecuteCommand(const ACommand: string);
+procedure TIntegratedTerminal.ExecuteCommand(const ACommand: string);  
 var
   Command: string;
 begin
@@ -612,7 +612,7 @@ begin
   ReadOutput;
 end;
 
-procedure TIntegratedTerminal.ReadOutput;
+procedure TIntegratedTerminal.ReadOutput;  
 var
   Buffer: array[0..1023] of Char;
   Count: Integer;
@@ -632,7 +632,7 @@ end;
 Pour améliorer la lisibilité, on peut interpréter les codes ANSI de couleur :
 
 ```pascal
-procedure ParseANSIColor(const AText: string; AMemo: TMemo);
+procedure ParseANSIColor(const AText: string; AMemo: TMemo);  
 const
   ESC = #27;
 var
@@ -702,7 +702,7 @@ type
     procedure UnloadAllPlugins;
   end;
 
-procedure TPluginManager.LoadPluginsFromDirectory(const ADirectory: string);
+procedure TPluginManager.LoadPluginsFromDirectory(const ADirectory: string);  
 var
   SearchRec: TSearchRec;
   PluginPath: string;
@@ -762,24 +762,24 @@ type
     procedure OnHelloCommand(Sender: TObject);
   end;
 
-function THelloPlugin.GetName: string;
+function THelloPlugin.GetName: string;  
 begin
   Result := 'Hello Plugin';
 end;
 
-procedure THelloPlugin.Initialize(AEditor: IEditorApplication);
+procedure THelloPlugin.Initialize(AEditor: IEditorApplication);  
 begin
   FEditor := AEditor;
   FEditor.RegisterCommand('hello', OnHelloCommand);
   FEditor.RegisterMenuItem('Say Hello', 'hello');
 end;
 
-procedure THelloPlugin.OnHelloCommand(Sender: TObject);
+procedure THelloPlugin.OnHelloCommand(Sender: TObject);  
 begin
   FEditor.ShowMessage('Hello from plugin!');
 end;
 
-function GetPlugin: IEditorPlugin; stdcall;
+function GetPlugin: IEditorPlugin; stdcall;  
 begin
   Result := THelloPlugin.Create;
 end;
@@ -787,7 +787,7 @@ end;
 exports
   GetPlugin;
 
-begin
+begin  
 end.
 ```
 
@@ -818,7 +818,7 @@ type
     procedure Checkout(const ABranch: string);
   end;
 
-function TGitRepository.ExecuteGit(const ACommand: string): string;
+function TGitRepository.ExecuteGit(const ACommand: string): string;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -857,7 +857,7 @@ type
     procedure DisplayDiff;
   end;
 
-procedure TDiffView.DisplayDiff;
+procedure TDiffView.DisplayDiff;  
 var
   i: Integer;
   Line: string;
@@ -909,7 +909,7 @@ type
     procedure SetBoolean(const AKey: string; AValue: Boolean);
   end;
 
-constructor TEditorConfig.Create;
+constructor TEditorConfig.Create;  
 begin
   inherited Create;
 
@@ -926,7 +926,7 @@ begin
   Load;
 end;
 
-procedure TEditorConfig.Load;
+procedure TEditorConfig.Load;  
 var
   FileContent: string;
 begin
@@ -937,7 +937,7 @@ begin
   end;
 end;
 
-procedure TEditorConfig.Save;
+procedure TEditorConfig.Save;  
 var
   JSONText: string;
 begin
@@ -962,7 +962,7 @@ type
     procedure Restore;
   end;
 
-procedure TEditorSession.Save;
+procedure TEditorSession.Save;  
 var
   SessionData: TJSONObject;
   FilesArray: TJSONArray;
@@ -1038,7 +1038,7 @@ type
     property IsDark: Boolean read FDark write FDark;
   end;
 
-procedure TUITheme.ApplyToApplication;
+procedure TUITheme.ApplyToApplication;  
 begin
   // Appliquer aux formulaires principaux
   Application.MainForm.Color := FBackgroundColor;
@@ -1053,7 +1053,7 @@ begin
   ApplyToMenus;
 end;
 
-procedure TUITheme.ApplyToEditors;
+procedure TUITheme.ApplyToEditors;  
 var
   i: Integer;
   Editor: TSynEdit;
@@ -1083,7 +1083,7 @@ end;
 Fournir plusieurs thèmes populaires :
 
 ```pascal
-function CreateDefaultTheme: TUITheme;
+function CreateDefaultTheme: TUITheme;  
 begin
   Result := TUITheme.Create;
   Result.Name := 'Default Light';
@@ -1096,7 +1096,7 @@ begin
   Result.FCommentColor := clGreen;
 end;
 
-function CreateDarkTheme: TUITheme;
+function CreateDarkTheme: TUITheme;  
 begin
   Result := TUITheme.Create;
   Result.Name := 'Dark Modern';
@@ -1109,7 +1109,7 @@ begin
   Result.FCommentColor := RGBToColor(106, 153, 85);
 end;
 
-function CreateMonokaiTheme: TUITheme;
+function CreateMonokaiTheme: TUITheme;  
 begin
   Result := TUITheme.Create;
   Result.Name := 'Monokai';
@@ -1127,7 +1127,7 @@ end;
 Certains éléments visuels doivent s'adapter à l'OS :
 
 ```pascal
-procedure TUITheme.ApplyPlatformSpecificSettings;
+procedure TUITheme.ApplyPlatformSpecificSettings;  
 begin
   {$IFDEF WINDOWS}
   // Sous Windows, utiliser les styles visuels natifs si disponibles
@@ -1166,7 +1166,7 @@ type
     procedure OptimizedRepaint;
   end;
 
-procedure TOptimizedEditor.Paint;
+procedure TOptimizedEditor.Paint;  
 begin
   // Ne repeindre que les zones modifiées
   if not FNeedsFullRepaint then
@@ -1179,7 +1179,7 @@ begin
   FNeedsFullRepaint := False;
 end;
 
-procedure TOptimizedEditor.InvalidateLines(AFirstLine, ALastLine: Integer);
+procedure TOptimizedEditor.InvalidateLines(AFirstLine, ALastLine: Integer);  
 var
   R: TRect;
 begin
@@ -1213,14 +1213,14 @@ type
     function GetLine(ALineNumber: Integer): string;
   end;
 
-constructor TLargeFileEditor.Create;
+constructor TLargeFileEditor.Create;  
 begin
   inherited Create;
   FChunkSize := 1024 * 1024; // 1 Mo par chunk
   FLoadedChunks := TList<TFileChunk>.Create;
 end;
 
-function TLargeFileEditor.GetLine(ALineNumber: Integer): string;
+function TLargeFileEditor.GetLine(ALineNumber: Integer): string;  
 var
   ChunkIndex: Integer;
   Chunk: TFileChunk;
@@ -1254,7 +1254,7 @@ type
     procedure Clear;
   end;
 
-function TSyntaxCache.GetTokens(ALineNumber: Integer): TLineTokens;
+function TSyntaxCache.GetTokens(ALineNumber: Integer): TLineTokens;  
 begin
   if not FCache.TryGetValue(ALineNumber, Result) then
   begin
@@ -1263,7 +1263,7 @@ begin
   end;
 end;
 
-procedure TSyntaxCache.SetTokens(ALineNumber: Integer; ATokens: TLineTokens);
+procedure TSyntaxCache.SetTokens(ALineNumber: Integer; ATokens: TLineTokens);  
 begin
   // Limiter la taille du cache
   if FCache.Count >= FMaxCacheSize then
@@ -1300,7 +1300,7 @@ type
     procedure Execute; override;
   end;
 
-procedure TSyntaxAnalyzer.Execute;
+procedure TSyntaxAnalyzer.Execute;  
 begin
   // Analyse syntaxique en arrière-plan
   FResults := AnalyzeDocument(FDocument);
@@ -1310,7 +1310,7 @@ begin
 end;
 
 // Utilisation
-procedure TMainForm.AnalyzeCurrentDocument;
+procedure TMainForm.AnalyzeCurrentDocument;  
 var
   Analyzer: TSyntaxAnalyzer;
 begin
@@ -1340,7 +1340,7 @@ type
                                           write FAccessibleDescription;
   end;
 
-procedure TAccessibleEditor.SetAccessibleInfo;
+procedure TAccessibleEditor.SetAccessibleInfo;  
 begin
   {$IFDEF WINDOWS}
   // Utiliser MSAA (Microsoft Active Accessibility)
@@ -1401,7 +1401,7 @@ end;
 Permettre l'ajustement de la taille du texte :
 
 ```pascal
-procedure TMainForm.IncreaseFontSize;
+procedure TMainForm.IncreaseFontSize;  
 var
   i: Integer;
 begin
@@ -1417,7 +1417,7 @@ begin
   SaveFontSizeToConfig;
 end;
 
-procedure TMainForm.DecreaseFontSize;
+procedure TMainForm.DecreaseFontSize;  
 var
   i: Integer;
 begin
@@ -1467,7 +1467,7 @@ begin
 end;
 {$ENDIF}
 
-procedure TMainForm.AdjustForDPI;
+procedure TMainForm.AdjustForDPI;  
 var
   ScaleFactor: Double;
 begin
@@ -1529,7 +1529,7 @@ end;
 Intercepter toutes les exceptions pour éviter les plantages :
 
 ```pascal
-procedure TMainForm.ApplicationException(Sender: TObject; E: Exception);
+procedure TMainForm.ApplicationException(Sender: TObject; E: Exception);  
 var
   ErrorMsg: string;
   LogFile: TextFile;
@@ -1560,7 +1560,7 @@ begin
 end;
 
 // Dans l'initialisation du formulaire
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   Application.OnException := @ApplicationException;
 end;
@@ -1585,7 +1585,7 @@ type
     function RestoreFromBackup: TStringList;
   end;
 
-procedure TAutoSaveManager.SaveAllModifiedDocuments;
+procedure TAutoSaveManager.SaveAllModifiedDocuments;  
 var
   i: Integer;
   Editor: TCustomCodeEditor;
@@ -1613,7 +1613,7 @@ begin
   end;
 end;
 
-function TAutoSaveManager.RestoreFromBackup: TStringList;
+function TAutoSaveManager.RestoreFromBackup: TStringList;  
 var
   SearchRec: TSearchRec;
 begin
@@ -1639,27 +1639,27 @@ Créer un installateur avec Inno Setup :
 ```pascal
 ; Script Inno Setup
 [Setup]
-AppName=MonEditeur
-AppVersion=1.0
-DefaultDirName={pf}\MonEditeur
-DefaultGroupName=MonEditeur
-OutputDir=Output
+AppName=MonEditeur  
+AppVersion=1.0  
+DefaultDirName={pf}\MonEditeur  
+DefaultGroupName=MonEditeur  
+OutputDir=Output  
 OutputBaseFilename=MonEditeur-Setup-Win64
 
 [Files]
-Source: "bin\Windows\MonEditeur.exe"; DestDir: "{app}"
-Source: "bin\Windows\*.dll"; DestDir: "{app}"
-Source: "themes\*"; DestDir: "{app}\themes"; Flags: recursesubdirs
+Source: "bin\Windows\MonEditeur.exe"; DestDir: "{app}"  
+Source: "bin\Windows\*.dll"; DestDir: "{app}"  
+Source: "themes\*"; DestDir: "{app}\themes"; Flags: recursesubdirs  
 Source: "plugins\*"; DestDir: "{app}\plugins"; Flags: recursesubdirs
 
 [Icons]
-Name: "{group}\MonEditeur"; Filename: "{app}\MonEditeur.exe"
+Name: "{group}\MonEditeur"; Filename: "{app}\MonEditeur.exe"  
 Name: "{commondesktop}\MonEditeur"; Filename: "{app}\MonEditeur.exe"
 
 [Registry]
 ; Association de fichiers
-Root: HKCR; Subkey: ".txt"; ValueType: string; ValueData: "MonEditeur.TextFile"
-Root: HKCR; Subkey: "MonEditeur.TextFile"; ValueType: string; ValueData: "Text File"
+Root: HKCR; Subkey: ".txt"; ValueType: string; ValueData: "MonEditeur.TextFile"  
+Root: HKCR; Subkey: "MonEditeur.TextFile"; ValueType: string; ValueData: "Text File"  
 Root: HKCR; Subkey: "MonEditeur.TextFile\DefaultIcon"; ValueType: string;
      ValueData: "{app}\MonEditeur.exe,0"
 Root: HKCR; Subkey: "MonEditeur.TextFile\shell\open\command"; ValueType: string;
@@ -1696,13 +1696,13 @@ monediteur_1.0-1_amd64/
 Fichier `DEBIAN/control` :
 
 ```
-Package: monediteur
-Version: 1.0-1
-Section: editors
-Priority: optional
-Architecture: amd64
-Depends: libgtk-3-0, libglib2.0-0
-Maintainer: Votre Nom <email@example.com>
+Package: monediteur  
+Version: 1.0-1  
+Section: editors  
+Priority: optional  
+Architecture: amd64  
+Depends: libgtk-3-0, libglib2.0-0  
+Maintainer: Votre Nom <email@example.com>  
 Description: Éditeur de code moderne et portable
  MonEditeur est un éditeur de code avancé avec coloration
  syntaxique, auto-complétion et support de multiples langages.
@@ -1712,13 +1712,13 @@ Fichier `.desktop` pour l'intégration au bureau :
 
 ```ini
 [Desktop Entry]
-Type=Application
-Name=MonEditeur
-Comment=Éditeur de code avancé
-Exec=monediteur %F
-Icon=monediteur
-Terminal=false
-Categories=Development;TextEditor;
+Type=Application  
+Name=MonEditeur  
+Comment=Éditeur de code avancé  
+Exec=monediteur %F  
+Icon=monediteur  
+Terminal=false  
+Categories=Development;TextEditor;  
 MimeType=text/plain;text/x-pascal;text/x-c;
 ```
 
@@ -1730,33 +1730,33 @@ Créer un AppImage portable :
 #!/bin/bash
 # build-appimage.sh
 
-APP_NAME="MonEditeur"
+APP_NAME="MonEditeur"  
 APP_DIR="${APP_NAME}.AppDir"
 
 # Créer la structure
-mkdir -p "${APP_DIR}/usr/bin"
-mkdir -p "${APP_DIR}/usr/lib"
-mkdir -p "${APP_DIR}/usr/share/applications"
+mkdir -p "${APP_DIR}/usr/bin"  
+mkdir -p "${APP_DIR}/usr/lib"  
+mkdir -p "${APP_DIR}/usr/share/applications"  
 mkdir -p "${APP_DIR}/usr/share/icons"
 
 # Copier l'exécutable et les dépendances
-cp bin/Linux/monediteur "${APP_DIR}/usr/bin/"
+cp bin/Linux/monediteur "${APP_DIR}/usr/bin/"  
 ldd bin/Linux/monediteur | grep "=> /" | awk '{print $3}' | \
     xargs -I '{}' cp -v '{}' "${APP_DIR}/usr/lib/"
 
 # Créer le fichier AppRun
 cat > "${APP_DIR}/AppRun" << 'EOF'
 #!/bin/bash
-SELF=$(readlink -f "$0")
-HERE=${SELF%/*}
-export LD_LIBRARY_PATH="${HERE}/usr/lib:${LD_LIBRARY_PATH}"
-exec "${HERE}/usr/bin/monediteur" "$@"
+SELF=$(readlink -f "$0")  
+HERE=${SELF%/*}  
+export LD_LIBRARY_PATH="${HERE}/usr/lib:${LD_LIBRARY_PATH}"  
+exec "${HERE}/usr/bin/monediteur" "$@"  
 EOF
 
 chmod +x "${APP_DIR}/AppRun"
 
 # Copier les icônes et fichier .desktop
-cp resources/monediteur.desktop "${APP_DIR}/"
+cp resources/monediteur.desktop "${APP_DIR}/"  
 cp resources/monediteur.png "${APP_DIR}/"
 
 # Créer l'AppImage
@@ -1775,7 +1775,7 @@ program BuildAll;
 uses
   SysUtils, Process;
 
-procedure ExecuteCommand(const ACommand: string);
+procedure ExecuteCommand(const ACommand: string);  
 var
   Process: TProcess;
 begin
@@ -1791,7 +1791,7 @@ begin
   end;
 end;
 
-procedure BuildWindows;
+procedure BuildWindows;  
 begin
   WriteLn('Building for Windows...');
   {$IFDEF WINDOWS}
@@ -1803,7 +1803,7 @@ begin
   WriteLn('Windows build complete.');
 end;
 
-procedure BuildLinux;
+procedure BuildLinux;  
 begin
   WriteLn('Building for Linux...');
   {$IFDEF LINUX}
@@ -1815,7 +1815,7 @@ begin
   WriteLn('Linux build complete.');
 end;
 
-procedure CreatePackages;
+procedure CreatePackages;  
 begin
   WriteLn('Creating distribution packages...');
 
@@ -1878,7 +1878,7 @@ type
 
 implementation
 
-procedure TEditorTest.TestCreateDocument;
+procedure TEditorTest.TestCreateDocument;  
 var
   Doc: TDocument;
 begin
@@ -1891,7 +1891,7 @@ begin
   end;
 end;
 
-procedure TEditorTest.TestLoadFile;
+procedure TEditorTest.TestLoadFile;  
 var
   Doc: TDocument;
   TestFile: string;
@@ -1936,7 +1936,7 @@ program IntegrationTests;
 uses
   Classes, SysUtils, MainForm, Editor, Project;
 
-procedure TestFileOperations;
+procedure TestFileOperations;  
 var
   Editor: TCustomCodeEditor;
   TestFile: string;
@@ -1965,7 +1965,7 @@ begin
   end;
 end;
 
-procedure TestProjectManagement;
+procedure TestProjectManagement;  
 var
   Project: TProject;
 begin
@@ -2103,27 +2103,27 @@ procedure RunPerformanceTests;
 
 implementation
 
-procedure TPerformanceTest.StartTimer;
+procedure TPerformanceTest.StartTimer;  
 begin
   FStartTime := Now;
 end;
 
-procedure TPerformanceTest.StopTimer;
+procedure TPerformanceTest.StopTimer;  
 begin
   FEndTime := Now;
 end;
 
-function TPerformanceTest.GetElapsedMilliseconds: Int64;
+function TPerformanceTest.GetElapsedMilliseconds: Int64;  
 begin
   Result := MilliSecondsBetween(FEndTime, FStartTime);
 end;
 
-procedure TPerformanceTest.ReportResult(const ATestName: string);
+procedure TPerformanceTest.ReportResult(const ATestName: string);  
 begin
   WriteLn(Format('%s: %d ms', [ATestName, GetElapsedMilliseconds]));
 end;
 
-procedure TestLargeFileLoading;
+procedure TestLargeFileLoading;  
 var
   Test: TPerformanceTest;
   Editor: TCustomCodeEditor;
@@ -2157,7 +2157,7 @@ begin
   end;
 end;
 
-procedure TestSearchPerformance;
+procedure TestSearchPerformance;  
 var
   Test: TPerformanceTest;
   Editor: TCustomCodeEditor;
@@ -2184,7 +2184,7 @@ begin
   end;
 end;
 
-procedure TestSyntaxHighlighting;
+procedure TestSyntaxHighlighting;  
 var
   Test: TPerformanceTest;
   Editor: TSynEdit;
@@ -2217,7 +2217,7 @@ begin
   end;
 end;
 
-procedure RunPerformanceTests;
+procedure RunPerformanceTests;  
 begin
   WriteLn('=== Performance Tests ===');
   WriteLn;
@@ -2262,7 +2262,7 @@ type
     function SearchHelp(const AQuery: string): TStringList;
   end;
 
-constructor THelpSystem.Create;
+constructor THelpSystem.Create;  
 begin
   inherited Create;
 
@@ -2274,7 +2274,7 @@ begin
   {$ENDIF}
 end;
 
-procedure THelpSystem.ShowHelp(const ATopic: string);
+procedure THelpSystem.ShowHelp(const ATopic: string);  
 begin
   {$IFDEF WINDOWS}
   // Utiliser le visualiseur CHM de Windows
@@ -2287,7 +2287,7 @@ begin
   {$ENDIF}
 end;
 
-procedure THelpSystem.ShowContextHelp(AContext: Integer);
+procedure THelpSystem.ShowContextHelp(AContext: Integer);  
 var
   Topic: string;
 begin
@@ -2338,7 +2338,7 @@ type
     property Description: string read FDescription;
   end;
 
-procedure TTutorial.Start;
+procedure TTutorial.Start;  
 begin
   FCurrentStep := 0;
   FOverlay := TTutorialOverlay.Create(Application.MainForm);
@@ -2347,7 +2347,7 @@ begin
   FSteps[FCurrentStep].Show;
 end;
 
-procedure TTutorialStep.Show;
+procedure TTutorialStep.Show;  
 begin
   // Afficher une bulle d'information près du contrôle ciblé
   with TTutorialBubble.Create(FTargetControl.Owner) do
@@ -2371,7 +2371,7 @@ begin
 end;
 
 // Exemple de tutoriel pour les nouveaux utilisateurs
-procedure CreateFirstUseTutorial: TTutorial;
+procedure CreateFirstUseTutorial: TTutorial;  
 begin
   Result := TTutorial.Create;
 
@@ -2424,7 +2424,7 @@ type
     procedure UpdateView;
   end;
 
-procedure TMinimap.Paint;
+procedure TMinimap.Paint;  
 var
   i: Integer;
   LineY: Integer;
@@ -2498,7 +2498,7 @@ type
     procedure PreviousDifference;
   end;
 
-procedure TDiffViewer.CompareFiles(const ALeftFile, ARightFile: string);
+procedure TDiffViewer.CompareFiles(const ALeftFile, ARightFile: string);  
 var
   LeftLines, RightLines: TStringList;
   i, j: Integer;
@@ -2575,7 +2575,7 @@ begin
   end;
 end;
 
-procedure TDiffViewer.DisplayDiff;
+procedure TDiffViewer.DisplayDiff;  
 var
   i: Integer;
   DiffLine: TDiffLine;
@@ -2661,7 +2661,7 @@ type
     function FindSymbolsInFile(const AFileName: string): TList<TSymbol>;
   end;
 
-procedure TSymbolFinder.IndexProject(AProject: TProject);
+procedure TSymbolFinder.IndexProject(AProject: TProject);  
 var
   i: Integer;
   ProjectFile: TProjectFile;
@@ -2686,7 +2686,7 @@ begin
   end;
 end;
 
-function TSymbolFinder.FindSymbol(const AName: string): TList<TSymbol>;
+function TSymbolFinder.FindSymbol(const AName: string): TList<TSymbol>;  
 var
   Symbol: TSymbol;
 begin
@@ -2701,7 +2701,7 @@ begin
 end;
 
 // Interface utilisateur pour la recherche rapide de symboles
-procedure TMainForm.ShowSymbolSearch;
+procedure TMainForm.ShowSymbolSearch;  
 var
   SearchDialog: TSymbolSearchDialog;
   Results: TList<TSymbol>;
@@ -2785,7 +2785,7 @@ begin
     Action.Execute(AEditor);
 end;
 
-procedure TMacroAction.Execute(AEditor: TSynEdit);
+procedure TMacroAction.Execute(AEditor: TSynEdit);  
 begin
   case FActionType of
     'insert_text':
@@ -2806,7 +2806,7 @@ begin
 end;
 
 // Utilisation dans l'interface
-procedure TMainForm.ToggleMacroRecording;
+procedure TMainForm.ToggleMacroRecording;  
 begin
   if FMacroRecorder.IsRecording then
   begin
@@ -2861,7 +2861,7 @@ uses
   LazUTF8;
 
 // Charger et sauvegarder en UTF-8
-MyList.LoadFromFile(FileName);  // UTF-8 par défaut avec {$H+}
+MyList.LoadFromFile(FileName);  // UTF-8 par défaut avec {$H+}  
 MyList.SaveToFile(FileName);
 ```
 
@@ -2872,7 +2872,7 @@ const
   NewLine = LineEnding;  // CRLF sur Windows, LF sur Unix
 
 // Ou détecter automatiquement
-function DetectLineEnding(const AText: string): string;
+function DetectLineEnding(const AText: string): string;  
 begin
   if Pos(#13#10, AText) > 0 then
     Result := #13#10  // Windows
@@ -2897,7 +2897,7 @@ end;
 ```pascal
 {$IFDEF WINDOWS}
 // Utiliser les messages Windows pour une meilleure réactivité
-procedure TCustomEditor.WMPaint(var Message: TWMPaint);
+procedure TCustomEditor.WMPaint(var Message: TWMPaint);  
 begin
   // Optimisations de rendu Windows
   inherited;
@@ -2909,7 +2909,7 @@ end;
 ```pascal
 {$IFDEF LINUX}
 // Optimiser pour GTK/X11
-procedure TCustomEditor.Paint;
+procedure TCustomEditor.Paint;  
 begin
   // Réduire les appels de rendu GTK coûteux
   Canvas.BeginUpdate;
@@ -3070,12 +3070,12 @@ type
 
 implementation
 
-function TLSPExtension.GetName: string;
+function TLSPExtension.GetName: string;  
 begin
   Result := 'Language Server Protocol Support';
 end;
 
-procedure TLSPExtension.Initialize(AContext: IEditorContext);
+procedure TLSPExtension.Initialize(AContext: IEditorContext);  
 begin
   FContext := AContext;
   FLSPClients := TDictionary<string, TLSPClient>.Create;
@@ -3089,7 +3089,7 @@ begin
   FContext.AddMenuItem('Tools/LSP/Find References', 'lsp.find_references');
 end;
 
-procedure TLSPExtension.OnDocumentOpened(ADocument: TDocument);
+procedure TLSPExtension.OnDocumentOpened(ADocument: TDocument);  
 var
   Language: string;
   Client: TLSPClient;
@@ -3107,7 +3107,7 @@ begin
   end;
 end;
 
-procedure TLSPExtension.StartLanguageServer(const ALanguage: string);
+procedure TLSPExtension.StartLanguageServer(const ALanguage: string);  
 var
   Client: TLSPClient;
   ServerPath: string;
@@ -3149,7 +3149,7 @@ begin
   end;
 end;
 
-procedure TLSPExtension.HandleCompletionResponse(AResponse: TJSONObject);
+procedure TLSPExtension.HandleCompletionResponse(AResponse: TJSONObject);  
 var
   Items: TJSONArray;
   Item: TJSONObject;
@@ -3245,7 +3245,7 @@ var
 
 {$R *.lfm}
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   // Configuration de l'éditeur
   Editor.Align := alClient;
@@ -3270,7 +3270,7 @@ begin
   UpdateStatusBar;
 end;
 
-procedure TMainForm.NewFile;
+procedure TMainForm.NewFile;  
 begin
   if FModified and not ConfirmSave then
     Exit;
@@ -3281,7 +3281,7 @@ begin
   UpdateTitle;
 end;
 
-procedure TMainForm.OpenFile(const AFileName: string);
+procedure TMainForm.OpenFile(const AFileName: string);  
 begin
   if FModified and not ConfirmSave then
     Exit;
@@ -3299,7 +3299,7 @@ begin
   end;
 end;
 
-procedure TMainForm.SaveFile(const AFileName: string);
+procedure TMainForm.SaveFile(const AFileName: string);  
 begin
   try
     Editor.Lines.SaveToFile(AFileName);
@@ -3314,7 +3314,7 @@ begin
   end;
 end;
 
-procedure TMainForm.UpdateTitle;
+procedure TMainForm.UpdateTitle;  
 var
   Title: string;
 begin
@@ -3329,13 +3329,13 @@ begin
   Caption := Title + ' - Mini Éditeur';
 end;
 
-procedure TMainForm.UpdateStatusBar;
+procedure TMainForm.UpdateStatusBar;  
 begin
   StatusBar.Panels[1].Text := Format('Ligne: %d', [Editor.CaretY]);
   StatusBar.Panels[2].Text := Format('Col: %d', [Editor.CaretX]);
 end;
 
-function TMainForm.ConfirmSave: Boolean;
+function TMainForm.ConfirmSave: Boolean;  
 var
   Response: Integer;
 begin
@@ -3358,18 +3358,18 @@ end;
 
 // Gestionnaires de menu
 
-procedure TMainForm.MenuNewClick(Sender: TObject);
+procedure TMainForm.MenuNewClick(Sender: TObject);  
 begin
   NewFile;
 end;
 
-procedure TMainForm.MenuOpenClick(Sender: TObject);
+procedure TMainForm.MenuOpenClick(Sender: TObject);  
 begin
   if OpenDialog.Execute then
     OpenFile(OpenDialog.FileName);
 end;
 
-procedure TMainForm.MenuSaveClick(Sender: TObject);
+procedure TMainForm.MenuSaveClick(Sender: TObject);  
 begin
   if FCurrentFile = '' then
     MenuSaveAsClick(Sender)
@@ -3377,44 +3377,44 @@ begin
     SaveFile(FCurrentFile);
 end;
 
-procedure TMainForm.MenuSaveAsClick(Sender: TObject);
+procedure TMainForm.MenuSaveAsClick(Sender: TObject);  
 begin
   if SaveDialog.Execute then
     SaveFile(SaveDialog.FileName);
 end;
 
-procedure TMainForm.MenuQuitClick(Sender: TObject);
+procedure TMainForm.MenuQuitClick(Sender: TObject);  
 begin
   if not FModified or ConfirmSave then
     Close;
 end;
 
-procedure TMainForm.MenuUndoClick(Sender: TObject);
+procedure TMainForm.MenuUndoClick(Sender: TObject);  
 begin
   Editor.Undo;
 end;
 
-procedure TMainForm.MenuRedoClick(Sender: TObject);
+procedure TMainForm.MenuRedoClick(Sender: TObject);  
 begin
   Editor.Redo;
 end;
 
-procedure TMainForm.MenuCutClick(Sender: TObject);
+procedure TMainForm.MenuCutClick(Sender: TObject);  
 begin
   Editor.CutToClipboard;
 end;
 
-procedure TMainForm.MenuCopyClick(Sender: TObject);
+procedure TMainForm.MenuCopyClick(Sender: TObject);  
 begin
   Editor.CopyToClipboard;
 end;
 
-procedure TMainForm.MenuPasteClick(Sender: TObject);
+procedure TMainForm.MenuPasteClick(Sender: TObject);  
 begin
   Editor.PasteFromClipboard;
 end;
 
-procedure TMainForm.EditorChange(Sender: TObject);
+procedure TMainForm.EditorChange(Sender: TObject);  
 begin
   FModified := True;
   UpdateTitle;

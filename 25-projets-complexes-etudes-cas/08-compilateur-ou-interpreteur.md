@@ -130,7 +130,7 @@ type
     function PeekToken: TToken;
   end;
 
-constructor TLexer.Create(const ASource: string);
+constructor TLexer.Create(const ASource: string);  
 begin
   FSource := ASource;
   FPosition := 1;
@@ -138,7 +138,7 @@ begin
   FColumn := 1;
 end;
 
-function TLexer.CurrentChar: Char;
+function TLexer.CurrentChar: Char;  
 begin
   if FPosition <= Length(FSource) then
     Result := FSource[FPosition]
@@ -146,7 +146,7 @@ begin
     Result := #0;
 end;
 
-procedure TLexer.Advance;
+procedure TLexer.Advance;  
 begin
   if CurrentChar = #10 then
   begin
@@ -158,13 +158,13 @@ begin
   Inc(FPosition);
 end;
 
-procedure TLexer.SkipWhitespace;
+procedure TLexer.SkipWhitespace;  
 begin
   while CurrentChar in [' ', #9, #10, #13] do
     Advance;
 end;
 
-function TLexer.ReadIdentifier: string;
+function TLexer.ReadIdentifier: string;  
 begin
   Result := '';
   while CurrentChar in ['a'..'z', 'A'..'Z', '0'..'9', '_'] do
@@ -174,7 +174,7 @@ begin
   end;
 end;
 
-function TLexer.ReadNumber: string;
+function TLexer.ReadNumber: string;  
 var
   HasDot: Boolean;
 begin
@@ -194,7 +194,7 @@ begin
   end;
 end;
 
-function TLexer.IsKeyword(const Ident: string): TTokenType;
+function TLexer.IsKeyword(const Ident: string): TTokenType;  
 var
   LowerIdent: string;
 begin
@@ -212,7 +212,7 @@ begin
     Result := tkIdentifier;
 end;
 
-function TLexer.NextToken: TToken;
+function TLexer.NextToken: TToken;  
 begin
   SkipWhitespace;
 
@@ -411,13 +411,13 @@ type
     function Parse: TASTNode;
   end;
 
-constructor TParser.Create(ALexer: TLexer);
+constructor TParser.Create(ALexer: TLexer);  
 begin
   FLexer := ALexer;
   FCurrentToken := FLexer.NextToken;
 end;
 
-procedure TParser.Eat(ATokenType: TTokenType);
+procedure TParser.Eat(ATokenType: TTokenType);  
 begin
   if FCurrentToken.TokenType = ATokenType then
     FCurrentToken := FLexer.NextToken
@@ -427,13 +427,13 @@ begin
        GetEnumName(TypeInfo(TTokenType), Ord(FCurrentToken.TokenType))]));
 end;
 
-procedure TParser.Error(const Msg: string);
+procedure TParser.Error(const Msg: string);  
 begin
   raise Exception.CreateFmt('Parse error at line %d, column %d: %s',
     [FCurrentToken.Line, FCurrentToken.Column, Msg]);
 end;
 
-function TParser.ParseExpression: TASTNode;
+function TParser.ParseExpression: TASTNode;  
 var
   Left: TASTNode;
   Op: TTokenType;
@@ -450,7 +450,7 @@ begin
   end;
 end;
 
-function TParser.ParseTerm: TASTNode;
+function TParser.ParseTerm: TASTNode;  
 var
   Left: TASTNode;
   Op: TTokenType;
@@ -467,7 +467,7 @@ begin
   end;
 end;
 
-function TParser.ParseFactor: TASTNode;
+function TParser.ParseFactor: TASTNode;  
 begin
   // Factor = Number | Identifier | '(' Expression ')'
   case FCurrentToken.TokenType of
@@ -496,7 +496,7 @@ begin
   end;
 end;
 
-function TParser.ParseAssignment: TASTNode;
+function TParser.ParseAssignment: TASTNode;  
 var
   VarName: string;
 begin
@@ -507,7 +507,7 @@ begin
   Result := TAssignmentNode.Create(VarName, ParseExpression);
 end;
 
-function TParser.ParseIfStatement: TASTNode;
+function TParser.ParseIfStatement: TASTNode;  
 var
   Condition, ThenBranch, ElseBranch: TASTNode;
 begin
@@ -527,7 +527,7 @@ begin
   Result := TIfNode.Create(Condition, ThenBranch, ElseBranch);
 end;
 
-function TParser.ParseWhileStatement: TASTNode;
+function TParser.ParseWhileStatement: TASTNode;  
 var
   Condition, Body: TASTNode;
 begin
@@ -540,7 +540,7 @@ begin
   Result := TWhileNode.Create(Condition, Body);
 end;
 
-function TParser.Parse: TASTNode;
+function TParser.Parse: TASTNode;  
 begin
   Result := ParseProgram;
 end;
@@ -568,18 +568,18 @@ type
     procedure Execute(Root: TASTNode);
   end;
 
-constructor TInterpreter.Create;
+constructor TInterpreter.Create;  
 begin
   FVariables := TDictionary<string, Variant>.Create;
 end;
 
-destructor TInterpreter.Destroy;
+destructor TInterpreter.Destroy;  
 begin
   FVariables.Free;
   inherited;
 end;
 
-function TInterpreter.EvaluateNode(Node: TASTNode): Variant;
+function TInterpreter.EvaluateNode(Node: TASTNode): Variant;  
 var
   BinOp: TBinaryOpNode;
   Left, Right: Variant;
@@ -617,7 +617,7 @@ begin
     raise Exception.Create('Cannot evaluate node type');
 end;
 
-procedure TInterpreter.ExecuteStatement(Node: TASTNode);
+procedure TInterpreter.ExecuteStatement(Node: TASTNode);  
 var
   BlockNode: TBlockNode;
   AssignNode: TAssignmentNode;
@@ -653,7 +653,7 @@ begin
   end;
 end;
 
-procedure TInterpreter.Execute(Root: TASTNode);
+procedure TInterpreter.Execute(Root: TASTNode);  
 begin
   ExecuteStatement(Root);
 end;
@@ -705,14 +705,14 @@ type
     function Compile(Root: TASTNode): TArray<TInstruction>;
   end;
 
-constructor TByteCodeGenerator.Create;
+constructor TByteCodeGenerator.Create;  
 begin
   FCode := TList<TInstruction>.Create;
   FVariables := TDictionary<string, Integer>.Create;
   FVarCount := 0;
 end;
 
-procedure TByteCodeGenerator.Emit(AOpCode: TOpCode; AOperand: Variant);
+procedure TByteCodeGenerator.Emit(AOpCode: TOpCode; AOperand: Variant);  
 var
   Instr: TInstruction;
 begin
@@ -721,7 +721,7 @@ begin
   FCode.Add(Instr);
 end;
 
-function TByteCodeGenerator.GetVariableIndex(const Name: string): Integer;
+function TByteCodeGenerator.GetVariableIndex(const Name: string): Integer;  
 begin
   if not FVariables.TryGetValue(Name, Result) then
   begin
@@ -731,7 +731,7 @@ begin
   end;
 end;
 
-procedure TByteCodeGenerator.CompileNode(Node: TASTNode);
+procedure TByteCodeGenerator.CompileNode(Node: TASTNode);  
 var
   BinOp: TBinaryOpNode;
   AssignNode: TAssignmentNode;
@@ -789,7 +789,7 @@ begin
   end;
 end;
 
-function TByteCodeGenerator.Compile(Root: TASTNode): TArray<TInstruction>;
+function TByteCodeGenerator.Compile(Root: TASTNode): TArray<TInstruction>;  
 begin
   FCode.Clear;
   CompileNode(Root);
@@ -817,23 +817,23 @@ type
     procedure Execute(const ACode: TArray<TInstruction>);
   end;
 
-constructor TVirtualMachine.Create;
+constructor TVirtualMachine.Create;  
 begin
   FStack := TList<Variant>.Create;
 end;
 
-destructor TVirtualMachine.Destroy;
+destructor TVirtualMachine.Destroy;  
 begin
   FStack.Free;
   inherited;
 end;
 
-procedure TVirtualMachine.Push(Value: Variant);
+procedure TVirtualMachine.Push(Value: Variant);  
 begin
   FStack.Add(Value);
 end;
 
-function TVirtualMachine.Pop: Variant;
+function TVirtualMachine.Pop: Variant;  
 begin
   if FStack.Count = 0 then
     raise Exception.Create('Stack underflow');
@@ -841,7 +841,7 @@ begin
   FStack.Delete(FStack.Count - 1);
 end;
 
-procedure TVirtualMachine.Execute(const ACode: TArray<TInstruction>);
+procedure TVirtualMachine.Execute(const ACode: TArray<TInstruction>);  
 var
   Instr: TInstruction;
   a, b: Variant;
@@ -965,7 +965,7 @@ type
     procedure SaveToFile(const FileName: string);
   end;
 
-procedure TAsmGenerator.GenerateAsm(Root: TASTNode);
+procedure TAsmGenerator.GenerateAsm(Root: TASTNode);  
 begin
   // Génération d'assembleur x86-64
   EmitLine('section .text');
@@ -997,7 +997,7 @@ type
     function EliminateDeadCode(Node: TASTNode): TASTNode;
   end;
 
-function TASTOptimizer.FoldConstants(Node: TASTNode): TASTNode;
+function TASTOptimizer.FoldConstants(Node: TASTNode): TASTNode;  
 var
   BinOp: TBinaryOpNode;
   Left, Right: TLiteralNode;
@@ -1119,14 +1119,14 @@ type
     function WarningCount: Integer;
   end;
 
-constructor TErrorReporter.Create;
+constructor TErrorReporter.Create;  
 begin
   FErrors := TList<TCompilerError>.Create;
   FWarnings := TList<TCompilerError>.Create;
   FHasErrors := False;
 end;
 
-procedure TErrorReporter.ReportError(const Msg: string; Line, Col: Integer);
+procedure TErrorReporter.ReportError(const Msg: string; Line, Col: Integer);  
 var
   Error: TCompilerError;
 begin
@@ -1138,7 +1138,7 @@ begin
   FHasErrors := True;
 end;
 
-procedure TErrorReporter.PrintReport;
+procedure TErrorReporter.PrintReport;  
 var
   Error: TCompilerError;
 begin
@@ -1213,13 +1213,13 @@ type
     procedure Analyze(Root: TASTNode);
   end;
 
-constructor TSymbolTable.Create(AParent: TSymbolTable);
+constructor TSymbolTable.Create(AParent: TSymbolTable);  
 begin
   FSymbols := TDictionary<string, TSymbol>.Create;
   FParent := AParent;
 end;
 
-procedure TSymbolTable.Define(const Name: string; AType: TDataType);
+procedure TSymbolTable.Define(const Name: string; AType: TDataType);  
 var
   Symbol: TSymbol;
 begin
@@ -1229,7 +1229,7 @@ begin
   FSymbols.Add(Name, Symbol);
 end;
 
-function TSymbolTable.Lookup(const Name: string): TSymbol;
+function TSymbolTable.Lookup(const Name: string): TSymbol;  
 begin
   if not FSymbols.TryGetValue(Name, Result) then
   begin
@@ -1240,7 +1240,7 @@ begin
   end;
 end;
 
-procedure TSemanticAnalyzer.CheckBinaryOp(Node: TBinaryOpNode);
+procedure TSemanticAnalyzer.CheckBinaryOp(Node: TBinaryOpNode);  
 var
   LeftType, RightType: TDataType;
 begin
@@ -1299,14 +1299,14 @@ type
     function CurrentScope: TSymbolTable;
   end;
 
-constructor TScopeManager.Create;
+constructor TScopeManager.Create;  
 begin
   FScopes := TStack<TSymbolTable>.Create;
   FCurrentScope := TSymbolTable.Create(nil);
   FScopes.Push(FCurrentScope);
 end;
 
-procedure TScopeManager.EnterScope;
+procedure TScopeManager.EnterScope;  
 var
   NewScope: TSymbolTable;
 begin
@@ -1315,7 +1315,7 @@ begin
   FCurrentScope := NewScope;
 end;
 
-procedure TScopeManager.ExitScope;
+procedure TScopeManager.ExitScope;  
 begin
   if FScopes.Count > 1 then
   begin
@@ -1457,7 +1457,7 @@ end.
 ### Gestion des Chemins (Windows/Ubuntu)
 
 ```pascal
-function GetCompilerPath: string;
+function GetCompilerPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := ExtractFilePath(ParamStr(0)) + 'compiler.exe';
@@ -1467,7 +1467,7 @@ begin
   {$ENDIF}
 end;
 
-function GetOutputExtension: string;
+function GetOutputExtension: string;  
 begin
   {$IFDEF WINDOWS}
   Result := '.exe';
@@ -1481,7 +1481,7 @@ end;
 ### Génération d'Exécutables Natifs
 
 ```pascal
-procedure CompileToNative(const InputFile, OutputFile: string);
+procedure CompileToNative(const InputFile, OutputFile: string);  
 var
   Process: TProcess;
   AsmFile: string;
@@ -1546,7 +1546,7 @@ type
     procedure PrintStackTrace;
   end;
 
-procedure TDebugger.OnBreakpoint(Line: Integer);
+procedure TDebugger.OnBreakpoint(Line: Integer);  
 begin
   WriteLn(Format('=== Breakpoint atteint ligne %d ===', [Line]));
   ShowVariables;
@@ -1555,7 +1555,7 @@ begin
   // Attendre commande utilisateur
 end;
 
-procedure TDebugger.ShowVariables;
+procedure TDebugger.ShowVariables;  
 var
   VarName: string;
 begin
@@ -1670,7 +1670,7 @@ type
     procedure InlineFunction(CallSite: TCallNode; Func: TFunctionNode);
   end;
 
-function TInliner.ShouldInline(Func: TFunctionNode): Boolean;
+function TInliner.ShouldInline(Func: TFunctionNode): Boolean;  
 begin
   // Critères d'inlining
   Result := (GetFunctionSize(Func) < 50) and  // Petite fonction
@@ -1700,7 +1700,7 @@ type
     procedure AddRoot(Ptr: Pointer);
   end;
 
-procedure TGarbageCollector.Collect;
+procedure TGarbageCollector.Collect;  
 var
   Root: Pointer;
 begin
@@ -1712,7 +1712,7 @@ begin
   Sweep;
 end;
 
-procedure TGarbageCollector.Sweep;
+procedure TGarbageCollector.Sweep;  
 var
   i: Integer;
   Obj: Pointer;
@@ -1740,7 +1740,7 @@ end;
 ### Suite de Tests
 
 ```pascal
-procedure RunCompilerTests;
+procedure RunCompilerTests;  
 begin
   TestLexer;
   TestParser;
@@ -1749,7 +1749,7 @@ begin
   TestOptimizations;
 end;
 
-procedure TestLexer;
+procedure TestLexer;  
 begin
   WriteLn('=== Tests du Lexer ===');
 
@@ -1796,14 +1796,14 @@ Pour un projet complet, documentez votre langage :
 ### Spécification BNF
 
 ```
-Program     ::= StatementList
-StatementList ::= Statement (';' Statement)*
-Statement   ::= Assignment | IfStatement | WhileStatement
-Assignment  ::= Identifier ':=' Expression
-IfStatement ::= 'if' Expression 'then' Statement ['else' Statement]
-WhileStatement ::= 'while' Expression 'do' Statement
-Expression  ::= Term (('+' | '-') Term)*
-Term        ::= Factor (('*' | '/') Factor)*
+Program     ::= StatementList  
+StatementList ::= Statement (';' Statement)*  
+Statement   ::= Assignment | IfStatement | WhileStatement  
+Assignment  ::= Identifier ':=' Expression  
+IfStatement ::= 'if' Expression 'then' Statement ['else' Statement]  
+WhileStatement ::= 'while' Expression 'do' Statement  
+Expression  ::= Term (('+' | '-') Term)*  
+Term        ::= Factor (('*' | '/') Factor)*  
 Factor      ::= Number | Identifier | '(' Expression ')'
 ```
 
@@ -1821,11 +1821,11 @@ Factor      ::= Number | Identifier | '(' Expression ')'
 ## Syntaxe
 
 ### Déclaration de Variables
-var x: Integer;
+var x: Integer;  
 var nom: String;
 
 ### Assignation
-x := 10;
+x := 10;  
 nom := "Alice";
 
 ### Instructions Conditionnelles
@@ -1835,7 +1835,7 @@ else
   writeln("x est petit");
 
 ### Boucles
-while x > 0 do
+while x > 0 do  
 begin
   writeln(x);
   x := x - 1;

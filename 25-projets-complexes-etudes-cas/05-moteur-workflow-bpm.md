@@ -204,7 +204,7 @@ implementation
 
 // Implémentation de TActivity
 
-constructor TActivity.Create;
+constructor TActivity.Create;  
 begin
   inherited Create;
   FId := TGUID.NewGuid.ToString;
@@ -213,7 +213,7 @@ begin
   FProperties := TStringList.Create;
 end;
 
-destructor TActivity.Destroy;
+destructor TActivity.Destroy;  
 begin
   FIncomingTransitions.Free;
   FOutgoingTransitions.Free;
@@ -221,13 +221,13 @@ begin
   inherited Destroy;
 end;
 
-procedure TActivity.AddIncomingTransition(ATransition: TTransition);
+procedure TActivity.AddIncomingTransition(ATransition: TTransition);  
 begin
   if FIncomingTransitions.IndexOf(ATransition) = -1 then
     FIncomingTransitions.Add(ATransition);
 end;
 
-procedure TActivity.AddOutgoingTransition(ATransition: TTransition);
+procedure TActivity.AddOutgoingTransition(ATransition: TTransition);  
 begin
   if FOutgoingTransitions.IndexOf(ATransition) = -1 then
     FOutgoingTransitions.Add(ATransition);
@@ -235,7 +235,7 @@ end;
 
 // Implémentation de TTransition
 
-constructor TTransition.Create;
+constructor TTransition.Create;  
 begin
   inherited Create;
   FId := TGUID.NewGuid.ToString;
@@ -244,7 +244,7 @@ end;
 
 // Implémentation de TWorkflowProcess
 
-constructor TWorkflowProcess.Create;
+constructor TWorkflowProcess.Create;  
 begin
   inherited Create;
   FId := TGUID.NewGuid.ToString;
@@ -252,14 +252,14 @@ begin
   FTransitions := TObjectList<TTransition>.Create(True);
 end;
 
-destructor TWorkflowProcess.Destroy;
+destructor TWorkflowProcess.Destroy;  
 begin
   FActivities.Free;
   FTransitions.Free;
   inherited Destroy;
 end;
 
-function TWorkflowProcess.AddActivity(AName: string; AType: TActivityType): TActivity;
+function TWorkflowProcess.AddActivity(AName: string; AType: TActivityType): TActivity;  
 begin
   Result := TActivity.Create;
   Result.Name := AName;
@@ -267,7 +267,7 @@ begin
   FActivities.Add(Result);
 end;
 
-function TWorkflowProcess.AddTransition(ASource, ATarget: TActivity): TTransition;
+function TWorkflowProcess.AddTransition(ASource, ATarget: TActivity): TTransition;  
 begin
   Result := TTransition.Create;
   Result.SourceActivity := ASource;
@@ -277,7 +277,7 @@ begin
   FTransitions.Add(Result);
 end;
 
-function TWorkflowProcess.FindActivity(AId: string): TActivity;
+function TWorkflowProcess.FindActivity(AId: string): TActivity;  
 var
   Activity: TActivity;
 begin
@@ -287,7 +287,7 @@ begin
       Exit(Activity);
 end;
 
-function TWorkflowProcess.GetStartActivity: TActivity;
+function TWorkflowProcess.GetStartActivity: TActivity;  
 var
   Activity: TActivity;
 begin
@@ -299,7 +299,7 @@ end;
 
 // Implémentation de TWorkflowInstance
 
-constructor TWorkflowInstance.Create;
+constructor TWorkflowInstance.Create;  
 begin
   inherited Create;
   FId := TGUID.NewGuid.ToString;
@@ -308,19 +308,19 @@ begin
   FStatus := asNotStarted;
 end;
 
-destructor TWorkflowInstance.Destroy;
+destructor TWorkflowInstance.Destroy;  
 begin
   FVariables.Free;
   FActivityHistory.Free;
   inherited Destroy;
 end;
 
-procedure TWorkflowInstance.SetVariable(const AName, AValue: string);
+procedure TWorkflowInstance.SetVariable(const AName, AValue: string);  
 begin
   FVariables.Values[AName] := AValue;
 end;
 
-function TWorkflowInstance.GetVariable(const AName: string): string;
+function TWorkflowInstance.GetVariable(const AName: string): string;  
 begin
   Result := FVariables.Values[AName];
 end;
@@ -380,26 +380,26 @@ type
 
 implementation
 
-constructor TWorkflowEngine.Create;
+constructor TWorkflowEngine.Create;  
 begin
   inherited Create;
   FProcesses := TObjectList<TWorkflowProcess>.Create(False);
   FInstances := TObjectList<TWorkflowInstance>.Create(True);
 end;
 
-destructor TWorkflowEngine.Destroy;
+destructor TWorkflowEngine.Destroy;  
 begin
   FProcesses.Free;
   FInstances.Free;
   inherited Destroy;
 end;
 
-procedure TWorkflowEngine.RegisterProcess(AProcess: TWorkflowProcess);
+procedure TWorkflowEngine.RegisterProcess(AProcess: TWorkflowProcess);  
 begin
   FProcesses.Add(AProcess);
 end;
 
-function TWorkflowEngine.GetProcess(AId: string): TWorkflowProcess;
+function TWorkflowEngine.GetProcess(AId: string): TWorkflowProcess;  
 var
   Process: TWorkflowProcess;
 begin
@@ -409,7 +409,7 @@ begin
       Exit(Process);
 end;
 
-function TWorkflowEngine.CreateInstance(AProcessId: string): TWorkflowInstance;
+function TWorkflowEngine.CreateInstance(AProcessId: string): TWorkflowInstance;  
 var
   Process: TWorkflowProcess;
 begin
@@ -423,7 +423,7 @@ begin
   FInstances.Add(Result);
 end;
 
-function TWorkflowEngine.GetInstance(AId: string): TWorkflowInstance;
+function TWorkflowEngine.GetInstance(AId: string): TWorkflowInstance;  
 var
   Instance: TWorkflowInstance;
 begin
@@ -433,7 +433,7 @@ begin
       Exit(Instance);
 end;
 
-procedure TWorkflowEngine.StartInstance(AInstance: TWorkflowInstance);
+procedure TWorkflowEngine.StartInstance(AInstance: TWorkflowInstance);  
 begin
   if AInstance.Status <> asNotStarted then
     raise Exception.Create('Instance déjà démarrée');
@@ -580,7 +580,7 @@ type
 
 implementation
 
-constructor TWorkflowDatabase.Create(const ADatabasePath: string);
+constructor TWorkflowDatabase.Create(const ADatabasePath: string);  
 begin
   inherited Create;
   FDatabasePath := ADatabasePath;
@@ -593,7 +593,7 @@ begin
   CreateTables;
 end;
 
-destructor TWorkflowDatabase.Destroy;
+destructor TWorkflowDatabase.Destroy;  
 begin
   FQuery.Free;
   FTransaction.Free;
@@ -601,7 +601,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TWorkflowDatabase.InitializeConnection;
+procedure TWorkflowDatabase.InitializeConnection;  
 begin
   {$IFDEF WINDOWS}
   // Chemin Windows
@@ -620,7 +620,7 @@ begin
   FConnection.Open;
 end;
 
-procedure TWorkflowDatabase.CreateTables;
+procedure TWorkflowDatabase.CreateTables;  
 begin
   FTransaction.Active := True;
 
@@ -700,7 +700,7 @@ begin
   end;
 end;
 
-procedure TWorkflowDatabase.SaveProcess(AProcess: TWorkflowProcess);
+procedure TWorkflowDatabase.SaveProcess(AProcess: TWorkflowProcess);  
 var
   Activity: TActivity;
   Transition: TTransition;
@@ -768,7 +768,7 @@ begin
   end;
 end;
 
-function TWorkflowDatabase.LoadProcess(AId: string): TWorkflowProcess;
+function TWorkflowDatabase.LoadProcess(AId: string): TWorkflowProcess;  
 begin
   Result := TWorkflowProcess.Create;
 
@@ -791,7 +791,7 @@ begin
   // TODO: Charger les activités et transitions
 end;
 
-procedure TWorkflowDatabase.SaveInstance(AInstance: TWorkflowInstance);
+procedure TWorkflowDatabase.SaveInstance(AInstance: TWorkflowInstance);  
 begin
   FTransaction.Active := True;
 
@@ -822,7 +822,7 @@ begin
   end;
 end;
 
-function TWorkflowDatabase.LoadInstance(AId: string): TWorkflowInstance;
+function TWorkflowDatabase.LoadInstance(AId: string): TWorkflowInstance;  
 begin
   Result := TWorkflowInstance.Create;
 
@@ -933,7 +933,7 @@ type
 
 implementation
 
-procedure TWorkflowDesignerForm.FormCreate(Sender: TObject);
+procedure TWorkflowDesignerForm.FormCreate(Sender: TObject);  
 begin
   FProcess := TWorkflowProcess.Create;
   FProcess.Name := 'Nouveau processus';
@@ -943,7 +943,7 @@ begin
   FConnectingFrom := nil;
 end;
 
-procedure TWorkflowDesignerForm.PaintBoxPaint(Sender: TObject);
+procedure TWorkflowDesignerForm.PaintBoxPaint(Sender: TObject);  
 var
   Activity: TActivity;
   Transition: TTransition;
@@ -961,7 +961,7 @@ begin
     DrawActivity(Activity);
 end;
 
-procedure TWorkflowDesignerForm.DrawActivity(AActivity: TActivity);
+procedure TWorkflowDesignerForm.DrawActivity(AActivity: TActivity);  
 var
   Rect: TRect;
   TextWidth, TextHeight: Integer;
@@ -1027,7 +1027,7 @@ begin
   );
 end;
 
-procedure TWorkflowDesignerForm.DrawTransition(ATransition: TTransition);
+procedure TWorkflowDesignerForm.DrawTransition(ATransition: TTransition);  
 var
   StartPoint, EndPoint: TPoint;
   ArrowSize: Integer;
@@ -1059,7 +1059,7 @@ begin
   PaintBox.Canvas.Pen.Width := 1;
 end;
 
-function TWorkflowDesignerForm.FindActivityAt(X, Y: Integer): TActivity;
+function TWorkflowDesignerForm.FindActivityAt(X, Y: Integer): TActivity;  
 var
   Activity: TActivity;
 begin
@@ -1160,31 +1160,31 @@ begin
   end;
 end;
 
-procedure TWorkflowDesignerForm.BtnStartClick(Sender: TObject);
+procedure TWorkflowDesignerForm.BtnStartClick(Sender: TObject);  
 begin
   FCurrentTool := atStart;
   StatusBar1.SimpleText := 'Outil: Début';
 end;
 
-procedure TWorkflowDesignerForm.BtnTaskClick(Sender: TObject);
+procedure TWorkflowDesignerForm.BtnTaskClick(Sender: TObject);  
 begin
   FCurrentTool := atTask;
   StatusBar1.SimpleText := 'Outil: Tâche';
 end;
 
-procedure TWorkflowDesignerForm.BtnDecisionClick(Sender: TObject);
+procedure TWorkflowDesignerForm.BtnDecisionClick(Sender: TObject);  
 begin
   FCurrentTool := atDecision;
   StatusBar1.SimpleText := 'Outil: Décision';
 end;
 
-procedure TWorkflowDesignerForm.BtnEndClick(Sender: TObject);
+procedure TWorkflowDesignerForm.BtnEndClick(Sender: TObject);  
 begin
   FCurrentTool := atEnd;
   StatusBar1.SimpleText := 'Outil: Fin';
 end;
 
-procedure TWorkflowDesignerForm.MenuNewClick(Sender: TObject);
+procedure TWorkflowDesignerForm.MenuNewClick(Sender: TObject);  
 begin
   FProcess.Free;
   FProcess := TWorkflowProcess.Create;
@@ -1193,7 +1193,7 @@ begin
   PaintBox.Invalidate;
 end;
 
-procedure TWorkflowDesignerForm.MenuSaveClick(Sender: TObject);
+procedure TWorkflowDesignerForm.MenuSaveClick(Sender: TObject);  
 var
   SaveDialog: TSaveDialog;
 begin
@@ -1212,7 +1212,7 @@ begin
   end;
 end;
 
-procedure TWorkflowDesignerForm.MenuOpenClick(Sender: TObject);
+procedure TWorkflowDesignerForm.MenuOpenClick(Sender: TObject);  
 var
   OpenDialog: TOpenDialog;
 begin
@@ -1291,7 +1291,7 @@ type
 
 implementation
 
-procedure TWorkflowDashboardForm.FormCreate(Sender: TObject);
+procedure TWorkflowDashboardForm.FormCreate(Sender: TObject);  
 begin
   // Initialiser la grille des instances
   InstancesGrid.ColCount := 6;
@@ -1324,7 +1324,7 @@ begin
   HistoryGrid.ColWidths[3] := 150;
 end;
 
-procedure TWorkflowDashboardForm.FormShow(Sender: TObject);
+procedure TWorkflowDashboardForm.FormShow(Sender: TObject);  
 begin
   if Assigned(FEngine) then
   begin
@@ -1333,7 +1333,7 @@ begin
   end;
 end;
 
-procedure TWorkflowDashboardForm.LoadProcesses;
+procedure TWorkflowDashboardForm.LoadProcesses;  
 var
   Process: TWorkflowProcess;
 begin
@@ -1352,7 +1352,7 @@ begin
     ProcessComboBox.ItemIndex := 0;
 end;
 
-procedure TWorkflowDashboardForm.LoadInstances;
+procedure TWorkflowDashboardForm.LoadInstances;  
 var
   Instance: TWorkflowInstance;
   Row: Integer;
@@ -1397,18 +1397,18 @@ begin
   end;
 end;
 
-procedure TWorkflowDashboardForm.LoadHistory(AInstanceId: string);
+procedure TWorkflowDashboardForm.LoadHistory(AInstanceId: string);  
 begin
   // TODO: Charger l'historique depuis la base de données
   HistoryGrid.RowCount := 1;
 end;
 
-procedure TWorkflowDashboardForm.BtnRefreshClick(Sender: TObject);
+procedure TWorkflowDashboardForm.BtnRefreshClick(Sender: TObject);  
 begin
   LoadInstances;
 end;
 
-procedure TWorkflowDashboardForm.BtnStartNewClick(Sender: TObject);
+procedure TWorkflowDashboardForm.BtnStartNewClick(Sender: TObject);  
 var
   Instance: TWorkflowInstance;
   ProcessId: string;
@@ -1440,7 +1440,7 @@ begin
   end;
 end;
 
-procedure TWorkflowDashboardForm.BtnCompleteClick(Sender: TObject);
+procedure TWorkflowDashboardForm.BtnCompleteClick(Sender: TObject);  
 begin
   if not Assigned(FSelectedInstance) then
   begin
@@ -1565,7 +1565,7 @@ implementation
 uses
   StrUtils;
 
-destructor TExpressionNode.Destroy;
+destructor TExpressionNode.Destroy;  
 begin
   if Assigned(FLeftChild) then
     FLeftChild.Free;
@@ -1604,7 +1604,7 @@ begin
   end;
 end;
 
-function TRuleEngine.ParseExpression(const AExpression: string): TExpressionNode;
+function TRuleEngine.ParseExpression(const AExpression: string): TExpressionNode;  
 var
   Expr: string;
   Pos: Integer;
@@ -2045,12 +2045,12 @@ Ajoutons les méthodes SaveToFile et LoadFromFile :
 ```pascal
 // À ajouter dans l'implémentation de TWorkflowProcess
 
-procedure TWorkflowProcess.SaveToFile(const AFileName: string);
+procedure TWorkflowProcess.SaveToFile(const AFileName: string);  
 begin
   TWorkflowXMLSerializer.SaveToXML(Self, AFileName);
 end;
 
-procedure TWorkflowProcess.LoadFromFile(const AFileName: string);
+procedure TWorkflowProcess.LoadFromFile(const AFileName: string);  
 var
   LoadedProcess: TWorkflowProcess;
   Activity: TActivity;
@@ -2168,7 +2168,7 @@ begin
   FPassword := APassword;
 end;
 
-procedure TEmailNotificationProvider.Send(AMessage: TNotificationMessage);
+procedure TEmailNotificationProvider.Send(AMessage: TNotificationMessage);  
 var
   SMTP: TSMTPSend;
   EmailBody: TStringList;
@@ -2362,7 +2362,7 @@ begin
   FServer.OnRequest := @HandleRequest;
 end;
 
-destructor TWorkflowAPIServer.Destroy;
+destructor TWorkflowAPIServer.Destroy;  
 begin
   if FServer.Active then
     FServer.Active := False;
@@ -2370,13 +2370,13 @@ begin
   inherited Destroy;
 end;
 
-procedure TWorkflowAPIServer.Start;
+procedure TWorkflowAPIServer.Start;  
 begin
   FServer.Active := True;
   WriteLn('Serveur API démarré sur le port ', FPort);
 end;
 
-procedure TWorkflowAPIServer.Stop;
+procedure TWorkflowAPIServer.Stop;  
 begin
   FServer.Active := False;
   WriteLn('Serveur API arrêté');
@@ -2727,13 +2727,13 @@ type
     procedure Run;
   end;
 
-constructor TWorkflowApplication.Create;
+constructor TWorkflowApplication.Create;  
 begin
   inherited Create;
   InitializeComponents;
 end;
 
-destructor TWorkflowApplication.Destroy;
+destructor TWorkflowApplication.Destroy;  
 begin
   if Assigned(FAPIServer) then
     FAPIServer.Stop;
@@ -2745,7 +2745,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TWorkflowApplication.InitializeComponents;
+procedure TWorkflowApplication.InitializeComponents;  
 var
   DatabasePath: string;
   EmailProvider: INotificationProvider;
@@ -2783,7 +2783,7 @@ begin
   LoadSampleProcess;
 end;
 
-procedure TWorkflowApplication.LoadSampleProcess;
+procedure TWorkflowApplication.LoadSampleProcess;  
 var
   Process: TWorkflowProcess;
   ActivityStart, ActivityReview, ActivityApprove, ActivityReject, ActivityEnd: TActivity;
@@ -2842,7 +2842,7 @@ begin
   WriteLn('Processus exemple chargé: ', Process.Name);
 end;
 
-procedure TWorkflowApplication.Run;
+procedure TWorkflowApplication.Run;  
 begin
   Application.Initialize;
 
@@ -2891,7 +2891,7 @@ end.
 ; Chemin vers la base de données
 ; Windows: chemin absolu ou relatif
 ; Linux: peut utiliser ~ pour le répertoire utilisateur
-Path={$IFDEF WINDOWS}.\data\workflow.db{$ELSE}~/.workflow/workflow.db{$ENDIF}
+Path={$IFDEF WINDOWS}.\data\workflow.db{$ELSE}~/.workflow/workflow.db{$ENDIF}  
 Type=SQLite
 
 [API]
@@ -2900,15 +2900,15 @@ Port=8080
 ; Activer HTTPS
 EnableSSL=false
 ; Certificat SSL (si activé)
-SSLCertificate=
+SSLCertificate=  
 SSLKey=
 
 [SMTP]
 ; Configuration du serveur email
-Host=smtp.example.com
-Port=587
-Username=workflow@example.com
-Password=changeme
+Host=smtp.example.com  
+Port=587  
+Username=workflow@example.com  
+Password=changeme  
 UseTLS=true
 
 [Logging]
@@ -2975,7 +2975,7 @@ type
 
 implementation
 
-constructor TWorkflowConfig.Create;
+constructor TWorkflowConfig.Create;  
 begin
   inherited Create;
 
@@ -2994,13 +2994,13 @@ begin
   Load;
 end;
 
-destructor TWorkflowConfig.Destroy;
+destructor TWorkflowConfig.Destroy;  
 begin
   FIniFile.Free;
   inherited Destroy;
 end;
 
-procedure TWorkflowConfig.Load;
+procedure TWorkflowConfig.Load;  
 begin
   if Assigned(FIniFile) then
     FIniFile.Free;
@@ -3031,13 +3031,13 @@ begin
   end;
 end;
 
-procedure TWorkflowConfig.Save;
+procedure TWorkflowConfig.Save;  
 begin
   if Assigned(FIniFile) then
     FIniFile.UpdateFile;
 end;
 
-function TWorkflowConfig.GetDatabasePath: string;
+function TWorkflowConfig.GetDatabasePath: string;  
 begin
   Result := FIniFile.ReadString('Database', 'Path', 'workflow.db');
 
@@ -3046,37 +3046,37 @@ begin
     Result := ExpandFileName(Result);
 end;
 
-function TWorkflowConfig.GetAPIPort: Integer;
+function TWorkflowConfig.GetAPIPort: Integer;  
 begin
   Result := FIniFile.ReadInteger('API', 'Port', 8080);
 end;
 
-function TWorkflowConfig.GetSMTPHost: string;
+function TWorkflowConfig.GetSMTPHost: string;  
 begin
   Result := FIniFile.ReadString('SMTP', 'Host', '');
 end;
 
-function TWorkflowConfig.GetSMTPPort: Integer;
+function TWorkflowConfig.GetSMTPPort: Integer;  
 begin
   Result := FIniFile.ReadInteger('SMTP', 'Port', 587);
 end;
 
-function TWorkflowConfig.GetSMTPUsername: string;
+function TWorkflowConfig.GetSMTPUsername: string;  
 begin
   Result := FIniFile.ReadString('SMTP', 'Username', '');
 end;
 
-function TWorkflowConfig.GetSMTPPassword: string;
+function TWorkflowConfig.GetSMTPPassword: string;  
 begin
   Result := FIniFile.ReadString('SMTP', 'Password', '');
 end;
 
-function TWorkflowConfig.GetLogLevel: string;
+function TWorkflowConfig.GetLogLevel: string;  
 begin
   Result := FIniFile.ReadString('Logging', 'Level', 'info');
 end;
 
-function TWorkflowConfig.GetLogFile: string;
+function TWorkflowConfig.GetLogFile: string;  
 begin
   Result := FIniFile.ReadString('Logging', 'File', 'workflow.log');
 end;
@@ -3122,7 +3122,7 @@ type
 
 implementation
 
-constructor TWorkflowLogger.Create(const ALogFile: string; ALevel: TLogLevel);
+constructor TWorkflowLogger.Create(const ALogFile: string; ALevel: TLogLevel);  
 var
   LogDir: string;
 begin
@@ -3153,14 +3153,14 @@ begin
   end;
 end;
 
-destructor TWorkflowLogger.Destroy;
+destructor TWorkflowLogger.Destroy;  
 begin
   if Assigned(FFileStream) then
     FFileStream.Free;
   inherited Destroy;
 end;
 
-function TWorkflowLogger.LogLevelToString(ALevel: TLogLevel): string;
+function TWorkflowLogger.LogLevelToString(ALevel: TLogLevel): string;  
 begin
   case ALevel of
     llDebug: Result := 'DEBUG';
@@ -3170,7 +3170,7 @@ begin
   end;
 end;
 
-procedure TWorkflowLogger.WriteToFile(const AMessage: string);
+procedure TWorkflowLogger.WriteToFile(const AMessage: string);  
 var
   Line: string;
 begin
@@ -3190,7 +3190,7 @@ begin
     WriteLn(AMessage);
 end;
 
-procedure TWorkflowLogger.Log(ALevel: TLogLevel; const AMessage: string);
+procedure TWorkflowLogger.Log(ALevel: TLogLevel; const AMessage: string);  
 var
   LogMessage: string;
   Timestamp: string;
@@ -3209,22 +3209,22 @@ begin
   WriteLn(LogMessage);
 end;
 
-procedure TWorkflowLogger.Debug(const AMessage: string);
+procedure TWorkflowLogger.Debug(const AMessage: string);  
 begin
   Log(llDebug, AMessage);
 end;
 
-procedure TWorkflowLogger.Info(const AMessage: string);
+procedure TWorkflowLogger.Info(const AMessage: string);  
 begin
   Log(llInfo, AMessage);
 end;
 
-procedure TWorkflowLogger.Warning(const AMessage: string);
+procedure TWorkflowLogger.Warning(const AMessage: string);  
 begin
   Log(llWarning, AMessage);
 end;
 
-procedure TWorkflowLogger.Error(const AMessage: string);
+procedure TWorkflowLogger.Error(const AMessage: string);  
 begin
   Log(llError, AMessage);
 end;
@@ -3240,23 +3240,23 @@ end.
 
 ```batch
 @echo off
-echo ========================================
-echo Déploiement du moteur de workflow
+echo ========================================  
+echo Déploiement du moteur de workflow  
 echo ========================================
 
-REM Créer les répertoires nécessaires
-if not exist "data" mkdir data
-if not exist "logs" mkdir logs
+REM Créer les répertoires nécessaires  
+if not exist "data" mkdir data  
+if not exist "logs" mkdir logs  
 if not exist "backup" mkdir backup
 
-REM Copier la configuration par défaut si elle n'existe pas
+REM Copier la configuration par défaut si elle n'existe pas  
 if not exist "workflow.conf" (
     echo Création de la configuration par défaut...
     copy workflow.conf.template workflow.conf
 )
 
-REM Compiler l'application
-echo Compilation de l'application...
+REM Compiler l'application  
+echo Compilation de l'application...  
 lazbuild WorkflowApp.lpi
 
 if errorlevel 1 (
@@ -3265,13 +3265,13 @@ if errorlevel 1 (
     exit /b 1
 )
 
-REM Copier les DLLs nécessaires
-echo Copie des bibliothèques...
+REM Copier les DLLs nécessaires  
+echo Copie des bibliothèques...  
 copy "%ProgramFiles%\FreePascal\fpc\3.2.2\bin\i386-win32\*.dll" .
 
-echo Déploiement terminé avec succès!
-echo.
-echo Pour lancer l'application: WorkflowApp.exe
+echo Déploiement terminé avec succès!  
+echo.  
+echo Pour lancer l'application: WorkflowApp.exe  
 pause
 ```
 
@@ -3280,13 +3280,13 @@ pause
 ```bash
 #!/bin/bash
 
-echo "========================================"
-echo "Déploiement du moteur de workflow"
+echo "========================================"  
+echo "Déploiement du moteur de workflow"  
 echo "========================================"
 
 # Créer les répertoires nécessaires
-mkdir -p ~/.workflow/data
-mkdir -p ~/.workflow/logs
+mkdir -p ~/.workflow/data  
+mkdir -p ~/.workflow/logs  
 mkdir -p ~/.workflow/backup
 
 # Copier la configuration par défaut si elle n'existe pas
@@ -3296,7 +3296,7 @@ if [ ! -f ~/.workflow/workflow.conf ]; then
 fi
 
 # Compiler l'application
-echo "Compilation de l'application..."
+echo "Compilation de l'application..."  
 lazbuild WorkflowApp.lpi
 
 if [ $? -ne 0 ]; then
@@ -3308,7 +3308,7 @@ fi
 chmod +x WorkflowApp
 
 # Créer un service systemd (optionnel)
-echo "Voulez-vous installer le service systemd? (o/n)"
+echo "Voulez-vous installer le service systemd? (o/n)"  
 read install_service
 
 if [ "$install_service" = "o" ]; then
@@ -3318,10 +3318,10 @@ if [ "$install_service" = "o" ]; then
     echo "Service installé. Utilisez 'sudo systemctl start workflow' pour démarrer"
 fi
 
-echo "Déploiement terminé avec succès!"
-echo ""
-echo "Pour lancer l'application: ./WorkflowApp"
-echo "Configuration: ~/.workflow/workflow.conf"
+echo "Déploiement terminé avec succès!"  
+echo ""  
+echo "Pour lancer l'application: ./WorkflowApp"  
+echo "Configuration: ~/.workflow/workflow.conf"  
 echo "Logs: ~/.workflow/logs/workflow.log"
 ```
 
@@ -3329,22 +3329,22 @@ echo "Logs: ~/.workflow/logs/workflow.log"
 
 ```ini
 [Unit]
-Description=Moteur de workflow BPM
+Description=Moteur de workflow BPM  
 After=network.target
 
 [Service]
-Type=simple
-User=workflow
-WorkingDirectory=/opt/workflow
-ExecStart=/opt/workflow/WorkflowApp
-Restart=on-failure
+Type=simple  
+User=workflow  
+WorkingDirectory=/opt/workflow  
+ExecStart=/opt/workflow/WorkflowApp  
+Restart=on-failure  
 RestartSec=10
 
 # Limites de sécurité
-NoNewPrivileges=true
-PrivateTmp=true
-ProtectSystem=strict
-ProtectHome=true
+NoNewPrivileges=true  
+PrivateTmp=true  
+ProtectSystem=strict  
+ProtectHome=true  
 ReadWritePaths=/opt/workflow /var/log/workflow
 
 [Install]
@@ -3407,7 +3407,7 @@ implementation
 
 // Tests du modèle
 
-procedure TWorkflowModelTest.TestCreateProcess;
+procedure TWorkflowModelTest.TestCreateProcess;  
 var
   Process: TWorkflowProcess;
 begin
@@ -3420,7 +3420,7 @@ begin
   end;
 end;
 
-procedure TWorkflowModelTest.TestAddActivity;
+procedure TWorkflowModelTest.TestAddActivity;  
 var
   Process: TWorkflowProcess;
   Activity: TActivity;
@@ -3437,7 +3437,7 @@ begin
   end;
 end;
 
-procedure TWorkflowModelTest.TestAddTransition;
+procedure TWorkflowModelTest.TestAddTransition;  
 var
   Process: TWorkflowProcess;
   Act1, Act2: TActivity;
@@ -3458,7 +3458,7 @@ begin
   end;
 end;
 
-procedure TWorkflowModelTest.TestFindActivity;
+procedure TWorkflowModelTest.TestFindActivity;  
 var
   Process: TWorkflowProcess;
   Activity, Found: TActivity;
@@ -3477,7 +3477,7 @@ end;
 
 // Tests du moteur
 
-procedure TWorkflowEngineTest.SetUp;
+procedure TWorkflowEngineTest.SetUp;  
 var
   Act1, Act2, Act3: TActivity;
 begin
@@ -3496,13 +3496,13 @@ begin
   FEngine.RegisterProcess(FProcess);
 end;
 
-procedure TWorkflowEngineTest.TearDown;
+procedure TWorkflowEngineTest.TearDown;  
 begin
   FEngine.Free;
   FProcess.Free;
 end;
 
-procedure TWorkflowEngineTest.TestCreateInstance;
+procedure TWorkflowEngineTest.TestCreateInstance;  
 var
   Instance: TWorkflowInstance;
 begin
@@ -3516,7 +3516,7 @@ begin
     Ord(Instance.CurrentActivity.ActivityType));
 end;
 
-procedure TWorkflowEngineTest.TestStartInstance;
+procedure TWorkflowEngineTest.TestStartInstance;  
 var
   Instance: TWorkflowInstance;
 begin
@@ -3527,7 +3527,7 @@ begin
   AssertTrue('Date de début définie', Instance.StartTime > 0);
 end;
 
-procedure TWorkflowEngineTest.TestCompleteActivity;
+procedure TWorkflowEngineTest.TestCompleteActivity;  
 var
   Instance: TWorkflowInstance;
   InitialActivity: TActivity;
@@ -3543,7 +3543,7 @@ begin
     Ord(Instance.CurrentActivity.ActivityType));
 end;
 
-procedure TWorkflowEngineTest.TestWorkflowExecution;
+procedure TWorkflowEngineTest.TestWorkflowExecution;  
 var
   Instance: TWorkflowInstance;
 begin
@@ -3564,19 +3564,19 @@ end;
 
 // Tests du moteur de règles
 
-procedure TWorkflowRulesTest.SetUp;
+procedure TWorkflowRulesTest.SetUp;  
 begin
   FRuleEngine := TRuleEngine.Create;
   FInstance := TWorkflowInstance.Create;
 end;
 
-procedure TWorkflowRulesTest.TearDown;
+procedure TWorkflowRulesTest.TearDown;  
 begin
   FRuleEngine.Free;
   FInstance.Free;
 end;
 
-procedure TWorkflowRulesTest.TestSimpleCondition;
+procedure TWorkflowRulesTest.TestSimpleCondition;  
 begin
   FInstance.SetVariable('status', 'approved');
 
@@ -3586,7 +3586,7 @@ begin
     FRuleEngine.Evaluate('status = rejected', FInstance));
 end;
 
-procedure TWorkflowRulesTest.TestComplexCondition;
+procedure TWorkflowRulesTest.TestComplexCondition;  
 begin
   FInstance.SetVariable('amount', '1500');
   FInstance.SetVariable('status', 'approved');
@@ -3599,7 +3599,7 @@ begin
     FRuleEngine.Evaluate('amount > 2000 OR status = approved', FInstance));
 end;
 
-procedure TWorkflowRulesTest.TestNumericComparison;
+procedure TWorkflowRulesTest.TestNumericComparison;  
 begin
   FInstance.SetVariable('amount', '1500');
 
@@ -3611,7 +3611,7 @@ begin
     FRuleEngine.Evaluate('amount <= 1500', FInstance));
 end;
 
-procedure TWorkflowRulesTest.TestStringComparison;
+procedure TWorkflowRulesTest.TestStringComparison;  
 begin
   FInstance.SetVariable('department', 'IT Department');
 
@@ -3648,7 +3648,7 @@ type
     procedure WriteCustomHelp; override;
   end;
 
-procedure TWorkflowTestRunner.WriteCustomHelp;
+procedure TWorkflowTestRunner.WriteCustomHelp;  
 begin
   inherited WriteCustomHelp;
   WriteLn('Tests du moteur de workflow BPM');
@@ -3684,31 +3684,31 @@ end.
 -- Index pour améliorer les performances des requêtes
 
 -- Index sur les instances
-CREATE INDEX IF NOT EXISTS idx_instances_process
+CREATE INDEX IF NOT EXISTS idx_instances_process  
 ON workflow_instances(process_id);
 
-CREATE INDEX IF NOT EXISTS idx_instances_status
+CREATE INDEX IF NOT EXISTS idx_instances_status  
 ON workflow_instances(status);
 
-CREATE INDEX IF NOT EXISTS idx_instances_current_activity
+CREATE INDEX IF NOT EXISTS idx_instances_current_activity  
 ON workflow_instances(current_activity_id);
 
 -- Index sur l'historique
-CREATE INDEX IF NOT EXISTS idx_history_instance
+CREATE INDEX IF NOT EXISTS idx_history_instance  
 ON workflow_history(instance_id);
 
-CREATE INDEX IF NOT EXISTS idx_history_timestamp
+CREATE INDEX IF NOT EXISTS idx_history_timestamp  
 ON workflow_history(timestamp);
 
 -- Index sur les activités
-CREATE INDEX IF NOT EXISTS idx_activities_process
+CREATE INDEX IF NOT EXISTS idx_activities_process  
 ON workflow_activities(process_id);
 
 -- Index sur les transitions
-CREATE INDEX IF NOT EXISTS idx_transitions_source
+CREATE INDEX IF NOT EXISTS idx_transitions_source  
 ON workflow_transitions(source_activity_id);
 
-CREATE INDEX IF NOT EXISTS idx_transitions_target
+CREATE INDEX IF NOT EXISTS idx_transitions_target  
 ON workflow_transitions(target_activity_id);
 ```
 
@@ -3758,7 +3758,7 @@ type
 
 implementation
 
-constructor TWorkflowCache.Create(AMaxSize: Integer);
+constructor TWorkflowCache.Create(AMaxSize: Integer);  
 begin
   inherited Create;
   FProcessCache := TDictionary<string, TWorkflowProcess>.Create;
@@ -3768,14 +3768,14 @@ begin
   FCacheMisses := 0;
 end;
 
-destructor TWorkflowCache.Destroy;
+destructor TWorkflowCache.Destroy;  
 begin
   FProcessCache.Free;
   FInstanceCache.Free;
   inherited Destroy;
 end;
 
-procedure TWorkflowCache.CleanupCache;
+procedure TWorkflowCache.CleanupCache;  
 begin
   // Stratégie simple: vider la moitié du cache si la limite est atteinte
   if FProcessCache.Count + FInstanceCache.Count > FMaxCacheSize then
@@ -3790,13 +3790,13 @@ begin
   end;
 end;
 
-procedure TWorkflowCache.AddProcess(AProcess: TWorkflowProcess);
+procedure TWorkflowCache.AddProcess(AProcess: TWorkflowProcess);  
 begin
   CleanupCache;
   FProcessCache.AddOrSetValue(AProcess.Id, AProcess);
 end;
 
-function TWorkflowCache.GetProcess(const AProcessId: string): TWorkflowProcess;
+function TWorkflowCache.GetProcess(const AProcessId: string): TWorkflowProcess;  
 begin
   if FProcessCache.TryGetValue(AProcessId, Result) then
     Inc(FCacheHits)
@@ -3807,18 +3807,18 @@ begin
   end;
 end;
 
-procedure TWorkflowCache.RemoveProcess(const AProcessId: string);
+procedure TWorkflowCache.RemoveProcess(const AProcessId: string);  
 begin
   FProcessCache.Remove(AProcessId);
 end;
 
-procedure TWorkflowCache.AddInstance(AInstance: TWorkflowInstance);
+procedure TWorkflowCache.AddInstance(AInstance: TWorkflowInstance);  
 begin
   CleanupCache;
   FInstanceCache.AddOrSetValue(AInstance.Id, AInstance);
 end;
 
-function TWorkflowCache.GetInstance(const AInstanceId: string): TWorkflowInstance;
+function TWorkflowCache.GetInstance(const AInstanceId: string): TWorkflowInstance;  
 begin
   if FInstanceCache.TryGetValue(AInstanceId, Result) then
     Inc(FCacheHits)
@@ -3829,12 +3829,12 @@ begin
   end;
 end;
 
-procedure TWorkflowCache.RemoveInstance(const AInstanceId: string);
+procedure TWorkflowCache.RemoveInstance(const AInstanceId: string);  
 begin
   FInstanceCache.Remove(AInstanceId);
 end;
 
-function TWorkflowCache.GetCacheHitRate: Double;
+function TWorkflowCache.GetCacheHitRate: Double;  
 var
   Total: Integer;
 begin
@@ -3845,7 +3845,7 @@ begin
     Result := 0;
 end;
 
-procedure TWorkflowCache.ClearCache;
+procedure TWorkflowCache.ClearCache;  
 begin
   FProcessCache.Clear;
   FInstanceCache.Clear;
@@ -3912,7 +3912,7 @@ begin
   FOnComplete := AOnComplete;
 end;
 
-procedure TWorkflowTask.Execute;
+procedure TWorkflowTask.Execute;  
 begin
   try
     // Exécuter le workflow jusqu'à la fin ou jusqu'à une activité manuelle
@@ -3947,7 +3947,7 @@ begin
   FTaskQueue := TThreadList.Create;
 end;
 
-destructor TWorkflowThreadPool.Destroy;
+destructor TWorkflowThreadPool.Destroy;  
 begin
   // Attendre que tous les threads se terminent
   while FActiveThreads > 0 do
@@ -3957,7 +3957,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TWorkflowThreadPool.ExecuteAsync(AInstance: TWorkflowInstance);
+procedure TWorkflowThreadPool.ExecuteAsync(AInstance: TWorkflowInstance);  
 var
   List: TList;
 begin
@@ -3979,13 +3979,13 @@ begin
   end;
 end;
 
-procedure TWorkflowThreadPool.OnTaskComplete(Sender: TObject);
+procedure TWorkflowThreadPool.OnTaskComplete(Sender: TObject);  
 begin
   Dec(FActiveThreads);
   ProcessNextTask;
 end;
 
-procedure TWorkflowThreadPool.ProcessNextTask;
+procedure TWorkflowThreadPool.ProcessNextTask;  
 var
   List: TList;
   Instance: TWorkflowInstance;
@@ -4005,7 +4005,7 @@ begin
   end;
 end;
 
-function TWorkflowThreadPool.GetActiveThreadCount: Integer;
+function TWorkflowThreadPool.GetActiveThreadCount: Integer;  
 begin
   Result := FActiveThreads;
 end;
@@ -4063,7 +4063,7 @@ implementation
 uses
   fpjson;
 
-constructor TWorkflowMetrics.Create;
+constructor TWorkflowMetrics.Create;  
 begin
   inherited Create;
   FExecutionTimes := TList<Double>.Create;
@@ -4071,13 +4071,13 @@ begin
   Reset;
 end;
 
-destructor TWorkflowMetrics.Destroy;
+destructor TWorkflowMetrics.Destroy;  
 begin
   FExecutionTimes.Free;
   inherited Destroy;
 end;
 
-procedure TWorkflowMetrics.Reset;
+procedure TWorkflowMetrics.Reset;  
 begin
   FTotalInstances := 0;
   FActiveInstances := 0;
@@ -4088,13 +4088,13 @@ begin
   FStartTime := Now;
 end;
 
-procedure TWorkflowMetrics.RecordInstanceStart;
+procedure TWorkflowMetrics.RecordInstanceStart;  
 begin
   Inc(FTotalInstances);
   Inc(FActiveInstances);
 end;
 
-procedure TWorkflowMetrics.RecordInstanceComplete(ExecutionTime: Double);
+procedure TWorkflowMetrics.RecordInstanceComplete(ExecutionTime: Double);  
 begin
   Dec(FActiveInstances);
   Inc(FCompletedInstances);
@@ -4102,13 +4102,13 @@ begin
   CalculateAverageExecutionTime;
 end;
 
-procedure TWorkflowMetrics.RecordInstanceFailed;
+procedure TWorkflowMetrics.RecordInstanceFailed;  
 begin
   Dec(FActiveInstances);
   Inc(FFailedInstances);
 end;
 
-procedure TWorkflowMetrics.CalculateAverageExecutionTime;
+procedure TWorkflowMetrics.CalculateAverageExecutionTime;  
 var
   Total: Double;
   Time: Double;
@@ -4126,7 +4126,7 @@ begin
   FAverageExecutionTime := Total / FExecutionTimes.Count;
 end;
 
-function TWorkflowMetrics.GetMetricsReport: string;
+function TWorkflowMetrics.GetMetricsReport: string;  
 var
   Uptime: Double;
   ThroughputPerHour: Double;
@@ -4162,7 +4162,7 @@ begin
   );
 end;
 
-function TWorkflowMetrics.GetMetricsJSON: string;
+function TWorkflowMetrics.GetMetricsJSON: string;  
 var
   JSONObj: TJSONObject;
   Uptime: Double;
@@ -4316,7 +4316,7 @@ Le fichier `workflow.conf` contient tous les paramètres:
 ### Exemple 1: Processus d'approbation de congés
 
 ```pascal
-procedure CreateVacationApprovalWorkflow;
+procedure CreateVacationApprovalWorkflow;  
 var
   Process: TWorkflowProcess;
   ActStart, ActRequest, ActManagerReview, ActHRReview: TActivity;
@@ -4378,7 +4378,7 @@ end;
 ### Exemple 2: Processus de traitement de commande
 
 ```pascal
-procedure CreateOrderProcessingWorkflow;
+procedure CreateOrderProcessingWorkflow;  
 var
   Process: TWorkflowProcess;
   ActStart, ActValidate, ActCheckStock, ActProcessPayment: TActivity;
@@ -4455,7 +4455,7 @@ program WorkflowAPIClient;
 uses
   SysUtils, fphttpclient, fpjson, jsonparser;
 
-procedure CreateAndExecuteWorkflowInstance;
+procedure CreateAndExecuteWorkflowInstance;  
 var
   HTTPClient: TFPHTTPClient;
   Response: string;
@@ -4622,7 +4622,7 @@ implementation
 
 // TSlackNotificationService
 
-constructor TSlackNotificationService.Create(const AWebhookURL: string);
+constructor TSlackNotificationService.Create(const AWebhookURL: string);  
 begin
   inherited Create;
   FWebhookURL := AWebhookURL;
@@ -4657,7 +4657,7 @@ begin
   end;
 end;
 
-function TSlackNotificationService.GetServiceName: string;
+function TSlackNotificationService.GetServiceName: string;  
 begin
   Result := 'slack_notification';
 end;
@@ -4682,14 +4682,14 @@ begin
   WriteLn('Email envoyé pour l''activité: ', AActivity.Name);
 end;
 
-function TEmailService.GetServiceName: string;
+function TEmailService.GetServiceName: string;  
 begin
   Result := 'email_service';
 end;
 
 // TWebhookService
 
-constructor TWebhookService.Create(const ATargetURL: string);
+constructor TWebhookService.Create(const ATargetURL: string);  
 begin
   inherited Create;
   FTargetURL := ATargetURL;
@@ -4723,21 +4723,21 @@ begin
   end;
 end;
 
-function TWebhookService.GetServiceName: string;
+function TWebhookService.GetServiceName: string;  
 begin
   Result := 'webhook';
 end;
 
 // TServiceRegistry
 
-constructor TServiceRegistry.Create;
+constructor TServiceRegistry.Create;  
 begin
   inherited Create;
   FServices := TStringList.Create;
   FServices.OwnsObjects := True;
 end;
 
-destructor TServiceRegistry.Destroy;
+destructor TServiceRegistry.Destroy;  
 begin
   FServices.Free;
   inherited Destroy;
@@ -4749,7 +4749,7 @@ begin
   FServices.AddObject(AName, TObject(AService));
 end;
 
-function TServiceRegistry.GetService(const AName: string): IExternalService;
+function TServiceRegistry.GetService(const AName: string): IExternalService;  
 var
   Index: Integer;
 begin
@@ -4833,7 +4833,7 @@ implementation
 uses
   DateUtils;
 
-constructor TAuthenticationManager.Create(const ASecretKey: string);
+constructor TAuthenticationManager.Create(const ASecretKey: string);  
 begin
   inherited Create;
   FSecretKey := ASecretKey;
@@ -4841,13 +4841,13 @@ begin
   FUsers.OwnsObjects := True;
 end;
 
-destructor TAuthenticationManager.Destroy;
+destructor TAuthenticationManager.Destroy;  
 begin
   FUsers.Free;
   inherited Destroy;
 end;
 
-function TAuthenticationManager.HashPassword(const APassword: string): string;
+function TAuthenticationManager.HashPassword(const APassword: string): string;  
 var
   Hash: TDCP_sha256;
   Digest: array[0..31] of Byte;
@@ -4907,7 +4907,7 @@ begin
   end;
 end;
 
-function TAuthenticationManager.GenerateToken(AUser: TWorkflowUser): string;
+function TAuthenticationManager.GenerateToken(AUser: TWorkflowUser): string;  
 var
   JSONObj: TJSONObject;
   Cipher: TDCP_rijndael;
@@ -4938,7 +4938,7 @@ begin
   end;
 end;
 
-function TAuthenticationManager.ValidateToken(const AToken: string): TWorkflowUser;
+function TAuthenticationManager.ValidateToken(const AToken: string): TWorkflowUser;  
 var
   Cipher: TDCP_rijndael;
   Ciphertext, Plaintext: string;

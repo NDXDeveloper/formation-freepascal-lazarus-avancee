@@ -128,7 +128,7 @@ type
     function IsEmpty: Boolean;
   end;
 
-constructor TTickRingBuffer.Create(ACapacity: Integer);
+constructor TTickRingBuffer.Create(ACapacity: Integer);  
 begin
   inherited Create;
   FCapacity := ACapacity;
@@ -139,13 +139,13 @@ begin
   InitCriticalSection(FLock);
 end;
 
-destructor TTickRingBuffer.Destroy;
+destructor TTickRingBuffer.Destroy;  
 begin
   DoneCriticalSection(FLock);
   inherited;
 end;
 
-function TTickRingBuffer.Push(const ATick: TMarketTick): Boolean;
+function TTickRingBuffer.Push(const ATick: TMarketTick): Boolean;  
 begin
   EnterCriticalSection(FLock);
   try
@@ -161,7 +161,7 @@ begin
   end;
 end;
 
-function TTickRingBuffer.Pop(out ATick: TMarketTick): Boolean;
+function TTickRingBuffer.Pop(out ATick: TMarketTick): Boolean;  
 begin
   EnterCriticalSection(FLock);
   try
@@ -177,17 +177,17 @@ begin
   end;
 end;
 
-function TTickRingBuffer.IsFull: Boolean;
+function TTickRingBuffer.IsFull: Boolean;  
 begin
   Result := FCount = FCapacity;
 end;
 
-function TTickRingBuffer.IsEmpty: Boolean;
+function TTickRingBuffer.IsEmpty: Boolean;  
 begin
   Result := FCount = 0;
 end;
 
-function TTickRingBuffer.Count: Integer;
+function TTickRingBuffer.Count: Integer;  
 begin
   EnterCriticalSection(FLock);
   try
@@ -228,20 +228,20 @@ type
     property Field[ATag: Integer]: string read GetField write SetField;
   end;
 
-constructor TFIXMessage.Create;
+constructor TFIXMessage.Create;  
 begin
   inherited;
   FTags := TStringList.Create;
   FTags.Delimiter := '|';  // SOH (Start of Header) en FIX
 end;
 
-destructor TFIXMessage.Destroy;
+destructor TFIXMessage.Destroy;  
 begin
   FTags.Free;
   inherited;
 end;
 
-procedure TFIXMessage.ParseFromString(const AMessage: string);
+procedure TFIXMessage.ParseFromString(const AMessage: string);  
 var
   Parts: TStringList;
   i, EqualPos: Integer;
@@ -270,17 +270,17 @@ begin
   end;
 end;
 
-function TFIXMessage.GetField(ATag: Integer): string;
+function TFIXMessage.GetField(ATag: Integer): string;  
 begin
   Result := FTags.Values[IntToStr(ATag)];
 end;
 
-procedure TFIXMessage.SetField(ATag: Integer; const AValue: string);
+procedure TFIXMessage.SetField(ATag: Integer; const AValue: string);  
 begin
   FTags.Values[IntToStr(ATag)] := AValue;
 end;
 
-function TFIXMessage.BuildMessage: string;
+function TFIXMessage.BuildMessage: string;  
 var
   i: Integer;
 begin
@@ -354,7 +354,7 @@ type
     property CurrentPosition: Integer read FCurrentPosition;
   end;
 
-constructor TMarketMakingStrategy.Create(const ASymbol: string);
+constructor TMarketMakingStrategy.Create(const ASymbol: string);  
 begin
   inherited Create;
   FSymbol := ASymbol;
@@ -451,7 +451,7 @@ type
     procedure ReleaseOrder(AOrder: POrder);
   end;
 
-constructor TOrderPool.Create;
+constructor TOrderPool.Create;  
 var
   i: Integer;
 begin
@@ -464,7 +464,7 @@ begin
   end;
 end;
 
-function TOrderPool.AllocateOrder: POrder;
+function TOrderPool.AllocateOrder: POrder;  
 var
   Index: Integer;
 begin
@@ -482,7 +482,7 @@ begin
   FillChar(Result^, SizeOf(TOrder), 0);
 end;
 
-procedure TOrderPool.ReleaseOrder(AOrder: POrder);
+procedure TOrderPool.ReleaseOrder(AOrder: POrder);  
 var
   Index: Integer;
 begin
@@ -500,19 +500,19 @@ end;
 
 ```pascal
 // Au lieu de passer des structures par valeur
-procedure ProcessTickBad(Tick: TMarketTick);  // Copie 64+ octets
+procedure ProcessTickBad(Tick: TMarketTick);  // Copie 64+ octets  
 begin
   // Traitement
 end;
 
 // Passer par pointeur
-procedure ProcessTickGood(const Tick: TMarketTick);  // Copie seulement l'adresse
+procedure ProcessTickGood(const Tick: TMarketTick);  // Copie seulement l'adresse  
 begin
   // Traitement identique, mais beaucoup plus rapide
 end;
 
 // Ou utiliser des pointeurs explicites
-procedure ProcessTickBest(Tick: PMarketTick);
+procedure ProcessTickBest(Tick: PMarketTick);  
 begin
   if Tick^.BidPrice > Tick^.AskPrice then  // Accès direct mémoire
     // ...
@@ -523,12 +523,12 @@ end;
 
 ```pascal
 // Forcer l'inline pour les fonctions appelées très souvent
-function GetMidPrice(const ATick: TMarketTick): Double; inline;
+function GetMidPrice(const ATick: TMarketTick): Double; inline;  
 begin
   Result := (ATick.BidPrice + ATick.AskPrice) / 2.0;
 end;
 
-function GetSpread(const ATick: TMarketTick): Double; inline;
+function GetSpread(const ATick: TMarketTick): Double; inline;  
 begin
   Result := ATick.AskPrice - ATick.BidPrice;
 end;
@@ -597,7 +597,7 @@ type
     constructor Create(AOrderQueue: TThreadedQueue<TOrder>);
   end;
 
-procedure TMarketDataThread.Execute;
+procedure TMarketDataThread.Execute;  
 var
   Tick: TMarketTick;
   Buffer: array[0..1023] of Byte;
@@ -621,7 +621,7 @@ begin
   end;
 end;
 
-procedure TStrategyThread.Execute;
+procedure TStrategyThread.Execute;  
 var
   Tick: TMarketTick;
   BuyOrder, SellOrder: TOrder;
@@ -645,7 +645,7 @@ begin
   end;
 end;
 
-procedure TExecutionThread.Execute;
+procedure TExecutionThread.Execute;  
 var
   Order: TOrder;
 begin
@@ -701,7 +701,7 @@ type
     property CurrentPnL: Double read FCurrentPnL;
   end;
 
-constructor TRiskManager.Create;
+constructor TRiskManager.Create;  
 begin
   inherited;
   FMaxDailyLoss := -10000.0;  // Perte max de 10,000
@@ -712,7 +712,7 @@ begin
   InitCriticalSection(FLock);
 end;
 
-function TRiskManager.ValidateOrder(const AOrder: TOrder): Boolean;
+function TRiskManager.ValidateOrder(const AOrder: TOrder): Boolean;  
 var
   CurrentPosition: Integer;
   NewPosition: Integer;
@@ -772,7 +772,7 @@ begin
   end;
 end;
 
-procedure TRiskManager.UpdatePnL(APnL: Double);
+procedure TRiskManager.UpdatePnL(APnL: Double);  
 begin
   EnterCriticalSection(FLock);
   try
@@ -782,7 +782,7 @@ begin
   end;
 end;
 
-function TRiskManager.IsHaltedDueToLoss: Boolean;
+function TRiskManager.IsHaltedDueToLoss: Boolean;  
 begin
   Result := FCurrentPnL <= FMaxDailyLoss;
 end;
@@ -817,7 +817,7 @@ type
     procedure Flush;
   end;
 
-procedure THighPerfLogger.Log(ALevel: TLogLevel; const AMessage: string);
+procedure THighPerfLogger.Log(ALevel: TLogLevel; const AMessage: string);  
 var
   Index: Integer;
   Entry: PLogEntry;
@@ -875,7 +875,7 @@ type
     procedure Reset;
   end;
 
-procedure TStatsCollector.RecordLatency(AMicroseconds: Int64);
+procedure TStatsCollector.RecordLatency(AMicroseconds: Int64);  
 var
   Total: Int64;
   i: Integer;
@@ -911,7 +911,7 @@ end;
 uses
   Windows;
 
-procedure OptimizeForWindows;
+procedure OptimizeForWindows;  
 var
   ProcessHandle: THandle;
   ThreadHandle: THandle;
@@ -933,7 +933,7 @@ begin
 end;
 
 // Optimisation du timer haute résolution
-procedure EnableHighResolutionTimer;
+procedure EnableHighResolutionTimer;  
 var
   TimeCaps: TTimeCaps;
 begin
@@ -959,7 +959,7 @@ end;
 uses
   BaseUnix, Unix, Linux;
 
-procedure OptimizeForLinux;
+procedure OptimizeForLinux;  
 var
   Policy: Integer;
   Param: sched_param;
@@ -985,7 +985,7 @@ begin
 end;
 
 // Configuration du noyau Linux pour faible latence
-procedure ConfigureKernelParams;
+procedure ConfigureKernelParams;  
 begin
   WriteLn('Configuration manuelle requise:');
   WriteLn('');
@@ -1018,7 +1018,7 @@ Le compteur TSC est le moyen le plus précis de mesurer le temps sur x86/x64.
 
 ```pascal
 {$IFDEF CPUX86_64}
-function ReadTSC: UInt64; assembler; nostackframe;
+function ReadTSC: UInt64; assembler; nostackframe;  
 asm
   rdtsc
   shl rdx, 32
@@ -1027,7 +1027,7 @@ end;
 {$ENDIF}
 
 {$IFDEF CPUI386}
-function ReadTSC: UInt64; assembler;
+function ReadTSC: UInt64; assembler;  
 asm
   rdtsc
   // EDX:EAX contient déjà le résultat 64-bit
@@ -1046,13 +1046,13 @@ type
     function MeasureLatency(StartTSC, EndTSC: UInt64): Double;
   end;
 
-constructor TLatencyMeasure.Create;
+constructor TLatencyMeasure.Create;  
 begin
   inherited;
   CalibrateTSC;
 end;
 
-procedure TLatencyMeasure.CalibrateTSC;
+procedure TLatencyMeasure.CalibrateTSC;  
 var
   Start, EndTSC: UInt64;
   StartTime, EndTime: TDateTime;
@@ -1073,12 +1073,12 @@ begin
   WriteLn('TSC Frequency: ', FTSCFrequency div 1000000, ' MHz');
 end;
 
-function TLatencyMeasure.GetTimestampMicroseconds: UInt64;
+function TLatencyMeasure.GetTimestampMicroseconds: UInt64;  
 begin
   Result := (ReadTSC * 1000000) div FTSCFrequency;
 end;
 
-function TLatencyMeasure.MeasureLatency(StartTSC, EndTSC: UInt64): Double;
+function TLatencyMeasure.MeasureLatency(StartTSC, EndTSC: UInt64): Double;  
 begin
   // Retourner la latence en microsecondes
   Result := ((EndTSC - StartTSC) * 1000000.0) / FTSCFrequency;
@@ -1133,7 +1133,7 @@ type
     function Receive(out AData; ASize: Integer): Integer;
   end;
 
-procedure TLowLatencySocket.ConfigureSocketOptions;
+procedure TLowLatencySocket.ConfigureSocketOptions;  
 var
   OptVal: Integer;
 begin
@@ -1166,7 +1166,7 @@ begin
   {$ENDIF}
 end;
 
-constructor TLowLatencySocket.Create;
+constructor TLowLatencySocket.Create;  
 begin
   inherited;
   FSocket := socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -1189,17 +1189,17 @@ begin
   Result := Sockets.Connect(FSocket, @Addr, SizeOf(Addr)) = 0;
 end;
 
-function TLowLatencySocket.Send(const AData; ASize: Integer): Integer;
+function TLowLatencySocket.Send(const AData; ASize: Integer): Integer;  
 begin
   Result := Sockets.Send(FSocket, AData, ASize, 0);
 end;
 
-function TLowLatencySocket.Receive(out AData; ASize: Integer): Integer;
+function TLowLatencySocket.Receive(out AData; ASize: Integer): Integer;  
 begin
   Result := Sockets.Recv(FSocket, AData, ASize, 0);
 end;
 
-destructor TLowLatencySocket.Destroy;
+destructor TLowLatencySocket.Destroy;  
 begin
   if FSocket <> INVALID_SOCKET then
     CloseSocket(FSocket);
@@ -1225,7 +1225,7 @@ type
     function ReceiveTick(out ATick: TMarketTick): Boolean;
   end;
 
-constructor TMulticastReceiver.Create(const AGroup: string; APort: Word);
+constructor TMulticastReceiver.Create(const AGroup: string; APort: Word);  
 var
   Addr: TSockAddr;
   MReq: ip_mreq;
@@ -1266,7 +1266,7 @@ begin
   SetSockOpt(FSocket, SOL_SOCKET, SO_RCVBUF, @OptVal, SizeOf(OptVal));
 end;
 
-function TMulticastReceiver.ReceiveTick(out ATick: TMarketTick): Boolean;
+function TMulticastReceiver.ReceiveTick(out ATick: TMarketTick): Boolean;  
 var
   Buffer: array[0..1023] of Byte;
   BytesRead: Integer;
@@ -1282,7 +1282,7 @@ begin
   end;
 end;
 
-destructor TMulticastReceiver.Destroy;
+destructor TMulticastReceiver.Destroy;  
 begin
   if FSocket <> INVALID_SOCKET then
     CloseSocket(FSocket);
@@ -1339,7 +1339,7 @@ begin
   FHistoricalData := nil;
 end;
 
-procedure TBacktester.LoadHistoricalData(const AFilename: string);
+procedure TBacktester.LoadHistoricalData(const AFilename: string);  
 var
   F: File of TMarketTick;
   Tick: TMarketTick;
@@ -1369,7 +1369,7 @@ begin
   CloseFile(F);
 end;
 
-procedure TBacktester.SimulateTick(const ATick: TMarketTick);
+procedure TBacktester.SimulateTick(const ATick: TMarketTick);  
 var
   BuyOrder, SellOrder: TOrder;
   OrderFilled: Boolean;
@@ -1411,7 +1411,7 @@ begin
   end;
 end;
 
-procedure TBacktester.RunBacktest(const ADataFile: string);
+procedure TBacktester.RunBacktest(const ADataFile: string);  
 var
   Current: PHistoricalTick;
   TickCount: Integer;
@@ -1437,12 +1437,12 @@ begin
   WriteLn('Backtest terminé!');
 end;
 
-function TBacktester.CalculatePnL: Double;
+function TBacktester.CalculatePnL: Double;  
 begin
   Result := FCurrentCapital - FInitialCapital;
 end;
 
-procedure TBacktester.PrintResults;
+procedure TBacktester.PrintResults;  
 var
   PnL: Double;
   ReturnPct: Double;
@@ -1473,7 +1473,7 @@ begin
   WriteLn(Format('Trades perdants: %d', [LosingTrades]));
 end;
 
-destructor TBacktester.Destroy;
+destructor TBacktester.Destroy;  
 var
   Current, Temp: PHistoricalTick;
 begin
@@ -1582,27 +1582,27 @@ end;
 
 ```ini
 [Connection]
-MarketDataHost=192.168.1.100
-MarketDataPort=5000
-ExecutionHost=192.168.1.101
+MarketDataHost=192.168.1.100  
+MarketDataPort=5000  
+ExecutionHost=192.168.1.101  
 ExecutionPort=5001
 
 [Strategy]
-MaxPositionSize=5000
-MaxOrderSize=1000
+MaxPositionSize=5000  
+MaxOrderSize=1000  
 MaxDailyLoss=-50000.0
 
 [Performance]
-TickBufferSize=100000
-OrderQueueSize=10000
+TickBufferSize=100000  
+OrderQueueSize=10000  
 CPUAffinity=0
 
 [Logging]
-LogLevel=1
+LogLevel=1  
 LogPath=/var/log/hft
 
 [Monitoring]
-MetricsPort=9090
+MetricsPort=9090  
 HealthCheckInterval=5000
 ```
 
@@ -1632,7 +1632,7 @@ type
     constructor CreateNew(AOwner: TComponent; Dummy: Integer = 0); override;
   end;
 
-constructor THFTService.CreateNew(AOwner: TComponent; Dummy: Integer);
+constructor THFTService.CreateNew(AOwner: TComponent; Dummy: Integer);  
 begin
   inherited;
   Name := 'HFTTradingSystem';
@@ -1641,14 +1641,14 @@ begin
   StartType := stAuto;
 end;
 
-procedure THFTService.ServiceStart(Sender: TService; var Started: Boolean);
+procedure THFTService.ServiceStart(Sender: TService; var Started: Boolean);  
 begin
   FTradingSystem := TTradingSystem.Create;
   FTradingSystem.Start;
   Started := True;
 end;
 
-procedure THFTService.ServiceStop(Sender: TService; var Stopped: Boolean);
+procedure THFTService.ServiceStop(Sender: TService; var Stopped: Boolean);  
 begin
   FTradingSystem.Stop;
   FTradingSystem.Free;
@@ -1664,7 +1664,7 @@ end.
 
 Installation du service :
 ```batch
-HFTService.exe /install
+HFTService.exe /install  
 net start HFTTradingSystem
 ```
 
@@ -1674,29 +1674,29 @@ Créer le fichier `/etc/systemd/system/hft-trading.service` :
 
 ```ini
 [Unit]
-Description=HFT Trading System
+Description=HFT Trading System  
 After=network.target
 
 [Service]
-Type=simple
-User=trader
-Group=trader
-WorkingDirectory=/opt/hft-trading
-ExecStart=/opt/hft-trading/hft_system
-Restart=always
+Type=simple  
+User=trader  
+Group=trader  
+WorkingDirectory=/opt/hft-trading  
+ExecStart=/opt/hft-trading/hft_system  
+Restart=always  
 RestartSec=10
 
 # Limites de ressources
-LimitNOFILE=65536
+LimitNOFILE=65536  
 LimitMEMLOCK=infinity
 
 # Capabilities pour priorité temps réel
-AmbientCapabilities=CAP_SYS_NICE CAP_IPC_LOCK
+AmbientCapabilities=CAP_SYS_NICE CAP_IPC_LOCK  
 SecureBits=keep-caps
 
 # Logging
-StandardOutput=journal
-StandardError=journal
+StandardOutput=journal  
+StandardError=journal  
 SyslogIdentifier=hft-trading
 
 [Install]
@@ -1706,8 +1706,8 @@ WantedBy=multi-user.target
 Commandes de gestion :
 ```bash
 # Installer et démarrer
-sudo systemctl daemon-reload
-sudo systemctl enable hft-trading
+sudo systemctl daemon-reload  
+sudo systemctl enable hft-trading  
 sudo systemctl start hft-trading
 
 # Vérifier le statut
@@ -1740,7 +1740,7 @@ type
     procedure Stop;
   end;
 
-constructor TMetricsServer.Create(APort: Word; AStats: TStatsCollector);
+constructor TMetricsServer.Create(APort: Word; AStats: TStatsCollector);  
 begin
   inherited Create;
   FStats := AStats;
@@ -1802,18 +1802,18 @@ begin
   end;
 end;
 
-procedure TMetricsServer.Start;
+procedure TMetricsServer.Start;  
 begin
   FServer.Active := True;
   WriteLn('Serveur de métriques démarré sur le port ', FServer.Port);
 end;
 
-procedure TMetricsServer.Stop;
+procedure TMetricsServer.Stop;  
 begin
   FServer.Active := False;
 end;
 
-destructor TMetricsServer.Destroy;
+destructor TMetricsServer.Destroy;  
 begin
   Stop;
   FServer.Free;
@@ -2001,7 +2001,7 @@ type
     procedure WaitForShutdown;
   end;
 
-constructor TTradingSystem.Create(const AConfigFile: string);
+constructor TTradingSystem.Create(const AConfigFile: string);  
 begin
   inherited Create;
 
@@ -2041,7 +2041,7 @@ begin
   WriteLn('Système initialisé avec succès!');
 end;
 
-procedure TTradingSystem.Start;
+procedure TTradingSystem.Start;  
 begin
   if FRunning then
     Exit;
@@ -2067,7 +2067,7 @@ begin
   WriteLn;
 end;
 
-procedure TTradingSystem.Stop;
+procedure TTradingSystem.Stop;  
 begin
   if not FRunning then
     Exit;
@@ -2105,7 +2105,7 @@ begin
   WriteLn('Système arrêté proprement.');
 end;
 
-procedure TTradingSystem.WaitForShutdown;
+procedure TTradingSystem.WaitForShutdown;  
 var
   Input: string;
 begin
@@ -2113,7 +2113,7 @@ begin
   ReadLn(Input);
 end;
 
-destructor TTradingSystem.Destroy;
+destructor TTradingSystem.Destroy;  
 begin
   if FRunning then
     Stop;
@@ -2182,7 +2182,7 @@ type
     MaxLatencyUs: Int64;
   end;
 
-function BenchmarkTickProcessing: TBenchmarkResult;
+function BenchmarkTickProcessing: TBenchmarkResult;  
 var
   Tick: TMarketTick;
   StartTSC, EndTSC: UInt64;
@@ -2230,7 +2230,7 @@ begin
   Result.IterationsPerSecond := ITERATIONS / (Result.AverageLatencyUs / 1000000);
 end;
 
-function BenchmarkOrderCreation: TBenchmarkResult;
+function BenchmarkOrderCreation: TBenchmarkResult;  
 var
   Order: TOrder;
   StartTime, EndTime: TDateTime;
@@ -2260,7 +2260,7 @@ begin
     ((MilliSecondsBetween(EndTime, StartTime) / 1000.0));
 end;
 
-procedure PrintBenchmarkResults(const AResult: TBenchmarkResult);
+procedure PrintBenchmarkResults(const AResult: TBenchmarkResult);  
 begin
   WriteLn('--- ', AResult.OperationName, ' ---');
   WriteLn(Format('Opérations/sec: %.0f', [AResult.IterationsPerSecond]));
@@ -2318,7 +2318,7 @@ type
     procedure LogRiskViolation(const ADetails: string);
   end;
 
-constructor TAuditLogger.Create(const AFilename: string);
+constructor TAuditLogger.Create(const AFilename: string);  
 begin
   inherited Create;
   AssignFile(FAuditFile, AFilename);
@@ -2331,7 +2331,7 @@ begin
   InitCriticalSection(FLock);
 end;
 
-procedure TAuditLogger.LogOrderPlaced(const AOrder: TOrder);
+procedure TAuditLogger.LogOrderPlaced(const AOrder: TOrder);  
 var
   Entry: TAuditEntry;
 begin
@@ -2352,7 +2352,7 @@ begin
   end;
 end;
 
-procedure TAuditLogger.LogOrderFilled(const AOrder: TOrder);
+procedure TAuditLogger.LogOrderFilled(const AOrder: TOrder);  
 var
   Entry: TAuditEntry;
 begin
@@ -2373,7 +2373,7 @@ begin
   end;
 end;
 
-procedure TAuditLogger.LogRiskViolation(const ADetails: string);
+procedure TAuditLogger.LogRiskViolation(const ADetails: string);  
 var
   Entry: TAuditEntry;
 begin
@@ -2391,7 +2391,7 @@ begin
   end;
 end;
 
-destructor TAuditLogger.Destroy;
+destructor TAuditLogger.Destroy;  
 begin
   CloseFile(FAuditFile);
   DoneCriticalSection(FLock);

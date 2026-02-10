@@ -225,7 +225,7 @@ Ne pas tout développer d'un coup. Procéder par itérations :
 
 ```pascal
 // 1. Écrire le test en premier
-procedure TCustomerServiceTest.TestCreateCustomer;
+procedure TCustomerServiceTest.TestCreateCustomer;  
 var
   Service: TCustomerService;
   Customer: TCustomer;
@@ -241,7 +241,7 @@ begin
 end;
 
 // 2. Implémenter le code pour faire passer le test
-function TCustomerService.CreateCustomer(const AName, AEmail: string): TCustomer;
+function TCustomerService.CreateCustomer(const AName, AEmail: string): TCustomer;  
 begin
   Result := TCustomer.Create;
   Result.Name := AName;
@@ -409,7 +409,7 @@ type
   end;
 
 // On peut utiliser n'importe quelle forme de manière polymorphe
-procedure PrintArea(AShape: TShape);
+procedure PrintArea(AShape: TShape);  
 begin
   WriteLn('Area: ', AShape.CalculateArea:0:2);
 end;
@@ -471,7 +471,7 @@ type
     constructor Create;
   end;
 
-constructor TCustomerService.Create;
+constructor TCustomerService.Create;  
 begin
   FRepository := TCustomerRepository.Create;  // Couplage fort
 end;
@@ -485,7 +485,7 @@ type
     constructor Create(ARepository: ICustomerRepository);
   end;
 
-constructor TCustomerService.Create(ARepository: ICustomerRepository);
+constructor TCustomerService.Create(ARepository: ICustomerRepository);  
 begin
   FRepository := ARepository;  // Dépendance injectée
 end;
@@ -513,7 +513,7 @@ type
     function CreateCustomer(AData: TCustomerData): TCustomer;
   end;
 
-function TCustomerService.CreateCustomer(AData: TCustomerData): TCustomer;
+function TCustomerService.CreateCustomer(AData: TCustomerData): TCustomer;  
 begin
   // Validation
   if Trim(AData.Name) = '' then

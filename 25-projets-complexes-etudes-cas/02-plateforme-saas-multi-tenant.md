@@ -69,7 +69,7 @@ Chaque tenant a son propre schéma (ensemble de tables) dans la même base de do
 -- Tenant 2 : schema_tenant2.Customers
 
 // Connexion dynamique au bon schéma
-procedure TDataModule.ConnectToTenant(ATenantID: Integer);
+procedure TDataModule.ConnectToTenant(ATenantID: Integer);  
 begin
   FConnection.Schema := 'schema_tenant' + IntToStr(ATenantID);
 end;
@@ -187,13 +187,13 @@ implementation
 uses
   DCPsha256, DCPbase64; // Pour le hashing sécurisé
 
-constructor TTenantAuthService.Create(AConnection: TSQLConnection);
+constructor TTenantAuthService.Create(AConnection: TSQLConnection);  
 begin
   inherited Create;
   FConnection := AConnection;
 end;
 
-function TTenantAuthService.HashPassword(const APassword: string): string;
+function TTenantAuthService.HashPassword(const APassword: string): string;  
 var
   Hash: TDCP_sha256;
 begin
@@ -367,31 +367,31 @@ begin
   FCurrentUserRole := ARole;
 end;
 
-class procedure TTenantContextManager.ClearContext;
+class procedure TTenantContextManager.ClearContext;  
 begin
   FCurrentTenantID := 0;
   FCurrentUserID := 0;
   FCurrentUserRole := '';
 end;
 
-class function TTenantContextManager.GetCurrentTenantID: Integer;
+class function TTenantContextManager.GetCurrentTenantID: Integer;  
 begin
   if FCurrentTenantID = 0 then
     raise Exception.Create('Aucun contexte de tenant défini');
   Result := FCurrentTenantID;
 end;
 
-class function TTenantContextManager.GetCurrentUserID: Integer;
+class function TTenantContextManager.GetCurrentUserID: Integer;  
 begin
   Result := FCurrentUserID;
 end;
 
-class function TTenantContextManager.GetCurrentUserRole: string;
+class function TTenantContextManager.GetCurrentUserRole: string;  
 begin
   Result := FCurrentUserRole;
 end;
 
-class function TTenantContextManager.IsAdmin: Boolean;
+class function TTenantContextManager.IsAdmin: Boolean;  
 begin
   Result := FCurrentUserRole = 'Admin';
 end;
@@ -444,13 +444,13 @@ implementation
 
 { TTenantAwareQuery }
 
-constructor TTenantAwareQuery.Create(AOwner: TComponent);
+constructor TTenantAwareQuery.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FAutoFilterTenant := True;
 end;
 
-procedure TTenantAwareQuery.InternalOpen;
+procedure TTenantAwareQuery.InternalOpen;  
 var
   OriginalSQL: string;
   TenantID: Integer;
@@ -488,19 +488,19 @@ end;
 
 { TTenantDataService }
 
-constructor TTenantDataService.Create(AConnection: TSQLConnection);
+constructor TTenantDataService.Create(AConnection: TSQLConnection);  
 begin
   inherited Create;
   FConnection := AConnection;
 end;
 
-function TTenantDataService.CreateQuery: TTenantAwareQuery;
+function TTenantDataService.CreateQuery: TTenantAwareQuery;  
 begin
   Result := TTenantAwareQuery.Create(nil);
   Result.Database := FConnection;
 end;
 
-function TTenantDataService.GetRecords(const ATableName, AWhereClause: string): TSQLQuery;
+function TTenantDataService.GetRecords(const ATableName, AWhereClause: string): TSQLQuery;  
 var
   Query: TTenantAwareQuery;
   SQL: string;
@@ -586,7 +586,7 @@ begin
   end;
 end;
 
-procedure TTenantDataService.DeleteRecord(const ATableName: string; AID: Integer);
+procedure TTenantDataService.DeleteRecord(const ATableName: string; AID: Integer);  
 var
   Query: TTenantAwareQuery;
 begin
@@ -638,7 +638,7 @@ type
 
 { TRequestHandler }
 
-constructor TRequestHandler.Create;
+constructor TRequestHandler.Create;  
 begin
   inherited Create;
   // Initialiser les services
@@ -646,14 +646,14 @@ begin
   FDataService := TTenantDataService.Create(GetDatabaseConnection);
 end;
 
-destructor TRequestHandler.Destroy;
+destructor TRequestHandler.Destroy;  
 begin
   FAuthService.Free;
   FDataService.Free;
   inherited Destroy;
 end;
 
-function TRequestHandler.ExtractSubdomain(const AHost: string): string;
+function TRequestHandler.ExtractSubdomain(const AHost: string): string;  
 var
   Parts: TStringList;
 begin
@@ -672,7 +672,7 @@ begin
   end;
 end;
 
-function TRequestHandler.ExtractBearerToken(ARequest: TRequest): string;
+function TRequestHandler.ExtractBearerToken(ARequest: TRequest): string;  
 var
   AuthHeader: string;
 begin
@@ -683,7 +683,7 @@ begin
     Result := '';
 end;
 
-procedure TRequestHandler.ValidateAuthentication(ARequest: TRequest);
+procedure TRequestHandler.ValidateAuthentication(ARequest: TRequest);  
 var
   Token, Subdomain: string;
   Tenant: TTenant;
@@ -714,7 +714,7 @@ begin
   TTenantContextManager.SetContext(Tenant.ID, User.ID, User.Role);
 end;
 
-procedure TRequestHandler.HandleLogin(ARequest: TRequest; AResponse: TResponse);
+procedure TRequestHandler.HandleLogin(ARequest: TRequest; AResponse: TResponse);  
 var
   JSON, ResponseJSON: TJSONObject;
   Subdomain, Email, Password: string;
@@ -779,7 +779,7 @@ begin
   end;
 end;
 
-procedure TRequestHandler.HandleRegister(ARequest: TRequest; AResponse: TResponse);
+procedure TRequestHandler.HandleRegister(ARequest: TRequest; AResponse: TResponse);  
 var
   JSON, ResponseJSON: TJSONObject;
   Subdomain, CompanyName, Email, Password: string;
@@ -820,7 +820,7 @@ begin
   end;
 end;
 
-procedure TRequestHandler.HandleGetCustomers(ARequest: TRequest; AResponse: TResponse);
+procedure TRequestHandler.HandleGetCustomers(ARequest: TRequest; AResponse: TResponse);  
 var
   Query: TSQLQuery;
   JSONArray: TJSONArray;
@@ -863,7 +863,7 @@ begin
   end;
 end;
 
-procedure TRequestHandler.HandleCreateCustomer(ARequest: TRequest; AResponse: TResponse);
+procedure TRequestHandler.HandleCreateCustomer(ARequest: TRequest; AResponse: TResponse);  
 var
   JSON: TJSONObject;
   Fields: TStringList;
@@ -1053,7 +1053,7 @@ uses
 
 { TSubscriptionPlan }
 
-destructor TSubscriptionPlan.Destroy;
+destructor TSubscriptionPlan.Destroy;  
 begin
   if Assigned(FFeatures) then
     FFeatures.Free;
@@ -1062,13 +1062,13 @@ end;
 
 { TSubscriptionManager }
 
-constructor TSubscriptionManager.Create(AConnection: TSQLConnection);
+constructor TSubscriptionManager.Create(AConnection: TSQLConnection);  
 begin
   inherited Create;
   FConnection := AConnection;
 end;
 
-function TSubscriptionManager.GetAvailablePlans: TList;
+function TSubscriptionManager.GetAvailablePlans: TList;  
 var
   Query: TSQLQuery;
   Plan: TSubscriptionPlan;
@@ -1109,7 +1109,7 @@ begin
   end;
 end;
 
-function TSubscriptionManager.GetTenantPlan(ATenantID: Integer): TSubscriptionPlan;
+function TSubscriptionManager.GetTenantPlan(ATenantID: Integer): TSubscriptionPlan;  
 var
   Query: TSQLQuery;
 begin
@@ -1215,7 +1215,7 @@ begin
   end;
 end;
 
-function TSubscriptionManager.CanAddUser(ATenantID: Integer): Boolean;
+function TSubscriptionManager.CanAddUser(ATenantID: Integer): Boolean;  
 var
   Query: TSQLQuery;
   Plan: TSubscriptionPlan;
@@ -1273,7 +1273,7 @@ begin
   end;
 end;
 
-function TSubscriptionManager.GetStorageLimit(ATenantID: Integer): Int64;
+function TSubscriptionManager.GetStorageLimit(ATenantID: Integer): Int64;  
 var
   Plan: TSubscriptionPlan;
 begin
@@ -1373,7 +1373,7 @@ begin
     ForceDirectories(FBasePath);
 end;
 
-function TFileStorageService.GetTenantPath(ATenantID: Integer): string;
+function TFileStorageService.GetTenantPath(ATenantID: Integer): string;  
 begin
   // Organiser les fichiers par tenant
   Result := FBasePath + 'tenant_' + IntToStr(ATenantID) + PathDelim;
@@ -1382,7 +1382,7 @@ begin
     ForceDirectories(Result);
 end;
 
-function TFileStorageService.CalculateDirectorySize(const APath: string): Int64;
+function TFileStorageService.CalculateDirectorySize(const APath: string): Int64;  
 var
   SearchRec: TSearchRec;
 begin
@@ -1489,7 +1489,7 @@ begin
   end;
 end;
 
-procedure TFileStorageService.DeleteFile(ATenantID: Integer; const AFileID: string);
+procedure TFileStorageService.DeleteFile(ATenantID: Integer; const AFileID: string);  
 var
   Query: TSQLQuery;
   FilePath: string;
@@ -1528,7 +1528,7 @@ begin
   end;
 end;
 
-function TFileStorageService.GetFileList(ATenantID: Integer): TStringList;
+function TFileStorageService.GetFileList(ATenantID: Integer): TStringList;  
 var
   Query: TSQLQuery;
 begin
@@ -1559,7 +1559,7 @@ begin
   end;
 end;
 
-function TFileStorageService.GetUsedStorage(ATenantID: Integer): Int64;
+function TFileStorageService.GetUsedStorage(ATenantID: Integer): Int64;  
 var
   TenantPath: string;
 begin
@@ -1567,7 +1567,7 @@ begin
   Result := CalculateDirectorySize(TenantPath);
 end;
 
-function TFileStorageService.CheckQuota(ATenantID: Integer; AFileSize: Int64): Boolean;
+function TFileStorageService.CheckQuota(ATenantID: Integer; AFileSize: Int64): Boolean;  
 var
   SubscriptionMgr: TSubscriptionManager;
   StorageLimit, UsedStorage: Int64;
@@ -1662,13 +1662,13 @@ uses
 
 { TRole }
 
-constructor TRole.Create;
+constructor TRole.Create;  
 begin
   inherited Create;
   FPermissions := TList.Create;
 end;
 
-destructor TRole.Destroy;
+destructor TRole.Destroy;  
 var
   i: Integer;
 begin
@@ -1680,14 +1680,14 @@ end;
 
 { TPermissionManager }
 
-constructor TPermissionManager.Create(AConnection: TSQLConnection);
+constructor TPermissionManager.Create(AConnection: TSQLConnection);  
 begin
   inherited Create;
   FConnection := AConnection;
   FPermissionCache := TDictionary<Integer, TList>.Create;
 end;
 
-destructor TPermissionManager.Destroy;
+destructor TPermissionManager.Destroy;  
 var
   PermList: TList;
 begin
@@ -1732,7 +1732,7 @@ begin
   end;
 end;
 
-function TPermissionManager.GetRole(ATenantID, ARoleID: Integer): TRole;
+function TPermissionManager.GetRole(ATenantID, ARoleID: Integer): TRole;  
 var
   Query: TSQLQuery;
   Permission: TPermission;
@@ -1787,7 +1787,7 @@ begin
   end;
 end;
 
-procedure TPermissionManager.AssignPermissionToRole(ARoleID, APermissionID: Integer);
+procedure TPermissionManager.AssignPermissionToRole(ARoleID, APermissionID: Integer);  
 var
   Query: TSQLQuery;
 begin
@@ -1806,7 +1806,7 @@ begin
   end;
 end;
 
-procedure TPermissionManager.AssignRoleToUser(AUserID, ARoleID: Integer);
+procedure TPermissionManager.AssignRoleToUser(AUserID, ARoleID: Integer);  
 var
   Query: TSQLQuery;
 begin
@@ -1829,7 +1829,7 @@ begin
   end;
 end;
 
-function TPermissionManager.GetUserPermissions(AUserID: Integer): TList;
+function TPermissionManager.GetUserPermissions(AUserID: Integer): TList;  
 var
   Query: TSQLQuery;
   Permission: TPermission;
@@ -1968,7 +1968,7 @@ uses
 
 { TMetricsCollector }
 
-constructor TMetricsCollector.Create(AConnection: TSQLConnection);
+constructor TMetricsCollector.Create(AConnection: TSQLConnection);  
 begin
   inherited Create;
   FConnection := AConnection;
@@ -1976,13 +1976,13 @@ begin
   SetLength(FBuffer, 100); // Buffer de 100 métriques
 end;
 
-destructor TMetricsCollector.Destroy;
+destructor TMetricsCollector.Destroy;  
 begin
   FlushBuffer;
   inherited Destroy;
 end;
 
-procedure TMetricsCollector.FlushBuffer;
+procedure TMetricsCollector.FlushBuffer;  
 var
   Query: TSQLQuery;
   i: Integer;
@@ -2170,7 +2170,7 @@ begin
   end;
 end;
 
-procedure TMetricsCollector.RecordPageView(ATenantID: Integer; const APage: string);
+procedure TMetricsCollector.RecordPageView(ATenantID: Integer; const APage: string);  
 var
   Tags: TJSONObject;
 begin
@@ -2183,7 +2183,7 @@ begin
   end;
 end;
 
-procedure TMetricsCollector.RecordError(ATenantID: Integer; const AError: string);
+procedure TMetricsCollector.RecordError(ATenantID: Integer; const AError: string);  
 var
   Tags: TJSONObject;
 begin
@@ -2284,13 +2284,13 @@ uses
 
 { TNotificationService }
 
-constructor TNotificationService.Create(AConnection: TSQLConnection);
+constructor TNotificationService.Create(AConnection: TSQLConnection);  
 begin
   inherited Create;
   FConnection := AConnection;
 end;
 
-function TNotificationService.ChannelToString(AChannel: TNotificationChannel): string;
+function TNotificationService.ChannelToString(AChannel: TNotificationChannel): string;  
 begin
   case AChannel of
     ncEmail: Result := 'email';
@@ -2301,7 +2301,7 @@ begin
   end;
 end;
 
-function TNotificationService.StringToChannel(const AStr: string): TNotificationChannel;
+function TNotificationService.StringToChannel(const AStr: string): TNotificationChannel;  
 begin
   if AStr = 'email' then
     Result := ncEmail
@@ -2315,7 +2315,7 @@ begin
     Result := ncInApp;
 end;
 
-function TNotificationService.PriorityToString(APriority: TNotificationPriority): string;
+function TNotificationService.PriorityToString(APriority: TNotificationPriority): string;  
 begin
   case APriority of
     npLow: Result := 'low';
@@ -2423,7 +2423,7 @@ begin
   end;
 end;
 
-procedure TNotificationService.MarkAsRead(ANotificationID: Integer);
+procedure TNotificationService.MarkAsRead(ANotificationID: Integer);  
 var
   Query: TSQLQuery;
 begin
@@ -2439,7 +2439,7 @@ begin
   end;
 end;
 
-procedure TNotificationService.MarkAllAsRead(AUserID: Integer);
+procedure TNotificationService.MarkAllAsRead(AUserID: Integer);  
 var
   Query: TSQLQuery;
 begin
@@ -2456,7 +2456,7 @@ begin
   end;
 end;
 
-function TNotificationService.GetUnreadCount(AUserID: Integer): Integer;
+function TNotificationService.GetUnreadCount(AUserID: Integer): Integer;  
 var
   Query: TSQLQuery;
 begin
@@ -2590,7 +2590,7 @@ begin
     ForceDirectories(FBackupPath);
 end;
 
-function TBackupService.GetTenantBackupPath(ATenantID: Integer): string;
+function TBackupService.GetTenantBackupPath(ATenantID: Integer): string;  
 begin
   Result := FBackupPath + 'tenant_' + IntToStr(ATenantID) + PathDelim;
 
@@ -2598,7 +2598,7 @@ begin
     ForceDirectories(Result);
 end;
 
-function TBackupService.BackupTypeToString(AType: TBackupType): string;
+function TBackupService.BackupTypeToString(AType: TBackupType): string;  
 begin
   case AType of
     btFull: Result := 'full';
@@ -2607,7 +2607,7 @@ begin
   end;
 end;
 
-function TBackupService.StringToBackupType(const AStr: string): TBackupType;
+function TBackupService.StringToBackupType(const AStr: string): TBackupType;  
 begin
   if AStr = 'incremental' then
     Result := btIncremental
@@ -2617,7 +2617,7 @@ begin
     Result := btFull;
 end;
 
-function TBackupService.StatusToString(AStatus: TBackupStatus): string;
+function TBackupService.StatusToString(AStatus: TBackupStatus): string;  
 begin
   case AStatus of
     bsPending: Result := 'pending';
@@ -2741,7 +2741,7 @@ begin
   end;
 end;
 
-procedure TBackupService.RestoreBackup(ABackupID: Integer);
+procedure TBackupService.RestoreBackup(ABackupID: Integer);  
 var
   Query: TSQLQuery;
   BackupFile, Command: string;
@@ -2850,7 +2850,7 @@ begin
   end;
 end;
 
-procedure TBackupService.DeleteBackup(ABackupID: Integer);
+procedure TBackupService.DeleteBackup(ABackupID: Integer);  
 var
   Query: TSQLQuery;
   FilePath: string;
@@ -2903,7 +2903,7 @@ begin
   end;
 end;
 
-function TBackupService.VerifyBackup(ABackupID: Integer): Boolean;
+function TBackupService.VerifyBackup(ABackupID: Integer): Boolean;  
 var
   Query: TSQLQuery;
   FilePath: string;
@@ -2936,7 +2936,7 @@ begin
   end;
 end;
 
-procedure TBackupService.CleanOldBackups(ATenantID: Integer; ADaysToKeep: Integer);
+procedure TBackupService.CleanOldBackups(ATenantID: Integer; ADaysToKeep: Integer);  
 var
   Query: TSQLQuery;
   CutoffDate: TDateTime;
@@ -3057,13 +3057,13 @@ uses
 
 { TWebhookManager }
 
-constructor TWebhookManager.Create(AConnection: TSQLConnection);
+constructor TWebhookManager.Create(AConnection: TSQLConnection);  
 begin
   inherited Create;
   FConnection := AConnection;
 end;
 
-function TWebhookManager.EventToString(AEvent: TWebhookEvent): string;
+function TWebhookManager.EventToString(AEvent: TWebhookEvent): string;  
 begin
   case AEvent of
     weUserCreated: Result := 'user.created';
@@ -3078,7 +3078,7 @@ begin
   end;
 end;
 
-function TWebhookManager.GenerateSignature(const APayload, ASecret: string): string;
+function TWebhookManager.GenerateSignature(const APayload, ASecret: string): string;  
 var
   Hash: TDCP_sha256;
   Digest: array[0..31] of Byte;
@@ -3164,7 +3164,7 @@ begin
   end;
 end;
 
-procedure TWebhookManager.DeleteWebhook(AWebhookID: Integer);
+procedure TWebhookManager.DeleteWebhook(AWebhookID: Integer);  
 var
   Query: TSQLQuery;
 begin
@@ -3179,7 +3179,7 @@ begin
   end;
 end;
 
-function TWebhookManager.GetTenantWebhooks(ATenantID: Integer): TList;
+function TWebhookManager.GetTenantWebhooks(ATenantID: Integer): TList;  
 var
   Query: TSQLQuery;
   Webhook: TWebhook;
@@ -3330,7 +3330,7 @@ begin
   end;
 end;
 
-procedure TWebhookManager.RetryFailedWebhooks;
+procedure TWebhookManager.RetryFailedWebhooks;  
 var
   Query: TSQLQuery;
   WebhookID: Integer;
@@ -3449,22 +3449,22 @@ uses
 
 { TConfigValue }
 
-function TConfigValue.AsString: string;
+function TConfigValue.AsString: string;  
 begin
   Result := FValue;
 end;
 
-function TConfigValue.AsInteger: Integer;
+function TConfigValue.AsInteger: Integer;  
 begin
   Result := StrToIntDef(FValue, 0);
 end;
 
-function TConfigValue.AsBoolean: Boolean;
+function TConfigValue.AsBoolean: Boolean;  
 begin
   Result := (LowerCase(FValue) = 'true') or (FValue = '1');
 end;
 
-function TConfigValue.AsJSON: TJSONObject;
+function TConfigValue.AsJSON: TJSONObject;  
 begin
   if FValueType = 'json' then
     Result := GetJSON(FValue) as TJSONObject
@@ -3474,14 +3474,14 @@ end;
 
 { TConfigurationManager }
 
-constructor TConfigurationManager.Create(AConnection: TSQLConnection);
+constructor TConfigurationManager.Create(AConnection: TSQLConnection);  
 begin
   inherited Create;
   FConnection := AConnection;
   FCache := TDictionary<string, TConfigValue>.Create;
 end;
 
-destructor TConfigurationManager.Destroy;
+destructor TConfigurationManager.Destroy;  
 begin
   ClearCache;
   FCache.Free;
@@ -3593,7 +3593,7 @@ begin
   end;
 end;
 
-function TConfigurationManager.GetGlobalConfig(const AKey, ADefault: string): string;
+function TConfigurationManager.GetGlobalConfig(const AKey, ADefault: string): string;  
 var
   Query: TSQLQuery;
   CacheKey: string;
@@ -3690,7 +3690,7 @@ begin
   end;
 end;
 
-procedure TConfigurationManager.SetGlobalConfig(const AKey, AValue: string);
+procedure TConfigurationManager.SetGlobalConfig(const AKey, AValue: string);  
 var
   Query: TSQLQuery;
   CacheKey: string;
@@ -3715,7 +3715,7 @@ begin
   end;
 end;
 
-procedure TConfigurationManager.ClearCache;
+procedure TConfigurationManager.ClearCache;  
 var
   ConfigValue: TConfigValue;
 begin
@@ -3724,7 +3724,7 @@ begin
   FCache.Clear;
 end;
 
-procedure TConfigurationManager.InvalidateCache(ATenantID: Integer);
+procedure TConfigurationManager.InvalidateCache(ATenantID: Integer);  
 var
   Key: string;
   KeysToRemove: TStringList;
@@ -3751,7 +3751,7 @@ begin
   end;
 end;
 
-function TConfigurationManager.GetAllTenantConfig(ATenantID: Integer): TJSONObject;
+function TConfigurationManager.GetAllTenantConfig(ATenantID: Integer): TJSONObject;  
 var
   Query: TSQLQuery;
 begin
@@ -3855,20 +3855,20 @@ type
 
 { TSaaSApplication }
 
-constructor TSaaSApplication.Create;
+constructor TSaaSApplication.Create;  
 begin
   inherited Create;
   InitializeServices;
   RegisterRoutes;
 end;
 
-destructor TSaaSApplication.Destroy;
+destructor TSaaSApplication.Destroy;  
 begin
   ShutdownServices;
   inherited Destroy;
 end;
 
-procedure TSaaSApplication.InitializeServices;
+procedure TSaaSApplication.InitializeServices;  
 var
   Connection: TSQLConnection;
 begin
@@ -3890,7 +3890,7 @@ begin
   WriteLn('Tous les services ont été initialisés avec succès');
 end;
 
-procedure TSaaSApplication.RegisterRoutes;
+procedure TSaaSApplication.RegisterRoutes;  
 begin
   // Routes d'authentification
   HTTPRouter.RegisterRoute('/api/auth/login', rmPost, @HandleLogin);
@@ -3935,7 +3935,7 @@ begin
   WriteLn('Routes enregistrées avec succès');
 end;
 
-procedure TSaaSApplication.ShutdownServices;
+procedure TSaaSApplication.ShutdownServices;  
 begin
   FConfig.Free;
   FWebhooks.Free;
@@ -3951,7 +3951,7 @@ begin
   WriteLn('Tous les services ont été arrêtés');
 end;
 
-procedure TSaaSApplication.Run;
+procedure TSaaSApplication.Run;  
 begin
   Application.Title := 'Plateforme SaaS Multi-tenant';
   Application.Port := 8080;
