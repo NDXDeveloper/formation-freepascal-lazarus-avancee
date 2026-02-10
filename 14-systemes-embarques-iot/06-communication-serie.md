@@ -245,9 +245,9 @@ PC USB ←→ [Puce USB-Serial FT232] ←→ Microcontrôleur UART
 Afficher des messages de debug depuis un microcontrôleur :
 
 ```pascal
-Serial_Print('Programme demarre');
-Serial_Print('Temperature: ');
-Serial_PrintInt(temperature);
+Serial_Print('Programme demarre');  
+Serial_Print('Temperature: ');  
+Serial_PrintInt(temperature);  
 Serial_PrintLn(' C');
 ```
 
@@ -324,7 +324,7 @@ Pour transmettre 1 octet à 9600 bauds (config 8-N-1) :
 
 ```
 1 trame = 1 start bit + 8 data bits + 1 stop bit = 10 bits
-Temps par octet = 10 bits / 9600 bauds = 1.04 ms
+Temps par octet = 10 bits / 9600 bauds = 1.04 ms  
 Débit effectif = 9600 / 10 = 960 octets/seconde = 0.94 Ko/s
 ```
 
@@ -357,7 +357,7 @@ while Serial_Available do
 **Solution :**
 ```pascal
 // Lire régulièrement le buffer
-while Serial_Available do
+while Serial_Available do  
 begin
   c := Serial_ReadChar;
   ProcessChar(c);
@@ -381,7 +381,7 @@ Les horloges ne sont jamais parfaitement précises. Tolérance acceptable : **±
 **Exemple de problème :**
 ```
 Émetteur : 9600 bauds (horloge +3% → 9888 bauds réels)
-Récepteur : 9600 bauds (horloge -2% → 9408 bauds réels)
+Récepteur : 9600 bauds (horloge -2% → 9408 bauds réels)  
 Différence : ~5% → risque d'erreur de bit !
 ```
 
@@ -502,7 +502,7 @@ Différence : ~5% → risque d'erreur de bit !
 ls /dev/tty*
 
 # Ports USB-Serial
-ls /dev/ttyUSB*
+ls /dev/ttyUSB*  
 ls /dev/ttyACM*
 
 # Informations détaillées

@@ -248,10 +248,10 @@ Le contrôleur d'interruptions ARM est beaucoup plus sophistiqué qu'AVR :
 
 **Exemple de priorités :**
 ```
-Priorité 0 (la plus haute) : Interruption critique temps réel
-Priorité 1 : Communication réseau importante
-Priorité 5 : Timer périodique
-Priorité 10 : Bouton utilisateur
+Priorité 0 (la plus haute) : Interruption critique temps réel  
+Priorité 1 : Communication réseau importante  
+Priorité 5 : Timer périodique  
+Priorité 10 : Bouton utilisateur  
 Priorité 15 (la plus basse) : Tâche de fond
 ```
 
@@ -264,8 +264,8 @@ Timer système intégré à tous les Cortex-M, utilisé pour :
 
 ```pascal
 // Configuration SysTick pour 1 ms
-SysTick_LOAD := (72000000 div 1000) - 1;  // 72 MHz / 1000 Hz
-SysTick_VAL := 0;
+SysTick_LOAD := (72000000 div 1000) - 1;  // 72 MHz / 1000 Hz  
+SysTick_VAL := 0;  
 SysTick_CTRL := $07;  // Enable, interrupt, core clock
 ```
 
@@ -285,7 +285,7 @@ SysTick_CTRL := $07;  // Enable, interrupt, core clock
 **Installation rapide (chocolatey) :**
 
 ```batch
-choco install gcc-arm-embedded
+choco install gcc-arm-embedded  
 choco install stlink
 ```
 
@@ -295,7 +295,7 @@ Installation très simple via APT :
 
 ```bash
 # FreePascal avec support ARM
-sudo apt update
+sudo apt update  
 sudo apt install fpc fpc-source
 
 # Toolchain ARM
@@ -311,8 +311,8 @@ sudo apt install stlink-tools openocd
 **Vérification de l'installation :**
 
 ```bash
-fpc -i | grep arm              # Support ARM ?
-arm-none-eabi-gcc --version    # Toolchain présente ?
+fpc -i | grep arm              # Support ARM ?  
+arm-none-eabi-gcc --version    # Toolchain présente ?  
 st-info --probe                # ST-Link détecté ?
 ```
 
@@ -379,7 +379,7 @@ const
   LED_PIN  = 13;
 
 // Délai approximatif
-procedure Delay_ms(ms: longword);
+procedure Delay_ms(ms: longword);  
 var
   i, j: longword;
 begin
@@ -389,14 +389,14 @@ begin
 end;
 
 // Configuration du système
-procedure SystemInit;
+procedure SystemInit;  
 begin
   // Configuration horloge système à 72 MHz (fait automatiquement)
   // La fonction SystemInit() est appelée avant le main
 end;
 
 // Configuration GPIO
-procedure GPIO_Setup;
+procedure GPIO_Setup;  
 var
   GPIO_InitStruct: TGPIO_InitTypeDef;
 begin
@@ -456,7 +456,7 @@ GPIO_InitStruct.GPIO_Mode := GPIO_Mode_Out_PP;
 - `GPIO_Mode_AF_PP` : Fonction alternative push-pull (UART, SPI, etc.)
 
 ```pascal
-GPIO_ResetBits(GPIOC, GPIO_Pin_13);  // Mettre à 0 (allumer sur Blue Pill)
+GPIO_ResetBits(GPIOC, GPIO_Pin_13);  // Mettre à 0 (allumer sur Blue Pill)  
 GPIO_SetBits(GPIOC, GPIO_Pin_13);    // Mettre à 1 (éteindre)
 ```
 
@@ -470,7 +470,7 @@ program BoutonLED;
 uses
   stm32f10x_rcc, stm32f10x_gpio;
 
-procedure GPIO_Setup;
+procedure GPIO_Setup;  
 var
   GPIO_InitStruct: TGPIO_InitTypeDef;
 begin
@@ -489,7 +489,7 @@ begin
   GPIO_Init(GPIOA, @GPIO_InitStruct);
 end;
 
-procedure Delay_ms(ms: longword);
+procedure Delay_ms(ms: longword);  
 var
   i, j: longword;
 begin
@@ -535,7 +535,7 @@ uses
 const
   ADC_CHANNEL = ADC_Channel_0;  // PA0
 
-procedure ADC_Setup;
+procedure ADC_Setup;  
 var
   GPIO_InitStruct: TGPIO_InitTypeDef;
   ADC_InitStruct: TADC_InitTypeDef;
@@ -567,7 +567,7 @@ begin
   while ADC_GetCalibrationStatus(ADC1) = SET do;
 end;
 
-function ADC_Read(channel: byte): word;
+function ADC_Read(channel: byte): word;  
 begin
   // Configurer le canal
   ADC_RegularChannelConfig(ADC1, channel, 1, ADC_SampleTime_55Cycles5);
@@ -622,7 +622,7 @@ program TestUSART;
 uses
   stm32f10x_rcc, stm32f10x_gpio, stm32f10x_usart;
 
-procedure USART_Setup;
+procedure USART_Setup;  
 var
   GPIO_InitStruct: TGPIO_InitTypeDef;
   USART_InitStruct: TUSART_InitTypeDef;
@@ -654,13 +654,13 @@ begin
   USART_Cmd(USART1, ENABLE);
 end;
 
-procedure USART_SendChar(c: char);
+procedure USART_SendChar(c: char);  
 begin
   while USART_GetFlagStatus(USART1, USART_FLAG_TXE) = RESET do;
   USART_SendData(USART1, Ord(c));
 end;
 
-procedure USART_SendString(const s: string);
+procedure USART_SendString(const s: string);  
 var
   i: integer;
 begin
@@ -668,14 +668,14 @@ begin
     USART_SendChar(s[i]);
 end;
 
-procedure USART_SendLn(const s: string);
+procedure USART_SendLn(const s: string);  
 begin
   USART_SendString(s);
   USART_SendChar(#13);
   USART_SendChar(#10);
 end;
 
-function USART_ReceiveChar: char;
+function USART_ReceiveChar: char;  
 begin
   while USART_GetFlagStatus(USART1, USART_FLAG_RXNE) = RESET do;
   Result := Chr(USART_ReceiveData(USART1));
@@ -731,7 +731,7 @@ var
   secondes: longword = 0;
 
 // Gestionnaire d'interruption Timer 2
-procedure TIM2_IRQHandler; public name 'TIM2_IRQHandler';
+procedure TIM2_IRQHandler; public name 'TIM2_IRQHandler';  
 begin
   if TIM_GetITStatus(TIM2, TIM_IT_Update) <> RESET then
   begin
@@ -745,7 +745,7 @@ begin
   end;
 end;
 
-procedure Timer_Setup;
+procedure Timer_Setup;  
 var
   TIM_TimeBaseStruct: TTIM_TimeBaseInitTypeDef;
   NVIC_InitStruct: TNVIC_InitTypeDef;
@@ -777,7 +777,7 @@ begin
   TIM_Cmd(TIM2, ENABLE);
 end;
 
-procedure GPIO_Setup;
+procedure GPIO_Setup;  
 var
   GPIO_InitStruct: TGPIO_InitTypeDef;
 begin
@@ -821,7 +821,7 @@ Pour 1 Hz avec horloge 36 MHz :
 // Prescaler = 72 → horloge devient 500 kHz
 // Period = 50 → 500 kHz / 50 = 10 kHz
 
-TIM_TimeBaseStruct.TIM_Prescaler := 71;  // 72 - 1
+TIM_TimeBaseStruct.TIM_Prescaler := 71;  // 72 - 1  
 TIM_TimeBaseStruct.TIM_Period := 49;     // 50 - 1
 ```
 
@@ -842,7 +842,7 @@ const
   PWM_PORT = GPIOA;
   PWM_PIN = GPIO_Pin_1;
 
-procedure PWM_Setup;
+procedure PWM_Setup;  
 var
   GPIO_InitStruct: TGPIO_InitTypeDef;
   TIM_TimeBaseStruct: TTIM_TimeBaseInitTypeDef;
@@ -880,14 +880,14 @@ begin
 end;
 
 // Définir le rapport cyclique (0-1000 = 0-100%)
-procedure PWM_SetDutyCycle(value: word);
+procedure PWM_SetDutyCycle(value: word);  
 begin
   if value > 1000 then
     value := 1000;
   TIM_SetCompare2(TIM2, value);
 end;
 
-procedure Delay_ms(ms: longword);
+procedure Delay_ms(ms: longword);  
 var
   i, j: longword;
 begin
@@ -981,7 +981,7 @@ const
 var
   ADC_Values: array[0..NUM_CHANNELS-1] of word;
 
-procedure DMA_Setup;
+procedure DMA_Setup;  
 var
   DMA_InitStruct: TDMA_InitTypeDef;
 begin
@@ -1008,7 +1008,7 @@ begin
   DMA_Cmd(DMA1_Channel1, ENABLE);
 end;
 
-procedure ADC_Setup;
+procedure ADC_Setup;  
 var
   GPIO_InitStruct: TGPIO_InitTypeDef;
   ADC_InitStruct: TADC_InitTypeDef;
@@ -1052,7 +1052,7 @@ begin
   ADC_SoftwareStartConvCmd(ADC1, ENABLE);
 end;
 
-procedure Delay_ms(ms: longword);
+procedure Delay_ms(ms: longword);  
 var
   i, j: longword;
 begin
@@ -1106,7 +1106,7 @@ var
   TX_Buffer: array[0..BUFFER_SIZE-1] of byte;
   RX_Buffer: array[0..BUFFER_SIZE-1] of byte;
 
-procedure SPI_DMA_Setup;
+procedure SPI_DMA_Setup;  
 var
   GPIO_InitStruct: TGPIO_InitTypeDef;
   SPI_InitStruct: TSPI_InitTypeDef;
@@ -1163,7 +1163,7 @@ begin
   SPI_Cmd(SPI1, ENABLE);
 end;
 
-procedure SPI_TransmitDMA(data: PByte; size: word);
+procedure SPI_TransmitDMA(data: PByte; size: word);  
 begin
   // Désactiver DMA
   DMA_Cmd(DMA1_Channel3, DISABLE);
@@ -1236,7 +1236,7 @@ uses
   usb_desc,     // Descripteurs
   usb_pwr;      // Gestion alimentation
 
-procedure USB_Setup;
+procedure USB_Setup;  
 begin
   // Configuration horloge USB (48 MHz requis)
   RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_1Div5);
@@ -1250,13 +1250,13 @@ begin
 end;
 
 // Callbacks pour envoyer/recevoir des données
-procedure USB_CDC_Send(const data: array of byte; len: word);
+procedure USB_CDC_Send(const data: array of byte; len: word);  
 begin
   // Envoyer via endpoint IN
   // (implémentation dépend de la bibliothèque)
 end;
 
-function USB_CDC_Receive(var data: array of byte): word;
+function USB_CDC_Receive(var data: array of byte): word;  
 begin
   // Recevoir depuis endpoint OUT
   // Retourner le nombre d'octets reçus
@@ -1353,7 +1353,7 @@ st-info --probe
 ```batch
 rem Télécharger st-flash depuis https://github.com/stlink-org/stlink
 
-rem Flasher
+rem Flasher  
 st-flash.exe write monprogramme.bin 0x8000000
 ```
 
@@ -1366,14 +1366,14 @@ OpenOCD supporte de nombreux debuggers (ST-Link, J-Link, etc.).
 **Configuration OpenOCD (stm32f103.cfg) :**
 
 ```tcl
-source [find interface/stlink.cfg]
+source [find interface/stlink.cfg]  
 source [find target/stm32f1x.cfg]
 
 # Flasher
-init
-reset halt
-flash write_image erase monprogramme.bin 0x08000000
-reset run
+init  
+reset halt  
+flash write_image erase monprogramme.bin 0x08000000  
+reset run  
 shutdown
 ```
 
@@ -1429,13 +1429,13 @@ stm32flash.exe -w monprogramme.bin -v -g 0x0 COM3
 **Makefile pour STM32F103 :**
 
 ```makefile
-PROGRAM = monprogramme
-MCU = stm32f103xb
+PROGRAM = monprogramme  
+MCU = stm32f103xb  
 CPU = armv7m
 
-FPC = fpc
-OBJCOPY = arm-none-eabi-objcopy
-STFLASH = st-flash
+FPC = fpc  
+OBJCOPY = arm-none-eabi-objcopy  
+STFLASH = st-flash  
 SIZE = arm-none-eabi-size
 
 FPCFLAGS = -Parm -Tembedded -Cp$(CPU) -Wp$(MCU) -O2 -g
@@ -1482,10 +1482,10 @@ clean:
 **Utilisation :**
 
 ```bash
-make              # Compiler et générer .bin
-make flash        # Flasher sur STM32
-make clean        # Nettoyer les fichiers
-make info         # Voir infos ST-Link
+make              # Compiler et générer .bin  
+make flash        # Flasher sur STM32  
+make clean        # Nettoyer les fichiers  
+make info         # Voir infos ST-Link  
 make erase        # Effacer la Flash
 ```
 
@@ -1494,11 +1494,11 @@ make erase        # Effacer la Flash
 ```bash
 #!/bin/bash
 
-PROGRAM="monprogramme"
-MCU="stm32f103xb"
+PROGRAM="monprogramme"  
+MCU="stm32f103xb"  
 CPU="armv7m"
 
-echo "===== Compilation ====="
+echo "===== Compilation ====="  
 fpc -Parm -Tembedded -Cp$CPU -Wp$MCU -O2 -g $PROGRAM.pas
 
 if [ $? -ne 0 ]; then
@@ -1506,16 +1506,16 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo ""
-echo "===== Conversion BIN ====="
+echo ""  
+echo "===== Conversion BIN ====="  
 arm-none-eabi-objcopy -O binary $PROGRAM.elf $PROGRAM.bin
 
-echo ""
-echo "===== Taille du programme ====="
+echo ""  
+echo "===== Taille du programme ====="  
 arm-none-eabi-size $PROGRAM.elf
 
-echo ""
-echo "===== Flashage ====="
+echo ""  
+echo "===== Flashage ====="  
 st-flash write $PROGRAM.bin 0x8000000
 
 if [ $? -ne 0 ]; then
@@ -1523,7 +1523,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo ""
+echo ""  
 echo "===== Terminé ! ====="
 ```
 
@@ -1551,7 +1551,7 @@ source [find target/stm32f1x.cfg]
 adapter speed 1000
 
 # Configuration debugging
-init
+init  
 reset init
 ```
 
@@ -1568,14 +1568,14 @@ openocd.exe -f openocd.cfg
 **Sortie attendue :**
 
 ```
-Open On-Chip Debugger 0.11.0
-Info : Listening on port 6666 for tcl connections
-Info : Listening on port 4444 for telnet connections
-Info : clock speed 1000 kHz
-Info : STLINK V2J29S7 (API v2) VID:PID 0483:3748
-Info : Target voltage: 3.245V
-Info : stm32f1x.cpu: hardware has 6 breakpoints, 4 watchpoints
-Info : starting gdb server for stm32f1x.cpu on 3333
+Open On-Chip Debugger 0.11.0  
+Info : Listening on port 6666 for tcl connections  
+Info : Listening on port 4444 for telnet connections  
+Info : clock speed 1000 kHz  
+Info : STLINK V2J29S7 (API v2) VID:PID 0483:3748  
+Info : Target voltage: 3.245V  
+Info : stm32f1x.cpu: hardware has 6 breakpoints, 4 watchpoints  
+Info : starting gdb server for stm32f1x.cpu on 3333  
 Info : Listening on port 3333 for gdb connections
 ```
 
@@ -1646,7 +1646,7 @@ target extended-remote localhost:3333
 load
 
 # Points d'arrêt
-break main
+break main  
 break TIM2_IRQHandler
 
 # Commandes automatiques au break
@@ -1675,8 +1675,8 @@ Bibliothèque C open source pour STM32, utilisable avec FreePascal via bindings.
 
 ```bash
 # Cloner libopencm3
-git clone https://github.com/libopencm3/libopencm3.git
-cd libopencm3
+git clone https://github.com/libopencm3/libopencm3.git  
+cd libopencm3  
 make
 
 # Les bibliothèques sont dans lib/
@@ -1752,7 +1752,7 @@ var
   temperature: real;
   humidite: real;
 
-procedure Delay_ms(ms: longword);
+procedure Delay_ms(ms: longword);  
 var
   i, j: longword;
 begin
@@ -1761,7 +1761,7 @@ begin
       asm nop; end;
 end;
 
-procedure Setup;
+procedure Setup;  
 begin
   // Initialiser I2C pour OLED
   I2C_Init;
@@ -1778,7 +1778,7 @@ begin
   Delay_ms(2000);
 end;
 
-procedure AfficherDonnees;
+procedure AfficherDonnees;  
 var
   ligne: string;
 begin
@@ -1876,13 +1876,13 @@ var
   vitesse: word = 1000;  // Hz
 
 // Générer des pulses step via timer
-procedure Timer_GeneratePulse;
+procedure Timer_GeneratePulse;  
 begin
   // Toggle pin STEP
   GPIO_ToggleBits(GPIOA, PIN_STEP);
 end;
 
-procedure Avancer(pas: longint);
+procedure Avancer(pas: longint);  
 begin
   GPIO_ResetBits(GPIOA, PIN_DIR);  // Direction forward
   // Générer "pas" pulses
@@ -1890,14 +1890,14 @@ begin
   position := position + pas;
 end;
 
-procedure Reculer(pas: longint);
+procedure Reculer(pas: longint);  
 begin
   GPIO_SetBits(GPIOA, PIN_DIR);  // Direction backward
   // Générer "pas" pulses
   position := position - pas;
 end;
 
-procedure ReglerVitesse(nouvelleVitesse: word);
+procedure ReglerVitesse(nouvelleVitesse: word);  
 begin
   vitesse := nouvelleVitesse;
   // Ajuster fréquence timer
@@ -1969,12 +1969,12 @@ type
 var
   pool: TMemoryPool;
 
-procedure TMemoryPool.Init;
+procedure TMemoryPool.Init;  
 begin
   index := 0;
 end;
 
-function TMemoryPool.Alloc(size: word): pointer;
+function TMemoryPool.Alloc(size: word): pointer;  
 begin
   if index + size <= 1024 then
   begin
@@ -1992,7 +1992,7 @@ end;
 
 ```pascal
 // Activer cache instruction et données
-SCB_EnableICache;
+SCB_EnableICache;  
 SCB_EnableDCache;
 ```
 
@@ -2004,8 +2004,8 @@ for i := 0 to 999 do
   tableau[i] := CalculComplexe(i);
 
 // Plus optimisé
-p := @tableau[0];
-for i := 0 to 999 do
+p := @tableau[0];  
+for i := 0 to 999 do  
 begin
   p^ := CalculComplexe(i);
   Inc(p);
@@ -2056,19 +2056,19 @@ end;
 
 ```pascal
 // Mode Sleep : arrêt CPU, périphériques actifs
-procedure EnterSleepMode;
+procedure EnterSleepMode;  
 begin
   __WFI;  // Wait For Interrupt
 end;
 
 // Mode Stop : arrêt horloge système
-procedure EnterStopMode;
+procedure EnterStopMode;  
 begin
   PWR_EnterSTOPMode(PWR_Regulator_LowPower, PWR_STOPEntry_WFI);
 end;
 
 // Mode Standby : tout éteint sauf RTC
-procedure EnterStandbyMode;
+procedure EnterStandbyMode;  
 begin
   PWR_EnterSTANDBYMode;
 end;
@@ -2078,7 +2078,7 @@ end;
 
 ```pascal
 // Désactiver horloge des périphériques non utilisés
-RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, DISABLE);
+RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, DISABLE);  
 RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, DISABLE);
 ```
 
@@ -2086,7 +2086,7 @@ RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, DISABLE);
 
 ```pascal
 // Passer à 8 MHz au lieu de 72 MHz
-SystemCoreClockUpdate;
+SystemCoreClockUpdate;  
 RCC_HCLKConfig(RCC_SYSCLK_Div8);
 ```
 

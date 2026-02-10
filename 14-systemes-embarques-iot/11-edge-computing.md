@@ -56,7 +56,7 @@ var
   CurrentState: TMachineState;
   BaselineState: TMachineState;
 
-function DetecterAnomalie: Boolean;
+function DetecterAnomalie: Boolean;  
 const
   TEMP_THRESHOLD = 10.0;    // °C écart max
   VIB_THRESHOLD = 5.0;      // Unités
@@ -123,20 +123,20 @@ var
   VisagesConnus: array[0..MAX_VISAGES-1] of TVisage;
   NombreVisages: Word;
 
-function CapturerImage: TImage;
+function CapturerImage: TImage;  
 begin
   // Capture caméra locale
   Camera_Capture(@Result);
 end;
 
-function ExtraireCaracteristiques(const Img: TImage): TFeatureVector;
+function ExtraireCaracteristiques(const Img: TImage): TFeatureVector;  
 begin
   // Traitement LOCAL de l'image
   // Extraction features (algorithme léger)
   Result := DetecterVisage_Lightweight(Img);
 end;
 
-function Identifier(const Features: TFeatureVector): Integer;
+function Identifier(const Features: TFeatureVector): Integer;  
 var
   i: Integer;
   Distance, MinDistance: Real;
@@ -209,7 +209,7 @@ type
     Type_: Byte;         // 0=piéton, 1=véhicule, 2=objet
   end;
 
-function DetecterObstacles: array of TObstacle;
+function DetecterObstacles: array of TObstacle;  
 var
   Obstacles: array[0..15] of TObstacle;
   Count: Byte;
@@ -234,7 +234,7 @@ begin
   Move(Obstacles, Result[0], Count * SizeOf(TObstacle));
 end;
 
-procedure PrendreDecision(const Obstacles: array of TObstacle);
+procedure PrendreDecision(const Obstacles: array of TObstacle);  
 var
   i: Integer;
   Danger: Boolean;
@@ -341,7 +341,7 @@ var
   Data: TSensorData;
   LocalThreshold: SmallInt = 300;  // 30°C
 
-function LireTemperature: SmallInt;
+function LireTemperature: SmallInt;  
 var
   ADCValue: Word;
 begin
@@ -349,7 +349,7 @@ begin
   Result := ((ADCValue * 33) div 4095) * 10;  // Conversion
 end;
 
-procedure TraiterLocalement;
+procedure TraiterLocalement;  
 begin
   // Décision EDGE : alarme locale si > seuil
   if Data.Temperature > LocalThreshold then
@@ -361,7 +361,7 @@ begin
     GPIO_Clear(ALARM_LED);
 end;
 
-procedure EnvoyerGateway;
+procedure EnvoyerGateway;  
 var
   Socket: Integer;
 begin
@@ -428,7 +428,7 @@ var
   LocalDB: PSQLite3;
   CloudQueue: TThreadList;
 
-procedure InitDatabase;
+procedure InitDatabase;  
 const
   SQL_CREATE =
     'CREATE TABLE IF NOT EXISTS sensor_data (' +
@@ -444,7 +444,7 @@ begin
   sqlite3_exec(LocalDB, PChar(SQL_CREATE), nil, nil, nil);
 end;
 
-procedure StockerLocalement(const Data: TSensorData);
+procedure StockerLocalement(const Data: TSensorData);  
 var
   SQL: string;
 begin
@@ -458,7 +458,7 @@ begin
   sqlite3_exec(LocalDB, PChar(SQL), nil, nil, nil);
 end;
 
-function AnalyserAnomalie(const Data: TSensorData): Boolean;
+function AnalyserAnomalie(const Data: TSensorData): Boolean;  
 var
   SQL: string;
   Stmt: PSQLite3_Stmt;
@@ -485,7 +485,7 @@ begin
   Result := Abs((Data.Temperature / 10.0) - AvgTemp) > 5.0;
 end;
 
-function AgregerDonnees: TAggregatedData;
+function AgregerDonnees: TAggregatedData;  
 var
   SQL: string;
   Stmt: PSQLite3_Stmt;
@@ -514,7 +514,7 @@ begin
   sqlite3_finalize(Stmt);
 end;
 
-procedure EnvoyerCloud(const Aggregated: TAggregatedData);
+procedure EnvoyerCloud(const Aggregated: TAggregatedData);  
 var
   JSON: string;
 begin
@@ -530,7 +530,7 @@ begin
 end;
 
 // Thread serveur pour recevoir des edge devices
-procedure ThreadServeur;
+procedure ThreadServeur;  
 var
   ServerSocket, ClientSocket: Integer;
   Data: TSensorData;
@@ -564,7 +564,7 @@ begin
 end;
 
 // Thread agrégation périodique
-procedure ThreadAgregation;
+procedure ThreadAgregation;  
 var
   Aggregated: TAggregatedData;
 begin
@@ -622,18 +622,18 @@ type
 var
   Model: TNeuralNetwork;
 
-procedure ChargerModele;
+procedure ChargerModele;  
 begin
   // Charger poids pré-entraînés depuis EEPROM/Flash
   EEPROM_ReadBlock(0, @Model, SizeOf(Model));
 end;
 
-function Sigmoid(x: Real): Real;
+function Sigmoid(x: Real): Real;  
 begin
   Result := 1.0 / (1.0 + Exp(-x));
 end;
 
-function Predire(const Inputs: array of Real): Byte;
+function Predire(const Inputs: array of Real): Byte;  
 var
   Hidden: array[0..9] of Real;
   Output: array[0..2] of Real;
@@ -710,7 +710,7 @@ type
     R: Real;      // Bruit mesure
   end;
 
-procedure InitKalman(var KF: TKalmanFilter; Q, R: Real);
+procedure InitKalman(var KF: TKalmanFilter; Q, R: Real);  
 begin
   KF.x := 0.0;
   KF.P := 1.0;
@@ -718,7 +718,7 @@ begin
   KF.R := R;
 end;
 
-function KalmanUpdate(var KF: TKalmanFilter; Measurement: Real): Real;
+function KalmanUpdate(var KF: TKalmanFilter; Measurement: Real): Real;  
 var
   K: Real;  // Gain de Kalman
 begin
@@ -771,7 +771,7 @@ type
     SumSquares: QWord;  // Pour variance
   end;
 
-procedure ResetAggregator(var Agg: TDataAggregator);
+procedure ResetAggregator(var Agg: TDataAggregator);  
 begin
   Agg.Count := 0;
   Agg.Sum := 0;
@@ -780,7 +780,7 @@ begin
   Agg.SumSquares := 0;
 end;
 
-procedure AddValue(var Agg: TDataAggregator; Value: Word);
+procedure AddValue(var Agg: TDataAggregator; Value: Word);  
 begin
   Inc(Agg.Count);
   Inc(Agg.Sum, Value);
@@ -790,7 +790,7 @@ begin
   if Value > Agg.Max then Agg.Max := Value;
 end;
 
-function GetAverage(const Agg: TDataAggregator): Word;
+function GetAverage(const Agg: TDataAggregator): Word;  
 begin
   if Agg.Count > 0 then
     Result := Agg.Sum div Agg.Count
@@ -798,7 +798,7 @@ begin
     Result := 0;
 end;
 
-function GetStdDev(const Agg: TDataAggregator): Real;
+function GetStdDev(const Agg: TDataAggregator): Real;  
 var
   Mean, Variance: Real;
 begin
@@ -868,7 +868,7 @@ const
 var
   Cache: array[0..CACHE_SIZE-1] of TCacheEntry;
 
-function HashKey(const Key: string): Byte;
+function HashKey(const Key: string): Byte;  
 var
   i: Integer;
   Hash: Byte;
@@ -879,7 +879,7 @@ begin
   Result := Hash mod CACHE_SIZE;
 end;
 
-function GetFromCache(const Key: string): string;
+function GetFromCache(const Key: string): string;  
 var
   Index: Byte;
   Now: LongWord;
@@ -898,7 +898,7 @@ begin
   end;
 end;
 
-procedure PutInCache(const Key, Value: string; TTL: LongWord);
+procedure PutInCache(const Key, Value: string; TTL: LongWord);  
 var
   Index: Byte;
 begin
@@ -910,7 +910,7 @@ begin
   Cache[Index].TTL := TTL;
 end;
 
-function GetWeatherData(City: string): string;
+function GetWeatherData(City: string): string;  
 var
   Cached: string;
 begin
@@ -955,7 +955,7 @@ var
   QueueHead, QueueTail: Byte;
   IsConnected: Boolean;
 
-procedure EnqueueMessage(const Data; Size: Word);
+procedure EnqueueMessage(const Data; Size: Word);  
 var
   NextHead: Byte;
 begin
@@ -975,7 +975,7 @@ begin
   end;
 end;
 
-function DequeueMessage(var Data; var Size: Word): Boolean;
+function DequeueMessage(var Data; var Size: Word): Boolean;  
 begin
   if QueueHead <> QueueTail then  // Queue pas vide
   begin
@@ -988,7 +988,7 @@ begin
     Result := False;
 end;
 
-procedure TenterEnvoiCloud(const Data; Size: Word);
+procedure TenterEnvoiCloud(const Data; Size: Word);  
 begin
   if IsConnected then
   begin
@@ -1010,7 +1010,7 @@ begin
 end;
 
 // Thread de synchronisation
-procedure ThreadSynchronisation;
+procedure ThreadSynchronisation;  
 var
   Data: array[0..255] of Byte;
   Size: Word;
@@ -1078,7 +1078,7 @@ var
   PriorityQueues: array[TPriority] of array[0..31] of TPrioritizedMessage;
   QueueHeads, QueueTails: array[TPriority] of Byte;
 
-procedure EnqueuePriority(const Data; Size: Word; Priority: TPriority);
+procedure EnqueuePriority(const Data; Size: Word; Priority: TPriority);  
 var
   NextHead: Byte;
 begin
@@ -1109,7 +1109,7 @@ begin
   end;
 end;
 
-function DequeuePriority(var Data; var Size: Word): Boolean;
+function DequeuePriority(var Data; var Size: Word): Boolean;  
 var
   p: TPriority;
 begin
@@ -1157,7 +1157,7 @@ type
     Key: array[0..31] of Byte;  // 256 bits
   end;
 
-procedure InitSecureStorage(var Storage: TSecureStorage; const Password: string);
+procedure InitSecureStorage(var Storage: TSecureStorage; const Password: string);  
 var
   Hash: array[0..31] of Byte;
 begin
@@ -1249,7 +1249,7 @@ begin
   end;
 end;
 
-function VerifierHMAC(const Msg: TAuthenticatedMessage; const Key: string): Boolean;
+function VerifierHMAC(const Msg: TAuthenticatedMessage; const Key: string): Boolean;  
 var
   CalculatedHMAC: array[0..31] of Byte;
   i: Integer;
@@ -1300,7 +1300,7 @@ var
   CurrentPowerMode: TPowerMode;
   BatteryLevel: Byte;
 
-procedure SetPowerMode(Mode: TPowerMode);
+procedure SetPowerMode(Mode: TPowerMode);  
 begin
   case Mode of
     pmActive:
@@ -1328,7 +1328,7 @@ begin
   CurrentPowerMode := Mode;
 end;
 
-procedure GererEnergie;
+procedure GererEnergie;  
 begin
   BatteryLevel := LireBatterie();
 
@@ -1403,7 +1403,7 @@ type
     Compression: Boolean;    // Activer compression
   end;
 
-function DeterminerStrategie: TTransmissionStrategy;
+function DeterminerStrategie: TTransmissionStrategy;  
 begin
   if BatteryLevel > 80 then
   begin
@@ -1490,7 +1490,7 @@ type
     Connected: Boolean;
   end;
 
-procedure InitMQTT(var MQTT: TEdgeMQTT; const Broker, ClientID: string);
+procedure InitMQTT(var MQTT: TEdgeMQTT; const Broker, ClientID: string);  
 begin
   MQTT.BrokerIP := Broker;
   MQTT.ClientID := ClientID;
@@ -1498,7 +1498,7 @@ begin
   MQTT.Connected := False;
 end;
 
-function ConnectMQTT(var MQTT: TEdgeMQTT): Boolean;
+function ConnectMQTT(var MQTT: TEdgeMQTT): Boolean;  
 begin
   try
     MQTT.Client.Connect(MQTT.BrokerIP, 1883, MQTT.ClientID);
@@ -1544,7 +1544,7 @@ var
   Temp: Real;
   Payload: string;
 
-procedure OnCommandReceived(const Topic, Message: string);
+procedure OnCommandReceived(const Topic, Message: string);  
 begin
   WriteLn('Commande reçue: ', Topic, ' = ', Message);
 
@@ -1593,7 +1593,7 @@ type
     PayloadLength: Word;
   end;
 
-function CreerCoapGET(const URI: string; MessageID: Word): TCoapMessage;
+function CreerCoapGET(const URI: string; MessageID: Word): TCoapMessage;  
 begin
   FillChar(Result, SizeOf(Result), 0);
 
@@ -1607,7 +1607,7 @@ begin
   Result.PayloadLength := Length(URI);
 end;
 
-procedure EnvoyerCoap(const Msg: TCoapMessage; const ServerIP: string);
+procedure EnvoyerCoap(const Msg: TCoapMessage; const ServerIP: string);  
 var
   Socket: Integer;
   Buffer: array[0..511] of Byte;
@@ -1647,7 +1647,7 @@ type
     M2: Real;  // Pour calcul variance en ligne (Welford)
   end;
 
-procedure InitStats(var Stats: TStatistics);
+procedure InitStats(var Stats: TStatistics);  
 begin
   Stats.Mean := 0.0;
   Stats.StdDev := 0.0;
@@ -1655,7 +1655,7 @@ begin
   Stats.M2 := 0.0;
 end;
 
-procedure UpdateStats(var Stats: TStatistics; Value: Real);
+procedure UpdateStats(var Stats: TStatistics; Value: Real);  
 var
   Delta, Delta2: Real;
 begin
@@ -1671,7 +1671,7 @@ begin
     Stats.StdDev := Sqrt(Stats.M2 / (Stats.Count - 1));
 end;
 
-function DetecterAnomalie(var Stats: TStatistics; Value: Real): Boolean;
+function DetecterAnomalie(var Stats: TStatistics; Value: Real): Boolean;  
 var
   ZScore: Real;
 const
@@ -1728,7 +1728,7 @@ end;
 type
   TPattern = array[0..9] of Real;  // Pattern de 10 valeurs
 
-function CorrelationPearson(const A, B: TPattern): Real;
+function CorrelationPearson(const A, B: TPattern): Real;  
 var
   i: Integer;
   MeanA, MeanB, SumXY, SumX2, SumY2: Real;
@@ -1769,7 +1769,7 @@ var
   RecentValues: TPattern;
   ValueIndex: Byte = 0;
 
-function DetecterPatternDefaillance(NewValue: Real): Boolean;
+function DetecterPatternDefaillance(NewValue: Real): Boolean;  
 var
   Correlation: Real;
 begin
@@ -1845,7 +1845,7 @@ var
   OptCount: Byte;
 
 // === ACQUISITION ===
-procedure TraiterCapteur(const Reading: TSensorReading);
+procedure TraiterCapteur(const Reading: TSensorReading);  
 var
   SQL: string;
 begin
@@ -1864,7 +1864,7 @@ begin
 end;
 
 // === ANALYSE LOCALE (EDGE) ===
-procedure AnalyserPiece(RoomID: Byte);
+procedure AnalyserPiece(RoomID: Byte);  
 var
   SQL: string;
   Stmt: PSQLite3_Stmt;
@@ -1950,7 +1950,7 @@ begin
 end;
 
 // === ACTION LOCALE ===
-procedure AppliquerOptimisation(const Opt: TOptimization);
+procedure AppliquerOptimisation(const Opt: TOptimization);  
 begin
   if Opt.SetHVAC then
   begin
@@ -1966,7 +1966,7 @@ begin
 end;
 
 // === AGRÉGATION POUR CLOUD ===
-procedure AgregerEtEnvoyerCloud;
+procedure AgregerEtEnvoyerCloud;  
 var
   i: Integer;
   JSON: string;
@@ -2001,7 +2001,7 @@ begin
 end;
 
 // === THREAD SERVEUR CAPTEURS ===
-procedure ThreadServeurCapteurs;
+procedure ThreadServeurCapteurs;  
 var
   ServerSocket, ClientSocket: Integer;
   Reading: TSensorReading;
@@ -2032,7 +2032,7 @@ begin
 end;
 
 // === THREAD AGRÉGATION PÉRIODIQUE ===
-procedure ThreadAgregation;
+procedure ThreadAgregation;  
 begin
   while True do
   begin
@@ -2043,7 +2043,7 @@ begin
 end;
 
 // === THREAD NETTOYAGE BASE DE DONNÉES ===
-procedure ThreadNettoyage;
+procedure ThreadNettoyage;  
 var
   SQL: string;
 begin
@@ -2064,7 +2064,7 @@ begin
 end;
 
 // === INITIALISATION ===
-procedure InitDatabase;
+procedure InitDatabase;  
 const
   SQL_CREATE =
     'CREATE TABLE IF NOT EXISTS readings (' +
@@ -2090,7 +2090,7 @@ begin
   WriteLn('Base de données initialisée');
 end;
 
-procedure InitMQTT;
+procedure InitMQTT;  
 begin
   MQTT := TMQTTClient.Create;
   MQTT.Connect('192.168.1.100', 1883, 'smart-building-edge');
@@ -2163,7 +2163,7 @@ var
   PendingUpdate: TFirmwareUpdate;
   UpdateAvailable: Boolean = False;
 
-procedure CheckForUpdates;
+procedure CheckForUpdates;  
 var
   Response: string;
   JSON: TJSONObject;
@@ -2190,7 +2190,7 @@ begin
   end;
 end;
 
-function DownloadFirmware(const URL: string): Boolean;
+function DownloadFirmware(const URL: string): Boolean;  
 var
   Buffer: array[0..1023] of Byte;
   BytesRead, TotalRead: LongWord;
@@ -2225,7 +2225,7 @@ begin
   end;
 end;
 
-function VerifyFirmware: Boolean;
+function VerifyFirmware: Boolean;  
 var
   FileHandle: Integer;
   Buffer: array[0..1023] of Byte;
@@ -2258,7 +2258,7 @@ begin
     WriteLn('ERREUR: CRC32 incorrect !');
 end;
 
-procedure ApplyFirmwareUpdate;
+procedure ApplyFirmwareUpdate;  
 begin
   WriteLn('Installation mise à jour...');
 
@@ -2275,7 +2275,7 @@ begin
   SystemReset();
 end;
 
-procedure PerformOTAUpdate;
+procedure PerformOTAUpdate;  
 begin
   if not UpdateAvailable then Exit;
 
@@ -2335,7 +2335,7 @@ var
   Metrics: TSystemMetrics;
   LastMetrics: TSystemMetrics;
 
-procedure CollectMetrics;
+procedure CollectMetrics;  
 var
   CpuTime, IdleTime: LongWord;
 begin
@@ -2361,7 +2361,7 @@ begin
   Metrics.Temperature := ReadCPUTemperature();
 end;
 
-procedure PublishMetrics;
+procedure PublishMetrics;  
 var
   JSON: string;
 begin
@@ -2380,7 +2380,7 @@ begin
 end;
 
 // Thread monitoring
-procedure ThreadMonitoring;
+procedure ThreadMonitoring;  
 begin
   while True do
   begin
@@ -2420,7 +2420,7 @@ var
   LogFile: TextFile;
   LogMutex: TRTLCriticalSection;
 
-procedure InitLogging;
+procedure InitLogging;  
 begin
   InitCriticalSection(LogMutex);
   AssignFile(LogFile, LOG_FILE);
@@ -2431,7 +2431,7 @@ begin
     Rewrite(LogFile);
 end;
 
-procedure Log(Level: TLogLevel; const Component, Message: string);
+procedure Log(Level: TLogLevel; const Component, Message: string);  
 const
   LevelStr: array[TLogLevel] of string = (
     'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRIT'
@@ -2504,7 +2504,7 @@ type
 var
   Model: array[0..9] of TConvLayer;  // 10 couches
 
-procedure LoadModel(const Filename: string);
+procedure LoadModel(const Filename: string);  
 var
   f: File of Byte;
   i, j: Integer;
@@ -2522,7 +2522,7 @@ begin
   WriteLn('Modèle chargé');
 end;
 
-function Classify(const Image: TImageTensor): Byte;
+function Classify(const Image: TImageTensor): Byte;  
 var
   // Implémentation simplifiée
   x, y, c: Integer;
@@ -2595,7 +2595,7 @@ type
     function Execute(Data: Pointer): Pointer; override;
   end;
 
-function TFilterStage.Execute(Data: Pointer): Pointer;
+function TFilterStage.Execute(Data: Pointer): Pointer;  
 var
   Input: ^TSensorData;
   Output: ^TSensorData;
@@ -2619,7 +2619,7 @@ type
     function Execute(Data: Pointer): Pointer; override;
   end;
 
-function TNormalizeStage.Execute(Data: Pointer): Pointer;
+function TNormalizeStage.Execute(Data: Pointer): Pointer;  
 var
   Input: ^TSensorData;
 begin
@@ -2641,7 +2641,7 @@ type
     function Execute(Data: Pointer): Pointer; override;
   end;
 
-function TAggregateStage.Execute(Data: Pointer): Pointer;
+function TAggregateStage.Execute(Data: Pointer): Pointer;  
 var
   Input: ^TSensorData;
   Aggregated: ^TAggregatedData;
@@ -2702,7 +2702,7 @@ end;
 
 ```pascal
 // Toujours prévoir le mode dégradé
-procedure TraiterDonnees(const Data: TSensorData);
+procedure TraiterDonnees(const Data: TSensorData);  
 begin
   // Essayer traitement optimal
   try
@@ -2730,7 +2730,7 @@ end;
 
 ```pascal
 // Préférer approximation rapide à précision lente
-function CalculRapideDistance(x1, y1, x2, y2: Real): Real;
+function CalculRapideDistance(x1, y1, x2, y2: Real): Real;  
 var
   dx, dy: Real;
 begin
@@ -2753,7 +2753,7 @@ end;
 var
   WorkBuffer: array[0..1023] of Byte;  // Buffer réutilisable
 
-procedure TraiterMessage(const Msg: TMessage);
+procedure TraiterMessage(const Msg: TMessage);  
 begin
   // ✗ MAUVAIS
   // var LocalBuffer: array[0..1023] of Byte;  // Nouvelle allocation
@@ -2771,7 +2771,7 @@ end;
 
 ```pascal
 // Simuler pannes réseau
-procedure TestResilience;
+procedure TestResilience;  
 var
   SimulatedFailure: Boolean;
 begin
@@ -2850,7 +2850,7 @@ Niveau Cloud (Serveur distant)
 
 ```pascal
 // Exemple : décider où traiter selon contexte
-function DeterminerLieuTraitement(const Data: TSensorData): TProcessingLocation;
+function DeterminerLieuTraitement(const Data: TSensorData): TProcessingLocation;  
 var
   BatteryLow: Boolean;
   HighLatencyNeeded: Boolean;
@@ -2869,7 +2869,7 @@ begin
     Result := plEdge;  // Par défaut : local
 end;
 
-procedure TraiterDonnees(const Data: TSensorData);
+procedure TraiterDonnees(const Data: TSensorData);  
 begin
   case DeterminerLieuTraitement(Data) of
     plEdge:
@@ -2910,7 +2910,7 @@ type
     procedure CheckConnection;
   end;
 
-procedure TStoreAndForward.Store(const Data: Pointer);
+procedure TStoreAndForward.Store(const Data: Pointer);  
 begin
   if FConnected then
   begin
@@ -2936,7 +2936,7 @@ begin
   end;
 end;
 
-procedure TStoreAndForward.Forward;
+procedure TStoreAndForward.Forward;  
 var
   i: Integer;
   Data: Pointer;
@@ -2983,7 +2983,7 @@ type
     function Execute(Operation: TOperation): Boolean;
   end;
 
-function TCircuitBreaker.Execute(Operation: TOperation): Boolean;
+function TCircuitBreaker.Execute(Operation: TOperation): Boolean;  
 var
   Now: LongWord;
 begin
@@ -3043,7 +3043,7 @@ end;
 var
   CloudBreaker: TCircuitBreaker;
 
-function SendDataToCloud(Data: Pointer): Boolean;
+function SendDataToCloud(Data: Pointer): Boolean;  
 begin
   Result := CloudBreaker.Execute(
     function: Boolean
@@ -3080,7 +3080,7 @@ var
   EventStore: array[0..999] of TEvent;
   EventCount: Word = 0;
 
-procedure AppendEvent(EventType: TEventType; const Data; Size: Word);
+procedure AppendEvent(EventType: TEventType; const Data; Size: Word);  
 var
   Event: TEvent;
 begin
@@ -3097,7 +3097,7 @@ begin
   WriteEventToDisk(Event);
 end;
 
-function ReplayEvents(FromEventID: LongWord): TSystemState;
+function ReplayEvents(FromEventID: LongWord): TSystemState;  
 var
   i: LongWord;
   State: TSystemState;
@@ -3152,7 +3152,7 @@ var
   ServingLayer: TServingLayer;
 
 // Batch Layer : traitement lourd, périodique
-procedure TBatchLayer.ProcessBatch(const Events: array of TEvent);
+procedure TBatchLayer.ProcessBatch(const Events: array of TEvent);  
 var
   i: Integer;
   Aggregates: TAggregateData;
@@ -3168,7 +3168,7 @@ begin
 end;
 
 // Speed Layer : temps réel
-procedure TSpeedLayer.ProcessStream(const Event: TEvent);
+procedure TSpeedLayer.ProcessStream(const Event: TEvent);  
 var
   RealtimeView: TRealtimeData;
 begin
@@ -3179,7 +3179,7 @@ begin
 end;
 
 // Serving Layer : combiner les vues
-function TServingLayer.Query(const Request: string): string;
+function TServingLayer.Query(const Request: string): string;  
 var
   BatchView: TAggregateData;
   RealtimeView: TRealtimeData;
@@ -3244,7 +3244,7 @@ var
   ProcessingTimes: array[0..99] of LongWord;
   PTIndex: Byte = 0;
 
-procedure RecordProcessingTime(Time: LongWord);
+procedure RecordProcessingTime(Time: LongWord);  
 var
   i: Integer;
   Sum: QWord;
@@ -3268,7 +3268,7 @@ begin
   Metrics.MaxProcessingTime := Sorted[99];
 end;
 
-procedure UpdateMetrics(Success: Boolean; BytesProcessed: LongWord);
+procedure UpdateMetrics(Success: Boolean; BytesProcessed: LongWord);  
 begin
   if Success then
   begin
@@ -3284,7 +3284,7 @@ begin
   // Calculs additionnels...
 end;
 
-procedure PrintMetricsReport;
+procedure PrintMetricsReport;  
 begin
   WriteLn('=== EDGE METRICS REPORT ===');
   WriteLn('Processing Time:');
@@ -3344,7 +3344,7 @@ var
   EventsCloud: LongWord;
   EventsFailed: LongWord;
 
-procedure InitSimulation;
+procedure InitSimulation;  
 var
   i: Integer;
 begin
@@ -3367,7 +3367,7 @@ begin
   WriteLn('  Event rate: ', Params.EventRate, ' events/sec');
 end;
 
-procedure SimulateEvent(var Device: TDevice);
+procedure SimulateEvent(var Device: TDevice);  
 var
   ProcessLocally: Boolean;
   Success: Boolean;
@@ -3407,7 +3407,7 @@ begin
     Inc(EventsProcessed);
 end;
 
-procedure RunSimulation(Duration: Integer);
+procedure RunSimulation(Duration: Integer);  
 var
   StartTime, ElapsedTime: TDateTime;
   EventInterval: Integer;
@@ -3433,7 +3433,7 @@ begin
   PrintSimulationResults;
 end;
 
-procedure PrintSimulationResults;
+procedure PrintSimulationResults;  
 var
   Total: LongWord;
   LocalPct, CloudPct, FailPct: Real;

@@ -28,7 +28,7 @@ Le déterminisme signifie que le système répond toujours dans le même délai,
 
 ```pascal
 // Exemple conceptuel de comportement déterministe
-procedure TacheTempsReel;
+procedure TacheTempsReel;  
 var
   DebutExecution, FinExecution: TDateTime;
 begin
@@ -54,16 +54,16 @@ end;
 **Jitter** : variation de cette latence dans le temps  
 
 ```
-Système non temps réel :
-Réponse 1: 15ms
-Réponse 2: 8ms
-Réponse 3: 45ms  ← Jitter élevé, imprévisible
+Système non temps réel :  
+Réponse 1: 15ms  
+Réponse 2: 8ms  
+Réponse 3: 45ms  ← Jitter élevé, imprévisible  
 Réponse 4: 12ms
 
-Système temps réel :
-Réponse 1: 10ms
-Réponse 2: 10ms
-Réponse 3: 10ms  ← Jitter minimal, prévisible
+Système temps réel :  
+Réponse 1: 10ms  
+Réponse 2: 10ms  
+Réponse 3: 10ms  ← Jitter minimal, prévisible  
 Réponse 4: 10ms
 ```
 
@@ -78,7 +78,7 @@ Windows et Linux standards (Ubuntu Desktop) ne sont **pas** des RTOS car :
 
 ```pascal
 // Sur Windows/Linux standard, ce code n'est PAS temps réel
-procedure BoucleControle;
+procedure BoucleControle;  
 begin
   while True do
   begin
@@ -109,7 +109,7 @@ type
   TTaskHandle = pointer;
 
 // Création d'une tâche temps réel
-procedure TacheCapteursTemperature(Parametres: Pointer);
+procedure TacheCapteursTemperature(Parametres: Pointer);  
 begin
   while True do
   begin
@@ -149,7 +149,7 @@ end;
 uses
   BaseUnix, Unix;
 
-procedure ConfigurerPrioriteTempsReel;
+procedure ConfigurerPrioriteTempsReel;  
 var
   Param: sched_param;
 begin
@@ -181,7 +181,7 @@ const
   PRIORITE_CONTROLE = 5;     // Priorité moyenne
   PRIORITE_AFFICHAGE = 1;    // Plus basse priorité
 
-procedure CreerTaches;
+procedure CreerTaches;  
 begin
   CreerTache(@TacheSecurite, PRIORITE_SECURITE);
   CreerTache(@TacheControle, PRIORITE_CONTROLE);
@@ -195,8 +195,8 @@ Algorithme optimal pour tâches périodiques :
 - Plus la période est courte, plus la priorité est élevée
 
 ```
-Tâche A : période 10ms  → Priorité 3 (haute)
-Tâche B : période 50ms  → Priorité 2 (moyenne)
+Tâche A : période 10ms  → Priorité 3 (haute)  
+Tâche B : période 50ms  → Priorité 2 (moyenne)  
 Tâche C : période 100ms → Priorité 1 (basse)
 ```
 
@@ -227,7 +227,7 @@ var
   SemaphoreRessource: TSemaphore;
 
 // Producteur
-procedure ProducteurDonnees;
+procedure ProducteurDonnees;  
 begin
   while True do
   begin
@@ -238,7 +238,7 @@ begin
 end;
 
 // Consommateur
-procedure ConsommateurDonnees;
+procedure ConsommateurDonnees;  
 begin
   while True do
   begin
@@ -256,7 +256,7 @@ Protection de sections critiques :
 var
   MutexUART: TMutex;
 
-procedure EnvoyerUART(Donnees: string);
+procedure EnvoyerUART(Donnees: string);  
 begin
   MutexLock(MutexUART);    // Verrouille l'accès exclusif
   try
@@ -284,7 +284,7 @@ var
   FileMessages: TQueue;
 
 // Tâche capteur
-procedure TacheCapteur;
+procedure TacheCapteur;  
 var
   Msg: TMessageCapteur;
 begin
@@ -300,7 +300,7 @@ begin
 end;
 
 // Tâche traitement
-procedure TacheTraitement;
+procedure TacheTraitement;  
 var
   Msg: TMessageCapteur;
 begin
@@ -319,7 +319,7 @@ Les interruptions matérielles sont cruciales en temps réel :
 ```pascal
 // Gestionnaire d'interruption (ISR)
 // DOIT être le plus court possible !
-procedure ISR_Timer; interrupt;
+procedure ISR_Timer; interrupt;  
 var
   TacheReveiller: TTaskHandle;
 begin
@@ -334,7 +334,7 @@ begin
 end;
 
 // Tâche qui fait le vrai traitement
-procedure TacheTraitementTimer;
+procedure TacheTraitementTimer;  
 begin
   while True do
   begin
@@ -355,7 +355,7 @@ end;
 Problème classique en temps réel :
 
 ```
-Tâche A (priorité haute) attend un mutex détenu par Tâche C (priorité basse)
+Tâche A (priorité haute) attend un mutex détenu par Tâche C (priorité basse)  
 Tâche B (priorité moyenne) s'exécute et bloque Tâche C
 → Tâche A est bloquée par Tâche B indirectement !
 ```
@@ -379,7 +379,7 @@ var
   BufferCapteurs: array[0..255] of integer;
 
 // ✗ MAUVAIS en temps réel strict : allocation dynamique
-procedure TacheDynamique;
+procedure TacheDynamique;  
 var
   Buffer: ^integer;
 begin
@@ -404,7 +404,7 @@ type
     Disponible: array[0..15] of boolean;
   end;
 
-function AllouerBloc(var Pool: TMemoryPool): pointer;
+function AllouerBloc(var Pool: TMemoryPool): pointer;  
 var
   i: integer;
 begin
@@ -426,7 +426,7 @@ En temps réel strict, vous devez **prouver** que chaque tâche respecte ses éc
 
 ```pascal
 // Analyse WCET
-procedure TacheControle; // WCET : 2.5ms maximum
+procedure TacheControle; // WCET : 2.5ms maximum  
 begin
   // Lecture capteurs : 0.8ms
   Temperature := LireCapteurTemperature();  // 0.5ms
@@ -451,10 +451,10 @@ Pour vérifier qu'un ensemble de tâches est exécutable :
 Test Rate Monotonic (RM) :
 Σ (WCET_i / Période_i) ≤ n × (2^(1/n) - 1)
 
-Exemple avec 3 tâches :
-Tâche A : 2ms / 10ms = 0.20
-Tâche B : 3ms / 20ms = 0.15
-Tâche C : 4ms / 50ms = 0.08
+Exemple avec 3 tâches :  
+Tâche A : 2ms / 10ms = 0.20  
+Tâche B : 3ms / 20ms = 0.15  
+Tâche C : 4ms / 50ms = 0.08  
 Total : 0.43
 
 Limite pour n=3 : 3 × (2^(1/3) - 1) ≈ 0.78
@@ -476,13 +476,13 @@ Limite pour n=3 : 3 × (2^(1/3) - 1) ≈ 0.78
 program RTOSDemo;
 
 // Bindings FreeRTOS (simplifiés)
-procedure vTaskDelay(Ticks: cardinal); external;
+procedure vTaskDelay(Ticks: cardinal); external;  
 function xTaskCreate(Code: pointer; Name: PChar; StackSize: word;
                      Params: pointer; Priority: byte;
                      Handle: pointer): boolean; external;
 
 // Votre code applicatif
-procedure LED_Blink(Params: pointer);
+procedure LED_Blink(Params: pointer);  
 begin
   while True do
   begin
@@ -530,7 +530,7 @@ var
   FileAlarmes: TQueueHandle;
 
 // Tâche lecture capteur (haute priorité)
-procedure TacheLectureCapteur(Params: pointer);
+procedure TacheLectureCapteur(Params: pointer);  
 var
   TempLue: real;
 begin
@@ -552,7 +552,7 @@ begin
 end;
 
 // Tâche affichage (basse priorité)
-procedure TacheAffichage(Params: pointer);
+procedure TacheAffichage(Params: pointer);  
 var
   TempLocale: real;
 begin
@@ -569,7 +569,7 @@ begin
 end;
 
 // Tâche gestion alarmes (priorité moyenne)
-procedure TacheAlarmes(Params: pointer);
+procedure TacheAlarmes(Params: pointer);  
 var
   TempAlarme: real;
 begin

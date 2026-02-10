@@ -26,7 +26,7 @@ La **Flash** est une mémoire **non-volatile** (persistante) où réside votre p
 
 ```pascal
 // Ce code est stocké en Flash
-procedure CalculerTemperature;
+procedure CalculerTemperature;  
 begin
   Temperature := (ADC_Value * 3.3) / 4096.0;
 end;
@@ -67,13 +67,13 @@ L'**EEPROM** est une mémoire **non-volatile** pour sauvegarder des paramètres.
 
 ```pascal
 // Sauvegarde configuration
-procedure SauvegarderConfig;
+procedure SauvegarderConfig;  
 begin
   EEPROM_Write(0, CalibrationOffset);
   EEPROM_Write(4, SeuilAlarme);
 end;
 
-procedure ChargerConfig;
+procedure ChargerConfig;  
 begin
   CalibrationOffset := EEPROM_Read(0);
   SeuilAlarme := EEPROM_Read(4);
@@ -117,7 +117,7 @@ Voici comment la mémoire est organisée dans un microcontrôleur :
 **Text (Code)** :
 ```pascal
 // Stocké en Flash, ne consomme pas de RAM
-procedure MaFonction;
+procedure MaFonction;  
 begin
   // Instructions machine ici
 end;
@@ -142,7 +142,7 @@ var
 **Stack (pile)** :
 ```pascal
 // Variables locales et appels de fonction
-procedure Fonction;
+procedure Fonction;  
 var
   Local: Integer;  // Sur la pile (stack)
   Tableau: array[0..99] of Byte;  // 100 octets sur la pile !
@@ -212,9 +212,9 @@ fpc -Xm programme.pas
 
 Exemple de contenu :
 ```
-Symbol                  Address    Size
-main                    0x08000100  120
-CalculerTemperature     0x08000178   84
+Symbol                  Address    Size  
+main                    0x08000100  120  
+CalculerTemperature     0x08000178   84  
 Buffer_Global           0x20000000  256
 ```
 
@@ -322,7 +322,7 @@ const
   FLAG_ALARME = $04;  // Bit 2
   FLAG_MOTEUR = $08;  // Bit 3
 
-procedure SetLED1(Active: Boolean);
+procedure SetLED1(Active: Boolean);  
 begin
   if Active then
     Etat := Etat or FLAG_LED1
@@ -330,7 +330,7 @@ begin
     Etat := Etat and (not FLAG_LED1);
 end;
 
-function GetLED1: Boolean;
+function GetLED1: Boolean;  
 begin
   Result := (Etat and FLAG_LED1) <> 0;
 end;
@@ -428,12 +428,12 @@ var
 var
   BufferCommun: array[0..255] of Byte;
 
-procedure CommuniquerUART;
+procedure CommuniquerUART;  
 begin
   // Utilise BufferCommun
 end;
 
-procedure CommuniquerSPI;
+procedure CommuniquerSPI;  
 begin
   // Réutilise le même BufferCommun
   // (pas en même temps que UART)
@@ -453,12 +453,12 @@ var
 var
   Etats: Byte;  // 8 bits pour 8 états
 
-function GetEtat(Numero: Byte): Boolean; inline;
+function GetEtat(Numero: Byte): Boolean; inline;  
 begin
   Result := (Etats and (1 shl Numero)) <> 0;
 end;
 
-procedure SetEtat(Numero: Byte; Valeur: Boolean); inline;
+procedure SetEtat(Numero: Byte; Valeur: Boolean); inline;  
 begin
   if Valeur then
     Etats := Etats or (1 shl Numero)
@@ -492,7 +492,7 @@ end;
 
 ```pascal
 // ✗ DANGEREUX : 1024 octets sur la pile !
-procedure Traiter;
+procedure Traiter;  
 var
   GrosBuffer: array[0..1023] of Byte;  // LOCAL = pile
 begin
@@ -503,7 +503,7 @@ end;
 var
   BufferGlobal: array[0..1023] of Byte;  // BSS, pas la pile
 
-procedure Traiter;
+procedure Traiter;  
 begin
   // Utilise BufferGlobal
 end;
@@ -512,7 +512,7 @@ end;
 var
   BufferStatique: array[0..1023] of Byte; static;
 
-procedure Traiter;
+procedure Traiter;  
 begin
   // BufferStatique est en BSS, pas sur la pile
 end;
@@ -522,7 +522,7 @@ end;
 
 ```pascal
 // ✗ DANGEREUX : récursion profonde
-function Fibonacci(n: Integer): Integer;
+function Fibonacci(n: Integer): Integer;  
 begin
   if n <= 1 then
     Result := n
@@ -532,7 +532,7 @@ begin
 end;
 
 // ✓ SOLUTION : version itérative
-function FibonacciIteratif(n: Integer): Integer;
+function FibonacciIteratif(n: Integer): Integer;  
 var
   a, b, i, temp: Integer;
 begin
@@ -558,7 +558,7 @@ const
 var
   StackGuard: LongWord = STACK_CANARY;
 
-procedure CheckStackOverflow;
+procedure CheckStackOverflow;  
 begin
   if StackGuard <> STACK_CANARY then
   begin
@@ -626,7 +626,7 @@ type
 var
   Pool: TMemoryPool;
 
-function AllouerBloc: Pointer;
+function AllouerBloc: Pointer;  
 var
   i: Integer;
 begin
@@ -641,7 +641,7 @@ begin
   Result := nil;  // Pool plein !
 end;
 
-procedure LibererBloc(p: Pointer);
+procedure LibererBloc(p: Pointer);  
 var
   i: Integer;
   Offset: PtrUInt;
@@ -729,7 +729,7 @@ const
 UART_Send(Format('Temp: %d', [Temperature]));
 
 // ✓ Conversion manuelle (pas d'allocation)
-procedure IntToStr(Value: Integer; var Buffer: ShortString);
+procedure IntToStr(Value: Integer; var Buffer: ShortString);  
 var
   i, Digit: Integer;
   Negatif: Boolean;
@@ -762,13 +762,13 @@ end;
 
 ```pascal
 // Fonction normale : overhead d'appel
-function Carre(x: Integer): Integer;
+function Carre(x: Integer): Integer;  
 begin
   Result := x * x;
 end;
 
 // Fonction inline : code inséré directement
-function Carre(x: Integer): Integer; inline;
+function Carre(x: Integer): Integer; inline;  
 begin
   Result := x * x;
 end;
@@ -785,12 +785,12 @@ end;
 {$INLINE ON}                // Activer inlining
 
 // Par fonction
-procedure Critique; inline;
+procedure Critique; inline;  
 begin
   // Code critique
 end;
 
-procedure PasOptimisee; {$OPTIMIZATION OFF}
+procedure PasOptimisee; {$OPTIMIZATION OFF}  
 begin
   // Debug plus facile
 end;
@@ -829,7 +829,7 @@ const
   GrandeTable: array[0..999] of Word = (...) progmem;
   // Reste en Flash, ne consomme pas de RAM
 
-function LireTable(Index: Word): Word;
+function LireTable(Index: Word): Word;  
 begin
   Result := pgm_read_word(@GrandeTable[Index]);
 end;
@@ -854,7 +854,7 @@ const
 type
   PFlashString = ^String;
 
-function FlashStr(const s: String): PFlashString; inline;
+function FlashStr(const s: String): PFlashString; inline;  
 begin
   Result := @s;
 end;
@@ -863,7 +863,7 @@ const
   MSG1 = 'Message long en Flash' progmem;
   MSG2 = 'Autre message' progmem;
 
-procedure AfficherMessage(fs: PFlashString);
+procedure AfficherMessage(fs: PFlashString);  
 var
   c: Char;
   i: Integer;
@@ -978,7 +978,7 @@ Précalculer au lieu de calculer :
 
 ```pascal
 // ✗ Calcul runtime (lent, consomme cycles CPU)
-function Sinus(Angle: Integer): Integer;
+function Sinus(Angle: Integer): Integer;  
 begin
   Result := Round(Sin(Angle * Pi / 180) * 1000);
 end;
@@ -989,7 +989,7 @@ const
     0, 17, 34, 52, 69, 87, 104, 121, 139, 156, ...
   );
 
-function Sinus(Angle: Integer): Integer;
+function Sinus(Angle: Integer): Integer;  
 begin
   Result := TableSinus[Angle mod 360];
 end;
@@ -1011,7 +1011,7 @@ var
   CurrentRAMUsage: Word = 0;
 
 {$IFDEF DEBUG}
-procedure TrackAllocation(Size: Word);
+procedure TrackAllocation(Size: Word);  
 begin
   Inc(AllocCount);
   Inc(CurrentRAMUsage, Size);
@@ -1023,14 +1023,14 @@ begin
               Size, CurrentRAMUsage, MaxStackUsage);
 end;
 
-procedure TrackDeallocation(Size: Word);
+procedure TrackDeallocation(Size: Word);  
 begin
   Dec(CurrentRAMUsage, Size);
 end;
 {$ENDIF}
 
 // Wrapper pour New/Dispose
-function MyNew(Size: Word): Pointer;
+function MyNew(Size: Word): Pointer;  
 begin
   Result := GetMem(Size);
   {$IFDEF DEBUG}
@@ -1038,7 +1038,7 @@ begin
   {$ENDIF}
 end;
 
-procedure MyDispose(p: Pointer; Size: Word);
+procedure MyDispose(p: Pointer; Size: Word);  
 begin
   {$IFDEF DEBUG}
   TrackDeallocation(Size);
@@ -1055,7 +1055,7 @@ var
   StackStart: ^Byte;
   StackEnd: ^Byte;
 
-procedure InitStackMonitoring;
+procedure InitStackMonitoring;  
 var
   Dummy: Byte;
 begin
@@ -1065,7 +1065,7 @@ begin
   FillChar(Dummy, 1024, $AA);
 end;
 
-function GetStackUsage: Word;
+function GetStackUsage: Word;  
 var
   Current: ^Byte;
   Dummy: Byte;
@@ -1076,7 +1076,7 @@ begin
   Result := Usage;
 end;
 
-function GetMaxStackUsage: Word;
+function GetMaxStackUsage: Word;  
 var
   p: ^Byte;
   Count: Word;
@@ -1110,7 +1110,7 @@ end;
 Créer un rapport détaillé :
 
 ```pascal
-procedure AfficherCartographieMemoire;
+procedure AfficherCartographieMemoire;  
 begin
   WriteLn('=== CARTOGRAPHIE MÉMOIRE ===');
   WriteLn;
@@ -1161,7 +1161,7 @@ type
 var
   RxBuffer: TCircularBuffer;
 
-procedure BufferPush(var Buf: TCircularBuffer; Value: Byte);
+procedure BufferPush(var Buf: TCircularBuffer; Value: Byte);  
 begin
   if Buf.Count < UART_BUFFER_SIZE then
   begin
@@ -1172,7 +1172,7 @@ begin
   // Sinon : buffer plein, données perdues
 end;
 
-function BufferPop(var Buf: TCircularBuffer): Byte;
+function BufferPop(var Buf: TCircularBuffer): Byte;  
 begin
   Result := 0;
   if Buf.Count > 0 then
@@ -1184,7 +1184,7 @@ begin
 end;
 
 // Interruption UART RX
-procedure USART1_IRQHandler; interrupt;
+procedure USART1_IRQHandler; interrupt;  
 begin
   if (USART1^.SR and USART_SR_RXNE) <> 0 then
   begin
@@ -1227,14 +1227,14 @@ var
   // Total : 512 octets (économie de 63 octets)
 
 // Règle : ne jamais utiliser I2C et SPI simultanément avec ce buffer
-procedure LireBME280;
+procedure LireBME280;  
 begin
   I2C_Read(BME280_ADDR, @CommBuffer.I2C, 8);
   // Traiter immédiatement
   Temperature := ConvertirTemp(CommBuffer.I2C);
 end;
 
-procedure LireSDCard;
+procedure LireSDCard;  
 begin
   SPI_ReadBlock(@CommBuffer.SPI, 512);
   // Traiter immédiatement
@@ -1262,7 +1262,7 @@ var
   FrameBuffer: array[0..(SCREEN_WIDTH * SCREEN_HEIGHT) div 8 - 1] of Byte;
   // 1024 octets (8 fois moins !)
 
-procedure SetPixel(x, y: Byte; Couleur: Boolean);
+procedure SetPixel(x, y: Byte; Couleur: Boolean);  
 var
   ByteIndex, BitIndex: Word;
 begin
@@ -1275,7 +1275,7 @@ begin
     FrameBuffer[ByteIndex] := FrameBuffer[ByteIndex] and (not (1 shl BitIndex));
 end;
 
-function GetPixel(x, y: Byte): Boolean;
+function GetPixel(x, y: Byte): Boolean;  
 var
   ByteIndex, BitIndex: Word;
 begin
@@ -1289,7 +1289,7 @@ end;
 
 ```pascal
 // Au lieu de rafraîchir tout l'écran
-procedure RefreshFullScreen;
+procedure RefreshFullScreen;  
 begin
   SPI_WriteBuffer(@FrameBuffer, 1024);  // 1024 octets à envoyer
 end;
@@ -1304,7 +1304,7 @@ type
 var
   DirtyRegion: TDirtyRect;
 
-procedure MarkDirty(x, y, w, h: Byte);
+procedure MarkDirty(x, y, w, h: Byte);  
 begin
   if not DirtyRegion.Dirty then
   begin
@@ -1324,7 +1324,7 @@ begin
   end;
 end;
 
-procedure RefreshDirtyRegion;
+procedure RefreshDirtyRegion;  
 var
   x, y, ByteIndex: Word;
 begin
@@ -1355,7 +1355,7 @@ var
   History: array[0..SAMPLES-1] of Word;  // 32 octets
   Index: Byte;
 
-function Average_Lourd: Word;
+function Average_Lourd: Word;  
 var
   i: Byte;
   Sum: LongWord;
@@ -1371,7 +1371,7 @@ var
   RunningSum: LongWord;   // 4 octets
   SampleCount: Byte;
 
-function Average_Leger(NewValue: Word): Word;
+function Average_Leger(NewValue: Word): Word;  
 begin
   if SampleCount < SAMPLES then
   begin
@@ -1401,7 +1401,7 @@ var
   FIR_History: array[0..FIR_TAPS-1] of Integer;  // 16-32 octets
   FIR_Coeffs: array[0..FIR_TAPS-1] of Integer;
 
-function FIR_Filter(Input: Integer): Integer;
+function FIR_Filter(Input: Integer): Integer;  
 var
   i: Integer;
   Sum: LongInt;
@@ -1423,7 +1423,7 @@ end;
 var
   IIR_State: Integer;  // 2-4 octets seulement !
 
-function IIR_Filter(Input: Integer): Integer;
+function IIR_Filter(Input: Integer): Integer;  
 const
   ALPHA = 64;  // Coefficient (0-255), 64 = ~25%
 begin
@@ -1457,7 +1457,7 @@ const
 var
   Config: TConfiguration;
 
-function CalculerChecksum(const Data: TConfiguration): Byte;
+function CalculerChecksum(const Data: TConfiguration): Byte;  
 var
   i: Integer;
   p: ^Byte;
@@ -1473,7 +1473,7 @@ begin
   Result := Sum;
 end;
 
-procedure SauvegarderConfig;
+procedure SauvegarderConfig;  
 var
   p: ^Byte;
   i: Integer;
@@ -1490,7 +1490,7 @@ begin
   end;
 end;
 
-function ChargerConfig: Boolean;
+function ChargerConfig: Boolean;  
 var
   p: ^Byte;
   i: Integer;
@@ -1515,7 +1515,7 @@ begin
   Result := True;
 end;
 
-procedure ChargerConfigDefaut;
+procedure ChargerConfigDefaut;  
 begin
   Config.CalibrationTemp := 0.0;
   Config.SeuilAlarme := 100;
@@ -1556,7 +1556,7 @@ const
 var
   ConfigFlags: TConfigFlags;  // 1 octet seulement !
 
-procedure SetFlag(Flag: Byte; Value: Boolean);
+procedure SetFlag(Flag: Byte; Value: Boolean);  
 begin
   if Value then
     ConfigFlags := ConfigFlags or Flag
@@ -1564,7 +1564,7 @@ begin
     ConfigFlags := ConfigFlags and (not Flag);
 end;
 
-function GetFlag(Flag: Byte): Boolean;
+function GetFlag(Flag: Byte): Boolean;  
 begin
   Result := (ConfigFlags and Flag) <> 0;
 end;
@@ -1585,7 +1585,7 @@ end;
 
 ```pascal
 // Forcer le compilateur à garder en registre (pas en RAM)
-function CalculRapide(a, b: Integer): Integer;
+function CalculRapide(a, b: Integer): Integer;  
 var
   temp: Integer register;  // Hint : utiliser registre CPU
 begin
@@ -1601,13 +1601,13 @@ end;
 var
   TickCount: LongWord volatile;
 
-procedure SysTick_Handler; interrupt;
+procedure SysTick_Handler; interrupt;  
 begin
   Inc(TickCount);  // Modifié par interruption
 end;
 
 // Le compilateur ne mettra pas en cache
-function GetTicks: LongWord;
+function GetTicks: LongWord;  
 begin
   Result := TickCount;  // Toujours relu depuis RAM
 end;
@@ -1661,7 +1661,7 @@ var
 
   // Total variables : ~40 octets seulement
 
-procedure LireCapteur;
+procedure LireCapteur;  
 var
   RawTemp: Word;
 begin
@@ -1677,7 +1677,7 @@ begin
   CurrentReading.Humidity := CommBuffer[0] div 2;  // 0-200 → 0-100
 end;
 
-procedure AfficherLCD;
+procedure AfficherLCD;  
 var
   s: String[10];  // 11 octets sur pile
 begin
@@ -1696,7 +1696,7 @@ begin
   LCD_WriteChar('%');
 end;
 
-procedure LoggerSDCard;
+procedure LoggerSDCard;  
 var
   i: Byte;
 begin
@@ -1716,7 +1716,7 @@ begin
 end;
 
 // Interruption timer (1 Hz)
-procedure Timer_IRQHandler; interrupt;
+procedure Timer_IRQHandler; interrupt;  
 begin
   Inc(TickCount);
   TIM2^.SR := 0;  // Clear flag
@@ -1777,7 +1777,7 @@ var
 
   // Total : ~20 octets
 
-procedure SetMotorPWM(Speed: Byte; Direction: Boolean); inline;
+procedure SetMotorPWM(Speed: Byte; Direction: Boolean); inline;  
 begin
   if Direction then
     GPIO_Set(DIR_PIN)
@@ -1787,7 +1787,7 @@ begin
   TIM3^.CCR1 := (Speed * 255) div 100;  // PWM 0-255
 end;
 
-procedure UpdateMotor(var Cmd: TMotorCommand); inline;
+procedure UpdateMotor(var Cmd: TMotorCommand); inline;  
 begin
   case Cmd.State of
     msAccel:
@@ -1819,7 +1819,7 @@ begin
 end;
 
 // Interruption 100 Hz (10ms)
-procedure Timer_IRQHandler; interrupt;
+procedure Timer_IRQHandler; interrupt;  
 begin
   UpdateMotor(Motor1);
   UpdateMotor(Motor2);
@@ -1827,7 +1827,7 @@ begin
 end;
 
 // Commande depuis UART
-procedure ProcessCommand(Cmd: Byte);
+procedure ProcessCommand(Cmd: Byte);  
 begin
   case Cmd and $F0 of
     $10:  // Motor 1 Forward
@@ -1883,7 +1883,7 @@ var
   AllocationCount: LongWord = 0;
   FreeCount: LongWord = 0;
 
-function TrackedGetMem(Size: PtrUInt): Pointer;
+function TrackedGetMem(Size: PtrUInt): Pointer;  
 begin
   Result := GetMem(Size);
   if Result <> nil then
@@ -1900,7 +1900,7 @@ begin
   end;
 end;
 
-procedure TrackedFreeMem(p: Pointer; Size: PtrUInt);
+procedure TrackedFreeMem(p: Pointer; Size: PtrUInt);  
 begin
   if p <> nil then
   begin
@@ -1914,7 +1914,7 @@ begin
   end;
 end;
 
-procedure PrintMemoryStats;
+procedure PrintMemoryStats;  
 begin
   WriteLn('=== MEMORY STATISTICS ===');
   WriteLn('Total allocated: ', TotalAllocated, ' bytes');
@@ -2058,7 +2058,7 @@ var
 // Utilisation RAM : ~1 Ko (97% d'économie !)
 // Fonctionne parfaitement sur 20 Ko RAM
 
-procedure StockerLecture(ID: Byte; Temp: Real; Hum, Press: Word);
+procedure StockerLecture(ID: Byte; Temp: Real; Hum, Press: Word);  
 var
   Reading: TSensorData;
 begin
@@ -2074,7 +2074,7 @@ begin
   HistoryIndex := (HistoryIndex + 1) mod HISTORY_SIZE;
 end;
 
-function RecupererTemperature(const Reading: TSensorData): Real;
+function RecupererTemperature(const Reading: TSensorData): Real;  
 begin
   Result := Reading.Temperature / 10.0;  // 257 → 25.7°C
 end;
@@ -2086,7 +2086,7 @@ end;
 
 ```pascal
 // Éviter tableaux temporaires
-procedure TriBulleInPlace(var Arr: array of Word);
+procedure TriBulleInPlace(var Arr: array of Word);  
 var
   i, j: Byte;
   temp: Word;
@@ -2116,7 +2116,7 @@ type
 var
   Samples: TCompressedSample;
 
-procedure AjouterEchantillon(Index: Byte; Value: Word);
+procedure AjouterEchantillon(Index: Byte; Value: Word);  
 var
   Delta: Integer;
 begin
@@ -2137,7 +2137,7 @@ begin
   end;
 end;
 
-function RecupererEchantillon(Index: Byte): Word;
+function RecupererEchantillon(Index: Byte): Word;  
 var
   i: Byte;
   Value: Integer;
@@ -2162,7 +2162,7 @@ var
   CurrentState: TState;  // 1 octet
 
 // Utiliser des flags matériels comme état
-function GetCurrentState: TState;
+function GetCurrentState: TState;  
 begin
   if (USART1^.SR and USART_SR_TC) = 0 then
     Exit(stSending);
@@ -2196,7 +2196,7 @@ var
   Stack: array[0..STACK_SIZE-1] of TStackItem;
   StackPtr: Byte = 0;
 
-procedure Push(Value: Word; State: Byte);
+procedure Push(Value: Word; State: Byte);  
 begin
   if StackPtr < STACK_SIZE then
   begin
@@ -2206,7 +2206,7 @@ begin
   end;
 end;
 
-function Pop(var Value: Word; var State: Byte): Boolean;
+function Pop(var Value: Word; var State: Byte): Boolean;  
 begin
   if StackPtr > 0 then
   begin
@@ -2232,31 +2232,31 @@ end;
 
 ELF_FILE=$1
 
-echo "=== ANALYSE MÉMOIRE ==="
+echo "=== ANALYSE MÉMOIRE ==="  
 echo
 
-echo "--- Tailles des sections ---"
-arm-none-eabi-size -A $ELF_FILE
+echo "--- Tailles des sections ---"  
+arm-none-eabi-size -A $ELF_FILE  
 echo
 
-echo "--- Top 20 symboles (code) ---"
-arm-none-eabi-nm --size-sort -C $ELF_FILE | grep ' T ' | tail -20
+echo "--- Top 20 symboles (code) ---"  
+arm-none-eabi-nm --size-sort -C $ELF_FILE | grep ' T ' | tail -20  
 echo
 
-echo "--- Top 20 symboles (données) ---"
-arm-none-eabi-nm --size-sort -C $ELF_FILE | grep ' [DdBb] ' | tail -20
+echo "--- Top 20 symboles (données) ---"  
+arm-none-eabi-nm --size-sort -C $ELF_FILE | grep ' [DdBb] ' | tail -20  
 echo
 
-echo "--- Détails des sections ---"
-arm-none-eabi-objdump -h $ELF_FILE
+echo "--- Détails des sections ---"  
+arm-none-eabi-objdump -h $ELF_FILE  
 echo
 
-echo "--- Calcul utilisation RAM ---"
-DATA=$(arm-none-eabi-size -A $ELF_FILE | grep '.data' | awk '{print $2}')
-BSS=$(arm-none-eabi-size -A $ELF_FILE | grep '.bss' | awk '{print $2}')
-TOTAL=$((DATA + BSS))
-echo "RAM utilisée : $TOTAL octets"
-echo "  .data : $DATA octets"
+echo "--- Calcul utilisation RAM ---"  
+DATA=$(arm-none-eabi-size -A $ELF_FILE | grep '.data' | awk '{print $2}')  
+BSS=$(arm-none-eabi-size -A $ELF_FILE | grep '.bss' | awk '{print $2}')  
+TOTAL=$((DATA + BSS))  
+echo "RAM utilisée : $TOTAL octets"  
+echo "  .data : $DATA octets"  
 echo "  .bss  : $BSS octets"
 ```
 
@@ -2279,7 +2279,7 @@ var
   Snapshots: array[0..SNAPSHOT_COUNT-1] of TMemorySnapshot;
   SnapshotIndex: Byte = 0;
 
-procedure TakeMemorySnapshot;
+procedure TakeMemorySnapshot;  
 var
   Snap: TMemorySnapshot;
 begin
@@ -2292,7 +2292,7 @@ begin
   SnapshotIndex := (SnapshotIndex + 1) mod SNAPSHOT_COUNT;
 end;
 
-procedure DumpMemoryHistory;
+procedure DumpMemoryHistory;  
 var
   i: Byte;
 begin
@@ -2326,7 +2326,7 @@ end;
 ### Visualisation mémoire
 
 ```pascal
-procedure AfficherCarteMemoire;
+procedure AfficherCarteMemoire;  
 const
   RAM_START = $20000000;
   RAM_SIZE = 20480;  // 20 Ko
@@ -2416,7 +2416,7 @@ var
 // Total utilisé : ~185 octets
 // Reste libre : ~1350 octets (87% libre !)
 
-procedure LireCapteurs;
+procedure LireCapteurs;  
 begin
   CurrentValues.Temperature := ADC_ReadTemp();
   CurrentValues.Humidity := ADC_ReadHum();
@@ -2432,7 +2432,7 @@ begin
     Arroser();
 end;
 
-procedure Arroser;
+procedure Arroser;  
 begin
   if (GetTickCount() - LastWatering) > 3600000 then  // Min 1h entre arrosages
   begin
@@ -2488,7 +2488,7 @@ var
 // Total : ~7 Ko
 // Reste : ~13 Ko pour stack et autres variables
 
-procedure AnalyserSignal;
+procedure AnalyserSignal;  
 var
   i: Word;
   Sum: LongWord;
@@ -2524,7 +2524,7 @@ begin
   Stats.Avg := Sum div BUFFER_SIZE;
 end;
 
-procedure DessinerSignal;
+procedure DessinerSignal;  
 var
   i, x, y: Word;
   Sample: Word;
@@ -2596,7 +2596,7 @@ const
 ### 4. Tester les limites
 
 ```pascal
-procedure TestLimitesPile;
+procedure TestLimitesPile;  
 var
   GrosTableau: array[0..511] of Byte;  // 512 octets sur pile
 begin

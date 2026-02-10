@@ -118,12 +118,12 @@ var
   compteur: byte;
 
 // Procédures et fonctions
-procedure Initialiser;
+procedure Initialiser;  
 begin
   // Configuration des périphériques
 end;
 
-procedure BouclePrincipale;
+procedure BouclePrincipale;  
 begin
   // Code exécuté en boucle infinie
   while true do
@@ -146,7 +146,7 @@ end.
 Les interruptions sont des événements matériels (timer qui expire, donnée reçue, etc.) qui suspendent l'exécution normale pour traiter l'événement.
 
 ```pascal
-procedure GestionnaireTimer; interrupt; public name 'TIMER1_COMPA_vect';
+procedure GestionnaireTimer; interrupt; public name 'TIMER1_COMPA_vect';  
 begin
   // Code exécuté à chaque interruption du timer
   Inc(compteur);
@@ -167,7 +167,7 @@ DDRB := DDRB or (1 shl PB5);  // Pin 13 Arduino = PB5
 Un microcontrôleur ne doit jamais "se terminer". Le programme principal contient toujours une boucle infinie :
 
 ```pascal
-while true do
+while true do  
 begin
   // Traitement
   Delay(1000);
@@ -235,7 +235,7 @@ var
 Le compilateur FreePascal affiche la taille du programme compilé :
 
 ```
-Code size: 1456 bytes
+Code size: 1456 bytes  
 Data size: 234 bytes
 ```
 

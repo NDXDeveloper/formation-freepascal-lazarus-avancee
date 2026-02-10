@@ -330,7 +330,7 @@ Programme s'exécutant directement sur le matériel :
 ```pascal
 program BareMetal;
 
-procedure Setup;
+procedure Setup;  
 begin
   // Configuration matérielle
 end;
@@ -359,7 +359,7 @@ Système d'exploitation temps réel pour multitâche :
 ```pascal
 // Exemple conceptuel avec FreeRTOS
 
-procedure TacheAffichage;
+procedure TacheAffichage;  
 begin
   while true do
   begin
@@ -368,7 +368,7 @@ begin
   end;
 end;
 
-procedure TacheAcquisition;
+procedure TacheAcquisition;  
 begin
   while true do
   begin
@@ -486,14 +486,14 @@ Fonctionnement sans intervention humaine :
 - Mode dégradé en cas de défaut
 
 ```pascal
-procedure ConfigurerWatchdog;
+procedure ConfigurerWatchdog;  
 begin
   // Si le programme ne "nourrit" pas le watchdog
   // toutes les 5 secondes, reset automatique
   EnableWatchdog(5000);
 end;
 
-procedure BouclePrincipale;
+procedure BouclePrincipale;  
 begin
   while true do
   begin

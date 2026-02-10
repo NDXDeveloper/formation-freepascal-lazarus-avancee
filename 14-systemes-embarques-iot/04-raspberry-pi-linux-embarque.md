@@ -189,7 +189,7 @@ https://www.raspberrypi.com/software/
 
 **Sur Ubuntu :**
 ```bash
-sudo apt update
+sudo apt update  
 sudo apt install rpi-imager
 ```
 
@@ -241,7 +241,7 @@ sudo raspi-config
 
 **1. Mise à jour du système**
 ```bash
-sudo apt update
+sudo apt update  
 sudo apt upgrade -y
 ```
 
@@ -318,11 +318,11 @@ Si vous voulez la dernière version de FreePascal :
 sudo apt install build-essential binutils gdb
 
 # Télécharger FPC (exemple 3.2.2)
-cd /tmp
+cd /tmp  
 wget https://sourceforge.net/projects/freepascal/files/Linux/3.2.2/fpc-3.2.2.arm-linux-eabihf.tar
 
 # Extraire
-tar xf fpc-3.2.2.arm-linux-eabihf.tar
+tar xf fpc-3.2.2.arm-linux-eabihf.tar  
 cd fpc-3.2.2.arm-linux-eabihf
 
 # Installer
@@ -363,9 +363,9 @@ fpc hello_pi.pas
 
 **Sortie :**
 ```
-Hello from FreePascal on Raspberry Pi !
-OS: linux-gnueabihf
-Architecture: arm
+Hello from FreePascal on Raspberry Pi !  
+OS: linux-gnueabihf  
+Architecture: arm  
 Compiled with FPC 3.2.2
 ```
 
@@ -460,7 +460,7 @@ echo 17 > /sys/class/gpio/export
 echo out > /sys/class/gpio/gpio17/direction
 
 # Écrire valeur
-echo 1 > /sys/class/gpio/gpio17/value  # HIGH
+echo 1 > /sys/class/gpio/gpio17/value  # HIGH  
 echo 0 > /sys/class/gpio/gpio17/value  # LOW
 
 # Libérer GPIO
@@ -480,7 +480,7 @@ uses
 const
   GPIO_PIN = 17;  // GPIO17 (broche physique 11)
 
-procedure WriteToFile(const FileName, Value: string);
+procedure WriteToFile(const FileName, Value: string);  
 var
   F: TextFile;
 begin
@@ -493,7 +493,7 @@ begin
   end;
 end;
 
-function ReadFromFile(const FileName: string): string;
+function ReadFromFile(const FileName: string): string;  
 var
   F: TextFile;
 begin
@@ -507,7 +507,7 @@ begin
   end;
 end;
 
-procedure ExportGPIO(Pin: Integer);
+procedure ExportGPIO(Pin: Integer);  
 begin
   if not DirectoryExists('/sys/class/gpio/gpio' + IntToStr(Pin)) then
     WriteToFile('/sys/class/gpio/export', IntToStr(Pin));
@@ -515,22 +515,22 @@ begin
   Sleep(100);  // Attendre que le système crée les fichiers
 end;
 
-procedure UnexportGPIO(Pin: Integer);
+procedure UnexportGPIO(Pin: Integer);  
 begin
   WriteToFile('/sys/class/gpio/unexport', IntToStr(Pin));
 end;
 
-procedure SetDirection(Pin: Integer; Direction: string);
+procedure SetDirection(Pin: Integer; Direction: string);  
 begin
   WriteToFile('/sys/class/gpio/gpio' + IntToStr(Pin) + '/direction', Direction);
 end;
 
-procedure SetValue(Pin: Integer; Value: Integer);
+procedure SetValue(Pin: Integer; Value: Integer);  
 begin
   WriteToFile('/sys/class/gpio/gpio' + IntToStr(Pin) + '/value', IntToStr(Value));
 end;
 
-function GetValue(Pin: Integer): Integer;
+function GetValue(Pin: Integer): Integer;  
 var
   S: string;
 begin
@@ -569,7 +569,7 @@ end.
 
 **Câblage :**
 ```
-Raspberry Pi          LED
+Raspberry Pi          LED  
 GPIO17 (pin 11) ─────[Résistance 220Ω]─────[LED]─────GND (pin 9)
 ```
 
@@ -590,7 +590,7 @@ sudo usermod -a -G gpio $USER
 # Se déconnecter/reconnecter
 
 # Ou donner accès direct (temporaire)
-sudo chmod 666 /sys/class/gpio/export
+sudo chmod 666 /sys/class/gpio/export  
 sudo chmod 666 /sys/class/gpio/unexport
 ```
 
@@ -682,7 +682,7 @@ sudo apt install binutils-arm-linux-gnueabihf
 
 ```pascal
 // hello_cross.pas
-program HelloCross;
+program HelloCross;  
 begin
   WriteLn('Compilé en cross depuis Ubuntu !');
 end.
@@ -836,7 +836,7 @@ type
 var
   I2C_FD: Integer = -1;
 
-function I2C_Open: Boolean;
+function I2C_Open: Boolean;  
 begin
   I2C_FD := fpOpen(I2C_DEVICE, O_RDWR);
   Result := I2C_FD >= 0;
@@ -845,27 +845,27 @@ begin
     WriteLn('Erreur ouverture I2C: ', fpgeterrno);
 end;
 
-procedure I2C_Close;
+procedure I2C_Close;  
 begin
   if I2C_FD >= 0 then
     fpClose(I2C_FD);
 end;
 
-function I2C_SetAddress(Addr: Byte): Boolean;
+function I2C_SetAddress(Addr: Byte): Boolean;  
 const
   I2C_SLAVE = $0703;  // ioctl constant
 begin
   Result := fpioctl(I2C_FD, I2C_SLAVE, Pointer(PtrUInt(Addr))) >= 0;
 end;
 
-function I2C_Write(const Data: array of Byte): Boolean;
+function I2C_Write(const Data: array of Byte): Boolean;  
 begin
   Result := fpWrite(I2C_FD, Data[0], Length(Data)) = Length(Data);
 end;
 
 // === Contrôle OLED SSD1306 simplifié ===
 
-procedure OLED_Command(Cmd: Byte);
+procedure OLED_Command(Cmd: Byte);  
 var
   Data: array[0..1] of Byte;
 begin
@@ -874,7 +874,7 @@ begin
   I2C_Write(Data);
 end;
 
-procedure OLED_Init;
+procedure OLED_Init;  
 begin
   I2C_SetAddress(OLED_ADDR);
 
@@ -908,7 +908,7 @@ begin
   Sleep(100);
 end;
 
-procedure OLED_Clear;
+procedure OLED_Clear;  
 var
   i: Integer;
   Data: array[0..16] of Byte;
@@ -934,7 +934,7 @@ begin
   end;
 end;
 
-procedure OLED_DrawText(X, Y: Byte; const Text: string);
+procedure OLED_DrawText(X, Y: Byte; const Text: string);  
 begin
   // Implémentation simplifiée
   // En réalité, il faut une police bitmap et écrire pixel par pixel
@@ -947,7 +947,7 @@ end;
 // Cette fonction est SIMPLIFIÉE et peut ne pas fonctionner
 // Pour production, utiliser bibliothèque comme pigpio
 
-function LireDHT22(Pin: Integer): TDonneesMeteo;
+function LireDHT22(Pin: Integer): TDonneesMeteo;  
 var
   Data: array[0..4] of Byte;
   i, bit_idx: Integer;
@@ -1074,7 +1074,7 @@ sudo pigpiod
 
 ```pascal
 // Appeler script Python pour DHT22
-function LireDHT22_Python(Pin: Integer): TDonneesMeteo;
+function LireDHT22_Python(Pin: Integer): TDonneesMeteo;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -1115,10 +1115,10 @@ end;
 
 ```python
 #!/usr/bin/env python3
-import sys
+import sys  
 import Adafruit_DHT
 
-pin = int(sys.argv[1])
+pin = int(sys.argv[1])  
 humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT22, pin)
 
 if humidity and temperature:
@@ -1166,26 +1166,26 @@ implementation
 const
   I2C_SLAVE = $0703;
 
-constructor TI2C.Create(const DeviceName: string);
+constructor TI2C.Create(const DeviceName: string);  
 begin
   inherited Create;
   FFD := -1;
   FDeviceName := DeviceName;
 end;
 
-destructor TI2C.Destroy;
+destructor TI2C.Destroy;  
 begin
   Close;
   inherited Destroy;
 end;
 
-function TI2C.Open: Boolean;
+function TI2C.Open: Boolean;  
 begin
   FFD := fpOpen(FDeviceName, O_RDWR);
   Result := FFD >= 0;
 end;
 
-procedure TI2C.Close;
+procedure TI2C.Close;  
 begin
   if FFD >= 0 then
   begin
@@ -1194,22 +1194,22 @@ begin
   end;
 end;
 
-function TI2C.SetAddress(Addr: Byte): Boolean;
+function TI2C.SetAddress(Addr: Byte): Boolean;  
 begin
   Result := fpioctl(FFD, I2C_SLAVE, Pointer(PtrUInt(Addr))) >= 0;
 end;
 
-function TI2C.Write(const Data: array of Byte): Boolean;
+function TI2C.Write(const Data: array of Byte): Boolean;  
 begin
   Result := fpWrite(FFD, Data[0], Length(Data)) = Length(Data);
 end;
 
-function TI2C.Read(var Data: array of Byte; Count: Integer): Boolean;
+function TI2C.Read(var Data: array of Byte; Count: Integer): Boolean;  
 begin
   Result := fpRead(FFD, Data[0], Count) = Count;
 end;
 
-function TI2C.WriteRead(const WriteData: array of Byte; var ReadData: array of Byte; ReadCount: Integer): Boolean;
+function TI2C.WriteRead(const WriteData: array of Byte; var ReadData: array of Byte; ReadCount: Integer): Boolean;  
 begin
   Result := Write(WriteData) and Read(ReadData, ReadCount);
 end;
@@ -1349,7 +1349,7 @@ type
     pad: LongWord;
   end;
 
-constructor TSPI.Create(const DeviceName: string);
+constructor TSPI.Create(const DeviceName: string);  
 begin
   inherited Create;
   FFD := -1;
@@ -1358,13 +1358,13 @@ begin
   FMode := 0;
 end;
 
-destructor TSPI.Destroy;
+destructor TSPI.Destroy;  
 begin
   Close;
   inherited Destroy;
 end;
 
-function TSPI.Open: Boolean;
+function TSPI.Open: Boolean;  
 begin
   FFD := fpOpen(FDeviceName, O_RDWR);
   Result := FFD >= 0;
@@ -1376,7 +1376,7 @@ begin
   end;
 end;
 
-procedure TSPI.Close;
+procedure TSPI.Close;  
 begin
   if FFD >= 0 then
   begin
@@ -1385,19 +1385,19 @@ begin
   end;
 end;
 
-function TSPI.SetSpeed(Speed: LongWord): Boolean;
+function TSPI.SetSpeed(Speed: LongWord): Boolean;  
 begin
   FSpeed := Speed;
   Result := fpioctl(FFD, SPI_IOC_WR_MAX_SPEED_HZ, @FSpeed) >= 0;
 end;
 
-function TSPI.SetMode(Mode: Byte): Boolean;
+function TSPI.SetMode(Mode: Byte): Boolean;  
 begin
   FMode := Mode;
   Result := fpioctl(FFD, SPI_IOC_WR_MODE, @FMode) >= 0;
 end;
 
-function TSPI.Transfer(const TxData: array of Byte; var RxData: array of Byte; Len: Integer): Boolean;
+function TSPI.Transfer(const TxData: array of Byte; var RxData: array of Byte; Len: Integer): Boolean;  
 var
   transfer: spi_ioc_transfer;
 begin
@@ -1425,7 +1425,7 @@ program TestMCP3008;
 uses
   SysUtils, UnitSPI;
 
-function LireADC_MCP3008(SPI: TSPI; Canal: Byte): Word;
+function LireADC_MCP3008(SPI: TSPI; Canal: Byte): Word;  
 var
   TxData, RxData: array[0..2] of Byte;
 begin
@@ -1498,7 +1498,7 @@ sudo raspi-config
 sudo apt install libraspberrypi-bin
 
 # Tester caméra
-raspistill -o test.jpg
+raspistill -o test.jpg  
 raspivid -o test.h264 -t 10000
 ```
 
@@ -1512,7 +1512,7 @@ program CapturePhoto;
 uses
   SysUtils, Process;
 
-procedure CaptureImage(const Fichier: string; Largeur: Integer = 1920; Hauteur: Integer = 1080);
+procedure CaptureImage(const Fichier: string; Largeur: Integer = 1920; Hauteur: Integer = 1080);  
 var
   Proc: TProcess;
 begin
@@ -1752,18 +1752,18 @@ const
   PORT = 8080;
 
 // Fonctions GPIO simplifiées
-procedure SetGPIO(Pin: Integer; Value: Boolean);
+procedure SetGPIO(Pin: Integer; Value: Boolean);  
 begin
   WriteLn('GPIO', Pin, ' := ', Value);
   // Implémentation réelle via /sys/class/gpio
 end;
 
-function GetGPIO(Pin: Integer): Boolean;
+function GetGPIO(Pin: Integer): Boolean;  
 begin
   Result := Random(2) = 1;  // Simulation
 end;
 
-function HandleRequest(const Request: string): string;
+function HandleRequest(const Request: string): string;  
 var
   Method, Path, Body: string;
   JSON, ResponseJSON: TJSONObject;
@@ -1984,15 +1984,15 @@ end;
 
 ```ini
 [Unit]
-Description=Mon application FreePascal
+Description=Mon application FreePascal  
 After=network.target
 
 [Service]
-Type=simple
-User=pi
-WorkingDirectory=/home/pi/mon-app
-ExecStart=/home/pi/mon-app/programme
-Restart=always
+Type=simple  
+User=pi  
+WorkingDirectory=/home/pi/mon-app  
+ExecStart=/home/pi/mon-app/programme  
+Restart=always  
 RestartSec=10
 
 [Install]
@@ -2002,8 +2002,8 @@ WantedBy=multi-user.target
 **Activer :**
 
 ```bash
-sudo systemctl daemon-reload
-sudo systemctl enable mon-app.service
+sudo systemctl daemon-reload  
+sudo systemctl enable mon-app.service  
 sudo systemctl start mon-app.service
 
 # Vérifier status
@@ -2025,7 +2025,7 @@ program AvecLogging;
 uses
   SysUtils, Unix;
 
-procedure LogMessage(const Msg: string);
+procedure LogMessage(const Msg: string);  
 var
   F: TextFile;
   LogFile: string;
@@ -2085,7 +2085,7 @@ uses
 var
   PidFile: string;
 
-procedure CreerPidFile;
+procedure CreerPidFile;  
 var
   F: TextFile;
 begin
@@ -2096,13 +2096,13 @@ begin
   CloseFile(F);
 end;
 
-procedure SupprimerPidFile;
+procedure SupprimerPidFile;  
 begin
   if FileExists(PidFile) then
     DeleteFile(PidFile);
 end;
 
-procedure SignalHandler(Signal: cint); cdecl;
+procedure SignalHandler(Signal: cint); cdecl;  
 begin
   WriteLn('Signal reçu: ', Signal);
   SupprimerPidFile;
@@ -2140,7 +2140,7 @@ end.
 #!/bin/bash
 # watchdog.sh
 
-PIDFILE="/var/run/mon-app.pid"
+PIDFILE="/var/run/mon-app.pid"  
 PROGRAM="/home/pi/mon-app/programme"
 
 while true; do

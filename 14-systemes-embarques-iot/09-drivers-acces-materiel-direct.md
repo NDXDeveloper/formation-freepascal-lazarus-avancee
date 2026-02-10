@@ -15,15 +15,15 @@ Cette section explore comment FreePascal peut interagir avec le matériel, depui
 Un **registre** est une petite zone mémoire intégrée directement dans un périphérique matériel. En écrivant ou lisant des valeurs spécifiques, on contrôle le comportement du composant.
 
 ```
-Exemple : registre GPIO d'un microcontrôleur
+Exemple : registre GPIO d'un microcontrôleur  
 Adresse : 0x40020000
 
-Bit 0 : État de la broche PA0 (0=bas, 1=haut)
+Bit 0 : État de la broche PA0 (0=bas, 1=haut)  
 Bit 1 : État de la broche PA1
 ...
 Bit 15 : État de la broche PA15
 
-Pour allumer une LED sur PA5, on écrit 1 au bit 5 :
+Pour allumer une LED sur PA5, on écrit 1 au bit 5 :  
 Registre[0x40020000] := Registre[0x40020000] OR (1 shl 5);
 ```
 
@@ -65,13 +65,13 @@ Sur PC x86/x64, certains périphériques utilisent des **ports I/O** séparés d
 
 ```pascal
 // Instructions spéciales IN/OUT
-function InPortB(Port: Word): Byte; assembler;
+function InPortB(Port: Word): Byte; assembler;  
 asm
   mov dx, Port
   in  al, dx
 end;
 
-procedure OutPortB(Port: Word; Value: Byte); assembler;
+procedure OutPortB(Port: Word; Value: Byte); assembler;  
 asm
   mov dx, Port
   mov al, Value
@@ -118,7 +118,7 @@ var
   GPIOC_CRH_Ptr: PLongWord = PLongWord(GPIOC_CRH);
   GPIOC_ODR_Ptr: PLongWord = PLongWord(GPIOC_ODR);
 
-procedure InitGPIO;
+procedure InitGPIO;  
 begin
   // Activer l'horloge du GPIOC
   RCC_APB2ENR_Ptr^ := RCC_APB2ENR_Ptr^ or (1 shl 4);
@@ -127,17 +127,17 @@ begin
   GPIOC_CRH_Ptr^ := (GPIOC_CRH_Ptr^ and (not ($F shl 20))) or ($2 shl 20);
 end;
 
-procedure LED_On;
+procedure LED_On;  
 begin
   GPIOC_ODR_Ptr^ := GPIOC_ODR_Ptr^ or (1 shl LED_PIN);
 end;
 
-procedure LED_Off;
+procedure LED_Off;  
 begin
   GPIOC_ODR_Ptr^ := GPIOC_ODR_Ptr^ and (not (1 shl LED_PIN));
 end;
 
-procedure Delay(Count: LongWord);
+procedure Delay(Count: LongWord);  
 var
   i: LongWord;
 begin
@@ -196,7 +196,7 @@ begin
 end;
 
 // Utilisation
-procedure Main;
+procedure Main;  
 begin
   GPIO_Config(5, gmOutput, gpNone, gsMedium);  // PA5 en sortie
   GPIO_Config(0, gmInput, gpPullUp, gsLow);    // PA0 en entrée
@@ -226,7 +226,7 @@ type
 var
   USART1: PUSART_Registers = PUSART_Registers(USART1_BASE);
 
-procedure UART_Init(BaudRate: LongWord);
+procedure UART_Init(BaudRate: LongWord);  
 var
   SystemClock: LongWord;
   Divider: LongWord;
@@ -241,7 +241,7 @@ begin
   USART1^.CR1 := (1 shl 13) or (1 shl 3) or (1 shl 2);
 end;
 
-procedure UART_SendChar(c: Char);
+procedure UART_SendChar(c: Char);  
 begin
   // Attendre que le registre de transmission soit vide
   while (USART1^.SR and (1 shl 7)) = 0 do ;
@@ -249,7 +249,7 @@ begin
   USART1^.DR := Ord(c);
 end;
 
-procedure UART_SendString(s: string);
+procedure UART_SendString(s: string);  
 var
   i: Integer;
 begin
@@ -257,7 +257,7 @@ begin
     UART_SendChar(s[i]);
 end;
 
-function UART_ReceiveChar: Char;
+function UART_ReceiveChar: Char;  
 begin
   // Attendre qu'un caractère soit reçu
   while (USART1^.SR and (1 shl 5)) = 0 do ;
@@ -304,7 +304,7 @@ type
 var
   ADC1: PADC_Registers = PADC_Registers(ADC1_BASE);
 
-procedure ADC_Init;
+procedure ADC_Init;  
 begin
   // Activer l'ADC
   ADC1^.CR2 := ADC1^.CR2 or (1 shl 0);
@@ -317,7 +317,7 @@ begin
   while (ADC1^.CR2 and (1 shl 3)) <> 0 do ;
 end;
 
-function ADC_Read(Channel: Byte): Word;
+function ADC_Read(Channel: Byte): Word;  
 begin
   // Sélectionner le canal
   ADC1^.SQR3 := Channel and $1F;
@@ -333,7 +333,7 @@ begin
 end;
 
 // Convertir en voltage (0-3.3V)
-function ADC_ToVoltage(Value: Word): Real;
+function ADC_ToVoltage(Value: Word): Real;  
 begin
   Result := (Value * 3.3) / 4095.0;
 end;
@@ -388,7 +388,7 @@ type
 var
   TIM2: PTimer_Registers = PTimer_Registers(TIM2_BASE);
 
-procedure PWM_Init(Frequency: LongWord);
+procedure PWM_Init(Frequency: LongWord);  
 var
   SystemClock, Prescaler, Period: LongWord;
 begin
@@ -409,7 +409,7 @@ begin
   TIM2^.CR1 := TIM2^.CR1 or $1;
 end;
 
-procedure PWM_SetDutyCycle(Percent: Byte);
+procedure PWM_SetDutyCycle(Percent: Byte);  
 var
   DutyValue: LongWord;
 begin
@@ -453,7 +453,7 @@ var
   CompteurTicks: LongWord = 0;
 
 // Gestionnaire d'interruption du Timer
-procedure TIM2_IRQHandler; interrupt;
+procedure TIM2_IRQHandler; interrupt;  
 begin
   // Vérifier le flag d'interruption
   if (TIM2^.SR and $1) <> 0 then
@@ -466,7 +466,7 @@ begin
   end;
 end;
 
-procedure Timer_EnableInterrupt;
+procedure Timer_EnableInterrupt;  
 begin
   // Activer l'interruption de mise à jour
   TIM2^.DIER := TIM2^.DIER or $1;
@@ -498,7 +498,7 @@ Sur Windows moderne (Vista et ultérieur), l'accès direct au matériel depuis l
 
 ```pascal
 // ✗ NE FONCTIONNE PLUS sur Windows moderne
-procedure OutPortB(Port: Word; Value: Byte); assembler;
+procedure OutPortB(Port: Word; Value: Byte); assembler;  
 asm
   mov dx, Port
   mov al, Value
@@ -522,7 +522,7 @@ const
   IOCTL_CUSTOM_READ_PORT = $222000;
   IOCTL_CUSTOM_WRITE_PORT = $222004;
 
-function OpenDriver(DriverName: string): THandle;
+function OpenDriver(DriverName: string): THandle;  
 begin
   Result := CreateFile(
     PChar('\\.\' + DriverName),
@@ -535,7 +535,7 @@ begin
   );
 end;
 
-function ReadPortViaDriver(hDriver: THandle; Port: Word): Byte;
+function ReadPortViaDriver(hDriver: THandle; Port: Word): Byte;  
 var
   BytesReturned: DWORD;
   InBuffer: Word;
@@ -578,7 +578,7 @@ Bibliothèques tierces qui fournissent un driver générique pour accès ports/m
 
 ```pascal
 // Utilisation de InpOut32.dll
-function Inp32(PortAddress: Word): Byte; stdcall; external 'inpout32.dll';
+function Inp32(PortAddress: Word): Byte; stdcall; external 'inpout32.dll';  
 procedure Out32(PortAddress: Word; Data: Byte); stdcall; external 'inpout32.dll';
 
 // Maintenant fonctionnel (avec le driver InpOut32)
@@ -602,7 +602,7 @@ var
   hSerial: THandle;
   DCB: TDCB;
 
-procedure OpenSerialPort(PortName: string; BaudRate: DWORD);
+procedure OpenSerialPort(PortName: string; BaudRate: DWORD);  
 begin
   hSerial := CreateFile(
     PChar(PortName),  // 'COM3'
@@ -633,7 +633,7 @@ begin
     raise Exception.Create('SetCommState failed');
 end;
 
-procedure WriteSerial(Data: string);
+procedure WriteSerial(Data: string);  
 var
   BytesWritten: DWORD;
 begin
@@ -641,7 +641,7 @@ begin
     raise Exception.Create('WriteFile failed');
 end;
 
-function ReadSerial(MaxBytes: Integer): string;
+function ReadSerial(MaxBytes: Integer): string;  
 var
   Buffer: array[0..255] of Char;
   BytesRead: DWORD;
@@ -688,7 +688,7 @@ const
   GPIO_BASE = BCM2835_PERI_BASE + $200000;
   BLOCK_SIZE = 4096;
 
-procedure MapGPIOMemory;
+procedure MapGPIOMemory;  
 begin
   // Ouvrir /dev/mem (nécessite root ou capability)
   fdMem := FpOpen('/dev/mem', O_RDWR or O_SYNC);
@@ -709,7 +709,7 @@ begin
     raise Exception.Create('mmap failed');
 end;
 
-procedure UnmapGPIOMemory;
+procedure UnmapGPIOMemory;  
 begin
   FpMunmap(GPIO_Map, BLOCK_SIZE);
   FpClose(fdMem);
@@ -732,7 +732,7 @@ type
 var
   GPIO: PGPIO;
 
-procedure SetupGPIOPin(Pin: Byte; AsOutput: Boolean);
+procedure SetupGPIOPin(Pin: Byte; AsOutput: Boolean);  
 var
   Reg, Shift: Byte;
   Value: LongWord;
@@ -749,7 +749,7 @@ begin
   GPIO^.GPFSEL[Reg] := Value;
 end;
 
-procedure SetGPIOPin(Pin: Byte; High: Boolean);
+procedure SetGPIOPin(Pin: Byte; High: Boolean);  
 var
   Reg, Bit: Byte;
 begin
@@ -792,7 +792,7 @@ Linux expose les GPIO via le système de fichiers `/sys/class/gpio`.
 uses
   SysUtils;
 
-procedure ExportGPIO(Pin: Integer);
+procedure ExportGPIO(Pin: Integer);  
 var
   f: TextFile;
 begin
@@ -803,7 +803,7 @@ begin
   Sleep(100);  // Attendre création
 end;
 
-procedure UnexportGPIO(Pin: Integer);
+procedure UnexportGPIO(Pin: Integer);  
 var
   f: TextFile;
 begin
@@ -813,7 +813,7 @@ begin
   CloseFile(f);
 end;
 
-procedure SetGPIODirection(Pin: Integer; IsOutput: Boolean);
+procedure SetGPIODirection(Pin: Integer; IsOutput: Boolean);  
 var
   f: TextFile;
   Path: string;
@@ -830,7 +830,7 @@ begin
   CloseFile(f);
 end;
 
-procedure WriteGPIO(Pin: Integer; Value: Boolean);
+procedure WriteGPIO(Pin: Integer; Value: Boolean);  
 var
   f: TextFile;
   Path: string;
@@ -847,7 +847,7 @@ begin
   CloseFile(f);
 end;
 
-function ReadGPIO(Pin: Integer): Boolean;
+function ReadGPIO(Pin: Integer): Boolean;  
 var
   f: TextFile;
   Path, Line: string;
@@ -901,7 +901,7 @@ uses
 var
   fdSerial: Integer;
 
-procedure ConfigureSerialPort(Device: string; BaudRate: Cardinal);
+procedure ConfigureSerialPort(Device: string; BaudRate: Cardinal);  
 var
   tios: termios;
   Speed: Cardinal;
@@ -951,12 +951,12 @@ begin
   TCFlush(fdSerial, TCIOFLUSH);
 end;
 
-procedure WriteSerial(Data: string);
+procedure WriteSerial(Data: string);  
 begin
   FpWrite(fdSerial, Data[1], Length(Data));
 end;
 
-function ReadSerial(MaxBytes: Integer): string;
+function ReadSerial(MaxBytes: Integer): string;  
 var
   Buffer: array[0..255] of Char;
   BytesRead: Integer;
@@ -971,7 +971,7 @@ begin
     Result := '';
 end;
 
-procedure CloseSerial;
+procedure CloseSerial;  
 begin
   FpClose(fdSerial);
 end;
@@ -1004,7 +1004,7 @@ const
 var
   fdI2C: Integer;
 
-procedure OpenI2C(Device: string; SlaveAddr: Byte);
+procedure OpenI2C(Device: string; SlaveAddr: Byte);  
 begin
   // Ouvrir le bus I2C
   fdI2C := FpOpen(Device, O_RDWR);
@@ -1016,7 +1016,7 @@ begin
     raise Exception.Create('Cannot set I2C slave address');
 end;
 
-procedure WriteI2CReg(RegAddr, Value: Byte);
+procedure WriteI2CReg(RegAddr, Value: Byte);  
 var
   Buffer: array[0..1] of Byte;
 begin
@@ -1027,7 +1027,7 @@ begin
     raise Exception.Create('I2C write failed');
 end;
 
-function ReadI2CReg(RegAddr: Byte): Byte;
+function ReadI2CReg(RegAddr: Byte): Byte;  
 var
   Buffer: Byte;
 begin
@@ -1042,7 +1042,7 @@ begin
   Result := Buffer;
 end;
 
-procedure CloseI2C;
+procedure CloseI2C;  
 begin
   FpClose(fdI2C);
 end;
@@ -1109,7 +1109,7 @@ type
 var
   fdSPI: Integer;
 
-procedure OpenSPI(Device: string; Mode: Byte; Speed: Cardinal);
+procedure OpenSPI(Device: string; Mode: Byte; Speed: Cardinal);  
 var
   BitsPerWord: Byte;
 begin
@@ -1131,7 +1131,7 @@ begin
     raise Exception.Create('Cannot set SPI bits per word');
 end;
 
-procedure SPITransfer(TxData: PByte; RxData: PByte; Len: Integer);
+procedure SPITransfer(TxData: PByte; RxData: PByte; Len: Integer);  
 var
   Transfer: spi_ioc_transfer;
 begin
@@ -1147,13 +1147,13 @@ begin
     raise Exception.Create('SPI transfer failed');
 end;
 
-procedure CloseSPI;
+procedure CloseSPI;  
 begin
   FpClose(fdSPI);
 end;
 
 // Exemple : lecture d'un registre MCP3008 (ADC SPI)
-function ReadMCP3008(Channel: Byte): Word;
+function ReadMCP3008(Channel: Byte): Word;  
 var
   TxBuf, RxBuf: array[0..2] of Byte;
 begin
@@ -1200,7 +1200,7 @@ var
   Context: Plibusb_context;
   DevHandle: Plibusb_device_handle;
 
-procedure InitUSB;
+procedure InitUSB;  
 var
   r: Integer;
 begin
@@ -1219,7 +1219,7 @@ begin
     raise Exception.Create('Cannot claim interface');
 end;
 
-procedure WriteUSB(Endpoint: Byte; Data: PByte; Length: Integer);
+procedure WriteUSB(Endpoint: Byte; Data: PByte; Length: Integer);  
 var
   Transferred: Integer;
   r: Integer;
@@ -1237,7 +1237,7 @@ begin
     raise Exception.CreateFmt('USB write failed: %d', [r]);
 end;
 
-function ReadUSB(Endpoint: Byte; Data: PByte; MaxLength: Integer): Integer;
+function ReadUSB(Endpoint: Byte; Data: PByte; MaxLength: Integer): Integer;  
 var
   Transferred: Integer;
   r: Integer;
@@ -1257,7 +1257,7 @@ begin
   Result := Transferred;
 end;
 
-procedure CloseUSB;
+procedure CloseUSB;  
 begin
   libusb_release_interface(DevHandle, 0);
   libusb_close(DevHandle);
@@ -1308,7 +1308,7 @@ type
 var
   DMA_CH1: PDMA_Channel = PDMA_Channel(DMA1_Channel1);
 
-procedure ConfigureDMA_ADC_to_Memory(var Buffer: array of Word);
+procedure ConfigureDMA_ADC_to_Memory(var Buffer: array of Word);  
 begin
   // Désactiver le canal DMA
   DMA_CH1^.CCR := 0;
@@ -1381,7 +1381,7 @@ type
 var
   NVIC: PNVIC = PNVIC(NVIC_BASE);
 
-procedure EnableIRQ(IRQn: Byte; Priority: Byte);
+procedure EnableIRQ(IRQn: Byte; Priority: Byte);  
 var
   RegIndex, BitPos: Byte;
 begin
@@ -1394,7 +1394,7 @@ begin
   NVIC^.IP[IRQn] := Priority shl 4;  // 4 bits de priorité
 end;
 
-procedure DisableIRQ(IRQn: Byte);
+procedure DisableIRQ(IRQn: Byte);  
 var
   RegIndex, BitPos: Byte;
 begin
@@ -1422,7 +1422,7 @@ var
   CompteurUSART: LongWord = 0;
 
 // Interruption de priorité basse
-procedure TIM2_IRQHandler; interrupt;
+procedure TIM2_IRQHandler; interrupt;  
 begin
   Inc(CompteurTIM2);
 
@@ -1437,7 +1437,7 @@ begin
 end;
 
 // Interruption de priorité haute
-procedure USART1_IRQHandler; interrupt;
+procedure USART1_IRQHandler; interrupt;  
 begin
   Inc(CompteurUSART);
 
@@ -1472,7 +1472,7 @@ type
 var
   IWDG: PIWDG = PIWDG(IWDG_BASE);
 
-procedure InitWatchdog(TimeoutMs: Word);
+procedure InitWatchdog(TimeoutMs: Word);  
 var
   Prescaler, Reload: Byte;
 begin
@@ -1492,7 +1492,7 @@ begin
   IWDG^.KR := $CCCC;  // Start
 end;
 
-procedure FeedWatchdog;
+procedure FeedWatchdog;  
 begin
   IWDG^.KR := $AAAA;  // Reload counter
 end;
@@ -1526,7 +1526,7 @@ Les interfaces JTAG/SWD permettent le debugging matériel.
 // À compiler avec options de debug
 
 {$IFDEF DEBUG}
-procedure InitDebugInterface;
+procedure InitDebugInterface;  
 const
   DBGMCU_BASE = $E0042000;
   DBGMCU_CR = DBGMCU_BASE + $04;
@@ -1546,7 +1546,7 @@ end;
 
 ```pascal
 // Breakpoint en assembleur inline
-procedure HardwareBreakpoint;
+procedure HardwareBreakpoint;  
 begin
   {$IFDEF DEBUG}
   asm
@@ -1556,7 +1556,7 @@ begin
 end;
 
 // Dans le code
-procedure FonctionCritique;
+procedure FonctionCritique;  
 begin
   HardwareBreakpoint();  // Le debugger s'arrête ici
 
@@ -1600,7 +1600,7 @@ type
 // Opération atomique pour multi-threading
 function AtomicIncrement(var Value: LongInt): LongInt; assembler;
 {$IFDEF CPUARM}
-asm
+asm  
 retry:
   ldrex r1, [r0]      // Load exclusive
   add r1, r1, #1      // Increment
@@ -1615,7 +1615,7 @@ end;
 ### Cache et barrières mémoire
 
 ```pascal
-procedure FlushCache;
+procedure FlushCache;  
 begin
   {$IFDEF CPUARM}
   asm
@@ -1625,7 +1625,7 @@ begin
   {$ENDIF}
 end;
 
-procedure InvalidateCache;
+procedure InvalidateCache;  
 begin
   {$IFDEF CPUARM}
   // Invalider le cache d'instructions
@@ -1663,7 +1663,7 @@ var
   LogFile: TSDFile;
   IsLogging: Boolean = False;
 
-procedure InitHardware;
+procedure InitHardware;  
 begin
   // GPIO
   GPIO_Init(LED_STATUS, gmOutput);
@@ -1677,14 +1677,14 @@ begin
   UART_SendString('Data Logger v1.0'#13#10);
 end;
 
-procedure ReadSensors;
+procedure ReadSensors;  
 begin
   // Simulé : lecture I2C de BME280
   Temperature := ReadBME280_Temperature();
   Humidity := ReadBME280_Humidity();
 end;
 
-procedure LogData;
+procedure LogData;  
 var
   Line: string;
   Timestamp: LongWord;
@@ -1701,7 +1701,7 @@ begin
 end;
 
 // Interruption bouton
-procedure EXTI2_IRQHandler; interrupt;
+procedure EXTI2_IRQHandler; interrupt;  
 begin
   IsLogging := not IsLogging;
 
@@ -1775,7 +1775,7 @@ const
 
 ```pascal
 // ✓ BON
-if FpOpen('/dev/i2c-1', O_RDWR) < 0 then
+if FpOpen('/dev/i2c-1', O_RDWR) < 0 then  
 begin
   WriteLn('Error: ', StrError(errno));
   Halt(1);
@@ -1790,7 +1790,7 @@ fd := FpOpen('/dev/i2c-1', O_RDWR);
 
 ```pascal
 // ✓ BON
-function WaitForFlag(Timeout: LongWord): Boolean;
+function WaitForFlag(Timeout: LongWord): Boolean;  
 var
   StartTime: LongWord;
 begin
@@ -1813,7 +1813,7 @@ while (USART1^.SR and FLAG_TXE) = 0 do ;  // Peut bloquer indéfiniment
 
 ```pascal
 // ✓ BON
-procedure UpdateSharedVariable;
+procedure UpdateSharedVariable;  
 begin
   DisableInterrupts();
   try
@@ -1921,7 +1921,7 @@ type
     Pressure: Real;
   end;
 
-procedure ReadAndLogWeather;
+procedure ReadAndLogWeather;  
 var
   Data: TWeatherData;
 begin
@@ -1981,7 +1981,7 @@ var
   CurrentPos: array[TAxis] of LongInt;
   TargetPos: array[TAxis] of LongInt;
 
-procedure StepMotor(Axis: TAxis; Direction: Boolean);
+procedure StepMotor(Axis: TAxis; Direction: Boolean);  
 begin
   case Axis of
     axisX:
@@ -2007,7 +2007,7 @@ begin
     Dec(CurrentPos[Axis]);
 end;
 
-procedure MoveLinear(X, Y, Z: Real; FeedRate: Real);
+procedure MoveLinear(X, Y, Z: Real; FeedRate: Real);  
 var
   StepsX, StepsY, StepsZ: LongInt;
   TotalSteps, Step: LongInt;
@@ -2042,7 +2042,7 @@ begin
   end;
 end;
 
-procedure ParseGCode(Line: string);
+procedure ParseGCode(Line: string);  
 var
   X, Y, Z, F: Real;
 begin
@@ -2103,7 +2103,7 @@ var
   IsBuffer1Active: Boolean;
   SamplesCollected: LongWord;
 
-procedure DMA_ADC_Complete_IRQHandler; interrupt;
+procedure DMA_ADC_Complete_IRQHandler; interrupt;  
 begin
   // Buffer plein, switcher
   if IsBuffer1Active then
@@ -2128,7 +2128,7 @@ begin
   DMA1^.LISR := DMA1^.LISR;
 end;
 
-procedure ProcessBuffer(Buf: PWord; Size: Integer);
+procedure ProcessBuffer(Buf: PWord; Size: Integer);  
 var
   i: Integer;
   Min, Max, Avg: Word;
@@ -2156,7 +2156,7 @@ begin
               Min, Max, Avg, SamplesCollected);
 end;
 
-procedure ConfigureHighSpeedADC;
+procedure ConfigureHighSpeedADC;  
 begin
   // ADC en mode continu
   ADC1^.CR2 := ADC1^.CR2 or ADC_CR2_CONT;
@@ -2211,7 +2211,7 @@ OpenOCD (Open On-Chip Debugger) permet le debugging via JTAG/SWD.
 
 ```bash
 # Fichier: openocd.cfg
-source [find interface/stlink.cfg]
+source [find interface/stlink.cfg]  
 source [find target/stm32f1x.cfg]
 
 # Activer semihosting (printf vers console PC)
@@ -2226,7 +2226,7 @@ openocd -f openocd.cfg
 **Dans FreePascal** :
 ```pascal
 // Semihosting pour debug printf
-procedure Debug_Print(s: string);
+procedure Debug_Print(s: string);  
 var
   Args: array[0..2] of LongWord;
 begin
@@ -2254,18 +2254,18 @@ Utiliser GPIO pour débugger le timing.
 var
   DebugPin: Byte = 12;
 
-procedure DEBUG_PulseStart; inline;
+procedure DEBUG_PulseStart; inline;  
 begin
   GPIO_Set(DebugPin);
 end;
 
-procedure DEBUG_PulseEnd; inline;
+procedure DEBUG_PulseEnd; inline;  
 begin
   GPIO_Clear(DebugPin);
 end;
 
 // Utilisation
-procedure FonctionAChronometre;
+procedure FonctionAChronometre;  
 begin
   DEBUG_PulseStart;
 
@@ -2280,7 +2280,7 @@ end;
 ### Assertion matérielle
 
 ```pascal
-procedure HardwareAssert(Condition: Boolean; Msg: string);
+procedure HardwareAssert(Condition: Boolean; Msg: string);  
 begin
   if not Condition then
   begin
@@ -2300,7 +2300,7 @@ begin
 end;
 
 // Utilisation
-procedure ConfigurerPeriph;
+procedure ConfigurerPeriph;  
 begin
   HardwareAssert(RCC^.CR and RCC_CR_HSERDY <> 0,
                  'HSE not ready');
@@ -2327,7 +2327,7 @@ type
 var
   LastError: THardwareError = heNone;
 
-procedure CheckHardwareHealth;
+procedure CheckHardwareHealth;  
 var
   Voltage, Current, Temperature: Real;
 begin
@@ -2357,7 +2357,7 @@ begin
   end;
 end;
 
-procedure EnterSafeMode;
+procedure EnterSafeMode;  
 begin
   // Désactiver sorties dangereuses
   DisableMotors();
@@ -2379,7 +2379,7 @@ const
   MAX_RETRIES = 3;
   RETRY_DELAY = 100;
 
-function CommunicationRobuste(Commande: Byte): Boolean;
+function CommunicationRobuste(Commande: Byte): Boolean;  
 var
   Retry: Integer;
   Response: Byte;
@@ -2412,7 +2412,7 @@ end;
 
 ```pascal
 // Boucle ultra-rapide pour bit-banging
-procedure FastBitBang(Data: Byte); assembler; nostackframe;
+procedure FastBitBang(Data: Byte); assembler; nostackframe;  
 asm
   // r0 contient Data
   mov r1, #8        // Compteur de bits
@@ -2449,7 +2449,7 @@ end;
 
 ```pascal
 {$IFDEF CPUARMV7M}
-procedure EnableFPU;
+procedure EnableFPU;  
 const
   CPACR = $E000ED88;
 var
@@ -2462,7 +2462,7 @@ end;
 {$ENDIF}
 
 // Calculs flottants accélérés
-function FastSqrt(x: Single): Single; inline;
+function FastSqrt(x: Single): Single; inline;  
 begin
   asm
     vsqrt.f32 s0, s0  // Instruction FPU matérielle
@@ -2501,7 +2501,7 @@ Pour les applications critiques (médical, automobile, aéronautique) :
 }
 
 // Traçabilité complète
-procedure SetMotorSpeed(Speed: Word); // REQ-MOT-001
+procedure SetMotorSpeed(Speed: Word); // REQ-MOT-001  
 var
   PWMValue: Word;
 begin

@@ -111,7 +111,7 @@ implementation
 
 { TTemperatureSensor }
 
-constructor TTemperatureSensor.Create(const ABrokerHost: string; ABrokerPort: Integer);
+constructor TTemperatureSensor.Create(const ABrokerHost: string; ABrokerPort: Integer);  
 begin
   FBrokerHost := ABrokerHost;
   FBrokerPort := ABrokerPort;
@@ -133,7 +133,7 @@ begin
   FMQTTClient.CleanSession := True;
 end;
 
-destructor TTemperatureSensor.Destroy;
+destructor TTemperatureSensor.Destroy;  
 begin
   if FConnected then
     Disconnect;
@@ -141,7 +141,7 @@ begin
   inherited Destroy;
 end;
 
-function TTemperatureSensor.Connect: Boolean;
+function TTemperatureSensor.Connect: Boolean;  
 begin
   try
     FMQTTClient.Connect;
@@ -155,7 +155,7 @@ begin
   end;
 end;
 
-procedure TTemperatureSensor.Disconnect;
+procedure TTemperatureSensor.Disconnect;  
 begin
   if FConnected then
   begin
@@ -164,7 +164,7 @@ begin
   end;
 end;
 
-procedure TTemperatureSensor.PublishTemperature(const Topic: string; Temperature: Double);
+procedure TTemperatureSensor.PublishTemperature(const Topic: string; Temperature: Double);  
 var
   Payload: string;
 begin
@@ -183,19 +183,19 @@ begin
   WriteLn('Publié : ', Topic, ' = ', Payload);
 end;
 
-procedure TTemperatureSensor.OnConnect(Sender: TObject);
+procedure TTemperatureSensor.OnConnect(Sender: TObject);  
 begin
   FConnected := True;
   WriteLn('Connecté au broker MQTT : ', FBrokerHost, ':', FBrokerPort);
 end;
 
-procedure TTemperatureSensor.OnDisconnect(Sender: TObject);
+procedure TTemperatureSensor.OnDisconnect(Sender: TObject);  
 begin
   FConnected := False;
   WriteLn('Déconnecté du broker MQTT');
 end;
 
-procedure TTemperatureSensor.OnError(Sender: TObject; const ErrorMsg: string);
+procedure TTemperatureSensor.OnError(Sender: TObject; const ErrorMsg: string);  
 begin
   WriteLn('Erreur MQTT : ', ErrorMsg);
 end;
@@ -292,7 +292,7 @@ implementation
 
 { TTemperatureMonitor }
 
-constructor TTemperatureMonitor.Create(const ABrokerHost: string; ABrokerPort: Integer);
+constructor TTemperatureMonitor.Create(const ABrokerHost: string; ABrokerPort: Integer);  
 begin
   FBrokerHost := ABrokerHost;
   FBrokerPort := ABrokerPort;
@@ -305,24 +305,24 @@ begin
   FMQTTClient.OnMessage := @OnMessage;
 end;
 
-destructor TTemperatureMonitor.Destroy;
+destructor TTemperatureMonitor.Destroy;  
 begin
   FMQTTClient.Free;
   inherited Destroy;
 end;
 
-procedure TTemperatureMonitor.Connect;
+procedure TTemperatureMonitor.Connect;  
 begin
   FMQTTClient.Connect;
 end;
 
-procedure TTemperatureMonitor.Subscribe(const Topic: string);
+procedure TTemperatureMonitor.Subscribe(const Topic: string);  
 begin
   WriteLn('Abonnement au topic : ', Topic);
   FMQTTClient.Subscribe(Topic, 1); // QoS 1
 end;
 
-procedure TTemperatureMonitor.Run;
+procedure TTemperatureMonitor.Run;  
 begin
   WriteLn('En attente de messages... (Ctrl+C pour arrêter)');
   // Boucle infinie pour recevoir les messages
@@ -333,7 +333,7 @@ begin
   end;
 end;
 
-procedure TTemperatureMonitor.OnConnect(Sender: TObject);
+procedure TTemperatureMonitor.OnConnect(Sender: TObject);  
 begin
   WriteLn('Connecté au broker MQTT');
 end;
@@ -345,7 +345,7 @@ begin
   ProcessTemperature(Topic, Payload);
 end;
 
-procedure TTemperatureMonitor.ProcessTemperature(const Topic, Payload: string);
+procedure TTemperatureMonitor.ProcessTemperature(const Topic, Payload: string);  
 var
   JSONData: TJSONData;
   JSONObject: TJSONObject;
@@ -402,11 +402,11 @@ net start mosquitto
 
 ```bash
 # Installation
-sudo apt-get update
+sudo apt-get update  
 sudo apt-get install mosquitto mosquitto-clients
 
 # Démarrer le service
-sudo systemctl start mosquitto
+sudo systemctl start mosquitto  
 sudo systemctl enable mosquitto
 
 # Vérifier le statut
@@ -441,9 +441,9 @@ CoAP est souvent décrit comme "HTTP pour l'IoT". Il utilise une architecture RE
 ```
 HTTP                    CoAP
 ----                    ----
-TCP (lourd)            UDP (léger)
-Port 80/443            Port 5683/5684
-Header texte           Header binaire (4 octets)
+TCP (lourd)            UDP (léger)  
+Port 80/443            Port 5683/5684  
+Header texte           Header binaire (4 octets)  
 Méthodes verbales      Méthodes codées
 ```
 
@@ -508,7 +508,7 @@ implementation
 
 { TCOAPClient }
 
-constructor TCOAPClient.Create(const AHost: string; APort: Integer);
+constructor TCOAPClient.Create(const AHost: string; APort: Integer);  
 begin
   FHost := AHost;
   FPort := APort;
@@ -516,7 +516,7 @@ begin
   FSocket := TUDPBlockSocket.Create;
 end;
 
-destructor TCOAPClient.Destroy;
+destructor TCOAPClient.Destroy;  
 begin
   FSocket.Free;
   inherited Destroy;
@@ -578,7 +578,7 @@ begin
     Result := Result + Chr($FF) + Payload;
 end;
 
-function TCOAPClient.GET(const URI: string; out Response: string): Boolean;
+function TCOAPClient.GET(const URI: string; out Response: string): Boolean;  
 var
   Packet: string;
   RecvData: string;
@@ -659,14 +659,14 @@ begin
 end;
 
 // Implémentations simplifiées de PUT et DELETE
-function TCOAPClient.PUT(const URI: string; const Payload: string): Boolean;
+function TCOAPClient.PUT(const URI: string; const Payload: string): Boolean;  
 var
   Response: string;
 begin
   Result := POST(URI, Payload, Response); // Simplifié
 end;
 
-function TCOAPClient.DELETE(const URI: string): Boolean;
+function TCOAPClient.DELETE(const URI: string): Boolean;  
 var
   Response: string;
 begin
@@ -813,7 +813,7 @@ implementation
 
 { TLoRaWANHandler }
 
-constructor TLoRaWANHandler.Create(const MQTTBroker: string; MQTTPort: Integer);
+constructor TLoRaWANHandler.Create(const MQTTBroker: string; MQTTPort: Integer);  
 begin
   SetLength(FDevices, 0);
 
@@ -824,20 +824,20 @@ begin
   FMQTTClient.OnMessage := @OnMQTTMessage;
 end;
 
-destructor TLoRaWANHandler.Destroy;
+destructor TLoRaWANHandler.Destroy;  
 begin
   FMQTTClient.Free;
   inherited Destroy;
 end;
 
-procedure TLoRaWANHandler.Connect;
+procedure TLoRaWANHandler.Connect;  
 begin
   WriteLn('Connexion au broker MQTT...');
   FMQTTClient.Connect;
   WriteLn('Connecté');
 end;
 
-procedure TLoRaWANHandler.SubscribeToGateway(const GatewayID: string);
+procedure TLoRaWANHandler.SubscribeToGateway(const GatewayID: string);  
 begin
   // S'abonner aux messages uplink de la gateway
   // Format typique : application/[appID]/device/[devEUI]/rx
@@ -866,7 +866,7 @@ begin
   end;
 end;
 
-procedure TLoRaWANHandler.ProcessUplinkMessage(const JSONData: TJSONObject);
+procedure TLoRaWANHandler.ProcessUplinkMessage(const JSONData: TJSONObject);  
 var
   DevEUI: string;
   DeviceIndex: Integer;
@@ -981,7 +981,7 @@ begin
   end;
 end;
 
-function TLoRaWANHandler.FindDeviceByEUI(const DevEUI: string): Integer;
+function TLoRaWANHandler.FindDeviceByEUI(const DevEUI: string): Integer;  
 var
   i: Integer;
 begin
@@ -996,7 +996,7 @@ begin
   end;
 end;
 
-procedure TLoRaWANHandler.ProcessMessages;
+procedure TLoRaWANHandler.ProcessMessages;  
 begin
   // Boucle de traitement des messages
   while True do
@@ -1006,7 +1006,7 @@ begin
   end;
 end;
 
-procedure TLoRaWANHandler.SendDownlink(const DevEUI: string; const Payload: string);
+procedure TLoRaWANHandler.SendDownlink(const DevEUI: string; const Payload: string);  
 var
   DownlinkJSON: TJSONObject;
   DownlinkTopic: string;
@@ -1109,7 +1109,7 @@ implementation
 
 { TLoRaPayloadEncoder }
 
-class function TLoRaPayloadEncoder.EncodeTemperature(Temp: Double): string;
+class function TLoRaPayloadEncoder.EncodeTemperature(Temp: Double): string;  
 var
   TempInt: SmallInt;
 begin
@@ -1119,7 +1119,7 @@ begin
   Result := IntToHex(Hi(TempInt), 2) + IntToHex(Lo(TempInt), 2);
 end;
 
-class function TLoRaPayloadEncoder.EncodeGPS(Latitude, Longitude: Double): string;
+class function TLoRaPayloadEncoder.EncodeGPS(Latitude, Longitude: Double): string;  
 var
   LatInt, LonInt: LongInt;
 begin
@@ -1138,7 +1138,7 @@ begin
             IntToHex(LonInt and $FF, 2);
 end;
 
-class function TLoRaPayloadEncoder.EncodeBatteryLevel(BatteryPercent: Byte): string;
+class function TLoRaPayloadEncoder.EncodeBatteryLevel(BatteryPercent: Byte): string;  
 begin
   // Encoder le niveau de batterie sur 1 octet (0-100%)
   if BatteryPercent > 100 then
@@ -1290,7 +1290,7 @@ implementation
 
 { TTTNClient }
 
-constructor TTTNClient.Create(const AppID, AccessKey, Region: string);
+constructor TTTNClient.Create(const AppID, AccessKey, Region: string);  
 begin
   FAppID := AppID;
   FAccessKey := AccessKey;
@@ -1309,25 +1309,25 @@ begin
   WriteLn('Client TTN configuré pour région: ', FRegion);
 end;
 
-destructor TTTNClient.Destroy;
+destructor TTTNClient.Destroy;  
 begin
   FMQTTClient.Free;
   inherited Destroy;
 end;
 
-procedure TTTNClient.Connect;
+procedure TTTNClient.Connect;  
 begin
   WriteLn('Connexion à The Things Network...');
   FMQTTClient.Connect;
 end;
 
-procedure TTTNClient.OnConnect(Sender: TObject);
+procedure TTTNClient.OnConnect(Sender: TObject);  
 begin
   WriteLn('✓ Connecté à TTN');
   SubscribeToDevices;
 end;
 
-procedure TTTNClient.SubscribeToDevices;
+procedure TTTNClient.SubscribeToDevices;  
 begin
   // S'abonner aux uplinks de tous les périphériques
   FMQTTClient.Subscribe('v3/' + FAppID + '/devices/+/up', 0);
@@ -1396,7 +1396,7 @@ begin
   WriteLn;
 end;
 
-procedure TTTNClient.Run;
+procedure TTTNClient.Run;  
 begin
   WriteLn('Écoute des messages... (Ctrl+C pour arrêter)');
   while True do
@@ -1640,7 +1640,7 @@ var
 
 { TIoTPlatform }
 
-constructor TIoTPlatform.Create;
+constructor TIoTPlatform.Create;  
 begin
   WriteLn('=== Plateforme IoT Unifiée ===');
   WriteLn('Initialisation...');
@@ -1679,7 +1679,7 @@ begin
   WriteLn;
 end;
 
-destructor TIoTPlatform.Destroy;
+destructor TIoTPlatform.Destroy;  
 begin
   WriteLn('Arrêt de la plateforme...');
 
@@ -1697,7 +1697,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TIoTPlatform.Start;
+procedure TIoTPlatform.Start;  
 begin
   WriteLn('Démarrage de la plateforme...');
   WriteLn;
@@ -1746,7 +1746,7 @@ begin
   end;
 end;
 
-procedure TIoTPlatform.Stop;
+procedure TIoTPlatform.Stop;  
 begin
   if FMQTTBroker.Connected then
     FMQTTBroker.Disconnect;
@@ -1754,7 +1754,7 @@ begin
   WriteLn('Plateforme arrêtée');
 end;
 
-procedure TIoTPlatform.ProcessMQTTData(const Topic, Data: string);
+procedure TIoTPlatform.ProcessMQTTData(const Topic, Data: string);  
 var
   Parts: TStringList;
   SensorType, SensorID: string;
@@ -1808,7 +1808,7 @@ begin
   WriteLn;
 end;
 
-procedure TIoTPlatform.ProcessLoRaData(const DevEUI, Data: string);
+procedure TIoTPlatform.ProcessLoRaData(const DevEUI, Data: string);  
 var
   Temperature, Humidity: Double;
   Battery: Byte;
@@ -1838,7 +1838,7 @@ begin
   WriteLn;
 end;
 
-procedure TIoTPlatform.ProcessCOAPData(const DeviceID, Data: string);
+procedure TIoTPlatform.ProcessCOAPData(const DeviceID, Data: string);  
 begin
   WriteLn('[CoAP] ', DeviceID);
   WriteLn('  Data: ', Data);
@@ -1888,7 +1888,7 @@ begin
   Query.Free;
 end;
 
-procedure TIoTPlatform.CheckAlerts(const DeviceID: string; Value: Double);
+procedure TIoTPlatform.CheckAlerts(const DeviceID: string; Value: Double);  
 begin
   // Exemple d'alertes simples
   if Value > 30.0 then
@@ -1899,7 +1899,7 @@ begin
   // Ici, vous pourriez envoyer des emails, SMS, notifications push, etc.
 end;
 
-function TIoTPlatform.GetDeviceStatus(const DeviceID: string): string;
+function TIoTPlatform.GetDeviceStatus(const DeviceID: string): string;  
 var
   Query: TSQLQuery;
   Status: TJSONObject;
@@ -1938,7 +1938,7 @@ begin
   end;
 end;
 
-function TIoTPlatform.GetAllDevices: TStringList;
+function TIoTPlatform.GetAllDevices: TStringList;  
 var
   Query: TSQLQuery;
 begin
@@ -2031,7 +2031,7 @@ implementation
 
 { TSecureMQTTClient }
 
-constructor TSecureMQTTClient.Create(const BrokerHost: string; BrokerPort: Integer);
+constructor TSecureMQTTClient.Create(const BrokerHost: string; BrokerPort: Integer);  
 begin
   FMQTTClient := TMQTTClient.Create;
   FMQTTClient.Host := BrokerHost;
@@ -2042,13 +2042,13 @@ begin
   FMQTTClient.UseSSL := True;
 end;
 
-destructor TSecureMQTTClient.Destroy;
+destructor TSecureMQTTClient.Destroy;  
 begin
   FMQTTClient.Free;
   inherited Destroy;
 end;
 
-procedure TSecureMQTTClient.SetCredentials(const Username, Password: string);
+procedure TSecureMQTTClient.SetCredentials(const Username, Password: string);  
 begin
   FUsername := Username;
   FPassword := Password;
@@ -2070,7 +2070,7 @@ begin
   FMQTTClient.SSLVersion := sslvTLSv1_2; // Utiliser TLS 1.2 minimum
 end;
 
-function TSecureMQTTClient.Connect: Boolean;
+function TSecureMQTTClient.Connect: Boolean;  
 begin
   try
     WriteLn('Connexion sécurisée à ', FMQTTClient.Host, ':', FMQTTClient.Port);
@@ -2086,7 +2086,7 @@ begin
   end;
 end;
 
-procedure TSecureMQTTClient.Publish(const Topic, Payload: string);
+procedure TSecureMQTTClient.Publish(const Topic, Payload: string);  
 begin
   FMQTTClient.Publish(Topic, Payload, 1, False);
 end;
@@ -2106,8 +2106,8 @@ openssl req -new -x509 -days 365 -extensions v3_ca ^
   -keyout ca.key -out ca.crt
 
 # Générer un certificat client
-openssl genrsa -out client.key 2048
-openssl req -new -key client.key -out client.csr
+openssl genrsa -out client.key 2048  
+openssl req -new -key client.key -out client.csr  
 openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key ^
   -CAcreateserial -out client.crt -days 365
 ```
@@ -2121,8 +2121,8 @@ openssl req -new -x509 -days 365 -extensions v3_ca \
   -keyout ca.key -out ca.crt
 
 # Générer un certificat client
-openssl genrsa -out client.key 2048
-openssl req -new -key client.key -out client.csr
+openssl genrsa -out client.key 2048  
+openssl req -new -key client.key -out client.csr  
 openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key \
   -CAcreateserial -out client.crt -days 365
 ```
@@ -2160,7 +2160,7 @@ uses
 
 { TLoRaWANSecurity }
 
-class function TLoRaWANSecurity.GenerateDevEUI: string;
+class function TLoRaWANSecurity.GenerateDevEUI: string;  
 var
   i: Integer;
   B: Byte;
@@ -2174,7 +2174,7 @@ begin
   end;
 end;
 
-class function TLoRaWANSecurity.GenerateAppKey: string;
+class function TLoRaWANSecurity.GenerateAppKey: string;  
 var
   i: Integer;
   B: Byte;
@@ -2282,7 +2282,7 @@ const
 ### 6.2 Gestion des erreurs
 
 ```pascal
-procedure ConnectWithRetry(Client: TMQTTClient; MaxRetries: Integer);
+procedure ConnectWithRetry(Client: TMQTTClient; MaxRetries: Integer);  
 var
   Retry: Integer;
 begin
@@ -2347,7 +2347,7 @@ implementation
 
 { TIoTLogger }
 
-constructor TIoTLogger.Create(const FileName: string; MinLevel: TLogLevel);
+constructor TIoTLogger.Create(const FileName: string; MinLevel: TLogLevel);  
 begin
   FFileName := FileName;
   FMinLevel := MinLevel;
@@ -2359,13 +2359,13 @@ begin
     Rewrite(FLogFile);
 end;
 
-destructor TIoTLogger.Destroy;
+destructor TIoTLogger.Destroy;  
 begin
   CloseFile(FLogFile);
   inherited Destroy;
 end;
 
-procedure TIoTLogger.Log(Level: TLogLevel; const Message: string);
+procedure TIoTLogger.Log(Level: TLogLevel; const Message: string);  
 const
   LevelStr: array[TLogLevel] of string =
     ('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL');
@@ -2383,27 +2383,27 @@ begin
   end;
 end;
 
-procedure TIoTLogger.Debug(const Message: string);
+procedure TIoTLogger.Debug(const Message: string);  
 begin
   Log(llDebug, Message);
 end;
 
-procedure TIoTLogger.Info(const Message: string);
+procedure TIoTLogger.Info(const Message: string);  
 begin
   Log(llInfo, Message);
 end;
 
-procedure TIoTLogger.Warning(const Message: string);
+procedure TIoTLogger.Warning(const Message: string);  
 begin
   Log(llWarning, Message);
 end;
 
-procedure TIoTLogger.Error(const Message: string);
+procedure TIoTLogger.Error(const Message: string);  
 begin
   Log(llError, Message);
 end;
 
-procedure TIoTLogger.Critical(const Message: string);
+procedure TIoTLogger.Critical(const Message: string);  
 begin
   Log(llCritical, Message);
 end;
@@ -2444,7 +2444,7 @@ implementation
 
 { TIoTConfig }
 
-constructor TIoTConfig.Create(const ConfigFile: string);
+constructor TIoTConfig.Create(const ConfigFile: string);  
 begin
   FIniFile := TIniFile.Create(ConfigFile);
 
@@ -2461,43 +2461,43 @@ begin
   end;
 end;
 
-destructor TIoTConfig.Destroy;
+destructor TIoTConfig.Destroy;  
 begin
   FIniFile.Free;
   inherited Destroy;
 end;
 
-function TIoTConfig.GetMQTTBroker: string;
+function TIoTConfig.GetMQTTBroker: string;  
 begin
   Result := FIniFile.ReadString('MQTT', 'Broker', 'localhost');
 end;
 
-function TIoTConfig.GetMQTTPort: Integer;
+function TIoTConfig.GetMQTTPort: Integer;  
 begin
   Result := FIniFile.ReadInteger('MQTT', 'Port', 1883);
 end;
 
-function TIoTConfig.GetMQTTUsername: string;
+function TIoTConfig.GetMQTTUsername: string;  
 begin
   Result := FIniFile.ReadString('MQTT', 'Username', '');
 end;
 
-function TIoTConfig.GetMQTTPassword: string;
+function TIoTConfig.GetMQTTPassword: string;  
 begin
   Result := FIniFile.ReadString('MQTT', 'Password', '');
 end;
 
-function TIoTConfig.GetDatabasePath: string;
+function TIoTConfig.GetDatabasePath: string;  
 begin
   Result := FIniFile.ReadString('Database', 'Path', 'iot_platform.db');
 end;
 
-function TIoTConfig.GetLogLevel: Integer;
+function TIoTConfig.GetLogLevel: Integer;  
 begin
   Result := FIniFile.ReadInteger('Logging', 'Level', 1);
 end;
 
-procedure TIoTConfig.SaveConfig;
+procedure TIoTConfig.SaveConfig;  
 begin
   FIniFile.UpdateFile;
 end;
@@ -2509,48 +2509,48 @@ end.
 
 ```ini
 [MQTT]
-Broker=localhost
-Port=1883
-Username=iot_user
-Password=secure_password
-UseTLS=false
-CACert=
-ClientCert=
+Broker=localhost  
+Port=1883  
+Username=iot_user  
+Password=secure_password  
+UseTLS=false  
+CACert=  
+ClientCert=  
 ClientKey=
 
 [LoRaWAN]
-NetworkServer=localhost
-NetworkPort=1883
-ApplicationID=my_app
-AccessKey=NNSXS.XXXXXXXXXX
+NetworkServer=localhost  
+NetworkPort=1883  
+ApplicationID=my_app  
+AccessKey=NNSXS.XXXXXXXXXX  
 Region=eu1
 
 [CoAP]
-DefaultPort=5683
+DefaultPort=5683  
 UseDTLS=false
 
 [Database]
-Type=sqlite
-Path=iot_platform.db
-Host=
-Port=
-Username=
+Type=sqlite  
+Path=iot_platform.db  
+Host=  
+Port=  
+Username=  
 Password=
 
 [Logging]
 Level=1
 ; 0=Debug, 1=Info, 2=Warning, 3=Error, 4=Critical
-LogFile=iot_platform.log
+LogFile=iot_platform.log  
 MaxSizeMB=100
 
 [Alerts]
-EmailEnabled=false
-SMTPServer=
-SMTPPort=587
-EmailFrom=
-EmailTo=
-SMSEnabled=false
-SMSProvider=
+EmailEnabled=false  
+SMTPServer=  
+SMTPPort=587  
+EmailFrom=  
+EmailTo=  
+SMSEnabled=false  
+SMSProvider=  
 SMSAPIKey=
 
 [General]
@@ -2588,7 +2588,7 @@ implementation
 
 { TIoTProtocolTests }
 
-procedure TIoTProtocolTests.TestMQTTConnection;
+procedure TIoTProtocolTests.TestMQTTConnection;  
 var
   Client: TTemperatureSensor;
 begin
@@ -2601,7 +2601,7 @@ begin
   end;
 end;
 
-procedure TIoTProtocolTests.TestLoRaWANEncoding;
+procedure TIoTProtocolTests.TestLoRaWANEncoding;  
 var
   Payload: string;
   Temp, Humidity: Double;
@@ -2617,7 +2617,7 @@ begin
   AssertEquals('Payload should be 10 characters', 10, Length(Payload));
 end;
 
-procedure TIoTProtocolTests.TestLoRaWANDecoding;
+procedure TIoTProtocolTests.TestLoRaWANDecoding;  
 var
   Payload: string;
   TempIn, HumIn, TempOut, HumOut: Double;
@@ -2640,7 +2640,7 @@ begin
   AssertEquals('Battery should match', BatIn, BatOut);
 end;
 
-procedure TIoTProtocolTests.TestCOAPRequest;
+procedure TIoTProtocolTests.TestCOAPRequest;  
 var
   Client: TCOAPClient;
   Response: string;
@@ -2654,7 +2654,7 @@ begin
   end;
 end;
 
-procedure TIoTProtocolTests.TestPayloadCompression;
+procedure TIoTProtocolTests.TestPayloadCompression;  
 var
   Original, Compressed: string;
 begin
@@ -2734,7 +2734,7 @@ implementation
 
 { TIoTService }
 
-function TIoTService.Start: Boolean;
+function TIoTService.Start: Boolean;  
 begin
   WriteLn('Démarrage du service IoT...');
 
@@ -2757,7 +2757,7 @@ begin
   end;
 end;
 
-function TIoTService.Stop: Boolean;
+function TIoTService.Stop: Boolean;  
 begin
   WriteLn('Arrêt du service IoT...');
 
@@ -2780,13 +2780,13 @@ begin
   end;
 end;
 
-function TIoTService.Install: Boolean;
+function TIoTService.Install: Boolean;  
 begin
   // Installation du service Windows
   Result := inherited Install;
 end;
 
-function TIoTService.UnInstall: Boolean;
+function TIoTService.UnInstall: Boolean;  
 begin
   // Désinstallation du service Windows
   Result := inherited UnInstall;
@@ -2812,7 +2812,7 @@ type
     procedure DoRun; override;
   end;
 
-procedure TIoTDaemonApp.DoRun;
+procedure TIoTDaemonApp.DoRun;  
 var
   Service: TIoTService;
 begin
@@ -2851,19 +2851,19 @@ end.
 **Installation sur Windows :**
 
 ```batch
-REM Compiler le service
+REM Compiler le service  
 lazbuild IoTService.lpi
 
-REM Installer le service
+REM Installer le service  
 IoTService.exe --install
 
-REM Démarrer le service
+REM Démarrer le service  
 net start "IoT Platform Service"
 
-REM Arrêter le service
+REM Arrêter le service  
 net stop "IoT Platform Service"
 
-REM Désinstaller le service
+REM Désinstaller le service  
 IoTService.exe --uninstall
 ```
 
@@ -2873,33 +2873,33 @@ Créer un fichier service systemd (`/etc/systemd/system/iot-platform.service`) :
 
 ```ini
 [Unit]
-Description=IoT Platform Multi-Protocol Service
-After=network.target mosquitto.service
+Description=IoT Platform Multi-Protocol Service  
+After=network.target mosquitto.service  
 Wants=mosquitto.service
 
 [Service]
-Type=simple
-User=iot
-Group=iot
-WorkingDirectory=/opt/iot-platform
-ExecStart=/opt/iot-platform/iot_platform
-Restart=on-failure
+Type=simple  
+User=iot  
+Group=iot  
+WorkingDirectory=/opt/iot-platform  
+ExecStart=/opt/iot-platform/iot_platform  
+Restart=on-failure  
 RestartSec=5s
 
 # Limites de ressources
-MemoryLimit=512M
+MemoryLimit=512M  
 CPUQuota=50%
 
 # Sécurité
-NoNewPrivileges=true
-PrivateTmp=true
-ProtectSystem=strict
-ProtectHome=true
+NoNewPrivileges=true  
+PrivateTmp=true  
+ProtectSystem=strict  
+ProtectHome=true  
 ReadWritePaths=/var/log/iot-platform /var/lib/iot-platform
 
 # Logging
-StandardOutput=journal
-StandardError=journal
+StandardOutput=journal  
+StandardError=journal  
 SyslogIdentifier=iot-platform
 
 [Install]
@@ -2913,20 +2913,20 @@ WantedBy=multi-user.target
 sudo useradd -r -s /bin/false iot
 
 # Créer les répertoires
-sudo mkdir -p /opt/iot-platform
-sudo mkdir -p /var/log/iot-platform
+sudo mkdir -p /opt/iot-platform  
+sudo mkdir -p /var/log/iot-platform  
 sudo mkdir -p /var/lib/iot-platform
 
 # Copier l'exécutable
-sudo cp iot_platform /opt/iot-platform/
+sudo cp iot_platform /opt/iot-platform/  
 sudo chmod +x /opt/iot-platform/iot_platform
 
 # Copier la configuration
 sudo cp iot_config.ini /opt/iot-platform/
 
 # Définir les permissions
-sudo chown -R iot:iot /opt/iot-platform
-sudo chown -R iot:iot /var/log/iot-platform
+sudo chown -R iot:iot /opt/iot-platform  
+sudo chown -R iot:iot /var/log/iot-platform  
 sudo chown -R iot:iot /var/lib/iot-platform
 
 # Copier le fichier service
@@ -2967,7 +2967,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copier les sources
-WORKDIR /build
+WORKDIR /build  
 COPY . .
 
 # Compiler l'application
@@ -2991,7 +2991,7 @@ RUN mkdir -p /app /data /logs && \
     chown -R iot:iot /app /data /logs
 
 # Copier l'exécutable depuis le stage de build
-COPY --from=builder /build/iot_platform /app/
+COPY --from=builder /build/iot_platform /app/  
 COPY --from=builder /build/iot_config.ini /app/
 
 # Définir l'utilisateur
@@ -3117,7 +3117,7 @@ implementation
 
 { TPrometheusExporter }
 
-constructor TPrometheusExporter.Create(Port: Integer);
+constructor TPrometheusExporter.Create(Port: Integer);  
 begin
   FDeviceCount := 0;
   FMessageCount := 0;
@@ -3128,13 +3128,13 @@ begin
   FHTTPServer.OnRequest := @HandleMetricsRequest;
 end;
 
-destructor TPrometheusExporter.Destroy;
+destructor TPrometheusExporter.Destroy;  
 begin
   FHTTPServer.Free;
   inherited Destroy;
 end;
 
-procedure TPrometheusExporter.Start;
+procedure TPrometheusExporter.Start;  
 begin
   FHTTPServer.Active := True;
   WriteLn('Metrics endpoint started on port ', FHTTPServer.Port);
@@ -3175,17 +3175,17 @@ begin
   end;
 end;
 
-procedure TPrometheusExporter.IncrementDeviceCount;
+procedure TPrometheusExporter.IncrementDeviceCount;  
 begin
   Inc(FDeviceCount);
 end;
 
-procedure TPrometheusExporter.IncrementMessageCount;
+procedure TPrometheusExporter.IncrementMessageCount;  
 begin
   Inc(FMessageCount);
 end;
 
-procedure TPrometheusExporter.IncrementErrorCount;
+procedure TPrometheusExporter.IncrementErrorCount;  
 begin
   Inc(FErrorCount);
 end;

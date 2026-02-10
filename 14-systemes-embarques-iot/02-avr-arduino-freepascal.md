@@ -124,18 +124,18 @@ Chaque port GPIO a 3 registres :
 
 ```pascal
 // Port B (broches digitales 8-13 sur Uno)
-DDRB   // Data Direction Register : 0=entrée, 1=sortie
-PORTB  // Port Output Register : valeur à écrire en sortie
+DDRB   // Data Direction Register : 0=entrée, 1=sortie  
+PORTB  // Port Output Register : valeur à écrire en sortie  
 PINB   // Port Input Register : lecture de l'état des broches
 
 // Port C (broches analogiques A0-A5 sur Uno)
-DDRC
-PORTC
+DDRC  
+PORTC  
 PINC
 
 // Port D (broches digitales 0-7 sur Uno)
-DDRD
-PORTD
+DDRD  
+PORTD  
 PIND
 ```
 
@@ -158,20 +158,20 @@ PORTB := PORTB and not (1 shl 5);
 Les timers génèrent des interruptions périodiques ou mesurent le temps :
 
 ```pascal
-TCCR0A  // Timer/Counter Control Register A
-TCCR0B  // Timer/Counter Control Register B
-TCNT0   // Timer/Counter Register (valeur actuelle)
-OCR0A   // Output Compare Register A
+TCCR0A  // Timer/Counter Control Register A  
+TCCR0B  // Timer/Counter Control Register B  
+TCNT0   // Timer/Counter Register (valeur actuelle)  
+OCR0A   // Output Compare Register A  
 TIMSK0  // Timer Interrupt Mask Register
 ```
 
 #### UART (Communication série)
 
 ```pascal
-UBRR0   // USART Baud Rate Register (vitesse)
-UCSR0A  // USART Control and Status Register A
-UCSR0B  // USART Control and Status Register B
-UCSR0C  // USART Control and Status Register C
+UBRR0   // USART Baud Rate Register (vitesse)  
+UCSR0A  // USART Control and Status Register A  
+UCSR0B  // USART Control and Status Register B  
+UCSR0C  // USART Control and Status Register C  
 UDR0    // USART Data Register (données à envoyer/recevoir)
 ```
 
@@ -197,7 +197,7 @@ var
   compteur: word = 0;
 
 // Gestionnaire d'interruption Timer 1
-procedure Timer1_ISR; interrupt; public name 'TIMER1_COMPA_vect';
+procedure Timer1_ISR; interrupt; public name 'TIMER1_COMPA_vect';  
 begin
   Inc(compteur);  // Incrémenté automatiquement toutes les 1s
 end;
@@ -216,7 +216,7 @@ end;
 **Variables d'environnement à configurer :**
 
 ```batch
-set PATH=%PATH%;C:\avr-gcc\bin
+set PATH=%PATH%;C:\avr-gcc\bin  
 set PATH=%PATH%;C:\Arduino\hardware\tools\avr\bin
 ```
 
@@ -226,7 +226,7 @@ Installation simple via APT :
 
 ```bash
 # Installer le compilateur FreePascal avec support AVR
-sudo apt update
+sudo apt update  
 sudo apt install fpc fpc-source
 
 # Installer la toolchain AVR
@@ -242,8 +242,8 @@ sudo apt install arduino
 **Vérification de l'installation :**
 
 ```bash
-fpc -i | grep avr        # Doit montrer le support AVR
-avr-gcc --version        # Doit afficher la version
+fpc -i | grep avr        # Doit montrer le support AVR  
+avr-gcc --version        # Doit afficher la version  
 avrdude -?               # Doit lister les options
 ```
 
@@ -290,7 +290,7 @@ const
   LED_PIN = 5;  // Pin 13 Arduino = PB5 (bit 5 du Port B)
 
 // Délai approximatif (blocant)
-procedure Delay_ms(ms: word);
+procedure Delay_ms(ms: word);  
 var
   i, j: word;
 begin
@@ -300,14 +300,14 @@ begin
 end;
 
 // Initialisation du matériel
-procedure Setup;
+procedure Setup;  
 begin
   // Configurer PB5 (LED) en sortie
   DDRB := DDRB or (1 shl LED_PIN);
 end;
 
 // Boucle principale
-procedure Loop;
+procedure Loop;  
 begin
   while true do
   begin
@@ -352,7 +352,7 @@ Cette ligne configure la broche en **sortie** :
 - `DDRB or ...` : active le bit sans toucher les autres
 
 ```pascal
-PORTB := PORTB or (1 shl LED_PIN);   // Met le bit à 1 (allume)
+PORTB := PORTB or (1 shl LED_PIN);   // Met le bit à 1 (allume)  
 PORTB := PORTB and not (1 shl LED_PIN); // Met le bit à 0 (éteint)
 ```
 
@@ -376,12 +376,12 @@ const
   LED_DDR  = DDRB;
   LED_PIN  = 5;
 
-procedure Setup;
+procedure Setup;  
 begin
   LED_DDR := LED_DDR or (1 shl LED_PIN);
 end;
 
-procedure Loop;
+procedure Loop;  
 begin
   while true do
   begin
@@ -411,7 +411,7 @@ const
   LED_PIN    = 5;  // PB5 (pin 13)
   BUTTON_PIN = 2;  // PD2 (pin 2)
 
-procedure Setup;
+procedure Setup;  
 begin
   // LED en sortie
   DDRB := DDRB or (1 shl LED_PIN);
@@ -423,7 +423,7 @@ begin
   PORTD := PORTD or (1 shl BUTTON_PIN);
 end;
 
-procedure Loop;
+procedure Loop;  
 var
   buttonState: boolean;
 begin
@@ -469,7 +469,7 @@ const
   ADC_CHANNEL = 0;  // Pin A0
 
 // Initialiser l'ADC
-procedure ADC_Init;
+procedure ADC_Init;  
 begin
   // Référence de tension : AVCC (5V)
   ADMUX := (1 shl REFS0);
@@ -479,7 +479,7 @@ begin
 end;
 
 // Lire une valeur sur un canal
-function ADC_Read(channel: byte): word;
+function ADC_Read(channel: byte): word;  
 begin
   // Sélectionner le canal (0-5 sur Arduino Uno)
   ADMUX := (ADMUX and $F0) or (channel and $0F);
@@ -559,7 +559,7 @@ const
   UBRR_VALUE = (F_CPU div (16 * BAUD)) - 1;
 
 // Initialiser UART
-procedure UART_Init;
+procedure UART_Init;  
 begin
   // Configurer la vitesse
   UBRR0H := Hi(UBRR_VALUE);
@@ -573,7 +573,7 @@ begin
 end;
 
 // Envoyer un octet
-procedure UART_Transmit(data: byte);
+procedure UART_Transmit(data: byte);  
 begin
   // Attendre que le buffer soit vide
   while (UCSR0A and (1 shl UDRE0)) = 0 do
@@ -584,7 +584,7 @@ begin
 end;
 
 // Recevoir un octet
-function UART_Receive: byte;
+function UART_Receive: byte;  
 begin
   // Attendre la réception
   while (UCSR0A and (1 shl RXC0)) = 0 do
@@ -595,7 +595,7 @@ begin
 end;
 
 // Envoyer une chaîne
-procedure UART_PrintString(const s: string);
+procedure UART_PrintString(const s: string);  
 var
   i: integer;
 begin
@@ -604,7 +604,7 @@ begin
 end;
 
 // Envoyer un saut de ligne
-procedure UART_PrintLn(const s: string);
+procedure UART_PrintLn(const s: string);  
 begin
   UART_PrintString(s);
   UART_Transmit(13);  // CR
@@ -667,13 +667,13 @@ var
   secondes: word = 0;
 
 // Interruption Timer 1 Compare Match A
-procedure Timer1_ISR; interrupt; public name 'TIMER1_COMPA_vect';
+procedure Timer1_ISR; interrupt; public name 'TIMER1_COMPA_vect';  
 begin
   Inc(secondes);
   // Cette interruption est appelée exactement toutes les secondes
 end;
 
-procedure Timer1_Init;
+procedure Timer1_Init;  
 const
   F_CPU = 16000000;
   PRESCALER = 256;
@@ -723,7 +723,7 @@ const
   PWM_PIN = 6;  // Arduino pin 6 = Timer 0, OC0A
 
 // Initialiser PWM sur Timer 0
-procedure PWM_Init;
+procedure PWM_Init;  
 begin
   // Pin 6 en sortie
   DDRD := DDRD or (1 shl PWM_PIN);
@@ -739,7 +739,7 @@ begin
 end;
 
 // Définir l'intensité (0-255)
-procedure PWM_Set(value: byte);
+procedure PWM_Set(value: byte);  
 begin
   OCR0A := value;
 end;
@@ -785,14 +785,14 @@ end.
 **Ligne de commande Windows :**
 
 ```batch
-fpc -Pavr -Tembedded -Wpatmega328p -O2 monprogramme.pas
+fpc -Pavr -Tembedded -Wpatmega328p -O2 monprogramme.pas  
 avr-objcopy -O ihex monprogramme.elf monprogramme.hex
 ```
 
 **Ligne de commande Ubuntu :**
 
 ```bash
-fpc -Pavr -Tembedded -Wpatmega328p -O2 monprogramme.pas
+fpc -Pavr -Tembedded -Wpatmega328p -O2 monprogramme.pas  
 avr-objcopy -O ihex monprogramme.elf monprogramme.hex
 ```
 
@@ -834,11 +834,11 @@ avrdude -p atmega328p -c usbtiny -U flash:w:monprogramme.hex:i
 ```bash
 #!/bin/bash
 
-PROGRAM="monprogramme"
-MCU="atmega328p"
+PROGRAM="monprogramme"  
+MCU="atmega328p"  
 PORT="/dev/ttyACM0"
 
-echo "Compilation..."
+echo "Compilation..."  
 fpc -Pavr -Tembedded -Wp$MCU -O2 $PROGRAM.pas
 
 if [ $? -eq 0 ]; then
@@ -858,11 +858,11 @@ fi
 
 ```batch
 @echo off
-set PROGRAM=monprogramme
-set MCU=atmega328p
+set PROGRAM=monprogramme  
+set MCU=atmega328p  
 set PORT=COM3
 
-echo Compilation...
+echo Compilation...  
 fpc -Pavr -Tembedded -Wp%MCU% -O2 %PROGRAM%.pas
 
 if %errorlevel%==0 (
@@ -901,9 +901,9 @@ type
   TPinState = (psLow, psHigh);
 
 // Fonctions publiques
-procedure pinMode(pin: byte; mode: TPinMode);
-procedure digitalWrite(pin: byte; state: TPinState);
-function digitalRead(pin: byte): TPinState;
+procedure pinMode(pin: byte; mode: TPinMode);  
+procedure digitalWrite(pin: byte; state: TPinState);  
+function digitalRead(pin: byte): TPinState;  
 procedure togglePin(pin: byte);
 
 implementation
@@ -935,7 +935,7 @@ const
     (DDR: @DDRB; PORT: @PORTB; PIN: @PINB; bit: 5)   // Pin 13 (LED)
   );
 
-procedure pinMode(pin: byte; mode: TPinMode);
+procedure pinMode(pin: byte; mode: TPinMode);  
 var
   mapping: TPinMapping;
 begin
@@ -958,7 +958,7 @@ begin
   end;
 end;
 
-procedure digitalWrite(pin: byte; state: TPinState);
+procedure digitalWrite(pin: byte; state: TPinState);  
 var
   mapping: TPinMapping;
 begin
@@ -971,7 +971,7 @@ begin
     mapping.PORT^ := mapping.PORT^ and not (1 shl mapping.bit);
 end;
 
-function digitalRead(pin: byte): TPinState;
+function digitalRead(pin: byte): TPinState;  
 var
   mapping: TPinMapping;
 begin
@@ -984,7 +984,7 @@ begin
     Result := psLow;
 end;
 
-procedure togglePin(pin: byte);
+procedure togglePin(pin: byte);  
 var
   mapping: TPinMapping;
 begin
@@ -1045,12 +1045,12 @@ interface
 const
   F_CPU = 16000000;
 
-procedure UART_Init(baud: longword);
-procedure UART_Write(data: byte);
-function UART_Read: byte;
-function UART_Available: boolean;
-procedure UART_Print(const s: string);
-procedure UART_PrintLn(const s: string);
+procedure UART_Init(baud: longword);  
+procedure UART_Write(data: byte);  
+function UART_Read: byte;  
+function UART_Available: boolean;  
+procedure UART_Print(const s: string);  
+procedure UART_PrintLn(const s: string);  
 procedure UART_PrintInt(value: integer);
 
 implementation
@@ -1058,7 +1058,7 @@ implementation
 uses
   atmega328p;
 
-procedure UART_Init(baud: longword);
+procedure UART_Init(baud: longword);  
 var
   ubrr: word;
 begin
@@ -1071,26 +1071,26 @@ begin
   UCSR0C := (1 shl UCSZ01) or (1 shl UCSZ00);
 end;
 
-procedure UART_Write(data: byte);
+procedure UART_Write(data: byte);  
 begin
   while (UCSR0A and (1 shl UDRE0)) = 0 do
     ;
   UDR0 := data;
 end;
 
-function UART_Read: byte;
+function UART_Read: byte;  
 begin
   while (UCSR0A and (1 shl RXC0)) = 0 do
     ;
   Result := UDR0;
 end;
 
-function UART_Available: boolean;
+function UART_Available: boolean;  
 begin
   Result := (UCSR0A and (1 shl RXC0)) <> 0;
 end;
 
-procedure UART_Print(const s: string);
+procedure UART_Print(const s: string);  
 var
   i: integer;
 begin
@@ -1098,14 +1098,14 @@ begin
     UART_Write(Ord(s[i]));
 end;
 
-procedure UART_PrintLn(const s: string);
+procedure UART_PrintLn(const s: string);  
 begin
   UART_Print(s);
   UART_Write(13);  // CR
   UART_Write(10);  // LF
 end;
 
-procedure UART_PrintInt(value: integer);
+procedure UART_PrintInt(value: integer);  
 var
   s: string;
 begin
@@ -1184,9 +1184,9 @@ unit unit_eeprom;
 
 interface
 
-procedure EEPROM_Write(address: word; data: byte);
-function EEPROM_Read(address: word): byte;
-procedure EEPROM_WriteBlock(address: word; const buffer: array of byte; size: word);
+procedure EEPROM_Write(address: word; data: byte);  
+function EEPROM_Read(address: word): byte;  
+procedure EEPROM_WriteBlock(address: word; const buffer: array of byte; size: word);  
 procedure EEPROM_ReadBlock(address: word; var buffer: array of byte; size: word);
 
 implementation
@@ -1194,7 +1194,7 @@ implementation
 uses
   atmega328p;
 
-procedure EEPROM_Write(address: word; data: byte);
+procedure EEPROM_Write(address: word; data: byte);  
 begin
   // Attendre la fin de l'écriture précédente
   while (EECR and (1 shl EEPE)) <> 0 do
@@ -1210,7 +1210,7 @@ begin
   EECR := EECR or (1 shl EEPE);   // Write Enable
 end;
 
-function EEPROM_Read(address: word): byte;
+function EEPROM_Read(address: word): byte;  
 begin
   // Attendre la fin de l'écriture en cours
   while (EECR and (1 shl EEPE)) <> 0 do
@@ -1227,7 +1227,7 @@ begin
   Result := EEDR;
 end;
 
-procedure EEPROM_WriteBlock(address: word; const buffer: array of byte; size: word);
+procedure EEPROM_WriteBlock(address: word; const buffer: array of byte; size: word);  
 var
   i: word;
 begin
@@ -1235,7 +1235,7 @@ begin
     EEPROM_Write(address + i, buffer[i]);
 end;
 
-procedure EEPROM_ReadBlock(address: word; var buffer: array of byte; size: word);
+procedure EEPROM_ReadBlock(address: word; var buffer: array of byte; size: word);  
 var
   i: word;
 begin
@@ -1309,10 +1309,10 @@ unit unit_i2c;
 
 interface
 
-procedure I2C_Init;
-procedure I2C_Start;
-procedure I2C_Stop;
-procedure I2C_Write(data: byte);
+procedure I2C_Init;  
+procedure I2C_Start;  
+procedure I2C_Stop;  
+procedure I2C_Write(data: byte);  
 function I2C_Read(ack: boolean): byte;
 
 implementation
@@ -1325,26 +1325,26 @@ const
   I2C_FREQ = 100000;  // 100 kHz
   TWBR_VALUE = ((F_CPU div I2C_FREQ) - 16) div 2;
 
-procedure I2C_Init;
+procedure I2C_Init;  
 begin
   TWBR := TWBR_VALUE;
   TWSR := 0;  // Prescaler = 1
   TWCR := (1 shl TWEN);  // Activer TWI
 end;
 
-procedure I2C_Start;
+procedure I2C_Start;  
 begin
   TWCR := (1 shl TWINT) or (1 shl TWSTA) or (1 shl TWEN);
   while (TWCR and (1 shl TWINT)) = 0 do
     ;
 end;
 
-procedure I2C_Stop;
+procedure I2C_Stop;  
 begin
   TWCR := (1 shl TWINT) or (1 shl TWSTO) or (1 shl TWEN);
 end;
 
-procedure I2C_Write(data: byte);
+procedure I2C_Write(data: byte);  
 begin
   TWDR := data;
   TWCR := (1 shl TWINT) or (1 shl TWEN);
@@ -1352,7 +1352,7 @@ begin
     ;
 end;
 
-function I2C_Read(ack: boolean): byte;
+function I2C_Read(ack: boolean): byte;  
 begin
   if ack then
     TWCR := (1 shl TWINT) or (1 shl TWEN) or (1 shl TWEA)
@@ -1381,7 +1381,7 @@ const
   CMD_START = $EE;
   CMD_READ_TEMP = $AA;
 
-function LireTemperature: integer;
+function LireTemperature: integer;  
 begin
   // Envoyer commande de lecture
   I2C_Start;
@@ -1438,7 +1438,7 @@ unit unit_spi;
 
 interface
 
-procedure SPI_Init;
+procedure SPI_Init;  
 function SPI_Transfer(data: byte): byte;
 
 implementation
@@ -1452,7 +1452,7 @@ const
   PIN_SCK  = 13;
   PIN_SS   = 10;
 
-procedure SPI_Init;
+procedure SPI_Init;  
 begin
   // Configurer les broches
   pinMode(PIN_MOSI, pmOutput);
@@ -1467,7 +1467,7 @@ begin
   SPCR := (1 shl SPE) or (1 shl MSTR) or (1 shl SPR0);
 end;
 
-function SPI_Transfer(data: byte): byte;
+function SPI_Transfer(data: byte): byte;  
 begin
   SPDR := data;
   while (SPSR and (1 shl SPIF)) = 0 do
@@ -1558,7 +1558,7 @@ var
   compteur_global: byte;
 
 // Variables locales : sur la pile (peut être plus lent)
-procedure MaProc;
+procedure MaProc;  
 var
   compteur_local: byte;
 begin
@@ -1602,7 +1602,7 @@ Si vous dépassez, le programme ne fonctionnera pas correctement !
 La méthode la plus simple :
 
 ```pascal
-procedure DebugBlink(fois: byte);
+procedure DebugBlink(fois: byte);  
 var
   i: byte;
 begin
@@ -1628,7 +1628,7 @@ end;
 Envoyer des messages :
 
 ```pascal
-procedure Debug(const msg: string; value: integer);
+procedure Debug(const msg: string; value: integer);  
 begin
   UART_Print('[DEBUG] ');
   UART_Print(msg);
@@ -1684,7 +1684,7 @@ var
   temperature: word;
   chauffage_actif: boolean = false;
 
-function LireTemperature: word;
+function LireTemperature: word;  
 var
   somme: longword;
   i: byte;
@@ -1701,7 +1701,7 @@ begin
   Result := somme shr 3;  // Diviser par 8
 end;
 
-procedure ControlerChauffage;
+procedure ControlerChauffage;  
 begin
   temperature := LireTemperature;
 
@@ -1725,7 +1725,7 @@ begin
   end;
 end;
 
-procedure ADC_Init;
+procedure ADC_Init;  
 begin
   ADMUX := (1 shl REFS0);  // AVCC reference
   ADCSRA := (1 shl ADEN) or (1 shl ADPS2) or (1 shl ADPS1) or (1 shl ADPS0);
@@ -1770,19 +1770,19 @@ const
 var
   compteur: word = 0;
 
-procedure SD_Select;
+procedure SD_Select;  
 begin
   digitalWrite(PIN_CS_SD, psLow);
 end;
 
-procedure SD_Deselect;
+procedure SD_Deselect;  
 begin
   digitalWrite(PIN_CS_SD, psHigh);
   SPI_Transfer($FF);  // Cycle horloge supplémentaire
 end;
 
 // Initialisation simplifiée de la carte SD
-function SD_Init: boolean;
+function SD_Init: boolean;  
 var
   i: byte;
   response: byte;
@@ -1968,52 +1968,52 @@ FreePascal sur AVR/Arduino offre une alternative intéressante au C/C++ Arduino 
 
 ```pascal
 // Port B (pins 8-13)
-DDRB  : byte at $24;   // Direction
-PORTB : byte at $25;   // Sortie
+DDRB  : byte at $24;   // Direction  
+PORTB : byte at $25;   // Sortie  
 PINB  : byte at $23;   // Lecture
 
 // Port C (pins A0-A5)
-DDRC  : byte at $27;
-PORTC : byte at $28;
+DDRC  : byte at $27;  
+PORTC : byte at $28;  
 PINC  : byte at $26;
 
 // Port D (pins 0-7)
-DDRD  : byte at $2A;
-PORTD : byte at $2B;
+DDRD  : byte at $2A;  
+PORTD : byte at $2B;  
 PIND  : byte at $29;
 ```
 
 #### Registres Timer 0 (8 bits)
 
 ```pascal
-TCCR0A : byte at $44;  // Control Register A
-TCCR0B : byte at $45;  // Control Register B
-TCNT0  : byte at $46;  // Counter value
-OCR0A  : byte at $47;  // Output Compare A
-OCR0B  : byte at $48;  // Output Compare B
-TIMSK0 : byte at $6E;  // Interrupt Mask
+TCCR0A : byte at $44;  // Control Register A  
+TCCR0B : byte at $45;  // Control Register B  
+TCNT0  : byte at $46;  // Counter value  
+OCR0A  : byte at $47;  // Output Compare A  
+OCR0B  : byte at $48;  // Output Compare B  
+TIMSK0 : byte at $6E;  // Interrupt Mask  
 TIFR0  : byte at $35;  // Interrupt Flags
 ```
 
 #### Registres UART
 
 ```pascal
-UCSR0A : byte at $C0;  // Status Register A
-UCSR0B : byte at $C1;  // Control Register B
-UCSR0C : byte at $C2;  // Control Register C
-UBRR0L : byte at $C4;  // Baud Rate Low
-UBRR0H : byte at $C5;  // Baud Rate High
+UCSR0A : byte at $C0;  // Status Register A  
+UCSR0B : byte at $C1;  // Control Register B  
+UCSR0C : byte at $C2;  // Control Register C  
+UBRR0L : byte at $C4;  // Baud Rate Low  
+UBRR0H : byte at $C5;  // Baud Rate High  
 UDR0   : byte at $C6;  // Data Register
 ```
 
 #### Registres ADC
 
 ```pascal
-ADMUX  : byte at $7C;  // Multiplexer Selection
-ADCSRA : byte at $7A;  // Control and Status A
-ADCSRB : byte at $7B;  // Control and Status B
-ADCL   : byte at $78;  // Data Register Low
-ADCH   : byte at $79;  // Data Register High
+ADMUX  : byte at $7C;  // Multiplexer Selection  
+ADCSRA : byte at $7A;  // Control and Status A  
+ADCSRB : byte at $7B;  // Control and Status B  
+ADCL   : byte at $78;  // Data Register Low  
+ADCH   : byte at $79;  // Data Register High  
 ADC    : word at $78;  // Data Register (16 bits)
 ```
 
@@ -2081,8 +2081,8 @@ Exemples pour F_CPU = 16 MHz :
 ```
 Fréquence interruption = F_CPU / (Prescaler × (1 + OCR))
 
-Exemple pour 1 Hz (1 seconde) avec F_CPU = 16 MHz :
-Prescaler = 256
+Exemple pour 1 Hz (1 seconde) avec F_CPU = 16 MHz :  
+Prescaler = 256  
 OCR = (16 000 000 / (256 × 1)) - 1 = 62499
 ```
 
@@ -2091,9 +2091,9 @@ OCR = (16 000 000 / (256 × 1)) - 1 = 62499
 ```
 Tension (V) = (ADC_value × Vref) / 1024
 
-Avec Vref = 5V :
-ADC = 0    → 0V
-ADC = 512  → 2.5V
+Avec Vref = 5V :  
+ADC = 0    → 0V  
+ADC = 512  → 2.5V  
 ADC = 1023 → 5V
 ```
 
@@ -2175,7 +2175,7 @@ const
 **Solutions :**
 ```pascal
 // Moyenner plusieurs lectures
-function ADC_Read_Stable(channel: byte): word;
+function ADC_Read_Stable(channel: byte): word;  
 var
   i: byte;
   somme: longword;
@@ -2196,15 +2196,15 @@ end;
 
 ```makefile
 # Configuration
-PROGRAM = monprogramme
-MCU = atmega328p
-F_CPU = 16000000
-PORT = /dev/ttyACM0
+PROGRAM = monprogramme  
+MCU = atmega328p  
+F_CPU = 16000000  
+PORT = /dev/ttyACM0  
 BAUD = 115200
 
 # Outils
-FPC = fpc
-OBJCOPY = avr-objcopy
+FPC = fpc  
+OBJCOPY = avr-objcopy  
 AVRDUDE = avrdude
 
 # Options de compilation
@@ -2235,9 +2235,9 @@ monitor:
 
 **Utilisation :**
 ```bash
-make          # Compiler
-make flash    # Flasher
-make monitor  # Ouvrir moniteur série
+make          # Compiler  
+make flash    # Flasher  
+make monitor  # Ouvrir moniteur série  
 make clean    # Nettoyer
 ```
 
@@ -2296,8 +2296,8 @@ make clean    # Nettoyer
 ```
 Arduino Pin 13 ----[Résistance 220Ω]----[LED]----GND
 
-Calcul résistance :
-R = (Vcc - Vled) / I
+Calcul résistance :  
+R = (Vcc - Vled) / I  
 R = (5V - 2V) / 0.020A = 150Ω (220Ω standard)
 ```
 

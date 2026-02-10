@@ -119,41 +119,41 @@ const
 
 { TSimpleGPIO }
 
-constructor TSimpleGPIO.Create(PinNumber: Integer);
+constructor TSimpleGPIO.Create(PinNumber: Integer);  
 begin
   FPinNumber := PinNumber;
   FExported := False;
   FDirection := gdInput;
 end;
 
-destructor TSimpleGPIO.Destroy;
+destructor TSimpleGPIO.Destroy;  
 begin
   if FExported then
     Unexport;
   inherited Destroy;
 end;
 
-function TSimpleGPIO.GetGPIOPath: string;
+function TSimpleGPIO.GetGPIOPath: string;  
 begin
   Result := GPIO_BASE_PATH + 'gpio' + IntToStr(FPinNumber) + '/';
 end;
 
-function TSimpleGPIO.GetValuePath: string;
+function TSimpleGPIO.GetValuePath: string;  
 begin
   Result := GetGPIOPath + 'value';
 end;
 
-function TSimpleGPIO.GetDirectionPath: string;
+function TSimpleGPIO.GetDirectionPath: string;  
 begin
   Result := GetGPIOPath + 'direction';
 end;
 
-function TSimpleGPIO.GetEdgePath: string;
+function TSimpleGPIO.GetEdgePath: string;  
 begin
   Result := GetGPIOPath + 'edge';
 end;
 
-procedure TSimpleGPIO.WriteToFile(const FileName, Value: string);
+procedure TSimpleGPIO.WriteToFile(const FileName, Value: string);  
 var
   F: TextFile;
 begin
@@ -168,7 +168,7 @@ begin
   end;
 end;
 
-function TSimpleGPIO.ReadFromFile(const FileName: string): string;
+function TSimpleGPIO.ReadFromFile(const FileName: string): string;  
 var
   F: TextFile;
   Line: string;
@@ -186,7 +186,7 @@ begin
   end;
 end;
 
-procedure TSimpleGPIO.Export;
+procedure TSimpleGPIO.Export;  
 begin
   if FExported then
     Exit;
@@ -205,7 +205,7 @@ begin
   end;
 end;
 
-procedure TSimpleGPIO.Unexport;
+procedure TSimpleGPIO.Unexport;  
 begin
   if not FExported then
     Exit;
@@ -220,7 +220,7 @@ begin
   end;
 end;
 
-procedure TSimpleGPIO.SetDirection(Direction: TGPIODirection);
+procedure TSimpleGPIO.SetDirection(Direction: TGPIODirection);  
 var
   DirStr: string;
 begin
@@ -237,7 +237,7 @@ begin
   WriteLn(Format('GPIO %d configuré en %s', [FPinNumber, DirStr]));
 end;
 
-procedure TSimpleGPIO.SetValue(Value: TGPIOValue);
+procedure TSimpleGPIO.SetValue(Value: TGPIOValue);  
 var
   ValStr: string;
 begin
@@ -255,7 +255,7 @@ begin
   WriteToFile(GetValuePath, ValStr);
 end;
 
-function TSimpleGPIO.GetValue: TGPIOValue;
+function TSimpleGPIO.GetValue: TGPIOValue;  
 var
   ValStr: string;
 begin
@@ -270,7 +270,7 @@ begin
     Result := gvLow;
 end;
 
-procedure TSimpleGPIO.SetEdge(Edge: TGPIOEdge);
+procedure TSimpleGPIO.SetEdge(Edge: TGPIOEdge);  
 var
   EdgeStr: string;
 begin
@@ -346,7 +346,7 @@ end.
 
 **Schéma de connexion :**
 ```
-Raspberry Pi         LED
+Raspberry Pi         LED  
 GPIO 17 (broche 11) ----[Résistance 220Ω]----(+)LED(-)---- GND (broche 6)
 ```
 
@@ -424,7 +424,7 @@ end.
 
 **Schéma de connexion du bouton :**
 ```
-Raspberry Pi                    Bouton
+Raspberry Pi                    Bouton  
 GPIO 27 (broche 13) -----------o----o---------- GND (broche 14)
                                 Bouton poussoir
 ```
@@ -443,8 +443,8 @@ Le PWM (Modulation de Largeur d'Impulsion) permet de simuler un signal analogiqu
 - **Duty Cycle** : Pourcentage du temps à HIGH (0-100%)
 
 ```
-Duty Cycle 25%:  ▁▁▁▁▔▁▁▁▁▔▁▁▁▁▔
-Duty Cycle 50%:  ▁▁▔▔▁▁▔▔▁▁▔▔▁▁▔▔
+Duty Cycle 25%:  ▁▁▁▁▔▁▁▁▁▔▁▁▁▁▔  
+Duty Cycle 50%:  ▁▁▔▔▁▁▔▔▁▁▔▔▁▁▔▔  
 Duty Cycle 75%:  ▁▔▔▔▁▔▔▔▁▔▔▔▁▔▔▔
 ```
 
@@ -486,7 +486,7 @@ implementation
 
 { TPWMController }
 
-constructor TPWMController.Create(PinNumber: Integer);
+constructor TPWMController.Create(PinNumber: Integer);  
 begin
   FGPIO := TSimpleGPIO.Create(PinNumber);
   FGPIO.Export;
@@ -497,14 +497,14 @@ begin
   FRunning := False;
 end;
 
-destructor TPWMController.Destroy;
+destructor TPWMController.Destroy;  
 begin
   Stop;
   FGPIO.Free;
   inherited Destroy;
 end;
 
-procedure TPWMController.PWMLoop;
+procedure TPWMController.PWMLoop;  
 var
   PeriodMicros: Integer;
   HighMicros: Integer;
@@ -535,7 +535,7 @@ begin
   end;
 end;
 
-procedure TPWMController.Start;
+procedure TPWMController.Start;  
 begin
   if FRunning then
     Exit;
@@ -549,7 +549,7 @@ begin
   WriteLn(Format('PWM démarré: %d Hz, %d%%', [FFrequency, FDutyCycle]));
 end;
 
-procedure TPWMController.Stop;
+procedure TPWMController.Stop;  
 begin
   if not FRunning then
     Exit;
@@ -567,7 +567,7 @@ begin
   WriteLn('PWM arrêté');
 end;
 
-procedure TPWMController.SetDutyCycle(Value: Integer);
+procedure TPWMController.SetDutyCycle(Value: Integer);  
 begin
   if Value < 0 then
     Value := 0;
@@ -578,7 +578,7 @@ begin
   WriteLn(Format('Duty cycle: %d%%', [FDutyCycle]));
 end;
 
-procedure TPWMController.SetFrequency(Value: Integer);
+procedure TPWMController.SetFrequency(Value: Integer);  
 begin
   if Value < 1 then
     Value := 1;
@@ -691,14 +691,14 @@ implementation
 
 { THardwarePWM }
 
-constructor THardwarePWM.Create(Chip, Channel: Integer);
+constructor THardwarePWM.Create(Chip, Channel: Integer);  
 begin
   FChip := Chip;
   FChannel := Channel;
   FEnabled := False;
 end;
 
-destructor THardwarePWM.Destroy;
+destructor THardwarePWM.Destroy;  
 begin
   if FEnabled then
     Disable;
@@ -706,12 +706,12 @@ begin
   inherited Destroy;
 end;
 
-function THardwarePWM.GetBasePath: string;
+function THardwarePWM.GetBasePath: string;  
 begin
   Result := Format('/sys/class/pwm/pwmchip%d/pwm%d/', [FChip, FChannel]);
 end;
 
-procedure THardwarePWM.WriteValue(const FileName, Value: string);
+procedure THardwarePWM.WriteValue(const FileName, Value: string);  
 var
   F: TextFile;
   FullPath: string;
@@ -728,7 +728,7 @@ begin
   end;
 end;
 
-function THardwarePWM.ReadValue(const FileName: string): string;
+function THardwarePWM.ReadValue(const FileName: string): string;  
 var
   F: TextFile;
   FullPath: string;
@@ -748,7 +748,7 @@ begin
   end;
 end;
 
-procedure THardwarePWM.Export;
+procedure THardwarePWM.Export;  
 var
   F: TextFile;
   ExportPath: string;
@@ -766,7 +766,7 @@ begin
   end;
 end;
 
-procedure THardwarePWM.Unexport;
+procedure THardwarePWM.Unexport;  
 var
   F: TextFile;
   UnexportPath: string;
@@ -783,31 +783,31 @@ begin
   end;
 end;
 
-procedure THardwarePWM.SetPeriod(NanoSeconds: Int64);
+procedure THardwarePWM.SetPeriod(NanoSeconds: Int64);  
 begin
   WriteValue('period', IntToStr(NanoSeconds));
 end;
 
-procedure THardwarePWM.SetDutyCycle(NanoSeconds: Int64);
+procedure THardwarePWM.SetDutyCycle(NanoSeconds: Int64);  
 begin
   WriteValue('duty_cycle', IntToStr(NanoSeconds));
 end;
 
-procedure THardwarePWM.Enable;
+procedure THardwarePWM.Enable;  
 begin
   WriteValue('enable', '1');
   FEnabled := True;
   WriteLn('PWM activé');
 end;
 
-procedure THardwarePWM.Disable;
+procedure THardwarePWM.Disable;  
 begin
   WriteValue('enable', '0');
   FEnabled := False;
   WriteLn('PWM désactivé');
 end;
 
-procedure THardwarePWM.SetPercentage(Percent: Double; FrequencyHz: Integer);
+procedure THardwarePWM.SetPercentage(Percent: Double; FrequencyHz: Integer);  
 var
   PeriodNS: Int64;
   DutyCycleNS: Int64;
@@ -995,7 +995,7 @@ const
 
 { TSPIDevice }
 
-constructor TSPIDevice.Create(const DevicePath: string);
+constructor TSPIDevice.Create(const DevicePath: string);  
 begin
   FDevice := DevicePath;
   FHandle := -1;
@@ -1007,13 +1007,13 @@ begin
     raise Exception.CreateFmt('Impossible d''ouvrir le périphérique SPI: %s', [FDevice]);
 end;
 
-destructor TSPIDevice.Destroy;
+destructor TSPIDevice.Destroy;  
 begin
   CloseDevice;
   inherited Destroy;
 end;
 
-function TSPIDevice.OpenDevice: Boolean;
+function TSPIDevice.OpenDevice: Boolean;  
 begin
   FHandle := FpOpen(FDevice, O_RDWR);
   Result := FHandle >= 0;
@@ -1030,7 +1030,7 @@ begin
     WriteLn(Format('Erreur ouverture SPI: %s (errno=%d)', [FDevice, fpgeterrno]));
 end;
 
-procedure TSPIDevice.CloseDevice;
+procedure TSPIDevice.CloseDevice;  
 begin
   if FHandle >= 0 then
   begin
@@ -1040,7 +1040,7 @@ begin
   end;
 end;
 
-function TSPIDevice.SetMode(Mode: Byte): Boolean;
+function TSPIDevice.SetMode(Mode: Byte): Boolean;  
 begin
   Result := False;
   if FHandle < 0 then
@@ -1054,7 +1054,7 @@ begin
   end;
 end;
 
-function TSPIDevice.SetSpeed(SpeedHz: LongWord): Boolean;
+function TSPIDevice.SetSpeed(SpeedHz: LongWord): Boolean;  
 begin
   Result := False;
   if FHandle < 0 then
@@ -1068,7 +1068,7 @@ begin
   end;
 end;
 
-function TSPIDevice.SetBitsPerWord(Bits: Byte): Boolean;
+function TSPIDevice.SetBitsPerWord(Bits: Byte): Boolean;  
 begin
   Result := False;
   if FHandle < 0 then
@@ -1101,7 +1101,7 @@ begin
   Result := FpIOCtl(FHandle, SPI_IOC_MESSAGE_1, @Transfer) >= 0;
 end;
 
-function TSPIDevice.WriteByte(Value: Byte): Boolean;
+function TSPIDevice.WriteByte(Value: Byte): Boolean;  
 var
   TxData, RxData: array[0..0] of Byte;
 begin
@@ -1109,7 +1109,7 @@ begin
   Result := Transfer(TxData, RxData, 1);
 end;
 
-function TSPIDevice.ReadByte: Byte;
+function TSPIDevice.ReadByte: Byte;  
 var
   TxData, RxData: array[0..0] of Byte;
 begin
@@ -1120,7 +1120,7 @@ begin
     Result := 0;
 end;
 
-function TSPIDevice.WriteBytes(const Data: array of Byte): Boolean;
+function TSPIDevice.WriteBytes(const Data: array of Byte): Boolean;  
 var
   RxData: array of Byte;
 begin
@@ -1128,7 +1128,7 @@ begin
   Result := Transfer(Data, RxData, Length(Data));
 end;
 
-function TSPIDevice.ReadBytes(Count: Integer): TBytes;
+function TSPIDevice.ReadBytes(Count: Integer): TBytes;  
 var
   TxData: array of Byte;
   i: Integer;
@@ -1176,7 +1176,7 @@ implementation
 
 { TMCP3008 }
 
-constructor TMCP3008.Create(const SPIDevice: string);
+constructor TMCP3008.Create(const SPIDevice: string);  
 begin
   FSPIDevice := TSPIDevice.Create(SPIDevice);
   FSPIDevice.SetSpeed(1000000); // 1 MHz
@@ -1184,13 +1184,13 @@ begin
   WriteLn('MCP3008 ADC initialisé');
 end;
 
-destructor TMCP3008.Destroy;
+destructor TMCP3008.Destroy;  
 begin
   FSPIDevice.Free;
   inherited Destroy;
 end;
 
-function TMCP3008.ReadChannel(Channel: Byte): Word;
+function TMCP3008.ReadChannel(Channel: Byte): Word;  
 var
   TxData, RxData: array[0..2] of Byte;
 begin
@@ -1214,7 +1214,7 @@ begin
     Result := 0;
 end;
 
-function TMCP3008.ReadVoltage(Channel: Byte; VRef: Double): Double;
+function TMCP3008.ReadVoltage(Channel: Byte; VRef: Double): Double;  
 var
   RawValue: Word;
 begin
@@ -1283,14 +1283,14 @@ end.
 
 **Schéma de connexion MCP3008 :**
 ```
-MCP3008          Raspberry Pi
-VDD  ----------- 3.3V (broche 1)
-VREF ----------- 3.3V
-AGND ----------- GND (broche 6)
-DGND ----------- GND
-CLK  ----------- SCLK (GPIO 11, broche 23)
-DOUT ----------- MISO (GPIO 9, broche 21)
-DIN  ----------- MOSI (GPIO 10, broche 19)
+MCP3008          Raspberry Pi  
+VDD  ----------- 3.3V (broche 1)  
+VREF ----------- 3.3V  
+AGND ----------- GND (broche 6)  
+DGND ----------- GND  
+CLK  ----------- SCLK (GPIO 11, broche 23)  
+DOUT ----------- MISO (GPIO 9, broche 21)  
+DIN  ----------- MOSI (GPIO 10, broche 19)  
 CS   ----------- CE0 (GPIO 8, broche 24)
 
 CH0-CH7: Entrées analogiques (0-3.3V)
@@ -1385,7 +1385,7 @@ uses
 
 { TI2CDevice }
 
-constructor TI2CDevice.Create(BusNumber: Integer; Address: Byte);
+constructor TI2CDevice.Create(BusNumber: Integer; Address: Byte);  
 begin
   FBusNumber := BusNumber;
   FAddress := Address;
@@ -1396,13 +1396,13 @@ begin
     raise Exception.CreateFmt('Impossible d''ouvrir le bus I²C: %s', [FDevice]);
 end;
 
-destructor TI2CDevice.Destroy;
+destructor TI2CDevice.Destroy;  
 begin
   CloseDevice;
   inherited Destroy;
 end;
 
-function TI2CDevice.OpenDevice: Boolean;
+function TI2CDevice.OpenDevice: Boolean;  
 begin
   FHandle := FpOpen(FDevice, O_RDWR);
   Result := FHandle >= 0;
@@ -1423,7 +1423,7 @@ begin
     WriteLn(Format('Erreur ouverture I²C: %s (errno=%d)', [FDevice, fpgeterrno]));
 end;
 
-procedure TI2CDevice.CloseDevice;
+procedure TI2CDevice.CloseDevice;  
 begin
   if FHandle >= 0 then
   begin
@@ -1433,7 +1433,7 @@ begin
   end;
 end;
 
-function TI2CDevice.WriteByte(Value: Byte): Boolean;
+function TI2CDevice.WriteByte(Value: Byte): Boolean;  
 begin
   Result := False;
   if FHandle < 0 then
@@ -1442,7 +1442,7 @@ begin
   Result := FpWrite(FHandle, Value, 1) = 1;
 end;
 
-function TI2CDevice.ReadByte: Byte;
+function TI2CDevice.ReadByte: Byte;  
 begin
   Result := 0;
   if FHandle < 0 then
@@ -1452,7 +1452,7 @@ begin
     Result := 0;
 end;
 
-function TI2CDevice.WriteBytes(const Data: array of Byte): Boolean;
+function TI2CDevice.WriteBytes(const Data: array of Byte): Boolean;  
 begin
   Result := False;
   if FHandle < 0 then
@@ -1461,7 +1461,7 @@ begin
   Result := FpWrite(FHandle, Data[0], Length(Data)) = Length(Data);
 end;
 
-function TI2CDevice.ReadBytes(Count: Integer): TBytes;
+function TI2CDevice.ReadBytes(Count: Integer): TBytes;  
 var
   BytesRead: Integer;
 begin
@@ -1475,7 +1475,7 @@ begin
     SetLength(Result, 0);
 end;
 
-function TI2CDevice.WriteRegister(Register: Byte; Value: Byte): Boolean;
+function TI2CDevice.WriteRegister(Register: Byte; Value: Byte): Boolean;  
 var
   Data: array[0..1] of Byte;
 begin
@@ -1484,7 +1484,7 @@ begin
   Result := WriteBytes(Data);
 end;
 
-function TI2CDevice.ReadRegister(Register: Byte): Byte;
+function TI2CDevice.ReadRegister(Register: Byte): Byte;  
 begin
   Result := 0;
 
@@ -1496,7 +1496,7 @@ begin
   Result := ReadByte;
 end;
 
-function TI2CDevice.WriteRegisterWord(Register: Byte; Value: Word): Boolean;
+function TI2CDevice.WriteRegisterWord(Register: Byte; Value: Word): Boolean;  
 var
   Data: array[0..2] of Byte;
 begin
@@ -1506,7 +1506,7 @@ begin
   Result := WriteBytes(Data);
 end;
 
-function TI2CDevice.ReadRegisterWord(Register: Byte): Word;
+function TI2CDevice.ReadRegisterWord(Register: Byte): Word;  
 var
   Data: TBytes;
 begin
@@ -1581,20 +1581,20 @@ implementation
 
 { TBMP280 }
 
-constructor TBMP280.Create(BusNumber: Integer; Address: Byte);
+constructor TBMP280.Create(BusNumber: Integer; Address: Byte);  
 begin
   FI2C := TI2CDevice.Create(BusNumber, Address);
   FCalibrationRead := False;
   WriteLn('BMP280 initialisé');
 end;
 
-destructor TBMP280.Destroy;
+destructor TBMP280.Destroy;  
 begin
   FI2C.Free;
   inherited Destroy;
 end;
 
-function TBMP280.Initialize: Boolean;
+function TBMP280.Initialize: Boolean;  
 var
   ChipID: Byte;
 begin
@@ -1625,7 +1625,7 @@ begin
   WriteLn('BMP280 configuré');
 end;
 
-procedure TBMP280.ReadCalibration;
+procedure TBMP280.ReadCalibration;  
 var
   i: Integer;
   CalibData: TBytes;
@@ -1658,7 +1658,7 @@ begin
     WriteLn('Erreur lecture calibration');
 end;
 
-function TBMP280.CompensateTemperature(adc_T: LongInt): Double;
+function TBMP280.CompensateTemperature(adc_T: LongInt): Double;  
 var
   var1, var2, T: Double;
 begin
@@ -1669,7 +1669,7 @@ begin
   Result := T;
 end;
 
-function TBMP280.CompensatePressure(adc_P: LongInt): Double;
+function TBMP280.CompensatePressure(adc_P: LongInt): Double;  
 var
   var1, var2, p: Double;
   t_fine: Double;
@@ -1703,7 +1703,7 @@ begin
   Result := p / 100.0; // Convertir en hPa
 end;
 
-function TBMP280.ReadTemperature: Double;
+function TBMP280.ReadTemperature: Double;  
 var
   Data: TBytes;
   adc_T: LongInt;
@@ -1724,7 +1724,7 @@ begin
   end;
 end;
 
-function TBMP280.ReadPressure: Double;
+function TBMP280.ReadPressure: Double;  
 var
   Data: TBytes;
   adc_P: LongInt;
@@ -1745,7 +1745,7 @@ begin
   end;
 end;
 
-function TBMP280.ReadAltitude(SeaLevelPressure: Double): Double;
+function TBMP280.ReadAltitude(SeaLevelPressure: Double): Double;  
 var
   Pressure: Double;
 begin
@@ -1809,10 +1809,10 @@ end.
 
 **Schéma de connexion BMP280 :**
 ```
-BMP280           Raspberry Pi
-VCC  ----------- 3.3V (broche 1)
-GND  ----------- GND (broche 6)
-SDA  ----------- SDA (GPIO 2, broche 3)
+BMP280           Raspberry Pi  
+VCC  ----------- 3.3V (broche 1)  
+GND  ----------- GND (broche 6)  
+SDA  ----------- SDA (GPIO 2, broche 3)  
 SCL  ----------- SCL (GPIO 3, broche 5)
 ```
 
@@ -1915,7 +1915,7 @@ uses
 
 { TUARTPort }
 
-constructor TUARTPort.Create(const Device: string);
+constructor TUARTPort.Create(const Device: string);  
 begin
   FDevice := Device;
   FHandle := -1;
@@ -1925,13 +1925,13 @@ begin
   FStopBits := sb1;
 end;
 
-destructor TUARTPort.Destroy;
+destructor TUARTPort.Destroy;  
 begin
   Close;
   inherited Destroy;
 end;
 
-function TUARTPort.BaudRateToSpeed(Rate: TBaudRate): Cardinal;
+function TUARTPort.BaudRateToSpeed(Rate: TBaudRate): Cardinal;  
 begin
   case Rate of
     br9600:   Result := B9600;
@@ -1944,7 +1944,7 @@ begin
   end;
 end;
 
-function TUARTPort.OpenPort: Boolean;
+function TUARTPort.OpenPort: Boolean;  
 begin
   FHandle := FpOpen(FDevice, O_RDWR or O_NOCTTY or O_NONBLOCK);
   Result := FHandle >= 0;
@@ -1955,7 +1955,7 @@ begin
     WriteLn(Format('Erreur ouverture UART: %s (errno=%d)', [FDevice, fpgeterrno]));
 end;
 
-procedure TUARTPort.ClosePort;
+procedure TUARTPort.ClosePort;  
 begin
   if FHandle >= 0 then
   begin
@@ -1965,7 +1965,7 @@ begin
   end;
 end;
 
-function TUARTPort.ConfigurePort: Boolean;
+function TUARTPort.ConfigurePort: Boolean;  
 var
   Options: Termios;
   Speed: Cardinal;
@@ -2039,19 +2039,19 @@ begin
                  [Speed, FDataBits]));
 end;
 
-function TUARTPort.Open: Boolean;
+function TUARTPort.Open: Boolean;  
 begin
   Result := OpenPort;
   if Result then
     Result := ConfigurePort;
 end;
 
-procedure TUARTPort.Close;
+procedure TUARTPort.Close;  
 begin
   ClosePort;
 end;
 
-function TUARTPort.WriteByte(Value: Byte): Boolean;
+function TUARTPort.WriteByte(Value: Byte): Boolean;  
 begin
   Result := False;
   if FHandle < 0 then
@@ -2060,7 +2060,7 @@ begin
   Result := FpWrite(FHandle, Value, 1) = 1;
 end;
 
-function TUARTPort.ReadByte(out Value: Byte; TimeoutMS: Integer): Boolean;
+function TUARTPort.ReadByte(out Value: Byte; TimeoutMS: Integer): Boolean;  
 var
   StartTime: QWord;
   BytesRead: Integer;
@@ -2088,12 +2088,12 @@ begin
   until (GetTickCount64 - StartTime) >= TimeoutMS;
 end;
 
-function TUARTPort.WriteString(const Text: string): Boolean;
+function TUARTPort.WriteString(const Text: string): Boolean;  
 begin
   Result := WriteData(PByte(Text)^, Length(Text)) = Length(Text);
 end;
 
-function TUARTPort.ReadString(MaxLength: Integer; TimeoutMS: Integer): string;
+function TUARTPort.ReadString(MaxLength: Integer; TimeoutMS: Integer): string;  
 var
   Buffer: array of Byte;
   BytesRead: Integer;
@@ -2109,7 +2109,7 @@ begin
   end;
 end;
 
-function TUARTPort.WriteData(const Data: array of Byte; Count: Integer): Integer;
+function TUARTPort.WriteData(const Data: array of Byte; Count: Integer): Integer;  
 begin
   Result := 0;
   if FHandle < 0 then
@@ -2152,7 +2152,7 @@ begin
   Result := TotalRead;
 end;
 
-function TUARTPort.DataAvailable: Boolean;
+function TUARTPort.DataAvailable: Boolean;  
 var
   BytesAvail: Integer;
 begin
@@ -2164,7 +2164,7 @@ begin
     Result := BytesAvail > 0;
 end;
 
-procedure TUARTPort.Flush;
+procedure TUARTPort.Flush;  
 begin
   if FHandle >= 0 then
     tcflush(FHandle, TCIOFLUSH);
@@ -2389,10 +2389,10 @@ end.
 
 **Schéma de connexion GPS :**
 ```
-Module GPS       Raspberry Pi
-VCC  ----------- 3.3V ou 5V (selon module)
-GND  ----------- GND (broche 6)
-TX   ----------- RX (GPIO 15, broche 10)
+Module GPS       Raspberry Pi  
+VCC  ----------- 3.3V ou 5V (selon module)  
+GND  ----------- GND (broche 6)  
+TX   ----------- RX (GPIO 15, broche 10)  
 RX   ----------- TX (GPIO 14, broche 8)
 ```
 
@@ -2466,7 +2466,7 @@ const
 
 { TDS18B20Sensor }
 
-constructor TDS18B20Sensor.Create(const SensorID: string);
+constructor TDS18B20Sensor.Create(const SensorID: string);  
 begin
   FSensorID := SensorID;
   FDevicePath := W1_DEVICES_PATH + FSensorID + '/w1_slave';
@@ -2475,7 +2475,7 @@ begin
     raise Exception.CreateFmt('Capteur non trouvé: %s', [FSensorID]);
 end;
 
-function TDS18B20Sensor.ReadTemperatureRaw: string;
+function TDS18B20Sensor.ReadTemperatureRaw: string;  
 var
   F: TextFile;
   Line: string;
@@ -2499,7 +2499,7 @@ begin
   end;
 end;
 
-function TDS18B20Sensor.ReadTemperature: Double;
+function TDS18B20Sensor.ReadTemperature: Double;  
 var
   RawData: string;
   Lines: TStringList;
@@ -2538,7 +2538,7 @@ end;
 
 { TDS18B20Manager }
 
-class function TDS18B20Manager.GetSensorList: TStringList;
+class function TDS18B20Manager.GetSensorList: TStringList;  
 var
   SearchRec: TSearchRec;
 begin
@@ -2554,7 +2554,7 @@ begin
   end;
 end;
 
-class function TDS18B20Manager.ScanSensors: Integer;
+class function TDS18B20Manager.ScanSensors: Integer;  
 var
   Sensors: TStringList;
 begin
@@ -2638,9 +2638,9 @@ end.
 
 **Schéma de connexion DS18B20 :**
 ```
-DS18B20          Raspberry Pi
-VDD (rouge)  --- 3.3V (broche 1)
-GND (noir)   --- GND (broche 6)
+DS18B20          Raspberry Pi  
+VDD (rouge)  --- 3.3V (broche 1)  
+GND (noir)   --- GND (broche 6)  
 DATA (jaune) --- GPIO 4 (broche 7)
                  + résistance pull-up 4.7kΩ vers 3.3V
 ```
@@ -2695,19 +2695,19 @@ implementation
 
 { TFT232H }
 
-constructor TFT232H.Create;
+constructor TFT232H.Create;  
 begin
   FHandle := nil;
   FConnected := False;
 end;
 
-destructor TFT232H.Destroy;
+destructor TFT232H.Destroy;  
 begin
   Disconnect;
   inherited Destroy;
 end;
 
-function TFT232H.Connect: Boolean;
+function TFT232H.Connect: Boolean;  
 begin
   // Implémentation dépendante de la bibliothèque
   // Exemple conceptuel:
@@ -2728,7 +2728,7 @@ begin
     WriteLn('Erreur connexion FT232H');
 end;
 
-procedure TFT232H.Disconnect;
+procedure TFT232H.Disconnect;  
 begin
   if FConnected then
   begin
@@ -2739,7 +2739,7 @@ begin
   end;
 end;
 
-function TFT232H.SetPinMode(Pin: Byte; IsOutput: Boolean): Boolean;
+function TFT232H.SetPinMode(Pin: Byte; IsOutput: Boolean): Boolean;  
 begin
   Result := False;
   if not FConnected then
@@ -2751,7 +2751,7 @@ begin
   Result := True;
 end;
 
-function TFT232H.DigitalWrite(Pin: Byte; Value: Boolean): Boolean;
+function TFT232H.DigitalWrite(Pin: Byte; Value: Boolean): Boolean;  
 begin
   Result := False;
   if not FConnected then
@@ -2763,7 +2763,7 @@ begin
   Result := True;
 end;
 
-function TFT232H.DigitalRead(Pin: Byte): Boolean;
+function TFT232H.DigitalRead(Pin: Byte): Boolean;  
 begin
   Result := False;
   if not FConnected then
@@ -2832,7 +2832,7 @@ uses
 
 { TArduinoBridge }
 
-constructor TArduinoBridge.Create(const PortName: string);
+constructor TArduinoBridge.Create(const PortName: string);  
 begin
   FSerialPort := PortName;
   {$IFDEF WINDOWS}
@@ -2845,7 +2845,7 @@ begin
   FConnected := False;
 end;
 
-destructor TArduinoBridge.Destroy;
+destructor TArduinoBridge.Destroy;  
 begin
   Disconnect;
   inherited Destroy;
@@ -2928,7 +2928,7 @@ begin
   Sleep(2000); // Attendre que l'Arduino redémarre
 end;
 
-procedure TArduinoBridge.CloseSerial;
+procedure TArduinoBridge.CloseSerial;  
 begin
   {$IFDEF WINDOWS}
   if FHandle <> INVALID_HANDLE_VALUE then
@@ -2945,7 +2945,7 @@ begin
   {$ENDIF}
 end;
 
-function TArduinoBridge.Connect: Boolean;
+function TArduinoBridge.Connect: Boolean;  
 begin
   Result := OpenSerial;
   if Result then
@@ -2955,7 +2955,7 @@ begin
   end;
 end;
 
-procedure TArduinoBridge.Disconnect;
+procedure TArduinoBridge.Disconnect;  
 begin
   if FConnected then
   begin
@@ -2965,7 +2965,7 @@ begin
   end;
 end;
 
-function TArduinoBridge.SendCommand(const Cmd: string): Boolean;
+function TArduinoBridge.SendCommand(const Cmd: string): Boolean;  
 var
   BytesWritten: {$IFDEF WINDOWS}DWORD{$ELSE}Integer{$ENDIF};
   CmdWithNewline: string;
@@ -2985,7 +2985,7 @@ begin
   {$ENDIF}
 end;
 
-function TArduinoBridge.ReadResponse(TimeoutMS: Integer): string;
+function TArduinoBridge.ReadResponse(TimeoutMS: Integer): string;  
 var
   Buffer: array[0..255] of Char;
   BytesRead: {$IFDEF WINDOWS}DWORD{$ELSE}Integer{$ENDIF};
@@ -3016,7 +3016,7 @@ begin
   Result := Trim(Result);
 end;
 
-function TArduinoBridge.SetPinMode(Pin: Byte; IsOutput: Boolean): Boolean;
+function TArduinoBridge.SetPinMode(Pin: Byte; IsOutput: Boolean): Boolean;  
 var
   Cmd: string;
 begin
@@ -3029,7 +3029,7 @@ begin
   Sleep(10);
 end;
 
-function TArduinoBridge.DigitalWrite(Pin: Byte; Value: Boolean): Boolean;
+function TArduinoBridge.DigitalWrite(Pin: Byte; Value: Boolean): Boolean;  
 var
   Cmd: string;
 begin
@@ -3042,7 +3042,7 @@ begin
   Sleep(10);
 end;
 
-function TArduinoBridge.DigitalRead(Pin: Byte): Boolean;
+function TArduinoBridge.DigitalRead(Pin: Byte): Boolean;  
 var
   Cmd, Response: string;
 begin
@@ -3056,7 +3056,7 @@ begin
   end;
 end;
 
-function TArduinoBridge.AnalogRead(Pin: Byte): Integer;
+function TArduinoBridge.AnalogRead(Pin: Byte): Integer;  
 var
   Cmd, Response: string;
 begin
@@ -3070,7 +3070,7 @@ begin
   end;
 end;
 
-function TArduinoBridge.AnalogWrite(Pin: Byte; Value: Byte): Boolean;
+function TArduinoBridge.AnalogWrite(Pin: Byte; Value: Byte): Boolean;  
 var
   Cmd: string;
 begin
@@ -3247,7 +3247,7 @@ implementation
 
 { TSafeGPIO }
 
-constructor TSafeGPIO.Create(PinNumber: Integer; AutoCleanup: Boolean);
+constructor TSafeGPIO.Create(PinNumber: Integer; AutoCleanup: Boolean);  
 begin
   FAutoCleanup := AutoCleanup;
 
@@ -3263,7 +3263,7 @@ begin
   end;
 end;
 
-destructor TSafeGPIO.Destroy;
+destructor TSafeGPIO.Destroy;  
 begin
   if FAutoCleanup then
     SafeCleanup;
@@ -3272,7 +3272,7 @@ begin
   inherited Destroy;
 end;
 
-function TSafeGPIO.TrySetValue(Value: TGPIOValue): Boolean;
+function TSafeGPIO.TrySetValue(Value: TGPIOValue): Boolean;  
 begin
   Result := False;
   try
@@ -3284,7 +3284,7 @@ begin
   end;
 end;
 
-function TSafeGPIO.TryGetValue(out Value: TGPIOValue): Boolean;
+function TSafeGPIO.TryGetValue(out Value: TGPIOValue): Boolean;  
 begin
   Result := False;
   try
@@ -3299,7 +3299,7 @@ begin
   end;
 end;
 
-procedure TSafeGPIO.SafeCleanup;
+procedure TSafeGPIO.SafeCleanup;  
 begin
   try
     // S'assurer que la sortie est à LOW avant de libérer
@@ -3368,7 +3368,7 @@ implementation
 
 { TDebouncedButton }
 
-constructor TDebouncedButton.Create(PinNumber: Integer; DebounceTimeMS: Integer);
+constructor TDebouncedButton.Create(PinNumber: Integer; DebounceTimeMS: Integer);  
 begin
   FDebounceTime := DebounceTimeMS;
   FLastChangeTime := 0;
@@ -3380,13 +3380,13 @@ begin
   FLastState := FGPIO.GetValue;
 end;
 
-destructor TDebouncedButton.Destroy;
+destructor TDebouncedButton.Destroy;  
 begin
   FGPIO.Free;
   inherited Destroy;
 end;
 
-procedure TDebouncedButton.CheckState;
+procedure TDebouncedButton.CheckState;  
 var
   CurrentState: TGPIOValue;
   CurrentTime: QWord;
@@ -3407,12 +3407,12 @@ begin
   end;
 end;
 
-procedure TDebouncedButton.Poll;
+procedure TDebouncedButton.Poll;  
 begin
   CheckState;
 end;
 
-function TDebouncedButton.IsPressed: Boolean;
+function TDebouncedButton.IsPressed: Boolean;  
 begin
   Result := FLastState = gvLow; // Logique inversée avec pull-up
 end;
@@ -3464,7 +3464,7 @@ implementation
 
 { TCrossPlatformGPIO }
 
-constructor TCrossPlatformGPIO.Create(PinNumber: Integer);
+constructor TCrossPlatformGPIO.Create(PinNumber: Integer);  
 begin
   FPinNumber := PinNumber;
 
@@ -3482,7 +3482,7 @@ begin
   {$ENDIF}
 end;
 
-destructor TCrossPlatformGPIO.Destroy;
+destructor TCrossPlatformGPIO.Destroy;  
 begin
   {$IFDEF LINUX}
   FLinuxGPIO.Free;
@@ -3495,7 +3495,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TCrossPlatformGPIO.SetAsOutput;
+procedure TCrossPlatformGPIO.SetAsOutput;  
 begin
   {$IFDEF LINUX}
   FLinuxGPIO.SetDirection(gdOutput);
@@ -3506,7 +3506,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TCrossPlatformGPIO.SetAsInput;
+procedure TCrossPlatformGPIO.SetAsInput;  
 begin
   {$IFDEF LINUX}
   FLinuxGPIO.SetDirection(gdInput);
@@ -3517,7 +3517,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TCrossPlatformGPIO.SetHigh;
+procedure TCrossPlatformGPIO.SetHigh;  
 begin
   {$IFDEF LINUX}
   FLinuxGPIO.SetValue(gvHigh);
@@ -3528,7 +3528,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TCrossPlatformGPIO.SetLow;
+procedure TCrossPlatformGPIO.SetLow;  
 begin
   {$IFDEF LINUX}
   FLinuxGPIO.SetValue(gvLow);
@@ -3539,7 +3539,7 @@ begin
   {$ENDIF}
 end;
 
-function TCrossPlatformGPIO.Read: Boolean;
+function TCrossPlatformGPIO.Read: Boolean;  
 begin
   {$IFDEF LINUX}
   Result := FLinuxGPIO.GetValue = gvHigh;
@@ -3550,7 +3550,7 @@ begin
   {$ENDIF}
 end;
 
-class function TCrossPlatformGPIO.GetPlatformInfo: string;
+class function TCrossPlatformGPIO.GetPlatformInfo: string;  
 begin
   {$IFDEF LINUX}
   Result := 'Linux (GPIO natif via sysfs)';
@@ -3598,7 +3598,7 @@ type
 
 { TWeatherStation }
 
-constructor TWeatherStation.Create;
+constructor TWeatherStation.Create;  
 var
   Sensors: TStringList;
 begin
@@ -3640,7 +3640,7 @@ begin
   WriteLn('Station météo prête');
 end;
 
-destructor TWeatherStation.Destroy;
+destructor TWeatherStation.Destroy;  
 begin
   CloseFile(FLogFile);
   FTempSensor.Free;
@@ -3649,7 +3649,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TWeatherStation.LogData(const Data: TJSONObject);
+procedure TWeatherStation.LogData(const Data: TJSONObject);  
 var
   LogLine: string;
 begin
@@ -3665,7 +3665,7 @@ begin
   Flush(FLogFile);
 end;
 
-procedure TWeatherStation.ReadAndLog;
+procedure TWeatherStation.ReadAndLog;  
 var
   Data: TJSONObject;
   TempDS, TempBMP, Pressure, Altitude: Double;
@@ -3706,7 +3706,7 @@ begin
   FLEDStatus.SetValue(gvLow);
 end;
 
-procedure TWeatherStation.Run;
+procedure TWeatherStation.Run;  
 begin
   WriteLn('Station météo en fonctionnement');
   WriteLn('Lecture toutes les 5 minutes');
@@ -3770,7 +3770,7 @@ type
 
 { TWateringSystem }
 
-constructor TWateringSystem.Create;
+constructor TWateringSystem.Create;  
 begin
   WriteLn('=== Système d''arrosage automatique ===');
   WriteLn;
@@ -3799,7 +3799,7 @@ begin
   WriteLn;
 end;
 
-destructor TWateringSystem.Destroy;
+destructor TWateringSystem.Destroy;  
 begin
   // S'assurer que la pompe est éteinte
   FPump.SetValue(gvLow);
@@ -3809,12 +3809,12 @@ begin
   inherited Destroy;
 end;
 
-function TWateringSystem.GetMoistureLevel: Integer;
+function TWateringSystem.GetMoistureLevel: Integer;  
 begin
   Result := FADC.ReadChannel(FMoistureChannel);
 end;
 
-function TWateringSystem.IsSoilDry: Boolean;
+function TWateringSystem.IsSoilDry: Boolean;  
 var
   Level: Integer;
 begin
@@ -3832,7 +3832,7 @@ begin
     WriteLn('Sol OK');
 end;
 
-procedure TWateringSystem.WaterPlant;
+procedure TWateringSystem.WaterPlant;  
 begin
   WriteLn('>>> ARROSAGE EN COURS <<<');
 
@@ -3849,7 +3849,7 @@ begin
   WriteLn;
 end;
 
-procedure TWateringSystem.Run;
+procedure TWateringSystem.Run;  
 begin
   WriteLn('Système d''arrosage démarré');
   WriteLn('Ctrl+C pour arrêter');
@@ -3941,7 +3941,7 @@ type
 
 { TMotionDetector }
 
-constructor TMotionDetector.Create;
+constructor TMotionDetector.Create;  
 begin
   WriteLn('=== Détecteur de mouvement ===');
   WriteLn;
@@ -3976,7 +3976,7 @@ begin
   WriteLn;
 end;
 
-destructor TMotionDetector.Destroy;
+destructor TMotionDetector.Destroy;  
 begin
   DeactivateAlarm;
   FPIR.Free;
@@ -3985,7 +3985,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TMotionDetector.OnMotionDetected;
+procedure TMotionDetector.OnMotionDetected;  
 var
   CurrentTime: TDateTime;
   TimeDiff: Double;
@@ -4019,19 +4019,19 @@ begin
   WriteLn;
 end;
 
-procedure TMotionDetector.ActivateAlarm;
+procedure TMotionDetector.ActivateAlarm;  
 begin
   FLED.SetValue(gvHigh);
   FBuzzer.SetValue(gvHigh);
 end;
 
-procedure TMotionDetector.DeactivateAlarm;
+procedure TMotionDetector.DeactivateAlarm;  
 begin
   FLED.SetValue(gvLow);
   FBuzzer.SetValue(gvLow);
 end;
 
-procedure TMotionDetector.SendNotification(const Message: string);
+procedure TMotionDetector.SendNotification(const Message: string);  
 var
   HTTPClient: TFPHTTPClient;
   Response: string;
@@ -4066,7 +4066,7 @@ begin
   end;
 end;
 
-procedure TMotionDetector.Run;
+procedure TMotionDetector.Run;  
 var
   CurrentState, PreviousState: TGPIOValue;
 begin
@@ -4215,7 +4215,7 @@ finally
 end;
 
 // Gérer les signaux système (SIGINT, SIGTERM)
-procedure SignalHandler(sig: cint); cdecl;
+procedure SignalHandler(sig: cint); cdecl;  
 begin
   WriteLn('Signal reçu, nettoyage...');
   // Nettoyer les GPIO
@@ -4223,7 +4223,7 @@ begin
 end;
 
 // Dans le programme principal:
-FpSignal(SIGINT, @SignalHandler);
+FpSignal(SIGINT, @SignalHandler);  
 FpSignal(SIGTERM, @SignalHandler);
 ```
 
