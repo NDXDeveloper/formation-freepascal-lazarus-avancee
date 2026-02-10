@@ -96,7 +96,7 @@ C:\Python311\
 
 3. **Variables d'environnement** (optionnel) :
 ```
-PYTHONHOME=C:\Python311
+PYTHONHOME=C:\Python311  
 PATH=%PATH%;C:\Python311
 ```
 
@@ -104,14 +104,14 @@ PATH=%PATH%;C:\Python311
 
 1. **Installer Python et les fichiers de développement** :
 ```bash
-sudo apt update
+sudo apt update  
 sudo apt install python3 python3-dev
 ```
 
 2. **Vérifier l'installation** :
 ```bash
-python3 --version
-python3-config --includes
+python3 --version  
+python3-config --includes  
 python3-config --ldflags
 ```
 
@@ -198,7 +198,7 @@ end.
 ```
 Hello from Python!
 2 + 2 = 4
-Bonjour, FreePascal!
+Bonjour, FreePascal!  
 Appuyez sur Entrée pour quitter...
 ```
 
@@ -387,7 +387,7 @@ uses
 var
   Engine: TPythonEngine;
 
-procedure ExecuterCodeAvecGestion(const Code: string);
+procedure ExecuterCodeAvecGestion(const Code: string);  
 begin
   try
     Engine.ExecString(Code);
@@ -461,7 +461,7 @@ var
   Output: TPythonInputOutput;
   Sortie: TStringList;
 
-procedure SurSortie(Sender: TObject; const S: string);
+procedure SurSortie(Sender: TObject; const S: string);  
 begin
   WriteLn('[PYTHON] ', S);
   Sortie.Add(S);
@@ -517,7 +517,7 @@ var
   Commande: string;
   Continuer: Boolean;
 
-procedure InitialiserEnvironnement;
+procedure InitialiserEnvironnement;  
 begin
   Engine.ExecStrings([
     'import sys',
@@ -603,14 +603,14 @@ const
   ERROR_DIVISION_BY_ZERO = 2;
 
 // Fonction simple
-function Additionner(a, b: Double): Double; cdecl;
+function Additionner(a, b: Double): Double; cdecl;  
 begin
   LastError := SUCCESS;
   Result := a + b;
 end;
 
 // Fonction avec gestion d'erreur
-function Diviser(a, b: Double; out resultat: Double): Integer; cdecl;
+function Diviser(a, b: Double; out resultat: Double): Integer; cdecl;  
 begin
   LastError := SUCCESS;
   LastErrorMsg := '';
@@ -629,7 +629,7 @@ begin
 end;
 
 // Fonction mathématique avancée
-function CalculerFactorielle(n: Integer): Int64; cdecl;
+function CalculerFactorielle(n: Integer): Int64; cdecl;  
 var
   i: Integer;
 begin
@@ -649,7 +649,7 @@ begin
 end;
 
 // Fonction avec tableau
-procedure TrierTableau(tableau: PDouble; taille: Integer); cdecl;
+procedure TrierTableau(tableau: PDouble; taille: Integer); cdecl;  
 var
   i, j: Integer;
   temp: Double;
@@ -707,19 +707,19 @@ begin
 end;
 
 // Récupération des erreurs
-function ObtenirDerniereErreur: Integer; cdecl;
+function ObtenirDerniereErreur: Integer; cdecl;  
 begin
   Result := LastError;
 end;
 
-procedure ObtenirMessageErreur(buffer: PChar; taille: Integer); cdecl;
+procedure ObtenirMessageErreur(buffer: PChar; taille: Integer); cdecl;  
 begin
   if buffer <> nil then
     StrLCopy(buffer, PChar(LastErrorMsg), taille - 1);
 end;
 
 // Version
-function ObtenirVersion: PChar; cdecl;
+function ObtenirVersion: PChar; cdecl;  
 begin
   Result := '1.0.0';
 end;
@@ -734,7 +734,7 @@ exports
   ObtenirMessageErreur,
   ObtenirVersion;
 
-begin
+begin  
 end.
 ```
 
@@ -758,9 +758,9 @@ fpc -olibmathpas.so mathpas.pas
 Utilisation de la bibliothèque mathpas depuis Python
 """
 
-import ctypes
-import sys
-import os
+import ctypes  
+import sys  
+import os  
 from typing import List
 
 # Déterminer le nom de la bibliothèque selon la plateforme
@@ -779,17 +779,17 @@ except OSError as e:
     sys.exit(1)
 
 # Définir les prototypes des fonctions
-mathpas.Additionner.argtypes = [ctypes.c_double, ctypes.c_double]
+mathpas.Additionner.argtypes = [ctypes.c_double, ctypes.c_double]  
 mathpas.Additionner.restype = ctypes.c_double
 
 mathpas.Diviser.argtypes = [ctypes.c_double, ctypes.c_double,
                             ctypes.POINTER(ctypes.c_double)]
 mathpas.Diviser.restype = ctypes.c_int
 
-mathpas.CalculerFactorielle.argtypes = [ctypes.c_int]
+mathpas.CalculerFactorielle.argtypes = [ctypes.c_int]  
 mathpas.CalculerFactorielle.restype = ctypes.c_int64
 
-mathpas.TrierTableau.argtypes = [ctypes.POINTER(ctypes.c_double), ctypes.c_int]
+mathpas.TrierTableau.argtypes = [ctypes.POINTER(ctypes.c_double), ctypes.c_int]  
 mathpas.TrierTableau.restype = None
 
 mathpas.CalculerStatistiques.argtypes = [
@@ -800,13 +800,13 @@ mathpas.CalculerStatistiques.argtypes = [
 ]
 mathpas.CalculerStatistiques.restype = None
 
-mathpas.ObtenirVersion.argtypes = []
+mathpas.ObtenirVersion.argtypes = []  
 mathpas.ObtenirVersion.restype = ctypes.c_char_p
 
-mathpas.ObtenirDerniereErreur.argtypes = []
+mathpas.ObtenirDerniereErreur.argtypes = []  
 mathpas.ObtenirDerniereErreur.restype = ctypes.c_int
 
-mathpas.ObtenirMessageErreur.argtypes = [ctypes.c_char_p, ctypes.c_int]
+mathpas.ObtenirMessageErreur.argtypes = [ctypes.c_char_p, ctypes.c_int]  
 mathpas.ObtenirMessageErreur.restype = None
 
 
@@ -922,7 +922,7 @@ mathpas version 1.0.0
 5! = 120
 10! = 3628800
 
-Avant tri : [3.14, 1.41, 2.71, 0.57, 1.61]
+Avant tri : [3.14, 1.41, 2.71, 0.57, 1.61]  
 Après tri : [0.57, 1.41, 1.61, 2.71, 3.14]
 
 Statistiques de [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
@@ -940,9 +940,9 @@ Pour une meilleure intégration, créez une classe Python wrapper :
 Wrapper orienté objet pour mathpas
 """
 
-import ctypes
-import sys
-import os
+import ctypes  
+import sys  
+import os  
 from typing import List, Tuple, Optional
 
 
@@ -1211,7 +1211,7 @@ type
     Parametres: TJSONObject;
   end;
 
-function TraiterRequete(const Requete: TRequete): TJSONObject;
+function TraiterRequete(const Requete: TRequete): TJSONObject;  
 var
   a, b: Double;
   n, i: Integer;
@@ -1331,8 +1331,8 @@ end.
 Client Python pour communiquer avec le serveur Pascal
 """
 
-import socket
-import json
+import socket  
+import json  
 from typing import Any, Dict
 
 
@@ -1503,7 +1503,7 @@ end.
 Client Python pour communiquer via pipe nommé (Windows)
 """
 
-import win32pipe
+import win32pipe  
 import win32file
 
 
@@ -1933,7 +1933,7 @@ type
 
 { TPlugin }
 
-constructor TPlugin.Create(AEngine: TPythonEngine; const FileName: string);
+constructor TPlugin.Create(AEngine: TPythonEngine; const FileName: string);  
 var
   PluginName: string;
 begin
@@ -1965,7 +1965,7 @@ begin
   WriteLn(Format('Plugin chargé: %s v%s', [FName, FVersion]));
 end;
 
-function TPlugin.Execute(const Params: array of Variant): Variant;
+function TPlugin.Execute(const Params: array of Variant): Variant;  
 var
   ExecuteFunc: Variant;
   ParamsArray: Variant;
@@ -1987,7 +1987,7 @@ end;
 
 { TPluginManager }
 
-constructor TPluginManager.Create;
+constructor TPluginManager.Create;  
 begin
   inherited Create;
   FEngine := TPythonEngine.Create(nil);
@@ -1995,7 +1995,7 @@ begin
   FPlugins := TList.Create;
 end;
 
-destructor TPluginManager.Destroy;
+destructor TPluginManager.Destroy;  
 begin
   UnloadAll;
   FPlugins.Free;
@@ -2003,7 +2003,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TPluginManager.LoadPlugin(const FileName: string);
+procedure TPluginManager.LoadPlugin(const FileName: string);  
 var
   Plugin: TPlugin;
 begin
@@ -2022,7 +2022,7 @@ begin
   end;
 end;
 
-procedure TPluginManager.UnloadAll;
+procedure TPluginManager.UnloadAll;  
 var
   i: Integer;
 begin
@@ -2031,12 +2031,12 @@ begin
   FPlugins.Clear;
 end;
 
-function TPluginManager.GetPlugin(Index: Integer): TPlugin;
+function TPluginManager.GetPlugin(Index: Integer): TPlugin;  
 begin
   Result := TPlugin(FPlugins[Index]);
 end;
 
-function TPluginManager.GetPluginCount: Integer;
+function TPluginManager.GetPluginCount: Integer;  
 begin
   Result := FPlugins.Count;
 end;
@@ -2097,9 +2097,9 @@ end.
 Plugin calculatrice pour l'application Pascal
 """
 
-PLUGIN_NAME = "Calculatrice"
-PLUGIN_VERSION = "1.0.0"
-PLUGIN_AUTHOR = "Votre Nom"
+PLUGIN_NAME = "Calculatrice"  
+PLUGIN_VERSION = "1.0.0"  
+PLUGIN_AUTHOR = "Votre Nom"  
 PLUGIN_DESCRIPTION = "Effectue des calculs mathématiques"
 
 def execute(params):
@@ -2136,9 +2136,9 @@ def aide():
 Plugin de manipulation de texte
 """
 
-PLUGIN_NAME = "Texte Utils"
-PLUGIN_VERSION = "1.0.0"
-PLUGIN_AUTHOR = "Votre Nom"
+PLUGIN_NAME = "Texte Utils"  
+PLUGIN_VERSION = "1.0.0"  
+PLUGIN_AUTHOR = "Votre Nom"  
 PLUGIN_DESCRIPTION = "Utilitaires de manipulation de texte"
 
 def execute(params):
@@ -2198,20 +2198,20 @@ var
 
 { TMLServer }
 
-constructor TMLServer.Create;
+constructor TMLServer.Create;  
 begin
   FPython := TPythonEngine.Create(nil);
   FPython.LoadDll;
   InitModel;
 end;
 
-destructor TMLServer.Destroy;
+destructor TMLServer.Destroy;  
 begin
   FPython.Free;
   inherited Destroy;
 end;
 
-procedure TMLServer.InitModel;
+procedure TMLServer.InitModel;  
 begin
   WriteLn('Initialisation du modèle ML...');
 
@@ -2234,7 +2234,7 @@ begin
   WriteLn('Modèle prêt');
 end;
 
-function TMLServer.Predict(const InputData: TJSONArray): TJSONObject;
+function TMLServer.Predict(const InputData: TJSONArray): TJSONObject;  
 var
   i: Integer;
   DataStr: string;
@@ -2280,7 +2280,7 @@ end;
 
 // Routes HTTP
 
-procedure RoutePredict(ARequest: TRequest; AResponse: TResponse);
+procedure RoutePredict(ARequest: TRequest; AResponse: TResponse);  
 var
   RequestData: TJSONObject;
   InputData: TJSONArray;
@@ -2316,7 +2316,7 @@ begin
   end;
 end;
 
-procedure RouteStatus(ARequest: TRequest; AResponse: TResponse);
+procedure RouteStatus(ARequest: TRequest; AResponse: TResponse);  
 var
   Status: TJSONObject;
 begin
@@ -2374,7 +2374,7 @@ end.
 Client Python pour tester le serveur ML Pascal
 """
 
-import requests
+import requests  
 import json
 
 
@@ -2468,7 +2468,7 @@ type
 
 { TMainForm }
 
-constructor TMainForm.Create(AOwner: TComponent);
+constructor TMainForm.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -2509,18 +2509,18 @@ begin
   FMemo.Lines.Add('Cliquez sur le bouton pour générer un graphique');
 end;
 
-destructor TMainForm.Destroy;
+destructor TMainForm.Destroy;  
 begin
   FPython.Free;
   inherited Destroy;
 end;
 
-procedure TMainForm.BtnGenererClick(Sender: TObject);
+procedure TMainForm.BtnGenererClick(Sender: TObject);  
 begin
   GenererGraphique;
 end;
 
-procedure TMainForm.GenererGraphique;
+procedure TMainForm.GenererGraphique;  
 var
   TempFile: string;
 begin
@@ -2601,7 +2601,7 @@ var
   i, n: Integer;
   ResultPython, ResultPascal: Double;
 
-function CalculPascal(x: Double): Double;
+function CalculPascal(x: Double): Double;  
 begin
   Result := Sin(x) * Cos(x) + Sqrt(Abs(x));
 end;
@@ -2683,7 +2683,7 @@ for i := 1 to 10000 do
   Result := Result + PythonFunction(i);
 
 // ✅ Bon: traiter le tableau en une fois en Python
-Engine.ExecString('result = sum(process_value(i) for i in range(10000))');
+Engine.ExecString('result = sum(process_value(i) for i in range(10000))');  
 Result := Engine.GetMainModule.result;
 ```
 
@@ -2693,7 +2693,7 @@ Result := Engine.GetMainModule.result;
 result = [x**2 for x in range(1000000)]
 
 # ✅ Rapide: NumPy vectorisé
-import numpy as np
+import numpy as np  
 result = np.arange(1000000) ** 2
 ```
 
@@ -2737,8 +2737,8 @@ Error: Unable to load Python DLL
 **Solutions** :
 ```pascal
 // Spécifier le chemin explicitement
-Engine.DllPath := 'C:\Python311\';
-Engine.DllName := 'python311.dll';
+Engine.DllPath := 'C:\Python311\';  
+Engine.DllName := 'python311.dll';  
 Engine.LoadDll;
 
 // Ou sous Linux
@@ -2758,7 +2758,7 @@ ModuleNotFoundError: No module named 'numpy'
 pip install numpy
 
 # Ou spécifier le chemin Python
-import sys
+import sys  
 sys.path.append('/chemin/vers/modules')
 ```
 
@@ -2935,11 +2935,11 @@ Voici un exemple qui combine les trois approches pour créer une application com
 
 ```
 # Dépendances Python pour l'application
-numpy>=1.21.0
-pandas>=1.3.0
-matplotlib>=3.4.0
-scikit-learn>=1.0.0
-requests>=2.26.0
+numpy>=1.21.0  
+pandas>=1.3.0  
+matplotlib>=3.4.0  
+scikit-learn>=1.0.0  
+requests>=2.26.0  
 flask>=2.0.0
 ```
 
@@ -2954,7 +2954,7 @@ program InstallDependencies;
 uses
   SysUtils, Process;
 
-function ExecuterCommande(const Cmd: string): Integer;
+function ExecuterCommande(const Cmd: string): Integer;  
 var
   Proc: TProcess;
 begin
@@ -2971,14 +2971,14 @@ begin
   end;
 end;
 
-function PythonEstInstalle: Boolean;
+function PythonEstInstalle: Boolean;  
 begin
   Result := ExecuterCommande('python --version') = 0;
   if not Result then
     Result := ExecuterCommande('python3 --version') = 0;
 end;
 
-procedure InstallerDependances;
+procedure InstallerDependances;  
 var
   PythonCmd: string;
 begin
@@ -3074,7 +3074,7 @@ choco install python
 
 **Linux:**
 ```bash
-sudo apt update
+sudo apt update  
 sudo apt install python3 python3-pip python3-dev
 ```
 
@@ -3181,7 +3181,7 @@ var
   TestsPasses: Integer = 0;
   TestsTotal: Integer = 0;
 
-procedure Test(const Nom: string; Condition: Boolean);
+procedure Test(const Nom: string; Condition: Boolean);  
 begin
   Inc(TestsTotal);
   Write('Test ', TestsTotal, ': ', Nom, ' ... ');
@@ -3195,7 +3195,7 @@ begin
     WriteLn('ÉCHEC ✗');
 end;
 
-procedure TesterPython;
+procedure TesterPython;  
 var
   Engine: TPythonEngine;
   Resultat: Variant;
@@ -3258,7 +3258,7 @@ begin
   end;
 end;
 
-procedure TesterExtensionPascal;
+procedure TesterExtensionPascal;  
 begin
   WriteLn;
   WriteLn('=== Tests Extension Pascal ===');

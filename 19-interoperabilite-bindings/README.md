@@ -229,7 +229,7 @@ L'ordre des octets en mémoire diffère selon l'architecture :
 ```
 Valeur : $12345678
 
-Little-endian : 78 56 34 12
+Little-endian : 78 56 34 12  
 Big-endian    : 12 34 56 78
 ```
 

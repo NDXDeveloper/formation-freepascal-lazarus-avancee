@@ -51,7 +51,7 @@ Java est rapide, mais certaines opérations sont plus efficaces en code natif :
 
 ```pascal
 // Code Pascal natif ultra-rapide
-function CalculIntensif(n: Int64): Int64; cdecl;
+function CalculIntensif(n: Int64): Int64; cdecl;  
 var
   i: Int64;
 begin
@@ -154,7 +154,7 @@ Java_<package_name>_<class_name>_<method_name>
 
 **Exemple** :
 ```java
-package com.example;
+package com.example;  
 class MathLib {
     public native int add(int a, int b);
 }
@@ -178,11 +178,11 @@ Java_com_example_MathLib_add
 #### Windows
 
 ```batch
-REM Télécharger depuis Oracle ou utiliser Chocolatey
+REM Télécharger depuis Oracle ou utiliser Chocolatey  
 choco install openjdk
 
-REM Vérifier l'installation
-java -version
+REM Vérifier l'installation  
+java -version  
 javac -version
 ```
 
@@ -190,11 +190,11 @@ javac -version
 
 ```bash
 # Installer OpenJDK
-sudo apt update
+sudo apt update  
 sudo apt install default-jdk
 
 # Vérifier l'installation
-java -version
+java -version  
 javac -version
 ```
 
@@ -222,11 +222,11 @@ C:\Program Files\Java\jdk-17\include\
 
 ```bash
 # Windows
-set JAVA_HOME=C:\Program Files\Java\jdk-17
+set JAVA_HOME=C:\Program Files\Java\jdk-17  
 set PATH=%JAVA_HOME%\bin;%PATH%
 
 # Linux
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64  
 export PATH=$JAVA_HOME/bin:$PATH
 ```
 
@@ -312,7 +312,7 @@ type
   jobject = Pointer;
 
 // Implémentation de la méthode native
-procedure Java_HelloJNI_sayHello(env: JNIEnv; obj: jobject); cdecl;
+procedure Java_HelloJNI_sayHello(env: JNIEnv; obj: jobject); cdecl;  
 begin
   WriteLn('Hello from FreePascal via JNI!');
 end;
@@ -320,7 +320,7 @@ end;
 exports
   Java_HelloJNI_sayHello;
 
-begin
+begin  
 end.
 ```
 
@@ -592,7 +592,7 @@ end;
 ### Trouver une classe
 
 ```pascal
-procedure Java_CallbackTest_triggerCallback(env: PJNIEnv; obj: jobject); cdecl;
+procedure Java_CallbackTest_triggerCallback(env: PJNIEnv; obj: jobject); cdecl;  
 var
   cls: jclass;
 begin
@@ -620,7 +620,7 @@ public class CallbackTest {
 
 **Pascal** :
 ```pascal
-procedure Java_CallbackTest_triggerCallback(env: PJNIEnv; obj: jobject); cdecl;
+procedure Java_CallbackTest_triggerCallback(env: PJNIEnv; obj: jobject); cdecl;  
 var
   cls: jclass;
   methodID: jmethodID;
@@ -663,9 +663,9 @@ Les signatures utilisent un format spécial :
 
 **Exemples** :
 ```
-void method()                    → ()V
-int method(String s)            → (Ljava/lang/String;)I
-void method(int[] arr, boolean b) → ([IZ)V
+void method()                    → ()V  
+int method(String s)            → (Ljava/lang/String;)I  
+void method(int[] arr, boolean b) → ([IZ)V  
 String method(Object obj)       → (Ljava/lang/Object;)Ljava/lang/String;
 ```
 
@@ -674,12 +674,12 @@ String method(Object obj)       → (Ljava/lang/Object;)Ljava/lang/String;
 ### Vérifier les exceptions
 
 ```pascal
-function VerifierException(env: PJNIEnv): Boolean;
+function VerifierException(env: PJNIEnv): Boolean;  
 begin
   Result := env^^.ExceptionCheck(env) = JNI_TRUE;
 end;
 
-procedure Java_ExceptionTest_causeException(env: PJNIEnv; obj: jobject); cdecl;
+procedure Java_ExceptionTest_causeException(env: PJNIEnv; obj: jobject); cdecl;  
 var
   cls: jclass;
   methodID: jmethodID;
@@ -701,7 +701,7 @@ end;
 ### Lever une exception
 
 ```pascal
-procedure LeverException(env: PJNIEnv; const message: string);
+procedure LeverException(env: PJNIEnv; const message: string);  
 var
   exceptionClass: jclass;
 begin
@@ -752,7 +752,7 @@ begin
   GlobalRef := env^^.NewGlobalRef(env, ref);
 end;
 
-procedure Java_MemoryTest_cleanup(env: PJNIEnv; obj: jobject); cdecl;
+procedure Java_MemoryTest_cleanup(env: PJNIEnv; obj: jobject); cdecl;  
 begin
   if GlobalRef <> nil then
   begin
@@ -910,7 +910,7 @@ begin
 end;
 
 // GetVersion
-function Java_MathLibrary_getVersion(env: PJNIEnv; obj: jobject): jstring; cdecl;
+function Java_MathLibrary_getVersion(env: PJNIEnv; obj: jobject): jstring; cdecl;  
 begin
   Result := env^^.NewStringUTF(env, 'MathLibrary v1.0.0 (FreePascal)');
 end;
@@ -921,7 +921,7 @@ exports
   Java_MathLibrary_fibonacci,
   Java_MathLibrary_getVersion;
 
-begin
+begin  
 end.
 ```
 
@@ -944,9 +944,9 @@ java MathLibrary
 
 **Sortie attendue** :
 ```
-Version: MathLibrary v1.0.0 (FreePascal)
-Factorial(5) = 120
-Power(2, 10) = 1024.0
+Version: MathLibrary v1.0.0 (FreePascal)  
+Factorial(5) = 120  
+Power(2, 10) = 1024.0  
 Fibonacci(10): 0 1 1 2 3 5 8 13 21 34
 ```
 
@@ -963,7 +963,7 @@ uses
 var
   JavaVM: PJavaVM;  // Sauvegardé lors de JNI_OnLoad
 
-procedure MonThreadNatif;
+procedure MonThreadNatif;  
 var
   env: PJNIEnv;
   attached: Boolean;
@@ -987,7 +987,7 @@ begin
 end;
 
 // Cette fonction est appelée automatiquement par la JVM
-function JNI_OnLoad(vm: PJavaVM; reserved: Pointer): jint; cdecl;
+function JNI_OnLoad(vm: PJavaVM; reserved: Pointer): jint; cdecl;  
 begin
   // Sauvegarder le pointeur JavaVM pour utilisation ultérieure
   JavaVM := vm;
@@ -999,7 +999,7 @@ begin
 end;
 
 // Appelé lors du déchargement
-procedure JNI_OnUnload(vm: PJavaVM; reserved: Pointer); cdecl;
+procedure JNI_OnUnload(vm: PJavaVM; reserved: Pointer); cdecl;  
 begin
   WriteLn('Bibliothèque déchargée');
   JavaVM := nil;
@@ -1030,7 +1030,7 @@ type
     destructor Destroy; override;
   end;
 
-constructor TCallbackThread.Create(env: PJNIEnv; callback: jobject);
+constructor TCallbackThread.Create(env: PJNIEnv; callback: jobject);  
 begin
   inherited Create(True);
 
@@ -1040,7 +1040,7 @@ begin
   FreeOnTerminate := True;
 end;
 
-destructor TCallbackThread.Destroy;
+destructor TCallbackThread.Destroy;  
 var
   env: PJNIEnv;
 begin
@@ -1054,7 +1054,7 @@ begin
   inherited;
 end;
 
-procedure TCallbackThread.Execute;
+procedure TCallbackThread.Execute;  
 var
   env: PJNIEnv;
   cls: jclass;
@@ -1151,7 +1151,7 @@ var
   CachedMethodID: jmethodID = nil;
   CachedClass: jclass = nil;
 
-procedure Java_CacheDemo_callMethod(env: PJNIEnv; obj: jobject); cdecl;
+procedure Java_CacheDemo_callMethod(env: PJNIEnv; obj: jobject); cdecl;  
 var
   localClass: jclass;
 begin
@@ -1180,7 +1180,7 @@ Pour éviter les copies de mémoire :
 
 ```java
 // Java
-ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
+ByteBuffer buffer = ByteBuffer.allocateDirect(1024);  
 nativeProcessBuffer(buffer);
 ```
 
@@ -1300,7 +1300,7 @@ implementation
 var
   LogFile: TextFile;
 
-procedure LogJNICall(const FunctionName: string; const Params: array of const);
+procedure LogJNICall(const FunctionName: string; const Params: array of const);  
 var
   i: Integer;
   ParamStr: string;
@@ -1819,7 +1819,7 @@ end;
 #### 2. Libérer toutes les ressources
 
 ```pascal
-procedure Java_ResourceTest_processData(env: PJNIEnv; obj: jobject); cdecl;
+procedure Java_ResourceTest_processData(env: PJNIEnv; obj: jobject); cdecl;  
 var
   cls: jclass;
   localRef: jobject;
@@ -1844,7 +1844,7 @@ end;
 #### 3. Vérifier les exceptions après chaque appel JNI
 
 ```pascal
-function AppelerMethodeSafe(env: PJNIEnv; obj: jobject): Boolean;
+function AppelerMethodeSafe(env: PJNIEnv; obj: jobject): Boolean;  
 var
   cls: jclass;
   methodID: jmethodID;
@@ -1917,7 +1917,7 @@ end;
 var
   GlobalEnv: PJNIEnv;  // NE JAMAIS FAIRE ÇA
 
-procedure Thread1;
+procedure Thread1;  
 begin
   GlobalEnv^^.CallVoidMethod(...);  // DANGEREUX !
 end;
@@ -1927,7 +1927,7 @@ end;
 
 ```pascal
 // ❌ MAUVAIS - Fuite mémoire
-procedure Java_Leak_process(env: PJNIEnv; obj: jobject; str: jstring); cdecl;
+procedure Java_Leak_process(env: PJNIEnv; obj: jobject; str: jstring); cdecl;  
 var
   chars: PChar;
 begin
@@ -1944,12 +1944,12 @@ end;
 var
   SavedRef: jobject;
 
-procedure Java_Bad_save(env: PJNIEnv; obj: jobject; ref: jobject); cdecl;
+procedure Java_Bad_save(env: PJNIEnv; obj: jobject; ref: jobject); cdecl;  
 begin
   SavedRef := ref;  // ERREUR : référence locale expirée !
 end;
 
-procedure Java_Bad_use(env: PJNIEnv; obj: jobject); cdecl;
+procedure Java_Bad_use(env: PJNIEnv; obj: jobject); cdecl;  
 begin
   // SavedRef est invalide maintenant !
   env^^.CallVoidMethod(env, SavedRef, ...);  // CRASH probable
@@ -1959,7 +1959,7 @@ end;
 var
   SavedRef: jobject = nil;
 
-procedure Java_Good_save(env: PJNIEnv; obj: jobject; ref: jobject); cdecl;
+procedure Java_Good_save(env: PJNIEnv; obj: jobject; ref: jobject); cdecl;  
 begin
   if SavedRef <> nil then
     env^^.DeleteGlobalRef(env, SavedRef);
@@ -2004,7 +2004,7 @@ end;
 exports
   Java_com_example_app_NativeLib_getDeviceInfo;
 
-begin
+begin  
 end.
 ```
 
@@ -2062,7 +2062,7 @@ end;
 exports
   Java_ImageProcessor_applyGrayscale;
 
-begin
+begin  
 end.
 ```
 
@@ -2080,8 +2080,8 @@ type
   TVector = array of Double;
   TMatrix = array of array of Double;
 
-function DotProduct(const A, B: TVector): Double;
-function MatrixMultiply(const A, B: TMatrix): TMatrix;
+function DotProduct(const A, B: TVector): Double;  
+function MatrixMultiply(const A, B: TMatrix): TMatrix;  
 function Determinant(const M: TMatrix): Double;
 
 implementation
@@ -2145,7 +2145,7 @@ end;
 exports
   Java_MathWrapper_dotProduct;
 
-begin
+begin  
 end.
 ```
 

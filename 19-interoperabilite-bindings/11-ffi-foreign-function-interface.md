@@ -216,7 +216,7 @@ Lier une bibliothèque au moment de la compilation.
 ```pascal
 {$LINKLIB m}  // Lier libm (bibliothèque mathématique)
 
-function sin(x: Double): Double; cdecl; external;
+function sin(x: Double): Double; cdecl; external;  
 function cos(x: Double): Double; cdecl; external;
 ```
 
@@ -289,7 +289,7 @@ end.
 
 **Sortie** :
 ```
-Texte : Bonjour FreePascal !
+Texte : Bonjour FreePascal !  
 Longueur : 20
 ```
 
@@ -325,8 +325,8 @@ program TestMath;
 {$mode objfpc}{$H+}
 
 // Déclarer les fonctions C
-function add(a, b: Integer): Integer; cdecl; external 'libmath.so';
-function multiply(a, b: Integer): Integer; cdecl; external 'libmath.so';
+function add(a, b: Integer): Integer; cdecl; external 'libmath.so';  
+function multiply(a, b: Integer): Integer; cdecl; external 'libmath.so';  
 function divide(a, b: Double): Double; cdecl; external 'libmath.so';
 
 begin
@@ -372,8 +372,8 @@ program TestStrings;
 uses
   SysUtils;
 
-procedure to_upper(s: PAnsiChar); cdecl; external 'libstring.so';
-procedure my_strcpy(dest, src: PAnsiChar); cdecl; external 'libstring.so';
+procedure to_upper(s: PAnsiChar); cdecl; external 'libstring.so';  
+procedure my_strcpy(dest, src: PAnsiChar); cdecl; external 'libstring.so';  
 function my_strlen(s: PAnsiChar): Integer; cdecl; external 'libstring.so';
 
 var
@@ -718,7 +718,7 @@ procedure process_numbers(arr: PInteger; length: Integer;
   callback: TCallback); cdecl; external 'libcallback.so';
 
 // Fonction callback Pascal
-procedure my_callback(value: Integer); cdecl;
+procedure my_callback(value: Integer); cdecl;  
 begin
   WriteLn('Valeur : ', value);
 end;
@@ -762,7 +762,7 @@ type
     count: Integer;
   end;
 
-procedure accumulate_callback(value: Integer; user_data: Pointer); cdecl;
+procedure accumulate_callback(value: Integer; user_data: Pointer); cdecl;  
 var
   data: ^TMyData;
 begin
@@ -791,7 +791,7 @@ end;
 **⚠️ IMPORTANT** : Garder une référence au callback !
 
 ```pascal
-procedure SafeCallback;
+procedure SafeCallback;  
 var
   callback: TCallback;
 begin
@@ -894,7 +894,7 @@ type
 
 implementation
 
-constructor TMathLib.Create;
+constructor TMathLib.Create;  
 begin
   inherited Create;
 
@@ -912,24 +912,24 @@ begin
     raise EMathLibException.Create('Fonctions non trouvées');
 end;
 
-destructor TMathLib.Destroy;
+destructor TMathLib.Destroy;  
 begin
   if FLibHandle <> NilHandle then
     UnloadLibrary(FLibHandle);
   inherited;
 end;
 
-function TMathLib.Sqrt(x: Double): Double;
+function TMathLib.Sqrt(x: Double): Double;  
 begin
   Result := FSqrt(x);
 end;
 
-function TMathLib.Sin(x: Double): Double;
+function TMathLib.Sin(x: Double): Double;  
 begin
   Result := FSin(x);
 end;
 
-function TMathLib.Cos(x: Double): Double;
+function TMathLib.Cos(x: Double): Double;  
 begin
   Result := FCos(x);
 end;
@@ -978,7 +978,7 @@ type
     property Sqrt: function(x: Double): Double cdecl read GetSqrt;
   end;
 
-function TMathLibLazy.GetSqrt: function(x: Double): Double; cdecl;
+function TMathLibLazy.GetSqrt: function(x: Double): Double; cdecl;  
 begin
   if @FSqrt = nil then
   begin
@@ -1021,7 +1021,7 @@ const char* get_last_error() {
 **Pascal** :
 
 ```pascal
-function my_operation(value: Integer): Integer; cdecl; external 'libmylib.so';
+function my_operation(value: Integer): Integer; cdecl; external 'libmylib.so';  
 function get_last_error: PAnsiChar; cdecl; external 'libmylib.so';
 
 var
@@ -1136,7 +1136,7 @@ type
   end;
 {$PACKRECORDS DEFAULT}
 
-function get_as_int(v: TValue): Integer; cdecl; external 'libunion.so';
+function get_as_int(v: TValue): Integer; cdecl; external 'libunion.so';  
 function get_as_float(v: TValue): Single; cdecl; external 'libunion.so';
 
 var
@@ -1230,8 +1230,8 @@ typedef struct {
     operation_t multiply;
 } Calculator;
 
-int add(int a, int b) { return a + b; }
-int subtract(int a, int b) { return a - b; }
+int add(int a, int b) { return a + b; }  
+int subtract(int a, int b) { return a - b; }  
 int multiply(int a, int b) { return a * b; }
 
 Calculator* create_calculator() {
@@ -1256,7 +1256,7 @@ type
     multiply: TOperation;
   end;
 
-function create_calculator: PCalculator; cdecl; external 'libcalc.so';
+function create_calculator: PCalculator; cdecl; external 'libcalc.so';  
 procedure free_calculator(calc: PCalculator); cdecl; external 'libcalc.so';
 
 var
@@ -1405,7 +1405,7 @@ const
   SQLITE_ROW = 100;
   SQLITE_DONE = 101;
 
-constructor TSQLite.Create(const DatabaseFile: string);
+constructor TSQLite.Create(const DatabaseFile: string);  
 var
   ret: Integer;
 begin
@@ -1433,7 +1433,7 @@ begin
   end;
 end;
 
-destructor TSQLite.Destroy;
+destructor TSQLite.Destroy;  
 begin
   if FDB <> nil then
     Fsqlite3_close(FDB);
@@ -1444,7 +1444,7 @@ begin
   inherited;
 end;
 
-procedure TSQLite.LoadFunctions;
+procedure TSQLite.LoadFunctions;  
 begin
   Pointer(Fsqlite3_open) := GetProcAddress(FLibHandle, 'sqlite3_open');
   Pointer(Fsqlite3_close) := GetProcAddress(FLibHandle, 'sqlite3_close');
@@ -1460,14 +1460,14 @@ begin
     raise ESQLiteException.Create('Fonctions SQLite non trouvées');
 end;
 
-procedure TSQLite.CheckError(ErrorCode: Integer; const Msg: string);
+procedure TSQLite.CheckError(ErrorCode: Integer; const Msg: string);  
 begin
   if ErrorCode <> SQLITE_OK then
     raise ESQLiteException.CreateFmt('%s: %s',
       [Msg, string(Fsqlite3_errmsg(FDB))]);
 end;
 
-procedure TSQLite.Execute(const SQL: string);
+procedure TSQLite.Execute(const SQL: string);  
 var
   ret: Integer;
 begin
@@ -1475,7 +1475,7 @@ begin
   CheckError(ret, 'Erreur lors de l''exécution');
 end;
 
-function TSQLite.Query(const SQL: string): TStringList;
+function TSQLite.Query(const SQL: string): TStringList;  
 var
   stmt: PSQLite3_Stmt;
   ret: Integer;
@@ -1597,7 +1597,7 @@ begin
   stream.Write(buffer^, Result);
 end;
 
-constructor TCurl.Create;
+constructor TCurl.Create;  
 begin
   inherited Create;
 
@@ -1617,7 +1617,7 @@ begin
     raise Exception.Create('Impossible d''initialiser CURL');
 end;
 
-destructor TCurl.Destroy;
+destructor TCurl.Destroy;  
 begin
   if FCurl <> nil then
     Fcurl_easy_cleanup(FCurl);
@@ -1628,7 +1628,7 @@ begin
   inherited;
 end;
 
-procedure TCurl.LoadFunctions;
+procedure TCurl.LoadFunctions;  
 begin
   Pointer(Fcurl_easy_init) := GetProcAddress(FLibHandle, 'curl_easy_init');
   Pointer(Fcurl_easy_cleanup) := GetProcAddress(FLibHandle, 'curl_easy_cleanup');
@@ -1636,7 +1636,7 @@ begin
   Pointer(Fcurl_easy_perform) := GetProcAddress(FLibHandle, 'curl_easy_perform');
 end;
 
-function TCurl.Get(const URL: string): string;
+function TCurl.Get(const URL: string): string;  
 var
   stream: TMemoryStream;
   urlStr: AnsiString;
@@ -1707,7 +1707,7 @@ type
 
 implementation
 
-constructor TGit.Create;
+constructor TGit.Create;  
 begin
   inherited Create;
 
@@ -1724,7 +1724,7 @@ begin
   Fgit_libgit2_init;
 end;
 
-destructor TGit.Destroy;
+destructor TGit.Destroy;  
 begin
   if FLibHandle <> NilHandle then
   begin
@@ -1735,7 +1735,7 @@ begin
   inherited;
 end;
 
-procedure TGit.LoadFunctions;
+procedure TGit.LoadFunctions;  
 begin
   Pointer(Fgit_libgit2_init) := GetProcAddress(FLibHandle, 'git_libgit2_init');
   Pointer(Fgit_libgit2_shutdown) := GetProcAddress(FLibHandle, 'git_libgit2_shutdown');
@@ -1746,7 +1746,7 @@ begin
   Pointer(Fgit_reference_free) := GetProcAddress(FLibHandle, 'git_reference_free');
 end;
 
-function TGit.GetCurrentBranch(const RepoPath: string): string;
+function TGit.GetCurrentBranch(const RepoPath: string): string;  
 var
   repo: Pgit_repository;
   ref: Pgit_reference;
@@ -1785,7 +1785,7 @@ end.
 **✓ Toujours vérifier les codes de retour** :
 
 ```pascal
-function SafeOperation: Boolean;
+function SafeOperation: Boolean;  
 var
   ret: Integer;
 begin
@@ -1860,7 +1860,7 @@ type
     destructor Destroy; override;
   end;
 
-constructor TResourceWrapper.Create;
+constructor TResourceWrapper.Create;  
 begin
   inherited;
   FHandle := c_create_resource();
@@ -1868,7 +1868,7 @@ begin
     raise Exception.Create('Création échouée');
 end;
 
-destructor TResourceWrapper.Destroy;
+destructor TResourceWrapper.Destroy;  
 begin
   if FHandle <> nil then
     c_destroy_resource(FHandle);
@@ -1894,7 +1894,7 @@ type
     procedure SafeOperation;
   end;
 
-procedure TThreadSafeWrapper.SafeOperation;
+procedure TThreadSafeWrapper.SafeOperation;  
 begin
   EnterCriticalSection(FLock);
   try
@@ -1927,7 +1927,7 @@ function sqrt(x: Double): Double; cdecl; external 'libm.so.6';
 **✓ Tester les cas limites** :
 
 ```pascal
-procedure TestFFI;
+procedure TestFFI;  
 begin
   // Test normal
   Assert(Abs(MySqrt(16.0) - 4.0) < 0.001);
@@ -1979,7 +1979,7 @@ function sqrt(x: Double): Double; cdecl; external 'msvcrt.dll';
 function sqrt(x: Double): Double; cdecl; external 'libm.so.6';
 {$ENDIF}
 
-function MySqrt(x: Double): Double;
+function MySqrt(x: Double): Double;  
 begin
   Result := sqrt(x);
 end;
@@ -2202,7 +2202,7 @@ const
   JSON_TYPE_BOOL = 4;
   JSON_TYPE_NULL = 5;
 
-constructor TJsonWrapper.Create;
+constructor TJsonWrapper.Create;  
 begin
   inherited Create;
 
@@ -2226,7 +2226,7 @@ begin
   end;
 end;
 
-destructor TJsonWrapper.Destroy;
+destructor TJsonWrapper.Destroy;  
 begin
   if FParser <> nil then
     Fdestroy_parser(FParser);
@@ -2237,7 +2237,7 @@ begin
   inherited;
 end;
 
-procedure TJsonWrapper.LoadFunctions;
+procedure TJsonWrapper.LoadFunctions;  
 begin
   Pointer(Fcreate_parser) := GetProcAddress(FLibHandle, 'simdjson_create_parser');
   Pointer(Fdestroy_parser) := GetProcAddress(FLibHandle, 'simdjson_destroy_parser');
@@ -2254,7 +2254,7 @@ begin
     raise EJsonException.Create('Fonctions simdjson non trouvées');
 end;
 
-function TJsonWrapper.Parse(const JsonString: string): PJsonDocument;
+function TJsonWrapper.Parse(const JsonString: string): PJsonDocument;  
 var
   doc: PJsonDocument;
   ret: Integer;
@@ -2269,7 +2269,7 @@ begin
   Result := doc;
 end;
 
-function TJsonWrapper.GetString(elem: PJsonElement): string;
+function TJsonWrapper.GetString(elem: PJsonElement): string;  
 var
   str: PAnsiChar;
   ret: Integer;
@@ -2281,7 +2281,7 @@ begin
     raise EJsonException.Create('Pas une chaîne');
 end;
 
-function TJsonWrapper.GetInt(elem: PJsonElement): Int64;
+function TJsonWrapper.GetInt(elem: PJsonElement): Int64;  
 var
   value: Int64;
   ret: Integer;
@@ -2293,7 +2293,7 @@ begin
     raise EJsonException.Create('Pas un entier');
 end;
 
-function TJsonWrapper.GetDouble(elem: PJsonElement): Double;
+function TJsonWrapper.GetDouble(elem: PJsonElement): Double;  
 var
   value: Double;
   ret: Integer;
@@ -2305,7 +2305,7 @@ begin
     raise EJsonException.Create('Pas un nombre');
 end;
 
-function TJsonWrapper.GetBool(elem: PJsonElement): Boolean;
+function TJsonWrapper.GetBool(elem: PJsonElement): Boolean;  
 var
   value: Boolean;
   ret: Integer;
@@ -2317,7 +2317,7 @@ begin
     raise EJsonException.Create('Pas un booléen');
 end;
 
-function TJsonWrapper.GetField(elem: PJsonElement; const Key: string): PJsonElement;
+function TJsonWrapper.GetField(elem: PJsonElement; const Key: string): PJsonElement;  
 var
   field: PJsonElement;
   ret: Integer;
@@ -2332,7 +2332,7 @@ begin
     raise EJsonException.CreateFmt('Champ "%s" non trouvé', [Key]);
 end;
 
-function TJsonWrapper.GetArrayElement(elem: PJsonElement; Index: Integer): PJsonElement;
+function TJsonWrapper.GetArrayElement(elem: PJsonElement; Index: Integer): PJsonElement;  
 var
   element: PJsonElement;
   ret: Integer;
@@ -2391,7 +2391,7 @@ end.
 uses
   DynLibs;
 
-procedure CheckLibrary;
+procedure CheckLibrary;  
 var
   handle: TLibHandle;
 begin
@@ -2410,7 +2410,7 @@ end;
 **2. Tracer les appels FFI** :
 
 ```pascal
-function TracedCall(const FuncName: string; x: Double): Double;
+function TracedCall(const FuncName: string; x: Double): Double;  
 begin
   WriteLn('[FFI] Appel de ', FuncName, ' avec x=', x:0:2);
   Result := c_function(x);
@@ -2445,8 +2445,8 @@ unit FFILogger;
 
 interface
 
-procedure LogFFICall(const Func: string; const Params: array of string);
-procedure LogFFIReturn(const Func: string; const ReturnValue: string);
+procedure LogFFICall(const Func: string; const Params: array of string);  
+procedure LogFFIReturn(const Func: string; const ReturnValue: string);  
 procedure LogFFIError(const Func, Error: string);
 
 implementation
@@ -2457,7 +2457,7 @@ uses
 var
   LogFile: TextFile;
 
-procedure LogFFICall(const Func: string; const Params: array of string);
+procedure LogFFICall(const Func: string; const Params: array of string);  
 var
   i: Integer;
   paramStr: string;
@@ -2474,14 +2474,14 @@ begin
   Flush(LogFile);
 end;
 
-procedure LogFFIReturn(const Func: string; const ReturnValue: string);
+procedure LogFFIReturn(const Func: string; const ReturnValue: string);  
 begin
   WriteLn(LogFile, Format('[%s] RETURN %s = %s',
     [FormatDateTime('hh:nn:ss.zzz', Now), Func, ReturnValue]));
   Flush(LogFile);
 end;
 
-procedure LogFFIError(const Func, Error: string);
+procedure LogFFIError(const Func, Error: string);  
 begin
   WriteLn(LogFile, Format('[%s] ERROR %s: %s',
     [FormatDateTime('hh:nn:ss.zzz', Now), Func, Error]));
@@ -2529,7 +2529,7 @@ end;
 
 ```pascal
 // Pour les fonctions très simples, éviter FFI
-function FastMod(a, b: Integer): Integer; inline;
+function FastMod(a, b: Integer): Integer; inline;  
 begin
   Result := a mod b;  // Pas besoin d'appeler C pour ça
 end;
@@ -2546,7 +2546,7 @@ type
     function Sqrt(x: Double): Double;
   end;
 
-function TCachedFFI.Sqrt(x: Double): Double;
+function TCachedFFI.Sqrt(x: Double): Double;  
 begin
   if not FCache.TryGetValue(x, Result) then
   begin
@@ -2606,7 +2606,7 @@ end;
 
 **❌ Problème** :
 ```pascal
-function GetName: PAnsiChar;
+function GetName: PAnsiChar;  
 var
   s: AnsiString;
 begin
@@ -2617,7 +2617,7 @@ end;
 
 **✓ Solution** :
 ```pascal
-function GetName: PAnsiChar;
+function GetName: PAnsiChar;  
 const
   NAME: AnsiString = 'Permanent';  // Constante globale
 begin
@@ -2629,7 +2629,7 @@ end;
 
 **❌ Problème** :
 ```pascal
-procedure ProcessData;
+procedure ProcessData;  
 var
   localVar: Integer;
 
@@ -2650,7 +2650,7 @@ type
     total: Integer;
   end;
 
-procedure MyCallback(value: Integer; context: Pointer); cdecl;
+procedure MyCallback(value: Integer; context: Pointer); cdecl;  
 var
   ctx: ^TContext;
 begin
@@ -2658,7 +2658,7 @@ begin
   Inc(ctx^.total, value);
 end;
 
-procedure ProcessData;
+procedure ProcessData;  
 var
   context: TContext;
 begin
@@ -2869,7 +2869,7 @@ const
   ERR_OK = 0;
   ERR_INVALID = -1;
 
-constructor TMyLib.Create;
+constructor TMyLib.Create;  
 begin
   inherited Create;
   FInitialized := False;
@@ -2886,7 +2886,7 @@ begin
   end;
 end;
 
-destructor TMyLib.Destroy;
+destructor TMyLib.Destroy;  
 begin
   if FInitialized then
     Fcleanup;
@@ -2897,7 +2897,7 @@ begin
   inherited;
 end;
 
-procedure TMyLib.LoadFunctions;
+procedure TMyLib.LoadFunctions;  
 begin
   Pointer(Finit) := GetProcAddress(FLibHandle, 'mylib_init');
   Pointer(Fcleanup) := GetProcAddress(FLibHandle, 'mylib_cleanup');
@@ -2906,13 +2906,13 @@ begin
     raise EMyLibException.Create('Fonctions non trouvées');
 end;
 
-procedure TMyLib.CheckError(ErrorCode: Integer; const Msg: string);
+procedure TMyLib.CheckError(ErrorCode: Integer; const Msg: string);  
 begin
   if ErrorCode <> ERR_OK then
     raise EMyLibException.CreateFmt('%s (code: %d)', [Msg, ErrorCode]);
 end;
 
-procedure TMyLib.Initialize;
+procedure TMyLib.Initialize;  
 var
   ret: Integer;
 begin

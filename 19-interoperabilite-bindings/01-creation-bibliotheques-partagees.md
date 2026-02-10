@@ -26,14 +26,14 @@ Quand vous corrigez un bug ou améliorez une fonctionnalité :
 - Pas besoin de recompiler les applications clientes
 
 ```
-Avant (bibliothèque statique) :
-App1.exe (contient le code)    → Mise à jour : recompiler App1
-App2.exe (contient le code)    → Mise à jour : recompiler App2
+Avant (bibliothèque statique) :  
+App1.exe (contient le code)    → Mise à jour : recompiler App1  
+App2.exe (contient le code)    → Mise à jour : recompiler App2  
 App3.exe (contient le code)    → Mise à jour : recompiler App3
 
-Après (bibliothèque partagée) :
-App1.exe → mylib.dll
-App2.exe → mylib.dll            → Mise à jour : remplacer mylib.dll
+Après (bibliothèque partagée) :  
+App1.exe → mylib.dll  
+App2.exe → mylib.dll            → Mise à jour : remplacer mylib.dll  
 App3.exe → mylib.dll
 ```
 
@@ -149,7 +149,7 @@ Les bibliothèques peuvent être :
 
 ```pascal
 // Exemple sans état - fonction pure
-function Additionner(a, b: Integer): Integer;
+function Additionner(a, b: Integer): Integer;  
 begin
   Result := a + b;  // Pas de variable globale
 end;
@@ -158,7 +158,7 @@ end;
 var
   CompteurAppels: Integer = 0;
 
-function IncrémenterCompteur(): Integer;
+function IncrémenterCompteur(): Integer;  
 begin
   Inc(CompteurAppels);
   Result := CompteurAppels;
@@ -313,17 +313,17 @@ Pour qu'une bibliothèque soit utilisable depuis d'autres langages, utilisez des
 
 ```pascal
 // Types de base
-Integer, LongInt    // 32 bits signé
-Int64               // 64 bits signé
-Single              // Flottant 32 bits
-Double              // Flottant 64 bits
-Byte                // 8 bits non signé
-Word                // 16 bits non signé
-LongWord            // 32 bits non signé
+Integer, LongInt    // 32 bits signé  
+Int64               // 64 bits signé  
+Single              // Flottant 32 bits  
+Double              // Flottant 64 bits  
+Byte                // 8 bits non signé  
+Word                // 16 bits non signé  
+LongWord            // 32 bits non signé  
 QWord               // 64 bits non signé
 
 // Pointeurs
-PChar               // Chaîne C
+PChar               // Chaîne C  
 Pointer             // Pointeur générique
 ```
 
@@ -331,11 +331,11 @@ Pointer             // Pointeur générique
 
 ```pascal
 // Types Pascal spécifiques
-string              // Structure interne Pascal
-AnsiString          // Gestion mémoire Pascal
-UnicodeString       // Peut varier selon la plateforme
-TObject             // Classes Pascal
-set of              // Sets Pascal
+string              // Structure interne Pascal  
+AnsiString          // Gestion mémoire Pascal  
+UnicodeString       // Peut varier selon la plateforme  
+TObject             // Classes Pascal  
+set of              // Sets Pascal  
 dynamic arrays      // Tableaux dynamiques Pascal
 ```
 
@@ -345,7 +345,7 @@ dynamic arrays      // Tableaux dynamiques Pascal
 PChar, PAnsiChar, PWideChar
 
 // Pour les tableaux
-Pointer + longueur séparée
+Pointer + longueur séparée  
 array[0..MAX] of Type
 
 // Pour les structures complexes
@@ -433,8 +433,8 @@ end;
 type
   TMyHandle = type Pointer;
 
-function CreateHandle(): TMyHandle; cdecl;
-procedure CloseHandle(h: TMyHandle); cdecl;
+function CreateHandle(): TMyHandle; cdecl;  
+procedure CloseHandle(h: TMyHandle); cdecl;  
 function UseHandle(h: TMyHandle; data: Integer): Integer; cdecl;
 ```
 
@@ -579,13 +579,13 @@ function GetText(buffer: PChar; size: Integer): Integer; cdecl;
 
 ```pascal
 // ❌ Alloué par la lib, libéré par l'appelant avec un autre allocateur
-function AllocateData(): Pointer; cdecl;
+function AllocateData(): Pointer; cdecl;  
 begin
   GetMem(Result, 1024);  // Allocateur Pascal
 end;
 
 // Client en C fait :
-void* data = AllocateData();
+void* data = AllocateData();  
 free(data);  // Allocateur C - ERREUR !
 ```
 

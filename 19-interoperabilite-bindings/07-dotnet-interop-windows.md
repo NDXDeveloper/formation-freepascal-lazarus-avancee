@@ -85,7 +85,7 @@ Des milliers de bibliothèques sont disponibles gratuitement via NuGet :
 
 ```pascal
 // Bibliothèque Pascal existante (calculs complexes)
-function CalculerComplexe(x, y: Double): Double; cdecl;
+function CalculerComplexe(x, y: Double): Double; cdecl;  
 begin
   Result := // ... algorithme optimisé en Pascal
 end;
@@ -271,25 +271,25 @@ uses
   SysUtils, Math;
 
 // Fonction simple d'addition
-function Add(a, b: Integer): Integer; cdecl; export;
+function Add(a, b: Integer): Integer; cdecl; export;  
 begin
   Result := a + b;
 end;
 
 // Fonction avec nombres décimaux
-function Power(base, exponent: Double): Double; cdecl; export;
+function Power(base, exponent: Double): Double; cdecl; export;  
 begin
   Result := Math.Power(base, exponent);
 end;
 
 // Fonction retournant une chaîne (attention à la gestion mémoire)
-function GetVersion: PAnsiChar; cdecl; export;
+function GetVersion: PAnsiChar; cdecl; export;  
 begin
   Result := '1.0.0';  // Chaîne constante, pas de désallocation nécessaire
 end;
 
 // Procédure modifiant des paramètres par référence
-procedure Swap(var a, b: Integer); cdecl; export;
+procedure Swap(var a, b: Integer); cdecl; export;  
 var
   temp: Integer;
 begin
@@ -299,7 +299,7 @@ begin
 end;
 
 // Fonction travaillant avec un tableau
-function SumArray(arr: PInteger; length: Integer): Integer; cdecl; export;
+function SumArray(arr: PInteger; length: Integer): Integer; cdecl; export;  
 var
   i: Integer;
   sum: Integer;
@@ -352,7 +352,7 @@ Après compilation, vous obtenez :
 Créez un fichier `Program.cs` :
 
 ```csharp
-using System;
+using System;  
 using System.Runtime.InteropServices;
 
 /// <summary>
@@ -435,7 +435,7 @@ class Program
 **Avec le compilateur csc** :
 
 ```bash
-csc Program.cs
+csc Program.cs  
 Program.exe
 ```
 
@@ -443,7 +443,7 @@ Program.exe
 
 ```bash
 # Créer un nouveau projet console
-dotnet new console -n MathDemo
+dotnet new console -n MathDemo  
 cd MathDemo
 
 # Remplacer le contenu de Program.cs
@@ -467,7 +467,7 @@ Les chaînes sont délicates en P/Invoke car elles doivent traverser la frontiè
 const
   VERSION_STRING: PAnsiChar = 'Version 1.0.0';
 
-function GetVersion: PAnsiChar; cdecl; export;
+function GetVersion: PAnsiChar; cdecl; export;  
 begin
   Result := VERSION_STRING;  // Pas de désallocation nécessaire
 end;
@@ -491,7 +491,7 @@ Cette approche est plus sûre pour les chaînes dynamiques.
 **Pascal** :
 
 ```pascal
-procedure GetMessage(buffer: PAnsiChar; bufferSize: Integer); cdecl; export;
+procedure GetMessage(buffer: PAnsiChar; bufferSize: Integer); cdecl; export;  
 var
   msg: string;
 begin
@@ -514,9 +514,9 @@ public static extern void GetMessage(
     int bufferSize);
 
 // Utilisation
-var sb = new StringBuilder(256);
-GetMessage(sb, sb.Capacity);
-string message = sb.ToString();
+var sb = new StringBuilder(256);  
+GetMessage(sb, sb.Capacity);  
+string message = sb.ToString();  
 Console.WriteLine(message);
 ```
 
@@ -525,7 +525,7 @@ Console.WriteLine(message);
 **Pascal** :
 
 ```pascal
-function CreateString(const text: PAnsiChar): PAnsiChar; cdecl; export;
+function CreateString(const text: PAnsiChar): PAnsiChar; cdecl; export;  
 var
   len: Integer;
 begin
@@ -534,7 +534,7 @@ begin
   StrCopy(Result, text);
 end;
 
-procedure FreeString(str: PAnsiChar); cdecl; export;
+procedure FreeString(str: PAnsiChar); cdecl; export;  
 begin
   if str <> nil then
     FreeMem(str);
@@ -551,7 +551,7 @@ public static extern IntPtr CreateString(string text);
 public static extern void FreeString(IntPtr str);
 
 // Utilisation avec gestion de mémoire
-IntPtr ptr = CreateString("Hello");
+IntPtr ptr = CreateString("Hello");  
 try
 {
     string result = Marshal.PtrToStringAnsi(ptr);
@@ -577,19 +577,19 @@ type
   end;
   PPoint = ^TPoint;
 
-function CreatePoint(x, y: Integer): TPoint; cdecl; export;
+function CreatePoint(x, y: Integer): TPoint; cdecl; export;  
 begin
   Result.X := x;
   Result.Y := y;
 end;
 
-procedure MovePoint(p: PPoint; dx, dy: Integer); cdecl; export;
+procedure MovePoint(p: PPoint; dx, dy: Integer); cdecl; export;  
 begin
   Inc(p^.X, dx);
   Inc(p^.Y, dy);
 end;
 
-function DistanceToOrigin(p: TPoint): Double; cdecl; export;
+function DistanceToOrigin(p: TPoint): Double; cdecl; export;  
 begin
   Result := Sqrt(p.X * p.X + p.Y * p.Y);
 end;
@@ -770,17 +770,17 @@ const
 
 { TCalculator - Implémentation }
 
-function TCalculator.Add(a, b: Integer): Integer;
+function TCalculator.Add(a, b: Integer): Integer;  
 begin
   Result := a + b;
 end;
 
-function TCalculator.Multiply(a, b: Integer): Integer;
+function TCalculator.Multiply(a, b: Integer): Integer;  
 begin
   Result := a * b;
 end;
 
-function TCalculator.GetDescription: WideString;
+function TCalculator.GetDescription: WideString;  
 begin
   Result := 'Pascal COM Calculator v1.0';
 end;
@@ -829,7 +829,7 @@ tlbimp comserver.dll /out:ComServerInterop.dll
 Utilisation en C# :
 
 ```csharp
-using System;
+using System;  
 using ComServerLib;  // Référence à ComServerInterop.dll
 
 class Program
@@ -948,7 +948,7 @@ type
     A, B: Integer;
   end;
 
-function ProcessRequest(const Req: TRequest): TJSONObject;
+function ProcessRequest(const Req: TRequest): TJSONObject;  
 begin
   Result := TJSONObject.Create;
 
@@ -1074,9 +1074,9 @@ fpc -oserver.exe server.pas
 **Program.cs** :
 
 ```csharp
-using System;
-using System.Net.Sockets;
-using System.Text;
+using System;  
+using System.Net.Sockets;  
+using System.Text;  
 using System.Text.Json;
 
 namespace PascalClient
@@ -1232,13 +1232,13 @@ namespace PascalClient
 
 ```bash
 # Compiler
-dotnet new console -n PascalClient
+dotnet new console -n PascalClient  
 cd PascalClient
 # Copier Program.cs
 dotnet run
 
 # Ou avec csc
-csc Program.cs
+csc Program.cs  
 Program.exe
 ```
 
@@ -1271,7 +1271,7 @@ Le marshalling est le processus de conversion des données entre le monde manag�
 
 ```pascal
 // Retourner un tableau de nombres premiers
-function GetPrimes(count: Integer; out outArray: PInteger): Integer; cdecl; export;
+function GetPrimes(count: Integer; out outArray: PInteger): Integer; cdecl; export;  
 const
   primes: array[0..24] of Integer =
     (2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
@@ -1290,7 +1290,7 @@ begin
 end;
 
 // Libérer le tableau alloué
-procedure FreeArray(arr: PInteger); cdecl; export;
+procedure FreeArray(arr: PInteger); cdecl; export;  
 begin
   if arr <> nil then
     FreeMem(arr);
@@ -1332,8 +1332,8 @@ class NativeArrays
 }
 
 // Utilisation simple
-int[] primes = NativeArrays.GetPrimesManaged(10);
-Console.WriteLine("Les 10 premiers nombres premiers:");
+int[] primes = NativeArrays.GetPrimesManaged(10);  
+Console.WriteLine("Les 10 premiers nombres premiers:");  
 Console.WriteLine(string.Join(", ", primes));
 ```
 
@@ -1351,7 +1351,7 @@ type
   PPerson = ^TPerson;
 
 // Créer et initialiser une personne
-procedure FillPerson(p: PPerson); cdecl; export;
+procedure FillPerson(p: PPerson); cdecl; export;  
 begin
   StrPCopy(p^.Name, 'John Doe');
   p^.Age := 30;
@@ -1359,7 +1359,7 @@ begin
 end;
 
 // Calculer le salaire moyen d'une équipe
-function GetAverageSalary(persons: PPerson; count: Integer): Double; cdecl; export;
+function GetAverageSalary(persons: PPerson; count: Integer): Double; cdecl; export;  
 var
   i: Integer;
   total: Double;
@@ -1374,7 +1374,7 @@ begin
 end;
 
 // Trouver la personne la plus âgée
-function FindOldest(persons: PPerson; count: Integer): TPerson; cdecl; export;
+function FindOldest(persons: PPerson; count: Integer): TPerson; cdecl; export;  
 var
   i: Integer;
   oldest: PPerson;
@@ -1468,7 +1468,7 @@ type
   PNode = ^TNode;
 
 // Créer une liste chaînée
-function CreateList(values: PInteger; count: Integer): PNode; cdecl; export;
+function CreateList(values: PInteger; count: Integer): PNode; cdecl; export;  
 var
   i: Integer;
   current, previous: PNode;
@@ -1493,7 +1493,7 @@ begin
 end;
 
 // Libérer une liste chaînée
-procedure FreeList(node: PNode); cdecl; export;
+procedure FreeList(node: PNode); cdecl; export;  
 var
   next: PNode;
 begin
@@ -1506,7 +1506,7 @@ begin
 end;
 
 // Compter les éléments
-function CountList(node: PNode): Integer; cdecl; export;
+function CountList(node: PNode): Integer; cdecl; export;  
 var
   count: Integer;
 begin
@@ -1562,7 +1562,7 @@ class NativeLinkedList
 }
 
 // Utilisation
-int[] values = { 1, 2, 3, 4, 5 };
+int[] values = { 1, 2, 3, 4, 5 };  
 IntPtr listHead = NativeLinkedList.CreateList(values, values.Length);
 
 try
@@ -1602,7 +1602,7 @@ MathLibrary/
 ### NativeMethods.cs - Imports P/Invoke
 
 ```csharp
-using System;
+using System;  
 using System.Runtime.InteropServices;
 
 namespace MathLibrary.Native
@@ -1659,8 +1659,8 @@ namespace MathLibrary
 ### MathLib.cs - API publique
 
 ```csharp
-using System;
-using System.Runtime.InteropServices;
+using System;  
+using System.Runtime.InteropServices;  
 using MathLibrary.Native;
 
 namespace MathLibrary
@@ -1835,7 +1835,7 @@ namespace MathLibrary
 ### Utilisation du wrapper
 
 ```csharp
-using System;
+using System;  
 using MathLibrary;
 
 class Program
@@ -1895,7 +1895,7 @@ class Program
 
 ```csharp
 // ✓ BON : Libération systématique
-IntPtr ptr = NativeMethods.AllocateBuffer(1024);
+IntPtr ptr = NativeMethods.AllocateBuffer(1024);  
 try
 {
     // Utiliser le buffer
@@ -1938,7 +1938,7 @@ public static extern int MyFunction(int x);
 
 ```pascal
 // ✓ BON : Retourner un code d'erreur
-function ProcessData(data: PByte; size: Integer): Integer; cdecl; export;
+function ProcessData(data: PByte; size: Integer): Integer; cdecl; export;  
 begin
   try
     // Traitement...
@@ -1952,7 +1952,7 @@ end;
 
 ```csharp
 // ✓ BON : Vérifier les codes d'erreur
-int result = NativeMethods.ProcessData(buffer, size);
+int result = NativeMethods.ProcessData(buffer, size);  
 if (result != 0)
 {
     throw new InvalidOperationException("Échec du traitement des données");
@@ -1969,7 +1969,7 @@ type
     ErrorMessage: array[0..255] of AnsiChar;
   end;
 
-function ComplexOperation(param: Integer): TResult; cdecl; export;
+function ComplexOperation(param: Integer): TResult; cdecl; export;  
 begin
   Result.Success := False;
   Result.ErrorCode := 0;
@@ -2002,7 +2002,7 @@ public struct Result
 }
 
 // Utilisation
-Result result = NativeMethods.ComplexOperation(42);
+Result result = NativeMethods.ComplexOperation(42);  
 if (!result.Success)
 {
     throw new Exception($"Erreur {result.ErrorCode}: {result.ErrorMessage}");
@@ -2017,12 +2017,12 @@ if (!result.Success)
 var
   CriticalSection: TRTLCriticalSection;
 
-procedure InitLibrary; cdecl; export;
+procedure InitLibrary; cdecl; export;  
 begin
   InitCriticalSection(CriticalSection);
 end;
 
-function ThreadSafeOperation(value: Integer): Integer; cdecl; export;
+function ThreadSafeOperation(value: Integer): Integer; cdecl; export;  
 begin
   EnterCriticalSection(CriticalSection);
   try
@@ -2033,7 +2033,7 @@ begin
   end;
 end;
 
-procedure CleanupLibrary; cdecl; export;
+procedure CleanupLibrary; cdecl; export;  
 begin
   DoneCriticalSection(CriticalSection);
 end;
@@ -2118,7 +2118,7 @@ public void ProcessArray(int[] data)
 **Ajouter des logs pour faciliter le débogage** :
 
 ```csharp
-using System;
+using System;  
 using System.Diagnostics;
 
 public class MathLib
@@ -2175,7 +2175,7 @@ public class MathLib
 **Tester l'interop avec des tests automatisés** :
 
 ```csharp
-using Xunit;
+using Xunit;  
 using MathLibrary;
 
 public class MathLibTests
@@ -2409,14 +2409,14 @@ public class ProgressReporter
 **Pascal** :
 
 ```pascal
-function GetUnicodeMessage: PWideChar; cdecl; export;
+function GetUnicodeMessage: PWideChar; cdecl; export;  
 const
   MSG: WideString = 'Bonjour 世界 🌍';
 begin
   Result := PWideChar(MSG);
 end;
 
-procedure ProcessUnicodeString(str: PWideChar); cdecl; export;
+procedure ProcessUnicodeString(str: PWideChar); cdecl; export;  
 var
   s: WideString;
 begin
@@ -2439,7 +2439,7 @@ public static extern void ProcessUnicodeString(
     [MarshalAs(UnmanagedType.LPWStr)] string str);
 
 // Utilisation
-string message = GetUnicodeMessage();
+string message = GetUnicodeMessage();  
 Console.WriteLine(message);  // Affiche: Bonjour 世界 🌍
 
 ProcessUnicodeString("Message depuis C# avec émojis: 😀🎉");
@@ -2465,52 +2465,52 @@ type
   end;
 
 // Wrapper C pour exposer la classe
-function Database_Create(connStr: PAnsiChar): Pointer; cdecl; export;
+function Database_Create(connStr: PAnsiChar): Pointer; cdecl; export;  
 begin
   Result := TDatabase.Create(string(connStr));
 end;
 
-procedure Database_Free(db: Pointer); cdecl; export;
+procedure Database_Free(db: Pointer); cdecl; export;  
 begin
   TDatabase(db).Free;
 end;
 
-function Database_Connect(db: Pointer): Boolean; cdecl; export;
+function Database_Connect(db: Pointer): Boolean; cdecl; export;  
 begin
   Result := TDatabase(db).Connect;
 end;
 
-procedure Database_Disconnect(db: Pointer); cdecl; export;
+procedure Database_Disconnect(db: Pointer); cdecl; export;  
 begin
   TDatabase(db).Disconnect;
 end;
 
-function Database_ExecuteQuery(db: Pointer; sql: PAnsiChar): Integer; cdecl; export;
+function Database_ExecuteQuery(db: Pointer; sql: PAnsiChar): Integer; cdecl; export;  
 begin
   Result := TDatabase(db).ExecuteQuery(string(sql));
 end;
 
 { TDatabase implementation }
 
-constructor TDatabase.Create(const ConnectionString: string);
+constructor TDatabase.Create(const ConnectionString: string);  
 begin
   FConnectionString := ConnectionString;
   FConnected := False;
 end;
 
-function TDatabase.Connect: Boolean;
+function TDatabase.Connect: Boolean;  
 begin
   // Logique de connexion...
   FConnected := True;
   Result := True;
 end;
 
-procedure TDatabase.Disconnect;
+procedure TDatabase.Disconnect;  
 begin
   FConnected := False;
 end;
 
-function TDatabase.ExecuteQuery(const SQL: string): Integer;
+function TDatabase.ExecuteQuery(const SQL: string): Integer;  
 begin
   if not FConnected then
     raise Exception.Create('Non connecté');
@@ -2631,24 +2631,24 @@ type
 var
   GlobalEventCallback: TEventCallback = nil;
 
-procedure RegisterEventCallback(callback: TEventCallback); cdecl; export;
+procedure RegisterEventCallback(callback: TEventCallback); cdecl; export;  
 begin
   GlobalEventCallback := callback;
 end;
 
-procedure UnregisterEventCallback; cdecl; export;
+procedure UnregisterEventCallback; cdecl; export;  
 begin
   GlobalEventCallback := nil;
 end;
 
-procedure TriggerEvent(eventType: Integer; data: Pointer); cdecl; export;
+procedure TriggerEvent(eventType: Integer; data: Pointer); cdecl; export;  
 begin
   if Assigned(GlobalEventCallback) then
     GlobalEventCallback(eventType, data);
 end;
 
 // Simuler des événements depuis un thread
-procedure StartEventGenerator; cdecl; export;
+procedure StartEventGenerator; cdecl; export;  
 var
   Thread: TThread;
 begin
@@ -2903,7 +2903,7 @@ public unsafe int Sum(int[] values)
 **Pascal correspondant** :
 
 ```pascal
-function SumArrayPointer(arr: PInteger; length: Integer): Integer; cdecl; export;
+function SumArrayPointer(arr: PInteger; length: Integer): Integer; cdecl; export;  
 var
   i: Integer;
   sum: Integer;
@@ -2974,7 +2974,7 @@ public void ProcessData()
 **BenchmarkDotNet** pour mesurer les performances :
 
 ```csharp
-using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes;  
 using BenchmarkDotNet.Running;
 
 [MemoryDiagnoser]
@@ -3201,16 +3201,16 @@ exports
   ConvertToGrayscale,
   AdjustBrightness;
 
-begin
+begin  
 end.
 ```
 
 **C# - ImageProcessor.cs** :
 
 ```csharp
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+using System;  
+using System.Drawing;  
+using System.Drawing.Imaging;  
 using System.Runtime.InteropServices;
 
 namespace ImageProcessing
@@ -3359,9 +3359,9 @@ namespace ImageProcessing
 **Programme de démonstration** :
 
 ```csharp
-using System;
-using System.Drawing;
-using System.Diagnostics;
+using System;  
+using System.Drawing;  
+using System.Diagnostics;  
 using ImageProcessing;
 
 class Program
@@ -3602,14 +3602,14 @@ exports
   ComputeFFT,
   LinearRegression;
 
-begin
+begin  
 end.
 ```
 
 **C# - API REST avec ASP.NET Core** :
 
 ```csharp
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;  
 using System.Runtime.InteropServices;
 
 namespace ComputeAPI.Controllers
@@ -3803,9 +3803,9 @@ namespace ComputeAPI.Controllers
 **Client de test** :
 
 ```csharp
-using System;
-using System.Net.Http;
-using System.Net.Http.Json;
+using System;  
+using System.Net.Http;  
+using System.Net.Http.Json;  
 using System.Threading.Tasks;
 
 class ComputeClient
@@ -3935,7 +3935,7 @@ System.DllNotFoundException: Unable to load DLL 'mathlib.dll'
 1. **Vérifier l'emplacement de la DLL** :
 ```csharp
 // Afficher le répertoire de recherche
-Console.WriteLine($"Répertoire courant: {Environment.CurrentDirectory}");
+Console.WriteLine($"Répertoire courant: {Environment.CurrentDirectory}");  
 Console.WriteLine($"Répertoire de l'exe: {AppDomain.CurrentDomain.BaseDirectory}");
 ```
 
@@ -3966,8 +3966,8 @@ static Program()
 
 4. **Ajouter au PATH** :
 ```csharp
-string nativePath = Path.Combine(AppContext.BaseDirectory, "native");
-string path = Environment.GetEnvironmentVariable("PATH");
+string nativePath = Path.Combine(AppContext.BaseDirectory, "native");  
+string path = Environment.GetEnvironmentVariable("PATH");  
 Environment.SetEnvironmentVariable("PATH", $"{nativePath};{path}");
 ```
 
@@ -4033,24 +4033,24 @@ Console.WriteLine($"Taille C#: {Marshal.SizeOf<MyStruct>()}");
 2. **Pointeurs invalides** :
 ```csharp
 // ✗ MAUVAIS - pointeur vers variable locale
-int value = 42;
+int value = 42;  
 NativeMethods.ProcessPointer(ref value);
 // La fonction native garde le pointeur qui devient invalide
 
 // ✓ BON - allouer sur le tas managé
-int[] value = new int[1] { 42 };
+int[] value = new int[1] { 42 };  
 NativeMethods.ProcessArray(value, 1);
 ```
 
 3. **Libération prématurée** :
 ```csharp
 // ✗ MAUVAIS
-IntPtr ptr = NativeMethods.CreateObject();
-NativeMethods.FreeObject(ptr);
+IntPtr ptr = NativeMethods.CreateObject();  
+NativeMethods.FreeObject(ptr);  
 NativeMethods.UseObject(ptr);  // ERREUR : objet déjà libéré
 
 // ✓ BON
-IntPtr ptr = NativeMethods.CreateObject();
+IntPtr ptr = NativeMethods.CreateObject();  
 try
 {
     NativeMethods.UseObject(ptr);
@@ -4084,15 +4084,15 @@ public static extern void ProcessWideString(string str);
 public static extern void GetString(StringBuilder buffer, int size);
 
 // Utilisation
-var sb = new StringBuilder(256);
-GetString(sb, sb.Capacity);
+var sb = new StringBuilder(256);  
+GetString(sb, sb.Capacity);  
 string result = sb.ToString();
 ```
 
 3. **Gestion correcte en Pascal** :
 ```pascal
 // Pour ANSI
-procedure GetString(buffer: PAnsiChar; size: Integer); cdecl; export;
+procedure GetString(buffer: PAnsiChar; size: Integer); cdecl; export;  
 var
   msg: AnsiString;
 begin
@@ -4102,7 +4102,7 @@ begin
 end;
 
 // Pour Unicode
-procedure GetWideString(buffer: PWideChar; size: Integer); cdecl; export;
+procedure GetWideString(buffer: PWideChar; size: Integer); cdecl; export;  
 var
   msg: WideString;
 begin
@@ -4155,7 +4155,7 @@ using (var wrapper = new ManagedWrapper())
 } // Dispose() appelé automatiquement
 
 // ✗ MAUVAIS
-var wrapper = new ManagedWrapper();
+var wrapper = new ManagedWrapper();  
 wrapper.DoWork();
 // Dispose() jamais appelé = fuite mémoire
 ```
@@ -4183,13 +4183,13 @@ var
   GlobalLock: TRTLCriticalSection;
   Counter: Integer;
 
-procedure InitLibrary; cdecl; export;
+procedure InitLibrary; cdecl; export;  
 begin
   InitCriticalSection(GlobalLock);
   Counter := 0;
 end;
 
-procedure IncrementCounter; cdecl; export;
+procedure IncrementCounter; cdecl; export;  
 begin
   EnterCriticalSection(GlobalLock);
   try
@@ -4199,7 +4199,7 @@ begin
   end;
 end;
 
-procedure CleanupLibrary; cdecl; export;
+procedure CleanupLibrary; cdecl; export;  
 begin
   DoneCriticalSection(GlobalLock);
 end;
@@ -4276,7 +4276,7 @@ Débogueur bas niveau pour diagnostiquer les crashes.
 **Commandes utiles** :
 ```
 !analyze -v          # Analyser le crash
-lm                   # Lister les modules chargés
+lm                   # Lister les modules chargés  
 kb                   # Stack trace
 !heap -stat          # Statistiques mémoire
 ```
@@ -4335,20 +4335,20 @@ MyApp/
 
 ```inno
 [Setup]
-AppName=My Application
-AppVersion=1.0
-DefaultDirName={pf}\MyApp
-OutputDir=Output
+AppName=My Application  
+AppVersion=1.0  
+DefaultDirName={pf}\MyApp  
+OutputDir=Output  
 OutputBaseFilename=MyAppSetup
 
 [Files]
-Source: "MyApp.exe"; DestDir: "{app}"
-Source: "MyApp.dll"; DestDir: "{app}"
-Source: "mathlib.dll"; DestDir: "{app}"
+Source: "MyApp.exe"; DestDir: "{app}"  
+Source: "MyApp.dll"; DestDir: "{app}"  
+Source: "mathlib.dll"; DestDir: "{app}"  
 Source: "config.json"; DestDir: "{app}"; Flags: onlyifdoesntexist
 
 [Icons]
-Name: "{commonprograms}\My Application"; Filename: "{app}\MyApp.exe"
+Name: "{commonprograms}\My Application"; Filename: "{app}\MyApp.exe"  
 Name: "{commondesktop}\My Application"; Filename: "{app}\MyApp.exe"
 
 [Run]

@@ -274,7 +274,7 @@ Les callbacks sont des fonctions Pascal que vous passez à une bibliothèque C p
 
 ```c
 // En C
-typedef void (*callback_t)(int value);
+typedef void (*callback_t)(int value);  
 void register_callback(callback_t cb);
 ```
 
@@ -286,7 +286,7 @@ type
 procedure register_callback(cb: TCallback); cdecl; external 'mylib';
 
 // Implémentation du callback
-procedure mon_callback(value: Integer); cdecl;
+procedure mon_callback(value: Integer); cdecl;  
 begin
   WriteLn('Valeur reçue : ', value);
 end;
@@ -304,7 +304,7 @@ Certaines bibliothèques permettent de passer un pointeur de contexte :
 
 ```c
 // En C
-typedef void (*callback_with_context_t)(int value, void* user_data);
+typedef void (*callback_with_context_t)(int value, void* user_data);  
 void register_callback_ex(callback_with_context_t cb, void* user_data);
 ```
 
@@ -322,7 +322,7 @@ type
   end;
   PMonContexte = ^TMonContexte;
 
-procedure callback_avec_contexte(value: Integer; user_data: Pointer); cdecl;
+procedure callback_avec_contexte(value: Integer; user_data: Pointer); cdecl;  
 var
   ctx: PMonContexte;
 begin
@@ -415,13 +415,13 @@ end;
 {$IFDEF UNIX}
 function __errno_location(): PInteger; cdecl; external 'c' name '__errno_location';
 
-function GetErrno: Integer; inline;
+function GetErrno: Integer; inline;  
 begin
   Result := __errno_location()^;
 end;
 {$ENDIF}
 
-procedure test_erreur;
+procedure test_erreur;  
 var
   f: Integer;
 begin
@@ -470,11 +470,11 @@ const
   CURLOPT_WRITEDATA = 10001;
 
 // Fonctions principales
-function curl_easy_init(): TCURL; cdecl; external CURL_LIB;
+function curl_easy_init(): TCURL; cdecl; external CURL_LIB;  
 function curl_easy_setopt(curl: TCURL; option: TCURLoption): TCURLcode;
   cdecl; varargs; external CURL_LIB;
-function curl_easy_perform(curl: TCURL): TCURLcode; cdecl; external CURL_LIB;
-procedure curl_easy_cleanup(curl: TCURL); cdecl; external CURL_LIB;
+function curl_easy_perform(curl: TCURL): TCURLcode; cdecl; external CURL_LIB;  
+procedure curl_easy_cleanup(curl: TCURL); cdecl; external CURL_LIB;  
 function curl_easy_strerror(code: TCURLcode): PChar; cdecl; external CURL_LIB;
 
 // Type callback pour recevoir les données
@@ -571,7 +571,7 @@ Les macros C ne peuvent pas être importées directement. Il faut les réécrire
 
 ```pascal
 // En Pascal - Fonction inline
-function MAX(a, b: Integer): Integer; inline;
+function MAX(a, b: Integer): Integer; inline;  
 begin
   if a > b then
     Result := a
@@ -646,7 +646,7 @@ end;
 
 **Vérifier le chargement de la bibliothèque**
 ```pascal
-function LoadLibrary(libname: PChar): TLibHandle;
+function LoadLibrary(libname: PChar): TLibHandle;  
 var
   lib: TLibHandle;
 begin
@@ -725,7 +725,7 @@ const
   MY_ERROR = -1;
 
 // Fonctions
-function my_init(): TMyHandle; cdecl; external MYLIB;
+function my_init(): TMyHandle; cdecl; external MYLIB;  
 procedure my_cleanup(handle: TMyHandle); cdecl; external MYLIB;
 
 implementation

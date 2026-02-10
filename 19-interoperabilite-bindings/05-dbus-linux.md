@@ -201,7 +201,7 @@ dbus-send --session --print-reply \
   org.freedesktop.DBus.ListNames
 
 # Surveiller tous les messages sur le bus
-dbus-monitor --session
+dbus-monitor --session  
 dbus-monitor --system  # Nécessite root
 ```
 
@@ -229,7 +229,7 @@ program NotificationSimple;
 uses
   Process, SysUtils;
 
-function ExecuterCommande(const Cmd: string): string;
+function ExecuterCommande(const Cmd: string): string;  
 var
   Proc: TProcess;
   Output: TStringList;
@@ -251,7 +251,7 @@ begin
   end;
 end;
 
-procedure AfficherNotification(const Titre, Message: string);
+procedure AfficherNotification(const Titre, Message: string);  
 var
   Cmd: string;
 begin
@@ -293,7 +293,7 @@ program ControleMediaPlayer;
 uses
   Process, SysUtils;
 
-function ExecuterDBus(const Cmd: string): string;
+function ExecuterDBus(const Cmd: string): string;  
 var
   Proc: TProcess;
   Output: TStringList;
@@ -315,7 +315,7 @@ begin
   end;
 end;
 
-function ListerLecteursMedia: TStringList;
+function ListerLecteursMedia: TStringList;  
 var
   Output: string;
 begin
@@ -332,7 +332,7 @@ begin
   Result.Text := Output;
 end;
 
-procedure MediaPlayerAction(const Player, Action: string);
+procedure MediaPlayerAction(const Player, Action: string);  
 var
   Cmd: string;
 begin
@@ -347,7 +347,7 @@ begin
   ExecuterDBus(Cmd);
 end;
 
-function ObtenirStatutLecture(const Player: string): string;
+function ObtenirStatutLecture(const Player: string): string;  
 var
   Output: string;
 begin
@@ -513,7 +513,7 @@ implementation
 
 { TDBusHelper }
 
-class function TDBusHelper.ExecuteDBusCommand(const Cmd: string): string;
+class function TDBusHelper.ExecuteDBusCommand(const Cmd: string): string;  
 var
   Proc: TProcess;
   Output: TStringList;
@@ -587,7 +587,7 @@ begin
   );
 end;
 
-class function TDBusHelper.ListNames(BusType: TDBusBusType): TStringList;
+class function TDBusHelper.ListNames(BusType: TDBusBusType): TStringList;  
 var
   Output: string;
 begin
@@ -639,7 +639,7 @@ begin
   Result := 0; // TODO: parser correctement
 end;
 
-class procedure TDBusNotifications.Close(NotificationId: Integer);
+class procedure TDBusNotifications.Close(NotificationId: Integer);  
 begin
   TDBusHelper.Call(
     dbtSession,
@@ -716,7 +716,7 @@ program SurveillanceReseau;
 uses
   SysUtils, DBusHelper;
 
-function ObtenirEtatReseau: string;
+function ObtenirEtatReseau: string;  
 var
   Output: string;
 begin
@@ -758,7 +758,7 @@ program InfoBatterie;
 uses
   SysUtils, DBusHelper;
 
-procedure AfficherInfoBatterie;
+procedure AfficherInfoBatterie;  
 var
   Percentage, State, TimeToEmpty: string;
 begin
@@ -828,7 +828,7 @@ program ControleSystemd;
 uses
   SysUtils, DBusHelper;
 
-procedure ListerServices;
+procedure ListerServices;  
 var
   Output: string;
 begin
@@ -846,7 +846,7 @@ begin
   WriteLn(Output);
 end;
 
-procedure RedemarrerService(const ServiceName: string);
+procedure RedemarrerService(const ServiceName: string);  
 begin
   WriteLn('Redémarrage de ', ServiceName, '...');
 
@@ -894,7 +894,7 @@ program SurveillanceNotifications;
 uses
   Process, SysUtils, Classes;
 
-procedure SurveillerNotifications;
+procedure SurveillerNotifications;  
 var
   Proc: TProcess;
   Line: string;
@@ -963,18 +963,18 @@ type
     procedure EmettreEvenement(const Message: string);
   end;
 
-function TMonService.Additionner(a, b: Integer): Integer;
+function TMonService.Additionner(a, b: Integer): Integer;  
 begin
   Result := a + b;
   WriteLn('Appel de Additionner(', a, ', ', b, ') = ', Result);
 end;
 
-function TMonService.ObtenirVersion: string;
+function TMonService.ObtenirVersion: string;  
 begin
   Result := '1.0.0';
 end;
 
-procedure TMonService.EmettreEvenement(const Message: string);
+procedure TMonService.EmettreEvenement(const Message: string);  
 begin
   WriteLn('Émission d''événement : ', Message);
   // Émettre un signal D-Bus
@@ -1017,7 +1017,7 @@ program IntrospectionDBus;
 uses
   SysUtils, DBusHelper;
 
-procedure IntrospectionService(const BusName, ObjectPath: string);
+procedure IntrospectionService(const BusName, ObjectPath: string);  
 var
   XML: string;
 begin
@@ -1061,7 +1061,7 @@ program ParseIntrospection;
 uses
   SysUtils, Classes, DOM, XMLRead;
 
-procedure AfficherIntrospection(const BusName, ObjectPath: string);
+procedure AfficherIntrospection(const BusName, ObjectPath: string);  
 var
   XML: string;
   Doc: TXMLDocument;
@@ -1150,7 +1150,7 @@ type
     procedure Demarrer;
   end;
 
-constructor TMonApplication.Create(const NomApp: string);
+constructor TMonApplication.Create(const NomApp: string);  
 begin
   inherited Create;
   FNomApp := NomApp;
@@ -1189,7 +1189,7 @@ begin
   );
 end;
 
-procedure TMonApplication.Demarrer;
+procedure TMonApplication.Demarrer;  
 var
   Choix: Integer;
 begin
@@ -1260,7 +1260,7 @@ type
     NombreNotifications: Integer;
   end;
 
-function ObtenirInfoSysteme: TInfoSysteme;
+function ObtenirInfoSysteme: TInfoSysteme;  
 var
   Output: string;
 begin
@@ -1310,7 +1310,7 @@ begin
   Result.NombreNotifications := 0; // Simplification
 end;
 
-procedure AfficherInfoSysteme;
+procedure AfficherInfoSysteme;  
 var
   Info: TInfoSysteme;
 begin
@@ -1388,13 +1388,13 @@ type
     procedure AfficherInfo;
   end;
 
-constructor TLecteurMedia.Create(const BusName: string);
+constructor TLecteurMedia.Create(const BusName: string);  
 begin
   inherited Create;
   FBusName := BusName;
 end;
 
-procedure TLecteurMedia.Play;
+procedure TLecteurMedia.Play;  
 begin
   TDBusHelper.Call(
     dbtSession,
@@ -1406,7 +1406,7 @@ begin
   );
 end;
 
-procedure TLecteurMedia.Pause;
+procedure TLecteurMedia.Pause;  
 begin
   TDBusHelper.Call(
     dbtSession,
@@ -1418,7 +1418,7 @@ begin
   );
 end;
 
-procedure TLecteurMedia.Stop;
+procedure TLecteurMedia.Stop;  
 begin
   TDBusHelper.Call(
     dbtSession,
@@ -1430,7 +1430,7 @@ begin
   );
 end;
 
-procedure TLecteurMedia.Next;
+procedure TLecteurMedia.Next;  
 begin
   TDBusHelper.Call(
     dbtSession,
@@ -1442,7 +1442,7 @@ begin
   );
 end;
 
-procedure TLecteurMedia.Previous;
+procedure TLecteurMedia.Previous;  
 begin
   TDBusHelper.Call(
     dbtSession,
@@ -1454,7 +1454,7 @@ begin
   );
 end;
 
-function TLecteurMedia.ObtenirStatut: string;
+function TLecteurMedia.ObtenirStatut: string;  
 var
   Output: string;
 begin
@@ -1476,7 +1476,7 @@ begin
     Result := 'Inconnu';
 end;
 
-function TLecteurMedia.ObtenirMetadata: TInfoPiste;
+function TLecteurMedia.ObtenirMetadata: TInfoPiste;  
 var
   Output: string;
 begin
@@ -1487,13 +1487,13 @@ begin
   Result.Duree := 0;
 end;
 
-function TLecteurMedia.ObtenirPosition: Integer;
+function TLecteurMedia.ObtenirPosition: Integer;  
 begin
   // Position en microsecondes, converti en secondes
   Result := 0; // Simplification
 end;
 
-procedure TLecteurMedia.DefinirPosition(Secondes: Integer);
+procedure TLecteurMedia.DefinirPosition(Secondes: Integer);  
 begin
   TDBusHelper.Call(
     dbtSession,
@@ -1505,7 +1505,7 @@ begin
   );
 end;
 
-procedure TLecteurMedia.DefinirVolume(Niveau: Double);
+procedure TLecteurMedia.DefinirVolume(Niveau: Double);  
 begin
   // Volume entre 0.0 et 1.0
   if (Niveau < 0) or (Niveau > 1) then
@@ -1515,7 +1515,7 @@ begin
   WriteLn('Définition du volume : ', Niveau:0:2);
 end;
 
-procedure TLecteurMedia.AfficherInfo;
+procedure TLecteurMedia.AfficherInfo;  
 var
   Info: TInfoPiste;
 begin
@@ -1648,12 +1648,12 @@ program VerificationPermissions;
 uses
   SysUtils, BaseUnix;
 
-function EstRoot: Boolean;
+function EstRoot: Boolean;  
 begin
   Result := FpGetUID = 0;
 end;
 
-procedure TesterAccesSystemBus;
+procedure TesterAccesSystemBus;  
 var
   Output: string;
 begin
@@ -1780,21 +1780,21 @@ type
     procedure Log(const Message: string);
   end;
 
-constructor TDBusLogger.Create(const FileName: string);
+constructor TDBusLogger.Create(const FileName: string);  
 begin
   AssignFile(FLogFile, FileName);
   Rewrite(FLogFile);
   Log('=== Début du traçage D-Bus ===');
 end;
 
-destructor TDBusLogger.Destroy;
+destructor TDBusLogger.Destroy;  
 begin
   Log('=== Fin du traçage D-Bus ===');
   CloseFile(FLogFile);
   inherited;
 end;
 
-procedure TDBusLogger.Log(const Message: string);
+procedure TDBusLogger.Log(const Message: string);  
 begin
   WriteLn(FLogFile, FormatDateTime('yyyy-mm-dd hh:nn:ss.zzz', Now),
     ' - ', Message);
@@ -1908,7 +1908,7 @@ if TimeSinceLastNotif > 5000 then
 
 ```pascal
 // ✅ Gérer les appels qui peuvent bloquer
-SetTimeout(5000); // 5 secondes max
+SetTimeout(5000); // 5 secondes max  
 try
   DBusCall(...);
 except
@@ -2150,13 +2150,13 @@ Pour mieux comprendre D-Bus si vous venez de Windows :
 
 ```pascal
 // ❌ Mauvais : Utiliser D-Bus pour tout
-procedure MettreAJourUI;
+procedure MettreAJourUI;  
 begin
   DBusCall('com.example.App', 'UpdateUI'); // Inutile !
 end;
 
 // ✅ Bon : Appel direct dans le même processus
-procedure MettreAJourUI;
+procedure MettreAJourUI;  
 begin
   Form1.UpdateDisplay; // Direct
 end;
@@ -2186,7 +2186,7 @@ end;
 
 ```pascal
 // ❌ Mauvais : Appel synchrone dans le thread UI
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 var
   Res: string;
 begin
@@ -2197,7 +2197,7 @@ end;
 // ✅ Bon : Asynchrone (utiliser un thread dédié)
 // Note : les procédures anonymes nécessitent {$modeswitch anonymousfunctions}
 // ou {$mode delphi} pour la syntaxe ci-dessous
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 begin
   TThread.CreateAnonymousThread(
     procedure
@@ -2220,9 +2220,9 @@ end;
 
 ```pascal
 // ❌ Mauvais : Un service D-Bus par fonctionnalité
-com.example.App.Database
-com.example.App.UI
-com.example.App.Network
+com.example.App.Database  
+com.example.App.UI  
+com.example.App.Network  
 com.example.App.Config
 
 // ✅ Bon : Un service principal avec interfaces
@@ -2248,7 +2248,7 @@ type
     class procedure Error(const Msg: string);
   end;
 
-class procedure TSystemNotifier.Info(const Msg: string);
+class procedure TSystemNotifier.Info(const Msg: string);  
 begin
   try
     TDBusNotifications.Notify('Mon App', 'Information', Msg);
@@ -2278,7 +2278,7 @@ type
     property OnStateChanged: TNotifyEvent read FOnStateChanged write FOnStateChanged;
   end;
 
-procedure TNetworkObserver.MonitorNetwork;
+procedure TNetworkObserver.MonitorNetwork;  
 begin
   // Surveiller les signaux NetworkManager
   // StateChanged signal
@@ -2328,12 +2328,12 @@ type
     procedure Notify(const Msg: string);
   end;
 
-procedure TRealDBusService.Notify(const Msg: string);
+procedure TRealDBusService.Notify(const Msg: string);  
 begin
   TDBusNotifications.Notify('App', 'Info', Msg);
 end;
 
-procedure TMockDBusService.Notify(const Msg: string);
+procedure TMockDBusService.Notify(const Msg: string);  
 begin
   WriteLn('[MOCK] Notification: ', Msg);
 end;
@@ -2365,7 +2365,7 @@ var
   TestsTotal: Integer = 0;
   Services: TStringList;
 
-procedure Test(const Nom: string; Resultat: Boolean);
+procedure Test(const Nom: string; Resultat: Boolean);  
 begin
   Inc(TestsTotal);
   Write('Test ', TestsTotal, ': ', Nom, ' ... ');
@@ -2470,7 +2470,7 @@ type
 // Note : nécessite {$mode delphi} ou {$modeswitch anonymousfunctions}
 // TProc<string> n'existe pas en FPC standard, définir :
 // type TStringProc = reference to procedure(const S: string);
-procedure CallAsync(const Method: string; OnComplete: TStringProc);
+procedure CallAsync(const Method: string; OnComplete: TStringProc);  
 begin
   TThread.CreateAnonymousThread(
     procedure

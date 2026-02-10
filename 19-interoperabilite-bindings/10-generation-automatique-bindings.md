@@ -255,7 +255,7 @@ unit math_simple;
 
 interface
 
-function add(a, b: longint): longint; cdecl; external;
+function add(a, b: longint): longint; cdecl; external;  
 function multiply(a, b: double): double; cdecl; external;
 
 implementation
@@ -283,7 +283,7 @@ typedef enum {
     SHAPE_TRIANGLE
 } ShapeType;
 
-Point create_point(double x, double y);
+Point create_point(double x, double y);  
 double distance(Point p1, Point p2);
 
 #endif
@@ -316,7 +316,7 @@ type
     SHAPE_TRIANGLE
   );
 
-function create_point(x, y: double): Point; cdecl; external;
+function create_point(x, y: double): Point; cdecl; external;  
 function distance(p1, p2: Point): double; cdecl; external;
 
 implementation
@@ -390,7 +390,7 @@ h2pas \
 **Solution** : Ajouter manuellement après génération
 ```pascal
 // Ajouter dans le fichier .pas
-function COMPLEX_MACRO(x, y: Integer): Integer; inline;
+function COMPLEX_MACRO(x, y: Integer): Integer; inline;  
 begin
   Result := x + y * 2;
 end;
@@ -436,15 +436,15 @@ type
 #!/bin/bash
 # correct_bindings.sh
 
-INPUT="$1"
+INPUT="$1"  
 OUTPUT="$2"
 
 # Générer avec h2pas
 h2pas -u -l libmath.so "$INPUT" -o "$OUTPUT"
 
 # Corrections automatiques
-sed -i 's/longint/Integer/g' "$OUTPUT"
-sed -i 's/\bdouble\b/Double/g' "$OUTPUT"
+sed -i 's/longint/Integer/g' "$OUTPUT"  
+sed -i 's/\bdouble\b/Double/g' "$OUTPUT"  
 sed -i 's/external;$/external libmath;/g' "$OUTPUT"
 
 echo "✓ Bindings générés et corrigés : $OUTPUT"
@@ -521,7 +521,7 @@ gcc -shared -fPIC math_lib.c math_lib_wrap.c \
 ```python
 import math_lib
 
-result = math_lib.add(10, 20)
+result = math_lib.add(10, 20)  
 print(f"10 + 20 = {result}")
 ```
 
@@ -548,7 +548,7 @@ int ml_add(int a, int b) {
 
 Puis :
 ```bash
-swig -c math_lib_simple.i
+swig -c math_lib_simple.i  
 h2pas math_lib_simple.h
 ```
 
@@ -597,11 +597,11 @@ h2pas math_lib_simple.h
 ```python
 #!/usr/bin/env python3
 """
-Générateur de bindings Pascal
+Générateur de bindings Pascal  
 Lit un fichier JSON décrivant une API C
 """
 
-import json
+import json  
 import sys
 
 def convert_type(c_type):
@@ -785,8 +785,8 @@ type
   end;
 
 // Fonctions de la bibliothèque
-function add(a: Integer; b: Integer): Integer; cdecl; external 'libmath.so';
-function create_point(x: Double; y: Double): TPoint; cdecl; external 'libmath.so';
+function add(a: Integer; b: Integer): Integer; cdecl; external 'libmath.so';  
+function create_point(x: Double; y: Double): TPoint; cdecl; external 'libmath.so';  
 function distance(p1: TPoint; p2: TPoint): Double; cdecl; external 'libmath.so';
 
 implementation
@@ -805,8 +805,8 @@ SQLite est une bibliothèque C très populaire pour les bases de données.
 #### Étape 1 : Télécharger le header
 
 ```bash
-wget https://www.sqlite.org/2024/sqlite-amalgamation-3450000.zip
-unzip sqlite-amalgamation-3450000.zip
+wget https://www.sqlite.org/2024/sqlite-amalgamation-3450000.zip  
+unzip sqlite-amalgamation-3450000.zip  
 cd sqlite-amalgamation-3450000
 ```
 
@@ -905,7 +905,7 @@ type
 
 implementation
 
-constructor TSQLiteDatabase.Create(const Filename: string);
+constructor TSQLiteDatabase.Create(const Filename: string);  
 var
   res: Integer;
 begin
@@ -920,14 +920,14 @@ begin
     );
 end;
 
-destructor TSQLiteDatabase.Destroy;
+destructor TSQLiteDatabase.Destroy;  
 begin
   if FHandle <> nil then
     sqlite3_close(FHandle);
   inherited;
 end;
 
-procedure TSQLiteDatabase.Execute(const SQL: string);
+procedure TSQLiteDatabase.Execute(const SQL: string);  
 var
   res: Integer;
   errmsg: PAnsiChar;
@@ -1068,10 +1068,10 @@ extern "C" {
 typedef void* CalculatorHandle;
 
 // Fonctions C wrappant les méthodes C++
-CalculatorHandle calculator_create(int precision);
-void calculator_destroy(CalculatorHandle handle);
-double calculator_add(CalculatorHandle handle, double a, double b);
-double calculator_multiply(CalculatorHandle handle, double a, double b);
+CalculatorHandle calculator_create(int precision);  
+void calculator_destroy(CalculatorHandle handle);  
+double calculator_add(CalculatorHandle handle, double a, double b);  
+double calculator_multiply(CalculatorHandle handle, double a, double b);  
 int calculator_get_precision(CalculatorHandle handle);
 
 #ifdef __cplusplus
@@ -1119,15 +1119,15 @@ int calculator_get_precision(CalculatorHandle handle) {
 **Makefile** :
 ```makefile
 # Variables
-CXX = g++
-CXXFLAGS = -fPIC -O2 -Wall
+CXX = g++  
+CXXFLAGS = -fPIC -O2 -Wall  
 LDFLAGS = -shared
 
 # Nom de la bibliothèque
 TARGET = libcalculator.so
 
 # Fichiers sources
-SOURCES = Calculator.cpp Calculator_c.cpp
+SOURCES = Calculator.cpp Calculator_c.cpp  
 OBJECTS = $(SOURCES:.cpp=.o)
 
 # Règle principale
@@ -1227,7 +1227,7 @@ type
 
 implementation
 
-constructor TCalculator.Create(Precision: Integer);
+constructor TCalculator.Create(Precision: Integer);  
 begin
   inherited Create;
   FHandle := calculator_create(Precision);
@@ -1236,14 +1236,14 @@ begin
     raise ECalculatorException.Create('Impossible de créer le calculateur');
 end;
 
-destructor TCalculator.Destroy;
+destructor TCalculator.Destroy;  
 begin
   if FHandle <> nil then
     calculator_destroy(FHandle);
   inherited;
 end;
 
-function TCalculator.GetPrecision: Integer;
+function TCalculator.GetPrecision: Integer;  
 begin
   if FHandle = nil then
     raise ECalculatorException.Create('Calculateur non initialisé');
@@ -1251,7 +1251,7 @@ begin
   Result := calculator_get_precision(FHandle);
 end;
 
-function TCalculator.Add(A, B: Double): Double;
+function TCalculator.Add(A, B: Double): Double;  
 begin
   if FHandle = nil then
     raise ECalculatorException.Create('Calculateur non initialisé');
@@ -1259,7 +1259,7 @@ begin
   Result := calculator_add(FHandle, A, B);
 end;
 
-function TCalculator.Multiply(A, B: Double): Double;
+function TCalculator.Multiply(A, B: Double): Double;  
 begin
   if FHandle = nil then
     raise ECalculatorException.Create('Calculateur non initialisé');
@@ -1359,9 +1359,9 @@ set -e
 echo "=== Génération automatique des bindings ==="
 
 # Configuration
-VERSION="1.2.3"
-HEADER="upstream/library-v${VERSION}/include/library.h"
-OUTPUT="bindings/LibraryBindings.pas"
+VERSION="1.2.3"  
+HEADER="upstream/library-v${VERSION}/include/library.h"  
+OUTPUT="bindings/LibraryBindings.pas"  
 LIBRARY="liblibrary.so.${VERSION}"
 
 # Vérifier que le header existe
@@ -1371,27 +1371,27 @@ if [ ! -f "$HEADER" ]; then
 fi
 
 # Étape 1 : Générer avec h2pas
-echo "1. Génération avec h2pas..."
+echo "1. Génération avec h2pas..."  
 h2pas -l "$LIBRARY" -u "$HEADER" -o "${OUTPUT}.tmp"
 
 # Étape 2 : Post-traitement
-echo "2. Post-traitement..."
+echo "2. Post-traitement..."  
 python3 generator/postprocess.py "${OUTPUT}.tmp" "$OUTPUT"
 
 # Étape 3 : Vérifier la compilation
-echo "3. Vérification de la compilation..."
+echo "3. Vérification de la compilation..."  
 fpc -Sc "$OUTPUT"
 
 # Étape 4 : Exécuter les tests
-echo "4. Exécution des tests..."
+echo "4. Exécution des tests..."  
 fpc tests/test_bindings.pas -Fu"bindings"
 ./tests/test_bindings
 
 # Nettoyage
 rm -f "${OUTPUT}.tmp"
 
-echo ""
-echo "✓ Bindings générés et testés avec succès"
+echo ""  
+echo "✓ Bindings générés et testés avec succès"  
 echo "   Fichier : $OUTPUT"
 ```
 
@@ -1404,7 +1404,7 @@ echo "   Fichier : $OUTPUT"
 Post-traitement des bindings générés par h2pas
 """
 
-import sys
+import sys  
 import re
 
 def postprocess(input_file, output_file):
@@ -1491,7 +1491,7 @@ var
   TestsPassed: Integer = 0;
   TestsFailed: Integer = 0;
 
-procedure Test(const Name: string; Condition: Boolean);
+procedure Test(const Name: string; Condition: Boolean);  
 begin
   Write('  ', Name, ' ... ');
   if Condition then
@@ -1506,7 +1506,7 @@ begin
   end;
 end;
 
-procedure TestBasicFunctions;
+procedure TestBasicFunctions;  
 var
   result: Integer;
 begin
@@ -1519,7 +1519,7 @@ begin
   Test('Multiplication', result = 30);
 end;
 
-procedure TestMemoryManagement;
+procedure TestMemoryManagement;  
 var
   ptr: Pointer;
 begin
@@ -1582,7 +1582,7 @@ set -e
 echo "=== Vérification des mises à jour ==="
 
 # URL de la dernière version
-LATEST_URL="https://example.com/library/latest"
+LATEST_URL="https://example.com/library/latest"  
 CURRENT_VERSION=$(cat version.txt)
 
 # Télécharger les informations de la dernière version
@@ -1593,14 +1593,14 @@ if [ "$LATEST_VERSION" = "$CURRENT_VERSION" ]; then
     exit 0
 fi
 
-echo "Nouvelle version disponible : $LATEST_VERSION"
-echo "Version actuelle : $CURRENT_VERSION"
+echo "Nouvelle version disponible : $LATEST_VERSION"  
+echo "Version actuelle : $CURRENT_VERSION"  
 echo ""
 
 # Télécharger la nouvelle version
-echo "Téléchargement de la version $LATEST_VERSION..."
-wget "$LATEST_URL/library-v${LATEST_VERSION}.tar.gz"
-tar -xzf "library-v${LATEST_VERSION}.tar.gz" -C upstream/
+echo "Téléchargement de la version $LATEST_VERSION..."  
+wget "$LATEST_URL/library-v${LATEST_VERSION}.tar.gz"  
+tar -xzf "library-v${LATEST_VERSION}.tar.gz" -C upstream/  
 rm "library-v${LATEST_VERSION}.tar.gz"
 
 # Mettre à jour le numéro de version
@@ -1610,7 +1610,7 @@ echo "$LATEST_VERSION" > version.txt
 echo ""
 ./scripts/build.sh
 
-echo ""
+echo ""  
 echo "✓ Mise à jour terminée vers la version $LATEST_VERSION"
 ```
 
@@ -1764,7 +1764,7 @@ type
 
 implementation
 
-constructor TSafeWrapper.Create;
+constructor TSafeWrapper.Create;  
 begin
   inherited Create;
   FHandle := mylib_create();
@@ -1775,7 +1775,7 @@ begin
     );
 end;
 
-destructor TSafeWrapper.Destroy;
+destructor TSafeWrapper.Destroy;  
 begin
   if FHandle <> nil then
   begin
@@ -1788,7 +1788,7 @@ begin
   inherited;
 end;
 
-function TSafeWrapper.SafeOperation(Value: Integer): Integer;
+function TSafeWrapper.SafeOperation(Value: Integer): Integer;  
 begin
   if FHandle = nil then
     raise EMyLibException.Create('Objet non initialisé');
@@ -1827,7 +1827,7 @@ type
 var
   Results: array of TTestResult;
 
-procedure AddTest(const Name: string; Passed: Boolean; const Msg: string = '');
+procedure AddTest(const Name: string; Passed: Boolean; const Msg: string = '');  
 var
   idx: Integer;
 begin
@@ -1838,19 +1838,19 @@ begin
   Results[idx].Message := Msg;
 end;
 
-procedure TestBasics;
+procedure TestBasics;  
 begin
   AddTest('Addition', mylib_add(2, 3) = 5);
   AddTest('Soustraction', mylib_sub(10, 3) = 7);
 end;
 
-procedure TestEdgeCases;
+procedure TestEdgeCases;  
 begin
   AddTest('Division par zéro', mylib_div(10, 0) = 0, 'Devrait retourner 0');
   AddTest('Valeur maximale', mylib_add(MaxInt, 1) = MaxInt, 'Devrait saturer');
 end;
 
-procedure TestMemoryLeaks;
+procedure TestMemoryLeaks;  
 var
   i: Integer;
   ptr: Pointer;
@@ -1863,7 +1863,7 @@ begin
   AddTest('Pas de fuite mémoire', True, '10000 allocations/libérations');
 end;
 
-procedure ShowResults;
+procedure ShowResults;  
 var
   i, passed, failed: Integer;
 begin

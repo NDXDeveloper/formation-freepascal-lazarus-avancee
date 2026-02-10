@@ -29,9 +29,9 @@ COM est un **standard binaire** qui définit comment les composants logiciels in
 
 ```pascal
 // Automatiser Microsoft Excel
-ExcelApp := CreateOleObject('Excel.Application');
-ExcelApp.Visible := True;
-ExcelApp.Workbooks.Add;
+ExcelApp := CreateOleObject('Excel.Application');  
+ExcelApp.Visible := True;  
+ExcelApp.Workbooks.Add;  
 ExcelApp.Cells[1, 1].Value := 'Hello from FreePascal!';
 ```
 
@@ -240,7 +240,7 @@ program ExcelRapport;
 uses
   SysUtils, ComObj, Variants;
 
-procedure CreerRapportVentes;
+procedure CreerRapportVentes;  
 var
   Excel, Workbook, Sheet, Chart: Variant;
   i: Integer;
@@ -327,7 +327,7 @@ program WordBasic;
 uses
   SysUtils, ComObj, Variants;
 
-procedure CreerDocument;
+procedure CreerDocument;  
 var
   WordApp, Doc, Paragraph, Table: Variant;
 begin
@@ -395,7 +395,7 @@ program OutlookEmail;
 uses
   SysUtils, ComObj, Variants;
 
-procedure EnvoyerEmail;
+procedure EnvoyerEmail;  
 var
   Outlook, MailItem: Variant;
 begin
@@ -452,7 +452,7 @@ program NavigateurCOM;
 uses
   SysUtils, ComObj, Variants, Windows;
 
-procedure OuvrirPageWeb;
+procedure OuvrirPageWeb;  
 var
   IE, Document, Links: Variant;
   Msg: TMsg;
@@ -516,7 +516,7 @@ program InfoSystemeWMI;
 uses
   SysUtils, ComObj, Variants, ActiveX;
 
-procedure AfficherInfosSysteme;
+procedure AfficherInfosSysteme;  
 var
   Locator, Service, ObjectSet, Obj: Variant;
   oEnum: IEnumVariant;
@@ -619,7 +619,7 @@ program SurveillanceProcessus;
 uses
   SysUtils, ComObj, Variants, ActiveX;
 
-procedure ListerProcessus;
+procedure ListerProcessus;  
 var
   Locator, Service, ObjectSet, Obj: Variant;
   oEnum: IEnumVariant;
@@ -722,7 +722,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   try
     // Créer le contrôle Windows Media Player
@@ -734,7 +734,7 @@ begin
   end;
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 var
   OpenDialog: TOpenDialog;
 begin
@@ -752,13 +752,13 @@ begin
   end;
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
+procedure TForm1.Button2Click(Sender: TObject);  
 begin
   // Pause
   FMediaPlayer.controls.pause;
 end;
 
-procedure TForm1.Button3Click(Sender: TObject);
+procedure TForm1.Button3Click(Sender: TObject);  
 begin
   // Stop
   FMediaPlayer.controls.stop;
@@ -811,12 +811,12 @@ uses
 
 {$R *.lfm}
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   CreateBrowser;
 end;
 
-procedure TForm1.CreateBrowser;
+procedure TForm1.CreateBrowser;  
 begin
   try
     // Créer le contrôle Internet Explorer
@@ -832,31 +832,31 @@ begin
   end;
 end;
 
-procedure TForm1.ButtonGoClick(Sender: TObject);
+procedure TForm1.ButtonGoClick(Sender: TObject);  
 begin
   if not VarIsEmpty(FBrowser) then
     FBrowser.Navigate(EditURL.Text);
 end;
 
-procedure TForm1.ButtonBackClick(Sender: TObject);
+procedure TForm1.ButtonBackClick(Sender: TObject);  
 begin
   if not VarIsEmpty(FBrowser) then
     FBrowser.GoBack;
 end;
 
-procedure TForm1.ButtonForwardClick(Sender: TObject);
+procedure TForm1.ButtonForwardClick(Sender: TObject);  
 begin
   if not VarIsEmpty(FBrowser) then
     FBrowser.GoForward;
 end;
 
-procedure TForm1.ButtonRefreshClick(Sender: TObject);
+procedure TForm1.ButtonRefreshClick(Sender: TObject);  
 begin
   if not VarIsEmpty(FBrowser) then
     FBrowser.Refresh;
 end;
 
-procedure TForm1.FormDestroy(Sender: TObject);
+procedure TForm1.FormDestroy(Sender: TObject);  
 begin
   FBrowser := Unassigned;
 end;
@@ -907,22 +907,22 @@ const
 
 { TCalculator }
 
-function TCalculator.Add(a, b: Integer): Integer;
+function TCalculator.Add(a, b: Integer): Integer;  
 begin
   Result := a + b;
 end;
 
-function TCalculator.Subtract(a, b: Integer): Integer;
+function TCalculator.Subtract(a, b: Integer): Integer;  
 begin
   Result := a - b;
 end;
 
-function TCalculator.Multiply(a, b: Integer): Integer;
+function TCalculator.Multiply(a, b: Integer): Integer;  
 begin
   Result := a * b;
 end;
 
-function TCalculator.Divide(a, b: Double): Double;
+function TCalculator.Divide(a, b: Double): Double;  
 begin
   if b = 0 then
     raise Exception.Create('Division par zéro');
@@ -931,7 +931,7 @@ end;
 
 { TCalculatorFactory }
 
-procedure TCalculatorFactory.UpdateRegistry(Register: Boolean);
+procedure TCalculatorFactory.UpdateRegistry(Register: Boolean);  
 begin
   if Register then
   begin
@@ -963,10 +963,10 @@ end.
 Pour enregistrer le serveur COM :
 
 ```batch
-REM Enregistrer
+REM Enregistrer  
 regsvr32 SimpleComServer.dll
 
-REM Désenregistrer
+REM Désenregistrer  
 regsvr32 /u SimpleComServer.dll
 ```
 
@@ -1075,24 +1075,24 @@ const
 
 { TDataStore }
 
-constructor TDataStore.Create;
+constructor TDataStore.Create;  
 begin
   inherited Create;
   FData := TDictionary<string, Variant>.Create;
 end;
 
-destructor TDataStore.Destroy;
+destructor TDataStore.Destroy;  
 begin
   FData.Free;
   inherited Destroy;
 end;
 
-procedure TDataStore.SetValue(const Key: WideString; const Value: OleVariant);
+procedure TDataStore.SetValue(const Key: WideString; const Value: OleVariant);  
 begin
   FData.AddOrSetValue(Key, Value);
 end;
 
-function TDataStore.GetValue(const Key: WideString): OleVariant;
+function TDataStore.GetValue(const Key: WideString): OleVariant;  
 begin
   if FData.ContainsKey(Key) then
     Result := FData[Key]
@@ -1100,18 +1100,18 @@ begin
     raise Exception.CreateFmt('Clé "%s" non trouvée', [Key]);
 end;
 
-procedure TDataStore.DeleteKey(const Key: WideString);
+procedure TDataStore.DeleteKey(const Key: WideString);  
 begin
   if not FData.Remove(Key) then
     raise Exception.CreateFmt('Clé "%s" non trouvée', [Key]);
 end;
 
-function TDataStore.HasKey(const Key: WideString): WordBool;
+function TDataStore.HasKey(const Key: WideString): WordBool;  
 begin
   Result := FData.ContainsKey(Key);
 end;
 
-function TDataStore.GetKeys: OleVariant;
+function TDataStore.GetKeys: OleVariant;  
 var
   Keys: TArray<string>;
   i: Integer;
@@ -1123,12 +1123,12 @@ begin
     Result[i] := Keys[i];
 end;
 
-procedure TDataStore.Clear;
+procedure TDataStore.Clear;  
 begin
   FData.Clear;
 end;
 
-function TDataStore.GetCount: Integer;
+function TDataStore.GetCount: Integer;  
 begin
   Result := FData.Count;
 end;
@@ -1157,7 +1157,7 @@ program TestDataStore;
 uses
   SysUtils, ComObj, Variants;
 
-procedure TestDataStore;
+procedure TestDataStore;  
 var
   Store: Variant;
   Keys: Variant;
@@ -1277,7 +1277,7 @@ const
 
 { TTimer }
 
-constructor TTimer.Create;
+constructor TTimer.Create;  
 begin
   inherited Create;
   FIsRunning := False;
@@ -1285,7 +1285,7 @@ begin
   FAlarmTime := -1;
 end;
 
-procedure TTimer.Start;
+procedure TTimer.Start;  
 begin
   FIsRunning := True;
   FElapsed := 0;
@@ -1305,23 +1305,23 @@ begin
   end;
 end;
 
-procedure TTimer.Stop;
+procedure TTimer.Stop;  
 begin
   FIsRunning := False;
 end;
 
-procedure TTimer.SetAlarm(Seconds: Integer; const Message: WideString);
+procedure TTimer.SetAlarm(Seconds: Integer; const Message: WideString);  
 begin
   FAlarmTime := Seconds;
   FAlarmMessage := Message;
 end;
 
-function TTimer.GetIsRunning: WordBool;
+function TTimer.GetIsRunning: WordBool;  
 begin
   Result := FIsRunning;
 end;
 
-procedure TTimer.FireOnTick;
+procedure TTimer.FireOnTick;  
 var
   EventSink: ITimerEvents;
 begin
@@ -1332,7 +1332,7 @@ begin
   end;
 end;
 
-procedure TTimer.FireOnAlarm;
+procedure TTimer.FireOnAlarm;  
 var
   EventSink: ITimerEvents;
 begin
@@ -1368,7 +1368,7 @@ program ServiceManager;
 uses
   SysUtils, ComObj, Variants, ActiveX;
 
-procedure ListerServices;
+procedure ListerServices;  
 var
   Locator, Service, ObjectSet, Obj: Variant;
   oEnum: IEnumVariant;
@@ -1416,7 +1416,7 @@ begin
   end;
 end;
 
-procedure ArreterService(const ServiceName: string);
+procedure ArreterService(const ServiceName: string);  
 var
   Locator, Service, ObjectSet, Obj: Variant;
   oEnum: IEnumVariant;
@@ -1492,7 +1492,7 @@ program ActiveDirectoryQuery;
 uses
   SysUtils, ComObj, Variants, ActiveX;
 
-procedure ListerUtilisateursAD;
+procedure ListerUtilisateursAD;  
 var
   Connection, Command, RecordSet: Variant;
   Count: Integer;
@@ -1580,7 +1580,7 @@ program GestionErreursCOM;
 uses
   SysUtils, ComObj, Variants, Windows, ActiveX;
 
-function HResultToString(HR: HRESULT): string;
+function HResultToString(HR: HRESULT): string;  
 begin
   case HR of
     S_OK: Result := 'S_OK - Succès';
@@ -1600,7 +1600,7 @@ begin
   end;
 end;
 
-procedure TesterGestionErreurs;
+procedure TesterGestionErreurs;  
 var
   Obj: Variant;
   TextFile: Variant;
@@ -1668,7 +1668,7 @@ end.
 ### Gestion robuste avec try..finally
 
 ```pascal
-procedure UtilisationRobusteCOM;
+procedure UtilisationRobusteCOM;  
 var
   ExcelApp: Variant;
   Workbook: Variant;
@@ -1735,8 +1735,8 @@ for i := 1 to 1000 do
   ExcelApp.Worksheets[1].Cells[i, 1].Value := i;
 
 // ✅ Bon : Utiliser un tableau
-var Data: Variant;
-Data := VarArrayCreate([1, 1000], varVariant);
+var Data: Variant;  
+Data := VarArrayCreate([1, 1000], varVariant);  
 for i := 1 to 1000 do
   Data[i] := i;
 
@@ -1751,8 +1751,8 @@ for i := 1 to 100 do
   ExcelApp.Worksheets[1].Cells[i, 1].Value := i;
 
 // ✅ Bon : Mettre en cache
-var Sheet: Variant;
-Sheet := ExcelApp.Worksheets[1];
+var Sheet: Variant;  
+Sheet := ExcelApp.Worksheets[1];  
 for i := 1 to 100 do
   Sheet.Cells[i, 1].Value := i;
 ```
@@ -1760,7 +1760,7 @@ for i := 1 to 100 do
 ### Désactiver les mises à jour d'écran
 
 ```pascal
-procedure RemplirExcelRapide;
+procedure RemplirExcelRapide;  
 var
   Excel, Sheet: Variant;
   i: Integer;
@@ -1860,21 +1860,21 @@ type
     procedure Log(const Message: string);
   end;
 
-constructor TComTracer.Create(const FileName: string);
+constructor TComTracer.Create(const FileName: string);  
 begin
   AssignFile(FLogFile, FileName);
   Rewrite(FLogFile);
   Log('=== Début du traçage COM ===');
 end;
 
-destructor TComTracer.Destroy;
+destructor TComTracer.Destroy;  
 begin
   Log('=== Fin du traçage COM ===');
   CloseFile(FLogFile);
   inherited;
 end;
 
-procedure TComTracer.Log(const Message: string);
+procedure TComTracer.Log(const Message: string);  
 begin
   WriteLn(FLogFile, FormatDateTime('yyyy-mm-dd hh:nn:ss.zzz', Now), ' - ', Message);
   Flush(FLogFile);
@@ -1933,7 +1933,7 @@ program DebugFuitesCOM;
 uses
   SysUtils, ComObj, Variants, Windows;
 
-procedure AfficherCompteurRef(const Obj: Variant);
+procedure AfficherCompteurRef(const Obj: Variant);  
 var
   Unk: IUnknown;
 begin
@@ -1945,7 +1945,7 @@ begin
   end;
 end;
 
-procedure TestFuites;
+procedure TestFuites;  
 var
   Excel: Variant;
   Workbook: Variant;
@@ -1992,7 +1992,7 @@ EOleSysError: Invalid class string
 
 **Solutions** :
 ```pascal
-procedure VerifierObjetCOM(const ProgID: string);
+procedure VerifierObjetCOM(const ProgID: string);  
 var
   ClassID: TGUID;
 begin
@@ -2008,8 +2008,8 @@ begin
 end;
 
 // Utilisation
-VerifierObjetCOM('Excel.Application');
-VerifierObjetCOM('Word.Application');
+VerifierObjetCOM('Excel.Application');  
+VerifierObjetCOM('Word.Application');  
 VerifierObjetCOM('Objet.Inexistant');
 ```
 
@@ -2019,7 +2019,7 @@ VerifierObjetCOM('Objet.Inexistant');
 
 **Solution** :
 ```pascal
-procedure FermerExcelProprement;
+procedure FermerExcelProprement;  
 var
   Excel, Workbook, Worksheet: Variant;
 begin
@@ -2063,7 +2063,7 @@ end;
 3. Vérifier les permissions du registre
 
 ```pascal
-function EstAdministrateur: Boolean;
+function EstAdministrateur: Boolean;  
 var
   TokenHandle: THandle;
   ReturnLength: Cardinal;
@@ -2096,7 +2096,7 @@ end;
 
 **Solution** :
 ```pascal
-procedure GestionTypesSafe;
+procedure GestionTypesSafe;  
 var
   Excel: Variant;
   Value: Variant;
@@ -2148,23 +2148,23 @@ end;
 
 ```pascal
 // Ordre de création
-Excel := CreateOleObject('Excel.Application');
-Workbook := Excel.Workbooks.Add;
+Excel := CreateOleObject('Excel.Application');  
+Workbook := Excel.Workbooks.Add;  
 Sheet := Workbook.Worksheets[1];
 
 // Ordre de libération (inverse)
-Sheet := Unassigned;
-Workbook.Close(False);
-Workbook := Unassigned;
-Excel.Quit;
+Sheet := Unassigned;  
+Workbook.Close(False);  
+Workbook := Unassigned;  
+Excel.Quit;  
 Excel := Unassigned;
 ```
 
 #### 3. Désactiver les alertes et l'affichage
 
 ```pascal
-Excel.DisplayAlerts := False;
-Excel.ScreenUpdating := False;
+Excel.DisplayAlerts := False;  
+Excel.ScreenUpdating := False;  
 Excel.Visible := False;
 ```
 
@@ -2188,7 +2188,7 @@ end;
 #### 5. Vérifier l'existence avant utilisation
 
 ```pascal
-function ApplicationEstInstallee(const ProgID: string): Boolean;
+function ApplicationEstInstallee(const ProgID: string): Boolean;  
 var
   ClassID: TGUID;
 begin
@@ -2207,7 +2207,7 @@ else
 
 ```pascal
 // ❌ Mauvais
-procedure Mauvais;
+procedure Mauvais;  
 var
   Excel: Variant;
 begin
@@ -2286,7 +2286,7 @@ program ExcelToPDF;
 uses
   SysUtils, ComObj, Variants;
 
-procedure CreerRapportPDF;
+procedure CreerRapportPDF;  
 var
   Excel, Workbook, Sheet: Variant;
   PDFFile: string;
@@ -2361,7 +2361,7 @@ program FusionCourrier;
 uses
   SysUtils, ComObj, Variants, Classes;
 
-procedure CreerLettresPersonnalisees;
+procedure CreerLettresPersonnalisees;  
 var
   Word, Doc: Variant;
   Destinataires: TStringList;
@@ -2450,7 +2450,7 @@ program AutomatisationComplete;
 uses
   SysUtils, ComObj, Variants;
 
-procedure GenererEtEnvoyerRapport;
+procedure GenererEtEnvoyerRapport;  
 var
   Excel, Workbook, Sheet: Variant;
   Word, Doc: Variant;
@@ -2556,7 +2556,7 @@ end.
 #### 1. Validation des entrées
 
 ```pascal
-function SauvegarderExcelSecurise(const FileName: string): Boolean;
+function SauvegarderExcelSecurise(const FileName: string): Boolean;  
 var
   Excel, Workbook: Variant;
 begin
@@ -2589,7 +2589,7 @@ end;
 #### 2. Gestion des macros
 
 ```pascal
-procedure DesactiverMacros;
+procedure DesactiverMacros;  
 var
   Excel: Variant;
   Workbook: Variant;
@@ -2615,7 +2615,7 @@ end;
 #### 3. Timeout pour éviter les blocages
 
 ```pascal
-function ExecuterAvecTimeout(const Code: TProcedure; TimeoutMs: Integer): Boolean;
+function ExecuterAvecTimeout(const Code: TProcedure; TimeoutMs: Integer): Boolean;  
 var
   Thread: TThread;
   StartTime: TDateTime;

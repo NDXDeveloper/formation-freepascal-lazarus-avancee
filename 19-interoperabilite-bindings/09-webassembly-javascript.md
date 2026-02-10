@@ -55,8 +55,8 @@ WebAssembly offre des performances bien supérieures à JavaScript pour :
 ```
 Opération : Calcul de 1 million de nombres premiers
 
-JavaScript pur    : ~2500 ms
-WebAssembly       : ~400 ms
+JavaScript pur    : ~2500 ms  
+WebAssembly       : ~400 ms  
 Gain              : 6x plus rapide
 ```
 
@@ -66,7 +66,7 @@ Vous pouvez réutiliser du code Pascal existant dans le navigateur :
 
 ```pascal
 // Code Pascal existant
-function CalculateComplexFormula(x, y: Double): Double;
+function CalculateComplexFormula(x, y: Double): Double;  
 begin
   Result := // ... calcul complexe
 end;
@@ -89,7 +89,7 @@ end;
 
 ```javascript
 // JavaScript - Erreur à l'exécution
-let x = 42;
+let x = 42;  
 x = "Hello";  // Autorisé, mais peut causer des bugs
 ```
 
@@ -139,8 +139,8 @@ x = "Hello";  // Autorisé, mais peut causer des bugs
 sudo apt install fpc-source
 
 # Compiler Pas2JS
-cd /usr/share/fpcsrc/packages/pas2js
-make
+cd /usr/share/fpcsrc/packages/pas2js  
+make  
 sudo make install
 
 # Vérifier l'installation
@@ -165,12 +165,12 @@ program HelloWasm;
 
 {$mode objfpc}
 
-function Add(a, b: Integer): Integer; export;
+function Add(a, b: Integer): Integer; export;  
 begin
   Result := a + b;
 end;
 
-function Multiply(a, b: Integer): Integer; export;
+function Multiply(a, b: Integer): Integer; export;  
 begin
   Result := a * b;
 end;
@@ -179,7 +179,7 @@ exports
   Add,
   Multiply;
 
-begin
+begin  
 end.
 ```
 
@@ -247,7 +247,7 @@ Le code Pascal est converti en JavaScript équivalent :
 
 ```pascal
 // Pascal
-function Add(a, b: Integer): Integer;
+function Add(a, b: Integer): Integer;  
 begin
   Result := a + b;
 end;
@@ -272,7 +272,7 @@ program HelloWeb;
 uses
   JS, Web;
 
-procedure ShowMessage;
+procedure ShowMessage;  
 begin
   window.alert('Bonjour depuis Pascal!');
 end;
@@ -343,16 +343,16 @@ my_web_app/
 #!/bin/bash
 
 # Répertoires
-SRC_DIR="src"
-BUILD_DIR="build"
+SRC_DIR="src"  
+BUILD_DIR="build"  
 WEB_DIR="web"
 
 # Nettoyer
-rm -rf $BUILD_DIR
+rm -rf $BUILD_DIR  
 mkdir -p $BUILD_DIR
 
 # Compiler avec Pas2JS
-echo "Compilation de main.pas..."
+echo "Compilation de main.pas..."  
 pas2js -Jirtl.js -Jc -O1 \
     -Fu$SRC_DIR \
     -FE$BUILD_DIR \
@@ -392,7 +392,7 @@ program JSInterop;
 uses
   JS, Web;
 
-procedure DemoConsole;
+procedure DemoConsole;  
 begin
   // console.log()
   console.log('Message dans la console');
@@ -400,7 +400,7 @@ begin
   console.error('Erreur');
 end;
 
-procedure DemoAlert;
+procedure DemoAlert;  
 begin
   // window.alert()
   window.alert('Bonjour!');
@@ -412,7 +412,7 @@ begin
     console.log('Utilisateur a annulé');
 end;
 
-procedure DemoPrompt;
+procedure DemoPrompt;  
 var
   name: String;
 begin
@@ -436,7 +436,7 @@ end.
 uses
   JS, Web;
 
-procedure ShowBrowserInfo;
+procedure ShowBrowserInfo;  
 var
   userAgent: String;
   language: String;
@@ -499,7 +499,7 @@ uses
   JS, Web;
 
 // Déclarer les fonctions JavaScript externes
-function calculateArea(radius: Double): Double; external name 'calculateArea';
+function calculateArea(radius: Double): Double; external name 'calculateArea';  
 function formatCurrency(amount: Double): String; external name 'formatCurrency';
 
 // Déclarer l'objet Calculator
@@ -512,7 +512,7 @@ type
 var
   calc: TCalculator; external name 'Calculator';
 
-procedure TestJSFunctions;
+procedure TestJSFunctions;  
 var
   area: Double;
   price: String;
@@ -589,7 +589,7 @@ function processArray(arr: TJSArray; callback: TJSFunction): TJSArray;
   external name 'processArray';
 
 // Fonction Pascal qui sera utilisée comme callback
-function Double(value: JSValue): JSValue;
+function Double(value: JSValue): JSValue;  
 var
   n: Integer;
 begin
@@ -597,7 +597,7 @@ begin
   Result := n * 2;
 end;
 
-procedure TestCallback;
+procedure TestCallback;  
 var
   numbers: TJSArray;
   results: TJSArray;
@@ -659,7 +659,7 @@ program DOMManipulation;
 uses
   JS, Web;
 
-procedure ModifyElements;
+procedure ModifyElements;  
 var
   titleElement: TJSHTMLElement;
   contentDiv: TJSHTMLElement;
@@ -697,7 +697,7 @@ end.
 ### Créer des éléments dynamiquement
 
 ```pascal
-procedure CreateElements;
+procedure CreateElements;  
 var
   newDiv: TJSHTMLElement;
   newParagraph: TJSHTMLElement;
@@ -727,7 +727,7 @@ begin
   body.appendChild(newDiv);
 end;
 
-procedure HandleButtonClick(event: TJSMouseEvent);
+procedure HandleButtonClick(event: TJSMouseEvent);  
 begin
   window.alert('Bouton dynamique cliqué!');
 end;
@@ -749,7 +749,7 @@ var
   clickCount: Integer = 0;
 
 // Gestionnaire de clic
-procedure OnButtonClick(event: TJSMouseEvent);
+procedure OnButtonClick(event: TJSMouseEvent);  
 var
   button: TJSHTMLElement;
 begin
@@ -760,7 +760,7 @@ begin
 end;
 
 // Gestionnaire de saisie
-procedure OnInputChange(event: TJSEvent);
+procedure OnInputChange(event: TJSEvent);  
 var
   input: TJSHTMLInputElement;
   display: TJSHTMLElement;
@@ -771,7 +771,7 @@ begin
 end;
 
 // Gestionnaire de souris over
-procedure OnMouseOver(event: TJSMouseEvent);
+procedure OnMouseOver(event: TJSMouseEvent);  
 var
   element: TJSHTMLElement;
 begin
@@ -780,7 +780,7 @@ begin
 end;
 
 // Gestionnaire de souris out
-procedure OnMouseOut(event: TJSMouseEvent);
+procedure OnMouseOut(event: TJSMouseEvent);  
 var
   element: TJSHTMLElement;
 begin
@@ -788,7 +788,7 @@ begin
   element.style.setProperty('background-color', '');
 end;
 
-procedure SetupEventListeners;
+procedure SetupEventListeners;  
 var
   button: TJSHTMLElement;
   input: TJSHTMLInputElement;
@@ -858,7 +858,7 @@ program FormValidation;
 uses
   JS, Web, SysUtils;
 
-procedure ValidateAndSubmit(event: TJSEvent);
+procedure ValidateAndSubmit(event: TJSEvent);  
 var
   emailInput: TJSHTMLInputElement;
   passwordInput: TJSHTMLInputElement;
@@ -906,7 +906,7 @@ begin
   end;
 end;
 
-procedure SetupForm;
+procedure SetupForm;  
 var
   form: TJSHTMLFormElement;
 begin
@@ -997,12 +997,12 @@ var
   previousValue: String = '';
   operation: String = '';
 
-procedure UpdateDisplay;
+procedure UpdateDisplay;  
 begin
   display.value := currentValue;
 end;
 
-procedure OnNumberClick(event: TJSMouseEvent);
+procedure OnNumberClick(event: TJSMouseEvent);  
 var
   button: TJSHTMLButtonElement;
   digit: String;
@@ -1018,7 +1018,7 @@ begin
   UpdateDisplay;
 end;
 
-procedure OnOperationClick(event: TJSMouseEvent);
+procedure OnOperationClick(event: TJSMouseEvent);  
 var
   button: TJSHTMLButtonElement;
 begin
@@ -1028,7 +1028,7 @@ begin
   currentValue := '0';
 end;
 
-procedure OnEqualsClick(event: TJSMouseEvent);
+procedure OnEqualsClick(event: TJSMouseEvent);  
 var
   a, b, result: Double;
 begin
@@ -1050,7 +1050,7 @@ begin
   UpdateDisplay;
 end;
 
-procedure OnClearClick(event: TJSMouseEvent);
+procedure OnClearClick(event: TJSMouseEvent);  
 begin
   currentValue := '0';
   previousValue := '';
@@ -1058,7 +1058,7 @@ begin
   UpdateDisplay;
 end;
 
-procedure SetupCalculator;
+procedure SetupCalculator;  
 var
   buttons: TJSNodeList;
   i: Integer;
@@ -1238,7 +1238,7 @@ var
   currentColor: String = '#000000';
   currentSize: Integer = 5;
 
-procedure StartDrawing(event: TJSMouseEvent);
+procedure StartDrawing(event: TJSMouseEvent);  
 var
   rect: TJSClientRect;
 begin
@@ -1248,7 +1248,7 @@ begin
   lastY := Trunc(event.clientY - rect.top);
 end;
 
-procedure Draw(event: TJSMouseEvent);
+procedure Draw(event: TJSMouseEvent);  
 var
   rect: TJSClientRect;
   currentX, currentY: Integer;
@@ -1272,12 +1272,12 @@ begin
   lastY := currentY;
 end;
 
-procedure StopDrawing(event: TJSMouseEvent);
+procedure StopDrawing(event: TJSMouseEvent);  
 begin
   isDrawing := False;
 end;
 
-procedure OnColorChange(event: TJSEvent);
+procedure OnColorChange(event: TJSEvent);  
 var
   input: TJSHTMLInputElement;
 begin
@@ -1285,7 +1285,7 @@ begin
   currentColor := input.value;
 end;
 
-procedure OnSizeChange(event: TJSEvent);
+procedure OnSizeChange(event: TJSEvent);  
 var
   input: TJSHTMLInputElement;
   sizeDisplay: TJSHTMLElement;
@@ -1297,7 +1297,7 @@ begin
   sizeDisplay.textContent := IntToStr(currentSize) + 'px';
 end;
 
-procedure ClearCanvas(event: TJSMouseEvent);
+procedure ClearCanvas(event: TJSMouseEvent);  
 begin
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -1306,7 +1306,7 @@ begin
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 end;
 
-procedure SaveImage(event: TJSMouseEvent);
+procedure SaveImage(event: TJSMouseEvent);  
 var
   dataURL: String;
   link: TJSHTMLAnchorElement;
@@ -1321,7 +1321,7 @@ begin
   link.click();
 end;
 
-procedure SetupDrawingApp;
+procedure SetupDrawingApp;  
 var
   colorInput: TJSHTMLInputElement;
   sizeInput: TJSHTMLInputElement;
@@ -1521,7 +1521,7 @@ var
   score: Integer;
   gameTimer: Integer;
 
-procedure InitGame;
+procedure InitGame;  
 begin
   // Initialiser le serpent au centre
   SetLength(snake, 3);
@@ -1542,7 +1542,7 @@ begin
   UpdateScore;
 end;
 
-procedure UpdateScore;
+procedure UpdateScore;  
 var
   scoreElement: TJSHTMLElement;
 begin
@@ -1550,13 +1550,13 @@ begin
   scoreElement.textContent := 'Score: ' + IntToStr(score);
 end;
 
-procedure DrawCell(x, y: Integer; color: String);
+procedure DrawCell(x, y: Integer; color: String);  
 begin
   ctx.fillStyle := color;
   ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE - 2, CELL_SIZE - 2);
 end;
 
-procedure Draw;
+procedure Draw;  
 var
   i: Integer;
 begin
@@ -1593,7 +1593,7 @@ begin
   DrawCell(food.X, food.Y, '#f44336');
 end;
 
-procedure CheckCollision;
+procedure CheckCollision;  
 var
   i: Integer;
   head: TPoint;
@@ -1619,7 +1619,7 @@ begin
   end;
 end;
 
-procedure Update;
+procedure Update;  
 var
   i: Integer;
   newHead: TPoint;
@@ -1669,13 +1669,13 @@ begin
   end;
 end;
 
-procedure GameLoop;
+procedure GameLoop;  
 begin
   Update;
   Draw;
 end;
 
-procedure OnKeyPress(event: TJSKeyboardEvent);
+procedure OnKeyPress(event: TJSKeyboardEvent);  
 begin
   case event.key of
     'ArrowUp':    if direction <> dDown then direction := dUp;
@@ -1687,7 +1687,7 @@ begin
   event.preventDefault();
 end;
 
-procedure StartNewGame(event: TJSMouseEvent);
+procedure StartNewGame(event: TJSMouseEvent);  
 begin
   if gameTimer <> 0 then
     window.clearInterval(gameTimer);
@@ -1697,7 +1697,7 @@ begin
   gameTimer := window.setInterval(@GameLoop, 150);
 end;
 
-procedure SetupGame;
+procedure SetupGame;  
 var
   startBtn: TJSHTMLButtonElement;
 begin
@@ -1859,9 +1859,9 @@ function countPrimes(max) {
 }
 
 // Test
-console.time('JavaScript');
-const result = countPrimes(100000);
-console.timeEnd('JavaScript');
+console.time('JavaScript');  
+const result = countPrimes(100000);  
+console.timeEnd('JavaScript');  
 console.log('Nombres premiers trouvés:', result);
 ```
 
@@ -1875,7 +1875,7 @@ program PrimesTest;
 uses
   JS, Web;
 
-function IsPrime(n: Integer): Boolean;
+function IsPrime(n: Integer): Boolean;  
 var
   i: Integer;
 begin
@@ -1894,7 +1894,7 @@ begin
   Result := True;
 end;
 
-function CountPrimes(max: Integer): Integer;
+function CountPrimes(max: Integer): Integer;  
 var
   i, count: Integer;
 begin
@@ -1907,7 +1907,7 @@ begin
   Result := count;
 end;
 
-procedure RunTest;
+procedure RunTest;  
 var
   startTime, endTime: Double;
   result: Integer;
@@ -1930,8 +1930,8 @@ end.
 **Résultats typiques** :
 
 ```
-JavaScript pur : ~2500 ms
-Pas2JS        : ~2800 ms
+JavaScript pur : ~2500 ms  
+Pas2JS        : ~2800 ms  
 Différence    : Similaire (le code est transpilé en JS)
 ```
 
@@ -1968,7 +1968,7 @@ end;
 
 ```pascal
 // ✗ LENT - Accès DOM dans la boucle
-for i := 1 to 100 do
+for i := 1 to 100 do  
 begin
   element := TJSHTMLElement(document.getElementById('item' + IntToStr(i)));
   element.textContent := 'Item ' + IntToStr(i);
@@ -1993,7 +1993,7 @@ var
   animationId: Integer;
   position: Double = 0;
 
-procedure Animate(timestamp: Double);
+procedure Animate(timestamp: Double);  
 var
   element: TJSHTMLElement;
 begin
@@ -2009,7 +2009,7 @@ begin
   animationId := window.requestAnimationFrame(@Animate);
 end;
 
-procedure StartAnimation(event: TJSMouseEvent);
+procedure StartAnimation(event: TJSMouseEvent);  
 begin
   animationId := window.requestAnimationFrame(@Animate);
 end;
@@ -2032,7 +2032,7 @@ uses
   JS, Web;
 
 // Fonction de calcul intensif
-function CalculateFactorial(n: Integer): Double;
+function CalculateFactorial(n: Integer): Double;  
 var
   i: Integer;
   result: Double;
@@ -2043,7 +2043,7 @@ begin
   Result := result;
 end;
 
-procedure OnMessage(event: TJSMessageEvent);
+procedure OnMessage(event: TJSMessageEvent);  
 var
   n: Integer;
   result: Double;
@@ -2069,7 +2069,7 @@ end.
 var
   worker: TJSWorker;
 
-procedure OnWorkerMessage(event: TJSMessageEvent);
+procedure OnWorkerMessage(event: TJSMessageEvent);  
 var
   result: Double;
 begin
@@ -2080,7 +2080,7 @@ begin
     'Résultat: ' + FloatToStr(result);
 end;
 
-procedure StartCalculation(event: TJSMouseEvent);
+procedure StartCalculation(event: TJSMouseEvent);  
 var
   n: Integer;
 begin
@@ -2092,7 +2092,7 @@ begin
   console.log('Calcul démarré en arrière-plan...');
 end;
 
-procedure SetupWorker;
+procedure SetupWorker;  
 begin
   worker := TJSWorker.new('worker.js');
   worker.addEventListener('message', @OnWorkerMessage);
@@ -2151,17 +2151,17 @@ set -e
 echo "=== Build de l'application Pas2JS ==="
 
 # Variables
-SRC_DIR="src"
-PUBLIC_DIR="public"
+SRC_DIR="src"  
+PUBLIC_DIR="public"  
 DIST_DIR="dist"
 
 # Nettoyer le répertoire de distribution
-echo "Nettoyage..."
-rm -rf $DIST_DIR
+echo "Nettoyage..."  
+rm -rf $DIST_DIR  
 mkdir -p $DIST_DIR/assets/{images,fonts}
 
 # Compiler le code Pascal
-echo "Compilation du code Pascal..."
+echo "Compilation du code Pascal..."  
 pas2js -Jirtl.js -Jc -O1 \
     -Fu$SRC_DIR \
     -FE$DIST_DIR \
@@ -2175,11 +2175,11 @@ fi
 echo "✓ Compilation réussie"
 
 # Copier les fichiers HTML
-echo "Copie des fichiers HTML..."
+echo "Copie des fichiers HTML..."  
 cp $PUBLIC_DIR/*.html $DIST_DIR/
 
 # Minifier le CSS (nécessite csso ou similaire)
-echo "Traitement du CSS..."
+echo "Traitement du CSS..."  
 if command -v csso &> /dev/null; then
     csso $PUBLIC_DIR/styles.css -o $DIST_DIR/styles.min.css
     echo "✓ CSS minifié"
@@ -2189,8 +2189,8 @@ else
 fi
 
 # Copier les assets
-echo "Copie des assets..."
-cp -r $PUBLIC_DIR/images/* $DIST_DIR/assets/images/ 2>/dev/null || :
+echo "Copie des assets..."  
+cp -r $PUBLIC_DIR/images/* $DIST_DIR/assets/images/ 2>/dev/null || :  
 cp -r $PUBLIC_DIR/fonts/* $DIST_DIR/assets/fonts/ 2>/dev/null || :
 
 # Optimiser les images (optionnel, nécessite imagemagick)
@@ -2201,16 +2201,16 @@ if command -v mogrify &> /dev/null; then
 fi
 
 # Créer un fichier de version
-echo "Création du fichier de version..."
-date "+%Y-%m-%d %H:%M:%S" > $DIST_DIR/version.txt
+echo "Création du fichier de version..."  
+date "+%Y-%m-%d %H:%M:%S" > $DIST_DIR/version.txt  
 git rev-parse --short HEAD >> $DIST_DIR/version.txt 2>/dev/null || echo "no-git" >> $DIST_DIR/version.txt
 
-echo ""
-echo "=== Build terminé avec succès ==="
-echo "Les fichiers sont dans : $DIST_DIR/"
-echo ""
-echo "Pour tester localement :"
-echo "  cd $DIST_DIR && python3 -m http.server 8000"
+echo ""  
+echo "=== Build terminé avec succès ==="  
+echo "Les fichiers sont dans : $DIST_DIR/"  
+echo ""  
+echo "Pour tester localement :"  
+echo "  cd $DIST_DIR && python3 -m http.server 8000"  
 echo "  Puis ouvrez : http://localhost:8000"
 ```
 
@@ -2235,7 +2235,7 @@ npm install -g terser
 
 ```bash
 # Minifier le JavaScript généré
-echo "Minification du JavaScript..."
+echo "Minification du JavaScript..."  
 if command -v terser &> /dev/null; then
     terser $DIST_DIR/main.js \
         --compress \
@@ -2257,9 +2257,9 @@ fi
 
 ```bash
 # Compresser les fichiers pour les serveurs qui supportent gzip
-echo "Compression Gzip..."
-gzip -9 -k $DIST_DIR/*.js
-gzip -9 -k $DIST_DIR/*.css
+echo "Compression Gzip..."  
+gzip -9 -k $DIST_DIR/*.js  
+gzip -9 -k $DIST_DIR/*.css  
 gzip -9 -k $DIST_DIR/*.html
 
 echo "✓ Fichiers compressés créés"
@@ -2385,8 +2385,8 @@ set -e
 echo "=== Déploiement de l'application ==="
 
 # Variables
-SERVER="user@myapp.example.com"
-REMOTE_DIR="/var/www/myapp"
+SERVER="user@myapp.example.com"  
+REMOTE_DIR="/var/www/myapp"  
 LOCAL_DIST="dist"
 
 # 1. Build
@@ -2394,21 +2394,21 @@ echo "1. Build de l'application..."
 ./scripts/build.sh
 
 # 2. Backup de l'ancienne version
-echo "2. Backup de l'ancienne version..."
+echo "2. Backup de l'ancienne version..."  
 ssh $SERVER "cd $REMOTE_DIR && tar -czf backup-$(date +%Y%m%d-%H%M%S).tar.gz dist/"
 
 # 3. Transfert des fichiers
-echo "3. Transfert des fichiers..."
+echo "3. Transfert des fichiers..."  
 rsync -avz --delete \
     $LOCAL_DIST/ \
     $SERVER:$REMOTE_DIR/dist/
 
 # 4. Redémarrage du serveur (si nécessaire)
-echo "4. Redémarrage du serveur..."
+echo "4. Redémarrage du serveur..."  
 ssh $SERVER "sudo systemctl reload nginx"
 
 # 5. Test de santé
-echo "5. Test de santé..."
+echo "5. Test de santé..."  
 HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" https://myapp.example.com)
 
 if [ $HTTP_CODE -eq 200 ]; then
@@ -2418,7 +2418,7 @@ else
     exit 1
 fi
 
-echo ""
+echo ""  
 echo "=== Déploiement terminé ==="
 ```
 
@@ -2497,12 +2497,12 @@ jobs:
 ./scripts/build.sh
 
 # Pousser vers gh-pages
-cd dist
-git init
-git add .
-git commit -m "Deploy to GitHub Pages"
-git branch -M gh-pages
-git remote add origin https://github.com/username/repo.git
+cd dist  
+git init  
+git add .  
+git commit -m "Deploy to GitHub Pages"  
+git branch -M gh-pages  
+git remote add origin https://github.com/username/repo.git  
 git push -f origin gh-pages
 
 echo "✓ Déployé sur: https://username.github.io/repo/"
@@ -2588,17 +2588,17 @@ interface
 uses
   JS, Web;
 
-function GetElement(id: String): TJSHTMLElement;
+function GetElement(id: String): TJSHTMLElement;  
 procedure ShowNotification(message: String);
 
 implementation
 
-function GetElement(id: String): TJSHTMLElement;
+function GetElement(id: String): TJSHTMLElement;  
 begin
   Result := TJSHTMLElement(document.getElementById(id));
 end;
 
-procedure ShowNotification(message: String);
+procedure ShowNotification(message: String);  
 var
   notification: TJSHTMLElement;
 begin
@@ -2626,12 +2626,12 @@ program Main;
 uses
   JS, Web, Types, Utils;
 
-procedure OnButtonClick(event: TJSMouseEvent);
+procedure OnButtonClick(event: TJSMouseEvent);  
 begin
   ShowNotification('Bouton cliqué!');
 end;
 
-procedure Init;
+procedure Init;  
 begin
   GetElement('myButton').addEventListener('click', @OnButtonClick);
 end;
@@ -2669,30 +2669,30 @@ var
 
 implementation
 
-constructor TAppState.Create;
+constructor TAppState.Create;  
 begin
   FData := TJSObject.new;
   SetLength(FListeners, 0);
 end;
 
-procedure TAppState.SetValue(key: String; value: JSValue);
+procedure TAppState.SetValue(key: String; value: JSValue);  
 begin
   FData[key] := value;
   Notify;
 end;
 
-function TAppState.GetValue(key: String): JSValue;
+function TAppState.GetValue(key: String): JSValue;  
 begin
   Result := FData[key];
 end;
 
-procedure TAppState.Subscribe(listener: TNotifyEvent);
+procedure TAppState.Subscribe(listener: TNotifyEvent);  
 begin
   SetLength(FListeners, Length(FListeners) + 1);
   FListeners[High(FListeners)] := listener;
 end;
 
-procedure TAppState.Notify;
+procedure TAppState.Notify;  
 var
   listener: TNotifyEvent;
 begin
@@ -2712,7 +2712,7 @@ end.
 uses
   AppState;
 
-procedure OnStateChange(Sender: TObject);
+procedure OnStateChange(Sender: TObject);  
 var
   count: Integer;
 begin
@@ -2721,7 +2721,7 @@ begin
   UpdateUI;
 end;
 
-procedure IncrementCount(event: TJSMouseEvent);
+procedure IncrementCount(event: TJSMouseEvent);  
 var
   count: Integer;
 begin
@@ -2729,7 +2729,7 @@ begin
   AppState.SetValue('count', count + 1);
 end;
 
-procedure Init;
+procedure Init;  
 begin
   AppState.SetValue('count', 0);
   AppState.Subscribe(@OnStateChange);
@@ -2739,7 +2739,7 @@ end;
 ### 3. Gestion d'erreurs
 
 ```pascal
-procedure SafeExecute(proc: TProcedure; errorMsg: String);
+procedure SafeExecute(proc: TProcedure; errorMsg: String);  
 begin
   try
     proc();
@@ -2773,7 +2773,7 @@ SafeExecute(
 var
   heavyModuleLoaded: Boolean = False;
 
-procedure LoadHeavyModule;
+procedure LoadHeavyModule;  
 var
   script: TJSHTMLScriptElement;
 begin
@@ -2791,7 +2791,7 @@ begin
   document.head.appendChild(script);
 end;
 
-procedure OnFeatureButtonClick(event: TJSMouseEvent);
+procedure OnFeatureButtonClick(event: TJSMouseEvent);  
 begin
   if not heavyModuleLoaded then
     LoadHeavyModule()
@@ -2832,7 +2832,7 @@ end;
 
 ```javascript
 // sw.js
-const CACHE_NAME = 'pascal-app-v1';
+const CACHE_NAME = 'pascal-app-v1';  
 const urlsToCache = [
   '/',
   '/index.html',
@@ -2859,7 +2859,7 @@ self.addEventListener('fetch', event => {
 **Enregistrement depuis Pascal** :
 
 ```pascal
-procedure RegisterServiceWorker;
+procedure RegisterServiceWorker;  
 begin
   if window.navigator.serviceWorker <> nil then
   begin

@@ -83,7 +83,7 @@ Combiner la productivité de C# avec la performance du code natif Pascal pour :
 
 ```pascal
 // Même code Pascal, fonctionne partout
-function CalculateComplex(x, y: Double): Double; cdecl; export;
+function CalculateComplex(x, y: Double): Double; cdecl; export;  
 begin
   Result := // ... algorithme complexe
 end;
@@ -110,7 +110,7 @@ double result = NativeLib.CalculateComplex(10.5, 20.3);
 #### Méthode 1 : Depuis les dépôts Ubuntu
 
 ```bash
-sudo apt update
+sudo apt update  
 sudo apt install mono-complete
 ```
 
@@ -124,14 +124,14 @@ mono --version
 
 ```bash
 # Ajouter la clé GPG
-sudo apt install gnupg ca-certificates
+sudo apt install gnupg ca-certificates  
 sudo gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
 
 # Ajouter le dépôt
 echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
 
 # Installer
-sudo apt update
+sudo apt update  
 sudo apt install mono-complete
 ```
 
@@ -139,12 +139,12 @@ sudo apt install mono-complete
 
 ```bash
 # Ajouter le dépôt Microsoft
-wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
+wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb  
+sudo dpkg -i packages-microsoft-prod.deb  
 rm packages-microsoft-prod.deb
 
 # Installer .NET SDK
-sudo apt update
+sudo apt update  
 sudo apt install -y dotnet-sdk-8.0
 
 # Vérifier
@@ -156,7 +156,7 @@ dotnet --version
 
 ```bash
 # FreePascal
-sudo apt update
+sudo apt update  
 sudo apt install fpc
 
 # Lazarus (IDE complet)
@@ -172,7 +172,7 @@ fpc -version
 **Éditeur de code** :
 ```bash
 # Visual Studio Code avec extensions
-sudo snap install code --classic
+sudo snap install code --classic  
 code --install-extension ms-dotnettools.csharp
 
 # Ou MonoDevelop
@@ -261,25 +261,25 @@ uses
   SysUtils, Math;
 
 // Addition simple
-function Add(a, b: Integer): Integer; cdecl; export;
+function Add(a, b: Integer): Integer; cdecl; export;  
 begin
   Result := a + b;
 end;
 
 // Multiplication
-function Multiply(a, b: Integer): Integer; cdecl; export;
+function Multiply(a, b: Integer): Integer; cdecl; export;  
 begin
   Result := a * b;
 end;
 
 // Puissance
-function Power(base, exponent: Double): Double; cdecl; export;
+function Power(base, exponent: Double): Double; cdecl; export;  
 begin
   Result := Math.Power(base, exponent);
 end;
 
 // Somme d'un tableau
-function SumArray(arr: PInteger; length: Integer): Integer; cdecl; export;
+function SumArray(arr: PInteger; length: Integer): Integer; cdecl; export;  
 var
   i: Integer;
   sum: Integer;
@@ -299,7 +299,7 @@ exports
   Power,
   SumArray;
 
-begin
+begin  
 end.
 ```
 
@@ -334,7 +334,7 @@ fpc -Xs -olibmathlib.so mathlib.pas
 **Program.cs** :
 
 ```csharp
-using System;
+using System;  
 using System.Runtime.InteropServices;
 
 namespace MathLibDemo
@@ -412,7 +412,7 @@ namespace MathLibDemo
 mcs Program.cs -out:MathDemo.exe
 
 # Ou avec dotnet (recommandé)
-dotnet new console -n MathDemo
+dotnet new console -n MathDemo  
 cd MathDemo
 # Copier Program.cs
 dotnet build
@@ -437,8 +437,8 @@ chmod +x MathDemo
 #### Méthode 1 : Copier dans le répertoire de l'application
 
 ```bash
-cp libmathlib.so /chemin/vers/application/
-cd /chemin/vers/application
+cp libmathlib.so /chemin/vers/application/  
+cd /chemin/vers/application  
 mono MathDemo.exe
 ```
 
@@ -459,11 +459,11 @@ ldconfig -p | grep mathlib
 
 ```bash
 # Temporaire (session courante)
-export LD_LIBRARY_PATH=/chemin/vers/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/chemin/vers/lib:$LD_LIBRARY_PATH  
 mono MathDemo.exe
 
 # Permanent (ajouter à ~/.bashrc)
-echo 'export LD_LIBRARY_PATH=/opt/myapp/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
+echo 'export LD_LIBRARY_PATH=/opt/myapp/lib:$LD_LIBRARY_PATH' >> ~/.bashrc  
 source ~/.bashrc
 ```
 
@@ -506,10 +506,10 @@ myproject/
 
 ```makefile
 # Variables
-FPC = fpc
-FPC_FLAGS = -O3 -fPIC -CX
-LIB_NAME = libmathlib.so
-SRC = src/mathlib.pas
+FPC = fpc  
+FPC_FLAGS = -O3 -fPIC -CX  
+LIB_NAME = libmathlib.so  
+SRC = src/mathlib.pas  
 BUILD_DIR = build
 
 # Cibles
@@ -586,20 +586,20 @@ libmathlib.so -> libmathlib.so.1
 #!/bin/bash
 # deploy.sh
 
-VERSION="1.2.3"
-LIB_BASE="libmathlib.so"
-LIB_FULL="${LIB_BASE}.${VERSION}"
+VERSION="1.2.3"  
+LIB_BASE="libmathlib.so"  
+LIB_FULL="${LIB_BASE}.${VERSION}"  
 INSTALL_DIR="/usr/local/lib"
 
 # Compiler avec version
 fpc -O3 -fPIC -o${LIB_FULL} mathlib.pas
 
 # Installer
-sudo cp ${LIB_FULL} ${INSTALL_DIR}/
+sudo cp ${LIB_FULL} ${INSTALL_DIR}/  
 cd ${INSTALL_DIR}
 
 # Créer les liens symboliques
-sudo ln -sf ${LIB_FULL} ${LIB_BASE}.1
+sudo ln -sf ${LIB_FULL} ${LIB_BASE}.1  
 sudo ln -sf ${LIB_BASE}.1 ${LIB_BASE}
 
 # Mettre à jour le cache
@@ -620,16 +620,16 @@ Les types de base sont identiques à Windows, mais avec quelques particularités
 
 ```pascal
 // Pascal (FreePascal)
-Integer   // 4 octets sur x86/x64 Linux
-Int64     // 8 octets
-PtrInt    // 4 octets (32-bit) ou 8 octets (64-bit)
+Integer   // 4 octets sur x86/x64 Linux  
+Int64     // 8 octets  
+PtrInt    // 4 octets (32-bit) ou 8 octets (64-bit)  
 PtrUInt   // Non signé, taille dépend de l'architecture
 ```
 
 ```csharp
 // C# / Mono
-int       // 4 octets (toujours)
-long      // 8 octets (toujours)
+int       // 4 octets (toujours)  
+long      // 8 octets (toujours)  
 IntPtr    // 4 ou 8 octets selon l'architecture
 ```
 
@@ -690,14 +690,14 @@ public struct Data
 ```pascal
 {$codepage UTF8}
 
-function GetUTF8Message: PAnsiChar; cdecl; export;
+function GetUTF8Message: PAnsiChar; cdecl; export;  
 const
   MSG: AnsiString = 'Bonjour Linux! 🐧';
 begin
   Result := PAnsiChar(MSG);
 end;
 
-procedure ProcessUTF8String(str: PAnsiChar); cdecl; export;
+procedure ProcessUTF8String(str: PAnsiChar); cdecl; export;  
 var
   s: AnsiString;
 begin
@@ -719,7 +719,7 @@ public static extern void ProcessUTF8String(
     [MarshalAs(UnmanagedType.LPUTF8Str)] string str);
 
 // Utilisation
-string message = GetUTF8Message();
+string message = GetUTF8Message();  
 Console.WriteLine(message);  // Affiche correctement les émojis
 
 ProcessUTF8String("Message C# avec émojis: 🚀🌟");
@@ -731,14 +731,14 @@ ProcessUTF8String("Message C# avec émojis: 🚀🌟");
 
 ```pascal
 // Allouer de la mémoire partagée
-function AllocateBuffer(size: PtrInt): Pointer; cdecl; export;
+function AllocateBuffer(size: PtrInt): Pointer; cdecl; export;  
 begin
   GetMem(Result, size);
   FillChar(Result^, size, 0);
 end;
 
 // Libérer la mémoire
-procedure FreeBuffer(buffer: Pointer); cdecl; export;
+procedure FreeBuffer(buffer: Pointer); cdecl; export;  
 begin
   if buffer <> nil then
     FreeMem(buffer);
@@ -824,8 +824,8 @@ using (var buffer = new NativeBuffer(1024))
 **Code qui fonctionne sur Windows et Linux** :
 
 ```csharp
-using System;
-using System.IO;
+using System;  
+using System.IO;  
 using System.Runtime.InteropServices;
 
 public class PathHelper
@@ -957,7 +957,7 @@ public static class NativeLibrary
 **Chargement de configuration** :
 
 ```csharp
-using System.Text.Json;
+using System.Text.Json;  
 using System.IO;
 
 public class LibraryConfig
@@ -1016,7 +1016,7 @@ public class LibraryConfig
 }
 
 // Utilisation
-string libPath = LibraryConfig.GetLibraryPath("Math");
+string libPath = LibraryConfig.GetLibraryPath("Math");  
 Console.WriteLine($"Bibliothèque trouvée : {libPath}");
 ```
 
@@ -1031,7 +1031,7 @@ Linux fournit de nombreuses bibliothèques système natives que vous pouvez util
 **Exemples de fonctions libc** :
 
 ```csharp
-using System;
+using System;  
 using System.Runtime.InteropServices;
 
 public static class LibC
@@ -1097,13 +1097,13 @@ uses
   SysUtils, BaseUnix;
 
 // Vérifier si un fichier existe
-function FileExists(path: PAnsiChar): Boolean; cdecl; export;
+function FileExists(path: PAnsiChar): Boolean; cdecl; export;  
 begin
   Result := SysUtils.FileExists(string(path));
 end;
 
 // Obtenir la taille d'un fichier
-function GetFileSize(path: PAnsiChar): Int64; cdecl; export;
+function GetFileSize(path: PAnsiChar): Int64; cdecl; export;  
 var
   info: stat;
 begin
@@ -1114,7 +1114,7 @@ begin
 end;
 
 // Obtenir les permissions d'un fichier (mode Unix)
-function GetFileMode(path: PAnsiChar): Integer; cdecl; export;
+function GetFileMode(path: PAnsiChar): Integer; cdecl; export;  
 var
   info: stat;
 begin
@@ -1125,7 +1125,7 @@ begin
 end;
 
 // Changer les permissions
-function SetFileMode(path: PAnsiChar; mode: Integer): Boolean; cdecl; export;
+function SetFileMode(path: PAnsiChar; mode: Integer): Boolean; cdecl; export;  
 begin
   Result := FpChmod(string(path), mode) = 0;
 end;
@@ -1136,14 +1136,14 @@ exports
   GetFileMode,
   SetFileMode;
 
-begin
+begin  
 end.
 ```
 
 **C# - Wrapper** :
 
 ```csharp
-using System;
+using System;  
 using System.Runtime.InteropServices;
 
 public static class FileOps
@@ -1246,7 +1246,7 @@ type
     GroupID: Integer;
   end;
 
-function GetSystemInfo: TSystemInfo; cdecl; export;
+function GetSystemInfo: TSystemInfo; cdecl; export;  
 var
   info: TSystemInfo;
   buf: array[0..255] of AnsiChar;
@@ -1275,13 +1275,13 @@ begin
 end;
 
 // Obtenir le nombre de CPUs
-function GetCPUCount: Integer; cdecl; export;
+function GetCPUCount: Integer; cdecl; export;  
 begin
   Result := GetCPUCount;  // Fonction FPC intégrée
 end;
 
 // Obtenir le uptime du système (en secondes)
-function GetUptime: Int64; cdecl; export;
+function GetUptime: Int64; cdecl; export;  
 var
   f: TextFile;
   line: string;
@@ -1307,14 +1307,14 @@ exports
   GetCPUCount,
   GetUptime;
 
-begin
+begin  
 end.
 ```
 
 **C#** :
 
 ```csharp
-using System;
+using System;  
 using System.Runtime.InteropServices;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
@@ -1468,14 +1468,14 @@ end;
 exports
   SendNotification;
 
-begin
+begin  
 end.
 ```
 
 **C# - Wrapper D-Bus** :
 
 ```csharp
-using System;
+using System;  
 using System.Runtime.InteropServices;
 
 public static class DBusNotifications
@@ -1533,8 +1533,8 @@ dotnet add package Tmds.DBus
 **Code C# direct** :
 
 ```csharp
-using System;
-using System.Threading.Tasks;
+using System;  
+using System.Threading.Tasks;  
 using Tmds.DBus;
 
 // Interface pour les notifications
@@ -1619,7 +1619,7 @@ type
   end;
 
 // Lire les statistiques CPU depuis /proc/stat
-function GetCPUStats: TCPUStats; cdecl; export;
+function GetCPUStats: TCPUStats; cdecl; export;  
 var
   f: TextFile;
   line: string;
@@ -1651,7 +1651,7 @@ begin
 end;
 
 // Calculer le pourcentage d'utilisation CPU
-function CalculateCPUUsage(prev, current: TCPUStats): Double; cdecl; export;
+function CalculateCPUUsage(prev, current: TCPUStats): Double; cdecl; export;  
 var
   totalDelta, idleDelta: Int64;
 begin
@@ -1665,7 +1665,7 @@ begin
 end;
 
 // Lire les statistiques mémoire depuis /proc/meminfo
-function GetMemoryStats: TMemoryStats; cdecl; export;
+function GetMemoryStats: TMemoryStats; cdecl; export;  
 var
   f: TextFile;
   line: string;
@@ -1711,15 +1711,15 @@ exports
   CalculateCPUUsage,
   GetMemoryStats;
 
-begin
+begin  
 end.
 ```
 
 **C# - Application de monitoring** :
 
 ```csharp
-using System;
-using System.Runtime.InteropServices;
+using System;  
+using System.Runtime.InteropServices;  
 using System.Threading;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -1944,17 +1944,17 @@ exports
   ApplySobelFilter,
   ResizeImage;
 
-begin
+begin  
 end.
 ```
 
 **C# - Application de traitement d'images** :
 
 ```csharp
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
+using System;  
+using System.Drawing;  
+using System.Drawing.Imaging;  
+using System.Runtime.InteropServices;  
 using System.Diagnostics;
 
 namespace ImageProcessing
@@ -2113,7 +2113,7 @@ class Program
 fpc -O3 -fPIC -olibimage_processing_linux.so image_processing_linux.pas
 
 # Copier dans /usr/local/lib
-sudo cp libimage_processing_linux.so /usr/local/lib/
+sudo cp libimage_processing_linux.so /usr/local/lib/  
 sudo ldconfig
 
 # Compiler le programme C#
@@ -2144,20 +2144,20 @@ var
   LogCallback: TLogCallback = nil;
 
 // Enregistrer un callback pour les logs
-procedure RegisterLogCallback(callback: TLogCallback); cdecl; export;
+procedure RegisterLogCallback(callback: TLogCallback); cdecl; export;  
 begin
   LogCallback := callback;
 end;
 
 // Helper pour envoyer des logs
-procedure Log(level: Integer; const msg: string);
+procedure Log(level: Integer; const msg: string);  
 begin
   if Assigned(LogCallback) then
     LogCallback(level, PAnsiChar(msg));
 end;
 
 // Fonction de travail principale
-procedure DoWork(param: PAnsiChar): Integer; cdecl; export;
+procedure DoWork(param: PAnsiChar): Integer; cdecl; export;  
 var
   i: Integer;
   config: string;
@@ -2185,7 +2185,7 @@ begin
 end;
 
 // Vérifier l'état du système
-function CheckSystemHealth: Boolean; cdecl; export;
+function CheckSystemHealth: Boolean; cdecl; export;  
 var
   loadAvg: array[0..2] of Double;
 begin
@@ -2207,16 +2207,16 @@ exports
   DoWork,
   CheckSystemHealth;
 
-begin
+begin  
 end.
 ```
 
 **C# - Service systemd** :
 
 ```csharp
-using System;
-using System.Runtime.InteropServices;
-using System.Threading;
+using System;  
+using System.Runtime.InteropServices;  
+using System.Threading;  
 using System.Threading.Tasks;
 
 namespace SystemdService
@@ -2328,21 +2328,21 @@ namespace SystemdService
 
 ```ini
 [Unit]
-Description=Mon Service Mono/Pascal
+Description=Mon Service Mono/Pascal  
 After=network.target
 
 [Service]
-Type=simple
-User=myuser
-WorkingDirectory=/opt/myservice
-Environment="LD_LIBRARY_PATH=/usr/local/lib"
-ExecStart=/usr/bin/mono /opt/myservice/ServiceWorker.exe
-Restart=on-failure
+Type=simple  
+User=myuser  
+WorkingDirectory=/opt/myservice  
+Environment="LD_LIBRARY_PATH=/usr/local/lib"  
+ExecStart=/usr/bin/mono /opt/myservice/ServiceWorker.exe  
+Restart=on-failure  
 RestartSec=10
 
 # Logs
-StandardOutput=journal
-StandardError=journal
+StandardOutput=journal  
+StandardError=journal  
 SyslogIdentifier=myservice
 
 [Install]
@@ -2353,23 +2353,23 @@ WantedBy=multi-user.target
 
 ```bash
 # Compiler
-fpc -O3 -fPIC -olibservice_worker.so service_worker.pas
-sudo cp libservice_worker.so /usr/local/lib/
+fpc -O3 -fPIC -olibservice_worker.so service_worker.pas  
+sudo cp libservice_worker.so /usr/local/lib/  
 sudo ldconfig
 
 mcs ServiceWorker.cs -out:ServiceWorker.exe
 
 # Installer
-sudo mkdir -p /opt/myservice
-sudo cp ServiceWorker.exe /opt/myservice/
+sudo mkdir -p /opt/myservice  
+sudo cp ServiceWorker.exe /opt/myservice/  
 sudo cp libservice_worker.so /opt/myservice/
 
 # Copier le fichier unit
 sudo cp myservice.service /etc/systemd/system/
 
 # Activer et démarrer
-sudo systemctl daemon-reload
-sudo systemctl enable myservice
+sudo systemctl daemon-reload  
+sudo systemctl enable myservice  
 sudo systemctl start myservice
 
 # Vérifier le statut
@@ -2500,7 +2500,7 @@ nm -D libmathlib.so | grep ' T '
 **Configuration du logging en C#** :
 
 ```csharp
-using System;
+using System;  
 using System.IO;
 
 public class Logger
@@ -2536,7 +2536,7 @@ public class Logger
 }
 
 // Utilisation
-Logger.Info("Application démarrée");
+Logger.Info("Application démarrée");  
 Logger.Error("Erreur lors du chargement de libmathlib.so");
 ```
 
@@ -2578,9 +2578,9 @@ public static class Syslog
 }
 
 // Utilisation
-Syslog.Initialize("myapp");
-Syslog.Log(Syslog.LOG_INFO, "Application started");
-Syslog.Log(Syslog.LOG_ERR, "Critical error occurred");
+Syslog.Initialize("myapp");  
+Syslog.Log(Syslog.LOG_INFO, "Application started");  
+Syslog.Log(Syslog.LOG_ERR, "Critical error occurred");  
 Syslog.Close();
 ```
 
@@ -2602,7 +2602,7 @@ find / -name "libmathlib.so" 2>/dev/null
 
 2. **Vérifier LD_LIBRARY_PATH** :
 ```bash
-echo $LD_LIBRARY_PATH
+echo $LD_LIBRARY_PATH  
 export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 ```
 
@@ -2643,7 +2643,7 @@ nm -D libmathlib.so | grep Add
 
 1. **Activer les core dumps** :
 ```bash
-ulimit -c unlimited
+ulimit -c unlimited  
 mono MathDemo.exe
 # Si crash, un fichier core sera créé
 
@@ -2655,12 +2655,12 @@ gdb mono core
 2. **Vérifier les pointeurs** :
 ```csharp
 // ✗ MAUVAIS
-int value = 42;
+int value = 42;  
 NativeMethods.ProcessPointer(ref value);
 // Si la fonction native garde le pointeur
 
 // ✓ BON
-IntPtr ptr = Marshal.AllocHGlobal(sizeof(int));
+IntPtr ptr = Marshal.AllocHGlobal(sizeof(int));  
 try
 {
     Marshal.WriteInt32(ptr, 42);
@@ -2696,7 +2696,7 @@ ls -l libmathlib.so
 chmod 755 libmathlib.so
 
 # Pour les services systemd
-sudo chown root:root /opt/myservice/*
+sudo chown root:root /opt/myservice/*  
 sudo chmod 755 /opt/myservice/*.exe
 ```
 
@@ -2754,9 +2754,9 @@ public static class LinuxPaths
 **Gérer proprement SIGTERM et SIGINT** :
 
 ```csharp
-using System;
-using System.Runtime.InteropServices;
-using Mono.Unix;
+using System;  
+using System.Runtime.InteropServices;  
+using Mono.Unix;  
 using Mono.Unix.Native;
 
 class GracefulShutdown
@@ -2816,12 +2816,12 @@ class GracefulShutdown
 sudo useradd -r -s /bin/false myappuser
 
 # Créer les répertoires
-sudo mkdir -p /opt/myapp /var/log/myapp
+sudo mkdir -p /opt/myapp /var/log/myapp  
 sudo chown myappuser:myappuser /opt/myapp /var/log/myapp
 
 # Fichier unit systemd
 [Service]
-User=myappuser
+User=myappuser  
 Group=myappuser
 ```
 
@@ -2884,11 +2884,11 @@ myapp_1.0.0-1/
 **Fichier control** :
 
 ```
-Package: myapp
-Version: 1.0.0-1
-Architecture: amd64
-Maintainer: Votre Nom <email@example.com>
-Depends: mono-runtime (>= 6.0), libc6
+Package: myapp  
+Version: 1.0.0-1  
+Architecture: amd64  
+Maintainer: Votre Nom <email@example.com>  
+Depends: mono-runtime (>= 6.0), libc6  
 Description: Mon application Mono/Pascal
  Description détaillée de l'application
 ```
@@ -2908,15 +2908,15 @@ if ! id -u myappuser > /dev/null 2>&1; then
 fi
 
 # Créer les répertoires de logs
-mkdir -p /var/log/myapp
+mkdir -p /var/log/myapp  
 chown myappuser:myappuser /var/log/myapp
 
 # Activer et démarrer le service
-systemctl daemon-reload
-systemctl enable myapp.service
+systemctl daemon-reload  
+systemctl enable myapp.service  
 systemctl start myapp.service
 
-echo "myapp installé avec succès"
+echo "myapp installé avec succès"  
 exit 0
 ```
 
@@ -3002,8 +3002,8 @@ MyApp.AppDir/
 APPDIR="$(dirname "$(readlink -f "${0}")")"
 
 # Configurer les chemins
-export LD_LIBRARY_PATH="${APPDIR}/usr/lib:${LD_LIBRARY_PATH}"
-export MONO_PATH="${APPDIR}/usr/lib/mono/4.5"
+export LD_LIBRARY_PATH="${APPDIR}/usr/lib:${LD_LIBRARY_PATH}"  
+export MONO_PATH="${APPDIR}/usr/lib/mono/4.5"  
 export PATH="${APPDIR}/usr/bin:${PATH}"
 
 # Lancer l'application
@@ -3014,7 +3014,7 @@ exec "${APPDIR}/usr/bin/mono" "${APPDIR}/usr/lib/myapp/MyApp.exe" "$@"
 
 ```bash
 # Télécharger appimagetool
-wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage  
 chmod +x appimagetool-x86_64.AppImage
 
 # Créer l'AppImage
@@ -3136,15 +3136,15 @@ public static class ModernNativeLoader
 #!/bin/bash
 set -e
 
-APP_NAME="myapp"
-APP_VERSION="1.0.0"
-INSTALL_DIR="/opt/${APP_NAME}"
+APP_NAME="myapp"  
+APP_VERSION="1.0.0"  
+INSTALL_DIR="/opt/${APP_NAME}"  
 LOG_DIR="/var/log/${APP_NAME}"
 
 echo "=== Installation de ${APP_NAME} ${APP_VERSION} ==="
 
 # Vérifier les prérequis
-echo "Vérification des prérequis..."
+echo "Vérification des prérequis..."  
 if ! command -v mono &> /dev/null; then
     echo "✗ Mono n'est pas installé"
     echo "  Installez avec: sudo apt install mono-runtime"
@@ -3154,7 +3154,7 @@ fi
 echo "✓ Mono installé: $(mono --version | head -n1)"
 
 # Créer l'utilisateur
-echo "Création de l'utilisateur..."
+echo "Création de l'utilisateur..."  
 if ! id -u ${APP_NAME} &> /dev/null; then
     sudo useradd -r -s /bin/false ${APP_NAME}
     echo "✓ Utilisateur ${APP_NAME} créé"
@@ -3163,32 +3163,32 @@ else
 fi
 
 # Créer les répertoires
-echo "Création des répertoires..."
-sudo mkdir -p ${INSTALL_DIR}/{bin,lib,etc}
+echo "Création des répertoires..."  
+sudo mkdir -p ${INSTALL_DIR}/{bin,lib,etc}  
 sudo mkdir -p ${LOG_DIR}
 
 # Copier les fichiers
-echo "Installation des fichiers..."
-sudo cp bin/MyApp.exe ${INSTALL_DIR}/bin/
-sudo cp lib/libmathlib.so.${APP_VERSION} ${INSTALL_DIR}/lib/
+echo "Installation des fichiers..."  
+sudo cp bin/MyApp.exe ${INSTALL_DIR}/bin/  
+sudo cp lib/libmathlib.so.${APP_VERSION} ${INSTALL_DIR}/lib/  
 sudo cp etc/config.json ${INSTALL_DIR}/etc/
 
 # Créer les liens symboliques
-cd ${INSTALL_DIR}/lib
-sudo ln -sf libmathlib.so.${APP_VERSION} libmathlib.so.1
-sudo ln -sf libmathlib.so.1 libmathlib.so
+cd ${INSTALL_DIR}/lib  
+sudo ln -sf libmathlib.so.${APP_VERSION} libmathlib.so.1  
+sudo ln -sf libmathlib.so.1 libmathlib.so  
 cd -
 
 # Définir les permissions
-echo "Configuration des permissions..."
-sudo chown -R ${APP_NAME}:${APP_NAME} ${INSTALL_DIR}
-sudo chown -R ${APP_NAME}:${APP_NAME} ${LOG_DIR}
-sudo chmod 755 ${INSTALL_DIR}/bin/MyApp.exe
+echo "Configuration des permissions..."  
+sudo chown -R ${APP_NAME}:${APP_NAME} ${INSTALL_DIR}  
+sudo chown -R ${APP_NAME}:${APP_NAME} ${LOG_DIR}  
+sudo chmod 755 ${INSTALL_DIR}/bin/MyApp.exe  
 sudo chmod 755 ${INSTALL_DIR}/lib/*.so*
 
 # Mettre à jour ldconfig
-echo "Mise à jour du cache des bibliothèques..."
-echo "${INSTALL_DIR}/lib" | sudo tee /etc/ld.so.conf.d/${APP_NAME}.conf
+echo "Mise à jour du cache des bibliothèques..."  
+echo "${INSTALL_DIR}/lib" | sudo tee /etc/ld.so.conf.d/${APP_NAME}.conf  
 sudo ldconfig
 
 # Installer le service systemd
@@ -3200,14 +3200,14 @@ if [ -f "systemd/myapp.service" ]; then
     echo "✓ Service installé et activé"
 fi
 
-echo ""
-echo "=== Installation terminée ==="
-echo ""
-echo "Pour démarrer le service:"
-echo "  sudo systemctl start ${APP_NAME}"
-echo ""
-echo "Pour voir les logs:"
-echo "  sudo journalctl -u ${APP_NAME} -f"
+echo ""  
+echo "=== Installation terminée ==="  
+echo ""  
+echo "Pour démarrer le service:"  
+echo "  sudo systemctl start ${APP_NAME}"  
+echo ""  
+echo "Pour voir les logs:"  
+echo "  sudo journalctl -u ${APP_NAME} -f"  
 echo ""
 ```
 
@@ -3217,8 +3217,8 @@ echo ""
 #!/bin/bash
 set -e
 
-APP_NAME="myapp"
-INSTALL_DIR="/opt/${APP_NAME}"
+APP_NAME="myapp"  
+INSTALL_DIR="/opt/${APP_NAME}"  
 LOG_DIR="/var/log/${APP_NAME}"
 
 echo "=== Désinstallation de ${APP_NAME} ==="
@@ -3242,7 +3242,7 @@ if [ -f "/etc/systemd/system/${APP_NAME}.service" ]; then
 fi
 
 # Supprimer les fichiers
-echo "Suppression des fichiers..."
+echo "Suppression des fichiers..."  
 sudo rm -rf ${INSTALL_DIR}
 
 # Supprimer la configuration ldconfig
@@ -3252,22 +3252,22 @@ if [ -f "/etc/ld.so.conf.d/${APP_NAME}.conf" ]; then
 fi
 
 # Demander si on supprime les logs
-read -p "Supprimer les logs dans ${LOG_DIR}? (o/N) " -n 1 -r
-echo
+read -p "Supprimer les logs dans ${LOG_DIR}? (o/N) " -n 1 -r  
+echo  
 if [[ $REPLY =~ ^[Oo]$ ]]; then
     sudo rm -rf ${LOG_DIR}
     echo "✓ Logs supprimés"
 fi
 
 # Demander si on supprime l'utilisateur
-read -p "Supprimer l'utilisateur ${APP_NAME}? (o/N) " -n 1 -r
-echo
+read -p "Supprimer l'utilisateur ${APP_NAME}? (o/N) " -n 1 -r  
+echo  
 if [[ $REPLY =~ ^[Oo]$ ]]; then
     sudo userdel ${APP_NAME}
     echo "✓ Utilisateur supprimé"
 fi
 
-echo ""
+echo ""  
 echo "=== Désinstallation terminée ==="
 ```
 
@@ -3307,7 +3307,7 @@ fpc -g -olibmylib.so mylib.pas
 mcs Program.cs -r:System.Drawing.dll -out:MyApp.exe
 
 # Avec dotnet
-dotnet build
+dotnet build  
 dotnet publish -c Release
 ```
 
@@ -3343,7 +3343,7 @@ valgrind --leak-check=full mono MyApp.exe
 strace -e trace=open,openat mono MyApp.exe
 
 # Profiling
-perf record mono MyApp.exe
+perf record mono MyApp.exe  
 perf report
 ```
 
@@ -3354,7 +3354,7 @@ perf report
 sudo systemctl daemon-reload
 
 # Démarrer/Arrêter
-sudo systemctl start myapp
+sudo systemctl start myapp  
 sudo systemctl stop myapp
 
 # Activer au démarrage
@@ -3447,35 +3447,35 @@ set -e
 echo "=== Build du projet Mono/Pascal ==="
 
 # Nettoyer
-echo "Nettoyage..."
-rm -rf build/
+echo "Nettoyage..."  
+rm -rf build/  
 mkdir -p build/{lib,bin}
 
 # Compiler les bibliothèques Pascal
-echo "Compilation des bibliothèques Pascal..."
-cd src/pascal
-make clean
-make
-cp *.so ../../build/lib/
+echo "Compilation des bibliothèques Pascal..."  
+cd src/pascal  
+make clean  
+make  
+cp *.so ../../build/lib/  
 cd ../..
 
 # Compiler l'application C#
-echo "Compilation de l'application C#..."
-cd src/csharp
-dotnet build -c Release -o ../../build/bin/
+echo "Compilation de l'application C#..."  
+cd src/csharp  
+dotnet build -c Release -o ../../build/bin/  
 cd ../..
 
 # Copier les fichiers additionnels
-echo "Copie des fichiers de configuration..."
+echo "Copie des fichiers de configuration..."  
 cp -r etc build/
 
 # Tests
-echo "Exécution des tests..."
+echo "Exécution des tests..."  
 cd tests
 ./test_mathlib.sh
 cd ..
 
-echo "✓ Build terminé avec succès"
+echo "✓ Build terminé avec succès"  
 echo "Les fichiers sont dans: build/"
 ```
 
