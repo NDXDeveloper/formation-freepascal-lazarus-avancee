@@ -515,7 +515,7 @@ tar -czf MonPackage_v1.0.tar.gz MonPackage_v1.0/
 
 Créez un `README.md` clair :
 
-```markdown
+````markdown
 # MonPremierPackage
 
 ## Description
@@ -546,7 +546,7 @@ end;
 
 ## Licence
 LGPL v3
-```
+````
 
 ## Packages statiques vs dynamiques
 
@@ -632,8 +632,11 @@ Créez un projet de test pour votre package :
 ```pascal
 program TestMonPackage;
 
+{$mode objfpc}{$H+}
+
 uses
-  TestFramework, MonBoutonSpecial;
+  Classes, SysUtils, fpcunit, testregistry, consoletestrunner,
+  MonBoutonSpecial;
 
 type
   TTestMonBouton = class(TTestCase)
@@ -648,12 +651,32 @@ var
 begin
   Btn := TMonBoutonSpecial.Create(nil);
   try
-    CheckNotNull(Btn, 'Button creation failed');
+    AssertNotNull('Button creation failed', Btn);
   finally
     Btn.Free;
   end;
 end;
+
+procedure TTestMonBouton.TestColorHover;
+var
+  Btn: TMonBoutonSpecial;
+begin
+  Btn := TMonBoutonSpecial.Create(nil);
+  try
+    Btn.ColorHover := clRed;
+    AssertEquals('ColorHover should be clRed', clRed, Btn.ColorHover);
+  finally
+    Btn.Free;
+  end;
+end;
+
+initialization
+  RegisterTest(TTestMonBouton);
+
+end.
 ```
+
+> **Note** : FPCUnit utilise `AssertEquals`, `AssertTrue`, `AssertNotNull` (pas `CheckEquals`, `CheckTrue`, `CheckNotNull` qui sont DUnit/Delphi). L'unité pour les tests console est `consoletestrunner` (pas `testrunner`).
 
 ## Dépannage courant
 

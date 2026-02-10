@@ -349,6 +349,8 @@ end.
 ```pascal
 unit PathUtils;
 
+{$mode objfpc}{$H+}
+
 interface
 
 uses
@@ -1618,33 +1620,37 @@ var
   JSONObject: TJSONObject;
   Iterator: TJSONEnum;
   SubIterator: TJSONEnum;
+  FS: TFileStream;
 begin
   if not FileExists(FileName) then
     Exit;
 
-  with TFileStream.Create(FileName, fmOpenRead) do
+  FS := TFileStream.Create(FileName, fmOpenRead);
   try
-    JSONData := GetJSON(Self);
-    if JSONData is TJSONObject then
-    begin
-      JSONObject := TJSONObject(JSONData);
-
-      for Iterator in JSONObject do
+    JSONData := GetJSON(FS);
+    try
+      if JSONData is TJSONObject then
       begin
-        if Iterator.Value is TJSONObject then
+        JSONObject := TJSONObject(JSONData);
+
+        for Iterator in JSONObject do
         begin
-          for SubIterator in TJSONObject(Iterator.Value) do
+          if Iterator.Value is TJSONObject then
           begin
-            FIniFile.WriteString(Iterator.Key,
-                               SubIterator.Key,
-                               SubIterator.Value.AsString);
+            for SubIterator in TJSONObject(Iterator.Value) do
+            begin
+              FIniFile.WriteString(Iterator.Key,
+                                 SubIterator.Key,
+                                 SubIterator.Value.AsString);
+            end;
           end;
         end;
       end;
+    finally
+      JSONData.Free;
     end;
-    JSONData.Free;
   finally
-    Free;
+    FS.Free;
   end;
 end;
 
@@ -1688,7 +1694,7 @@ end.
 ### Structure de documentation
 
 `README.md` :
-```markdown
+````markdown
 # MonProjet - Application Multi-Plateforme
 
 ## Plateformes Supportées
@@ -1751,7 +1757,7 @@ make test
 # Tests multi-plateformes
 ./scripts/test_all_platforms.sh
 ```
-```
+````
 
 ## Conclusion
 

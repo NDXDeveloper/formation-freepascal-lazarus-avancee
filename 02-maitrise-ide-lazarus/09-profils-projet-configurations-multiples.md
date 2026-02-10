@@ -275,15 +275,25 @@ Mode : Test-Coverage
 Code conditionnel :
 ```pascal
 {$IFDEF TEST_MODE}
+uses consoletestrunner;
+
 procedure RunTests;
+var
+  App: TTestRunner;
 begin
   WriteLn('Mode Test activé');
   {$IFDEF COVERAGE}
   InitializeCoverage;
   {$ENDIF}
 
-  // Exécuter les tests
-  TestFramework.RunAllTests;
+  // Exécuter les tests avec FPCUnit
+  App := TTestRunner.Create(nil);
+  try
+    App.Initialize;
+    App.Run;
+  finally
+    App.Free;
+  end;
 
   {$IFDEF COVERAGE}
   GenerateCoverageReport;
@@ -291,6 +301,8 @@ begin
 end;
 {$ENDIF}
 ```
+
+> **Note** : FPCUnit utilise `consoletestrunner` (pas `TestFramework` qui est Delphi/DUnit).
 
 ### Mode Demo limité
 
@@ -308,7 +320,12 @@ Code avec limitations :
 ```pascal
 unit Features;
 
+{$mode objfpc}{$H+}
+
 interface
+
+uses
+  SysUtils, Dialogs;
 
 const
   {$IFDEF DEMO_VERSION}
@@ -756,6 +773,7 @@ pipeline {
 
 ```pascal
 program ShowBuildMode;
+{$mode objfpc}{$H+}
 
 begin
   WriteLn('=== Configuration de compilation ===');
@@ -774,12 +792,8 @@ begin
 
   WriteLn('OS : ', {$I %FPCTARGETOS%});
   WriteLn('CPU : ', {$I %FPCTARGETCPU%});
+  WriteLn('FPC : ', {$I %FPCVERSION%});
   WriteLn('Date : ', {$I %DATE%}, ' ', {$I %TIME%});
-
-  // Afficher les optimisations
-  {$IF Declared(OptimizationLevel)}
-  WriteLn('Optimisation : ', OptimizationLevel);
-  {$ENDIF}
 
   // Vérifier les assertions
   {$IFOPT C+}
@@ -797,11 +811,16 @@ end.
 ```pascal
 unit BuildLog;
 
+{$mode objfpc}{$H+}
+
 interface
 
 procedure LogBuildInfo;
 
 implementation
+
+uses
+  SysUtils;
 
 procedure LogBuildInfo;
 var
@@ -822,7 +841,13 @@ begin
 
   WriteLn(LogFile, '=== Build Info ===');
   WriteLn(LogFile, 'Date : ', DateTimeToStr(Now));
-  WriteLn(LogFile, 'Mode : ', {$I %BUILDMODE%});
+  // Note : {$I %BUILDMODE%} n'existe pas en FPC.
+  // Utiliser des defines pour identifier le mode :
+  {$IFDEF DEBUG}
+  WriteLn(LogFile, 'Mode : Debug');
+  {$ELSE}
+  WriteLn(LogFile, 'Mode : Release');
+  {$ENDIF}
   WriteLn(LogFile, 'Version FPC : ', {$I %FPCVERSION%});
   WriteLn(LogFile, 'Target : ', {$I %FPCTARGETOS%}, '-', {$I %FPCTARGETCPU%});
   WriteLn(LogFile, '');

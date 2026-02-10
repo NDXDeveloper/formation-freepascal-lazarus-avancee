@@ -895,12 +895,21 @@ fi
 
 ### Compilation parallèle
 
-```bash
-# Utiliser plusieurs cœurs (si supporté)
-lazbuild -j$(nproc) MonProjet.lpi
+> **Attention** : `lazbuild` ne supporte pas l'option `-j` pour la compilation
+> parallèle (contrairement à `make`). FPC compile séquentiellement.
+> Pour accélérer les builds, vous pouvez compiler **plusieurs projets**
+> en parallèle dans des processus séparés :
 
-# Windows
-lazbuild -j%NUMBER_OF_PROCESSORS% MonProjet.lpi
+```bash
+# Linux : compiler plusieurs projets en parallèle
+lazbuild Projet1.lpi &
+lazbuild Projet2.lpi &
+lazbuild Projet3.lpi &
+wait  # Attendre que tous les builds se terminent
+
+# Ou utiliser GNU parallel si disponible
+echo -e "Projet1.lpi\nProjet2.lpi\nProjet3.lpi" | \
+  parallel lazbuild --build-mode=Release {}
 ```
 
 ### Cache de compilation
@@ -1290,7 +1299,7 @@ echo "3. Uploader sur GitHub/GitLab releases"
 ### Documentation d'automatisation
 
 Créer `AUTOMATION.md` :
-```markdown
+````markdown
 # Guide d'automatisation avec lazbuild
 
 ## Installation rapide
@@ -1380,10 +1389,13 @@ lazbuild -r MonProjet.lpi
 # Utiliser le cache
 export LAZBUILD_CACHE=/tmp/lazbuild-cache
 
-# Compilation parallèle
-lazbuild -j$(nproc) MonProjet.lpi
+# Compilation incrémentale (par défaut, ne recompile que les unités modifiées)
+lazbuild MonProjet.lpi
+
+# Si vous avez plusieurs projets, lancez-les en parallèle
+lazbuild Projet1.lpi & lazbuild Projet2.lpi & wait
 ```
-```
+````
 
 ## Exemples d'utilisation réels
 

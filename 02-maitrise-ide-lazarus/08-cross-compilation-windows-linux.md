@@ -228,6 +228,7 @@ program CrossPlatformApp;
 uses
   {$IFDEF UNIX}
   cthreads,  // Threads POSIX pour Linux
+  unix,      // fpSetEnv et autres appels POSIX
   {$ENDIF}
   {$IFDEF WINDOWS}
   Windows,   // API Windows
@@ -241,7 +242,9 @@ begin
 
   {$IFDEF LINUX}
   // Configuration spécifique Linux
-  SetEnvironmentVariable('GTK_THEME', 'Adwaita');
+  // Note : SetEnvironmentVariable n'existe pas en FPC,
+  // utiliser fpSetEnv de l'unité unix
+  fpSetEnv('GTK_THEME', 'Adwaita', 1);
   {$ENDIF}
 
   Application.Initialize;
@@ -824,6 +827,7 @@ Categories=Utility;Development;
 
 ```pascal
 program VerifyCrossCompile;
+{$mode objfpc}{$H+}
 
 begin
   WriteLn('=== Informations de compilation ===');

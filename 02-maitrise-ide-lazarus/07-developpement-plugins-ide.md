@@ -231,7 +231,7 @@ begin
     ToolButton := RegisterIDEButtonCommand(
       'MyToolButton',              // Nom
       'Mon bouton',                // Hint
-      'Cliquez pour l'action',     // Description
+      'Cliquez pour l''action',    // Description
       Bitmap,                      // Icône
       @MyButtonClick              // Action
     );
@@ -248,6 +248,8 @@ end;
 
 ```pascal
 unit MyPluginWindow;
+
+{$mode objfpc}{$H+}
 
 interface
 
@@ -459,6 +461,8 @@ end;
 ```pascal
 unit MyFileWizard;
 
+{$mode objfpc}{$H+}
+
 interface
 
 uses
@@ -663,6 +667,8 @@ end;
 ```pascal
 unit MyPropertyEditor;
 
+{$mode objfpc}{$H+}
+
 interface
 
 uses
@@ -789,6 +795,8 @@ end;
 ### Déboguer votre plugin
 
 ```pascal
+uses SysUtils, Classes;
+
 // Technique 1 : Messages de debug
 {$IFDEF DEBUG}
 procedure DebugLog(const Msg: string);
@@ -797,7 +805,8 @@ begin
   // Ou dans un fichier
   with TStringList.Create do
   try
-    LoadFromFile('plugin_debug.log');
+    if FileExists('plugin_debug.log') then
+      LoadFromFile('plugin_debug.log');
     Add(FormatDateTime('hh:nn:ss', Now) + ' - ' + Msg);
     SaveToFile('plugin_debug.log');
   finally
@@ -990,6 +999,9 @@ end;
 
 ```pascal
 // Éviter les opérations lourdes dans le thread principal
+// Note : les procédures anonymes nécessitent le modeswitch suivant en mode ObjFPC :
+{$modeswitch anonymousfunctions}
+
 procedure HeavyOperation;
 begin
   // Utiliser un thread
@@ -1010,6 +1022,10 @@ begin
   ).Start;
 end;
 ```
+
+> **Note** : Les procédures anonymes ne sont pas disponibles en mode ObjFPC par défaut.
+> Il faut ajouter `{$modeswitch anonymousfunctions}` (FPC 3.3.1+) ou utiliser
+> `{$mode delphi}`. Alternativement, créez une sous-classe de `TThread` classique.
 
 ## Ressources et documentation
 

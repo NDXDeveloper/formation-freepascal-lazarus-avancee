@@ -216,15 +216,15 @@ Lors de l'utilisation de Lazarus sur Windows et Ubuntu, attention à :
 
 À la fin de ce module, vous devrez être capable de :
 
-✅ Naviguer efficacement dans tous les panneaux de l'IDE
-✅ Personnaliser complètement l'environnement de travail
-✅ Créer et distribuer vos propres packages
-✅ Utiliser les outils de refactoring pour restructurer du code
-✅ Déboguer des applications complexes sur Windows et Linux
-✅ Intégrer Lazarus avec Git/SVN pour le travail en équipe
-✅ Développer des extensions pour l'IDE
-✅ Configurer et utiliser la cross-compilation
-✅ Automatiser les builds avec lazbuild
+✅ Naviguer efficacement dans tous les panneaux de l'IDE  
+✅ Personnaliser complètement l'environnement de travail  
+✅ Créer et distribuer vos propres packages  
+✅ Utiliser les outils de refactoring pour restructurer du code  
+✅ Déboguer des applications complexes sur Windows et Linux  
+✅ Intégrer Lazarus avec Git/SVN pour le travail en équipe  
+✅ Développer des extensions pour l'IDE  
+✅ Configurer et utiliser la cross-compilation  
+✅ Automatiser les builds avec lazbuild  
 ✅ Gérer des projets multi-plateformes efficacement
 
 ### Commençons !
