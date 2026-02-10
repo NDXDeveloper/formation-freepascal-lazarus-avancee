@@ -121,7 +121,7 @@ type
 ```pascal
 implementation
 
-constructor TClockLabel.Create(AOwner: TComponent);
+constructor TClockLabel.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -144,14 +144,14 @@ begin
   UpdateTime(nil);
 end;
 
-destructor TClockLabel.Destroy;
+destructor TClockLabel.Destroy;  
 begin
   FTimer.Enabled := False;
   // FTimer est détruit automatiquement (Self est son propriétaire)
   inherited Destroy;
 end;
 
-procedure TClockLabel.SetActive(AValue: Boolean);
+procedure TClockLabel.SetActive(AValue: Boolean);  
 begin
   if FActive <> AValue then
   begin
@@ -162,7 +162,7 @@ begin
   end;
 end;
 
-procedure TClockLabel.SetTimeFormat(AValue: TTimeFormat);
+procedure TClockLabel.SetTimeFormat(AValue: TTimeFormat);  
 begin
   if FTimeFormat <> AValue then
   begin
@@ -171,7 +171,7 @@ begin
   end;
 end;
 
-procedure TClockLabel.SetUpdateInterval(AValue: Integer);
+procedure TClockLabel.SetUpdateInterval(AValue: Integer);  
 begin
   if (AValue >= 100) and (FUpdateInterval <> AValue) then
   begin
@@ -180,7 +180,7 @@ begin
   end;
 end;
 
-function TClockLabel.GetFormattedTime: string;
+function TClockLabel.GetFormattedTime: string;  
 var
   FormatStr: string;
 begin
@@ -204,7 +204,7 @@ begin
   Result := FPrefix + FormatDateTime(FormatStr, Now) + FSuffix;
 end;
 
-procedure TClockLabel.UpdateTime(Sender: TObject);
+procedure TClockLabel.UpdateTime(Sender: TObject);  
 begin
   Caption := GetFormattedTime;
 end;
@@ -261,13 +261,13 @@ type
     property ComplexData: string read GetComplexAsString write SetComplexFromString;
   end;
 
-function TMyComponent.GetComplexAsString: string;
+function TMyComponent.GetComplexAsString: string;  
 begin
   // Convertir la structure en string
   Result := Format('%d,%d,%s', [FComplexData.X, FComplexData.Y, FComplexData.Name]);
 end;
 
-procedure TMyComponent.SetComplexFromString(const Value: string);
+procedure TMyComponent.SetComplexFromString(const Value: string);  
 var
   Parts: TStringList;
 begin
@@ -345,7 +345,7 @@ type
     procedure WriteState(Writer: TWriter); override;
   end;
 
-procedure TStreamableComponent.Loaded;
+procedure TStreamableComponent.Loaded;  
 begin
   inherited Loaded;
 
@@ -390,7 +390,7 @@ type
     property Color: TColor read FColor write FColor default clBtnFace;
   end;
 
-constructor TOptimizedComponent.Create(AOwner: TComponent);
+constructor TOptimizedComponent.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -449,13 +449,13 @@ type
     property RuntimeOnly: Boolean read FIsModified write FIsModified stored False;
   end;
 
-function TSmartComponent.IsSizeStored: Boolean;
+function TSmartComponent.IsSizeStored: Boolean;  
 begin
   // Ne sauvegarder les dimensions que si AutoSize est désactivé
   Result := not FAutoSize;
 end;
 
-function TSmartComponent.IsCustomDataStored: Boolean;
+function TSmartComponent.IsCustomDataStored: Boolean;  
 begin
   // Ne sauvegarder que si non vide
   Result := FCustomData <> '';
@@ -483,7 +483,7 @@ type
     property PenWidth: Integer read FPenWidth write FPenWidth default 1;
   end;
 
-procedure TDrawingComponent.DefineProperties(Filer: TFiler);
+procedure TDrawingComponent.DefineProperties(Filer: TFiler);  
 begin
   inherited DefineProperties(Filer);
 
@@ -491,7 +491,7 @@ begin
   Filer.DefineProperty('Points', @ReadPoints, @WritePoints, Length(FPoints) > 0);
 end;
 
-procedure TDrawingComponent.WritePoints(Writer: TWriter);
+procedure TDrawingComponent.WritePoints(Writer: TWriter);  
 var
   i: Integer;
 begin
@@ -504,7 +504,7 @@ begin
   Writer.WriteListEnd;
 end;
 
-procedure TDrawingComponent.ReadPoints(Reader: TReader);
+procedure TDrawingComponent.ReadPoints(Reader: TReader);  
 var
   i: Integer;
 begin
@@ -543,19 +543,19 @@ type
     property ImageFormat: string read FImageFormat write FImageFormat;
   end;
 
-constructor TImageComponent.Create(AOwner: TComponent);
+constructor TImageComponent.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FImageData := TMemoryStream.Create;
 end;
 
-destructor TImageComponent.Destroy;
+destructor TImageComponent.Destroy;  
 begin
   FImageData.Free;
   inherited Destroy;
 end;
 
-procedure TImageComponent.DefineProperties(Filer: TFiler);
+procedure TImageComponent.DefineProperties(Filer: TFiler);  
 begin
   inherited DefineProperties(Filer);
 
@@ -564,13 +564,13 @@ begin
                              FImageData.Size > 0);
 end;
 
-procedure TImageComponent.WriteImageData(Stream: TStream);
+procedure TImageComponent.WriteImageData(Stream: TStream);  
 begin
   FImageData.Position := 0;
   Stream.CopyFrom(FImageData, FImageData.Size);
 end;
 
-procedure TImageComponent.ReadImageData(Stream: TStream);
+procedure TImageComponent.ReadImageData(Stream: TStream);  
 begin
   FImageData.Clear;
   FImageData.CopyFrom(Stream, Stream.Size - Stream.Position);
@@ -599,7 +599,7 @@ type
     // OldProperty n'est plus publiée mais peut être lue
   end;
 
-procedure TVersionedComponent.DefineProperties(Filer: TFiler);
+procedure TVersionedComponent.DefineProperties(Filer: TFiler);  
 begin
   inherited DefineProperties(Filer);
 
@@ -607,7 +607,7 @@ begin
   Filer.DefineProperty('OldProperty', @ReadOldProperty, nil, False);
 end;
 
-procedure TVersionedComponent.ReadOldProperty(Reader: TReader);
+procedure TVersionedComponent.ReadOldProperty(Reader: TReader);  
 begin
   FOldProperty := Reader.ReadString;
   // Convertir vers la nouvelle propriété
@@ -615,7 +615,7 @@ begin
     FNewProperty := FOldProperty;
 end;
 
-procedure TVersionedComponent.ReadState(Reader: TReader);
+procedure TVersionedComponent.ReadState(Reader: TReader);  
 begin
   // Détecter la version avant de lire
   FVersion := 1; // Version par défaut pour anciens fichiers
@@ -679,36 +679,36 @@ type
   end;
 
 // Implémentation de la collection
-constructor TChartPoints.Create(AOwner: TComponent);
+constructor TChartPoints.Create(AOwner: TComponent);  
 begin
   inherited Create(TChartPoint);
   FOwner := AOwner;
 end;
 
-function TChartPoints.GetOwner: TPersistent;
+function TChartPoints.GetOwner: TPersistent;  
 begin
   Result := FOwner;
 end;
 
-function TChartPoints.Add: TChartPoint;
+function TChartPoints.Add: TChartPoint;  
 begin
   Result := TChartPoint(inherited Add);
 end;
 
 // Implémentation du composant
-constructor TChartComponent.Create(AOwner: TComponent);
+constructor TChartComponent.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FPoints := TChartPoints.Create(Self);
 end;
 
-destructor TChartComponent.Destroy;
+destructor TChartComponent.Destroy;  
 begin
   FPoints.Free;
   inherited Destroy;
 end;
 
-procedure TChartComponent.SetPoints(Value: TChartPoints);
+procedure TChartComponent.SetPoints(Value: TChartPoints);  
 begin
   FPoints.Assign(Value);
 end;
@@ -734,7 +734,7 @@ type
     property AutoTrigger: Boolean read FAutoTrigger write FAutoTrigger default False;
   end;
 
-procedure TEventComponent.Loaded;
+procedure TEventComponent.Loaded;  
 begin
   inherited Loaded;
 
@@ -769,12 +769,12 @@ type
     property Flag2: Boolean read GetFlag2 write SetFlag2 stored True;
   end;
 
-function TOptimizedComponent.GetFlag1: Boolean;
+function TOptimizedComponent.GetFlag1: Boolean;  
 begin
   Result := (FFlags and 1) <> 0;
 end;
 
-procedure TOptimizedComponent.SetFlag1(Value: Boolean);
+procedure TOptimizedComponent.SetFlag1(Value: Boolean);  
 begin
   if Value then
     FFlags := FFlags or 1
@@ -807,7 +807,7 @@ type
     property ImagePath: string read FImagePath write SetImagePath;
   end;
 
-function TResourceComponent.GetImage: TBitmap;
+function TResourceComponent.GetImage: TBitmap;  
 begin
   if not FImageLoaded and (FImagePath <> '') then
   begin
@@ -823,7 +823,7 @@ begin
   Result := FImage;
 end;
 
-procedure TResourceComponent.Loaded;
+procedure TResourceComponent.Loaded;  
 begin
   inherited Loaded;
 
@@ -854,7 +854,7 @@ type
     property Value: Integer read FValue write FValue;
   end;
 
-procedure TDebugComponent.ReadState(Reader: TReader);
+procedure TDebugComponent.ReadState(Reader: TReader);  
 begin
   {$IFDEF DEBUG}
   WriteLn('ReadState: Début de lecture');
@@ -867,7 +867,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TDebugComponent.WriteState(Writer: TWriter);
+procedure TDebugComponent.WriteState(Writer: TWriter);  
 begin
   {$IFDEF DEBUG}
   WriteLn('WriteState: Début d''écriture');
@@ -877,7 +877,7 @@ begin
   inherited WriteState(Writer);
 end;
 
-procedure TDebugComponent.Loaded;
+procedure TDebugComponent.Loaded;  
 begin
   {$IFDEF DEBUG}
   WriteLn('Loaded: Composant complètement chargé');

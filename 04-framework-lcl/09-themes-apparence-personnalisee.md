@@ -59,8 +59,8 @@ Chaque couche peut modifier ou compléter celle du dessous, offrant une flexibil
 La méthode la plus simple et la plus portable. Vous modifiez les propriétés standard des composants :
 
 ```pascal
-Button1.Color := clSkyBlue;
-Button1.Font.Name := 'Segoe UI';
+Button1.Color := clSkyBlue;  
+Button1.Font.Name := 'Segoe UI';  
 Button1.Font.Size := 10;
 ```
 
@@ -83,7 +83,7 @@ ThemeManager.LoadTheme('MonTheme.theme');
 Création de composants personnalisés avec leur propre rendu :
 
 ```pascal
-TThemedButton = class(TButton)
+TThemedButton = class(TButton)  
 protected
   procedure Paint; override;
 end;
@@ -203,7 +203,7 @@ Utiliser uniquement les propriétés communes et laisser le système gérer l'ap
 
 ```pascal
 // Code identique sur toutes les plateformes
-Button1.Caption := 'Valider';
+Button1.Caption := 'Valider';  
 Button1.Default := True;
 // L'apparence s'adapte automatiquement
 ```
@@ -255,7 +255,7 @@ type
     class procedure ListAvailableFonts;
   end;
 
-class procedure TThemeInspector.DumpThemeColors;
+class procedure TThemeInspector.DumpThemeColors;  
 begin
   WriteLn('clBtnFace: ', ColorToString(clBtnFace));
   WriteLn('clWindow: ', ColorToString(clWindow));

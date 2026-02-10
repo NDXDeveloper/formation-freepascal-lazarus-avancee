@@ -18,12 +18,12 @@ TTimer est probablement le composant non-visuel le plus utilisé. Il déclenche 
 
 ```pascal
 // Configuration de base
-Timer1 := TTimer.Create(Self);
-Timer1.Interval := 1000;  // 1000 millisecondes = 1 seconde
+Timer1 := TTimer.Create(Self);  
+Timer1.Interval := 1000;  // 1000 millisecondes = 1 seconde  
 Timer1.Enabled := True;   // Démarre immédiatement
 
 // L'événement qui se répète
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TForm1.Timer1Timer(Sender: TObject);  
 begin
   // Ce code s'exécute toutes les secondes
   Label1.Caption := 'Heure : ' + TimeToStr(Now);
@@ -34,13 +34,13 @@ end;
 
 ```pascal
 // Horloge en temps réel
-procedure TForm1.TimerClockTimer(Sender: TObject);
+procedure TForm1.TimerClockTimer(Sender: TObject);  
 begin
   StatusBar1.Panels[0].Text := FormatDateTime('hh:nn:ss', Now);
 end;
 
 // Animation simple
-procedure TForm1.TimerAnimationTimer(Sender: TObject);
+procedure TForm1.TimerAnimationTimer(Sender: TObject);  
 begin
   Image1.Left := Image1.Left + 5;
   if Image1.Left > Form1.Width then
@@ -48,14 +48,14 @@ begin
 end;
 
 // Sauvegarde automatique
-procedure TForm1.TimerAutoSaveTimer(Sender: TObject);
+procedure TForm1.TimerAutoSaveTimer(Sender: TObject);  
 begin
   if DocumentModified then
     SaveDocument;
 end;
 
 // Déconnexion après inactivité
-procedure TForm1.TimerIdleTimer(Sender: TObject);
+procedure TForm1.TimerIdleTimer(Sender: TObject);  
 begin
   Inc(FIdleTime);
   if FIdleTime > 300 then  // 5 minutes
@@ -70,7 +70,7 @@ end;
 
 ```pascal
 // Éviter les conflits - désactiver pendant le traitement
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TForm1.Timer1Timer(Sender: TObject);  
 begin
   Timer1.Enabled := False;  // Stop temporaire
   try
@@ -82,13 +82,13 @@ begin
 end;
 
 // Timer à usage unique
-procedure TForm1.StartCountdown;
+procedure TForm1.StartCountdown;  
 begin
   Timer1.Interval := 3000;  // 3 secondes
   Timer1.Enabled := True;
 end;
 
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TForm1.Timer1Timer(Sender: TObject);  
 begin
   Timer1.Enabled := False;  // S'arrête après une fois
   ShowMessage('3 secondes écoulées !');
@@ -100,10 +100,10 @@ end;
 Un timer spécialisé qui ne se déclenche que lorsque l'application est inactive.
 
 ```pascal
-IdleTimer1.Enabled := True;
+IdleTimer1.Enabled := True;  
 IdleTimer1.Interval := 100;
 
-procedure TForm1.IdleTimer1Timer(Sender: TObject);
+procedure TForm1.IdleTimer1Timer(Sender: TObject);  
 begin
   // Tâches de fond quand l'utilisateur n'interagit pas
   UpdateBackgroundTasks;
@@ -121,14 +121,14 @@ Ces composants affichent les boîtes de dialogue standard du système pour ouvri
 
 ```pascal
 // Configuration
-OpenDialog1 := TOpenDialog.Create(Self);
-OpenDialog1.Title := 'Choisir un fichier à ouvrir';
-OpenDialog1.InitialDir := GetCurrentDir;
-OpenDialog1.Filter := 'Fichiers texte|*.txt|Tous les fichiers|*.*';
+OpenDialog1 := TOpenDialog.Create(Self);  
+OpenDialog1.Title := 'Choisir un fichier à ouvrir';  
+OpenDialog1.InitialDir := GetCurrentDir;  
+OpenDialog1.Filter := 'Fichiers texte|*.txt|Tous les fichiers|*.*';  
 OpenDialog1.FilterIndex := 1;  // Premier filtre par défaut
 
 // Utilisation
-if OpenDialog1.Execute then
+if OpenDialog1.Execute then  
 begin
   // L'utilisateur a choisi un fichier
   Memo1.Lines.LoadFromFile(OpenDialog1.FileName);
@@ -136,8 +136,8 @@ begin
 end;
 
 // Options utiles
-OpenDialog1.Options := OpenDialog1.Options + [ofAllowMultiSelect];
-if OpenDialog1.Execute then
+OpenDialog1.Options := OpenDialog1.Options + [ofAllowMultiSelect];  
+if OpenDialog1.Execute then  
 begin
   // Plusieurs fichiers sélectionnés
   for i := 0 to OpenDialog1.Files.Count - 1 do
@@ -148,12 +148,12 @@ end;
 #### TSaveDialog - Sauvegarder un fichier
 
 ```pascal
-SaveDialog1.Title := 'Enregistrer le document';
-SaveDialog1.Filter := 'Document Word|*.docx|Document texte|*.txt|PDF|*.pdf';
-SaveDialog1.DefaultExt := 'txt';  // Extension ajoutée automatiquement
+SaveDialog1.Title := 'Enregistrer le document';  
+SaveDialog1.Filter := 'Document Word|*.docx|Document texte|*.txt|PDF|*.pdf';  
+SaveDialog1.DefaultExt := 'txt';  // Extension ajoutée automatiquement  
 SaveDialog1.Options := SaveDialog1.Options + [ofOverwritePrompt];
 
-if SaveDialog1.Execute then
+if SaveDialog1.Execute then  
 begin
   Memo1.Lines.SaveToFile(SaveDialog1.FileName);
   FCurrentFile := SaveDialog1.FileName;
@@ -164,10 +164,10 @@ end;
 #### TSelectDirectoryDialog - Choisir un dossier
 
 ```pascal
-SelectDirectoryDialog1.Title := 'Choisir le dossier de destination';
+SelectDirectoryDialog1.Title := 'Choisir le dossier de destination';  
 SelectDirectoryDialog1.InitialDir := GetUserDir;
 
-if SelectDirectoryDialog1.Execute then
+if SelectDirectoryDialog1.Execute then  
 begin
   FBackupPath := SelectDirectoryDialog1.FileName;
   Label1.Caption := 'Dossier : ' + FBackupPath;
@@ -181,7 +181,7 @@ end;
 ```pascal
 ColorDialog1.Color := Label1.Font.Color;  // Couleur initiale
 
-if ColorDialog1.Execute then
+if ColorDialog1.Execute then  
 begin
   Label1.Font.Color := ColorDialog1.Color;
   // Sauvegarder le choix
@@ -189,24 +189,24 @@ begin
 end;
 
 // Avec couleurs personnalisées
-ColorDialog1.CustomColors.Add('ColorA=' + IntToHex(clRed, 6));
+ColorDialog1.CustomColors.Add('ColorA=' + IntToHex(clRed, 6));  
 ColorDialog1.CustomColors.Add('ColorB=' + IntToHex(clBlue, 6));
 ```
 
 #### TFontDialog - Choisir une police
 
 ```pascal
-FontDialog1.Font := Memo1.Font;  // Police actuelle
+FontDialog1.Font := Memo1.Font;  // Police actuelle  
 FontDialog1.Options := [fdEffects, fdTrueTypeOnly];  // Effets et TrueType seulement
 
-if FontDialog1.Execute then
+if FontDialog1.Execute then  
 begin
   Memo1.Font := FontDialog1.Font;
   SaveFontSettings(FontDialog1.Font);
 end;
 
 // Limiter les choix
-FontDialog1.MinFontSize := 8;
+FontDialog1.MinFontSize := 8;  
 FontDialog1.MaxFontSize := 72;
 ```
 
@@ -216,14 +216,14 @@ FontDialog1.MaxFontSize := 72;
 
 ```pascal
 // Configuration
-FindDialog1.FindText := 'recherche';
+FindDialog1.FindText := 'recherche';  
 FindDialog1.Options := [frDown, frMatchCase];
 
 // Afficher
 FindDialog1.Execute;
 
 // Gérer la recherche
-procedure TForm1.FindDialog1Find(Sender: TObject);
+procedure TForm1.FindDialog1Find(Sender: TObject);  
 var
   FoundAt: Integer;
   StartPos: Integer;
@@ -248,10 +248,10 @@ end;
 #### TReplaceDialog - Rechercher et remplacer
 
 ```pascal
-ReplaceDialog1.FindText := 'ancien';
+ReplaceDialog1.FindText := 'ancien';  
 ReplaceDialog1.ReplaceText := 'nouveau';
 
-procedure TForm1.ReplaceDialog1Replace(Sender: TObject);
+procedure TForm1.ReplaceDialog1Replace(Sender: TObject);  
 begin
   with Sender as TReplaceDialog do
   begin
@@ -271,30 +271,30 @@ Le menu principal de votre application, affiché en haut de la fenêtre.
 
 ```pascal
 // Création par code (généralement fait visuellement)
-MainMenu1 := TMainMenu.Create(Self);
+MainMenu1 := TMainMenu.Create(Self);  
 Form1.Menu := MainMenu1;
 
 // Créer la structure
-MenuFile := TMenuItem.Create(MainMenu1);
-MenuFile.Caption := '&Fichier';
+MenuFile := TMenuItem.Create(MainMenu1);  
+MenuFile.Caption := '&Fichier';  
 MainMenu1.Items.Add(MenuFile);
 
-MenuNew := TMenuItem.Create(MenuFile);
-MenuNew.Caption := '&Nouveau' + #9 + 'Ctrl+N';  // #9 = Tab pour raccourci
-MenuNew.ShortCut := ShortCut(Word('N'), [ssCtrl]);
-MenuNew.OnClick := @MenuNewClick;
+MenuNew := TMenuItem.Create(MenuFile);  
+MenuNew.Caption := '&Nouveau' + #9 + 'Ctrl+N';  // #9 = Tab pour raccourci  
+MenuNew.ShortCut := ShortCut(Word('N'), [ssCtrl]);  
+MenuNew.OnClick := @MenuNewClick;  
 MenuFile.Add(MenuNew);
 
 // Séparateur
-MenuSep := TMenuItem.Create(MenuFile);
-MenuSep.Caption := '-';  // Un tiret crée un séparateur
+MenuSep := TMenuItem.Create(MenuFile);  
+MenuSep.Caption := '-';  // Un tiret crée un séparateur  
 MenuFile.Add(MenuSep);
 
 // Menu avec image
-MenuSave := TMenuItem.Create(MenuFile);
-MenuSave.Caption := '&Enregistrer';
-MenuSave.ImageIndex := 2;  // Si ImageList associée
-MenuSave.Enabled := False;  // Grisé au départ
+MenuSave := TMenuItem.Create(MenuFile);  
+MenuSave.Caption := '&Enregistrer';  
+MenuSave.ImageIndex := 2;  // Si ImageList associée  
+MenuSave.Enabled := False;  // Grisé au départ  
 MenuFile.Add(MenuSave);
 ```
 
@@ -319,7 +319,7 @@ begin
 end;
 
 // Menu contextuel dynamique
-procedure TForm1.PopupMenu1Popup(Sender: TObject);
+procedure TForm1.PopupMenu1Popup(Sender: TObject);  
 begin
   // Adapter le menu au contexte
   MenuEdit.Visible := CanEdit;
@@ -333,28 +333,28 @@ TActionList centralise la logique des actions (nouveau, ouvrir, sauver...) utili
 
 ```pascal
 // Créer une action
-ActionNew := TAction.Create(ActionList1);
-ActionNew.Caption := '&Nouveau';
-ActionNew.ShortCut := ShortCut(Word('N'), [ssCtrl]);
-ActionNew.Hint := 'Créer un nouveau document';
-ActionNew.ImageIndex := 0;
-ActionNew.OnExecute := @ActionNewExecute;
+ActionNew := TAction.Create(ActionList1);  
+ActionNew.Caption := '&Nouveau';  
+ActionNew.ShortCut := ShortCut(Word('N'), [ssCtrl]);  
+ActionNew.Hint := 'Créer un nouveau document';  
+ActionNew.ImageIndex := 0;  
+ActionNew.OnExecute := @ActionNewExecute;  
 ActionNew.OnUpdate := @ActionNewUpdate;
 
 // Associer l'action à plusieurs composants
-Button1.Action := ActionNew;
-MenuItemNew.Action := ActionNew;
+Button1.Action := ActionNew;  
+MenuItemNew.Action := ActionNew;  
 ToolButton1.Action := ActionNew;
 // Tous sont synchronisés automatiquement !
 
 // Gérer l'action
-procedure TForm1.ActionNewExecute(Sender: TObject);
+procedure TForm1.ActionNewExecute(Sender: TObject);  
 begin
   CreateNewDocument;
 end;
 
 // Mettre à jour l'état
-procedure TForm1.ActionNewUpdate(Sender: TObject);
+procedure TForm1.ActionNewUpdate(Sender: TObject);  
 begin
   TAction(Sender).Enabled := not FProcessing;
 end;
@@ -367,12 +367,12 @@ end;
 Affiche les fichiers d'un dossier.
 
 ```pascal
-FileListBox1.Directory := 'C:\Documents';
-FileListBox1.Mask := '*.txt;*.doc';  // Filtre
+FileListBox1.Directory := 'C:\Documents';  
+FileListBox1.Mask := '*.txt;*.doc';  // Filtre  
 FileListBox1.ShowGlyphs := True;     // Icônes de fichiers
 
 // Réagir à la sélection
-procedure TForm1.FileListBox1Click(Sender: TObject);
+procedure TForm1.FileListBox1Click(Sender: TObject);  
 begin
   if FileListBox1.ItemIndex >= 0 then
     LoadFile(FileListBox1.FileName);
@@ -384,11 +384,11 @@ end;
 Affiche l'arborescence des dossiers.
 
 ```pascal
-DirectoryListBox1.Directory := GetCurrentDir;
+DirectoryListBox1.Directory := GetCurrentDir;  
 DirectoryListBox1.FileList := FileListBox1;  // Lier à une liste de fichiers
 
 // Changement de dossier
-procedure TForm1.DirectoryListBox1Change(Sender: TObject);
+procedure TForm1.DirectoryListBox1Change(Sender: TObject);  
 begin
   CurrentPath := DirectoryListBox1.Directory;
   UpdateFileList;
@@ -400,10 +400,10 @@ end;
 Permet de choisir un lecteur (Windows principalement).
 
 ```pascal
-DriveComboBox1.DirList := DirectoryListBox1;  // Lier au dossier
+DriveComboBox1.DirList := DirectoryListBox1;  // Lier au dossier  
 DriveComboBox1.Drive := 'C';
 
-procedure TForm1.DriveComboBox1Change(Sender: TObject);
+procedure TForm1.DriveComboBox1Change(Sender: TObject);  
 begin
   DirectoryListBox1.Drive := DriveComboBox1.Drive;
 end;
@@ -416,11 +416,11 @@ end;
 Fait le lien entre les composants de données et l'interface.
 
 ```pascal
-DataSource1 := TDataSource.Create(Self);
+DataSource1 := TDataSource.Create(Self);  
 DataSource1.DataSet := SQLQuery1;  // Lier à une requête
 
 // Connecter les contrôles
-DBEdit1.DataSource := DataSource1;
+DBEdit1.DataSource := DataSource1;  
 DBEdit1.DataField := 'Nom';
 
 DBGrid1.DataSource := DataSource1;
@@ -432,7 +432,7 @@ Stocke des images pour les menus, boutons, listes, etc.
 
 ```pascal
 // Configuration
-ImageList1.Width := 16;
+ImageList1.Width := 16;  
 ImageList1.Height := 16;
 
 // Ajouter des images
@@ -452,8 +452,8 @@ begin
 end;
 
 // Utiliser avec d'autres composants
-ToolBar1.Images := ImageList1;
-TreeView1.Images := ImageList1;
+ToolBar1.Images := ImageList1;  
+TreeView1.Images := ImageList1;  
 ListView1.SmallImages := ImageList1;
 ```
 
@@ -462,25 +462,25 @@ ListView1.SmallImages := ImageList1;
 Configure le comportement global de l'application.
 
 ```pascal
-ApplicationProperties1.Title := 'Mon Application';
-ApplicationProperties1.ShowMainForm := True;
+ApplicationProperties1.Title := 'Mon Application';  
+ApplicationProperties1.ShowMainForm := True;  
 ApplicationProperties1.ShowButtonGlyphs := sbgAlways;
 
 // Événements globaux
-procedure TForm1.ApplicationProperties1Idle(Sender: TObject; var Done: Boolean);
+procedure TForm1.ApplicationProperties1Idle(Sender: TObject; var Done: Boolean);  
 begin
   // Appelé quand l'application est inactive
   StatusBar1.Panels[0].Text := 'Prêt';
   Done := True;  // Pas d'autres traitements idle
 end;
 
-procedure TForm1.ApplicationProperties1Hint(Sender: TObject);
+procedure TForm1.ApplicationProperties1Hint(Sender: TObject);  
 begin
   // Afficher les hints dans la barre de statut
   StatusBar1.SimpleText := Application.Hint;
 end;
 
-procedure TForm1.ApplicationProperties1Exception(Sender: TObject; E: Exception);
+procedure TForm1.ApplicationProperties1Exception(Sender: TObject; E: Exception);  
 begin
   // Gestion globale des exceptions
   LogError(E.Message);
@@ -495,7 +495,7 @@ end;
 Lance des programmes externes ou des commandes système.
 
 ```pascal
-Process1 := TProcess.Create(nil);
+Process1 := TProcess.Create(nil);  
 try
   Process1.Executable := 'notepad.exe';
   Process1.Parameters.Add('document.txt');
@@ -506,13 +506,13 @@ finally
 end;
 
 // Exécution avec capture de sortie
-Process1.Executable := 'dir';
-Process1.Parameters.Add('/b');
-Process1.Options := [poUsePipes, poNoConsole];
+Process1.Executable := 'dir';  
+Process1.Parameters.Add('/b');  
+Process1.Options := [poUsePipes, poNoConsole];  
 Process1.Execute;
 
 // Lire la sortie
-StringList := TStringList.Create;
+StringList := TStringList.Create;  
 try
   StringList.LoadFromStream(Process1.Output);
   Memo1.Lines := StringList;
@@ -662,7 +662,7 @@ end;
 
 ```pascal
 // Client TCP
-TCPClient := TIdTCPClient.Create(nil);
+TCPClient := TIdTCPClient.Create(nil);  
 try
   TCPClient.Host := '192.168.1.100';
   TCPClient.Port := 9000;
@@ -675,12 +675,12 @@ finally
 end;
 
 // Serveur TCP
-TCPServer := TIdTCPServer.Create(nil);
-TCPServer.DefaultPort := 9000;
-TCPServer.OnExecute := @TCPServerExecute;
+TCPServer := TIdTCPServer.Create(nil);  
+TCPServer.DefaultPort := 9000;  
+TCPServer.OnExecute := @TCPServerExecute;  
 TCPServer.Active := True;
 
-procedure TForm1.TCPServerExecute(AContext: TIdContext);
+procedure TForm1.TCPServerExecute(AContext: TIdContext);  
 var
   Msg: string;
 begin
@@ -696,20 +696,20 @@ end;
 Affiche une icône dans la barre système (systray).
 
 ```pascal
-TrayIcon1 := TTrayIcon.Create(Self);
-TrayIcon1.Icon.LoadFromFile('app.ico');
-TrayIcon1.Hint := 'Mon Application';
-TrayIcon1.PopupMenu := PopupMenuTray;
+TrayIcon1 := TTrayIcon.Create(Self);  
+TrayIcon1.Icon.LoadFromFile('app.ico');  
+TrayIcon1.Hint := 'Mon Application';  
+TrayIcon1.PopupMenu := PopupMenuTray;  
 TrayIcon1.Visible := True;
 
 // Notification ballon (Windows)
-TrayIcon1.BalloonTitle := 'Notification';
-TrayIcon1.BalloonHint := 'Nouveau message reçu !';
-TrayIcon1.BalloonFlags := bfInfo;
+TrayIcon1.BalloonTitle := 'Notification';  
+TrayIcon1.BalloonHint := 'Nouveau message reçu !';  
+TrayIcon1.BalloonFlags := bfInfo;  
 TrayIcon1.ShowBalloonHint;
 
 // Réagir au clic
-procedure TForm1.TrayIcon1Click(Sender: TObject);
+procedure TForm1.TrayIcon1Click(Sender: TObject);  
 begin
   Form1.WindowState := wsNormal;
   Form1.Show;
@@ -717,7 +717,7 @@ begin
 end;
 
 // Menu contextuel
-procedure TForm1.MenuRestoreClick(Sender: TObject);
+procedure TForm1.MenuRestoreClick(Sender: TObject);  
 begin
   Form1.Show;
   TrayIcon1.Visible := False;
@@ -729,10 +729,10 @@ end;
 Pour les notifications modernes du système.
 
 ```pascal
-Notification1 := TNotification.Create(Self);
-Notification1.Title := 'Rappel';
-Notification1.AlertBody := 'Réunion dans 10 minutes';
-Notification1.FireDate := Now + EncodeTime(0, 10, 0, 0);
+Notification1 := TNotification.Create(Self);  
+Notification1.Title := 'Rappel';  
+Notification1.AlertBody := 'Réunion dans 10 minutes';  
+Notification1.FireDate := Now + EncodeTime(0, 10, 0, 0);  
 Notification1.Present;
 ```
 
@@ -744,8 +744,8 @@ Force un format de saisie spécifique.
 
 ```pascal
 // Masques courants
-MaskEdit1.EditMask := '000-000-0000;1;_';  // Téléphone
-MaskEdit2.EditMask := '00/00/0000;1;_';    // Date
+MaskEdit1.EditMask := '000-000-0000;1;_';  // Téléphone  
+MaskEdit2.EditMask := '00/00/0000;1;_';    // Date  
 MaskEdit3.EditMask := '>LL-00000;1;_';     // Code postal canadien
 
 // Légende des masques :
@@ -761,7 +761,7 @@ MaskEdit3.EditMask := '>LL-00000;1;_';     // Code postal canadien
 // _ = Caractère de remplissage
 
 // Récupérer la valeur
-PhoneNumber := MaskEdit1.Text;  // Avec le masque
+PhoneNumber := MaskEdit1.Text;  // Avec le masque  
 PhoneNumber := MaskEdit1.EditText;  // Sans le masque
 ```
 
@@ -770,8 +770,8 @@ PhoneNumber := MaskEdit1.EditText;  // Sans le masque
 Combine un TLabel et un TEdit en un seul composant.
 
 ```pascal
-LabeledEdit1.EditLabel.Caption := 'Nom d''utilisateur :';
-LabeledEdit1.LabelPosition := lpAbove;  // ou lpLeft, lpRight, lpBelow
+LabeledEdit1.EditLabel.Caption := 'Nom d''utilisateur :';  
+LabeledEdit1.LabelPosition := lpAbove;  // ou lpLeft, lpRight, lpBelow  
 LabeledEdit1.LabelSpacing := 3;
 
 // S'utilise comme un TEdit normal
@@ -784,7 +784,7 @@ UserName := LabeledEdit1.Text;
 
 ```pascal
 // Toujours libérer les composants créés dynamiquement
-Timer := TTimer.Create(nil);  // nil = pas de propriétaire auto
+Timer := TTimer.Create(nil);  // nil = pas de propriétaire auto  
 try
   Timer.Interval := 1000;
   Timer.OnTimer := @TimerTick;
@@ -795,7 +795,7 @@ finally
 end;
 
 // Avec un propriétaire, libération automatique
-Timer := TTimer.Create(Self);  // Self = Form propriétaire
+Timer := TTimer.Create(Self);  // Self = Form propriétaire  
 Timer.Interval := 1000;
 // Pas besoin de Free, détruit avec la Form
 ```
@@ -810,8 +810,8 @@ Timer.Interval := 1000;
 // Zone 4 : Données
 
 // Nommer clairement
-TimerAutosave     // Pas Timer1
-OpenDialogImage   // Pas OpenDialog1
+TimerAutosave     // Pas Timer1  
+OpenDialogImage   // Pas OpenDialog1  
 ActionListMain    // Pas ActionList1
 
 // Commenter leur rôle
@@ -825,18 +825,18 @@ TimerAutosave.Tag := 1;  // Sauvegarde toutes les 5 minutes
 // Au lieu de dupliquer le code dans plusieurs événements OnClick
 
 // Mauvais
-procedure TForm1.ButtonSaveClick(Sender: TObject);
+procedure TForm1.ButtonSaveClick(Sender: TObject);  
 begin
   SaveDocument;
 end;
 
-procedure TForm1.MenuSaveClick(Sender: TObject);
+procedure TForm1.MenuSaveClick(Sender: TObject);  
 begin
   SaveDocument;
 end;
 
 // Bon
-procedure TForm1.ActionSaveExecute(Sender: TObject);
+procedure TForm1.ActionSaveExecute(Sender: TObject);  
 begin
   SaveDocument;
 end;
@@ -848,7 +848,7 @@ end;
 ### Création et initialisation
 
 ```pascal
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   // Initialiser les composants non-visuels
   Timer1.Interval := 1000;
@@ -866,14 +866,14 @@ end;
 ### Utilisation pendant l'exécution
 
 ```pascal
-procedure TForm1.StartMonitoring;
+procedure TForm1.StartMonitoring;  
 begin
   Timer1.Enabled := True;
   TrayIcon1.Visible := True;
   ApplicationProperties1.OnIdle := @ApplicationIdle;
 end;
 
-procedure TForm1.StopMonitoring;
+procedure TForm1.StopMonitoring;  
 begin
   Timer1.Enabled := False;
   TrayIcon1.Visible := False;
@@ -884,7 +884,7 @@ end;
 ### Nettoyage et libération
 
 ```pascal
-procedure TForm1.FormDestroy(Sender: TObject);
+procedure TForm1.FormDestroy(Sender: TObject);  
 begin
   // Arrêter les timers
   Timer1.Enabled := False;
@@ -959,13 +959,13 @@ type
     constructor Create;
   end;
 
-constructor TBackgroundTask.Create;
+constructor TBackgroundTask.Create;  
 begin
   inherited Create(False);  // False = démarre immédiatement
   FreeOnTerminate := True;  // Libération automatique
 end;
 
-procedure TBackgroundTask.Execute;
+procedure TBackgroundTask.Execute;  
 begin
   while not Terminated do
   begin
@@ -988,7 +988,7 @@ BackgroundTask := TBackgroundTask.Create;
 Version asynchrone de TProcess pour ne pas bloquer l'interface.
 
 ```pascal
-AsyncProcess := TAsyncProcess.Create(nil);
+AsyncProcess := TAsyncProcess.Create(nil);  
 try
   AsyncProcess.Executable := 'longprocess.exe';
   AsyncProcess.OnTerminate := @ProcessTerminated;
@@ -998,7 +998,7 @@ finally
   // Nettoyer après terminaison
 end;
 
-procedure TForm1.ProcessTerminated(Sender: TObject);
+procedure TForm1.ProcessTerminated(Sender: TObject);  
 begin
   ShowMessage('Processus terminé avec code : ' +
               IntToStr(TAsyncProcess(Sender).ExitStatus));
@@ -1026,7 +1026,7 @@ type
     property OnDiskSpaceLow: TNotifyEvent read FOnDiskSpaceLow write FOnDiskSpaceLow;
   end;
 
-constructor TSystemMonitor.Create(AOwner: TComponent);
+constructor TSystemMonitor.Create(AOwner: TComponent);  
 begin
   inherited;
   FTimer := TTimer.Create(Self);
@@ -1035,7 +1035,7 @@ begin
   FTimer.Enabled := True;
 end;
 
-procedure TSystemMonitor.CheckSystem(Sender: TObject);
+procedure TSystemMonitor.CheckSystem(Sender: TObject);  
 begin
   // Vérifier la mémoire
   if GetFreeMemory < MinMemory then
@@ -1065,7 +1065,7 @@ type
     procedure WriteValue(const Section, Key, Value: string);
   end;
 
-class function TConfigurationManager.GetInstance: TConfigurationManager;
+class function TConfigurationManager.GetInstance: TConfigurationManager;  
 begin
   if not Assigned(FInstance) then
     FInstance := TConfigurationManager.Create(Application);
@@ -1087,7 +1087,7 @@ type
     class function CreateConfirmDialog(const Message: string): Integer;
   end;
 
-class function TDialogFactory.CreateOpenDialog(const Filter: string): TOpenDialog;
+class function TDialogFactory.CreateOpenDialog(const Filter: string): TOpenDialog;  
 begin
   Result := TOpenDialog.Create(nil);
   Result.Filter := Filter;
@@ -1096,7 +1096,7 @@ begin
 end;
 
 // Utilisation
-Dialog := TDialogFactory.CreateOpenDialog('Images|*.jpg;*.png|Tous|*.*');
+Dialog := TDialogFactory.CreateOpenDialog('Images|*.jpg;*.png|Tous|*.*');  
 try
   if Dialog.Execute then
     LoadImage(Dialog.FileName);
@@ -1124,19 +1124,19 @@ type
     property OnDataChanged: TNotifyEvent read FOnDataChanged write FOnDataChanged;
   end;
 
-constructor TDataManager.Create(AOwner: TComponent);
+constructor TDataManager.Create(AOwner: TComponent);  
 begin
   inherited;
   FObservers := TMethodList.Create;
 end;
 
-destructor TDataManager.Destroy;
+destructor TDataManager.Destroy;  
 begin
   FObservers.Free;
   inherited;
 end;
 
-procedure TDataManager.NotifyObservers;
+procedure TDataManager.NotifyObservers;  
 var
   i: Integer;
 begin
@@ -1157,7 +1157,7 @@ end;
 
 ```pascal
 // Journalisation des timers
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TForm1.Timer1Timer(Sender: TObject);  
 begin
   {$IFDEF DEBUG}
   DebugLn(Format('Timer1 triggered at %s', [TimeToStr(Now)]));
@@ -1167,7 +1167,7 @@ begin
 end;
 
 // Traçage des dialogues
-function ShowOpenDialog: string;
+function ShowOpenDialog: string;  
 begin
   Result := '';
   {$IFDEF DEBUG}
@@ -1190,7 +1190,7 @@ begin
 end;
 
 // Surveillance des actions
-procedure TForm1.ActionListExecute(Action: TBasicAction; var Handled: Boolean);
+procedure TForm1.ActionListExecute(Action: TBasicAction; var Handled: Boolean);  
 begin
   {$IFDEF DEBUG}
   if Action is TAction then
@@ -1215,7 +1215,7 @@ type
     property Enabled: Boolean read FEnabled write FEnabled;
   end;
 
-procedure TDiagnostics.LogComponentState(Component: TComponent);
+procedure TDiagnostics.LogComponentState(Component: TComponent);  
 begin
   if not FEnabled then Exit;
 
@@ -1256,7 +1256,7 @@ type
     property OnDisconnected: TNotifyEvent read FOnDisconnected write FOnDisconnected;
   end;
 
-function TDatabaseService.Connect(const Host, Database, User, Password: string): Boolean;
+function TDatabaseService.Connect(const Host, Database, User, Password: string): Boolean;  
 begin
   Result := False;
   try
@@ -1294,7 +1294,7 @@ type
     property OnRequestComplete: TNotifyEvent read FOnRequestComplete write FOnRequestComplete;
   end;
 
-function TRESTService.Get(const Endpoint: string): string;
+function TRESTService.Get(const Endpoint: string): string;  
 begin
   Result := FHTTP.Get(FBaseURL + Endpoint);
   if Assigned(FOnRequestComplete) then
@@ -1319,7 +1319,7 @@ type
     procedure RemoveTask(Task: TScheduledTask);
   end;
 
-procedure TTaskScheduler.ExecuteTasks(Sender: TObject);
+procedure TTaskScheduler.ExecuteTasks(Sender: TObject);  
 var
   i: Integer;
   Task: TScheduledTask;
@@ -1352,7 +1352,7 @@ type
     procedure ReturnSaveDialog(Dialog: TSaveDialog);
   end;
 
-function TDialogPool.GetOpenDialog: TOpenDialog;
+function TDialogPool.GetOpenDialog: TOpenDialog;  
 begin
   if FOpenDialogs.Count > 0 then
     Result := TOpenDialog(FOpenDialogs.Pop)
@@ -1364,7 +1364,7 @@ begin
   Result.Filter := '';
 end;
 
-procedure TDialogPool.ReturnOpenDialog(Dialog: TOpenDialog);
+procedure TDialogPool.ReturnOpenDialog(Dialog: TOpenDialog);  
 begin
   FOpenDialogs.Push(Dialog);
 end;
@@ -1378,7 +1378,7 @@ La plupart des composants non-visuels de la LCL sont compatibles avec Delphi. `T
 
 ```pascal
 // Ce code fonctionne tel quel en Delphi et en FPC/Lazarus
-function GetRegistryValue(const Key, ValueName: string): string;
+function GetRegistryValue(const Key, ValueName: string): string;  
 var
   Reg: TRegistry;
 begin
@@ -1428,7 +1428,7 @@ type
     property OnStop: TNotifyEvent read FOnStop write FOnStop;
   end;
 
-procedure TMyService.SetActive(Value: Boolean);
+procedure TMyService.SetActive(Value: Boolean);  
 begin
   if FActive <> Value then
   begin
@@ -1440,7 +1440,7 @@ begin
   end;
 end;
 
-procedure TMyService.DoStart;
+procedure TMyService.DoStart;  
 begin
   // Logique de démarrage
   if Assigned(FOnStart) then

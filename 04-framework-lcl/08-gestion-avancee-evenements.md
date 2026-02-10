@@ -28,7 +28,7 @@ type
   end;
 
 // Méthode qui sera appelée
-procedure TForm1.MyButtonSpecialClick(Sender: TObject);
+procedure TForm1.MyButtonSpecialClick(Sender: TObject);  
 begin
   ShowMessage('Clic spécial détecté !');
 end;
@@ -100,13 +100,13 @@ type
 
 implementation
 
-procedure TDataProcessor.DoDataReceived(const Data: string; Value: Integer);
+procedure TDataProcessor.DoDataReceived(const Data: string; Value: Integer);  
 begin
   if Assigned(FOnDataReceived) then
     FOnDataReceived(Self, Data, Value);
 end;
 
-function TDataProcessor.DoValidate(const Value: string): Boolean;
+function TDataProcessor.DoValidate(const Value: string): Boolean;  
 var
   ErrorMsg: string;
 begin
@@ -122,7 +122,7 @@ begin
   end;
 end;
 
-function TDataProcessor.DoBeforeProcess: Boolean;
+function TDataProcessor.DoBeforeProcess: Boolean;  
 begin
   Result := True;
 
@@ -130,7 +130,7 @@ begin
     FOnBeforeProcess(Self, Result);
 end;
 
-function TDataProcessor.DoCalculate(Input: Double): Double;
+function TDataProcessor.DoCalculate(Input: Double): Double;  
 begin
   if Assigned(FOnCalculate) then
     Result := FOnCalculate(Self, Input)
@@ -138,13 +138,13 @@ begin
     Result := Input; // Valeur par défaut
 end;
 
-procedure TDataProcessor.DoProgress(Progress, Total: Integer; const Status: string);
+procedure TDataProcessor.DoProgress(Progress, Total: Integer; const Status: string);  
 begin
   if Assigned(FOnProgress) then
     FOnProgress(Self, Progress, Total, Status);
 end;
 
-procedure TDataProcessor.ProcessData(const Data: string);
+procedure TDataProcessor.ProcessData(const Data: string);  
 var
   i: Integer;
   CalculatedValue: Double;
@@ -223,14 +223,14 @@ type
 
 implementation
 
-constructor TSmartEdit.Create(AOwner: TComponent);
+constructor TSmartEdit.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FIsValidating := False;
   FOldText := '';
 end;
 
-procedure TSmartEdit.Loaded;
+procedure TSmartEdit.Loaded;  
 begin
   inherited Loaded;
 
@@ -242,7 +242,7 @@ begin
   end;
 end;
 
-procedure TSmartEdit.SetOnChange(Value: TNotifyEvent);
+procedure TSmartEdit.SetOnChange(Value: TNotifyEvent);  
 begin
   FOriginalOnChange := Value;
 
@@ -250,12 +250,12 @@ begin
     inherited OnChange := @InternalOnChange;
 end;
 
-function TSmartEdit.GetOnChange: TNotifyEvent;
+function TSmartEdit.GetOnChange: TNotifyEvent;  
 begin
   Result := FOriginalOnChange;
 end;
 
-procedure TSmartEdit.InternalOnChange(Sender: TObject);
+procedure TSmartEdit.InternalOnChange(Sender: TObject);  
 begin
   if FIsValidating then Exit;
 
@@ -293,19 +293,19 @@ begin
   end;
 end;
 
-procedure TSmartEdit.DoBeforeChange;
+procedure TSmartEdit.DoBeforeChange;  
 begin
   if Assigned(FBeforeChange) then
     FBeforeChange(Self);
 end;
 
-procedure TSmartEdit.DoAfterChange;
+procedure TSmartEdit.DoAfterChange;  
 begin
   if Assigned(FAfterChange) then
     FAfterChange(Self);
 end;
 
-function TSmartEdit.ValidateInput: Boolean;
+function TSmartEdit.ValidateInput: Boolean;  
 var
   Dummy: Integer;
 begin
@@ -373,18 +373,18 @@ implementation
 
 { TMulticastNotifyEvent }
 
-constructor TMulticastNotifyEvent.Create;
+constructor TMulticastNotifyEvent.Create;  
 begin
   FHandlers := TList.Create;
 end;
 
-destructor TMulticastNotifyEvent.Destroy;
+destructor TMulticastNotifyEvent.Destroy;  
 begin
   FHandlers.Free;
   inherited;
 end;
 
-procedure TMulticastNotifyEvent.Add(Handler: TNotifyEvent);
+procedure TMulticastNotifyEvent.Add(Handler: TNotifyEvent);  
 var
   Method: ^TMethod;
 begin
@@ -396,7 +396,7 @@ begin
   end;
 end;
 
-procedure TMulticastNotifyEvent.Remove(Handler: TNotifyEvent);
+procedure TMulticastNotifyEvent.Remove(Handler: TNotifyEvent);  
 var
   i: Integer;
   Method: ^TMethod;
@@ -414,7 +414,7 @@ begin
   end;
 end;
 
-procedure TMulticastNotifyEvent.Clear;
+procedure TMulticastNotifyEvent.Clear;  
 var
   i: Integer;
 begin
@@ -423,7 +423,7 @@ begin
   FHandlers.Clear;
 end;
 
-procedure TMulticastNotifyEvent.Execute(Sender: TObject);
+procedure TMulticastNotifyEvent.Execute(Sender: TObject);  
 var
   i: Integer;
   Handler: TNotifyEvent;
@@ -436,12 +436,12 @@ begin
   end;
 end;
 
-function TMulticastNotifyEvent.Count: Integer;
+function TMulticastNotifyEvent.Count: Integer;  
 begin
   Result := FHandlers.Count;
 end;
 
-function TMulticastNotifyEvent.Contains(Handler: TNotifyEvent): Boolean;
+function TMulticastNotifyEvent.Contains(Handler: TNotifyEvent): Boolean;  
 var
   i: Integer;
   Method: ^TMethod;
@@ -461,35 +461,35 @@ end;
 
 { TBroadcaster }
 
-constructor TBroadcaster.Create(AOwner: TComponent);
+constructor TBroadcaster.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FOnBroadcast := TMulticastNotifyEvent.Create;
 end;
 
-destructor TBroadcaster.Destroy;
+destructor TBroadcaster.Destroy;  
 begin
   FOnBroadcast.Free;
   inherited;
 end;
 
-procedure TBroadcaster.Broadcast(const Msg: string);
+procedure TBroadcaster.Broadcast(const Msg: string);  
 begin
   FMessage := Msg;
   DoBroadcast;
 end;
 
-procedure TBroadcaster.DoBroadcast;
+procedure TBroadcaster.DoBroadcast;  
 begin
   FOnBroadcast.Execute(Self);
 end;
 
-procedure TBroadcaster.Subscribe(Handler: TNotifyEvent);
+procedure TBroadcaster.Subscribe(Handler: TNotifyEvent);  
 begin
   FOnBroadcast.Add(Handler);
 end;
 
-procedure TBroadcaster.Unsubscribe(Handler: TNotifyEvent);
+procedure TBroadcaster.Unsubscribe(Handler: TNotifyEvent);  
 begin
   FOnBroadcast.Remove(Handler);
 end;
@@ -567,7 +567,7 @@ uses
 
 { TAsyncEventManager }
 
-constructor TAsyncEventManager.Create;
+constructor TAsyncEventManager.Create;  
 begin
   inherited Create(True); // Créé suspendu
   FEventQueue := TQueue.Create;
@@ -576,7 +576,7 @@ begin
   FreeOnTerminate := False;
 end;
 
-destructor TAsyncEventManager.Destroy;
+destructor TAsyncEventManager.Destroy;  
 var
   Event: TEventMessage;
 begin
@@ -603,7 +603,7 @@ begin
   inherited;
 end;
 
-procedure TAsyncEventManager.Execute;
+procedure TAsyncEventManager.Execute;  
 var
   Event: TEventMessage;
 begin
@@ -664,7 +664,7 @@ begin
   end).Start;
 end;
 
-procedure TAsyncEventManager.ProcessEvent(Event: TEventMessage);
+procedure TAsyncEventManager.ProcessEvent(Event: TEventMessage);  
 begin
   // Traiter l'événement selon son type
   // Note : case...of ne supporte que les types ordinaux en FPC,
@@ -683,7 +683,7 @@ begin
   end;
 end;
 
-procedure TAsyncEventManager.NotifyEventProcessed;
+procedure TAsyncEventManager.NotifyEventProcessed;  
 begin
   if Assigned(FOnEventProcessed) then
     FOnEventProcessed(Self);
@@ -698,7 +698,7 @@ type
   end;
   PDelayedEvent = ^TDelayedEvent;
 
-constructor TDelayedEventTimer.Create(AOwner: TComponent);
+constructor TDelayedEventTimer.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FTimers := TList.Create;
@@ -714,14 +714,14 @@ begin
   end).Start;
 end;
 
-destructor TDelayedEventTimer.Destroy;
+destructor TDelayedEventTimer.Destroy;  
 begin
   CancelAll;
   FTimers.Free;
   inherited;
 end;
 
-procedure TDelayedEventTimer.AddDelayedEvent(Proc: TNotifyEvent; DelayMS: Integer);
+procedure TDelayedEventTimer.AddDelayedEvent(Proc: TNotifyEvent; DelayMS: Integer);  
 var
   Event: PDelayedEvent;
 begin
@@ -731,7 +731,7 @@ begin
   FTimers.Add(Event);
 end;
 
-procedure TDelayedEventTimer.CheckTimers;
+procedure TDelayedEventTimer.CheckTimers;  
 var
   i: Integer;
   Event: PDelayedEvent;
@@ -753,7 +753,7 @@ begin
   end;
 end;
 
-procedure TDelayedEventTimer.CancelAll;
+procedure TDelayedEventTimer.CancelAll;  
 var
   i: Integer;
 begin
@@ -826,12 +826,12 @@ implementation
 
 { TBubbleEvent }
 
-procedure TBubbleEvent.StopPropagation;
+procedure TBubbleEvent.StopPropagation;  
 begin
   Canceled := True;
 end;
 
-procedure TBubbleEvent.PreventDefault;
+procedure TBubbleEvent.PreventDefault;  
 begin
   // Empêcher l'action par défaut
   Canceled := True;
@@ -839,13 +839,13 @@ end;
 
 { TBubblePanel }
 
-procedure TBubblePanel.SetParent(NewParent: TWinControl);
+procedure TBubblePanel.SetParent(NewParent: TWinControl);  
 begin
   inherited SetParent(NewParent);
   FindParentHandler;
 end;
 
-procedure TBubblePanel.FindParentHandler;
+procedure TBubblePanel.FindParentHandler;  
 var
   Control: TWinControl;
 begin
@@ -860,7 +860,7 @@ begin
   end;
 end;
 
-function TBubblePanel.HandleBubbleEvent(Event: TBubbleEvent): Boolean;
+function TBubblePanel.HandleBubbleEvent(Event: TBubbleEvent): Boolean;  
 begin
   Result := not Event.Canceled;
 
@@ -896,7 +896,7 @@ begin
   end;
 end;
 
-function TBubblePanel.DispatchEvent(Event: TBubbleEvent): Boolean;
+function TBubblePanel.DispatchEvent(Event: TBubbleEvent): Boolean;  
 var
   i: Integer;
   Child: TControl;
@@ -941,13 +941,13 @@ begin
   end;
 end;
 
-procedure TBubblePanel.CaptureEvent(Event: TBubbleEvent);
+procedure TBubblePanel.CaptureEvent(Event: TBubbleEvent);  
 begin
   // Traitement en phase de capture
   // Override dans les classes dérivées
 end;
 
-procedure TBubblePanel.BubbleEvent(Event: TBubbleEvent);
+procedure TBubblePanel.BubbleEvent(Event: TBubbleEvent);  
 begin
   // Traitement en phase de bubbling
   // Override dans les classes dérivées
@@ -956,7 +956,7 @@ begin
     FOnBubbleEvent(Self);
 end;
 
-procedure TBubblePanel.TriggerEvent(const EventType: string; const Data: Variant);
+procedure TBubblePanel.TriggerEvent(const EventType: string; const Data: Variant);  
 var
   Event: TBubbleEvent;
 begin
@@ -1058,7 +1058,7 @@ uses
 
 { TEventFilter }
 
-constructor TEventFilter.Create;
+constructor TEventFilter.Create;  
 begin
   FActive := False;
   FBlockedEvents := TStringList.Create;
@@ -1066,7 +1066,7 @@ begin
   FLogEvents := False;
 end;
 
-destructor TEventFilter.Destroy;
+destructor TEventFilter.Destroy;  
 begin
   if FActive then
     Deactivate;
@@ -1076,7 +1076,7 @@ begin
   inherited;
 end;
 
-procedure TEventFilter.Activate;
+procedure TEventFilter.Activate;  
 begin
   if not FActive then
   begin
@@ -1086,7 +1086,7 @@ begin
   end;
 end;
 
-procedure TEventFilter.Deactivate;
+procedure TEventFilter.Deactivate;  
 begin
   if FActive then
   begin
@@ -1095,7 +1095,7 @@ begin
   end;
 end;
 
-procedure TEventFilter.AppMessageHandler(var Msg: TMsg; var Handled: Boolean);
+procedure TEventFilter.AppMessageHandler(var Msg: TMsg; var Handled: Boolean);  
 var
   EventName: string;
 begin
@@ -1132,13 +1132,13 @@ begin
     FOldAppMessageHandler(Msg, Handled);
 end;
 
-procedure TEventFilter.BlockEvent(const EventName: string);
+procedure TEventFilter.BlockEvent(const EventName: string);  
 begin
   if FBlockedEvents.IndexOf(EventName) < 0 then
     FBlockedEvents.Add(EventName);
 end;
 
-procedure TEventFilter.UnblockEvent(const EventName: string);
+procedure TEventFilter.UnblockEvent(const EventName: string);  
 var
   Index: Integer;
 begin
@@ -1147,7 +1147,7 @@ begin
     FBlockedEvents.Delete(Index);
 end;
 
-procedure TEventFilter.BlockAllMouseEvents;
+procedure TEventFilter.BlockAllMouseEvents;  
 begin
   BlockEvent('LBUTTONDOWN');
   BlockEvent('LBUTTONUP');
@@ -1159,7 +1159,7 @@ begin
   BlockEvent('MOUSEWHEEL');
 end;
 
-procedure TEventFilter.BlockAllKeyEvents;
+procedure TEventFilter.BlockAllKeyEvents;  
 begin
   BlockEvent('KEYDOWN');
   BlockEvent('KEYUP');
@@ -1168,39 +1168,39 @@ begin
   BlockEvent('SYSKEYUP');
 end;
 
-procedure TEventFilter.StartLogging;
+procedure TEventFilter.StartLogging;  
 begin
   FLogEvents := True;
   FEventLog.Add('=== Début du log : ' + DateTimeToStr(Now) + ' ===');
 end;
 
-procedure TEventFilter.StopLogging;
+procedure TEventFilter.StopLogging;  
 begin
   FLogEvents := False;
   FEventLog.Add('=== Fin du log : ' + DateTimeToStr(Now) + ' ===');
 end;
 
-procedure TEventFilter.SaveLog(const FileName: string);
+procedure TEventFilter.SaveLog(const FileName: string);  
 begin
   FEventLog.SaveToFile(FileName);
 end;
 
 { TControlEventInterceptor }
 
-constructor TControlEventInterceptor.Create(AOwner: TComponent);
+constructor TControlEventInterceptor.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   SetLength(FBlockedMessages, 0);
 end;
 
-destructor TControlEventInterceptor.Destroy;
+destructor TControlEventInterceptor.Destroy;  
 begin
   if Assigned(FControl) then
     SetControl(nil);
   inherited;
 end;
 
-procedure TControlEventInterceptor.SetControl(Value: TControl);
+procedure TControlEventInterceptor.SetControl(Value: TControl);  
 begin
   if FControl <> Value then
   begin
@@ -1223,7 +1223,7 @@ begin
   end;
 end;
 
-procedure TControlEventInterceptor.NewWndProc(var Message: TMessage);
+procedure TControlEventInterceptor.NewWndProc(var Message: TMessage);  
 begin
   // Avant l'événement
   if Assigned(FOnBeforeEvent) then
@@ -1256,7 +1256,7 @@ begin
     FControl := nil;
 end;
 
-function TControlEventInterceptor.IsMessageBlocked(MsgId: Cardinal): Boolean;
+function TControlEventInterceptor.IsMessageBlocked(MsgId: Cardinal): Boolean;  
 var
   i: Integer;
 begin
@@ -1271,7 +1271,7 @@ begin
   end;
 end;
 
-procedure TControlEventInterceptor.BlockMessage(MsgId: Cardinal);
+procedure TControlEventInterceptor.BlockMessage(MsgId: Cardinal);  
 begin
   if not IsMessageBlocked(MsgId) then
   begin
@@ -1280,7 +1280,7 @@ begin
   end;
 end;
 
-procedure TControlEventInterceptor.UnblockMessage(MsgId: Cardinal);
+procedure TControlEventInterceptor.UnblockMessage(MsgId: Cardinal);  
 var
   i, j: Integer;
 begin
@@ -1298,7 +1298,7 @@ begin
   end;
 end;
 
-procedure TControlEventInterceptor.BlockMouseMessages;
+procedure TControlEventInterceptor.BlockMouseMessages;  
 begin
   BlockMessage(LM_LBUTTONDOWN);
   BlockMessage(LM_LBUTTONUP);
@@ -1310,7 +1310,7 @@ begin
   BlockMessage(LM_MOUSEWHEEL);
 end;
 
-procedure TControlEventInterceptor.BlockKeyMessages;
+procedure TControlEventInterceptor.BlockKeyMessages;  
 begin
   BlockMessage(LM_KEYDOWN);
   BlockMessage(LM_KEYUP);
@@ -1426,7 +1426,7 @@ implementation
 
 { TObservableSubject }
 
-constructor TObservableSubject.Create(AOwner: TComponent);
+constructor TObservableSubject.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FObservers := TInterfaceList.Create;
@@ -1434,29 +1434,29 @@ begin
   FChanged := False;
 end;
 
-destructor TObservableSubject.Destroy;
+destructor TObservableSubject.Destroy;  
 begin
   FObservers.Free;
   inherited;
 end;
 
-procedure TObservableSubject.Attach(Observer: IObserver);
+procedure TObservableSubject.Attach(Observer: IObserver);  
 begin
   if FObservers.IndexOf(Observer) < 0 then
     FObservers.Add(Observer);
 end;
 
-procedure TObservableSubject.Detach(Observer: IObserver);
+procedure TObservableSubject.Detach(Observer: IObserver);  
 begin
   FObservers.Remove(Observer);
 end;
 
-procedure TObservableSubject.Notify(const EventData: Variant);
+procedure TObservableSubject.Notify(const EventData: Variant);  
 begin
   NotifyObservers(EventData);
 end;
 
-procedure TObservableSubject.NotifyObservers(const EventData: Variant);
+procedure TObservableSubject.NotifyObservers(const EventData: Variant);  
 var
   i: Integer;
 begin
@@ -1472,19 +1472,19 @@ begin
   FChanged := False;
 end;
 
-procedure TObservableSubject.BeginUpdate;
+procedure TObservableSubject.BeginUpdate;  
 begin
   Inc(FUpdateCount);
 end;
 
-procedure TObservableSubject.EndUpdate;
+procedure TObservableSubject.EndUpdate;  
 begin
   Dec(FUpdateCount);
   if (FUpdateCount = 0) and FChanged then
     NotifyObservers('BatchUpdate');
 end;
 
-procedure TObservableSubject.Changed;
+procedure TObservableSubject.Changed;  
 begin
   FChanged := True;
   if FUpdateCount = 0 then
@@ -1493,7 +1493,7 @@ end;
 
 { TObserver }
 
-procedure TObserver.Update(const Subject: TObject; const EventData: Variant);
+procedure TObserver.Update(const Subject: TObject; const EventData: Variant);  
 begin
   DoUpdate(Subject, EventData);
 
@@ -1501,27 +1501,27 @@ begin
     FOnUpdate(Self);
 end;
 
-procedure TObserver.DoUpdate(const Subject: TObject; const EventData: Variant);
+procedure TObserver.DoUpdate(const Subject: TObject; const EventData: Variant);  
 begin
   // Override dans les classes dérivées
 end;
 
 { TDataModel }
 
-constructor TDataModel.Create(AOwner: TComponent);
+constructor TDataModel.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FData := TStringList.Create;
   FSelectedIndex := -1;
 end;
 
-destructor TDataModel.Destroy;
+destructor TDataModel.Destroy;  
 begin
   FData.Free;
   inherited;
 end;
 
-procedure TDataModel.SetSelectedIndex(Value: Integer);
+procedure TDataModel.SetSelectedIndex(Value: Integer);  
 begin
   if (Value >= -1) and (Value < FData.Count) and (FSelectedIndex <> Value) then
   begin
@@ -1530,13 +1530,13 @@ begin
   end;
 end;
 
-procedure TDataModel.AddItem(const Item: string);
+procedure TDataModel.AddItem(const Item: string);  
 begin
   FData.Add(Item);
   NotifyObservers('ItemAdded');
 end;
 
-procedure TDataModel.RemoveItem(Index: Integer);
+procedure TDataModel.RemoveItem(Index: Integer);  
 begin
   if (Index >= 0) and (Index < FData.Count) then
   begin
@@ -1547,7 +1547,7 @@ begin
   end;
 end;
 
-procedure TDataModel.UpdateItem(Index: Integer; const NewValue: string);
+procedure TDataModel.UpdateItem(Index: Integer; const NewValue: string);  
 begin
   if (Index >= 0) and (Index < FData.Count) then
   begin
@@ -1556,7 +1556,7 @@ begin
   end;
 end;
 
-procedure TDataModel.Clear;
+procedure TDataModel.Clear;  
 begin
   FData.Clear;
   FSelectedIndex := -1;
@@ -1565,7 +1565,7 @@ end;
 
 { TDataView }
 
-procedure TDataView.SetModel(AModel: TDataModel);
+procedure TDataView.SetModel(AModel: TDataModel);  
 begin
   if FModel <> AModel then
   begin
@@ -1582,13 +1582,13 @@ begin
   end;
 end;
 
-procedure TDataView.DoUpdate(const Subject: TObject; const EventData: Variant);
+procedure TDataView.DoUpdate(const Subject: TObject; const EventData: Variant);  
 begin
   if FAutoRefresh and (Subject = FModel) then
     RefreshView;
 end;
 
-procedure TDataView.RefreshView;
+procedure TDataView.RefreshView;  
 begin
   // Override dans les classes dérivées pour mettre à jour l'affichage
 end;
@@ -1715,7 +1715,7 @@ uses
 
 { TTouchControl }
 
-constructor TTouchControl.Create(AOwner: TComponent);
+constructor TTouchControl.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   SetLength(FTouchPoints, 0);
@@ -1723,13 +1723,13 @@ begin
   DoubleBuffered := True;
 end;
 
-destructor TTouchControl.Destroy;
+destructor TTouchControl.Destroy;  
 begin
   FGestureRecognizer.Free;
   inherited;
 end;
 
-procedure TTouchControl.ProcessTouchBegin(const Point: TPoint; ID: Integer);
+procedure TTouchControl.ProcessTouchBegin(const Point: TPoint; ID: Integer);  
 var
   Index: Integer;
   TouchPoint: TTouchPoint;
@@ -1762,7 +1762,7 @@ begin
   Invalidate;
 end;
 
-procedure TTouchControl.ProcessTouchMove(const Point: TPoint; ID: Integer);
+procedure TTouchControl.ProcessTouchMove(const Point: TPoint; ID: Integer);  
 var
   Index: Integer;
 begin
@@ -1782,7 +1782,7 @@ begin
   end;
 end;
 
-procedure TTouchControl.ProcessTouchEnd(ID: Integer);
+procedure TTouchControl.ProcessTouchEnd(ID: Integer);  
 var
   Index, i: Integer;
 begin
@@ -1806,7 +1806,7 @@ begin
   end;
 end;
 
-procedure TTouchControl.RecognizeGesture;
+procedure TTouchControl.RecognizeGesture;  
 var
   Gesture: TGestureInfo;
 begin
@@ -1817,7 +1817,7 @@ begin
   end;
 end;
 
-function TTouchControl.FindTouchPoint(ID: Integer): Integer;
+function TTouchControl.FindTouchPoint(ID: Integer): Integer;  
 var
   i: Integer;
 begin
@@ -1842,7 +1842,7 @@ begin
     ProcessTouchBegin(Point(X, Y), 0);
 end;
 
-procedure TTouchControl.MouseMove(Shift: TShiftState; X, Y: Integer);
+procedure TTouchControl.MouseMove(Shift: TShiftState; X, Y: Integer);  
 begin
   inherited;
 
@@ -1861,7 +1861,7 @@ begin
     ProcessTouchEnd(0);
 end;
 
-procedure TTouchControl.Paint;
+procedure TTouchControl.Paint;  
 var
   i: Integer;
 begin
@@ -1893,12 +1893,12 @@ begin
   end;
 end;
 
-function TTouchControl.TouchPointCount: Integer;
+function TTouchControl.TouchPointCount: Integer;  
 begin
   Result := Length(FTouchPoints);
 end;
 
-function TTouchControl.GetTouchPoint(Index: Integer): TTouchPoint;
+function TTouchControl.GetTouchPoint(Index: Integer): TTouchPoint;  
 begin
   if (Index >= 0) and (Index < Length(FTouchPoints)) then
     Result := FTouchPoints[Index];
@@ -1906,7 +1906,7 @@ end;
 
 { TGestureRecognizer }
 
-constructor TGestureRecognizer.Create;
+constructor TGestureRecognizer.Create;  
 begin
   FGestureThreshold := 10;
   FLongPressDelay := 500;
@@ -1915,12 +1915,12 @@ begin
   FLastTapPoint := Point(0, 0);
 end;
 
-function TGestureRecognizer.CalculateDistance(P1, P2: TPoint): Single;
+function TGestureRecognizer.CalculateDistance(P1, P2: TPoint): Single;  
 begin
   Result := Sqrt(Sqr(P2.X - P1.X) + Sqr(P2.Y - P1.Y));
 end;
 
-function TGestureRecognizer.CalculateAngle(P1, P2: TPoint): Single;
+function TGestureRecognizer.CalculateAngle(P1, P2: TPoint): Single;  
 begin
   Result := ArcTan2(P2.Y - P1.Y, P2.X - P1.X);
 end;
@@ -2015,7 +2015,7 @@ begin
   end;
 end;
 
-function TGestureRecognizer.RecognizeSwipe: TGestureInfo;
+function TGestureRecognizer.RecognizeSwipe: TGestureInfo;  
 begin
   FillChar(Result, SizeOf(Result), 0);
   Result.GestureType := gtSwipe;
@@ -2039,7 +2039,7 @@ begin
   end;
 end;
 
-function TGestureRecognizer.RecognizePinch: TGestureInfo;
+function TGestureRecognizer.RecognizePinch: TGestureInfo;  
 var
   OldDistance, NewDistance: Single;
 begin
@@ -2066,7 +2066,7 @@ begin
   end;
 end;
 
-function TGestureRecognizer.RecognizeRotation: TGestureInfo;
+function TGestureRecognizer.RecognizeRotation: TGestureInfo;  
 var
   OldAngle, NewAngle: Single;
 begin
@@ -2230,7 +2230,7 @@ implementation
 var
   GMessageBus: TMessageBus = nil;
 
-function GlobalMessageBus: TMessageBus;
+function GlobalMessageBus: TMessageBus;  
 begin
   if not Assigned(GMessageBus) then
     GMessageBus := TMessageBus.Create;
@@ -2239,7 +2239,7 @@ end;
 
 { TEventMessage }
 
-constructor TEventMessage.Create(AType: TMessageType; ASender: TObject);
+constructor TEventMessage.Create(AType: TMessageType; ASender: TObject);  
 begin
   CreateGUID(FID);
   FType := AType;
@@ -2252,7 +2252,7 @@ end;
 
 { TMessageBus }
 
-constructor TMessageBus.Create;
+constructor TMessageBus.Create;  
 begin
   FSubscribers := TObjectList.Create(False);
   FMessageQueue := TQueue.Create;
@@ -2261,7 +2261,7 @@ begin
   FAsyncMode := False;
 end;
 
-destructor TMessageBus.Destroy;
+destructor TMessageBus.Destroy;  
 var
   Msg: TEventMessage;
 begin
@@ -2286,7 +2286,7 @@ begin
     FSubscribers.Add(TObject(Receiver));
 end;
 
-procedure TMessageBus.Unsubscribe(Receiver: IMessageReceiver);
+procedure TMessageBus.Unsubscribe(Receiver: IMessageReceiver);  
 begin
   FSubscribers.Remove(TObject(Receiver));
 end;
@@ -2297,7 +2297,7 @@ begin
   FHandlers.AddObject(MessageID, TObject(@Handler));
 end;
 
-procedure TMessageBus.UnregisterHandler(const MessageID: string);
+procedure TMessageBus.UnregisterHandler(const MessageID: string);  
 var
   Index: Integer;
 begin
@@ -2306,7 +2306,7 @@ begin
     FHandlers.Delete(Index);
 end;
 
-procedure TMessageBus.SendMessage(Message: TEventMessage);
+procedure TMessageBus.SendMessage(Message: TEventMessage);  
 begin
   if FAsyncMode then
     PostMessage(Message)
@@ -2314,7 +2314,7 @@ begin
     DeliverMessage(Message);
 end;
 
-procedure TMessageBus.PostMessage(Message: TEventMessage);
+procedure TMessageBus.PostMessage(Message: TEventMessage);  
 begin
   FMessageQueue.Push(Message);
 
@@ -2332,7 +2332,7 @@ begin
   SendMessage(Msg);
 end;
 
-procedure TMessageBus.ProcessQueue;
+procedure TMessageBus.ProcessQueue;  
 var
   Msg: TEventMessage;
 begin
@@ -2352,7 +2352,7 @@ begin
   end;
 end;
 
-procedure TMessageBus.DeliverMessage(Message: TEventMessage);
+procedure TMessageBus.DeliverMessage(Message: TEventMessage);  
 var
   i: Integer;
   Receiver: IMessageReceiver;
@@ -2412,13 +2412,13 @@ end;
 
 { TMessageComponent }
 
-constructor TMessageComponent.Create(AOwner: TComponent);
+constructor TMessageComponent.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FAcceptedTypes := [mtBroadcast];
 end;
 
-procedure TMessageComponent.ReceiveMessage(Message: TEventMessage);
+procedure TMessageComponent.ReceiveMessage(Message: TEventMessage);  
 begin
   HandleMessage(Message);
 
@@ -2426,23 +2426,23 @@ begin
     FOnMessage(Message);
 end;
 
-function TMessageComponent.AcceptMessage(Message: TEventMessage): Boolean;
+function TMessageComponent.AcceptMessage(Message: TEventMessage): Boolean;  
 begin
   Result := (Message.MessageType in FAcceptedTypes) or
             (Message.Target = Self);
 end;
 
-procedure TMessageComponent.HandleMessage(Message: TEventMessage);
+procedure TMessageComponent.HandleMessage(Message: TEventMessage);  
 begin
   // Override dans les classes dérivées
 end;
 
-procedure TMessageComponent.SubscribeTo(MessageBus: TMessageBus);
+procedure TMessageComponent.SubscribeTo(MessageBus: TMessageBus);  
 begin
   MessageBus.Subscribe(Self);
 end;
 
-procedure TMessageComponent.UnsubscribeFrom(MessageBus: TMessageBus);
+procedure TMessageComponent.UnsubscribeFrom(MessageBus: TMessageBus);  
 begin
   MessageBus.Unsubscribe(Self);
 end;
@@ -2543,7 +2543,7 @@ uses
 
 { TEventPool }
 
-constructor TEventPool.Create(AMaxSize: Integer);
+constructor TEventPool.Create(AMaxSize: Integer);  
 begin
   FPool := TStack.Create;
   FMaxSize := AMaxSize;
@@ -2551,7 +2551,7 @@ begin
   FReuseCount := 0;
 end;
 
-destructor TEventPool.Destroy;
+destructor TEventPool.Destroy;  
 var
   Obj: TObject;
 begin
@@ -2564,7 +2564,7 @@ begin
   inherited;
 end;
 
-function TEventPool.Acquire: TObject;
+function TEventPool.Acquire: TObject;  
 begin
   if FPool.Count > 0 then
   begin
@@ -2578,7 +2578,7 @@ begin
   end;
 end;
 
-procedure TEventPool.Release(Obj: TObject);
+procedure TEventPool.Release(Obj: TObject);  
 begin
   if FPool.Count < FMaxSize then
   begin
@@ -2591,7 +2591,7 @@ end;
 
 { TCachedEventManager }
 
-constructor TCachedEventManager.Create(ACacheSize: Integer);
+constructor TCachedEventManager.Create(ACacheSize: Integer);  
 begin
   FEventCache := TStringList.Create;
   FEventCache.Sorted := True;
@@ -2600,14 +2600,14 @@ begin
   FCacheMisses := 0;
 end;
 
-destructor TCachedEventManager.Destroy;
+destructor TCachedEventManager.Destroy;  
 begin
   ClearCache;
   FEventCache.Free;
   inherited;
 end;
 
-procedure TCachedEventManager.AddToCache(const Key: string; Value: TObject);
+procedure TCachedEventManager.AddToCache(const Key: string; Value: TObject);  
 begin
   // Limiter la taille du cache
   if FEventCache.Count >= FCacheSize then
@@ -2620,7 +2620,7 @@ begin
   FEventCache.AddObject(Key, Value);
 end;
 
-function TCachedEventManager.GetFromCache(const Key: string): TObject;
+function TCachedEventManager.GetFromCache(const Key: string): TObject;  
 var
   Index: Integer;
 begin
@@ -2636,7 +2636,7 @@ begin
     Inc(FCacheMisses);
 end;
 
-procedure TCachedEventManager.ClearCache;
+procedure TCachedEventManager.ClearCache;  
 var
   i: Integer;
 begin
@@ -2645,7 +2645,7 @@ begin
   FEventCache.Clear;
 end;
 
-function TCachedEventManager.ProcessEvent(const EventID: string): TObject;
+function TCachedEventManager.ProcessEvent(const EventID: string): TObject;  
 begin
   // Vérifier le cache d'abord
   Result := GetFromCache(EventID);
@@ -2658,7 +2658,7 @@ begin
   end;
 end;
 
-function TCachedEventManager.CacheHitRate: Double;
+function TCachedEventManager.CacheHitRate: Double;  
 var
   Total: Integer;
 begin
@@ -2671,7 +2671,7 @@ end;
 
 { TEventThrottler }
 
-constructor TEventThrottler.Create(AMinInterval: Integer);
+constructor TEventThrottler.Create(AMinInterval: Integer);  
 begin
   FMinInterval := AMinInterval;
   FLastEventTime := 0;
@@ -2683,14 +2683,14 @@ begin
   FTimer.OnTimer := @ProcessQueuedEvents;
 end;
 
-destructor TEventThrottler.Destroy;
+destructor TEventThrottler.Destroy;  
 begin
   FTimer.Free;
   FEventQueue.Free;
   inherited;
 end;
 
-function TEventThrottler.ShouldProcess: Boolean;
+function TEventThrottler.ShouldProcess: Boolean;  
 var
   CurrentTime: TDateTime;
   ElapsedMS: Integer;
@@ -2712,7 +2712,7 @@ begin
   end;
 end;
 
-procedure TEventThrottler.QueueEvent(Event: TNotifyEvent);
+procedure TEventThrottler.QueueEvent(Event: TNotifyEvent);  
 begin
   FEventQueue.Push(TObject(@Event));
 
@@ -2720,7 +2720,7 @@ begin
     FTimer.Enabled := True;
 end;
 
-procedure TEventThrottler.ProcessQueuedEvents(Sender: TObject);
+procedure TEventThrottler.ProcessQueuedEvents(Sender: TObject);  
 var
   Event: TNotifyEvent;
 begin
@@ -2739,7 +2739,7 @@ end;
 
 { TEventDebouncer }
 
-constructor TEventDebouncer.Create(ADelay: Integer);
+constructor TEventDebouncer.Create(ADelay: Integer);  
 begin
   FDelay := ADelay;
 
@@ -2749,13 +2749,13 @@ begin
   FTimer.OnTimer := @ExecutePendingEvent;
 end;
 
-destructor TEventDebouncer.Destroy;
+destructor TEventDebouncer.Destroy;  
 begin
   FTimer.Free;
   inherited;
 end;
 
-procedure TEventDebouncer.TriggerEvent(Event: TNotifyEvent);
+procedure TEventDebouncer.TriggerEvent(Event: TNotifyEvent);  
 begin
   FPendingEvent := Event;
 
@@ -2764,7 +2764,7 @@ begin
   FTimer.Enabled := True;
 end;
 
-procedure TEventDebouncer.ExecutePendingEvent(Sender: TObject);
+procedure TEventDebouncer.ExecutePendingEvent(Sender: TObject);  
 begin
   FTimer.Enabled := False;
 
@@ -2775,7 +2775,7 @@ begin
   end;
 end;
 
-procedure TEventDebouncer.Cancel;
+procedure TEventDebouncer.Cancel;  
 begin
   FTimer.Enabled := False;
   FPendingEvent := nil;

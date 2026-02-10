@@ -101,7 +101,7 @@ Indique le DPI utilisé lors de la conception du formulaire. Lazarus calcule le 
 ### Obtenir le DPI actuel
 
 ```pascal
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 var
   CurrentDPI: Integer;
   ScaleFactor: Double;
@@ -132,7 +132,7 @@ type
     function GetImageList: TImageList;
   end;
 
-function TImageManager.GetImageList: TImageList;
+function TImageManager.GetImageList: TImageList;  
 var
   CurrentDPI: Integer;
 begin
@@ -155,7 +155,7 @@ Les images SVG peuvent être redimensionnées sans perte de qualité :
 uses
   BGRABitmap, BGRASVG; // Bibliothèque pour SVG
 
-procedure ChargerIconeSVG(const Fichier: string; Taille: Integer);
+procedure ChargerIconeSVG(const Fichier: string; Taille: Integer);  
 var
   SVG: TBGRASVG;
   Bitmap: TBGRABitmap;
@@ -176,7 +176,7 @@ end;
 ### Configuration des TImageList
 
 ```pascal
-procedure ConfigurerImageList;
+procedure ConfigurerImageList;  
 var
   ScaleFactor: Double;
   NouvellesTailles: Integer;
@@ -197,7 +197,7 @@ end;
 Avec `Scaled := True`, les polices sont automatiquement ajustées. Mais vous pouvez aussi le faire manuellement :
 
 ```pascal
-procedure AjusterTaillePolice(Control: TControl);
+procedure AjusterTaillePolice(Control: TControl);  
 var
   ScaleFactor: Double;
   NouvelleTaille: Integer;
@@ -216,12 +216,12 @@ end;
 
 ```pascal
 // Convertir des pixels en unités indépendantes
-function PixelsToPoints(Pixels: Integer): Integer;
+function PixelsToPoints(Pixels: Integer): Integer;  
 begin
   Result := MulDiv(Pixels, 72, Screen.PixelsPerInch);
 end;
 
-function PointsToPixels(Points: Integer): Integer;
+function PointsToPixels(Points: Integer): Integer;  
 begin
   Result := MulDiv(Points, Screen.PixelsPerInch, 72);
 end;
@@ -232,7 +232,7 @@ end;
 ### Fonction de mise à l'échelle générique
 
 ```pascal
-procedure MettreAEchelle(Control: TControl; DPIBase: Integer = 96);
+procedure MettreAEchelle(Control: TControl; DPIBase: Integer = 96);  
 var
   Ratio: Double;
   i: Integer;
@@ -265,13 +265,13 @@ type
     class function ScaleMargin(Value: Integer): Integer;
   end;
 
-class function TDPIHelper.Scale(Value: Integer): Integer;
+class function TDPIHelper.Scale(Value: Integer): Integer;  
 begin
   if FBaseDPI = 0 then FBaseDPI := 96;
   Result := MulDiv(Value, Screen.PixelsPerInch, FBaseDPI);
 end;
 
-class function TDPIHelper.ScaleMargin(Value: Integer): Integer;
+class function TDPIHelper.ScaleMargin(Value: Integer): Integer;  
 begin
   Result := Scale(Value);
   // Assurer un minimum de 1 pixel
@@ -280,7 +280,7 @@ begin
 end;
 
 // Utilisation
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   Panel1.BorderSpacing.Around := TDPIHelper.ScaleMargin(8);
   Button1.Margins.Left := TDPIHelper.ScaleMargin(4);
@@ -304,7 +304,7 @@ Windows propose plusieurs niveaux :
 uses
   Windows;
 
-procedure ConfigurerDPIWindows;
+procedure ConfigurerDPIWindows;  
 type
   TSetProcessDpiAwareness = function(value: Integer): HRESULT; stdcall;
 var
@@ -332,7 +332,7 @@ type
     procedure WMDpiChanged(var Message: TMessage); message WM_DPICHANGED;
   end;
 
-procedure TForm1.WMDpiChanged(var Message: TMessage);
+procedure TForm1.WMDpiChanged(var Message: TMessage);  
 var
   NewDPI: Integer;
   OldDPI: Integer;
@@ -355,7 +355,7 @@ end;
 Sous Linux avec GTK, la mise à l'échelle est gérée par l'environnement de bureau :
 
 ```pascal
-procedure ConfigurerDPILinux;
+procedure ConfigurerDPILinux;  
 var
   ScaleFactor: string;
 begin
@@ -395,7 +395,7 @@ fpSetEnv('GDK_SCALE', '2', 1);
 ### Détecter les différents DPI
 
 ```pascal
-procedure DetecterDPIMoniteurs;
+procedure DetecterDPIMoniteurs;  
 var
   i: Integer;
   Moniteur: TMonitor;
@@ -413,7 +413,7 @@ end;
 ### Adapter lors du changement de moniteur
 
 ```pascal
-procedure TForm1.FormMonitorChanged(Sender: TObject);
+procedure TForm1.FormMonitorChanged(Sender: TObject);  
 begin
   // Recalculer la mise à l'échelle
   if Scaled then
@@ -445,14 +445,14 @@ type
     property Icone: TPicture read FIcone write SetIcone;
   end;
 
-constructor TMonBoutonDPI.Create(AOwner: TComponent);
+constructor TMonBoutonDPI.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FBaseDPI := 96;
   FIcone := TPicture.Create;
 end;
 
-procedure TMonBoutonDPI.ScaleForDPI(NewDPI: Integer);
+procedure TMonBoutonDPI.ScaleForDPI(NewDPI: Integer);  
 var
   Ratio: Double;
 begin
@@ -466,7 +466,7 @@ begin
   FBaseDPI := NewDPI;
 end;
 
-procedure TMonBoutonDPI.Paint;
+procedure TMonBoutonDPI.Paint;  
 var
   IconSize: Integer;
 begin
@@ -491,14 +491,14 @@ end;
 
 ```pascal
 // Les anchors fonctionnent bien avec le High-DPI
-Button1.Anchors := [akRight, akBottom]; // Reste en bas à droite
+Button1.Anchors := [akRight, akBottom]; // Reste en bas à droite  
 Panel1.Align := alClient; // Remplit tout l'espace
 
 // Éviter les positions absolues
 Button1.Left := 500; // Problématique en High-DPI
 // Préférer
-Button1.AnchorSideRight.Control := Form1;
-Button1.AnchorSideRight.Side := asrRight;
+Button1.AnchorSideRight.Control := Form1;  
+Button1.AnchorSideRight.Side := asrRight;  
 Button1.BorderSpacing.Right := TDPIHelper.Scale(10);
 ```
 
@@ -506,12 +506,12 @@ Button1.BorderSpacing.Right := TDPIHelper.Scale(10);
 
 ```pascal
 // Utiliser TFlowPanel pour disposition automatique
-FlowPanel1.Align := alTop;
-FlowPanel1.AutoSize := True;
+FlowPanel1.Align := alTop;  
+FlowPanel1.AutoSize := True;  
 FlowPanel1.AutoWrap := True;
 
 // Les contrôles s'adaptent automatiquement
-for i := 0 to 5 do
+for i := 0 to 5 do  
 begin
   with TButton.Create(FlowPanel1) do
   begin
@@ -528,7 +528,7 @@ end;
 ### Simuler différents DPI
 
 ```pascal
-procedure SimulerDPI(NouveauDPI: Integer);
+procedure SimulerDPI(NouveauDPI: Integer);  
 begin
   {$IFDEF DEBUG}
   // Note : Screen.PixelsPerInch est en lecture seule dans Lazarus.
@@ -544,7 +544,7 @@ end;
 ### Menu de test DPI
 
 ```pascal
-procedure TForm1.CreerMenuTestDPI;
+procedure TForm1.CreerMenuTestDPI;  
 var
   MenuItem: TMenuItem;
   DPIValues: array[0..3] of Integer = (96, 120, 144, 192);
@@ -561,7 +561,7 @@ begin
   end;
 end;
 
-procedure TForm1.MenuDPIClick(Sender: TObject);
+procedure TForm1.MenuDPIClick(Sender: TObject);  
 begin
   SimulerDPI(TMenuItem(Sender).Tag);
 end;
@@ -576,7 +576,7 @@ end;
 **Solution** :
 ```pascal
 // Activer l'auto-dimensionnement
-Label1.AutoSize := True;
+Label1.AutoSize := True;  
 Button1.AutoSize := True;
 
 // Ou prévoir une marge
@@ -612,7 +612,7 @@ BorderSpacing.Around := 8; // Éviter
 
 **Solution** :
 ```pascal
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   // Limiter la taille maximale
   Constraints.MaxWidth := Screen.Width - 50;
@@ -678,7 +678,7 @@ var
 
 implementation
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   // Configuration de base
   Scaled := True;
@@ -690,7 +690,7 @@ begin
   ConfigurerPourDPI;
 end;
 
-procedure TForm1.ConfigurerPourDPI;
+procedure TForm1.ConfigurerPourDPI;  
 var
   ScaleFactor: Double;
 begin

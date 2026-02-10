@@ -102,7 +102,7 @@ type
 ```pascal
 implementation
 
-constructor TBlinkingLabel.Create(AOwner: TComponent);
+constructor TBlinkingLabel.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -122,14 +122,14 @@ begin
   FOriginalColor := Font.Color;
 end;
 
-destructor TBlinkingLabel.Destroy;
+destructor TBlinkingLabel.Destroy;  
 begin
   FBlinkTimer.Enabled := False;
   // FBlinkTimer est détruit automatiquement car Self est son propriétaire
   inherited Destroy;
 end;
 
-procedure TBlinkingLabel.SetBlinking(AValue: Boolean);
+procedure TBlinkingLabel.SetBlinking(AValue: Boolean);  
 begin
   if FBlinking <> AValue then
   begin
@@ -138,7 +138,7 @@ begin
   end;
 end;
 
-procedure TBlinkingLabel.SetBlinkInterval(AValue: Integer);
+procedure TBlinkingLabel.SetBlinkInterval(AValue: Integer);  
 begin
   if (AValue > 0) and (FBlinkInterval <> AValue) then
   begin
@@ -147,7 +147,7 @@ begin
   end;
 end;
 
-procedure TBlinkingLabel.SetBlinkColor(AValue: TColor);
+procedure TBlinkingLabel.SetBlinkColor(AValue: TColor);  
 begin
   if FBlinkColor <> AValue then
   begin
@@ -158,7 +158,7 @@ begin
   end;
 end;
 
-procedure TBlinkingLabel.OnBlink(Sender: TObject);
+procedure TBlinkingLabel.OnBlink(Sender: TObject);  
 begin
   FIsHighlighted := not FIsHighlighted;
 
@@ -170,7 +170,7 @@ begin
   Invalidate;  // Forcer le rafraîchissement
 end;
 
-procedure TBlinkingLabel.UpdateBlinking;
+procedure TBlinkingLabel.UpdateBlinking;  
 begin
   FBlinkTimer.Enabled := FBlinking;
 
@@ -187,7 +187,7 @@ end;
 ### Étape 3 : Enregistrer le composant
 
 ```pascal
-procedure Register;
+procedure Register;  
 begin
   RegisterComponents('Mes Composants', [TBlinkingLabel]);
 end;
@@ -290,7 +290,7 @@ type
 ```pascal
 implementation
 
-constructor TTitledPanel.Create(AOwner: TComponent);
+constructor TTitledPanel.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -326,13 +326,13 @@ begin
   Height := 150;
 end;
 
-destructor TTitledPanel.Destroy;
+destructor TTitledPanel.Destroy;  
 begin
   FTitleFont.Free;
   inherited Destroy;
 end;
 
-function TTitledPanel.GetSystemTitleHeight: Integer;
+function TTitledPanel.GetSystemTitleHeight: Integer;  
 begin
   // Adapter la hauteur selon le système
   {$IFDEF WINDOWS}
@@ -348,7 +348,7 @@ begin
   {$ENDIF}
 end;
 
-function TTitledPanel.GetSystemColors: Boolean;
+function TTitledPanel.GetSystemColors: Boolean;  
 begin
   // Détecter si on doit utiliser les couleurs système
   {$IFDEF WINDOWS}
@@ -363,7 +363,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TTitledPanel.Paint;
+procedure TTitledPanel.Paint;  
 var
   R: TRect;
 begin
@@ -384,7 +384,7 @@ begin
   end;
 end;
 
-procedure TTitledPanel.DrawTitleBar;
+procedure TTitledPanel.DrawTitleBar;  
 var
   TitleRect: TRect;
   TextStyle: TTextStyle;
@@ -436,7 +436,7 @@ begin
   end;
 end;
 
-procedure TTitledPanel.DrawBorder;
+procedure TTitledPanel.DrawBorder;  
 var
   R: TRect;
 begin
@@ -466,7 +466,7 @@ begin
   end;
 end;
 
-procedure TTitledPanel.AdjustClientRect(var ARect: TRect);
+procedure TTitledPanel.AdjustClientRect(var ARect: TRect);  
 begin
   inherited AdjustClientRect(ARect);
 
@@ -487,13 +487,13 @@ begin
     InflateRect(ARect, -1, -1);
 end;
 
-function TTitledPanel.GetContentArea: TRect;
+function TTitledPanel.GetContentArea: TRect;  
 begin
   Result := ClientRect;
   AdjustClientRect(Result);
 end;
 
-procedure TTitledPanel.UpdateTheme;
+procedure TTitledPanel.UpdateTheme;  
 begin
   // Mettre à jour les couleurs selon le thème système actuel
   if GetSystemColors then
@@ -521,7 +521,7 @@ end;
 
 // Setters avec invalidation
 
-procedure TTitledPanel.SetTitle(const AValue: string);
+procedure TTitledPanel.SetTitle(const AValue: string);  
 begin
   if FTitle <> AValue then
   begin
@@ -530,7 +530,7 @@ begin
   end;
 end;
 
-procedure TTitledPanel.SetTitleHeight(AValue: Integer);
+procedure TTitledPanel.SetTitleHeight(AValue: Integer);  
 begin
   if (AValue > 0) and (FTitleHeight <> AValue) then
   begin
@@ -614,7 +614,7 @@ type
 ```pascal
 implementation
 
-constructor TConfigManager.Create(AOwner: TComponent);
+constructor TConfigManager.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -630,7 +630,7 @@ begin
   InitializeStorage;
 end;
 
-destructor TConfigManager.Destroy;
+destructor TConfigManager.Destroy;  
 begin
   if FAutoSave then
     Save;
@@ -643,7 +643,7 @@ begin
   inherited Destroy;
 end;
 
-function TConfigManager.GetStoragePath: string;
+function TConfigManager.GetStoragePath: string;  
 begin
   case FLocation of
     clPortable:
@@ -690,7 +690,7 @@ begin
     ForceDirectories(Result);
 end;
 
-procedure TConfigManager.InitializeStorage;
+procedure TConfigManager.InitializeStorage;  
 var
   ConfigPath: string;
 begin
@@ -723,7 +723,7 @@ begin
   end;
 end;
 
-function TConfigManager.ReadString(const Section, Key, Default: string): string;
+function TConfigManager.ReadString(const Section, Key, Default: string): string;  
 begin
   {$IFDEF WINDOWS}
   if FUseRegistry and Assigned(FRegistry) then
@@ -746,7 +746,7 @@ begin
   end;
 end;
 
-procedure TConfigManager.WriteString(const Section, Key, Value: string);
+procedure TConfigManager.WriteString(const Section, Key, Value: string);  
 begin
   {$IFDEF WINDOWS}
   if FUseRegistry and Assigned(FRegistry) then
@@ -768,7 +768,7 @@ end;
 
 // Méthodes similaires pour Integer et Bool...
 
-function TConfigManager.BackupConfig: Boolean;
+function TConfigManager.BackupConfig: Boolean;  
 var
   BackupName: string;
 begin
@@ -809,7 +809,7 @@ type
     function GetButtonStyle: Integer;
   end;
 
-procedure TCustomButton.DrawButton;
+procedure TCustomButton.DrawButton;  
 begin
   {$IFDEF WINDOWS}
   // Utiliser le thème Windows
@@ -850,7 +850,7 @@ type
     class function NormalizePath(const Path: string): string;
   end;
 
-class function TFileHelper.GetUserDataPath: string;
+class function TFileHelper.GetUserDataPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('APPDATA');
@@ -866,7 +866,7 @@ begin
     Result := ExtractFilePath(ParamStr(0));
 end;
 
-class function TFileHelper.NormalizePath(const Path: string): string;
+class function TFileHelper.NormalizePath(const Path: string): string;  
 begin
   Result := Path;
   // Remplacer les séparateurs
@@ -894,14 +894,14 @@ type
     procedure UpdateDPI;
   end;
 
-constructor TScalableControl.Create(AOwner: TComponent);
+constructor TScalableControl.Create(AOwner: TComponent);  
 begin
   inherited;
   FDesignDPI := 96;  // DPI de conception standard
   UpdateDPI;
 end;
 
-procedure TScalableControl.UpdateDPI;
+procedure TScalableControl.UpdateDPI;  
 begin
   if Screen.PixelsPerInch <> FDesignDPI then
   begin
@@ -912,12 +912,12 @@ begin
     FScaleFactor := 1.0;
 end;
 
-function TScalableControl.ScaleValue(Value: Integer): Integer;
+function TScalableControl.ScaleValue(Value: Integer): Integer;  
 begin
   Result := Round(Value * FScaleFactor);
 end;
 
-procedure TScalableControl.ScaleControl;
+procedure TScalableControl.ScaleControl;  
 begin
   // Adapter les dimensions
   Width := ScaleValue(Width);
@@ -953,7 +953,7 @@ uses
 
 implementation
 
-procedure Register;
+procedure Register;  
 begin
   RegisterUnit('BlinkingLabel', @BlinkingLabel.Register);
   RegisterUnit('TitledPanel', @TitledPanel.Register);
@@ -1022,25 +1022,25 @@ type
 
 implementation
 
-procedure TBlinkingLabelTest.SetUp;
+procedure TBlinkingLabelTest.SetUp;  
 begin
   FComponent := TBlinkingLabel.Create(nil);
 end;
 
-procedure TBlinkingLabelTest.TearDown;
+procedure TBlinkingLabelTest.TearDown;  
 begin
   FComponent.Free;
   FComponent := nil;
 end;
 
-procedure TBlinkingLabelTest.TestCreation;
+procedure TBlinkingLabelTest.TestCreation;  
 begin
   AssertNotNull('Le composant doit être créé', FComponent);
   AssertEquals('Intervalle par défaut', 500, FComponent.BlinkInterval);
   AssertFalse('Clignotement désactivé par défaut', FComponent.Blinking);
 end;
 
-procedure TBlinkingLabelTest.TestBlinking;
+procedure TBlinkingLabelTest.TestBlinking;  
 begin
   FComponent.Blinking := True;
   AssertTrue('Clignotement activé', FComponent.Blinking);
@@ -1052,7 +1052,7 @@ begin
   AssertFalse('Clignotement désactivé', FComponent.Blinking);
 end;
 
-procedure TBlinkingLabelTest.TestProperties;
+procedure TBlinkingLabelTest.TestProperties;  
 begin
   FComponent.Caption := 'Test';
   AssertEquals('Caption défini', 'Test', FComponent.Caption);
@@ -1061,7 +1061,7 @@ begin
   AssertEquals('Couleur de clignotement', clRed, FComponent.BlinkColor);
 end;
 
-procedure TBlinkingLabelTest.TestMemoryLeaks;
+procedure TBlinkingLabelTest.TestMemoryLeaks;  
 var
   InitialMemory: PtrUInt;
   i: Integer;
@@ -1115,17 +1115,17 @@ type
 
 implementation
 
-procedure TPlatformSpecificTest.SetUp;
+procedure TPlatformSpecificTest.SetUp;  
 begin
   FPanel := TTitledPanel.Create(nil);
 end;
 
-procedure TPlatformSpecificTest.TearDown;
+procedure TPlatformSpecificTest.TearDown;  
 begin
   FPanel.Free;
 end;
 
-procedure TPlatformSpecificTest.TestWindowsRendering;
+procedure TPlatformSpecificTest.TestWindowsRendering;  
 begin
   {$IFDEF WINDOWS}
   FPanel.UpdateTheme;
@@ -1142,7 +1142,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TPlatformSpecificTest.TestLinuxRendering;
+procedure TPlatformSpecificTest.TestLinuxRendering;  
 begin
   {$IFDEF LINUX}
   // Tester selon le widgetset
@@ -1162,7 +1162,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TPlatformSpecificTest.TestMacOSRendering;
+procedure TPlatformSpecificTest.TestMacOSRendering;  
 begin
   {$IFDEF DARWIN}
   // Tests spécifiques macOS
@@ -1172,7 +1172,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TPlatformSpecificTest.TestDPIScaling;
+procedure TPlatformSpecificTest.TestDPIScaling;  
 var
   OriginalDPI: Integer;
 begin
@@ -1192,7 +1192,7 @@ begin
   end;
 end;
 
-procedure TPlatformSpecificTest.TestThemeAdaptation;
+procedure TPlatformSpecificTest.TestThemeAdaptation;  
 begin
   FPanel.UpdateTheme;
 
@@ -1229,7 +1229,7 @@ type
     destructor Destroy; override;
   end;
 
-procedure TResourceAwareComponent.LoadResources;
+procedure TResourceAwareComponent.LoadResources;  
 begin
   if FResourcesLoaded then Exit;
 
@@ -1247,7 +1247,7 @@ begin
   FResourcesLoaded := True;
 end;
 
-procedure TResourceAwareComponent.FreeResources;
+procedure TResourceAwareComponent.FreeResources;  
 begin
   if not FResourcesLoaded then Exit;
 
@@ -1256,7 +1256,7 @@ begin
   FResourcesLoaded := False;
 end;
 
-procedure TResourceAwareComponent.SetParent(NewParent: TWinControl);
+procedure TResourceAwareComponent.SetParent(NewParent: TWinControl);  
 begin
   if NewParent <> nil then
     LoadResources
@@ -1266,14 +1266,14 @@ begin
   inherited SetParent(NewParent);
 end;
 
-procedure TResourceAwareComponent.Loaded;
+procedure TResourceAwareComponent.Loaded;  
 begin
   inherited;
   if Parent <> nil then
     LoadResources;
 end;
 
-destructor TResourceAwareComponent.Destroy;
+destructor TResourceAwareComponent.Destroy;  
 begin
   FreeResources;
   inherited;
@@ -1299,26 +1299,26 @@ type
     destructor Destroy; override;
   end;
 
-constructor TOptimizedControl.Create(AOwner: TComponent);
+constructor TOptimizedControl.Create(AOwner: TComponent);  
 begin
   inherited;
   FBufferBitmap := TBitmap.Create;
   FNeedRepaint := True;
 end;
 
-destructor TOptimizedControl.Destroy;
+destructor TOptimizedControl.Destroy;  
 begin
   FBufferBitmap.Free;
   inherited;
 end;
 
-procedure TOptimizedControl.InvalidateBuffer;
+procedure TOptimizedControl.InvalidateBuffer;  
 begin
   FNeedRepaint := True;
   Invalidate;
 end;
 
-procedure TOptimizedControl.Resize;
+procedure TOptimizedControl.Resize;  
 begin
   inherited;
   if (Width <> FLastWidth) or (Height <> FLastHeight) then
@@ -1330,7 +1330,7 @@ begin
   end;
 end;
 
-procedure TOptimizedControl.Paint;
+procedure TOptimizedControl.Paint;  
 begin
   if FNeedRepaint or (FBufferBitmap.Width <> Width) or
      (FBufferBitmap.Height <> Height) then
@@ -1344,7 +1344,7 @@ begin
   Canvas.Draw(0, 0, FBufferBitmap);
 end;
 
-procedure TOptimizedControl.PaintBuffer;
+procedure TOptimizedControl.PaintBuffer;  
 begin
   // Dessiner dans le buffer
   with FBufferBitmap.Canvas do
@@ -1379,7 +1379,7 @@ type
     procedure UpdateFromThread;
   end;
 
-constructor TThreadSafeComponent.Create(AOwner: TComponent);
+constructor TThreadSafeComponent.Create(AOwner: TComponent);  
 begin
   inherited;
   FLock := TCriticalSection.Create;
@@ -1387,14 +1387,14 @@ begin
   FUpdatePending := False;
 end;
 
-destructor TThreadSafeComponent.Destroy;
+destructor TThreadSafeComponent.Destroy;  
 begin
   FLock.Free;
   FData.Free;
   inherited;
 end;
 
-procedure TThreadSafeComponent.AddData(const Value: string);
+procedure TThreadSafeComponent.AddData(const Value: string);  
 begin
   FLock.Enter;
   try
@@ -1412,7 +1412,7 @@ begin
     TThread.Synchronize(nil, @DoUpdateUI);
 end;
 
-function TThreadSafeComponent.GetData: TStringList;
+function TThreadSafeComponent.GetData: TStringList;  
 begin
   Result := TStringList.Create;
   FLock.Enter;
@@ -1423,7 +1423,7 @@ begin
   end;
 end;
 
-procedure TThreadSafeComponent.DoUpdateUI;
+procedure TThreadSafeComponent.DoUpdateUI;  
 begin
   if not FUpdatePending then Exit;
 
@@ -1438,7 +1438,7 @@ begin
   end;
 end;
 
-procedure TThreadSafeComponent.UpdateFromThread;
+procedure TThreadSafeComponent.UpdateFromThread;  
 begin
   if MainThreadID = GetCurrentThreadId then
     DoUpdateUI
@@ -1538,30 +1538,30 @@ type
     procedure DetachObserver(Observer: IObserver);
   end;
 
-constructor TObservableComponent.Create(AOwner: TComponent);
+constructor TObservableComponent.Create(AOwner: TComponent);  
 begin
   inherited;
   FObservers := TInterfaceList.Create;
 end;
 
-destructor TObservableComponent.Destroy;
+destructor TObservableComponent.Destroy;  
 begin
   FObservers.Free;
   inherited;
 end;
 
-procedure TObservableComponent.AttachObserver(Observer: IObserver);
+procedure TObservableComponent.AttachObserver(Observer: IObserver);  
 begin
   if FObservers.IndexOf(Observer) = -1 then
     FObservers.Add(Observer);
 end;
 
-procedure TObservableComponent.DetachObserver(Observer: IObserver);
+procedure TObservableComponent.DetachObserver(Observer: IObserver);  
 begin
   FObservers.Remove(Observer);
 end;
 
-procedure TObservableComponent.NotifyObservers;
+procedure TObservableComponent.NotifyObservers;  
 var
   i: Integer;
 begin
@@ -1595,7 +1595,7 @@ type
     function CanRedo: Boolean;
   end;
 
-procedure TCommandComponent.ExecuteCommand(Command: TCommand);
+procedure TCommandComponent.ExecuteCommand(Command: TCommand);  
 var
   i: Integer;
 begin
@@ -1612,7 +1612,7 @@ begin
   Inc(FCurrentIndex);
 end;
 
-procedure TCommandComponent.Undo;
+procedure TCommandComponent.Undo;  
 begin
   if CanUndo then
   begin
@@ -1621,7 +1621,7 @@ begin
   end;
 end;
 
-procedure TCommandComponent.Redo;
+procedure TCommandComponent.Redo;  
 begin
   if CanRedo then
   begin
@@ -1658,7 +1658,7 @@ type
     property Logging: Boolean read FLogging;
   end;
 
-procedure TDiagnosticComponent.LogComponentState(Component: TComponent);
+procedure TDiagnosticComponent.LogComponentState(Component: TComponent);  
 var
   i: Integer;
   PropInfo: PPropInfo;
@@ -1702,7 +1702,7 @@ begin
   end;
 end;
 
-procedure TDiagnosticComponent.LogSystemInfo;
+procedure TDiagnosticComponent.LogSystemInfo;  
 begin
   if not FLogging then Exit;
 

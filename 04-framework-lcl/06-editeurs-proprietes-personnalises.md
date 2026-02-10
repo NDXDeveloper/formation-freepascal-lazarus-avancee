@@ -70,7 +70,7 @@ type
 
 implementation
 
-function TEmailPropertyEditor.GetAttributes: TPropertyAttributes;
+function TEmailPropertyEditor.GetAttributes: TPropertyAttributes;  
 begin
   // Définir les capacités de l'éditeur
   Result := [paDialog,        // Peut ouvrir une boîte de dialogue
@@ -79,7 +79,7 @@ begin
              paMultiSelect];   // Peut éditer plusieurs composants à la fois
 end;
 
-function TEmailPropertyEditor.GetValue: string;
+function TEmailPropertyEditor.GetValue: string;  
 begin
   // Récupérer la valeur actuelle
   Result := GetStrValue;
@@ -91,7 +91,7 @@ begin
     Result := Result + ' (invalide!)';
 end;
 
-procedure TEmailPropertyEditor.SetValue(const NewValue: string);
+procedure TEmailPropertyEditor.SetValue(const NewValue: string);  
 var
   Email: string;
 begin
@@ -113,7 +113,7 @@ begin
   SetStrValue(Email);
 end;
 
-procedure TEmailPropertyEditor.Edit;
+procedure TEmailPropertyEditor.Edit;  
 var
   EmailDialog: TForm;
   Edit: TEdit;
@@ -195,20 +195,20 @@ type
 
 implementation
 
-constructor TCountryPropertyEditor.Create(Hook: TPropertyEditorHook; APropCount: Integer);
+constructor TCountryPropertyEditor.Create(Hook: TPropertyEditorHook; APropCount: Integer);  
 begin
   inherited Create(Hook, APropCount);
   FCountries := TStringList.Create;
   LoadCountries;
 end;
 
-destructor TCountryPropertyEditor.Destroy;
+destructor TCountryPropertyEditor.Destroy;  
 begin
   FCountries.Free;
   inherited Destroy;
 end;
 
-procedure TCountryPropertyEditor.LoadCountries;
+procedure TCountryPropertyEditor.LoadCountries;  
 begin
   // Charger la liste des pays
   FCountries.Add('France');
@@ -225,13 +225,13 @@ begin
   FCountries.Sort; // Trier alphabétiquement
 end;
 
-function TCountryPropertyEditor.GetAttributes: TPropertyAttributes;
+function TCountryPropertyEditor.GetAttributes: TPropertyAttributes;  
 begin
   // Indiquer qu'on a une liste de valeurs et qu'on peut trier
   Result := [paValueList, paSortList, paAutoUpdate];
 end;
 
-procedure TCountryPropertyEditor.GetValues(Proc: TGetStrProc);
+procedure TCountryPropertyEditor.GetValues(Proc: TGetStrProc);  
 var
   i: Integer;
 begin
@@ -240,7 +240,7 @@ begin
     Proc(FCountries[i]);
 end;
 
-procedure TCountryPropertyEditor.SetValue(const NewValue: string);
+procedure TCountryPropertyEditor.SetValue(const NewValue: string);  
 begin
   // Vérifier que la valeur est dans la liste
   if (NewValue <> '') and (FCountries.IndexOf(NewValue) = -1) then
@@ -320,7 +320,7 @@ implementation
 
 { TColorPair }
 
-procedure TColorPair.Assign(Source: TPersistent);
+procedure TColorPair.Assign(Source: TPersistent);  
 begin
   if Source is TColorPair then
   begin
@@ -331,7 +331,7 @@ begin
     inherited Assign(Source);
 end;
 
-function TColorPair.ToString: string;
+function TColorPair.ToString: string;  
 begin
   Result := Format('Fg:%s, Bg:%s',
     [ColorToString(FForeground), ColorToString(FBackground)]);
@@ -339,12 +339,12 @@ end;
 
 { TColorPairPropertyEditor }
 
-function TColorPairPropertyEditor.GetAttributes: TPropertyAttributes;
+function TColorPairPropertyEditor.GetAttributes: TPropertyAttributes;  
 begin
   Result := [paDialog, paSubProperties, paReadOnly];
 end;
 
-function TColorPairPropertyEditor.GetValue: string;
+function TColorPairPropertyEditor.GetValue: string;  
 var
   ColorPair: TColorPair;
 begin
@@ -355,7 +355,7 @@ begin
     Result := '(vide)';
 end;
 
-procedure TColorPairPropertyEditor.Edit;
+procedure TColorPairPropertyEditor.Edit;  
 var
   Dialog: TColorPairEditDialog;
   ColorPair: TColorPair;
@@ -380,7 +380,7 @@ end;
 
 { TColorPairEditDialog }
 
-constructor TColorPairEditDialog.CreateNew(AOwner: TComponent; Dummy: Integer);
+constructor TColorPairEditDialog.CreateNew(AOwner: TComponent; Dummy: Integer);  
 begin
   inherited CreateNew(AOwner, Dummy);
 
@@ -427,7 +427,7 @@ begin
   FCancelBtn.Cancel := True;
 end;
 
-procedure TColorPairEditDialog.ForegroundBtnClick(Sender: TObject);
+procedure TColorPairEditDialog.ForegroundBtnClick(Sender: TObject);  
 var
   ColorDialog: TColorDialog;
 begin
@@ -444,7 +444,7 @@ begin
   end;
 end;
 
-procedure TColorPairEditDialog.BackgroundBtnClick(Sender: TObject);
+procedure TColorPairEditDialog.BackgroundBtnClick(Sender: TObject);  
 var
   ColorDialog: TColorDialog;
 begin
@@ -461,7 +461,7 @@ begin
   end;
 end;
 
-procedure TColorPairEditDialog.UpdatePreview;
+procedure TColorPairEditDialog.UpdatePreview;  
 begin
   FPreview.Font.Color := FColorPair.Foreground;
   FPreview.Color := FColorPair.Background;
@@ -501,17 +501,17 @@ type
 
 implementation
 
-function TPercentagePropertyEditor.GetAttributes: TPropertyAttributes;
+function TPercentagePropertyEditor.GetAttributes: TPropertyAttributes;  
 begin
   Result := inherited GetAttributes + [paCustomDrawn];
 end;
 
-function TPercentagePropertyEditor.GetValue: string;
+function TPercentagePropertyEditor.GetValue: string;  
 begin
   Result := IntToStr(GetOrdValue) + '%';
 end;
 
-procedure TPercentagePropertyEditor.SetValue(const NewValue: string);
+procedure TPercentagePropertyEditor.SetValue(const NewValue: string);  
 var
   S: string;
   V: Integer;
@@ -619,19 +619,19 @@ type
 
 implementation
 
-procedure TConfigurablePanelEditor.Edit;
+procedure TConfigurablePanelEditor.Edit;  
 begin
   // Action lors du double-clic sur le composant
   ShowConfigDialog;
 end;
 
-function TConfigurablePanelEditor.GetVerbCount: Integer;
+function TConfigurablePanelEditor.GetVerbCount: Integer;  
 begin
   // Nombre d'éléments dans le menu contextuel
   Result := 4;
 end;
 
-function TConfigurablePanelEditor.GetVerb(Index: Integer): string;
+function TConfigurablePanelEditor.GetVerb(Index: Integer): string;  
 begin
   // Texte des éléments du menu contextuel
   case Index of
@@ -642,7 +642,7 @@ begin
   end;
 end;
 
-procedure TConfigurablePanelEditor.ExecuteVerb(Index: Integer);
+procedure TConfigurablePanelEditor.ExecuteVerb(Index: Integer);  
 begin
   // Actions du menu contextuel
   case Index of
@@ -652,7 +652,7 @@ begin
   end;
 end;
 
-procedure TConfigurablePanelEditor.ShowConfigDialog;
+procedure TConfigurablePanelEditor.ShowConfigDialog;  
 var
   Dialog: TForm;
   Panel: TConfigurablePanel;
@@ -680,7 +680,7 @@ begin
   end;
 end;
 
-procedure TConfigurablePanelEditor.LoadPreset(PresetName: string);
+procedure TConfigurablePanelEditor.LoadPreset(PresetName: string);  
 var
   Panel: TConfigurablePanel;
 begin
@@ -725,7 +725,7 @@ uses
   EmailPropertyEditor, CountryPropertyEditor, ColorPairEditor,
   PercentageEditor, MyComponentEditor;
 
-procedure Register;
+procedure Register;  
 begin
   // Enregistrer les éditeurs de propriétés
 
@@ -798,7 +798,7 @@ type
 
 implementation
 
-procedure TGradientColors.SetStartColor(Value: TColor);
+procedure TGradientColors.SetStartColor(Value: TColor);  
 begin
   if FStartColor <> Value then
   begin
@@ -808,7 +808,7 @@ begin
   end;
 end;
 
-procedure TGradientColors.SetEndColor(Value: TColor);
+procedure TGradientColors.SetEndColor(Value: TColor);  
 begin
   if FEndColor <> Value then
   begin
@@ -818,7 +818,7 @@ begin
   end;
 end;
 
-procedure TGradientEditor.Edit;
+procedure TGradientEditor.Edit;  
 var
   ColorDialog: TColorDialog;
   StartBtn, EndBtn: TButton;
@@ -864,13 +864,13 @@ begin
   end;
 end;
 
-procedure TGradientEditor.UpdatePreview;
+procedure TGradientEditor.UpdatePreview;  
 begin
   if Assigned(FPreviewPanel) then
     FPreviewPanel.Invalidate;
 end;
 
-procedure TGradientEditor.DrawGradient(Canvas: TCanvas; Rect: TRect);
+procedure TGradientEditor.DrawGradient(Canvas: TCanvas; Rect: TRect);  
 var
   i, Steps: Integer;
   R1, G1, B1, R2, G2, B2: Byte;
@@ -919,7 +919,7 @@ end;
 
 1. **Validation intelligente** : Validez les entrées mais proposez des corrections
 ```pascal
-procedure TPhoneEditor.SetValue(const NewValue: string);
+procedure TPhoneEditor.SetValue(const NewValue: string);  
 var
   Cleaned: string;
 begin
@@ -965,7 +965,7 @@ end;
 
 3. **Aide contextuelle** : Fournissez des informations utiles
 ```pascal
-function TComplexEditor.GetHint: string;
+function TComplexEditor.GetHint: string;  
 begin
   Result := 'Format attendu : XXX-XXX-XXXX' + LineEnding +
             'Exemple : 123-456-7890' + LineEnding +
@@ -997,7 +997,7 @@ type
 
 implementation
 
-procedure TSafePropertyEditor.SetValue(const NewValue: string);
+procedure TSafePropertyEditor.SetValue(const NewValue: string);  
 var
   ErrorMsg: string;
   CorrectedValue: string;
@@ -1021,12 +1021,12 @@ begin
     inherited SetValue(NewValue);
 end;
 
-procedure TSafePropertyEditor.ShowError(const Msg: string);
+procedure TSafePropertyEditor.ShowError(const Msg: string);  
 begin
   MessageDlg('Erreur', Msg, mtError, [mbOK], 0);
 end;
 
-procedure TSafePropertyEditor.ShowHint(const Msg: string);
+procedure TSafePropertyEditor.ShowHint(const Msg: string);  
 begin
   MessageDlg('Conseil', Msg, mtInformation, [mbOK], 0);
 end;
@@ -1077,12 +1077,12 @@ type
 
 implementation
 
-function TDimensionEditor.GetAttributes: TPropertyAttributes;
+function TDimensionEditor.GetAttributes: TPropertyAttributes;  
 begin
   Result := [paDialog, paMultiSelect];
 end;
 
-procedure TDimensionEditor.Edit;
+procedure TDimensionEditor.Edit;  
 var
   Dialog: TDimensionDialog;
   Component: TComponent;
@@ -1119,7 +1119,7 @@ begin
   end;
 end;
 
-procedure TDimensionEditor.UpdateLinkedProperties(NewWidth, NewHeight: Integer);
+procedure TDimensionEditor.UpdateLinkedProperties(NewWidth, NewHeight: Integer);  
 var
   Component: TComponent;
   WidthProp, HeightProp: TPropertyEditor;
@@ -1137,7 +1137,7 @@ begin
     HeightProp.SetOrdValue(NewHeight);
 end;
 
-constructor TDimensionDialog.CreateNew(AOwner: TComponent; Dummy: Integer);
+constructor TDimensionDialog.CreateNew(AOwner: TComponent; Dummy: Integer);  
 begin
   inherited;
 
@@ -1175,7 +1175,7 @@ begin
   FAspectRatio.OnChange := @AspectRatioChange;
 end;
 
-procedure TDimensionDialog.AspectRatioChange(Sender: TObject);
+procedure TDimensionDialog.AspectRatioChange(Sender: TObject);  
 begin
   if FAspectRatio.Checked then
   begin
@@ -1184,7 +1184,7 @@ begin
   end;
 end;
 
-procedure TDimensionDialog.WidthEditChange(Sender: TObject);
+procedure TDimensionDialog.WidthEditChange(Sender: TObject);  
 var
   NewWidth, NewHeight: Integer;
 begin
@@ -1227,7 +1227,7 @@ type
 
 implementation
 
-function TIDEAwareEditor.GetProjectPath: string;
+function TIDEAwareEditor.GetProjectPath: string;  
 var
   Project: TLazProject;
 begin
@@ -1237,7 +1237,7 @@ begin
     Result := ExtractFilePath(Project.ProjectInfoFile);
 end;
 
-procedure TIDEAwareEditor.OpenRelatedFile;
+procedure TIDEAwareEditor.OpenRelatedFile;  
 var
   FileName: string;
 begin
@@ -1267,7 +1267,7 @@ begin
   end;
 end;
 
-procedure TIDEAwareEditor.CreateNewResource;
+procedure TIDEAwareEditor.CreateNewResource;  
 var
   FileName: string;
   FileStream: TFileStream;
@@ -1303,12 +1303,12 @@ begin
   end;
 end;
 
-procedure TIDEAwareEditor.Edit;
+procedure TIDEAwareEditor.Edit;  
 begin
   OpenRelatedFile;
 end;
 
-function TIDEAwareEditor.GetAttributes: TPropertyAttributes;
+function TIDEAwareEditor.GetAttributes: TPropertyAttributes;  
 begin
   Result := [paDialog];
 end;
@@ -1347,7 +1347,7 @@ implementation
 uses
   Math;
 
-procedure TFormulaPropertyEditor.Edit;
+procedure TFormulaPropertyEditor.Edit;  
 begin
   FPreviewForm := TForm.Create(nil);
   try
@@ -1407,20 +1407,20 @@ begin
   end;
 end;
 
-procedure TFormulaPropertyEditor.FormulaEditChange(Sender: TObject);
+procedure TFormulaPropertyEditor.FormulaEditChange(Sender: TObject);  
 begin
   // Réinitialiser le timer à chaque frappe
   FUpdateTimer.Enabled := False;
   FUpdateTimer.Enabled := True;
 end;
 
-procedure TFormulaPropertyEditor.UpdatePreview(Sender: TObject);
+procedure TFormulaPropertyEditor.UpdatePreview(Sender: TObject);  
 begin
   FUpdateTimer.Enabled := False;
   FPreviewPanel.Invalidate;
 end;
 
-procedure TFormulaPropertyEditor.DrawFormula(Canvas: TCanvas; const Formula: string);
+procedure TFormulaPropertyEditor.DrawFormula(Canvas: TCanvas; const Formula: string);  
 var
   x, y: Double;
   PixelX, PixelY: Integer;
@@ -1519,7 +1519,7 @@ type
 
 implementation
 
-procedure TVisualComponentEditor.Edit;
+procedure TVisualComponentEditor.Edit;  
 var
   EditForm: TForm;
   Control: TControl;
@@ -1559,7 +1559,7 @@ begin
   end;
 end;
 
-procedure TVisualComponentEditor.CreateHandles;
+procedure TVisualComponentEditor.CreateHandles;  
 var
   i: Integer;
 begin
@@ -1578,7 +1578,7 @@ begin
   end;
 end;
 
-procedure TVisualComponentEditor.UpdateHandles;
+procedure TVisualComponentEditor.UpdateHandles;  
 var
   R: TRect;
   Control: TControl;
@@ -1597,12 +1597,12 @@ begin
   FHandles[7].SetBounds(R.Left - 4, R.Top + (R.Bottom - R.Top) div 2 - 4, 8, 8); // Milieu-gauche
 end;
 
-function TVisualComponentEditor.GetVerbCount: Integer;
+function TVisualComponentEditor.GetVerbCount: Integer;  
 begin
   Result := 3;
 end;
 
-function TVisualComponentEditor.GetVerb(Index: Integer): string;
+function TVisualComponentEditor.GetVerb(Index: Integer): string;  
 begin
   case Index of
     0: Result := 'Éditer visuellement...';
@@ -1611,7 +1611,7 @@ begin
   end;
 end;
 
-procedure TVisualComponentEditor.ExecuteVerb(Index: Integer);
+procedure TVisualComponentEditor.ExecuteVerb(Index: Integer);  
 var
   Control: TControl;
 begin
@@ -1663,7 +1663,7 @@ type
 
 implementation
 
-procedure TDebugPropertyEditor.LogDebug(const Msg: string);
+procedure TDebugPropertyEditor.LogDebug(const Msg: string);  
 var
   F: TextFile;
 begin
@@ -1679,7 +1679,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TDebugPropertyEditor.Initialize;
+procedure TDebugPropertyEditor.Initialize;  
 begin
   inherited;
   LogDebug('Éditeur initialisé pour ' + GetPropInfo^.Name);
@@ -1687,19 +1687,19 @@ begin
   LogDebug('Composant: ' + GetComponent(0).ClassName);
 end;
 
-function TDebugPropertyEditor.GetAttributes: TPropertyAttributes;
+function TDebugPropertyEditor.GetAttributes: TPropertyAttributes;  
 begin
   Result := inherited GetAttributes;
   LogDebug('GetAttributes appelé, résultat: ' + SetToString(PTypeInfo(TypeInfo(TPropertyAttributes)), Integer(Result), True));
 end;
 
-function TDebugPropertyEditor.GetValue: string;
+function TDebugPropertyEditor.GetValue: string;  
 begin
   Result := inherited GetValue;
   LogDebug('GetValue appelé, résultat: ' + Result);
 end;
 
-procedure TDebugPropertyEditor.SetValue(const NewValue: string);
+procedure TDebugPropertyEditor.SetValue(const NewValue: string);  
 begin
   LogDebug('SetValue appelé avec: ' + NewValue);
   try
@@ -1714,13 +1714,13 @@ begin
   end;
 end;
 
-procedure TDebugPropertyEditor.Edit;
+procedure TDebugPropertyEditor.Edit;  
 begin
   LogDebug('Edit appelé');
   ShowDebugInfo;
 end;
 
-procedure TDebugPropertyEditor.ShowDebugInfo;
+procedure TDebugPropertyEditor.ShowDebugInfo;  
 var
   Info: TStringList;
   i: Integer;

@@ -38,8 +38,8 @@ TForm est le composant le plus important : c'est la fenêtre de votre applicatio
 Form1.Caption := 'Ma Super Application';
 
 // Taille et position
-Form1.Width := 800;
-Form1.Height := 600;
+Form1.Width := 800;  
+Form1.Height := 600;  
 Form1.Position := poScreenCenter;  // Centre de l'écran
 
 // Style de bordure
@@ -53,21 +53,21 @@ Form1.WindowState := wsNormal;     // Normal, wsMinimized, wsMaximized
 **Événements principaux** :
 ```pascal
 // À la création (initialisation)
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   // Initialiser vos variables
   // Charger les paramètres
 end;
 
 // À l'affichage
-procedure TForm1.FormShow(Sender: TObject);
+procedure TForm1.FormShow(Sender: TObject);  
 begin
   // Rafraîchir les données
   // Positionner le focus
 end;
 
 // À la fermeture
-procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);  
 begin
   // Sauvegarder les données
   // Demander confirmation si nécessaire
@@ -83,16 +83,16 @@ TPanel est le couteau suisse des conteneurs. Il organise d'autres composants en 
 **Utilisation typique** :
 ```pascal
 // Créer une barre d'outils en haut
-ToolbarPanel := TPanel.Create(Self);
-ToolbarPanel.Parent := Form1;
-ToolbarPanel.Align := alTop;
-ToolbarPanel.Height := 40;
-ToolbarPanel.Caption := '';  // Pas de texte
+ToolbarPanel := TPanel.Create(Self);  
+ToolbarPanel.Parent := Form1;  
+ToolbarPanel.Align := alTop;  
+ToolbarPanel.Height := 40;  
+ToolbarPanel.Caption := '';  // Pas de texte  
 ToolbarPanel.BevelOuter := bvLowered;
 
 // Zone de contenu principal
-ContentPanel := TPanel.Create(Self);
-ContentPanel.Parent := Form1;
+ContentPanel := TPanel.Create(Self);  
+ContentPanel.Parent := Form1;  
 ContentPanel.Align := alClient;  // Remplit l'espace restant
 ```
 
@@ -104,15 +104,15 @@ TGroupBox est parfait pour organiser visuellement des options liées.
 
 ```pascal
 // Groupe d'options de connexion
-LoginGroup := TGroupBox.Create(Self);
-LoginGroup.Caption := 'Connexion';
-LoginGroup.Parent := Form1;
+LoginGroup := TGroupBox.Create(Self);  
+LoginGroup.Caption := 'Connexion';  
+LoginGroup.Parent := Form1;  
 LoginGroup.SetBounds(10, 10, 300, 150);
 
 // Ajouter des contrôles dans le groupe
-UserEdit := TEdit.Create(Self);
-UserEdit.Parent := LoginGroup;  // Parent = le groupe, pas la form !
-UserEdit.Top := 30;
+UserEdit := TEdit.Create(Self);  
+UserEdit.Parent := LoginGroup;  // Parent = le groupe, pas la form !  
+UserEdit.Top := 30;  
 UserEdit.Left := 10;
 ```
 
@@ -122,18 +122,18 @@ Pour les interfaces complexes, les onglets permettent d'organiser le contenu en 
 
 ```pascal
 // Créer le contrôle d'onglets
-PageControl1 := TPageControl.Create(Self);
-PageControl1.Parent := Form1;
+PageControl1 := TPageControl.Create(Self);  
+PageControl1.Parent := Form1;  
 PageControl1.Align := alClient;
 
 // Premier onglet
-TabGeneral := TTabSheet.Create(PageControl1);
-TabGeneral.PageControl := PageControl1;
+TabGeneral := TTabSheet.Create(PageControl1);  
+TabGeneral.PageControl := PageControl1;  
 TabGeneral.Caption := 'Général';
 
 // Deuxième onglet
-TabAdvanced := TTabSheet.Create(PageControl1);
-TabAdvanced.PageControl := PageControl1;
+TabAdvanced := TTabSheet.Create(PageControl1);  
+TabAdvanced.PageControl := PageControl1;  
 TabAdvanced.Caption := 'Avancé';
 
 // Sélectionner un onglet
@@ -146,20 +146,20 @@ TSplitter permet à l'utilisateur de redimensionner des zones de l'interface.
 
 ```pascal
 // Panel de gauche
-LeftPanel := TPanel.Create(Self);
-LeftPanel.Parent := Form1;
-LeftPanel.Align := alLeft;
+LeftPanel := TPanel.Create(Self);  
+LeftPanel.Parent := Form1;  
+LeftPanel.Align := alLeft;  
 LeftPanel.Width := 200;
 
 // Splitter (DOIT être créé APRÈS le panel qu'il suit)
-Splitter1 := TSplitter.Create(Self);
-Splitter1.Parent := Form1;
-Splitter1.Align := alLeft;  // Même alignement que le panel
+Splitter1 := TSplitter.Create(Self);  
+Splitter1.Parent := Form1;  
+Splitter1.Align := alLeft;  // Même alignement que le panel  
 Splitter1.Width := 5;
 
 // Panel de droite
-RightPanel := TPanel.Create(Self);
-RightPanel.Parent := Form1;
+RightPanel := TPanel.Create(Self);  
+RightPanel.Parent := Form1;  
 RightPanel.Align := alClient;
 ```
 
@@ -171,25 +171,25 @@ Le composant le plus utilisé pour la saisie de texte sur une ligne.
 
 ```pascal
 // Configuration de base
-Edit1 := TEdit.Create(Self);
-Edit1.Parent := Form1;
-Edit1.Text := 'Texte initial';
+Edit1 := TEdit.Create(Self);  
+Edit1.Parent := Form1;  
+Edit1.Text := 'Texte initial';  
 Edit1.MaxLength := 50;  // Limite de caractères
 
 // Options utiles
-Edit1.CharCase := ecUpperCase;  // Tout en majuscules (ecNormal, ecLowerCase)
-Edit1.PasswordChar := '*';      // Masquer le texte
-Edit1.ReadOnly := True;         // Lecture seule
+Edit1.CharCase := ecUpperCase;  // Tout en majuscules (ecNormal, ecLowerCase)  
+Edit1.PasswordChar := '*';      // Masquer le texte  
+Edit1.ReadOnly := True;         // Lecture seule  
 Edit1.NumbersOnly := True;      // Que des chiffres
 
 // Événements importants
-procedure TForm1.Edit1Change(Sender: TObject);
+procedure TForm1.Edit1Change(Sender: TObject);  
 begin
   // Appelé à chaque modification
   StatusBar1.SimpleText := 'Longueur : ' + IntToStr(Length(Edit1.Text));
 end;
 
-procedure TForm1.Edit1KeyPress(Sender: TObject; var Key: Char);
+procedure TForm1.Edit1KeyPress(Sender: TObject; var Key: Char);  
 begin
   // Filtrer les caractères
   if Key = #13 then  // Entrée pressée
@@ -206,24 +206,24 @@ Pour éditer plusieurs lignes de texte.
 
 ```pascal
 // Configuration
-Memo1 := TMemo.Create(Self);
-Memo1.Parent := Form1;
-Memo1.ScrollBars := ssVertical;  // ou ssBoth, ssHorizontal
+Memo1 := TMemo.Create(Self);  
+Memo1.Parent := Form1;  
+Memo1.ScrollBars := ssVertical;  // ou ssBoth, ssHorizontal  
 Memo1.WordWrap := True;           // Retour à la ligne automatique
 
 // Manipuler le texte
-Memo1.Lines.Add('Nouvelle ligne');
-Memo1.Lines.Insert(0, 'Première ligne');
-Memo1.Lines.Delete(2);  // Supprimer la 3e ligne
+Memo1.Lines.Add('Nouvelle ligne');  
+Memo1.Lines.Insert(0, 'Première ligne');  
+Memo1.Lines.Delete(2);  // Supprimer la 3e ligne  
 Memo1.Lines.Clear;      // Tout effacer
 
 // Charger/Sauver
-Memo1.Lines.LoadFromFile('document.txt');
+Memo1.Lines.LoadFromFile('document.txt');  
 Memo1.Lines.SaveToFile('document.txt');
 
 // Sélection et curseur
-Memo1.SelStart := 10;   // Position du curseur
-Memo1.SelLength := 5;   // Longueur de la sélection
+Memo1.SelStart := 10;   // Position du curseur  
+Memo1.SelLength := 5;   // Longueur de la sélection  
 Memo1.SelText := 'Remplacer';  // Remplacer la sélection
 ```
 
@@ -233,8 +233,8 @@ Combine une zone de texte et une liste déroulante.
 
 ```pascal
 // Ajouter des éléments
-ComboBox1.Items.Add('Option 1');
-ComboBox1.Items.Add('Option 2');
+ComboBox1.Items.Add('Option 1');  
+ComboBox1.Items.Add('Option 2');  
 ComboBox1.Items.AddStrings(['Option 3', 'Option 4', 'Option 5']);
 
 // Styles
@@ -243,12 +243,12 @@ ComboBox1.Style := csDropDownList;  // Liste seulement (pas de saisie)
 // csSimple : liste toujours visible
 
 // Sélection
-ComboBox1.ItemIndex := 0;  // Sélectionner le premier
+ComboBox1.ItemIndex := 0;  // Sélectionner le premier  
 if ComboBox1.ItemIndex >= 0 then
   ShowMessage('Sélection : ' + ComboBox1.Text);
 
 // Événement de changement
-procedure TForm1.ComboBox1Change(Sender: TObject);
+procedure TForm1.ComboBox1Change(Sender: TObject);  
 begin
   case ComboBox1.ItemIndex of
     0: ConfigureOptionA;
@@ -263,7 +263,7 @@ Pour afficher et sélectionner dans une liste d'éléments.
 
 ```pascal
 // Configuration
-ListBox1.MultiSelect := True;    // Sélection multiple
+ListBox1.MultiSelect := True;    // Sélection multiple  
 ListBox1.Sorted := True;         // Tri automatique
 
 // Ajouter avec données associées
@@ -275,7 +275,7 @@ for i := 0 to ListBox1.Items.Count - 1 do
     ProcessItem(ListBox1.Items[i]);
 
 // Double-clic
-procedure TForm1.ListBox1DblClick(Sender: TObject);
+procedure TForm1.ListBox1DblClick(Sender: TObject);  
 begin
   if ListBox1.ItemIndex >= 0 then
     EditItem(ListBox1.Items[ListBox1.ItemIndex]);
@@ -287,15 +287,15 @@ end;
 Pour les options oui/non.
 
 ```pascal
-CheckBox1.Caption := 'Activer les notifications';
+CheckBox1.Caption := 'Activer les notifications';  
 CheckBox1.Checked := True;
 
 // État tristate (coché/décoché/grisé)
-CheckBox1.AllowGrayed := True;
+CheckBox1.AllowGrayed := True;  
 CheckBox1.State := cbGrayed;  // cbUnchecked, cbChecked, cbGrayed
 
 // Réagir au changement
-procedure TForm1.CheckBox1Change(Sender: TObject);
+procedure TForm1.CheckBox1Change(Sender: TObject);  
 begin
   NotificationsEnabled := CheckBox1.Checked;
   UpdateUI;
@@ -308,18 +308,18 @@ Pour un choix parmi plusieurs options mutuellement exclusives.
 
 ```pascal
 // Les RadioButtons sur le même parent s'excluent automatiquement
-RadioButton1.Caption := 'Petit';
-RadioButton2.Caption := 'Moyen';
-RadioButton3.Caption := 'Grand';
+RadioButton1.Caption := 'Petit';  
+RadioButton2.Caption := 'Moyen';  
+RadioButton3.Caption := 'Grand';  
 RadioButton2.Checked := True;  // Sélection par défaut
 
 // Pour des groupes séparés, utilisez des TGroupBox différents
 // Groupe 1 : Taille
-RadioSmall.Parent := GroupSize;
+RadioSmall.Parent := GroupSize;  
 RadioLarge.Parent := GroupSize;
 
 // Groupe 2 : Couleur (indépendant du groupe 1)
-RadioRed.Parent := GroupColor;
+RadioRed.Parent := GroupColor;  
 RadioBlue.Parent := GroupColor;
 ```
 
@@ -330,20 +330,20 @@ RadioBlue.Parent := GroupColor;
 Le composant d'action le plus basique et le plus utilisé.
 
 ```pascal
-Button1.Caption := '&OK';  // & = raccourci Alt+O
-Button1.Default := True;   // Bouton par défaut (Entrée)
+Button1.Caption := '&OK';  // & = raccourci Alt+O  
+Button1.Default := True;   // Bouton par défaut (Entrée)  
 Button1.Cancel := True;    // Bouton annulation (Échap)
 
 // Personnalisation visuelle
-Button1.Font.Style := [fsBold];
+Button1.Font.Style := [fsBold];  
 Button1.Font.Color := clBlue;
 
 // Avec image
-Button1.Glyph.LoadFromFile('icon.bmp');
+Button1.Glyph.LoadFromFile('icon.bmp');  
 Button1.Layout := blGlyphLeft;  // Position de l'image
 
 // Action
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 begin
   // Identifier qui a appelé
   if Sender = Button1 then
@@ -360,8 +360,8 @@ BitBtn1.Kind := bkOK;  // Boutons prédéfinis avec icônes
 // Autres : bkCancel, bkHelp, bkYes, bkNo, bkClose, bkRetry
 
 // Personnalisé
-BitBtn1.Kind := bkCustom;
-BitBtn1.Caption := 'Imprimer';
+BitBtn1.Kind := bkCustom;  
+BitBtn1.Caption := 'Imprimer';  
 BitBtn1.Glyph.LoadFromFile('printer.png');
 ```
 
@@ -370,15 +370,15 @@ BitBtn1.Glyph.LoadFromFile('printer.png');
 Bouton plat, idéal pour les barres d'outils.
 
 ```pascal
-SpeedButton1.Flat := True;
-SpeedButton1.Glyph.LoadFromFile('save.png');
-SpeedButton1.ShowHint := True;
+SpeedButton1.Flat := True;  
+SpeedButton1.Glyph.LoadFromFile('save.png');  
+SpeedButton1.ShowHint := True;  
 SpeedButton1.Hint := 'Sauvegarder le document';
 
 // Groupes de boutons (un seul enfoncé à la fois)
-SpeedButton1.GroupIndex := 1;
-SpeedButton2.GroupIndex := 1;
-SpeedButton3.GroupIndex := 1;
+SpeedButton1.GroupIndex := 1;  
+SpeedButton2.GroupIndex := 1;  
+SpeedButton3.GroupIndex := 1;  
 SpeedButton1.Down := True;  // Enfoncé par défaut
 ```
 
@@ -388,20 +388,20 @@ Pour créer des barres d'outils professionnelles.
 
 ```pascal
 // Créer la barre
-ToolBar1 := TToolBar.Create(Self);
-ToolBar1.Parent := Form1;
+ToolBar1 := TToolBar.Create(Self);  
+ToolBar1.Parent := Form1;  
 ToolBar1.Images := ImageList1;  // Liste d'images pour les boutons
 
 // Ajouter des boutons
-btnNew := TToolButton.Create(ToolBar1);
-btnNew.Parent := ToolBar1;
-btnNew.Caption := 'Nouveau';
-btnNew.ImageIndex := 0;
+btnNew := TToolButton.Create(ToolBar1);  
+btnNew.Parent := ToolBar1;  
+btnNew.Caption := 'Nouveau';  
+btnNew.ImageIndex := 0;  
 btnNew.OnClick := @NewFileClick;
 
 // Séparateur
-btnSep := TToolButton.Create(ToolBar1);
-btnSep.Parent := ToolBar1;
+btnSep := TToolButton.Create(ToolBar1);  
+btnSep.Parent := ToolBar1;  
 btnSep.Style := tbsSeparator;
 ```
 
@@ -412,19 +412,19 @@ btnSep.Style := tbsSeparator;
 Le composant le plus simple pour afficher du texte.
 
 ```pascal
-Label1.Caption := 'Nom d''utilisateur :';
+Label1.Caption := 'Nom d''utilisateur :';  
 Label1.Font.Style := [fsBold];
 
 // Alignement
-Label1.Alignment := taCenter;  // taLeftJustify, taRightJustify
+Label1.Alignment := taCenter;  // taLeftJustify, taRightJustify  
 Label1.Layout := tlCenter;      // tlTop, tlBottom
 
 // Multi-ligne et retour automatique
-Label1.WordWrap := True;
+Label1.WordWrap := True;  
 Label1.AutoSize := False;  // Nécessaire pour WordWrap
 
 // Associer à un contrôle (focus avec Alt+N)
-Label1.Caption := '&Nom :';
+Label1.Caption := '&Nom :';  
 Label1.FocusControl := Edit1;
 ```
 
@@ -433,8 +433,8 @@ Label1.FocusControl := Edit1;
 Similaire à TLabel mais peut avoir une bordure et recevoir des événements souris.
 
 ```pascal
-StaticText1.BorderStyle := sbsSunken;
-StaticText1.Caption := 'Zone d''information';
+StaticText1.BorderStyle := sbsSunken;  
+StaticText1.Caption := 'Zone d''information';  
 StaticText1.OnClick := @StaticTextClick;  // Peut réagir au clic
 ```
 
@@ -448,16 +448,16 @@ Image1.Picture.LoadFromFile('photo.jpg');
 // Formats supportés : BMP, JPG, PNG, GIF, ICO, etc.
 
 // Options d'affichage
-Image1.Stretch := True;      // Étirer à la taille du composant
-Image1.Proportional := True; // Garder les proportions
+Image1.Stretch := True;      // Étirer à la taille du composant  
+Image1.Proportional := True; // Garder les proportions  
 Image1.Center := True;       // Centrer si plus petit
 
 // Effacer
 Image1.Picture.Clear;
 
 // Dessiner dynamiquement
-Image1.Canvas.Brush.Color := clYellow;
-Image1.Canvas.FillRect(0, 0, 100, 100);
+Image1.Canvas.Brush.Color := clYellow;  
+Image1.Canvas.FillRect(0, 0, 100, 100);  
 Image1.Canvas.TextOut(10, 10, 'Texte sur image');
 ```
 
@@ -469,8 +469,8 @@ Pour dessiner des formes simples.
 Shape1.Shape := stCircle;
 // Autres : stRectangle, stRoundRect, stEllipse, stSquare, stRoundSquare
 
-Shape1.Brush.Color := clBlue;
-Shape1.Pen.Color := clRed;
+Shape1.Brush.Color := clBlue;  
+Shape1.Pen.Color := clRed;  
 Shape1.Pen.Width := 3;
 ```
 
@@ -493,16 +493,16 @@ Bevel1.Style := bsLowered;   // Enfoncé
 Pour montrer l'avancement d'une opération.
 
 ```pascal
-ProgressBar1.Min := 0;
-ProgressBar1.Max := 100;
+ProgressBar1.Min := 0;  
+ProgressBar1.Max := 100;  
 ProgressBar1.Position := 0;
 
 // Style
-ProgressBar1.Style := pbstNormal;  // ou pbstMarquee (défilement)
+ProgressBar1.Style := pbstNormal;  // ou pbstMarquee (défilement)  
 ProgressBar1.Smooth := True;       // Animation fluide
 
 // Mise à jour
-for i := 1 to 100 do
+for i := 1 to 100 do  
 begin
   DoWork;
   ProgressBar1.Position := i;
@@ -515,14 +515,14 @@ end;
 Pour sélectionner une valeur dans une plage.
 
 ```pascal
-TrackBar1.Min := 0;
-TrackBar1.Max := 255;
-TrackBar1.Position := 128;
-TrackBar1.Frequency := 10;  // Marques tous les 10
+TrackBar1.Min := 0;  
+TrackBar1.Max := 255;  
+TrackBar1.Position := 128;  
+TrackBar1.Frequency := 10;  // Marques tous les 10  
 TrackBar1.TickStyle := tsAuto;
 
 // Réagir au changement
-procedure TForm1.TrackBar1Change(Sender: TObject);
+procedure TForm1.TrackBar1Change(Sender: TObject);  
 begin
   Label1.Caption := 'Volume : ' + IntToStr(TrackBar1.Position);
   SetVolume(TrackBar1.Position);
@@ -535,14 +535,14 @@ Souvent associé à un TEdit pour saisir des nombres.
 
 ```pascal
 // Association avec un Edit
-UpDown1.Associate := Edit1;
-UpDown1.Min := 0;
-UpDown1.Max := 100;
-UpDown1.Position := 50;
+UpDown1.Associate := Edit1;  
+UpDown1.Min := 0;  
+UpDown1.Max := 100;  
+UpDown1.Position := 50;  
 UpDown1.Increment := 5;  // Pas de 5
 
 // Sans association
-procedure TForm1.UpDown1Click(Sender: TObject; Button: TUDBtnType);
+procedure TForm1.UpDown1Click(Sender: TObject; Button: TUDBtnType);  
 begin
   if Button = btNext then
     IncreaseValue
@@ -556,13 +556,13 @@ end;
 Combine TEdit et TUpDown en un seul composant.
 
 ```pascal
-SpinEdit1.MinValue := 1;
-SpinEdit1.MaxValue := 99;
-SpinEdit1.Value := 10;
+SpinEdit1.MinValue := 1;  
+SpinEdit1.MaxValue := 99;  
+SpinEdit1.Value := 10;  
 SpinEdit1.Increment := 1;
 
 // Version pour décimaux : TFloatSpinEdit
-FloatSpinEdit1.DecimalPlaces := 2;
+FloatSpinEdit1.DecimalPlaces := 2;  
 FloatSpinEdit1.Value := 3.14;
 ```
 
@@ -574,15 +574,15 @@ Pour saisir facilement dates et heures.
 
 ```pascal
 // Mode date
-DateTimePicker1.Kind := dtkDate;
-DateTimePicker1.Date := Now;
-DateTimePicker1.DateFormat := dfShort;  // ou dfLong
-DateTimePicker1.MinDate := EncodeDate(2020, 1, 1);
+DateTimePicker1.Kind := dtkDate;  
+DateTimePicker1.Date := Now;  
+DateTimePicker1.DateFormat := dfShort;  // ou dfLong  
+DateTimePicker1.MinDate := EncodeDate(2020, 1, 1);  
 DateTimePicker1.MaxDate := EncodeDate(2030, 12, 31);
 
 // Mode heure
-DateTimePicker2.Kind := dtkTime;
-DateTimePicker2.Time := Now;
+DateTimePicker2.Kind := dtkTime;  
+DateTimePicker2.Time := Now;  
 DateTimePicker2.TimeFormat := tf24;  // ou tf12
 
 // Récupérer la valeur
@@ -594,10 +594,10 @@ ShowMessage('Date choisie : ' + DateToStr(DateTimePicker1.Date));
 Affiche un calendrier complet.
 
 ```pascal
-Calendar1.Date := Date;  // Date d'aujourd'hui
+Calendar1.Date := Date;  // Date d'aujourd'hui  
 Calendar1.OnChange := @CalendarChange;
 
-procedure TForm1.CalendarChange(Sender: TObject);
+procedure TForm1.CalendarChange(Sender: TObject);  
 begin
   ShowMessage('Date sélectionnée : ' + DateToStr(Calendar1.Date));
 end;
@@ -611,23 +611,23 @@ Pour afficher des données en tableau.
 
 ```pascal
 // Configuration
-StringGrid1.ColCount := 5;
-StringGrid1.RowCount := 10;
-StringGrid1.FixedCols := 1;  // Première colonne fixe
+StringGrid1.ColCount := 5;  
+StringGrid1.RowCount := 10;  
+StringGrid1.FixedCols := 1;  // Première colonne fixe  
 StringGrid1.FixedRows := 1;  // Première ligne fixe (en-têtes)
 
 // En-têtes
-StringGrid1.Cells[1, 0] := 'Nom';
-StringGrid1.Cells[2, 0] := 'Prénom';
+StringGrid1.Cells[1, 0] := 'Nom';  
+StringGrid1.Cells[2, 0] := 'Prénom';  
 StringGrid1.Cells[3, 0] := 'Age';
 
 // Données
-StringGrid1.Cells[1, 1] := 'Dupont';
-StringGrid1.Cells[2, 1] := 'Jean';
+StringGrid1.Cells[1, 1] := 'Dupont';  
+StringGrid1.Cells[2, 1] := 'Jean';  
 StringGrid1.Cells[3, 1] := '25';
 
 // Options utiles
-StringGrid1.Options := StringGrid1.Options + [goEditing];  // Édition
+StringGrid1.Options := StringGrid1.Options + [goEditing];  // Édition  
 StringGrid1.Options := StringGrid1.Options + [goRowSelect]; // Sélection ligne
 ```
 
@@ -637,14 +637,14 @@ Pour des listes complexes avec plusieurs colonnes et icônes.
 
 ```pascal
 // Configuration des colonnes
-ListView1.ViewStyle := vsReport;
-ListView1.Columns.Add.Caption := 'Nom';
-ListView1.Columns[0].Width := 150;
-ListView1.Columns.Add.Caption := 'Taille';
+ListView1.ViewStyle := vsReport;  
+ListView1.Columns.Add.Caption := 'Nom';  
+ListView1.Columns[0].Width := 150;  
+ListView1.Columns.Add.Caption := 'Taille';  
 ListView1.Columns.Add.Caption := 'Date';
 
 // Ajouter des éléments
-with ListView1.Items.Add do
+with ListView1.Items.Add do  
 begin
   Caption := 'Document.txt';     // Première colonne
   SubItems.Add('12 KB');         // Deuxième colonne
@@ -653,8 +653,8 @@ begin
 end;
 
 // Autres styles de vue
-ListView1.ViewStyle := vsIcon;   // Grandes icônes
-ListView1.ViewStyle := vsList;   // Liste simple
+ListView1.ViewStyle := vsIcon;   // Grandes icônes  
+ListView1.ViewStyle := vsList;   // Liste simple  
 ListView1.ViewStyle := vsSmallIcon; // Petites icônes
 ```
 
@@ -680,7 +680,7 @@ begin
 end;
 
 // Réagir à la sélection
-procedure TForm1.TreeView1Change(Sender: TObject; Node: TTreeNode);
+procedure TForm1.TreeView1Change(Sender: TObject; Node: TTreeNode);  
 begin
   if Node <> nil then
     ShowMessage('Sélection : ' + Node.Text);
@@ -695,11 +695,11 @@ Tous les contrôles visuels partagent ces propriétés :
 
 ```pascal
 // Position absolue
-Control.Left := 10;
+Control.Left := 10;  
 Control.Top := 20;
 
 // Taille
-Control.Width := 200;
+Control.Width := 200;  
 Control.Height := 30;
 
 // Tout en une fois
@@ -716,9 +716,9 @@ Control.Anchors := [akLeft, akTop, akRight];  // S'étire horizontalement
 ### Visibilité et activation
 
 ```pascal
-Control.Visible := False;   // Cacher
-Control.Enabled := False;   // Désactiver (grisé)
-Control.TabStop := True;    // Peut recevoir le focus avec Tab
+Control.Visible := False;   // Cacher  
+Control.Enabled := False;   // Désactiver (grisé)  
+Control.TabStop := True;    // Peut recevoir le focus avec Tab  
 Control.TabOrder := 0;      // Ordre dans la séquence Tab
 ```
 
@@ -726,13 +726,13 @@ Control.TabOrder := 0;      // Ordre dans la séquence Tab
 
 ```pascal
 // Police
-Control.Font.Name := 'Arial';
-Control.Font.Size := 12;
-Control.Font.Style := [fsBold, fsItalic];
+Control.Font.Name := 'Arial';  
+Control.Font.Size := 12;  
+Control.Font.Style := [fsBold, fsItalic];  
 Control.Font.Color := clBlue;
 
 // Couleurs
-Control.Color := clWindow;      // Couleur de fond
+Control.Color := clWindow;      // Couleur de fond  
 Control.ParentColor := True;    // Utiliser la couleur du parent
 
 // Curseur souris
@@ -740,7 +740,7 @@ Control.Cursor := crHandPoint;  // Main
 // crDefault, crCross, crHelp, crHourGlass, etc.
 
 // Bulles d'aide
-Control.ShowHint := True;
+Control.ShowHint := True;  
 Control.Hint := 'Ceci est une aide contextuelle';
 ```
 
@@ -750,24 +750,24 @@ La plupart des composants partagent ces événements :
 
 ```pascal
 // Souris
-OnClick         // Clic simple
-OnDblClick      // Double-clic
-OnMouseEnter    // Souris entre
-OnMouseLeave    // Souris sort
-OnMouseMove     // Mouvement souris
+OnClick         // Clic simple  
+OnDblClick      // Double-clic  
+OnMouseEnter    // Souris entre  
+OnMouseLeave    // Souris sort  
+OnMouseMove     // Mouvement souris  
 OnMouseDown/Up  // Bouton pressé/relâché
 
 // Clavier
-OnKeyDown       // Touche pressée
-OnKeyPress      // Caractère saisi
+OnKeyDown       // Touche pressée  
+OnKeyPress      // Caractère saisi  
 OnKeyUp         // Touche relâchée
 
 // Focus
-OnEnter         // Reçoit le focus
+OnEnter         // Reçoit le focus  
 OnExit          // Perd le focus
 
 // Général
-OnChange        // Contenu modifié
+OnChange        // Contenu modifié  
 OnResize        // Taille changée
 ```
 
@@ -785,7 +785,7 @@ OnResize        // Taille changée
 
 ```pascal
 // Pour de nombreuses modifications, suspendre les mises à jour
-ListBox1.Items.BeginUpdate;
+ListBox1.Items.BeginUpdate;  
 try
   for i := 1 to 1000 do
     ListBox1.Items.Add('Item ' + IntToStr(i));
@@ -794,8 +794,8 @@ finally
 end;
 
 // Désactiver temporairement les événements
-OldOnChange := Edit1.OnChange;
-Edit1.OnChange := nil;
+OldOnChange := Edit1.OnChange;  
+Edit1.OnChange := nil;  
 try
   Edit1.Text := 'Nouvelle valeur';  // Pas d'événement déclenché
 finally
@@ -816,7 +816,7 @@ end;
 Parfois, vous devez créer des composants pendant l'exécution :
 
 ```pascal
-procedure TForm1.CreateDynamicButton;
+procedure TForm1.CreateDynamicButton;  
 var
   NewButton: TButton;
 begin
@@ -830,7 +830,7 @@ begin
   FDynamicButtons.Add(NewButton);
 end;
 
-procedure TForm1.DynamicButtonClick(Sender: TObject);
+procedure TForm1.DynamicButtonClick(Sender: TObject);  
 begin
   ShowMessage('Bouton dynamique cliqué : ' + TButton(Sender).Caption);
 end;

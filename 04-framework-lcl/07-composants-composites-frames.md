@@ -27,13 +27,13 @@ Les **frames** (TFrame) sont l'outil principal de Lazarus pour créer des compos
 
 ```pascal
 // Panel simple - création par code
-Panel1 := TPanel.Create(Self);
-Panel1.Parent := Form1;
-Button1 := TButton.Create(Panel1);
+Panel1 := TPanel.Create(Self);  
+Panel1.Parent := Form1;  
+Button1 := TButton.Create(Panel1);  
 Button1.Parent := Panel1;
 
 // Frame - déjà conçu visuellement
-Frame1 := TMyFrame.Create(Self);
+Frame1 := TMyFrame.Create(Self);  
 Frame1.Parent := Form1;
 // Tous les composants du frame sont déjà créés !
 ```
@@ -104,7 +104,7 @@ implementation
 
 {$R *.lfm}
 
-constructor TAddressFrame.Create(AOwner: TComponent);
+constructor TAddressFrame.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -123,13 +123,13 @@ begin
   FRequired := False;
 end;
 
-function TAddressFrame.GetAddress: string;
+function TAddressFrame.GetAddress: string;  
 begin
   Result := Format('%s, %s %s, %s',
     [edtStreet.Text, edtPostalCode.Text, edtCity.Text, cboCountry.Text]);
 end;
 
-procedure TAddressFrame.SetAddress(const Value: string);
+procedure TAddressFrame.SetAddress(const Value: string);  
 begin
   // Analyse simplifiée de l'adresse
   // Dans un vrai projet, utilisez un parser plus sophistiqué
@@ -142,7 +142,7 @@ begin
   end;
 end;
 
-procedure TAddressFrame.Clear;
+procedure TAddressFrame.Clear;  
 begin
   edtStreet.Clear;
   edtCity.Clear;
@@ -150,7 +150,7 @@ begin
   cboCountry.ItemIndex := -1;
 end;
 
-function TAddressFrame.IsValid: Boolean;
+function TAddressFrame.IsValid: Boolean;  
 begin
   Result := True;
 
@@ -174,7 +174,7 @@ begin
   end;
 end;
 
-function TAddressFrame.IsEmpty: Boolean;
+function TAddressFrame.IsEmpty: Boolean;  
 begin
   Result := (Trim(edtStreet.Text) = '') and
             (Trim(edtCity.Text) = '') and
@@ -182,13 +182,13 @@ begin
             (cboCountry.ItemIndex < 0);
 end;
 
-procedure TAddressFrame.SetRequired(Value: Boolean);
+procedure TAddressFrame.SetRequired(Value: Boolean);  
 begin
   FRequired := Value;
   ValidateFields;
 end;
 
-procedure TAddressFrame.ValidateFields;
+procedure TAddressFrame.ValidateFields;  
 begin
   // Indicateur visuel pour les champs requis
   if FRequired then
@@ -207,7 +207,7 @@ begin
   end;
 end;
 
-procedure TAddressFrame.edtPostalCodeKeyPress(Sender: TObject; var Key: char);
+procedure TAddressFrame.edtPostalCodeKeyPress(Sender: TObject; var Key: char);  
 begin
   // Accepter uniquement les chiffres pour la France
   if cboCountry.Text = 'France' then
@@ -217,7 +217,7 @@ begin
   end;
 end;
 
-procedure TAddressFrame.FrameResize(Sender: TObject);
+procedure TAddressFrame.FrameResize(Sender: TObject);  
 begin
   // Adapter la disposition selon la taille
   if Width < 300 then
@@ -278,7 +278,7 @@ type
 
 implementation
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   // Créer le frame pour l'adresse personnelle
   FHomeAddress := TAddressFrame.Create(Self);
@@ -304,7 +304,7 @@ begin
   btnValidate.Top := 330;
 end;
 
-procedure TFormMain.btnValidateClick(Sender: TObject);
+procedure TFormMain.btnValidateClick(Sender: TObject);  
 begin
   // Valider les deux adresses
   if not FHomeAddress.IsValid then
@@ -399,7 +399,7 @@ uses
 
 {$R *.lfm}
 
-constructor TLoginFrame.Create(AOwner: TComponent);
+constructor TLoginFrame.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -414,13 +414,13 @@ begin
   UpdateUI;
 end;
 
-destructor TLoginFrame.Destroy;
+destructor TLoginFrame.Destroy;  
 begin
   // Nettoyer les ressources
   inherited Destroy;
 end;
 
-procedure TLoginFrame.SetState(Value: TLoginState);
+procedure TLoginFrame.SetState(Value: TLoginState);  
 begin
   if FState <> Value then
   begin
@@ -429,7 +429,7 @@ begin
   end;
 end;
 
-procedure TLoginFrame.UpdateUI;
+procedure TLoginFrame.UpdateUI;  
 begin
   case FState of
     lsLoggedOut:
@@ -492,12 +492,12 @@ begin
   end;
 end;
 
-procedure TLoginFrame.btnLoginClick(Sender: TObject);
+procedure TLoginFrame.btnLoginClick(Sender: TObject);  
 begin
   DoLogin;
 end;
 
-procedure TLoginFrame.DoLogin;
+procedure TLoginFrame.DoLogin;  
 begin
   // Validation des champs
   if Trim(edtUsername.Text) = '' then
@@ -536,7 +536,7 @@ begin
   end;
 end;
 
-function TLoginFrame.ValidateCredentials(const Username, Password: string): Boolean;
+function TLoginFrame.ValidateCredentials(const Username, Password: string): Boolean;  
 begin
   // Exemple simple - À remplacer par une vraie authentification
   Result := (Username = 'admin') and (Password = 'password');
@@ -547,7 +547,7 @@ begin
   // - Utiliser HTTPS pour la communication
 end;
 
-procedure TLoginFrame.LoadSavedCredentials;
+procedure TLoginFrame.LoadSavedCredentials;  
 var
   Ini: TIniFile;
 begin
@@ -561,7 +561,7 @@ begin
   end;
 end;
 
-procedure TLoginFrame.SaveCredentials;
+procedure TLoginFrame.SaveCredentials;  
 var
   Ini: TIniFile;
 begin
@@ -575,7 +575,7 @@ begin
   end;
 end;
 
-procedure TLoginFrame.edtPasswordKeyPress(Sender: TObject; var Key: char);
+procedure TLoginFrame.edtPasswordKeyPress(Sender: TObject; var Key: char);  
 begin
   if Key = #13 then  // Entrée
   begin
@@ -584,26 +584,26 @@ begin
   end;
 end;
 
-procedure TLoginFrame.btnCancelClick(Sender: TObject);
+procedure TLoginFrame.btnCancelClick(Sender: TObject);  
 begin
   Reset;
 end;
 
-procedure TLoginFrame.Reset;
+procedure TLoginFrame.Reset;  
 begin
   edtPassword.Clear;
   FAttemptCount := 0;
   SetState(lsLoggedOut);
 end;
 
-procedure TLoginFrame.Logout;
+procedure TLoginFrame.Logout;  
 begin
   Reset;
   if Assigned(FOnLogout) then
     FOnLogout(Self);
 end;
 
-procedure TLoginFrame.tmrTimeoutTimer(Sender: TObject);
+procedure TLoginFrame.tmrTimeoutTimer(Sender: TObject);  
 begin
   tmrTimeout.Enabled := False;
   FAttemptCount := 0;
@@ -663,20 +663,20 @@ type
 
 implementation
 
-constructor TBaseFrame.Create(AOwner: TComponent);
+constructor TBaseFrame.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FModified := False;
 end;
 
-procedure TBaseFrame.DoModified;
+procedure TBaseFrame.DoModified;  
 begin
   FModified := True;
   if Assigned(FOnModified) then
     FOnModified(Self);
 end;
 
-procedure TBaseFrame.SetModified(Value: Boolean);
+procedure TBaseFrame.SetModified(Value: Boolean);  
 begin
   if FModified <> Value then
   begin
@@ -686,13 +686,13 @@ begin
   end;
 end;
 
-function TBaseFrame.ValidateData: Boolean;
+function TBaseFrame.ValidateData: Boolean;  
 begin
   // Validation de base
   Result := True;
 end;
 
-procedure TBaseFrame.ClearData;
+procedure TBaseFrame.ClearData;  
 begin
   // Réinitialisation de base
   FModified := False;
@@ -700,21 +700,21 @@ end;
 
 { TCustomerFrame }
 
-procedure TCustomerFrame.DoModified;
+procedure TCustomerFrame.DoModified;  
 begin
   inherited DoModified;
   // Actions spécifiques au frame client
   Caption := Caption + ' *';  // Indicateur de modification
 end;
 
-procedure TCustomerFrame.LoadData;
+procedure TCustomerFrame.LoadData;  
 begin
   // Charger les données du client
   // SELECT * FROM Customers WHERE ID = FCustomerID
   Modified := False;
 end;
 
-procedure TCustomerFrame.SaveData;
+procedure TCustomerFrame.SaveData;  
 begin
   if not ValidateData then
     raise Exception.Create('Données invalides');
@@ -724,7 +724,7 @@ begin
   Modified := False;
 end;
 
-function TCustomerFrame.ValidateData: Boolean;
+function TCustomerFrame.ValidateData: Boolean;  
 begin
   Result := inherited ValidateData;
 
@@ -781,33 +781,33 @@ implementation
 var
   GMediatorInstance: TFrameMediator = nil;
 
-function Mediator: TFrameMediator;
+function Mediator: TFrameMediator;  
 begin
   if not Assigned(GMediatorInstance) then
     GMediatorInstance := TFrameMediator.Create;
   Result := GMediatorInstance;
 end;
 
-constructor TFrameMediator.Create;
+constructor TFrameMediator.Create;  
 begin
   FFrames := TObjectList.Create(False);  // Ne pas posséder les frames
   FMessages := TQueue.Create;
 end;
 
-destructor TFrameMediator.Destroy;
+destructor TFrameMediator.Destroy;  
 begin
   FMessages.Free;
   FFrames.Free;
   inherited;
 end;
 
-procedure TFrameMediator.RegisterFrame(Frame: TFrame);
+procedure TFrameMediator.RegisterFrame(Frame: TFrame);  
 begin
   if FFrames.IndexOf(Frame) = -1 then
     FFrames.Add(Frame);
 end;
 
-procedure TFrameMediator.UnregisterFrame(Frame: TFrame);
+procedure TFrameMediator.UnregisterFrame(Frame: TFrame);  
 begin
   FFrames.Remove(Frame);
 end;
@@ -832,7 +832,7 @@ begin
   SendMessage(nil, MsgType, Data);
 end;
 
-procedure TFrameMediator.ProcessMessages;
+procedure TFrameMediator.ProcessMessages;  
 var
   Msg: TFrameMessage;
   i: Integer;
@@ -903,7 +903,7 @@ type
 
 implementation
 
-constructor TOptimizedFrame.Create(AOwner: TComponent);
+constructor TOptimizedFrame.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -916,13 +916,13 @@ begin
   FLazyLoadTimer.OnTimer := @LazyLoadTimerTimer;
 end;
 
-destructor TOptimizedFrame.Destroy;
+destructor TOptimizedFrame.Destroy;  
 begin
   FreeResources;
   inherited Destroy;
 end;
 
-procedure TOptimizedFrame.SetParent(NewParent: TWinControl);
+procedure TOptimizedFrame.SetParent(NewParent: TWinControl);  
 begin
   if (NewParent <> nil) and not FResourcesLoaded then
   begin
@@ -938,7 +938,7 @@ begin
   inherited SetParent(NewParent);
 end;
 
-procedure TOptimizedFrame.VisibleChanging;
+procedure TOptimizedFrame.VisibleChanging;  
 begin
   inherited;
 
@@ -948,7 +948,7 @@ begin
     OptimizeForHidden;
 end;
 
-procedure TOptimizedFrame.LoadResources;
+procedure TOptimizedFrame.LoadResources;  
 begin
   if FResourcesLoaded then Exit;
 
@@ -960,7 +960,7 @@ begin
   FResourcesLoaded := True;
 end;
 
-procedure TOptimizedFrame.FreeResources;
+procedure TOptimizedFrame.FreeResources;  
 begin
   if not FResourcesLoaded then Exit;
 
@@ -969,7 +969,7 @@ begin
   FResourcesLoaded := False;
 end;
 
-procedure TOptimizedFrame.LazyLoadTimerTimer(Sender: TObject);
+procedure TOptimizedFrame.LazyLoadTimerTimer(Sender: TObject);  
 begin
   FLazyLoadTimer.Enabled := False;
 
@@ -977,7 +977,7 @@ begin
     LoadResources;
 end;
 
-procedure TOptimizedFrame.OptimizeForDisplay;
+procedure TOptimizedFrame.OptimizeForDisplay;  
 begin
   // Activer les mises à jour visuelles
   DoubleBuffered := True;
@@ -987,7 +987,7 @@ begin
     LoadResources;
 end;
 
-procedure TOptimizedFrame.OptimizeForHidden;
+procedure TOptimizedFrame.OptimizeForHidden;  
 begin
   // Désactiver les mises à jour inutiles
   DoubleBuffered := False;
@@ -1026,13 +1026,13 @@ type
 
 implementation
 
-class constructor TFrameFactory.Create;
+class constructor TFrameFactory.Create;  
 begin
   FRegistry := TStringList.Create;
   FRegistry.Sorted := True;
 end;
 
-class destructor TFrameFactory.Destroy;
+class destructor TFrameFactory.Destroy;  
 begin
   FRegistry.Free;
 end;
@@ -1061,7 +1061,7 @@ begin
     raise Exception.CreateFmt('Frame "%s" non enregistré', [Name]);
 end;
 
-class function TFrameFactory.FrameExists(const Name: string): Boolean;
+class function TFrameFactory.FrameExists(const Name: string): Boolean;  
 begin
   Result := FRegistry.IndexOf(UpperCase(Name)) >= 0;
 end;
@@ -1103,7 +1103,7 @@ type
 
 implementation
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   FFrameCache := TStringList.Create;
   FFrameCache.OwnsObjects := True;
@@ -1123,13 +1123,13 @@ begin
   cboFrameSelector.ItemIndex := 0;
 end;
 
-destructor TMainForm.Destroy;
+destructor TMainForm.Destroy;  
 begin
   FFrameCache.Free;
   inherited;
 end;
 
-procedure TMainForm.btnCreateFrameClick(Sender: TObject);
+procedure TMainForm.btnCreateFrameClick(Sender: TObject);  
 var
   TabSheet: TTabSheet;
   FrameName: string;
@@ -1148,7 +1148,7 @@ begin
   PageControl.ActivePage := TabSheet;
 end;
 
-procedure TMainForm.LoadFrameIntoTab(const FrameName: string; TabSheet: TTabSheet);
+procedure TMainForm.LoadFrameIntoTab(const FrameName: string; TabSheet: TTabSheet);  
 var
   Frame: TFrame;
 begin
@@ -1160,7 +1160,7 @@ begin
   TabSheet.Tag := PtrInt(Frame);
 end;
 
-function TMainForm.GetOrCreateFrame(const FrameName: string): TFrame;
+function TMainForm.GetOrCreateFrame(const FrameName: string): TFrame;  
 var
   Index: Integer;
   CacheKey: string;
@@ -1181,7 +1181,7 @@ begin
   end;
 end;
 
-procedure TMainForm.ClearCurrentFrame;
+procedure TMainForm.ClearCurrentFrame;  
 begin
   if Assigned(FCurrentFrame) then
   begin
@@ -1190,7 +1190,7 @@ begin
   end;
 end;
 
-procedure TMainForm.PageControlChange(Sender: TObject);
+procedure TMainForm.PageControlChange(Sender: TObject);  
 var
   ActiveTab: TTabSheet;
 begin
@@ -1243,26 +1243,26 @@ type
 
 implementation
 
-constructor TConfigurableFrame.Create(AOwner: TComponent);
+constructor TConfigurableFrame.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FComponents := TStringList.Create;
   FComponents.OwnsObjects := True;
 end;
 
-destructor TConfigurableFrame.Destroy;
+destructor TConfigurableFrame.Destroy;  
 begin
   FComponents.Free;
   inherited;
 end;
 
-procedure TConfigurableFrame.LoadFromXML(const XMLFile: string);
+procedure TConfigurableFrame.LoadFromXML(const XMLFile: string);  
 begin
   FConfigFile := XMLFile;
   LoadConfiguration(XMLFile);
 end;
 
-procedure TConfigurableFrame.LoadConfiguration(const FileName: string);
+procedure TConfigurableFrame.LoadConfiguration(const FileName: string);  
 var
   Doc: TXMLDocument;
   Root, Node: TDOMNode;
@@ -1298,7 +1298,7 @@ begin
   end;
 end;
 
-procedure TConfigurableFrame.CreateControlFromXML(Node: TDOMNode; Parent: TWinControl);
+procedure TConfigurableFrame.CreateControlFromXML(Node: TDOMNode; Parent: TWinControl);  
 var
   ControlClass: TControlClass;
   Control: TControl;
@@ -1358,7 +1358,7 @@ begin
   end;
 end;
 
-function TConfigurableFrame.StringToControlClass(const ClassName: string): TControlClass;
+function TConfigurableFrame.StringToControlClass(const ClassName: string): TControlClass;  
 begin
   Result := nil;
 
@@ -1380,7 +1380,7 @@ begin
     Result := TListBox;
 end;
 
-function TConfigurableFrame.FindComponentByName(const Name: string): TComponent;
+function TConfigurableFrame.FindComponentByName(const Name: string): TComponent;  
 var
   Index: Integer;
 begin
@@ -1391,7 +1391,7 @@ begin
     Result := nil;
 end;
 
-procedure TConfigurableFrame.SaveToXML(const XMLFile: string);
+procedure TConfigurableFrame.SaveToXML(const XMLFile: string);  
 var
   Doc: TXMLDocument;
   Root, Node: TDOMNode;
@@ -1520,14 +1520,14 @@ implementation
 
 { TWorkerThread }
 
-constructor TWorkerThread.Create(AFrame: TThreadSafeFrame);
+constructor TWorkerThread.Create(AFrame: TThreadSafeFrame);  
 begin
   inherited Create(True);
   FFrame := AFrame;
   FreeOnTerminate := False;
 end;
 
-procedure TWorkerThread.Execute;
+procedure TWorkerThread.Execute;  
 var
   i: Integer;
 begin
@@ -1544,7 +1544,7 @@ begin
   end;
 end;
 
-procedure TWorkerThread.UpdateUI;
+procedure TWorkerThread.UpdateUI;  
 begin
   FFrame.AddData(FData);
   // Pas de variable Position ici : utiliser le pourcentage calculé
@@ -1553,7 +1553,7 @@ end;
 
 { TThreadSafeFrame }
 
-constructor TThreadSafeFrame.Create(AOwner: TComponent);
+constructor TThreadSafeFrame.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -1562,7 +1562,7 @@ begin
   FWorkerThread := nil;
 end;
 
-destructor TThreadSafeFrame.Destroy;
+destructor TThreadSafeFrame.Destroy;  
 begin
   if Assigned(FWorkerThread) then
   begin
@@ -1577,7 +1577,7 @@ begin
   inherited;
 end;
 
-procedure TThreadSafeFrame.StartButtonClick(Sender: TObject);
+procedure TThreadSafeFrame.StartButtonClick(Sender: TObject);  
 begin
   if Assigned(FWorkerThread) then
     Exit;
@@ -1593,7 +1593,7 @@ begin
   FWorkerThread.Start;
 end;
 
-procedure TThreadSafeFrame.StopButtonClick(Sender: TObject);
+procedure TThreadSafeFrame.StopButtonClick(Sender: TObject);  
 begin
   if not Assigned(FWorkerThread) then
     Exit;
@@ -1607,7 +1607,7 @@ begin
   StatusLabel.Caption := 'Arrêté';
 end;
 
-procedure TThreadSafeFrame.AddData(const Data: string);
+procedure TThreadSafeFrame.AddData(const Data: string);  
 begin
   FDataLock.Enter;
   try
@@ -1623,7 +1623,7 @@ begin
     TThread.Synchronize(nil, @ProcessDataQueue);
 end;
 
-procedure TThreadSafeFrame.ProcessDataQueue;
+procedure TThreadSafeFrame.ProcessDataQueue;  
 var
   Data: string;
 begin
@@ -1646,17 +1646,17 @@ begin
   end;
 end;
 
-procedure TThreadSafeFrame.DoUpdateProgress;
+procedure TThreadSafeFrame.DoUpdateProgress;  
 begin
   ProgressBar.Position := FPendingProgress;
 end;
 
-procedure TThreadSafeFrame.DoUpdateStatus;
+procedure TThreadSafeFrame.DoUpdateStatus;  
 begin
   StatusLabel.Caption := FPendingStatus;
 end;
 
-procedure TThreadSafeFrame.UpdateProgress(Position: Integer);
+procedure TThreadSafeFrame.UpdateProgress(Position: Integer);  
 begin
   if MainThreadID = GetCurrentThreadId then
     ProgressBar.Position := Position
@@ -1667,7 +1667,7 @@ begin
   end;
 end;
 
-procedure TThreadSafeFrame.UpdateStatus(const Status: string);
+procedure TThreadSafeFrame.UpdateStatus(const Status: string);  
 begin
   if MainThreadID = GetCurrentThreadId then
     StatusLabel.Caption := Status
@@ -1730,7 +1730,7 @@ uses
 
 { TFrameTestCase }
 
-procedure TFrameTestCase.SetUp;
+procedure TFrameTestCase.SetUp;  
 begin
   // Créer un formulaire de test
   FTestForm := TForm.Create(nil);
@@ -1739,13 +1739,13 @@ begin
   FTestFrame := nil;
 end;
 
-procedure TFrameTestCase.TearDown;
+procedure TFrameTestCase.TearDown;  
 begin
   FreeAndNil(FTestFrame);
   FreeAndNil(FTestForm);
 end;
 
-function TFrameTestCase.CreateTestFrame(FrameClass: TFrameClass): TFrame;
+function TFrameTestCase.CreateTestFrame(FrameClass: TFrameClass): TFrame;  
 begin
   Result := FrameClass.Create(FTestForm);
   Result.Parent := FTestForm;
@@ -1753,7 +1753,7 @@ begin
   FTestFrame := Result;
 end;
 
-procedure TFrameTestCase.SimulateClick(Control: TControl);
+procedure TFrameTestCase.SimulateClick(Control: TControl);  
 begin
   if Control is TButton then
     TButton(Control).Click
@@ -1761,7 +1761,7 @@ begin
     TCheckBox(Control).Checked := not TCheckBox(Control).Checked;
 end;
 
-procedure TFrameTestCase.SimulateKeyPress(Control: TWinControl; Key: Char);
+procedure TFrameTestCase.SimulateKeyPress(Control: TWinControl; Key: Char);  
 var
   KeyEvent: Char;
 begin
@@ -1770,25 +1770,25 @@ begin
     TEdit(Control).OnKeyPress(Control, KeyEvent);
 end;
 
-procedure TFrameTestCase.SimulateText(Edit: TEdit; const Text: string);
+procedure TFrameTestCase.SimulateText(Edit: TEdit; const Text: string);  
 begin
   Edit.Text := Text;
   if Assigned(Edit.OnChange) then
     Edit.OnChange(Edit);
 end;
 
-function TFrameTestCase.GetControlByName(const Name: string): TControl;
+function TFrameTestCase.GetControlByName(const Name: string): TControl;  
 begin
   Result := FTestFrame.FindComponent(Name) as TControl;
 end;
 
-procedure TFrameTestCase.TestFrameCreation;
+procedure TFrameTestCase.TestFrameCreation;  
 begin
   AssertNotNull('Frame doit être créé', FTestFrame);
   AssertTrue('Frame doit avoir un parent', FTestFrame.Parent = FTestForm);
 end;
 
-procedure TFrameTestCase.TestFrameDestruction;
+procedure TFrameTestCase.TestFrameDestruction;  
 var
   Frame: TFrame;
 begin
@@ -1805,7 +1805,7 @@ begin
   AssertNull('Frame doit être nil après destruction', Frame);
 end;
 
-procedure TFrameTestCase.TestMemoryLeaks;
+procedure TFrameTestCase.TestMemoryLeaks;  
 var
   i: Integer;
   Frame: TFrame;
@@ -1828,7 +1828,7 @@ end;
 
 { TAddressFrameTest }
 
-procedure TAddressFrameTest.TestAddressValidation;
+procedure TAddressFrameTest.TestAddressValidation;  
 var
   Frame: TAddressFrame;
 begin
@@ -1848,7 +1848,7 @@ begin
   AssertTrue('Adresse complète doit être valide', Frame.IsValid);
 end;
 
-procedure TAddressFrameTest.TestPostalCodeFormat;
+procedure TAddressFrameTest.TestPostalCodeFormat;  
 var
   Frame: TAddressFrame;
   Key: Char;
@@ -1868,7 +1868,7 @@ begin
   AssertEquals('Les lettres doivent être refusées', #0, Key);
 end;
 
-procedure TAddressFrameTest.TestRequiredFields;
+procedure TAddressFrameTest.TestRequiredFields;  
 var
   Frame: TAddressFrame;
 begin
@@ -1888,7 +1888,7 @@ begin
     Pos('*', Frame.lblStreet.Caption) > 0);
 end;
 
-procedure TAddressFrameTest.TestClearFunction;
+procedure TAddressFrameTest.TestClearFunction;  
 var
   Frame: TAddressFrame;
 begin
@@ -2045,14 +2045,14 @@ implementation
 
 { TBasePresenter }
 
-constructor TBasePresenter.Create(AView: IView; AModel: IModel);
+constructor TBasePresenter.Create(AView: IView; AModel: IModel);  
 begin
   inherited Create;
   FView := AView;
   FModel := AModel;
 end;
 
-procedure TBasePresenter.LoadData;
+procedure TBasePresenter.LoadData;  
 begin
   try
     FView.SetEnabled(False);
@@ -2064,7 +2064,7 @@ begin
   end;
 end;
 
-procedure TBasePresenter.SaveData;
+procedure TBasePresenter.SaveData;  
 begin
   if not FModel.IsValid then
   begin
@@ -2075,7 +2075,7 @@ begin
   // Sauvegarder...
 end;
 
-procedure TBasePresenter.ValidateData;
+procedure TBasePresenter.ValidateData;  
 begin
   if FModel.IsValid then
     FView.ShowData('Validation réussie')
@@ -2085,17 +2085,17 @@ end;
 
 { TMVPFrame }
 
-procedure TMVPFrame.SetPresenter(APresenter: IPresenter);
+procedure TMVPFrame.SetPresenter(APresenter: IPresenter);  
 begin
   FPresenter := APresenter;
 end;
 
-procedure TMVPFrame.ShowError(const Error: string);
+procedure TMVPFrame.ShowError(const Error: string);  
 begin
   MessageDlg('Erreur', Error, mtError, [mbOK], 0);
 end;
 
-procedure TMVPFrame.SetEnabled(Value: Boolean);
+procedure TMVPFrame.SetEnabled(Value: Boolean);  
 begin
   Enabled := Value;
 end;
@@ -2164,12 +2164,12 @@ uses
 
 { TCustomerModel }
 
-function TCustomerModel.GetData: string;
+function TCustomerModel.GetData: string;  
 begin
   Result := Format('Nom: %s, Email: %s, Tél: %s', [FName, FEmail, FPhone]);
 end;
 
-procedure TCustomerModel.SetData(const Value: string);
+procedure TCustomerModel.SetData(const Value: string);  
 begin
   // Parser les données...
   FName := ExtractDelimited(1, Value, [',']);
@@ -2177,7 +2177,7 @@ begin
   FPhone := ExtractDelimited(3, Value, [',']);
 end;
 
-function TCustomerModel.IsValid: Boolean;
+function TCustomerModel.IsValid: Boolean;  
 begin
   Result := (FName <> '') and
             (Pos('@', FEmail) > 0) and
@@ -2186,7 +2186,7 @@ end;
 
 { TCustomerFrame }
 
-procedure TCustomerFrame.ShowData(const Data: string);
+procedure TCustomerFrame.ShowData(const Data: string);  
 var
   Model: TCustomerModel;
 begin
@@ -2200,20 +2200,20 @@ begin
   end;
 end;
 
-procedure TCustomerFrame.UpdateModel(Model: TCustomerModel);
+procedure TCustomerFrame.UpdateModel(Model: TCustomerModel);  
 begin
   Model.Name := edtName.Text;
   Model.Email := edtEmail.Text;
   Model.Phone := edtPhone.Text;
 end;
 
-procedure TCustomerFrame.btnLoadClick(Sender: TObject);
+procedure TCustomerFrame.btnLoadClick(Sender: TObject);  
 begin
   if Assigned(Presenter) then
     Presenter.LoadData;
 end;
 
-procedure TCustomerFrame.btnSaveClick(Sender: TObject);
+procedure TCustomerFrame.btnSaveClick(Sender: TObject);  
 begin
   if Presenter is TCustomerPresenter then
   begin
@@ -2222,7 +2222,7 @@ begin
   end;
 end;
 
-procedure TCustomerFrame.btnValidateClick(Sender: TObject);
+procedure TCustomerFrame.btnValidateClick(Sender: TObject);  
 begin
   if Presenter is TCustomerPresenter then
   begin
@@ -2233,12 +2233,12 @@ end;
 
 { TCustomerPresenter }
 
-function TCustomerPresenter.GetCustomerModel: TCustomerModel;
+function TCustomerPresenter.GetCustomerModel: TCustomerModel;  
 begin
   Result := FModel as TCustomerModel;
 end;
 
-procedure TCustomerPresenter.SaveData;
+procedure TCustomerPresenter.SaveData;  
 begin
   // Logique métier spécifique
   if not CustomerModel.IsValid then
@@ -2340,7 +2340,7 @@ implementation
 
 { TStatefulFrame }
 
-constructor TStatefulFrame.Create(AOwner: TComponent);
+constructor TStatefulFrame.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FStateHistory := TList.Create;
@@ -2350,7 +2350,7 @@ begin
   FState.Enter;
 end;
 
-destructor TStatefulFrame.Destroy;
+destructor TStatefulFrame.Destroy;  
 var
   i: Integer;
 begin
@@ -2367,7 +2367,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TStatefulFrame.SetState(NewState: TFrameState);
+procedure TStatefulFrame.SetState(NewState: TFrameState);  
 begin
   if Assigned(FState) then
     FState.Exit;
@@ -2378,13 +2378,13 @@ begin
     FState.Enter;
 end;
 
-procedure TStatefulFrame.ChangeState(NewState: TFrameState);
+procedure TStatefulFrame.ChangeState(NewState: TFrameState);  
 begin
   SaveStateToHistory;
   SetState(NewState);
 end;
 
-procedure TStatefulFrame.SaveStateToHistory;
+procedure TStatefulFrame.SaveStateToHistory;  
 begin
   if Assigned(FState) then
     FStateHistory.Add(FState);
@@ -2397,7 +2397,7 @@ begin
   end;
 end;
 
-procedure TStatefulFrame.RestoreStateFromHistory;
+procedure TStatefulFrame.RestoreStateFromHistory;  
 begin
   if FStateHistory.Count > 0 then
   begin
@@ -2412,48 +2412,48 @@ begin
   end;
 end;
 
-procedure TStatefulFrame.HandleInput(const Input: string);
+procedure TStatefulFrame.HandleInput(const Input: string);  
 begin
   if Assigned(FState) then
     FState.HandleInput(Input);
 end;
 
-procedure TStatefulFrame.Undo;
+procedure TStatefulFrame.Undo;  
 begin
   RestoreStateFromHistory;
 end;
 
-procedure TStatefulFrame.Redo;
+procedure TStatefulFrame.Redo;  
 begin
   // Implémenter la logique de redo
 end;
 
 { TFrameState }
 
-constructor TFrameState.Create(AContext: TStatefulFrame);
+constructor TFrameState.Create(AContext: TStatefulFrame);  
 begin
   inherited Create;
   FContext := AContext;
 end;
 
-procedure TFrameState.Enter;
+procedure TFrameState.Enter;  
 begin
   // Override dans les classes dérivées
 end;
 
-procedure TFrameState.Exit;
+procedure TFrameState.Exit;  
 begin
   // Override dans les classes dérivées
 end;
 
-procedure TFrameState.Update;
+procedure TFrameState.Update;  
 begin
   // Override si nécessaire
 end;
 
 { TIdleState }
 
-procedure TIdleState.Enter;
+procedure TIdleState.Enter;  
 begin
   // Configuration pour l'état idle
   if Assigned(FContext) then
@@ -2463,7 +2463,7 @@ begin
   end;
 end;
 
-procedure TIdleState.HandleInput(const Input: string);
+procedure TIdleState.HandleInput(const Input: string);  
 begin
   if Input = 'LOAD' then
     FContext.ChangeState(TLoadingState.Create(FContext))
@@ -2473,7 +2473,7 @@ end;
 
 { TLoadingState }
 
-procedure TLoadingState.Enter;
+procedure TLoadingState.Enter;  
 begin
   FContext.Cursor := crHourGlass;
   FContext.Enabled := False;
@@ -2485,14 +2485,14 @@ begin
   FLoadingTimer.Enabled := True;
 end;
 
-procedure TLoadingState.Exit;
+procedure TLoadingState.Exit;  
 begin
   FLoadingTimer.Free;
   FContext.Cursor := crDefault;
   FContext.Enabled := True;
 end;
 
-procedure TLoadingState.HandleInput(const Input: string);
+procedure TLoadingState.HandleInput(const Input: string);  
 begin
   if Input = 'CANCEL' then
   begin
@@ -2501,7 +2501,7 @@ begin
   end;
 end;
 
-procedure TLoadingState.OnLoadingComplete(Sender: TObject);
+procedure TLoadingState.OnLoadingComplete(Sender: TObject);  
 begin
   FLoadingTimer.Enabled := False;
   FContext.ChangeState(TIdleState.Create(FContext));
@@ -2509,13 +2509,13 @@ end;
 
 { TEditingState }
 
-procedure TEditingState.Enter;
+procedure TEditingState.Enter;  
 begin
   // Activer le mode édition
   FContext.Color := clInfoBk;
 end;
 
-procedure TEditingState.HandleInput(const Input: string);
+procedure TEditingState.HandleInput(const Input: string);  
 begin
   if Input = 'SAVE' then
     FContext.ChangeState(TIdleState.Create(FContext))
@@ -2525,19 +2525,19 @@ end;
 
 { TErrorState }
 
-constructor TErrorState.Create(AContext: TStatefulFrame; const ErrorMsg: string);
+constructor TErrorState.Create(AContext: TStatefulFrame; const ErrorMsg: string);  
 begin
   inherited Create(AContext);
   FErrorMessage := ErrorMsg;
 end;
 
-procedure TErrorState.Enter;
+procedure TErrorState.Enter;  
 begin
   FContext.Color := $FFE0E0;  // Rouge clair
   ShowMessage('Erreur : ' + FErrorMessage);
 end;
 
-procedure TErrorState.HandleInput(const Input: string);
+procedure TErrorState.HandleInput(const Input: string);  
 begin
   if Input = 'RETRY' then
     FContext.ChangeState(TLoadingState.Create(FContext))

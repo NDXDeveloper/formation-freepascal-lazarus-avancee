@@ -14,7 +14,7 @@ La LCL (Lazarus Component Library) est organisée comme un bâtiment à plusieur
 
 **L'étage supérieur (ce que vous voyez)** : C'est là où vous travaillez quotidiennement. Vous placez des boutons, des zones de texte, des menus. Vous écrivez du code comme :
 ```pascal
-Button1.Caption := 'Cliquez-moi';
+Button1.Caption := 'Cliquez-moi';  
 Edit1.Text := 'Bonjour';
 ```
 
@@ -119,10 +119,10 @@ Voyons ce qui se passe quand vous créez un bouton dans votre application :
 
 ```pascal
 // Votre code (identique sur toutes les plateformes)
-MonBouton := TButton.Create(Self);
-MonBouton.Caption := 'Cliquer ici';
-MonBouton.Left := 100;
-MonBouton.Top := 50;
+MonBouton := TButton.Create(Self);  
+MonBouton.Caption := 'Cliquer ici';  
+MonBouton.Left := 100;  
+MonBouton.Top := 50;  
 MonBouton.Parent := Form1;
 ```
 
@@ -254,7 +254,7 @@ Même si la LCL fait un excellent travail d'abstraction, certaines différences 
 Button1.Left := 100;
 
 // Préférez l'alignement et les ancres
-Button1.Align := alTop;
+Button1.Align := alTop;  
 Button1.BorderSpacing.Around := 8;
 ```
 
@@ -262,11 +262,11 @@ Button1.BorderSpacing.Around := 8;
 ```pascal
 uses InterfaceBase;
 
-if WidgetSet.LCLPlatform = lpGtk2 then
+if WidgetSet.LCLPlatform = lpGtk2 then  
 begin
   // Code spécifique GTK2
-end
-else if WidgetSet.LCLPlatform = lpWin32 then
+end  
+else if WidgetSet.LCLPlatform = lpWin32 then  
 begin
   // Code spécifique Windows
 end;
@@ -332,16 +332,16 @@ Pour des performances optimales :
 
 ```pascal
 // Mauvais : provoque plusieurs rafraîchissements
-Button1.Left := 10;
-Button1.Top := 20;
-Button1.Width := 100;
+Button1.Left := 10;  
+Button1.Top := 20;  
+Button1.Width := 100;  
 Button1.Height := 30;
 
 // Bon : un seul rafraîchissement
 Button1.SetBounds(10, 20, 100, 30);
 
 // Ou utiliser BeginUpdate/EndUpdate pour les modifications multiples
-ListView1.BeginUpdate;
+ListView1.BeginUpdate;  
 try
   // Plusieurs modifications...
 finally
@@ -365,7 +365,7 @@ DebugLn('Mon message de debug');
 
 **Vérifier le widgetset actif** :
 ```pascal
-ShowMessage('Widgetset: ' + WidgetSet.ClassName);
+ShowMessage('Widgetset: ' + WidgetSet.ClassName);  
 ShowMessage('Platform: ' + IntToStr(Ord(WidgetSet.LCLPlatform)));
 ```
 

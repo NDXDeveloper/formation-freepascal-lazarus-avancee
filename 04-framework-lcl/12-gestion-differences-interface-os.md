@@ -65,7 +65,7 @@ MainMenu1.Parent := Form1;
 ### Utiliser les directives de compilation
 
 ```pascal
-function ObtenirOS: string;
+function ObtenirOS: string;  
 begin
   {$IFDEF WINDOWS}
     Result := 'Windows';
@@ -94,7 +94,7 @@ uses
   {$ENDIF}
   SysUtils;
 
-function DetecterEnvironnement: string;
+function DetecterEnvironnement: string;  
 begin
   {$IFDEF WINDOWS}
     // Note : TOSVersion n'existe pas en FPC (Delphi uniquement)
@@ -116,7 +116,7 @@ end;
 ### Détection avancée pour Linux
 
 ```pascal
-function DetecterEnvironnementLinux: string;
+function DetecterEnvironnementLinux: string;  
 var
   Desktop: string;
 begin
@@ -143,7 +143,7 @@ end;
 type
   TButtonOrder = (boWindowsStyle, boMacStyle);
 
-function GetButtonOrder: TButtonOrder;
+function GetButtonOrder: TButtonOrder;  
 begin
   {$IFDEF DARWIN}
     Result := boMacStyle;
@@ -152,7 +152,7 @@ begin
   {$ENDIF}
 end;
 
-procedure OrganiserBoutons(BtnOK, BtnAnnuler: TButton; Parent: TWinControl);
+procedure OrganiserBoutons(BtnOK, BtnAnnuler: TButton; Parent: TWinControl);  
 var
   Marge: Integer;
 begin
@@ -197,7 +197,7 @@ end;
 ### Raccourcis clavier spécifiques à l'OS
 
 ```pascal
-function GetRaccourciCopier: TShortCut;
+function GetRaccourciCopier: TShortCut;  
 begin
   {$IFDEF DARWIN}
     // macOS utilise Cmd au lieu de Ctrl
@@ -208,7 +208,7 @@ begin
   {$ENDIF}
 end;
 
-procedure ConfigurerRaccourcis;
+procedure ConfigurerRaccourcis;  
 begin
   // Configuration adaptative des raccourcis
   ActionCopier.ShortCut := GetRaccourciCopier;
@@ -233,7 +233,7 @@ end;
 uses
   FileUtil, LazFileUtils;
 
-function GetDossierConfiguration: string;
+function GetDossierConfiguration: string;  
 begin
   {$IFDEF WINDOWS}
     // Windows : %APPDATA%\MonApp
@@ -246,7 +246,7 @@ begin
   {$ENDIF}
 end;
 
-function GetDossierDocuments: string;
+function GetDossierDocuments: string;  
 begin
   {$IFDEF WINDOWS}
     Result := GetWindowsSpecialDir(CSIDL_PERSONAL); // Mes Documents
@@ -259,7 +259,7 @@ begin
   {$ENDIF}
 end;
 
-function GetDossierTemp: string;
+function GetDossierTemp: string;  
 begin
   Result := GetTempDir; // Fonction cross-platform de Lazarus
   // Windows : %TEMP%
@@ -270,7 +270,7 @@ end;
 ### Chemins d'installation
 
 ```pascal
-function GetCheminInstallation: string;
+function GetCheminInstallation: string;  
 begin
   {$IFDEF WINDOWS}
     // Windows : Program Files
@@ -297,7 +297,7 @@ end;
 ### Utiliser les dialogues système
 
 ```pascal
-procedure OuvrirFichier;
+procedure OuvrirFichier;  
 var
   OpenDialog: TOpenDialog;
 begin
@@ -335,7 +335,7 @@ end;
 ### Messages et notifications
 
 ```pascal
-procedure AfficherNotification(const Titre, Message: string);
+procedure AfficherNotification(const Titre, Message: string);  
 begin
   {$IFDEF WINDOWS}
     // Windows : utiliser les notifications balloon ou toast
@@ -366,7 +366,7 @@ end;
 ### Formats d'icônes par OS
 
 ```pascal
-procedure ChargerIconeApplication;
+procedure ChargerIconeApplication;  
 var
   CheminIcone: string;
 begin
@@ -394,7 +394,7 @@ end;
 ### Tailles d'icônes recommandées
 
 ```pascal
-function GetTailleIconeStandard: Integer;
+function GetTailleIconeStandard: Integer;  
 begin
   {$IFDEF WINDOWS}
     Result := 16; // ou 32 pour les grandes icônes
@@ -419,7 +419,7 @@ end;
 ### Obtenir les polices par défaut
 
 ```pascal
-function GetPoliceSysteme: string;
+function GetPoliceSysteme: string;  
 begin
   {$IFDEF WINDOWS}
     Result := 'Segoe UI'; // Windows 10/11
@@ -448,7 +448,7 @@ begin
   {$ENDIF}
 end;
 
-procedure AppliquerPoliceSysteme(Control: TControl);
+procedure AppliquerPoliceSysteme(Control: TControl);  
 begin
   Control.Font.Name := GetPoliceSysteme;
 end;
@@ -457,7 +457,7 @@ end;
 ### Tailles de police appropriées
 
 ```pascal
-function GetTaillePoliceDefaut: Integer;
+function GetTaillePoliceDefaut: Integer;  
 begin
   {$IFDEF WINDOWS}
     Result := 9; // Points
@@ -478,7 +478,7 @@ end;
 ### Fermeture d'application
 
 ```pascal
-procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: Boolean);  
 begin
   {$IFDEF DARWIN}
     // Sur macOS, fermer la fenêtre ne quitte pas l'app
@@ -496,7 +496,7 @@ end;
 ### Minimisation et systray
 
 ```pascal
-procedure GererMinimisation;
+procedure GererMinimisation;  
 begin
   {$IFDEF WINDOWS}
     // Windows : minimiser dans le systray
@@ -528,7 +528,7 @@ end;
 ### Respecter le thème système
 
 ```pascal
-procedure AppliquerThemeSysteme;
+procedure AppliquerThemeSysteme;  
 begin
   {$IFDEF WINDOWS}
     // Windows : détecter le mode sombre (Windows 10+)
@@ -575,7 +575,7 @@ end;
 ### Couleurs système
 
 ```pascal
-procedure UtiliserCouleursSysteme;
+procedure UtiliserCouleursSysteme;  
 begin
   // Utiliser les couleurs système plutôt que des couleurs fixes
   Panel1.Color := clBtnFace;        // Couleur de fond des boutons
@@ -592,7 +592,7 @@ end;
 ### Associations de fichiers
 
 ```pascal
-function GetIconePourExtension(const Extension: string): TIcon;
+function GetIconePourExtension(const Extension: string): TIcon;  
 begin
   Result := TIcon.Create;
 
@@ -617,7 +617,7 @@ end;
 uses
   LCLIntf; // Pour OpenDocument
 
-procedure OuvrirAvecAppParDefaut(const Fichier: string);
+procedure OuvrirAvecAppParDefaut(const Fichier: string);  
 begin
   // OpenDocument est cross-platform
   OpenDocument(Fichier);
@@ -642,7 +642,7 @@ end;
 ### Position et comportement
 
 ```pascal
-procedure TForm1.ShowContextMenu(X, Y: Integer);
+procedure TForm1.ShowContextMenu(X, Y: Integer);  
 begin
   {$IFDEF DARWIN}
     // macOS : Ctrl+Click au lieu du clic droit
@@ -684,7 +684,7 @@ type
     class function GetFileDialogFilter(const Description, Extension: string): string;
   end;
 
-class function TOSHelper.IsWindows: Boolean;
+class function TOSHelper.IsWindows: Boolean;  
 begin
   {$IFDEF WINDOWS}
     Result := True;
@@ -693,7 +693,7 @@ begin
   {$ENDIF}
 end;
 
-class function TOSHelper.GetPlatformName: string;
+class function TOSHelper.GetPlatformName: string;  
 begin
   {$IFDEF WINDOWS}
     Result := 'Windows';
@@ -709,7 +709,7 @@ begin
   {$ENDIF}
 end;
 
-class procedure TOSHelper.ConfigureForPlatform(AForm: TForm);
+class procedure TOSHelper.ConfigureForPlatform(AForm: TForm);  
 begin
   // Configuration automatique selon l'OS
   AForm.Font.Name := GetDefaultFont;
@@ -727,7 +727,7 @@ begin
   {$ENDIF}
 end;
 
-class function TOSHelper.GetFileDialogFilter(const Description, Extension: string): string;
+class function TOSHelper.GetFileDialogFilter(const Description, Extension: string): string;  
 begin
   {$IFDEF WINDOWS}
     // Windows utilise | comme séparateur
@@ -772,12 +772,12 @@ var
 
 implementation
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   ConfigurePourOS;
 end;
 
-procedure TMainForm.ConfigurePourOS;
+procedure TMainForm.ConfigurePourOS;  
 begin
   // Titre adapté
   Caption := 'MonApp - ' + TOSHelper.GetPlatformName;
@@ -821,7 +821,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TMainForm.ConfigurerBoutons;
+procedure TMainForm.ConfigurerBoutons;  
 begin
   // Ordre des boutons selon l'OS
   {$IFDEF DARWIN}
@@ -835,7 +835,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TMainForm.ConfigurerRaccourcis;
+procedure TMainForm.ConfigurerRaccourcis;  
 begin
   {$IFDEF DARWIN}
     // macOS utilise Cmd (Meta)

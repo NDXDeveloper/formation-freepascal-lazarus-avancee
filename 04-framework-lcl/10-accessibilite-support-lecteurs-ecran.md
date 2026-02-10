@@ -38,15 +38,15 @@ Button1.Caption := 'Enregistrer le document';
 
 #### La propriété `Hint`
 ```pascal
-Button1.Hint := 'Enregistre le document actuel sur le disque (Ctrl+S)';
+Button1.Hint := 'Enregistre le document actuel sur le disque (Ctrl+S)';  
 Button1.ShowHint := True;
 // Fournit une information supplémentaire
 ```
 
 #### La propriété `TabOrder`
 ```pascal
-Edit1.TabOrder := 0;  // Premier élément
-Edit2.TabOrder := 1;  // Deuxième élément
+Edit1.TabOrder := 0;  // Premier élément  
+Edit2.TabOrder := 1;  // Deuxième élément  
 Button1.TabOrder := 2; // Troisième élément
 ```
 
@@ -55,7 +55,7 @@ Button1.TabOrder := 2; // Troisième élément
 Pour les champs de saisie, il est essentiel d'associer un label descriptif :
 
 ```pascal
-Label1.Caption := '&Nom :';  // Le & indique le raccourci Alt+N
+Label1.Caption := '&Nom :';  // Le & indique le raccourci Alt+N  
 Label1.FocusControl := Edit1; // Association avec le champ de saisie
 ```
 
@@ -76,12 +76,12 @@ Pour les boutons avec seulement des icônes :
 
 ```pascal
 // Mauvaise pratique
-ToolButton1.Caption := '';
+ToolButton1.Caption := '';  
 ToolButton1.ImageIndex := 5; // Seulement une icône
 
 // Bonne pratique
-ToolButton1.Caption := 'Imprimer';
-ToolButton1.ImageIndex := 5;
+ToolButton1.Caption := 'Imprimer';  
+ToolButton1.ImageIndex := 5;  
 ToolButton1.Hint := 'Imprimer le document actuel';
 ```
 
@@ -90,7 +90,7 @@ ToolButton1.Hint := 'Imprimer le document actuel';
 Le focus doit être visible et logique :
 
 ```pascal
-procedure TForm1.FormShow(Sender: TObject);
+procedure TForm1.FormShow(Sender: TObject);  
 begin
   // Définir le focus initial sur le premier champ important
   Edit1.SetFocus;
@@ -103,11 +103,11 @@ Les raccourcis permettent une navigation rapide :
 
 ```pascal
 // Dans le caption, & définit le raccourci
-Button1.Caption := '&Ouvrir';     // Alt+O
+Button1.Caption := '&Ouvrir';     // Alt+O  
 Button2.Caption := '&Sauvegarder'; // Alt+S
 
 // Pour les menus
-MenuItem1.Caption := '&Fichier';
+MenuItem1.Caption := '&Fichier';  
 MenuItem1.ShortCut := ShortCut(Ord('O'), [ssCtrl]); // Ctrl+O
 ```
 
@@ -128,7 +128,7 @@ Les lecteurs d'écran peuvent détecter les changements dans la barre d'état.
 Pour les messages importants :
 
 ```pascal
-procedure AfficherMessageAccessible(const Message: string);
+procedure AfficherMessageAccessible(const Message: string);  
 begin
   // Le MessageDlg est accessible aux lecteurs d'écran
   MessageDlg(Message, mtInformation, [mbOK], 0);
@@ -157,7 +157,7 @@ uses
   Windows, // Pour les API Windows
   ComObj;  // Pour le support COM/MSAA
 
-procedure ConfigurerAccessibiliteWindows;
+procedure ConfigurerAccessibiliteWindows;  
 begin
   // S'assurer que les hints sont activés
   Application.ShowHint := True;
@@ -186,7 +186,7 @@ Les applications Lazarus avec widgetset GTK2/GTK3 supportent automatiquement l'a
 uses
   Interfaces; // Assure le bon widgetset
 
-procedure ConfigurerAccessibiliteLinux;
+procedure ConfigurerAccessibiliteLinux;  
 begin
   // GTK gère automatiquement l'accessibilité
   // S'assurer que les propriétés standards sont définies
@@ -218,9 +218,9 @@ GroupBox1.Caption := 'Informations personnelles';
 Pour les boutons radio, utilisez `TRadioGroup` :
 
 ```pascal
-RadioGroup1.Caption := 'Format d''export';
-RadioGroup1.Items.Add('PDF');
-RadioGroup1.Items.Add('Word');
+RadioGroup1.Caption := 'Format d''export';  
+RadioGroup1.Items.Add('PDF');  
+RadioGroup1.Items.Add('Word');  
 RadioGroup1.Items.Add('HTML');
 ```
 
@@ -232,7 +232,7 @@ Pour les `TListBox` et `TListView` :
 
 ```pascal
 // Fournir un label descriptif
-Label1.Caption := 'Liste des documents récents :';
+Label1.Caption := 'Liste des documents récents :';  
 Label1.FocusControl := ListBox1;
 
 // S'assurer que les éléments sont clairs
@@ -245,8 +245,8 @@ Pour les `TStringGrid` :
 
 ```pascal
 // Définir des en-têtes clairs
-StringGrid1.Cells[0, 0] := 'Nom';
-StringGrid1.Cells[1, 0] := 'Date';
+StringGrid1.Cells[0, 0] := 'Nom';  
+StringGrid1.Cells[1, 0] := 'Date';  
 StringGrid1.Cells[2, 0] := 'Taille';
 
 // Activer la navigation au clavier
@@ -258,7 +258,7 @@ StringGrid1.Options := StringGrid1.Options + [goRowSelect, goThumbTracking];
 ### Messages d'erreur explicites
 
 ```pascal
-procedure ValiderFormulaire;
+procedure ValiderFormulaire;  
 begin
   if Edit1.Text = '' then
   begin
@@ -278,7 +278,7 @@ end;
 
 ```pascal
 // Utiliser les couleurs système plutôt que des couleurs fixes
-Edit1.Color := clWindow;      // Couleur de fenêtre système
+Edit1.Color := clWindow;      // Couleur de fenêtre système  
 Edit1.Font.Color := clWindowText; // Couleur de texte système
 
 // Éviter
@@ -292,7 +292,7 @@ Edit1.Color := clYellow; // Peut être illisible
 Edit1.Color := clRed; // Pour indiquer une erreur
 
 // Bonne pratique : couleur + texte
-Edit1.Color := clRed;
+Edit1.Color := clRed;  
 Label2.Caption := '⚠ Erreur : Format invalide';
 ```
 
@@ -306,7 +306,7 @@ Incluez dans votre application :
 - Compatibilité avec les lecteurs d'écran
 
 ```pascal
-procedure AfficherAideAccessibilite;
+procedure AfficherAideAccessibilite;  
 var
   Message: string;
 begin
