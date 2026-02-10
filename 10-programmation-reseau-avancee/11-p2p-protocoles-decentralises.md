@@ -28,18 +28,18 @@ Le P2P (Peer-to-Peer ou pair-à-pair) est une architecture réseau où chaque pa
 
 ### Avantages du P2P
 
-✅ **Pas de point unique de défaillance** - Si un pair tombe, les autres continuent
-✅ **Scalabilité naturelle** - Plus il y a de pairs, plus le réseau est puissant
-✅ **Économie de bande passante** - Distribution de la charge
-✅ **Résistance à la censure** - Difficile de bloquer un réseau décentralisé
+✅ **Pas de point unique de défaillance** - Si un pair tombe, les autres continuent  
+✅ **Scalabilité naturelle** - Plus il y a de pairs, plus le réseau est puissant  
+✅ **Économie de bande passante** - Distribution de la charge  
+✅ **Résistance à la censure** - Difficile de bloquer un réseau décentralisé  
 ✅ **Coûts réduits** - Pas besoin d'infrastructure serveur massive
 
 ### Inconvénients du P2P
 
-❌ **Complexité accrue** - Plus difficile à programmer
-❌ **Sécurité délicate** - Chaque pair doit être sécurisé
-❌ **Découverte de pairs** - Comment trouver les autres pairs ?
-❌ **Données inconsistantes** - Synchronisation plus difficile
+❌ **Complexité accrue** - Plus difficile à programmer  
+❌ **Sécurité délicate** - Chaque pair doit être sécurisé  
+❌ **Découverte de pairs** - Comment trouver les autres pairs ?  
+❌ **Données inconsistantes** - Synchronisation plus difficile  
 ❌ **NAT et firewalls** - Problèmes de connectivité
 
 ### Exemples d'applications P2P
@@ -782,7 +782,7 @@ uses
 var
   Network: TP2PNetwork;
   Command: String;
-  Parts: TStringArray;
+  Parts: TStringList;
 
 procedure OnPeerConnected(Peer: TPeer);
 begin
@@ -827,45 +827,46 @@ begin
       if Command = '' then
         Continue;
 
-      Parts := Command.Split(' ');
+      Parts := TStringList.Create;
+      try
+        Parts.Delimiter := ' ';
+        Parts.StrictDelimiter := True;
+        Parts.DelimitedText := Command;
 
-      case LowerCase(Parts[0]) of
-        'connect':
+        if LowerCase(Parts[0]) = 'connect' then
+        begin
+          if Parts.Count >= 3 then
           begin
-            if Length(Parts) >= 3 then
-            begin
-              try
-                Network.ConnectToPeer(Parts[1], StrToInt(Parts[2]));
-                WriteLn('Connexion en cours...');
-              except
-                on E: Exception do
-                  WriteLn('Erreur : ', E.Message);
-              end;
-            end
-            else
-              WriteLn('Usage : connect <ip> <port>');
-          end;
-
-        'send':
+            try
+              Network.ConnectToPeer(Parts[1], StrToInt(Parts[2]));
+              WriteLn('Connexion en cours...');
+            except
+              on E: Exception do
+                WriteLn('Erreur : ', E.Message);
+            end;
+          end
+          else
+            WriteLn('Usage : connect <ip> <port>');
+        end
+        else if LowerCase(Parts[0]) = 'send' then
+        begin
+          if Parts.Count >= 2 then
           begin
-            if Length(Parts) >= 2 then
-            begin
-              Delete(Command, 1, 5);  // Enlever "send "
-              Network.Broadcast(Command);
-              WriteLn('Message envoyé');
-            end
-            else
-              WriteLn('Usage : send <message>');
-          end;
-
-        'peers':
-          WriteLn('Pairs connectés : ', Network.GetPeerCount);
-
-        'quit':
-          Break;
-
+            Delete(Command, 1, 5);  // Enlever "send "
+            Network.Broadcast(Command);
+            WriteLn('Message envoyé');
+          end
+          else
+            WriteLn('Usage : send <message>');
+        end
+        else if LowerCase(Parts[0]) = 'peers' then
+          WriteLn('Pairs connectés : ', Network.GetPeerCount)
+        else if LowerCase(Parts[0]) = 'quit' then
+          Break
         else
           WriteLn('Commande inconnue');
+      finally
+        Parts.Free;
       end;
 
     until False;
@@ -2035,25 +2036,22 @@ begin
 
   MsgType := JSON.U['type'];
 
-  case MsgType of
-    'hello':
-      begin
-        Username := JSON.U['username'];
-        WriteLn('[SYSTÈME] ', Username, ' a rejoint le chat');
-      end;
-
-    'message':
-      begin
-        Username := JSON.U['username'];
-        Message := JSON.U['message'];
-        WriteLn('[', Username, '] ', Message);
-      end;
-
-    'bye':
-      begin
-        Username := JSON.U['username'];
-        WriteLn('[SYSTÈME] ', Username, ' a quitté le chat');
-      end;
+  // case sur des chaînes n'est pas supporté en FreePascal
+  if MsgType = 'hello' then
+  begin
+    Username := JSON.U['username'];
+    WriteLn('[SYSTÈME] ', Username, ' a rejoint le chat');
+  end
+  else if MsgType = 'message' then
+  begin
+    Username := JSON.U['username'];
+    Message := JSON.U['message'];
+    WriteLn('[', Username, '] ', Message);
+  end
+  else if MsgType = 'bye' then
+  begin
+    Username := JSON.U['username'];
+    WriteLn('[SYSTÈME] ', Username, ' a quitté le chat');
   end;
 end;
 
@@ -2090,7 +2088,7 @@ uses
 var
   Chat: TP2PChat;
   Input: String;
-  Parts: TStringArray;
+  Parts: TStringList;
 begin
   Write('Votre pseudo : ');
   ReadLn(Input);
@@ -2113,20 +2111,25 @@ begin
 
       if Input[1] = '/' then
       begin
-        Parts := Input.Split(' ');
+        Parts := TStringList.Create;
+        try
+          Parts.Delimiter := ' ';
+          Parts.StrictDelimiter := True;
+          Parts.DelimitedText := Input;
 
-        case LowerCase(Parts[0]) of
-          '/connect':
-            if Length(Parts) >= 3 then
+          if LowerCase(Parts[0]) = '/connect' then
+          begin
+            if Parts.Count >= 3 then
               Chat.ConnectToPeer(Parts[1], StrToInt(Parts[2]))
             else
               WriteLn('Usage : /connect <ip> <port>');
-
-          '/quit':
-            Break;
-
+          end
+          else if LowerCase(Parts[0]) = '/quit' then
+            Break
           else
             WriteLn('Commande inconnue');
+        finally
+          Parts.Free;
         end;
       end
       else
@@ -2256,17 +2259,13 @@ begin
   JSON.InitJSON(Data);
   MsgType := JSON.U['type'];
 
-  case MsgType of
-    'list_request':
-      HandleFileListRequest(Peer);
-
-    'file_request':
-      HandleFileRequest(Peer, JSON.U['hash']);
-
-    'file_chunk':
-      HandleFileChunk(Peer, JSON.U['hash'], JSON.I['chunk'],
-                     Base64ToBin(JSON.U['data']));
-  end;
+  if MsgType = 'list_request' then
+    HandleFileListRequest(Peer)
+  else if MsgType = 'file_request' then
+    HandleFileRequest(Peer, JSON.U['hash'])
+  else if MsgType = 'file_chunk' then
+    HandleFileChunk(Peer, JSON.U['hash'], JSON.I['chunk'],
+                   Base64ToBin(JSON.U['data']));
 end;
 
 procedure TP2PFileShare.HandleFileListRequest(Peer: TPeer);
@@ -2836,18 +2835,18 @@ Dans ce tutoriel, nous avons couvert :
 
 ### Avantages du P2P
 
-✅ **Décentralisation** - Pas de point unique de défaillance
-✅ **Scalabilité** - Performance augmente avec le nombre de pairs
-✅ **Résilience** - Résistant à la censure et aux pannes
-✅ **Économie** - Pas besoin de serveurs coûteux
+✅ **Décentralisation** - Pas de point unique de défaillance  
+✅ **Scalabilité** - Performance augmente avec le nombre de pairs  
+✅ **Résilience** - Résistant à la censure et aux pannes  
+✅ **Économie** - Pas besoin de serveurs coûteux  
 ✅ **Confidentialité** - Données distribuées, pas centralisées
 
 ### Inconvénients et défis
 
-❌ **Complexité** - Plus difficile à implémenter que client-serveur
-❌ **Sécurité** - Chaque pair est une surface d'attaque
-❌ **NAT/Firewall** - Problèmes de connectivité
-❌ **Consistance** - Difficile de maintenir un état cohérent
+❌ **Complexité** - Plus difficile à implémenter que client-serveur  
+❌ **Sécurité** - Chaque pair est une surface d'attaque  
+❌ **NAT/Firewall** - Problèmes de connectivité  
+❌ **Consistance** - Difficile de maintenir un état cohérent  
 ❌ **Découverte** - Trouver les pairs n'est pas trivial
 
 ### Quand utiliser le P2P ?
@@ -3700,18 +3699,18 @@ end;
 
 Le développement P2P avec FreePascal/Lazarus offre :
 
-✅ **Performance** - Pas de goulot d'étranglement serveur
-✅ **Résilience** - Tolérance aux pannes
-✅ **Scalabilité** - Croissance organique
-✅ **Économie** - Infrastructure minimale
+✅ **Performance** - Pas de goulot d'étranglement serveur  
+✅ **Résilience** - Tolérance aux pannes  
+✅ **Scalabilité** - Croissance organique  
+✅ **Économie** - Infrastructure minimale  
 ✅ **Liberté** - Décentralisation et autonomie
 
 ### Défis à relever
 
-❌ **Complexité technique** - Architecture plus difficile
-❌ **NAT/Firewalls** - Connectivité problématique
-❌ **Sécurité** - Surface d'attaque distribuée
-❌ **Consistance** - État synchronisé difficile
+❌ **Complexité technique** - Architecture plus difficile  
+❌ **NAT/Firewalls** - Connectivité problématique  
+❌ **Sécurité** - Surface d'attaque distribuée  
+❌ **Consistance** - État synchronisé difficile  
 ❌ **Découverte** - Bootstrap nécessaire
 
 ### L'avenir du P2P

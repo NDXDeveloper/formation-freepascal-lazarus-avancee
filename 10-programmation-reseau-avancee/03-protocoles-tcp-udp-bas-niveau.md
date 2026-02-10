@@ -1172,11 +1172,11 @@ procedure HandleClientProtocol(ClientSock: TSocket);
 var
   Command: Byte;
   Data, Response: string;
-  Continue: Boolean;
+  KeepRunning: Boolean;
 begin
-  Continue := True;
+  KeepRunning := True;
 
-  while Continue do
+  while KeepRunning do
   begin
     if not ReceivePacket(ClientSock, Command, Data) then
     begin
@@ -1209,7 +1209,7 @@ begin
       CMD_QUIT:
         begin
           SendPacket(ClientSock, RESP_OK, 'Goodbye');
-          Continue := False;
+          KeepRunning := False;
         end;
 
     else
@@ -1987,7 +1987,8 @@ end;
 procedure RunEpollServer(ListenSock: TSocket);
 var
   EpollFD: Integer;
-  Event, Events: array[0..MAX_EVENTS - 1] of TEpollEvent;
+  Event: TEpollEvent;
+  Events: array[0..MAX_EVENTS - 1] of TEpollEvent;
   NumEvents, i: Integer;
   ClientSock: TSocket;
   ClientAddr: TInetSockAddr;

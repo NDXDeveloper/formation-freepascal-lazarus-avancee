@@ -780,14 +780,14 @@ Clients              Serveur
 
 ## Structure de cette section
 
-**10.8.1** : Named Pipes (Windows) - IPC Windows natif
-**10.8.2** : Unix Domain Sockets (Linux) - IPC Linux rapide
-**10.8.3** : Shared Memory - Mémoire partagée
-**10.8.4** : Message Queues - Files de messages
-**10.8.5** : JSON-RPC - RPC simple avec JSON
-**10.8.6** : XML-RPC - RPC avec XML
-**10.8.7** : Custom RPC - Protocole RPC personnalisé
-**10.8.8** : IPC Performance - Benchmarks et optimisations
+**10.8.1** : Named Pipes (Windows) - IPC Windows natif  
+**10.8.2** : Unix Domain Sockets (Linux) - IPC Linux rapide  
+**10.8.3** : Shared Memory - Mémoire partagée  
+**10.8.4** : Message Queues - Files de messages  
+**10.8.5** : JSON-RPC - RPC simple avec JSON  
+**10.8.6** : XML-RPC - RPC avec XML  
+**10.8.7** : Custom RPC - Protocole RPC personnalisé  
+**10.8.8** : IPC Performance - Benchmarks et optimisations  
 
 ## Prérequis
 

@@ -63,7 +63,7 @@ program MinimalHTTPServer;
 {$mode objfpc}{$H+}
 
 uses
-  SysUtils, Classes, Sockets;
+  SysUtils, Classes, StrUtils, Sockets;
 
 function ParseHTTPRequest(const Request: string; out Method, Path, Version: string): Boolean;
 var
@@ -756,44 +756,37 @@ var
 begin
   Ext := LowerCase(ExtractFileExt(FileName));
 
-  case Ext of
-    '.html', '.htm': Result := 'text/html';
-    '.css': Result := 'text/css';
-    '.js': Result := 'application/javascript';
-    '.json': Result := 'application/json';
-    '.xml': Result := 'application/xml';
-    '.txt': Result := 'text/plain';
-    '.csv': Result := 'text/csv';
-
-    '.jpg', '.jpeg': Result := 'image/jpeg';
-    '.png': Result := 'image/png';
-    '.gif': Result := 'image/gif';
-    '.bmp': Result := 'image/bmp';
-    '.ico': Result := 'image/x-icon';
-    '.svg': Result := 'image/svg+xml';
-    '.webp': Result := 'image/webp';
-
-    '.pdf': Result := 'application/pdf';
-    '.zip': Result := 'application/zip';
-    '.rar': Result := 'application/x-rar-compressed';
-    '.tar': Result := 'application/x-tar';
-    '.gz': Result := 'application/gzip';
-
-    '.mp3': Result := 'audio/mpeg';
-    '.wav': Result := 'audio/wav';
-    '.ogg': Result := 'audio/ogg';
-
-    '.mp4': Result := 'video/mp4';
-    '.avi': Result := 'video/x-msvideo';
-    '.webm': Result := 'video/webm';
-
-    '.woff': Result := 'font/woff';
-    '.woff2': Result := 'font/woff2';
-    '.ttf': Result := 'font/ttf';
-    '.otf': Result := 'font/otf';
-  else
-    Result := 'application/octet-stream';
-  end;
+  // case sur des chaînes n'est pas supporté en FreePascal
+  if (Ext = '.html') or (Ext = '.htm') then Result := 'text/html'
+  else if Ext = '.css' then Result := 'text/css'
+  else if Ext = '.js' then Result := 'application/javascript'
+  else if Ext = '.json' then Result := 'application/json'
+  else if Ext = '.xml' then Result := 'application/xml'
+  else if Ext = '.txt' then Result := 'text/plain'
+  else if Ext = '.csv' then Result := 'text/csv'
+  else if (Ext = '.jpg') or (Ext = '.jpeg') then Result := 'image/jpeg'
+  else if Ext = '.png' then Result := 'image/png'
+  else if Ext = '.gif' then Result := 'image/gif'
+  else if Ext = '.bmp' then Result := 'image/bmp'
+  else if Ext = '.ico' then Result := 'image/x-icon'
+  else if Ext = '.svg' then Result := 'image/svg+xml'
+  else if Ext = '.webp' then Result := 'image/webp'
+  else if Ext = '.pdf' then Result := 'application/pdf'
+  else if Ext = '.zip' then Result := 'application/zip'
+  else if Ext = '.rar' then Result := 'application/x-rar-compressed'
+  else if Ext = '.tar' then Result := 'application/x-tar'
+  else if Ext = '.gz' then Result := 'application/gzip'
+  else if Ext = '.mp3' then Result := 'audio/mpeg'
+  else if Ext = '.wav' then Result := 'audio/wav'
+  else if Ext = '.ogg' then Result := 'audio/ogg'
+  else if Ext = '.mp4' then Result := 'video/mp4'
+  else if Ext = '.avi' then Result := 'video/x-msvideo'
+  else if Ext = '.webm' then Result := 'video/webm'
+  else if Ext = '.woff' then Result := 'font/woff'
+  else if Ext = '.woff2' then Result := 'font/woff2'
+  else if Ext = '.ttf' then Result := 'font/ttf'
+  else if Ext = '.otf' then Result := 'font/otf'
+  else Result := 'application/octet-stream';
 end;
 
 function TFileServer.IsPathSafe(const Path: string): Boolean;
@@ -801,7 +794,7 @@ begin
   // Empêcher les attaques de type "directory traversal"
   Result := (Pos('..', Path) = 0) and
             (Pos('~', Path) = 0) and
-            not Path.StartsWith('/');
+            (Copy(Path, 1, 1) <> '/');
 end;
 
 function TFileServer.GetFullPath(const Path: string): string;
@@ -812,7 +805,7 @@ begin
   CleanPath := StringReplace(Path, '/', PathDelim, [rfReplaceAll]);
 
   // Suppression du / initial
-  if CleanPath.StartsWith(PathDelim) then
+  if Copy(CleanPath, 1, 1) = PathDelim then
     Delete(CleanPath, 1, 1);
 
   Result := FRootDirectory + CleanPath;
@@ -829,7 +822,7 @@ begin
   end;
 
   FullPath := GetFullPath(Path);
-  Result := FileExists(FullPath) and FullPath.StartsWith(FRootDirectory);
+  Result := FileExists(FullPath) and (Copy(FullPath, 1, Length(FRootDirectory)) = FRootDirectory);
 end;
 
 function TFileServer.ServeFile(const Path: string; out Content: string;
@@ -849,7 +842,7 @@ begin
   FullPath := GetFullPath(Path);
 
   // Vérification de sécurité
-  if not FullPath.StartsWith(FRootDirectory) then
+  if Copy(FullPath, 1, Length(FRootDirectory)) <> FRootDirectory then
     Exit;
 
   if not FileExists(FullPath) then
@@ -895,7 +888,7 @@ begin
 
   FullPath := GetFullPath(Path);
 
-  if not FullPath.StartsWith(FRootDirectory) then
+  if Copy(FullPath, 1, Length(FRootDirectory)) <> FRootDirectory then
   begin
     Result := '<html><body><h1>403 Forbidden</h1></body></html>';
     Exit;
@@ -1611,7 +1604,7 @@ begin
             SetResponseHeader(Response, 'Content-Type', 'application/json');
           end;
         end
-        else if Request.Path.StartsWith('/api/users/') then
+        else if Copy(Request.Path, 1, 11) = '/api/users/' then
         begin
           case Request.Method of
             hmGET: HandleGetUser(Request, Response);
@@ -2974,7 +2967,7 @@ var
   Content, ContentType: string;
 begin
   // Routing
-  if Request.Path.StartsWith('/api/') then
+  if Copy(Request.Path, 1, 5) = '/api/' then
   begin
     // API REST
     if Request.Path = '/api/time' then
@@ -3332,19 +3325,19 @@ Vous avez maintenant toutes les connaissances pour créer des serveurs HTTP/HTTP
 
 ### Ce que nous avons couvert
 
-✅ **Bases HTTP** : Requêtes, réponses, méthodes, headers
-✅ **Parsing HTTP** : Analyse complète des requêtes
-✅ **Routing** : Système de routes flexible
-✅ **Fichiers statiques** : Serveur de fichiers avec types MIME
-✅ **API REST** : CRUD complet avec JSON
-✅ **HTTPS/SSL** : Sécurisation avec OpenSSL
-✅ **Sessions** : Gestion des sessions utilisateur
-✅ **Multi-threading** : Performance avec threads
-✅ **Middleware** : Système de filtres extensible
-✅ **Logging** : Traçabilité et débogage
-✅ **Configuration** : Fichiers INI
-✅ **Sécurité** : Validation, sanitization
-✅ **Performance** : Cache, keep-alive, compression
+✅ **Bases HTTP** : Requêtes, réponses, méthodes, headers  
+✅ **Parsing HTTP** : Analyse complète des requêtes  
+✅ **Routing** : Système de routes flexible  
+✅ **Fichiers statiques** : Serveur de fichiers avec types MIME  
+✅ **API REST** : CRUD complet avec JSON  
+✅ **HTTPS/SSL** : Sécurisation avec OpenSSL  
+✅ **Sessions** : Gestion des sessions utilisateur  
+✅ **Multi-threading** : Performance avec threads  
+✅ **Middleware** : Système de filtres extensible  
+✅ **Logging** : Traçabilité et débogage  
+✅ **Configuration** : Fichiers INI  
+✅ **Sécurité** : Validation, sanitization  
+✅ **Performance** : Cache, keep-alive, compression  
 ✅ **Déploiement** : Production sur Linux et Windows
 
 ### Quand utiliser un serveur HTTP personnalisé ?

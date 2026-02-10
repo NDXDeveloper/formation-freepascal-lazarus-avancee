@@ -3560,11 +3560,11 @@ Dans ce tutoriel, nous avons couvert :
 
 ### Avantages de mORMot
 
-✅ **Performance exceptionnelle** - Parmi les plus rapides du marché
-✅ **Complet** - ORM, REST, SOA, JSON tout intégré
-✅ **Multi-plateforme** - Windows, Linux, BSD, Android
-✅ **Bien documenté** - Documentation extensive
-✅ **Open Source** - Code source disponible
+✅ **Performance exceptionnelle** - Parmi les plus rapides du marché  
+✅ **Complet** - ORM, REST, SOA, JSON tout intégré  
+✅ **Multi-plateforme** - Windows, Linux, BSD, Android  
+✅ **Bien documenté** - Documentation extensive  
+✅ **Open Source** - Code source disponible  
 ✅ **Actif** - Communauté et mises à jour régulières
 
 ### Quand utiliser mORMot ?

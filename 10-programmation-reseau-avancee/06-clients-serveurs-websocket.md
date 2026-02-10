@@ -525,35 +525,33 @@ begin
       TypeMsg := MsgJSON.Get('type', '');
       Contenu := MsgJSON.Get('contenu', '');
 
-      case TypeMsg of
-        'message':
-          begin
-            // Créer une réponse JSON
-            Reponse := TJSONObject.Create;
-            try
-              Reponse.Add('type', 'message');
-              Reponse.Add('expediteur', FPseudo);
-              Reponse.Add('contenu', Contenu);
-              Reponse.Add('timestamp', FormatDateTime('yyyy-mm-dd hh:nn:ss', Now));
+      // case sur des chaînes n'est pas supporté en FreePascal
+      if TypeMsg = 'message' then
+      begin
+        // Créer une réponse JSON
+        Reponse := TJSONObject.Create;
+        try
+          Reponse.Add('type', 'message');
+          Reponse.Add('expediteur', FPseudo);
+          Reponse.Add('contenu', Contenu);
+          Reponse.Add('timestamp', FormatDateTime('yyyy-mm-dd hh:nn:ss', Now));
 
-              // Diffuser
-              DiffuserMessage('', Reponse.AsJSON);
-            finally
-              Reponse.Free;
-            end;
-          end;
-
-        'ping':
-          begin
-            // Répondre avec un pong
-            Reponse := TJSONObject.Create;
-            try
-              Reponse.Add('type', 'pong');
-              Send(Reponse.AsJSON);
-            finally
-              Reponse.Free;
-            end;
-          end;
+          // Diffuser
+          DiffuserMessage('', Reponse.AsJSON);
+        finally
+          Reponse.Free;
+        end;
+      end
+      else if TypeMsg = 'ping' then
+      begin
+        // Répondre avec un pong
+        Reponse := TJSONObject.Create;
+        try
+          Reponse.Add('type', 'pong');
+          Send(Reponse.AsJSON);
+        finally
+          Reponse.Free;
+        end;
       end;
 
     finally

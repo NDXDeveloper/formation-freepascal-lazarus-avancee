@@ -2691,20 +2691,20 @@ Dans ce tutoriel, nous avons couvert :
 
 ### Avantages de gRPC/Protobuf
 
-✅ **Performance exceptionnelle** - 5 à 10x plus rapide que REST/JSON
-✅ **Efficacité réseau** - 60 à 90% de réduction de taille
-✅ **Typage fort** - Moins d'erreurs, meilleure maintenabilité
-✅ **Streaming** - Support natif du temps réel
-✅ **Multi-langage** - Interopérabilité parfaite
-✅ **Évolutivité** - Compatibilité ascendante garantie
+✅ **Performance exceptionnelle** - 5 à 10x plus rapide que REST/JSON  
+✅ **Efficacité réseau** - 60 à 90% de réduction de taille  
+✅ **Typage fort** - Moins d'erreurs, meilleure maintenabilité  
+✅ **Streaming** - Support natif du temps réel  
+✅ **Multi-langage** - Interopérabilité parfaite  
+✅ **Évolutivité** - Compatibilité ascendante garantie  
 ✅ **Génération de code** - Productivité accrue
 
 ### Inconvénients et limitations
 
-❌ **Courbe d'apprentissage** - Plus complexe que REST
-❌ **Support FreePascal limité** - Nécessite des adaptations
-❌ **Debugging** - Format binaire moins lisible
-❌ **Écosystème** - Moins d'outils que REST
+❌ **Courbe d'apprentissage** - Plus complexe que REST  
+❌ **Support FreePascal limité** - Nécessite des adaptations  
+❌ **Debugging** - Format binaire moins lisible  
+❌ **Écosystème** - Moins d'outils que REST  
 ❌ **Navigateurs** - Pas de support natif
 
 ### Quand utiliser gRPC/Protobuf ?

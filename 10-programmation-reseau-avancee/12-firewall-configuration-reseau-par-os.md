@@ -96,8 +96,8 @@ SocketUDP := fpSocket(AF_INET, SOCK_DGRAM, 0);   // SOCK_DGRAM = UDP
 
 ### Adresses IP
 
-**IPv4 :** Format `192.168.1.1` (4 nombres de 0 à 255)
-**IPv6 :** Format `2001:0db8:85a3::8a2e:0370:7334` (plus long, plus moderne)
+**IPv4 :** Format `192.168.1.1` (4 nombres de 0 à 255)  
+**IPv6 :** Format `2001:0db8:85a3::8a2e:0370:7334` (plus long, plus moderne)  
 
 **Adresses spéciales :**
 
@@ -444,9 +444,9 @@ end.
 
 Windows a trois profils de firewall :
 
-**1. Domaine** - Réseau d'entreprise (Active Directory)
-**2. Privé** - Réseau domestique de confiance
-**3. Public** - Réseau public (WiFi café, aéroport)
+**1. Domaine** - Réseau d'entreprise (Active Directory)  
+**2. Privé** - Réseau domestique de confiance  
+**3. Public** - Réseau public (WiFi café, aéroport)  
 
 **Configurer par profil :**
 
@@ -2557,19 +2557,21 @@ begin
     ReadLn(Choix);
     WriteLn;
 
-    case Choix of
-      '1':
-        begin
-          Write('Hôte à tester : ');
-          ReadLn(Choix);
-          TestConnectivite(Choix);
-        end;
-      '2': AfficherConfiguration;
-      '3': AfficherPortsOuverts;
-      '4': Break;
+    // case sur des chaînes n'est pas supporté en FreePascal
+    if Choix = '1' then
+    begin
+      Write('Hôte à tester : ');
+      ReadLn(Choix);
+      TestConnectivite(Choix);
+    end
+    else if Choix = '2' then
+      AfficherConfiguration
+    else if Choix = '3' then
+      AfficherPortsOuverts
+    else if Choix = '4' then
+      Break
     else
       WriteLn('Choix invalide');
-    end;
 
     WriteLn;
     WriteLn('Appuyez sur Entrée...');
@@ -2857,15 +2859,15 @@ ip addr show
 
 ### Bonnes pratiques finales
 
-✅ **Toujours tester localement d'abord** (localhost/127.0.0.1)
-✅ **Documenter les ports utilisés** par votre application
-✅ **Logger les connexions** pour le débogage
-✅ **Utiliser des ports > 1024** pour éviter les droits admin
-✅ **Valider toutes les entrées** utilisateur
-✅ **Implémenter des timeouts** appropriés
-✅ **Monitorer régulièrement** les logs firewall
-✅ **Mettre à jour** le système et l'application
-✅ **Tester la configuration** après chaque changement
+✅ **Toujours tester localement d'abord** (localhost/127.0.0.1)  
+✅ **Documenter les ports utilisés** par votre application  
+✅ **Logger les connexions** pour le débogage  
+✅ **Utiliser des ports > 1024** pour éviter les droits admin  
+✅ **Valider toutes les entrées** utilisateur  
+✅ **Implémenter des timeouts** appropriés  
+✅ **Monitorer régulièrement** les logs firewall  
+✅ **Mettre à jour** le système et l'application  
+✅ **Tester la configuration** après chaque changement  
 ✅ **Avoir un plan de secours** en cas de problème
 
 ### Mot de la fin

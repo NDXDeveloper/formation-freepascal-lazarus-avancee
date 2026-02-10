@@ -594,14 +594,14 @@ Serveur SMTP + TLS
 
 Cette section couvre tous les aspects de SSL/TLS avec FreePascal :
 
-**10.5.1** : OpenSSL sur Windows - Installation et configuration
-**10.5.2** : OpenSSL sur Ubuntu - Installation et configuration
-**10.5.3** : Génération de certificats - Auto-signés et Let's Encrypt
-**10.5.4** : Configuration Synapse SSL - Utilisation avec Synapse
-**10.5.5** : Configuration Indy SSL - Utilisation avec Indy
-**10.5.6** : Validation de certificats - Vérification et sécurité
-**10.5.7** : Pinning de certificats - Sécurité renforcée
-**10.5.8** : Debugging SSL/TLS - Résolution de problèmes
+**10.5.1** : OpenSSL sur Windows - Installation et configuration  
+**10.5.2** : OpenSSL sur Ubuntu - Installation et configuration  
+**10.5.3** : Génération de certificats - Auto-signés et Let's Encrypt  
+**10.5.4** : Configuration Synapse SSL - Utilisation avec Synapse  
+**10.5.5** : Configuration Indy SSL - Utilisation avec Indy  
+**10.5.6** : Validation de certificats - Vérification et sécurité  
+**10.5.7** : Pinning de certificats - Sécurité renforcée  
+**10.5.8** : Debugging SSL/TLS - Résolution de problèmes  
 
 ## Prérequis
 

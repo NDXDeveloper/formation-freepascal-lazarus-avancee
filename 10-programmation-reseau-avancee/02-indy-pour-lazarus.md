@@ -967,29 +967,52 @@ end;
 ### 2. Utiliser les threads pour les opérations longues
 
 ```pascal
+type
+  TDownloadThread = class(TThread)
+  private
+    FForm: TForm1;
+    FResultat: string;
+    procedure MettreAJourInterface;
+  protected
+    procedure Execute; override;
+  public
+    constructor Create(AForm: TForm1);
+  end;
+
+constructor TDownloadThread.Create(AForm: TForm1);
+begin
+  inherited Create(False); // Démarrage immédiat
+  FreeOnTerminate := True;
+  FForm := AForm;
+end;
+
+procedure TDownloadThread.Execute;
+var
+  HTTP: TIdHTTP;
+begin
+  HTTP := TIdHTTP.Create(nil);
+  try
+    FResultat := HTTP.Get('http://example.com');
+
+    // Mise à jour de l'interface dans le thread principal
+    Synchronize(@MettreAJourInterface);
+  finally
+    HTTP.Free;
+  end;
+end;
+
+procedure TDownloadThread.MettreAJourInterface;
+begin
+  FForm.Memo1.Text := FResultat;
+end;
+
 procedure TForm1.ButtonClick(Sender: TObject);
 begin
-  TThread.CreateAnonymousThread(procedure
-  var
-    HTTP: TIdHTTP;
-    Result: string;
-  begin
-    HTTP := TIdHTTP.Create(nil);
-    try
-      Result := HTTP.Get('http://example.com');
-
-      // Mise à jour de l'interface dans le thread principal
-      TThread.Synchronize(nil, procedure
-      begin
-        Memo1.Text := Result;
-      end);
-
-    finally
-      HTTP.Free;
-    end;
-  end).Start;
+  TDownloadThread.Create(Self);
 end;
 ```
+
+> **Note :** En mode ObjFPC, on utilise une classe de thread nommée plutôt que `TThread.CreateAnonymousThread(procedure ... end)` qui nécessite `{$modeswitch anonymousfunctions}` (FPC 3.3.1+).
 
 ### 3. Gérer les exceptions correctement
 
@@ -1011,26 +1034,36 @@ end;
 ### 4. Configurer correctement les timeouts
 
 ```pascal
-procedure ConfigurerTimeoutsServeur;
-var
-  Server: TIdTCPServer;
-begin
-  Server := TIdTCPServer.Create(nil);
-  try
-    // Timeouts pour éviter les blocages
-    Server.TerminateWaitTime := 5000; // 5 secondes
-
-    // Pour chaque connexion
-    Server.OnExecute := procedure(AContext: TIdContext)
-    begin
-      AContext.Connection.IOHandler.ReadTimeout := 30000; // 30 secondes
-    end;
-
-  finally
-    Server.Free;
+type
+  TServeurAvecTimeout = class
+  private
+    FServer: TIdTCPServer;
+    procedure OnExecute(AContext: TIdContext);
+  public
+    procedure Configurer;
   end;
+
+procedure TServeurAvecTimeout.OnExecute(AContext: TIdContext);
+begin
+  // Configuration du timeout par connexion
+  AContext.Connection.IOHandler.ReadTimeout := 30000; // 30 secondes
+
+  // ... traitement des données ...
+end;
+
+procedure TServeurAvecTimeout.Configurer;
+begin
+  FServer := TIdTCPServer.Create(nil);
+
+  // Timeouts pour éviter les blocages
+  FServer.TerminateWaitTime := 5000; // 5 secondes
+
+  // Assignation du gestionnaire d'événement
+  FServer.OnExecute := @OnExecute;
 end;
 ```
+
+> **Note :** En mode ObjFPC, les événements `of object` doivent être assignés avec l'opérateur `@` vers une méthode nommée, pas une procédure anonyme.
 
 ### 5. Utiliser des pools de connexions
 
@@ -1882,18 +1915,18 @@ end;
 procedure TMonitoredServer.OnExecute(AContext: TIdContext);
 var
   Data: string;
-  BytesReceived, BytesSent: Integer;
+  BytesReceived, BytesSent: Int64;
 begin
   Data := AContext.Connection.IOHandler.ReadLn;
   BytesReceived := Length(Data);
 
-  InterlockedExchangeAdd(FStats.TotalBytesReceived, BytesReceived);
+  InterlockedExchangeAdd64(FStats.TotalBytesReceived, BytesReceived);
 
   // Réponse
   AContext.Connection.IOHandler.WriteLn('Echo: ' + Data);
   BytesSent := Length(Data) + 6; // "Echo: " + données
 
-  InterlockedExchangeAdd(FStats.TotalBytesSent, BytesSent);
+  InterlockedExchangeAdd64(FStats.TotalBytesSent, BytesSent);
 end;
 
 function TMonitoredServer.GetStats: string;
@@ -2703,24 +2736,37 @@ var
 begin
   Ext := LowerCase(ExtractFileExt(FileName));
 
-  case Ext of
-    '.html', '.htm': Result := 'text/html';
-    '.css': Result := 'text/css';
-    '.js': Result := 'application/javascript';
-    '.json': Result := 'application/json';
-    '.xml': Result := 'application/xml';
-    '.txt': Result := 'text/plain';
-    '.pdf': Result := 'application/pdf';
-    '.jpg', '.jpeg': Result := 'image/jpeg';
-    '.png': Result := 'image/png';
-    '.gif': Result := 'image/gif';
-    '.svg': Result := 'image/svg+xml';
-    '.zip': Result := 'application/zip';
-    '.mp3': Result := 'audio/mpeg';
-    '.mp4': Result := 'video/mp4';
+  // case sur des chaînes n'est pas supporté en FreePascal
+  if (Ext = '.html') or (Ext = '.htm') then
+    Result := 'text/html'
+  else if Ext = '.css' then
+    Result := 'text/css'
+  else if Ext = '.js' then
+    Result := 'application/javascript'
+  else if Ext = '.json' then
+    Result := 'application/json'
+  else if Ext = '.xml' then
+    Result := 'application/xml'
+  else if Ext = '.txt' then
+    Result := 'text/plain'
+  else if Ext = '.pdf' then
+    Result := 'application/pdf'
+  else if (Ext = '.jpg') or (Ext = '.jpeg') then
+    Result := 'image/jpeg'
+  else if Ext = '.png' then
+    Result := 'image/png'
+  else if Ext = '.gif' then
+    Result := 'image/gif'
+  else if Ext = '.svg' then
+    Result := 'image/svg+xml'
+  else if Ext = '.zip' then
+    Result := 'application/zip'
+  else if Ext = '.mp3' then
+    Result := 'audio/mpeg'
+  else if Ext = '.mp4' then
+    Result := 'video/mp4'
   else
     Result := 'application/octet-stream';
-  end;
 end;
 
 function TFileServer.GenerateDirectoryListing(const Path: string): string;
@@ -2788,7 +2834,7 @@ begin
               PathDelim, [rfReplaceAll]);
 
   // Sécurité: empêcher l'accès en dehors du répertoire racine
-  if not FullPath.StartsWith(FRootDir) then
+  if Copy(FullPath, 1, Length(FRootDir)) <> FRootDir then
   begin
     AResponseInfo.ResponseNo := 403;
     AResponseInfo.ContentText := '<html><body><h1>403 Forbidden</h1></body></html>';

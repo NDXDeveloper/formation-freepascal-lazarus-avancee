@@ -193,11 +193,11 @@ Numéro de port : 0 à 65535
 │  ├─ 80         → HTTP
 │  ├─ 110        → POP3 (email entrant)
 │  ├─ 143        → IMAP
-│  ├─ 443        → HTTPS
-│  └─ 3306       → MySQL
+│  └─ 443        → HTTPS
 │
 ├─ 1024 à 49151  → Ports enregistrés
 │  ├─ 3000       → Node.js (convention)
+│  ├─ 3306       → MySQL
 │  ├─ 5432       → PostgreSQL
 │  ├─ 6379       → Redis
 │  └─ 8080       → HTTP alternatif
@@ -620,18 +620,18 @@ sudo firewall-cmd --add-port=8080/tcp --permanent
 
 Ce chapitre couvre tous les aspects de la programmation réseau avec FreePascal/Lazarus :
 
-**10.1** : Synapse - Bibliothèque légère et efficace
-**10.2** : Indy - Framework complet avec composants visuels
-**10.3** : Protocoles TCP/UDP bas niveau - Contrôle total
-**10.4** : Serveurs HTTP/HTTPS personnalisés - Web backends
-**10.5** : Configuration SSL/TLS - Sécurité des communications
-**10.6** : Clients et serveurs WebSocket - Temps réel
-**10.7** : Protocoles binaires personnalisés - Performance maximale
-**10.8** : RPC et IPC - Communication inter-processus
-**10.9** : mORMot - Framework SOA/REST haute performance
-**10.10** : gRPC et Protocol Buffers - APIs modernes
-**10.11** : P2P et protocoles décentralisés - Systèmes distribués
-**10.12** : Configuration réseau et firewall - Déploiement
+**10.1** : Synapse - Bibliothèque légère et efficace  
+**10.2** : Indy - Framework complet avec composants visuels  
+**10.3** : Protocoles TCP/UDP bas niveau - Contrôle total  
+**10.4** : Serveurs HTTP/HTTPS personnalisés - Web backends  
+**10.5** : Configuration SSL/TLS - Sécurité des communications  
+**10.6** : Clients et serveurs WebSocket - Temps réel  
+**10.7** : Protocoles binaires personnalisés - Performance maximale  
+**10.8** : RPC et IPC - Communication inter-processus  
+**10.9** : mORMot - Framework SOA/REST haute performance  
+**10.10** : gRPC et Protocol Buffers - APIs modernes  
+**10.11** : P2P et protocoles décentralisés - Systèmes distribués  
+**10.12** : Configuration réseau et firewall - Déploiement  
 
 ## Prérequis
 
