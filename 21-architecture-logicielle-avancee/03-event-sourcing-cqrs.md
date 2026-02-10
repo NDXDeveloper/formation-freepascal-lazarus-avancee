@@ -107,7 +107,7 @@ type
 
 implementation
 
-constructor TEvenementBase.Create(const AAgregatId: string; AVersion: Integer);
+constructor TEvenementBase.Create(const AAgregatId: string; AVersion: Integer);  
 begin
   inherited Create;
   FId := TGuid.NewGuid.ToString;
@@ -192,7 +192,7 @@ begin
   FSoldeInitial := ASoldeInitial;
 end;
 
-function TEvenementCompteOuvert.VersJSON: TJSONObject;
+function TEvenementCompteOuvert.VersJSON: TJSONObject;  
 begin
   Result := TJSONObject.Create;
   Result.Add('id', Id);
@@ -204,7 +204,7 @@ begin
   Result.Add('solde_initial', FSoldeInitial);
 end;
 
-class function TEvenementCompteOuvert.DepuisJSON(AJSON: TJSONObject): TEvenementBase;
+class function TEvenementCompteOuvert.DepuisJSON(AJSON: TJSONObject): TEvenementBase;  
 var
   Evt: TEvenementCompteOuvert;
 begin
@@ -227,7 +227,7 @@ begin
   FDescription := ADescription;
 end;
 
-function TEvenementArgentDepose.VersJSON: TJSONObject;
+function TEvenementArgentDepose.VersJSON: TJSONObject;  
 begin
   Result := TJSONObject.Create;
   Result.Add('id', Id);
@@ -239,7 +239,7 @@ begin
   Result.Add('description', FDescription);
 end;
 
-class function TEvenementArgentDepose.DepuisJSON(AJSON: TJSONObject): TEvenementBase;
+class function TEvenementArgentDepose.DepuisJSON(AJSON: TJSONObject): TEvenementBase;  
 begin
   Result := TEvenementArgentDepose.Create(
     AJSON.Get('agregat_id', ''),
@@ -259,7 +259,7 @@ begin
   FDescription := ADescription;
 end;
 
-function TEvenementArgentRetire.VersJSON: TJSONObject;
+function TEvenementArgentRetire.VersJSON: TJSONObject;  
 begin
   Result := TJSONObject.Create;
   Result.Add('id', Id);
@@ -271,7 +271,7 @@ begin
   Result.Add('description', FDescription);
 end;
 
-class function TEvenementArgentRetire.DepuisJSON(AJSON: TJSONObject): TEvenementBase;
+class function TEvenementArgentRetire.DepuisJSON(AJSON: TJSONObject): TEvenementBase;  
 begin
   Result := TEvenementArgentRetire.Create(
     AJSON.Get('agregat_id', ''),
@@ -337,21 +337,21 @@ type
 
 implementation
 
-constructor TEventStoreMemoire.Create;
+constructor TEventStoreMemoire.Create;  
 begin
   inherited Create;
   FEvenements := TObjectList<TEvenementBase>.Create(True);
   InitCriticalSection(FLock);
 end;
 
-destructor TEventStoreMemoire.Destroy;
+destructor TEventStoreMemoire.Destroy;  
 begin
   DoneCriticalSection(FLock);
   FEvenements.Free;
   inherited;
 end;
 
-procedure TEventStoreMemoire.AjouterEvenement(const AEvenement: TEvenementBase);
+procedure TEventStoreMemoire.AjouterEvenement(const AEvenement: TEvenementBase);  
 begin
   EnterCriticalSection(FLock);
   try
@@ -363,7 +363,7 @@ begin
   end;
 end;
 
-procedure TEventStoreMemoire.AjouterEvenements(const AEvenements: TArray<TEvenementBase>);
+procedure TEventStoreMemoire.AjouterEvenements(const AEvenements: TArray<TEvenementBase>);  
 var
   Evt: TEvenementBase;
 begin
@@ -371,7 +371,7 @@ begin
     AjouterEvenement(Evt);
 end;
 
-function TEventStoreMemoire.ChargerEvenements(const AAgregatId: string): TList<TEvenementBase>;
+function TEventStoreMemoire.ChargerEvenements(const AAgregatId: string): TList<TEvenementBase>;  
 var
   Evt: TEvenementBase;
 begin
@@ -411,7 +411,7 @@ begin
   end;
 end;
 
-function TEventStoreMemoire.ObtenirDerniereVersion(const AAgregatId: string): Integer;
+function TEventStoreMemoire.ObtenirDerniereVersion(const AAgregatId: string): Integer;  
 var
   Evt: TEvenementBase;
 begin
@@ -483,7 +483,7 @@ type
 
 implementation
 
-constructor TCompte.Create(const AId: string);
+constructor TCompte.Create(const AId: string);  
 begin
   inherited Create;
   FId := AId;
@@ -492,19 +492,19 @@ begin
   FEvenementsPendants := TObjectList<TEvenementBase>.Create(False);
 end;
 
-destructor TCompte.Destroy;
+destructor TCompte.Destroy;  
 begin
   FEvenementsPendants.Free;
   inherited;
 end;
 
-procedure TCompte.AjouterEvenement(const AEvenement: TEvenementBase);
+procedure TCompte.AjouterEvenement(const AEvenement: TEvenementBase);  
 begin
   FEvenementsPendants.Add(AEvenement);
   AppliquerEvenement(AEvenement);
 end;
 
-procedure TCompte.AppliquerEvenement(const AEvenement: TEvenementBase);
+procedure TCompte.AppliquerEvenement(const AEvenement: TEvenementBase);  
 begin
   // Appliquer les changements selon le type d'événement
   if AEvenement is TEvenementCompteOuvert then
@@ -529,7 +529,7 @@ begin
   FVersion := AEvenement.Version;
 end;
 
-procedure TCompte.Ouvrir(const ATitulaire: string; ASoldeInitial: Currency);
+procedure TCompte.Ouvrir(const ATitulaire: string; ASoldeInitial: Currency);  
 var
   Evt: TEvenementCompteOuvert;
 begin
@@ -545,7 +545,7 @@ begin
   AjouterEvenement(Evt);
 end;
 
-procedure TCompte.Deposer(AMontant: Currency; const ADescription: string);
+procedure TCompte.Deposer(AMontant: Currency; const ADescription: string);  
 var
   Evt: TEvenementArgentDepose;
 begin
@@ -561,7 +561,7 @@ begin
   AjouterEvenement(Evt);
 end;
 
-procedure TCompte.Retirer(AMontant: Currency; const ADescription: string);
+procedure TCompte.Retirer(AMontant: Currency; const ADescription: string);  
 var
   Evt: TEvenementArgentRetire;
 begin
@@ -580,7 +580,7 @@ begin
   AjouterEvenement(Evt);
 end;
 
-procedure TCompte.ChargerDepuisHistorique(const AEvenements: TList<TEvenementBase>);
+procedure TCompte.ChargerDepuisHistorique(const AEvenements: TList<TEvenementBase>);  
 var
   Evt: TEvenementBase;
 begin
@@ -593,13 +593,13 @@ begin
     [FTitulaire, FSolde, FVersion]));
 end;
 
-function TCompte.ObtenirEvenementsPendants: TList<TEvenementBase>;
+function TCompte.ObtenirEvenementsPendants: TList<TEvenementBase>;  
 begin
   Result := TList<TEvenementBase>.Create;
   Result.AddRange(FEvenementsPendants);
 end;
 
-procedure TCompte.MarquerEvenementsSauvegardes;
+procedure TCompte.MarquerEvenementsSauvegardes;  
 begin
   FEvenementsPendants.Clear;
 end;
@@ -642,13 +642,13 @@ type
 
 implementation
 
-constructor TCompteRepository.Create(const AEventStore: IEventStore);
+constructor TCompteRepository.Create(const AEventStore: IEventStore);  
 begin
   inherited Create;
   FEventStore := AEventStore;
 end;
 
-procedure TCompteRepository.Sauvegarder(const ACompte: TCompte);
+procedure TCompteRepository.Sauvegarder(const ACompte: TCompte);  
 var
   Evenements: TList<TEvenementBase>;
   Evt: TEvenementBase;
@@ -677,7 +677,7 @@ begin
   end;
 end;
 
-function TCompteRepository.Charger(const AId: string): TCompte;
+function TCompteRepository.Charger(const AId: string): TCompte;  
 var
   Evenements: TList<TEvenementBase>;
 begin
@@ -702,7 +702,7 @@ begin
   end;
 end;
 
-function TCompteRepository.Existe(const AId: string): Boolean;
+function TCompteRepository.Existe(const AId: string): Boolean;  
 begin
   Result := FEventStore.ObtenirDerniereVersion(AId) > 0;
 end;
@@ -894,7 +894,7 @@ type
 
 implementation
 
-constructor TCommandeBase.Create;
+constructor TCommandeBase.Create;  
 begin
   inherited Create;
   FId := TGuid.NewGuid.ToString;
@@ -986,13 +986,13 @@ implementation
 
 // THandlerOuvrirCompte
 
-constructor THandlerOuvrirCompte.Create(const ARepository: ICompteRepository);
+constructor THandlerOuvrirCompte.Create(const ARepository: ICompteRepository);  
 begin
   inherited Create;
   FRepository := ARepository;
 end;
 
-procedure THandlerOuvrirCompte.Traiter(const ACommande: TCommandeOuvrirCompte);
+procedure THandlerOuvrirCompte.Traiter(const ACommande: TCommandeOuvrirCompte);  
 var
   Compte: TCompte;
 begin
@@ -1019,13 +1019,13 @@ end;
 
 // THandlerDeposerArgent
 
-constructor THandlerDeposerArgent.Create(const ARepository: ICompteRepository);
+constructor THandlerDeposerArgent.Create(const ARepository: ICompteRepository);  
 begin
   inherited Create;
   FRepository := ARepository;
 end;
 
-procedure THandlerDeposerArgent.Traiter(const ACommande: TCommandeDeposerArgent);
+procedure THandlerDeposerArgent.Traiter(const ACommande: TCommandeDeposerArgent);  
 var
   Compte: TCompte;
 begin
@@ -1049,13 +1049,13 @@ end;
 
 // THandlerRetirerArgent
 
-constructor THandlerRetirerArgent.Create(const ARepository: ICompteRepository);
+constructor THandlerRetirerArgent.Create(const ARepository: ICompteRepository);  
 begin
   inherited Create;
   FRepository := ARepository;
 end;
 
-procedure THandlerRetirerArgent.Traiter(const ACommande: TCommandeRetirerArgent);
+procedure THandlerRetirerArgent.Traiter(const ACommande: TCommandeRetirerArgent);  
 var
   Compte: TCompte;
 begin
@@ -1153,13 +1153,13 @@ type
 
 implementation
 
-constructor TQueryObtenirCompte.Create(const ACompteId: string);
+constructor TQueryObtenirCompte.Create(const ACompteId: string);  
 begin
   inherited Create;
   FCompteId := ACompteId;
 end;
 
-constructor TQueryListerComptes.Create(APageNumber, APageSize: Integer);
+constructor TQueryListerComptes.Create(APageNumber, APageSize: Integer);  
 begin
   inherited Create;
   FPageNumber := APageNumber;
@@ -1235,13 +1235,13 @@ implementation
 
 // THandlerObtenirCompte
 
-constructor THandlerObtenirCompte.Create(const AReadModel: ICompteReadModel);
+constructor THandlerObtenirCompte.Create(const AReadModel: ICompteReadModel);  
 begin
   inherited Create;
   FReadModel := AReadModel;
 end;
 
-function THandlerObtenirCompte.Executer(const AQuery: TQueryObtenirCompte): TCompteDTO;
+function THandlerObtenirCompte.Executer(const AQuery: TQueryObtenirCompte): TCompteDTO;  
 begin
   WriteLn(Format('[QueryHandler] Exécution: ObtenirCompte %s', [AQuery.CompteId]));
   Result := FReadModel.ObtenirCompte(AQuery.CompteId);
@@ -1249,13 +1249,13 @@ end;
 
 // THandlerListerComptes
 
-constructor THandlerListerComptes.Create(const AReadModel: ICompteReadModel);
+constructor THandlerListerComptes.Create(const AReadModel: ICompteReadModel);  
 begin
   inherited Create;
   FReadModel := AReadModel;
 end;
 
-function THandlerListerComptes.Executer(const AQuery: TQueryListerComptes): TList<TCompteDTO>;
+function THandlerListerComptes.Executer(const AQuery: TQueryListerComptes): TList<TCompteDTO>;  
 begin
   WriteLn(Format('[QueryHandler] Exécution: ListerComptes (page %d)',
     [AQuery.PageNumber]));
@@ -1264,7 +1264,7 @@ end;
 
 // THandlerObtenirTransactions
 
-constructor THandlerObtenirTransactions.Create(const AReadModel: ICompteReadModel);
+constructor THandlerObtenirTransactions.Create(const AReadModel: ICompteReadModel);  
 begin
   inherited Create;
   FReadModel := AReadModel;
@@ -1337,7 +1337,7 @@ implementation
 uses
   Domain.Events.Compte, Math;
 
-constructor TCompteReadModelMemoire.Create;
+constructor TCompteReadModelMemoire.Create;  
 begin
   inherited Create;
   FComptes := TDictionary<string, TCompteDTO>.Create;
@@ -1345,7 +1345,7 @@ begin
   InitCriticalSection(FLock);
 end;
 
-destructor TCompteReadModelMemoire.Destroy;
+destructor TCompteReadModelMemoire.Destroy;  
 begin
   DoneCriticalSection(FLock);
   FTransactions.Free;
@@ -1353,7 +1353,7 @@ begin
   inherited;
 end;
 
-function TCompteReadModelMemoire.ObtenirCompte(const ACompteId: string): TCompteDTO;
+function TCompteReadModelMemoire.ObtenirCompte(const ACompteId: string): TCompteDTO;  
 begin
   EnterCriticalSection(FLock);
   try
@@ -1364,7 +1364,7 @@ begin
   end;
 end;
 
-function TCompteReadModelMemoire.ListerComptes(APage, APageSize: Integer): TList<TCompteDTO>;
+function TCompteReadModelMemoire.ListerComptes(APage, APageSize: Integer): TList<TCompteDTO>;  
 var
   TousLesComptes: TArray<TCompteDTO>;
   Debut, Fin, i: Integer;
@@ -1408,7 +1408,7 @@ begin
   end;
 end;
 
-procedure TCompteReadModelMemoire.MettreAJourDepuisEvenement(const AEvenement: TEvenementBase);
+procedure TCompteReadModelMemoire.MettreAJourDepuisEvenement(const AEvenement: TEvenementBase);  
 var
   Compte: TCompteDTO;
   Transaction: TTransactionDTO;
@@ -1517,21 +1517,21 @@ type
 
 implementation
 
-constructor TEventBus.Create;
+constructor TEventBus.Create;  
 begin
   inherited Create;
   FSubscribers := TList<IEventSubscriber>.Create;
   InitCriticalSection(FLock);
 end;
 
-destructor TEventBus.Destroy;
+destructor TEventBus.Destroy;  
 begin
   DoneCriticalSection(FLock);
   FSubscribers.Free;
   inherited;
 end;
 
-procedure TEventBus.Abonner(const ASubscriber: IEventSubscriber);
+procedure TEventBus.Abonner(const ASubscriber: IEventSubscriber);  
 begin
   EnterCriticalSection(FLock);
   try
@@ -1545,7 +1545,7 @@ begin
   end;
 end;
 
-procedure TEventBus.Desabonner(const ASubscriber: IEventSubscriber);
+procedure TEventBus.Desabonner(const ASubscriber: IEventSubscriber);  
 begin
   EnterCriticalSection(FLock);
   try
@@ -1556,7 +1556,7 @@ begin
   end;
 end;
 
-procedure TEventBus.Publier(const AEvenement: TEvenementBase);
+procedure TEventBus.Publier(const AEvenement: TEvenementBase);  
 var
   Subscriber: IEventSubscriber;
 begin
@@ -1611,13 +1611,13 @@ type
 
 implementation
 
-constructor TCompteProjection.Create(const AReadModel: ICompteReadModel);
+constructor TCompteProjection.Create(const AReadModel: ICompteReadModel);  
 begin
   inherited Create;
   FReadModel := AReadModel;
 end;
 
-procedure TCompteProjection.TraiterEvenement(const AEvenement: TEvenementBase);
+procedure TCompteProjection.TraiterEvenement(const AEvenement: TEvenementBase);  
 begin
   WriteLn(Format('[Projection] Traitement événement: %s', [AEvenement.ClassName]));
 
@@ -1916,27 +1916,27 @@ begin
   FData := AData;
 end;
 
-destructor TSnapshot.Destroy;
+destructor TSnapshot.Destroy;  
 begin
   FData.Free;
   inherited;
 end;
 
-constructor TSnapshotStoreMemoire.Create;
+constructor TSnapshotStoreMemoire.Create;  
 begin
   inherited Create;
   FSnapshots := TObjectDictionary<string, TSnapshot>.Create([doOwnsValues]);
   InitCriticalSection(FLock);
 end;
 
-destructor TSnapshotStoreMemoire.Destroy;
+destructor TSnapshotStoreMemoire.Destroy;  
 begin
   DoneCriticalSection(FLock);
   FSnapshots.Free;
   inherited;
 end;
 
-procedure TSnapshotStoreMemoire.Sauvegarder(const ASnapshot: TSnapshot);
+procedure TSnapshotStoreMemoire.Sauvegarder(const ASnapshot: TSnapshot);  
 begin
   EnterCriticalSection(FLock);
   try
@@ -1948,7 +1948,7 @@ begin
   end;
 end;
 
-function TSnapshotStoreMemoire.Charger(const AAgregatId: string): TSnapshot;
+function TSnapshotStoreMemoire.Charger(const AAgregatId: string): TSnapshot;  
 begin
   EnterCriticalSection(FLock);
   try
@@ -1959,7 +1959,7 @@ begin
   end;
 end;
 
-function TSnapshotStoreMemoire.ObtenirDerniereVersion(const AAgregatId: string): Integer;
+function TSnapshotStoreMemoire.ObtenirDerniereVersion(const AAgregatId: string): Integer;  
 var
   Snapshot: TSnapshot;
 begin
@@ -1976,7 +1976,7 @@ end.
 **Utilisation des snapshots :**
 
 ```pascal
-procedure ChargerCompteAvecSnapshot(const ACompteId: string);
+procedure ChargerCompteAvecSnapshot(const ACompteId: string);  
 var
   Snapshot: TSnapshot;
   Evenements: TList<TEvenementBase>;
@@ -2060,7 +2060,7 @@ begin
   Result := (AType = 'CompteOuvert') and (AVersion = 1);
 end;
 
-function TUpgraderCompteOuvertV1VersV2.Upgrader(AJSON: TJSONObject): TJSONObject;
+function TUpgraderCompteOuvertV1VersV2.Upgrader(AJSON: TJSONObject): TJSONObject;  
 begin
   Result := TJSONObject.Create;
 
@@ -2135,7 +2135,7 @@ begin
   FTransfertsEnCours := TDictionary<string, string>.Create;
 end;
 
-destructor TProcessTransfert.Destroy;
+destructor TProcessTransfert.Destroy;  
 begin
   FTransfertsEnCours.Free;
   inherited;
@@ -2168,7 +2168,7 @@ begin
   end;
 end;
 
-procedure TProcessTransfert.TraiterEvenement(const AEvenement: TEvenementBase);
+procedure TProcessTransfert.TraiterEvenement(const AEvenement: TEvenementBase);  
 var
   TransfertId, CompteDestination: string;
   InfoTransfert: string;
@@ -2221,13 +2221,13 @@ end.
 
 ```pascal
 // ✅ Bon
-TEvenementCompteOuvert
-TEvenementArgentDepose
+TEvenementCompteOuvert  
+TEvenementArgentDepose  
 TEvenementCommandeValidee
 
 // ❌ Mauvais
-TEvenementOuvrirCompte
-TEvenementDeposer
+TEvenementOuvrirCompte  
+TEvenementDeposer  
 TEvenementValiderCommande
 ```
 
@@ -2283,7 +2283,7 @@ type
 
 ```pascal
 // Le read model n'est pas immédiatement à jour
-procedure DeposerEtAfficher(const ACompteId: string);
+procedure DeposerEtAfficher(const ACompteId: string);  
 var
   Cmd: TCommandeDeposerArgent;
   Query: TQueryObtenirCompte;
@@ -2324,7 +2324,7 @@ type
   end;
 
 // Gérer les anciennes versions
-procedure ChargerEvenement(AJSON: TJSONObject);
+procedure ChargerEvenement(AJSON: TJSONObject);  
 var
   Version: Integer;
 begin

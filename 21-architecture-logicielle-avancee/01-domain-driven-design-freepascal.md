@@ -79,7 +79,7 @@ type
 
 implementation
 
-constructor TClient.Create(const AId: TGUID; const ANom, APrenom: string);
+constructor TClient.Create(const AId: TGUID; const ANom, APrenom: string);  
 begin
   inherited Create;
   FId := AId;
@@ -88,7 +88,7 @@ begin
   FDateInscription := Now;
 end;
 
-function TClient.Equals(Obj: TObject): Boolean;
+function TClient.Equals(Obj: TObject): Boolean;  
 begin
   if Obj is TClient then
     Result := IsEqualGUID(FId, TClient(Obj).Id)
@@ -131,7 +131,7 @@ type
 
 implementation
 
-constructor TAdresse.Create(const ARue, AVille, ACodePostal, APays: string);
+constructor TAdresse.Create(const ARue, AVille, ACodePostal, APays: string);  
 begin
   inherited Create;
   FRue := ARue;
@@ -140,7 +140,7 @@ begin
   FPays := APays;
 end;
 
-function TAdresse.Equals(Obj: TObject): Boolean;
+function TAdresse.Equals(Obj: TObject): Boolean;  
 var
   Other: TAdresse;
 begin
@@ -155,7 +155,7 @@ begin
   end;
 end;
 
-function TAdresse.ToString: string;
+function TAdresse.ToString: string;  
 begin
   Result := Format('%s, %s %s, %s', [FRue, FCodePostal, FVille, FPays]);
 end;
@@ -217,7 +217,7 @@ type
 
 implementation
 
-constructor TCommande.Create(const AClient: TClient);
+constructor TCommande.Create(const AClient: TClient);  
 begin
   inherited Create;
   FId := TGUID.NewGuid;
@@ -227,13 +227,13 @@ begin
   FDateCreation := Now;
 end;
 
-destructor TCommande.Destroy;
+destructor TCommande.Destroy;  
 begin
   FLignes.Free;
   inherited;
 end;
 
-procedure TCommande.AjouterLigne(const AProduit: TProduit; AQuantite: Integer);
+procedure TCommande.AjouterLigne(const AProduit: TProduit; AQuantite: Integer);  
 var
   Ligne: TLigneCommande;
 begin
@@ -249,7 +249,7 @@ begin
   FLignes.Add(Ligne);
 end;
 
-procedure TCommande.Valider;
+procedure TCommande.Valider;  
 begin
   // Règle métier : au moins une ligne
   if FLignes.Count = 0 then
@@ -262,7 +262,7 @@ begin
   FStatut := TStatutCommande.Validee;
 end;
 
-function TCommande.CalculerTotal: Currency;
+function TCommande.CalculerTotal: Currency;  
 var
   Ligne: TLigneCommande;
 begin
@@ -379,7 +379,7 @@ type
 
 implementation
 
-function TRepositoryCommandeSQL.TrouverParId(const AId: TGUID): TCommande;
+function TRepositoryCommandeSQL.TrouverParId(const AId: TGUID): TCommande;  
 var
   Query: TSQLQuery;
 begin
@@ -399,7 +399,7 @@ begin
   end;
 end;
 
-procedure TRepositoryCommandeSQL.Sauvegarder(const ACommande: TCommande);
+procedure TRepositoryCommandeSQL.Sauvegarder(const ACommande: TCommande);  
 var
   Query: TSQLQuery;
 begin
@@ -565,7 +565,7 @@ type
   end;
 
 // Configuration au démarrage
-procedure ConfigurerServices(Container: TServiceContainer);
+procedure ConfigurerServices(Container: TServiceContainer);  
 var
   Connection: TSQLConnection;
   RepoCommande: IRepositoryCommande;
@@ -700,13 +700,13 @@ type
     property Solde: Currency read FSolde;  // Lecture seule !
   end;
 
-procedure TCompte.ValiderSoldeMinimum(NouveauSolde: Currency);
+procedure TCompte.ValiderSoldeMinimum(NouveauSolde: Currency);  
 begin
   if NouveauSolde < -FDecouvertAutorise then
     raise ECompteException.Create('Découvert dépassé');
 end;
 
-procedure TCompte.Debiter(Montant: Currency);
+procedure TCompte.Debiter(Montant: Currency);  
 var
   NouveauSolde: Currency;
 begin
@@ -756,7 +756,7 @@ type
     function Equals(Obj: TObject): Boolean; override;
   end;
 
-class function TEmail.Creer(const AAdresse: string): TEmail;
+class function TEmail.Creer(const AAdresse: string): TEmail;  
 begin
   // Validation
   if Pos('@', AAdresse) = 0 then

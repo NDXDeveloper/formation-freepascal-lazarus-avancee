@@ -107,7 +107,7 @@ begin
   FRetryCount := 0;
 end;
 
-destructor TMessage.Destroy;
+destructor TMessage.Destroy;  
 begin
   FPayload.Free;
   inherited;
@@ -160,7 +160,7 @@ type
 
 implementation
 
-constructor TMessageQueue.Create(AMaxSize: Integer);
+constructor TMessageQueue.Create(AMaxSize: Integer);  
 begin
   inherited Create;
   FMessages := TThreadList.Create;
@@ -169,7 +169,7 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TMessageQueue.Destroy;
+destructor TMessageQueue.Destroy;  
 var
   List: TList;
   i: Integer;
@@ -190,7 +190,7 @@ begin
   inherited;
 end;
 
-function TMessageQueue.Enqueue(AMessage: TMessage): Boolean;
+function TMessageQueue.Enqueue(AMessage: TMessage): Boolean;  
 var
   List: TList;
 begin
@@ -222,13 +222,13 @@ begin
   end;
 end;
 
-function TMessageQueue.TryEnqueue(AMessage: TMessage; ATimeout: Cardinal): Boolean;
+function TMessageQueue.TryEnqueue(AMessage: TMessage; ATimeout: Cardinal): Boolean;  
 begin
   // Pour simplifier, même implémentation que Enqueue
   Result := Enqueue(AMessage);
 end;
 
-function TMessageQueue.Dequeue: TMessage;
+function TMessageQueue.Dequeue: TMessage;  
 var
   List: TList;
 begin
@@ -257,7 +257,7 @@ begin
   end;
 end;
 
-function TMessageQueue.TryDequeue(out AMessage: TMessage; ATimeout: Cardinal): Boolean;
+function TMessageQueue.TryDequeue(out AMessage: TMessage; ATimeout: Cardinal): Boolean;  
 var
   List: TList;
 begin
@@ -288,7 +288,7 @@ begin
   end;
 end;
 
-function TMessageQueue.Count: Integer;
+function TMessageQueue.Count: Integer;  
 var
   List: TList;
 begin
@@ -300,17 +300,17 @@ begin
   end;
 end;
 
-function TMessageQueue.IsEmpty: Boolean;
+function TMessageQueue.IsEmpty: Boolean;  
 begin
   Result := Count = 0;
 end;
 
-function TMessageQueue.IsFull: Boolean;
+function TMessageQueue.IsFull: Boolean;  
 begin
   Result := Count >= FMaxSize;
 end;
 
-procedure TMessageQueue.Clear;
+procedure TMessageQueue.Clear;  
 var
   List: TList;
   i: Integer;
@@ -365,7 +365,7 @@ type
 
 implementation
 
-constructor TMessageProducer.Create(const AName: string; AQueue: TMessageQueue);
+constructor TMessageProducer.Create(const AName: string; AQueue: TMessageQueue);  
 begin
   inherited Create;
   FProducerName := AName;
@@ -388,7 +388,7 @@ begin
   end;
 end;
 
-procedure TMessageProducer.SendSimpleMessage(const AType, AText: string);
+procedure TMessageProducer.SendSimpleMessage(const AType, AText: string);  
 var
   Data: TJSONObject;
 begin
@@ -451,7 +451,7 @@ begin
   FreeOnTerminate := False;
 end;
 
-procedure TMessageConsumer.Execute;
+procedure TMessageConsumer.Execute;  
 var
   Message: TMessage;
 begin
@@ -482,7 +482,7 @@ begin
   WriteLn(Format('[Consumer %s] Arrêté', [FConsumerName]));
 end;
 
-procedure TMessageConsumer.Stop;
+procedure TMessageConsumer.Stop;  
 begin
   FRunning := False;
   WriteLn(Format('[Consumer %s] Arrêt demandé', [FConsumerName]));
@@ -509,7 +509,7 @@ type
     procedure ProcessMessage(AMessage: TMessage);
   end;
 
-procedure TMessageProcessor.ProcessMessage(AMessage: TMessage);
+procedure TMessageProcessor.ProcessMessage(AMessage: TMessage);  
 var
   Text: string;
 begin
@@ -659,7 +659,7 @@ implementation
 
 // TEvent
 
-constructor TEvent.Create(const AEventType, ASource: string; AData: TJSONObject);
+constructor TEvent.Create(const AEventType, ASource: string; AData: TJSONObject);  
 var
   G: TGUID;
 begin
@@ -672,7 +672,7 @@ begin
   FTimestamp := Now;
 end;
 
-destructor TEvent.Destroy;
+destructor TEvent.Destroy;  
 begin
   FData.Free;
   inherited;
@@ -680,7 +680,7 @@ end;
 
 // TUserCreatedEvent
 
-constructor TUserCreatedEvent.Create(const ASource, AUserId, AUsername: string);
+constructor TUserCreatedEvent.Create(const ASource, AUserId, AUsername: string);  
 var
   Data: TJSONObject;
 begin
@@ -691,12 +691,12 @@ begin
   inherited Create('user.created', ASource, Data);
 end;
 
-function TUserCreatedEvent.GetUserId: string;
+function TUserCreatedEvent.GetUserId: string;  
 begin
   Result := Data.Get('user_id', '');
 end;
 
-function TUserCreatedEvent.GetUsername: string;
+function TUserCreatedEvent.GetUsername: string;  
 begin
   Result := Data.Get('username', '');
 end;
@@ -715,12 +715,12 @@ begin
   inherited Create('order.placed', ASource, Data);
 end;
 
-function TOrderPlacedEvent.GetOrderId: string;
+function TOrderPlacedEvent.GetOrderId: string;  
 begin
   Result := Data.Get('order_id', '');
 end;
 
-function TOrderPlacedEvent.GetAmount: Currency;
+function TOrderPlacedEvent.GetAmount: Currency;  
 begin
   Result := Data.Get('amount', 0.0);
 end;
@@ -805,14 +805,14 @@ implementation
 
 // TDispatchThread
 
-constructor TDispatchThread.Create(ABus: TEventBus);
+constructor TDispatchThread.Create(ABus: TEventBus);  
 begin
   inherited Create(True);  // Créé suspendu
   FBus := ABus;
   FreeOnTerminate := False;
 end;
 
-procedure TDispatchThread.Execute;
+procedure TDispatchThread.Execute;  
 begin
   FBus.DispatchEvents;
 end;
@@ -830,7 +830,7 @@ end;
 
 // TEventBus
 
-constructor TEventBus.Create;
+constructor TEventBus.Create;  
 begin
   inherited Create;
   FSubscriptions := TObjectList<TSubscription>.Create(True);
@@ -839,7 +839,7 @@ begin
   FRunning := False;
 end;
 
-destructor TEventBus.Destroy;
+destructor TEventBus.Destroy;  
 var
   Event: TEvent;
 begin
@@ -871,7 +871,7 @@ begin
   end;
 end;
 
-procedure TEventBus.Unsubscribe(const ASubscriberId, AEventType: string);
+procedure TEventBus.Unsubscribe(const ASubscriberId, AEventType: string);  
 var
   i: Integer;
 begin
@@ -892,7 +892,7 @@ begin
   end;
 end;
 
-procedure TEventBus.UnsubscribeAll(const ASubscriberId: string);
+procedure TEventBus.UnsubscribeAll(const ASubscriberId: string);  
 var
   i: Integer;
 begin
@@ -910,7 +910,7 @@ begin
   end;
 end;
 
-procedure TEventBus.Publish(AEvent: TEvent);
+procedure TEventBus.Publish(AEvent: TEvent);  
 begin
   FEventQueue.PushItem(AEvent);
 
@@ -918,7 +918,7 @@ begin
     [AEvent.EventType, AEvent.Source]));
 end;
 
-procedure TEventBus.PublishSync(AEvent: TEvent);
+procedure TEventBus.PublishSync(AEvent: TEvent);  
 var
   Subscription: TSubscription;
 begin
@@ -949,7 +949,7 @@ begin
   AEvent.Free;
 end;
 
-procedure TEventBus.DispatchEvents;
+procedure TEventBus.DispatchEvents;  
 var
   Event: TEvent;
 begin
@@ -970,7 +970,7 @@ begin
   end;
 end;
 
-procedure TEventBus.Start;
+procedure TEventBus.Start;  
 begin
   if FRunning then Exit;
 
@@ -982,7 +982,7 @@ begin
   WriteLn('[EventBus] Démarré');
 end;
 
-procedure TEventBus.Stop;
+procedure TEventBus.Stop;  
 begin
   if not FRunning then Exit;
 
@@ -1059,28 +1059,28 @@ implementation
 
 // TEventSubscriber
 
-constructor TEventSubscriber.Create(const AId: string; AEventBus: TEventBus);
+constructor TEventSubscriber.Create(const AId: string; AEventBus: TEventBus);  
 begin
   inherited Create;
   FSubscriberId := AId;
   FEventBus := AEventBus;
 end;
 
-destructor TEventSubscriber.Destroy;
+destructor TEventSubscriber.Destroy;  
 begin
   if Assigned(FEventBus) then
     FEventBus.UnsubscribeAll(FSubscriberId);
   inherited;
 end;
 
-procedure TEventSubscriber.SubscribeTo(const AEventType: string);
+procedure TEventSubscriber.SubscribeTo(const AEventType: string);  
 begin
   FEventBus.Subscribe(FSubscriberId, AEventType, @HandleEvent);
 end;
 
 // TEmailNotifier
 
-constructor TEmailNotifier.Create(AEventBus: TEventBus);
+constructor TEmailNotifier.Create(AEventBus: TEventBus);  
 begin
   inherited Create('EmailNotifier', AEventBus);
 
@@ -1089,7 +1089,7 @@ begin
   SubscribeTo('order.placed');
 end;
 
-procedure TEmailNotifier.HandleEvent(AEvent: TEvent);
+procedure TEmailNotifier.HandleEvent(AEvent: TEvent);  
 begin
   WriteLn('  [EmailNotifier] Envoi email pour: ', AEvent.EventType);
 
@@ -1107,7 +1107,7 @@ end;
 
 // TEventLogger
 
-constructor TEventLogger.Create(AEventBus: TEventBus);
+constructor TEventLogger.Create(AEventBus: TEventBus);  
 begin
   inherited Create('EventLogger', AEventBus);
 
@@ -1115,7 +1115,7 @@ begin
   SubscribeTo('*');
 end;
 
-procedure TEventLogger.HandleEvent(AEvent: TEvent);
+procedure TEventLogger.HandleEvent(AEvent: TEvent);  
 begin
   WriteLn(Format('  [Logger] %s | Type: %s | Source: %s',
     [FormatDateTime('hh:nn:ss', AEvent.Timestamp),
@@ -1125,7 +1125,7 @@ end;
 
 // TAnalyticsTracker
 
-constructor TAnalyticsTracker.Create(AEventBus: TEventBus);
+constructor TAnalyticsTracker.Create(AEventBus: TEventBus);  
 begin
   inherited Create('AnalyticsTracker', AEventBus);
 
@@ -1134,7 +1134,7 @@ begin
   SubscribeTo('order.placed');
 end;
 
-procedure TAnalyticsTracker.HandleEvent(AEvent: TEvent);
+procedure TAnalyticsTracker.HandleEvent(AEvent: TEvent);  
 begin
   WriteLn('  [Analytics] Enregistrement métrique: ', AEvent.EventType);
 
@@ -1267,20 +1267,20 @@ type
 
 implementation
 
-constructor TDeadLetterQueue.Create(AMaxRetries: Integer);
+constructor TDeadLetterQueue.Create(AMaxRetries: Integer);  
 begin
   inherited Create;
   FQueue := TMessageQueue.Create(1000);
   FMaxRetries := AMaxRetries;
 end;
 
-destructor TDeadLetterQueue.Destroy;
+destructor TDeadLetterQueue.Destroy;  
 begin
   FQueue.Free;
   inherited;
 end;
 
-function TDeadLetterQueue.ShouldRetry(AMessage: TMessage): Boolean;
+function TDeadLetterQueue.ShouldRetry(AMessage: TMessage): Boolean;  
 begin
   Result := AMessage.RetryCount < FMaxRetries;
 
@@ -1297,7 +1297,7 @@ begin
   end;
 end;
 
-procedure TDeadLetterQueue.SendToDeadLetter(AMessage: TMessage; const AReason: string);
+procedure TDeadLetterQueue.SendToDeadLetter(AMessage: TMessage; const AReason: string);  
 var
   DeadMessage: TMessage;
   Data: TJSONObject;
@@ -1351,7 +1351,7 @@ type
 
 implementation
 
-constructor TPriorityMessageQueue.Create;
+constructor TPriorityMessageQueue.Create;  
 var
   Priority: TMessagePriority;
 begin
@@ -1364,7 +1364,7 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TPriorityMessageQueue.Destroy;
+destructor TPriorityMessageQueue.Destroy;  
 var
   Priority: TMessagePriority;
   List: TList;
@@ -1390,7 +1390,7 @@ begin
   inherited;
 end;
 
-procedure TPriorityMessageQueue.Enqueue(AMessage: TMessage);
+procedure TPriorityMessageQueue.Enqueue(AMessage: TMessage);  
 var
   List: TList;
 begin
@@ -1411,7 +1411,7 @@ begin
   end;
 end;
 
-function TPriorityMessageQueue.Dequeue: TMessage;
+function TPriorityMessageQueue.Dequeue: TMessage;  
 var
   Priority: TMessagePriority;
   List: TList;
@@ -1446,7 +1446,7 @@ begin
   end;
 end;
 
-function TPriorityMessageQueue.Count: Integer;
+function TPriorityMessageQueue.Count: Integer;  
 var
   Priority: TMessagePriority;
   List: TList;
@@ -1554,7 +1554,7 @@ end;
 
 // TRequestReplyManager
 
-constructor TRequestReplyManager.Create;
+constructor TRequestReplyManager.Create;  
 begin
   inherited Create;
   FRequestQueue := TMessageQueue.Create;
@@ -1562,7 +1562,7 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TRequestReplyManager.Destroy;
+destructor TRequestReplyManager.Destroy;  
 var
   Queue: TMessageQueue;
 begin
@@ -1650,7 +1650,7 @@ begin
   WriteLn(Format('[RequestReply] Réponse envoyée pour: %s', [ACorrelationId]));
 end;
 
-function TRequestReplyManager.GetNextRequest: TRequestMessage;
+function TRequestReplyManager.GetNextRequest: TRequestMessage;  
 var
   Msg: TMessage;
 begin
@@ -1714,14 +1714,14 @@ implementation
 
 // TPublisher
 
-constructor TPublisher.Create(const AId: string; AEventBus: TEventBus);
+constructor TPublisher.Create(const AId: string; AEventBus: TEventBus);  
 begin
   inherited Create;
   FPublisherId := AId;
   FEventBus := AEventBus;
 end;
 
-procedure TPublisher.Publish(const ATopic: string; AData: TJSONObject);
+procedure TPublisher.Publish(const ATopic: string; AData: TJSONObject);  
 var
   Event: TEvent;
 begin
@@ -1734,7 +1734,7 @@ end;
 
 // TTopicSubscriber
 
-constructor TTopicSubscriber.Create(const AId: string; AEventBus: TEventBus);
+constructor TTopicSubscriber.Create(const AId: string; AEventBus: TEventBus);  
 begin
   inherited Create;
   FSubscriberId := AId;
@@ -1744,7 +1744,7 @@ begin
   FTopics.Duplicates := dupIgnore;
 end;
 
-destructor TTopicSubscriber.Destroy;
+destructor TTopicSubscriber.Destroy;  
 begin
   // Se désabonner de tout
   FEventBus.UnsubscribeAll(FSubscriberId);
@@ -1752,7 +1752,7 @@ begin
   inherited;
 end;
 
-procedure TTopicSubscriber.SubscribeTo(const ATopic: string);
+procedure TTopicSubscriber.SubscribeTo(const ATopic: string);  
 begin
   FTopics.Add(ATopic);
   FEventBus.Subscribe(FSubscriberId, ATopic, @HandleEvent);
@@ -1761,13 +1761,13 @@ begin
     [FSubscriberId, ATopic]));
 end;
 
-procedure TTopicSubscriber.UnsubscribeFrom(const ATopic: string);
+procedure TTopicSubscriber.UnsubscribeFrom(const ATopic: string);  
 begin
   FTopics.Delete(FTopics.IndexOf(ATopic));
   FEventBus.Unsubscribe(FSubscriberId, ATopic);
 end;
 
-procedure TTopicSubscriber.HandleEvent(AEvent: TEvent);
+procedure TTopicSubscriber.HandleEvent(AEvent: TEvent);  
 begin
   if FTopics.IndexOf(AEvent.EventType) >= 0 then
   begin
@@ -1834,23 +1834,23 @@ begin
   FHTTPClient := TFPHTTPClient.Create(nil);
 end;
 
-destructor TRabbitMQClient.Destroy;
+destructor TRabbitMQClient.Destroy;  
 begin
   FHTTPClient.Free;
   inherited;
 end;
 
-function TRabbitMQClient.GetBaseURL: string;
+function TRabbitMQClient.GetBaseURL: string;  
 begin
   Result := Format('http://%s:%d/api', [FHost, FPort]);
 end;
 
-function TRabbitMQClient.BasicAuth: string;
+function TRabbitMQClient.BasicAuth: string;  
 begin
   Result := 'Basic ' + EncodeStringBase64(FUsername + ':' + FPassword);
 end;
 
-procedure TRabbitMQClient.DeclareQueue(const AQueueName: string);
+procedure TRabbitMQClient.DeclareQueue(const AQueueName: string);  
 var
   URL: string;
   Body: TJSONObject;
@@ -1874,7 +1874,7 @@ begin
   end;
 end;
 
-procedure TRabbitMQClient.PublishMessage(const AQueueName, AMessage: string);
+procedure TRabbitMQClient.PublishMessage(const AQueueName, AMessage: string);  
 var
   URL: string;
   Body: TJSONObject;
@@ -1899,7 +1899,7 @@ begin
   end;
 end;
 
-function TRabbitMQClient.ConsumeMessage(const AQueueName: string): string;
+function TRabbitMQClient.ConsumeMessage(const AQueueName: string): string;  
 var
   URL: string;
   Response: string;
@@ -1969,7 +1969,7 @@ type
 
 implementation
 
-constructor TRedisClient.Create(const AHost: string; APort: Integer);
+constructor TRedisClient.Create(const AHost: string; APort: Integer);  
 begin
   inherited Create;
   FHost := AHost;
@@ -1977,14 +1977,14 @@ begin
   FConnected := False;
 end;
 
-destructor TRedisClient.Destroy;
+destructor TRedisClient.Destroy;  
 begin
   if FConnected then
     Disconnect;
   inherited;
 end;
 
-procedure TRedisClient.Connect;
+procedure TRedisClient.Connect;  
 begin
   // Implémentation simplifiée
   // Dans un cas réel, utiliser une bibliothèque Redis
@@ -1992,19 +1992,19 @@ begin
   WriteLn(Format('[Redis] Connecté à %s:%d', [FHost, FPort]));
 end;
 
-procedure TRedisClient.Disconnect;
+procedure TRedisClient.Disconnect;  
 begin
   FConnected := False;
   WriteLn('[Redis] Déconnecté');
 end;
 
-function TRedisClient.SendCommand(const ACommand: string): string;
+function TRedisClient.SendCommand(const ACommand: string): string;  
 begin
   // Implémentation simplifiée du protocole Redis
   Result := 'OK';
 end;
 
-procedure TRedisClient.Publish(const AChannel, AMessage: string);
+procedure TRedisClient.Publish(const AChannel, AMessage: string);  
 begin
   if not FConnected then
     raise Exception.Create('Non connecté à Redis');
@@ -2013,7 +2013,7 @@ begin
   WriteLn(Format('[Redis] Message publié sur: %s', [AChannel]));
 end;
 
-procedure TRedisClient.Subscribe(const AChannel: string);
+procedure TRedisClient.Subscribe(const AChannel: string);  
 begin
   if not FConnected then
     raise Exception.Create('Non connecté à Redis');
@@ -2022,7 +2022,7 @@ begin
   WriteLn(Format('[Redis] Abonné au canal: %s', [AChannel]));
 end;
 
-function TRedisClient.GetMessage: string;
+function TRedisClient.GetMessage: string;  
 begin
   // Attendre et récupérer un message
   Result := '';
@@ -2039,7 +2039,7 @@ Les messages doivent pouvoir être traités plusieurs fois sans effet de bord.
 
 ```pascal
 // ✅ BON : Idempotent
-procedure ProcessOrder(AOrderId: string);
+procedure ProcessOrder(AOrderId: string);  
 begin
   if not OrderExists(AOrderId) then
     CreateOrder(AOrderId)
@@ -2048,7 +2048,7 @@ begin
 end;
 
 // ❌ MAUVAIS : Non-idempotent
-procedure ProcessOrder(AOrderId: string);
+procedure ProcessOrder(AOrderId: string);  
 begin
   CreateOrder(AOrderId);  // Échoue si déjà existe
 end;
@@ -2080,7 +2080,7 @@ type
 ### 3. Gestion des erreurs
 
 ```pascal
-procedure ProcessMessage(AMessage: TMessage);
+procedure ProcessMessage(AMessage: TMessage);  
 begin
   try
     // Traiter le message
@@ -2120,12 +2120,12 @@ type
     function GetMetrics: TJSONObject;
   end;
 
-procedure TQueueMetrics.RecordPublished;
+procedure TQueueMetrics.RecordPublished;  
 begin
   InterlockedIncrement64(FMessagesPublished);
 end;
 
-function TQueueMetrics.GetMetrics: TJSONObject;
+function TQueueMetrics.GetMetrics: TJSONObject;  
 begin
   Result := TJSONObject.Create;
   Result.Add('published', FMessagesPublished);
@@ -2237,7 +2237,7 @@ type
 
 implementation
 
-constructor TECommerceSystem.Create;
+constructor TECommerceSystem.Create;  
 begin
   inherited Create;
 
@@ -2250,7 +2250,7 @@ begin
   FEventBus := TEventBus.Create;
 end;
 
-destructor TECommerceSystem.Destroy;
+destructor TECommerceSystem.Destroy;  
 begin
   Stop;
 
@@ -2262,7 +2262,7 @@ begin
   inherited;
 end;
 
-procedure TECommerceSystem.Start;
+procedure TECommerceSystem.Start;  
 begin
   WriteLn('[ECommerce] Démarrage du système...');
 
@@ -2274,7 +2274,7 @@ begin
   WriteLn('[ECommerce] Système opérationnel');
 end;
 
-procedure TECommerceSystem.Stop;
+procedure TECommerceSystem.Stop;  
 begin
   WriteLn('[ECommerce] Arrêt du système...');
 
@@ -2315,7 +2315,7 @@ begin
   WriteLn('[ECommerce] Commande enregistrée et événement publié');
 end;
 
-procedure TECommerceSystem.ProcessPayment(const AOrderId: string; AMontant: Currency);
+procedure TECommerceSystem.ProcessPayment(const AOrderId: string; AMontant: Currency);  
 var
   PaymentData: TJSONObject;
   Message: TMessage;
@@ -2378,7 +2378,7 @@ begin
   FBatchTimeout := ABatchTimeout;
 end;
 
-function TBatchProcessor.CollectBatch: TList<TMessage>;
+function TBatchProcessor.CollectBatch: TList<TMessage>;  
 var
   Message: TMessage;
   StartTime: TDateTime;
@@ -2398,7 +2398,7 @@ begin
   WriteLn(Format('[Batch] %d messages collectés', [Result.Count]));
 end;
 
-procedure TBatchProcessor.Run;
+procedure TBatchProcessor.Run;  
 var
   Batch: TList<TMessage>;
 begin
@@ -2451,7 +2451,7 @@ type
 
 implementation
 
-constructor TPartitionedQueue.Create(APartitionCount: Integer);
+constructor TPartitionedQueue.Create(APartitionCount: Integer);  
 var
   i: Integer;
 begin
@@ -2465,13 +2465,13 @@ begin
   WriteLn(Format('[PartitionedQueue] Créé avec %d partitions', [APartitionCount]));
 end;
 
-destructor TPartitionedQueue.Destroy;
+destructor TPartitionedQueue.Destroy;  
 begin
   FPartitions.Free;
   inherited;
 end;
 
-function TPartitionedQueue.GetPartitionIndex(AMessage: TMessage): Integer;
+function TPartitionedQueue.GetPartitionIndex(AMessage: TMessage): Integer;  
 var
   HashValue: Cardinal;
   i: Integer;
@@ -2483,7 +2483,7 @@ begin
   Result := HashValue mod Cardinal(FPartitionCount);
 end;
 
-procedure TPartitionedQueue.Enqueue(AMessage: TMessage);
+procedure TPartitionedQueue.Enqueue(AMessage: TMessage);  
 var
   PartitionIndex: Integer;
 begin
@@ -2494,7 +2494,7 @@ begin
     [PartitionIndex]));
 end;
 
-function TPartitionedQueue.DequeueFrom(APartitionIndex: Integer): TMessage;
+function TPartitionedQueue.DequeueFrom(APartitionIndex: Integer): TMessage;  
 begin
   if (APartitionIndex >= 0) and (APartitionIndex < FPartitionCount) then
     Result := FPartitions[APartitionIndex].Dequeue
@@ -2528,7 +2528,7 @@ type
 
 implementation
 
-class function TMessageCompressor.Compress(const AData: string): TBytes;
+class function TMessageCompressor.Compress(const AData: string): TBytes;  
 var
   Input: TStringStream;
   Output: TMemoryStream;
@@ -2556,7 +2556,7 @@ begin
   end;
 end;
 
-class function TMessageCompressor.Decompress(const AData: TBytes): string;
+class function TMessageCompressor.Decompress(const AData: TBytes): string;  
 var
   Input: TMemoryStream;
   Output: TStringStream;
@@ -2631,14 +2631,14 @@ var
 
 implementation
 
-constructor TMessageTracer.Create;
+constructor TMessageTracer.Create;  
 begin
   inherited Create;
   FTraces := TDictionary<string, TList<TMessageTrace>>.Create;
   FLock := TCriticalSection.Create;
 end;
 
-destructor TMessageTracer.Destroy;
+destructor TMessageTracer.Destroy;  
 var
   List: TList<TMessageTrace>;
 begin
@@ -2680,7 +2680,7 @@ begin
   end;
 end;
 
-function TMessageTracer.GetTrace(const AMessageId: string): TArray<TMessageTrace>;
+function TMessageTracer.GetTrace(const AMessageId: string): TArray<TMessageTrace>;  
 var
   List: TList<TMessageTrace>;
 begin
@@ -2695,7 +2695,7 @@ begin
   end;
 end;
 
-procedure TMessageTracer.PrintTrace(const AMessageId: string);
+procedure TMessageTracer.PrintTrace(const AMessageId: string);  
 var
   Traces: TArray<TMessageTrace>;
   Trace: TMessageTrace;
@@ -2768,7 +2768,7 @@ implementation
 uses
   DateUtils;
 
-constructor THealthChecker.Create(AQueue: TMessageQueue; AMaxQueueSize: Integer);
+constructor THealthChecker.Create(AQueue: TMessageQueue; AMaxQueueSize: Integer);  
 begin
   inherited Create;
   FQueue := AQueue;
@@ -2777,7 +2777,7 @@ begin
   FCriticalThreshold := 0.9; // 90%
 end;
 
-function THealthChecker.CheckHealth: TQueueHealth;
+function THealthChecker.CheckHealth: TQueueHealth;  
 var
   QueueSize: Integer;
   Utilization: Double;
@@ -2797,7 +2797,7 @@ begin
     Result.Status := hsHealthy;
 end;
 
-function THealthChecker.ToJSON: TJSONObject;
+function THealthChecker.ToJSON: TJSONObject;  
 var
   Health: TQueueHealth;
   StatusStr: string;

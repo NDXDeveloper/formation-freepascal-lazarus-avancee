@@ -153,7 +153,7 @@ uses
   {$ENDIF}
   FileUtil;
 
-constructor TPluginManager.Create(const APluginPath: string);
+constructor TPluginManager.Create(const APluginPath: string);  
 begin
   inherited Create;
   FPlugins := TList<IPlugin>.Create;
@@ -161,7 +161,7 @@ begin
   FPluginPath := APluginPath;
 end;
 
-destructor TPluginManager.Destroy;
+destructor TPluginManager.Destroy;  
 begin
   UnloadPlugins;
   FLibraries.Free;
@@ -169,7 +169,7 @@ begin
   inherited;
 end;
 
-function TPluginManager.LoadPluginFromLibrary(const ALibPath: string): IPlugin;
+function TPluginManager.LoadPluginFromLibrary(const ALibPath: string): IPlugin;  
 var
   LibHandle: TLibHandle;
   CreatePluginFunc: TPluginFactory;
@@ -215,7 +215,7 @@ begin
   end;
 end;
 
-procedure TPluginManager.ScanPluginDirectory;
+procedure TPluginManager.ScanPluginDirectory;  
 var
   FileList: TStringList;
   FileName: string;
@@ -258,7 +258,7 @@ begin
   end;
 end;
 
-procedure TPluginManager.LoadPlugins;
+procedure TPluginManager.LoadPlugins;  
 var
   Plugin: IPlugin;
 begin
@@ -281,7 +281,7 @@ begin
   WriteLn(Format('[PluginManager] %d plugin(s) chargé(s)', [FPlugins.Count]));
 end;
 
-procedure TPluginManager.UnloadPlugins;
+procedure TPluginManager.UnloadPlugins;  
 var
   Plugin: IPlugin;
   LibHandle: TLibHandle;
@@ -310,12 +310,12 @@ begin
   WriteLn('[PluginManager] Plugins déchargés');
 end;
 
-function TPluginManager.GetPluginCount: Integer;
+function TPluginManager.GetPluginCount: Integer;  
 begin
   Result := FPlugins.Count;
 end;
 
-function TPluginManager.GetPlugin(AIndex: Integer): IPlugin;
+function TPluginManager.GetPlugin(AIndex: Integer): IPlugin;  
 begin
   if (AIndex >= 0) and (AIndex < FPlugins.Count) then
     Result := FPlugins[AIndex]
@@ -323,7 +323,7 @@ begin
     Result := nil;
 end;
 
-function TPluginManager.FindPlugin(const AName: string): IPlugin;
+function TPluginManager.FindPlugin(const AName: string): IPlugin;  
 var
   Plugin: IPlugin;
 begin
@@ -339,7 +339,7 @@ begin
   end;
 end;
 
-procedure TPluginManager.ExecuteAll;
+procedure TPluginManager.ExecuteAll;  
 var
   Plugin: IPlugin;
 begin
@@ -356,7 +356,7 @@ begin
   end;
 end;
 
-procedure TPluginManager.ExecutePlugin(const AName: string);
+procedure TPluginManager.ExecutePlugin(const AName: string);  
 var
   Plugin: IPlugin;
 begin
@@ -399,7 +399,7 @@ type
     procedure Execute;
   end;
 
-constructor THelloWorldPlugin.Create;
+constructor THelloWorldPlugin.Create;  
 begin
   inherited Create;
 
@@ -410,22 +410,22 @@ begin
   FInfo.Website := 'https://example.com';
 end;
 
-function THelloWorldPlugin.GetInfo: TPluginInfo;
+function THelloWorldPlugin.GetInfo: TPluginInfo;  
 begin
   Result := FInfo;
 end;
 
-procedure THelloWorldPlugin.Initialize;
+procedure THelloWorldPlugin.Initialize;  
 begin
   WriteLn('[Plugin HelloWorld] Initialisation...');
 end;
 
-procedure THelloWorldPlugin.Finalize;
+procedure THelloWorldPlugin.Finalize;  
 begin
   WriteLn('[Plugin HelloWorld] Finalisation...');
 end;
 
-procedure THelloWorldPlugin.Execute;
+procedure THelloWorldPlugin.Execute;  
 begin
   WriteLn('═══════════════════════════════════════');
   WriteLn('  HELLO WORLD depuis un plugin !      ');
@@ -435,7 +435,7 @@ begin
 end;
 
 // Fonction exportée pour créer le plugin
-function CreatePlugin: IPlugin; stdcall;
+function CreatePlugin: IPlugin; stdcall;  
 begin
   Result := THelloWorldPlugin.Create;
 end;
@@ -443,7 +443,7 @@ end;
 exports
   CreatePlugin;
 
-begin
+begin  
 end.
 ```
 
@@ -579,7 +579,7 @@ type
     function GetDefaultConfig: TJSONObject;
   end;
 
-procedure TCalculatorPlugin.LoadConfig(AConfig: TJSONObject);
+procedure TCalculatorPlugin.LoadConfig(AConfig: TJSONObject);  
 begin
   FPrecision := AConfig.Get('precision', 2);
   FUseDegrees := AConfig.Get('use_degrees', True);
@@ -588,13 +588,13 @@ begin
     [FPrecision, BoolToStr(FUseDegrees, True)]));
 end;
 
-procedure TCalculatorPlugin.SaveConfig(AConfig: TJSONObject);
+procedure TCalculatorPlugin.SaveConfig(AConfig: TJSONObject);  
 begin
   AConfig.Add('precision', FPrecision);
   AConfig.Add('use_degrees', FUseDegrees);
 end;
 
-function TCalculatorPlugin.GetDefaultConfig: TJSONObject;
+function TCalculatorPlugin.GetDefaultConfig: TJSONObject;  
 begin
   Result := TJSONObject.Create;
   Result.Add('precision', 2);
@@ -696,7 +696,7 @@ begin
   end;
 end;
 
-procedure TProgressPlugin.Execute;
+procedure TProgressPlugin.Execute;  
 var
   i: Integer;
 begin
@@ -711,7 +711,7 @@ begin
   NotifyEvent(petAfterExecute, 'Traitement terminé', 100);
 end;
 
-procedure TProgressPlugin.SetEventCallback(ACallback: TPluginEventCallback);
+procedure TProgressPlugin.SetEventCallback(ACallback: TPluginEventCallback);  
 begin
   FEventCallback := ACallback;
 end;
@@ -764,13 +764,13 @@ implementation
 uses
   StrUtils;
 
-constructor TDependencyResolver.Create(APlugins: TList<IPlugin>);
+constructor TDependencyResolver.Create(APlugins: TList<IPlugin>);  
 begin
   inherited Create;
   FPlugins := APlugins;
 end;
 
-function TDependencyResolver.CompareVersions(const V1, V2: string): Integer;
+function TDependencyResolver.CompareVersions(const V1, V2: string): Integer;  
 var
   Parts1, Parts2: TStringList;
   i, Val1, Val2: Integer;
@@ -801,7 +801,7 @@ begin
   end;
 end;
 
-function TDependencyResolver.CheckDependency(const ADep: TPluginDependency): Boolean;
+function TDependencyResolver.CheckDependency(const ADep: TPluginDependency): Boolean;  
 var
   Plugin: IPlugin;
   Info: TPluginInfo;
@@ -822,7 +822,7 @@ begin
   end;
 end;
 
-function TDependencyResolver.ResolveDependencies: Boolean;
+function TDependencyResolver.ResolveDependencies: Boolean;  
 var
   Plugin: IPlugin;
   DepPlugin: IPluginWithDependencies;
@@ -856,7 +856,7 @@ begin
   end;
 end;
 
-function TDependencyResolver.GetLoadOrder: TList<IPlugin>;
+function TDependencyResolver.GetLoadOrder: TList<IPlugin>;  
 begin
   // Algorithme de tri topologique pour ordonner les plugins
   // selon leurs dépendances
@@ -918,13 +918,13 @@ type
 
 implementation
 
-constructor TSandboxExecutor.Create(AAllowedPermissions: TPluginPermissions);
+constructor TSandboxExecutor.Create(AAllowedPermissions: TPluginPermissions);  
 begin
   inherited Create;
   FAllowedPermissions := AAllowedPermissions;
 end;
 
-function TSandboxExecutor.CheckPermissions(APlugin: IPlugin): Boolean;
+function TSandboxExecutor.CheckPermissions(APlugin: IPlugin): Boolean;  
 var
   SecurePlugin: ISecurePlugin;
   Required: TPluginPermissions;
@@ -951,7 +951,7 @@ begin
   end;
 end;
 
-procedure TSandboxExecutor.ExecutePlugin(APlugin: IPlugin);
+procedure TSandboxExecutor.ExecutePlugin(APlugin: IPlugin);  
 begin
   if not CheckPermissions(APlugin) then
   begin
@@ -1001,13 +1001,13 @@ type
 
 implementation
 
-constructor TPluginSignature.Create(const APublicKey: string);
+constructor TPluginSignature.Create(const APublicKey: string);  
 begin
   inherited Create;
   FPublicKey := APublicKey;
 end;
 
-function TPluginSignature.CalculateHash(const AFileName: string): string;
+function TPluginSignature.CalculateHash(const AFileName: string): string;  
 var
   FileStream: TFileStream;
   Hash: TDCP_sha256;
@@ -1030,14 +1030,14 @@ begin
   end;
 end;
 
-function TPluginSignature.VerifySignature(const AHash, ASignature: string): Boolean;
+function TPluginSignature.VerifySignature(const AHash, ASignature: string): Boolean;  
 begin
   // Vérification simplifiée ici
   // Dans un cas réel, utiliser RSA ou autre algorithme asymétrique
   Result := AHash = ASignature;
 end;
 
-function TPluginSignature.VerifyPlugin(const AFileName, ASignatureFile: string): Boolean;
+function TPluginSignature.VerifyPlugin(const AFileName, ASignatureFile: string): Boolean;  
 var
   Hash, Signature: string;
   SigFile: TStringList;
@@ -1147,7 +1147,7 @@ implementation
 
 // TPluginMessage
 
-constructor TPluginMessage.Create(const ASender, ATopic: string; AData: TJSONObject);
+constructor TPluginMessage.Create(const ASender, ATopic: string; AData: TJSONObject);  
 begin
   inherited Create;
   FSender := ASender;
@@ -1156,7 +1156,7 @@ begin
   FTimestamp := Now;
 end;
 
-destructor TPluginMessage.Destroy;
+destructor TPluginMessage.Destroy;  
 begin
   FData.Free;
   inherited;
@@ -1175,7 +1175,7 @@ end;
 
 // TPluginMessageBus
 
-constructor TPluginMessageBus.Create;
+constructor TPluginMessageBus.Create;  
 begin
   inherited Create;
   FSubscribers := TObjectList<TMessageSubscriber>.Create(True);
@@ -1183,7 +1183,7 @@ begin
   InitCriticalSection(FLock);
 end;
 
-destructor TPluginMessageBus.Destroy;
+destructor TPluginMessageBus.Destroy;  
 var
   Msg: TPluginMessage;
 begin
@@ -1213,7 +1213,7 @@ begin
   end;
 end;
 
-procedure TPluginMessageBus.Unsubscribe(const APluginName, ATopic: string);
+procedure TPluginMessageBus.Unsubscribe(const APluginName, ATopic: string);  
 var
   i: Integer;
 begin
@@ -1234,7 +1234,7 @@ begin
   end;
 end;
 
-procedure TPluginMessageBus.Publish(const ASender, ATopic: string; AData: TJSONObject);
+procedure TPluginMessageBus.Publish(const ASender, ATopic: string; AData: TJSONObject);  
 var
   Message: TPluginMessage;
 begin
@@ -1245,7 +1245,7 @@ begin
     [ASender, ATopic]));
 end;
 
-procedure TPluginMessageBus.ProcessMessages;
+procedure TPluginMessageBus.ProcessMessages;  
 var
   Message: TPluginMessage;
   Subscriber: TMessageSubscriber;
@@ -1303,7 +1303,7 @@ type
     procedure SendMessage(const AText: string);
   end;
 
-constructor TChatPlugin.Create(AMessageBus: TPluginMessageBus);
+constructor TChatPlugin.Create(AMessageBus: TPluginMessageBus);  
 begin
   inherited Create;
   FMessageBus := AMessageBus;
@@ -1314,26 +1314,26 @@ begin
   FInfo.Description := 'Plugin de chat inter-plugin';
 end;
 
-procedure TChatPlugin.Initialize;
+procedure TChatPlugin.Initialize;  
 begin
   // S'abonner aux messages
   FMessageBus.Subscribe(FInfo.Name, 'chat', @OnMessageReceived);
   WriteLn('[ChatPlugin] Initialisé et abonné');
 end;
 
-procedure TChatPlugin.Finalize;
+procedure TChatPlugin.Finalize;  
 begin
   // Se désabonner
   FMessageBus.Unsubscribe(FInfo.Name, 'chat');
   WriteLn('[ChatPlugin] Finalisé');
 end;
 
-procedure TChatPlugin.Execute;
+procedure TChatPlugin.Execute;  
 begin
   SendMessage('Hello from ' + FInfo.Name);
 end;
 
-procedure TChatPlugin.OnMessageReceived(AMessage: TPluginMessage);
+procedure TChatPlugin.OnMessageReceived(AMessage: TPluginMessage);  
 var
   Text: string;
 begin
@@ -1345,7 +1345,7 @@ begin
     [AMessage.Sender, Text]));
 end;
 
-procedure TChatPlugin.SendMessage(const AText: string);
+procedure TChatPlugin.SendMessage(const AText: string);  
 var
   Data: TJSONObject;
 begin
@@ -1394,7 +1394,7 @@ implementation
 uses
   FileUtil, DateUtils;
 
-constructor TPluginWatcher.Create(AManager: TPluginManager; const APluginPath: string);
+constructor TPluginWatcher.Create(AManager: TPluginManager; const APluginPath: string);  
 begin
   inherited Create;
   FManager := AManager;
@@ -1407,7 +1407,7 @@ begin
   FTimer.Enabled := False;
 end;
 
-destructor TPluginWatcher.Destroy;
+destructor TPluginWatcher.Destroy;  
 begin
   StopWatching;
   FTimer.Free;
@@ -1415,7 +1415,7 @@ begin
   inherited;
 end;
 
-procedure TPluginWatcher.StartWatching;
+procedure TPluginWatcher.StartWatching;  
 var
   FileList: TStringList;
   FileName: string;
@@ -1440,13 +1440,13 @@ begin
   FTimer.Enabled := True;
 end;
 
-procedure TPluginWatcher.StopWatching;
+procedure TPluginWatcher.StopWatching;  
 begin
   FTimer.Enabled := False;
   WriteLn('[HotReload] Surveillance désactivée');
 end;
 
-procedure TPluginWatcher.CheckForChanges(Sender: TObject);
+procedure TPluginWatcher.CheckForChanges(Sender: TObject);  
 var
   FileList: TStringList;
   FileName: string;
@@ -1489,7 +1489,7 @@ begin
   end;
 end;
 
-procedure TPluginWatcher.ReloadPlugin(const APluginFile: string);
+procedure TPluginWatcher.ReloadPlugin(const APluginFile: string);  
 begin
   WriteLn('[HotReload] Rechargement: ', ExtractFileName(APluginFile));
 
@@ -1576,7 +1576,7 @@ type
 
 implementation
 
-constructor TMarketplacePluginInfo.Create;
+constructor TMarketplacePluginInfo.Create;  
 begin
   inherited Create;
   FScreenshots := TStringList.Create;
@@ -1586,14 +1586,14 @@ begin
   FRating := 0;
 end;
 
-destructor TMarketplacePluginInfo.Destroy;
+destructor TMarketplacePluginInfo.Destroy;  
 begin
   FTags.Free;
   FScreenshots.Free;
   inherited;
 end;
 
-function TMarketplacePluginInfo.ToJSON: TJSONObject;
+function TMarketplacePluginInfo.ToJSON: TJSONObject;  
 var
   ScreenshotsArray, TagsArray: TJSONArray;
   i: Integer;
@@ -1625,7 +1625,7 @@ begin
   Result.Add('tags', TagsArray);
 end;
 
-procedure TMarketplacePluginInfo.FromJSON(AJSON: TJSONObject);
+procedure TMarketplacePluginInfo.FromJSON(AJSON: TJSONObject);  
 var
   ScreenshotsArray, TagsArray: TJSONArray;
   i: Integer;
@@ -1711,14 +1711,14 @@ type
 
 implementation
 
-constructor TPluginManagerForm.Create(AOwner: TComponent; AManager: TPluginManager);
+constructor TPluginManagerForm.Create(AOwner: TComponent; AManager: TPluginManager);  
 begin
   inherited Create(AOwner);
   FManager := AManager;
   FEnabledPlugins := TStringList.Create;
 end;
 
-procedure TPluginManagerForm.FormCreate(Sender: TObject);
+procedure TPluginManagerForm.FormCreate(Sender: TObject);  
 begin
   Caption := 'Gestionnaire de Plugins';
   Width := 800;
@@ -1734,13 +1734,13 @@ begin
   RefreshPluginList;
 end;
 
-procedure TPluginManagerForm.FormDestroy(Sender: TObject);
+procedure TPluginManagerForm.FormDestroy(Sender: TObject);  
 begin
   FEnabledPlugins.Free;
   inherited;
 end;
 
-procedure TPluginManagerForm.RefreshPluginList;
+procedure TPluginManagerForm.RefreshPluginList;  
 var
   i: Integer;
   Plugin: IPlugin;
@@ -1785,7 +1785,7 @@ begin
     ShowPluginInfo(Plugin);
 end;
 
-procedure TPluginManagerForm.ShowPluginInfo(APlugin: IPlugin);
+procedure TPluginManagerForm.ShowPluginInfo(APlugin: IPlugin);  
 var
   Info: TPluginInfo;
   IsEnabled: Boolean;
@@ -1802,7 +1802,7 @@ begin
   ButtonDisable.Enabled := IsEnabled;
 end;
 
-procedure TPluginManagerForm.ButtonEnableClick(Sender: TObject);
+procedure TPluginManagerForm.ButtonEnableClick(Sender: TObject);  
 var
   Item: TListItem;
   Index: Integer;
@@ -1825,7 +1825,7 @@ begin
   end;
 end;
 
-procedure TPluginManagerForm.ButtonDisableClick(Sender: TObject);
+procedure TPluginManagerForm.ButtonDisableClick(Sender: TObject);  
 var
   Item: TListItem;
   Index: Integer;
@@ -1849,12 +1849,12 @@ begin
   end;
 end;
 
-procedure TPluginManagerForm.ButtonConfigureClick(Sender: TObject);
+procedure TPluginManagerForm.ButtonConfigureClick(Sender: TObject);  
 begin
   ShowMessage('Configuration du plugin (à implémenter)');
 end;
 
-procedure TPluginManagerForm.ButtonReloadClick(Sender: TObject);
+procedure TPluginManagerForm.ButtonReloadClick(Sender: TObject);  
 begin
   FManager.UnloadPlugins;
   FManager.LoadPlugins;
@@ -1900,7 +1900,7 @@ function CreatePlugin: IPlugin; cdecl;
 #!/bin/bash
 # build-plugins.sh
 
-PLUGIN_NAME=$1
+PLUGIN_NAME=$1  
 SOURCE_FILE="${PLUGIN_NAME}.lpr"
 
 if [ -z "$PLUGIN_NAME" ]; then
@@ -1936,7 +1936,7 @@ echo "Plateforme détectée: $PLATFORM"
 mkdir -p plugins
 
 # Compiler
-echo "Compilation en cours..."
+echo "Compilation en cours..."  
 fpc -o"plugins/${PLUGIN_NAME}.${EXT}" "$SOURCE_FILE"
 
 if [ $? -eq 0 ]; then
@@ -1967,7 +1967,7 @@ type
   end;
 
 // L'hôte supporte les deux versions
-function LoadPlugin(ALibPath: string): IInterface;
+function LoadPlugin(ALibPath: string): IInterface;  
 var
   PluginV2: IPluginV2;
   PluginV1: IPluginV1;
@@ -1995,7 +1995,7 @@ end;
 ### 2. Isoler les crashes de plugins
 
 ```pascal
-procedure SafeExecutePlugin(APlugin: IPlugin);
+procedure SafeExecutePlugin(APlugin: IPlugin);  
 begin
   try
     APlugin.Execute;
@@ -2062,23 +2062,23 @@ type
 
 implementation
 
-procedure TTestPluginSystem.SetUp;
+procedure TTestPluginSystem.SetUp;  
 begin
   FManager := TPluginManager.Create('test_plugins');
 end;
 
-procedure TTestPluginSystem.TearDown;
+procedure TTestPluginSystem.TearDown;  
 begin
   FManager.Free;
 end;
 
-procedure TTestPluginSystem.TestLoadPlugins;
+procedure TTestPluginSystem.TestLoadPlugins;  
 begin
   FManager.LoadPlugins;
   AssertTrue('Au moins un plugin chargé', FManager.GetPluginCount > 0);
 end;
 
-procedure TTestPluginSystem.TestExecutePlugin;
+procedure TTestPluginSystem.TestExecutePlugin;  
 var
   Plugin: IPlugin;
 begin
@@ -2093,7 +2093,7 @@ begin
   Plugin.Finalize;
 end;
 
-procedure TTestPluginSystem.TestPluginCrash;
+procedure TTestPluginSystem.TestPluginCrash;  
 var
   Plugin: IPlugin;
 begin
@@ -2243,7 +2243,7 @@ type
     procedure Execute;
   end;
 
-constructor TCalculatorPlugin.Create;
+constructor TCalculatorPlugin.Create;  
 begin
   inherited Create;
 
@@ -2257,38 +2257,38 @@ begin
   FOperator := ' ';
 end;
 
-destructor TCalculatorPlugin.Destroy;
+destructor TCalculatorPlugin.Destroy;  
 begin
   if Assigned(FForm) then
     FForm.Free;
   inherited;
 end;
 
-function TCalculatorPlugin.GetInfo: TPluginInfo;
+function TCalculatorPlugin.GetInfo: TPluginInfo;  
 begin
   Result := FInfo;
 end;
 
-procedure TCalculatorPlugin.Initialize;
+procedure TCalculatorPlugin.Initialize;  
 begin
   WriteLn('[Calculator] Plugin initialisé');
   CreateUI;
 end;
 
-procedure TCalculatorPlugin.Finalize;
+procedure TCalculatorPlugin.Finalize;  
 begin
   if Assigned(FForm) then
     FreeAndNil(FForm);
   WriteLn('[Calculator] Plugin finalisé');
 end;
 
-procedure TCalculatorPlugin.Execute;
+procedure TCalculatorPlugin.Execute;  
 begin
   if Assigned(FForm) then
     FForm.Show;
 end;
 
-procedure TCalculatorPlugin.CreateUI;
+procedure TCalculatorPlugin.CreateUI;  
 var
   Panel: TPanel;
   Button: TButton;
@@ -2366,7 +2366,7 @@ begin
   Button.Top := 220;
 end;
 
-procedure TCalculatorPlugin.ButtonClick(Sender: TObject);
+procedure TCalculatorPlugin.ButtonClick(Sender: TObject);  
 var
   Digit: string;
 begin
@@ -2378,7 +2378,7 @@ begin
     FDisplay.Text := FDisplay.Text + Digit;
 end;
 
-procedure TCalculatorPlugin.OperatorClick(Sender: TObject);
+procedure TCalculatorPlugin.OperatorClick(Sender: TObject);  
 var
   Op: string;
   CurrentDisplay: Double;
@@ -2435,7 +2435,7 @@ end;
 exports
   CreatePlugin;
 
-begin
+begin  
 end.
 ```
 
@@ -2480,7 +2480,7 @@ type
     procedure ExportData(const AData: TStringList; AFormat: TExportFormat);
   end;
 
-constructor TFileExporterPlugin.Create;
+constructor TFileExporterPlugin.Create;  
 begin
   inherited Create;
 
@@ -2494,22 +2494,22 @@ begin
   FDefaultPath := GetCurrentDir;
 end;
 
-function TFileExporterPlugin.GetInfo: TPluginInfo;
+function TFileExporterPlugin.GetInfo: TPluginInfo;  
 begin
   Result := FInfo;
 end;
 
-procedure TFileExporterPlugin.Initialize;
+procedure TFileExporterPlugin.Initialize;  
 begin
   WriteLn('[FileExporter] Plugin initialisé');
 end;
 
-procedure TFileExporterPlugin.Finalize;
+procedure TFileExporterPlugin.Finalize;  
 begin
   WriteLn('[FileExporter] Plugin finalisé');
 end;
 
-procedure TFileExporterPlugin.Execute;
+procedure TFileExporterPlugin.Execute;  
 var
   SampleData: TStringList;
 begin
@@ -2527,7 +2527,7 @@ begin
   end;
 end;
 
-procedure TFileExporterPlugin.LoadConfig(AConfig: TJSONObject);
+procedure TFileExporterPlugin.LoadConfig(AConfig: TJSONObject);  
 begin
   FDefaultFormat := TExportFormat(AConfig.Get('default_format', 1));
   FDefaultPath := AConfig.Get('default_path', GetCurrentDir);
@@ -2536,13 +2536,13 @@ begin
     [Ord(FDefaultFormat), FDefaultPath]));
 end;
 
-procedure TFileExporterPlugin.SaveConfig(AConfig: TJSONObject);
+procedure TFileExporterPlugin.SaveConfig(AConfig: TJSONObject);  
 begin
   AConfig.Add('default_format', Ord(FDefaultFormat));
   AConfig.Add('default_path', FDefaultPath);
 end;
 
-function TFileExporterPlugin.GetDefaultConfig: TJSONObject;
+function TFileExporterPlugin.GetDefaultConfig: TJSONObject;  
 begin
   Result := TJSONObject.Create;
   Result.Add('default_format', 1); // JSON par défaut
@@ -2704,7 +2704,7 @@ end;
 exports
   CreatePlugin;
 
-begin
+begin  
 end.
 ```
 
@@ -2794,12 +2794,12 @@ procedure Register;
 
 implementation
 
-procedure DoSomething(Sender: TObject);
+procedure DoSomething(Sender: TObject);  
 begin
   ShowMessage('Action du plugin !');
 end;
 
-procedure Register;
+procedure Register;  
 begin
   RegisterIDEMenuCommand(itmSourceInsertions,
     'MyPluginCommand',

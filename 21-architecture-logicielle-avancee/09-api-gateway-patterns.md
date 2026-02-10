@@ -101,7 +101,7 @@ uses
 
 // TAPIGateway
 
-constructor TAPIGateway.Create(APort: Integer);
+constructor TAPIGateway.Create(APort: Integer);  
 begin
   inherited Create;
   FPort := APort;
@@ -114,7 +114,7 @@ begin
   WriteLn(Format('[Gateway] Créé sur le port %d', [FPort]));
 end;
 
-destructor TAPIGateway.Destroy;
+destructor TAPIGateway.Destroy;  
 begin
   Stop;
   FServer.Free;
@@ -140,7 +140,7 @@ begin
     [AMethod, APath, ATargetService, ATargetPath]));
 end;
 
-function TAPIGateway.FindRoute(const APath, AMethod: string): Integer;
+function TAPIGateway.FindRoute(const APath, AMethod: string): Integer;  
 var
   i: Integer;
 begin
@@ -230,13 +230,13 @@ begin
   end;
 end;
 
-procedure TAPIGateway.Start;
+procedure TAPIGateway.Start;  
 begin
   FServer.Active := True;
   WriteLn(Format('[Gateway] Démarré sur http://localhost:%d', [FPort]));
 end;
 
-procedure TAPIGateway.Stop;
+procedure TAPIGateway.Stop;  
 begin
   if FServer.Active then
   begin
@@ -344,14 +344,14 @@ uses
 
 // TAuthManager
 
-constructor TAuthManager.Create(const ASecretKey: string);
+constructor TAuthManager.Create(const ASecretKey: string);  
 begin
   inherited Create;
   FSecretKey := ASecretKey;
   WriteLn('[Auth] Gestionnaire d''authentification initialisé');
 end;
 
-function TAuthManager.ExtractToken(const AAuthHeader: string): string;
+function TAuthManager.ExtractToken(const AAuthHeader: string): string;  
 begin
   // Format: "Bearer token123456"
   if Pos('Bearer ', AAuthHeader) = 1 then
@@ -360,7 +360,7 @@ begin
     Result := '';
 end;
 
-function TAuthManager.ParseToken(const AToken: string): TAuthToken;
+function TAuthManager.ParseToken(const AToken: string): TAuthToken;  
 var
   Decoded: string;
   JSON: TJSONObject;
@@ -409,12 +409,12 @@ begin
   end;
 end;
 
-function TAuthManager.IsTokenExpired(const AToken: TAuthToken): Boolean;
+function TAuthManager.IsTokenExpired(const AToken: TAuthToken): Boolean;  
 begin
   Result := Now > AToken.ExpiresAt;
 end;
 
-function TAuthManager.ValidateToken(const AToken: string): Boolean;
+function TAuthManager.ValidateToken(const AToken: string): Boolean;  
 var
   ParsedToken: TAuthToken;
 begin
@@ -444,7 +444,7 @@ begin
   Result := True;
 end;
 
-function TAuthManager.GetUserFromToken(const AToken: string): string;
+function TAuthManager.GetUserFromToken(const AToken: string): string;  
 var
   ParsedToken: TAuthToken;
 begin
@@ -452,7 +452,7 @@ begin
   Result := ParsedToken.UserId;
 end;
 
-function TAuthManager.HasRole(const AToken: string; const ARole: string): Boolean;
+function TAuthManager.HasRole(const AToken: string; const ARole: string): Boolean;  
 var
   ParsedToken: TAuthToken;
   Role: string;
@@ -512,7 +512,7 @@ implementation
 
 // TSecureAPIGateway
 
-constructor TSecureAPIGateway.Create(APort: Integer; const ASecretKey: string);
+constructor TSecureAPIGateway.Create(APort: Integer; const ASecretKey: string);  
 begin
   inherited Create(APort);
   FAuthManager := TAuthManager.Create(ASecretKey);
@@ -521,13 +521,13 @@ begin
   WriteLn('[SecureGateway] Gateway sécurisée créée');
 end;
 
-destructor TSecureAPIGateway.Destroy;
+destructor TSecureAPIGateway.Destroy;  
 begin
   FAuthManager.Free;
   inherited;
 end;
 
-procedure TSecureAPIGateway.AddPublicRoute(const APath: string);
+procedure TSecureAPIGateway.AddPublicRoute(const APath: string);  
 var
   Len: Integer;
 begin
@@ -538,7 +538,7 @@ begin
   WriteLn(Format('[SecureGateway] Route publique: %s', [APath]));
 end;
 
-function TSecureAPIGateway.IsPublicPath(const APath: string): Boolean;
+function TSecureAPIGateway.IsPublicPath(const APath: string): Boolean;  
 var
   PublicPath: string;
 begin
@@ -644,7 +644,7 @@ implementation
 
 // TRateLimiter
 
-constructor TRateLimiter.Create(AMaxRequests, AWindowSeconds: Integer);
+constructor TRateLimiter.Create(AMaxRequests, AWindowSeconds: Integer);  
 begin
   inherited Create;
   FMaxRequests := AMaxRequests;
@@ -655,13 +655,13 @@ begin
     [FMaxRequests, FWindowSeconds]));
 end;
 
-destructor TRateLimiter.Destroy;
+destructor TRateLimiter.Destroy;  
 begin
   FLimits.Free;
   inherited;
 end;
 
-procedure TRateLimiter.ResetWindowIfNeeded(const AClientId: string);
+procedure TRateLimiter.ResetWindowIfNeeded(const AClientId: string);  
 var
   Info: TRateLimitInfo;
   ElapsedSeconds: Int64;
@@ -687,7 +687,7 @@ begin
   end;
 end;
 
-function TRateLimiter.IsAllowed(const AClientId: string): Boolean;
+function TRateLimiter.IsAllowed(const AClientId: string): Boolean;  
 var
   Info: TRateLimitInfo;
 begin
@@ -712,7 +712,7 @@ begin
   end;
 end;
 
-function TRateLimiter.GetRemainingRequests(const AClientId: string): Integer;
+function TRateLimiter.GetRemainingRequests(const AClientId: string): Integer;  
 var
   Info: TRateLimitInfo;
 begin
@@ -770,7 +770,7 @@ begin
   WriteLn('[RateLimitedGateway] Gateway avec rate limiting créée');
 end;
 
-destructor TRateLimitedGateway.Destroy;
+destructor TRateLimitedGateway.Destroy;  
 begin
   FRateLimiter.Free;
   inherited;
@@ -1154,7 +1154,7 @@ begin
     [AServiceName, AFailureThreshold, ATimeoutSeconds]));
 end;
 
-function TCircuitBreaker.GetStateString: string;
+function TCircuitBreaker.GetStateString: string;  
 begin
   case FState of
     csClose: Result := 'CLOSED';
@@ -1163,7 +1163,7 @@ begin
   end;
 end;
 
-function TCircuitBreaker.ShouldAttemptReset: Boolean;
+function TCircuitBreaker.ShouldAttemptReset: Boolean;  
 var
   ElapsedSeconds: Int64;
 begin
@@ -1177,7 +1177,7 @@ begin
   Result := ElapsedSeconds >= FTimeoutSeconds;
 end;
 
-function TCircuitBreaker.IsCallAllowed: Boolean;
+function TCircuitBreaker.IsCallAllowed: Boolean;  
 begin
   case FState of
     csClose:
@@ -1212,7 +1212,7 @@ begin
   end;
 end;
 
-procedure TCircuitBreaker.RecordSuccess;
+procedure TCircuitBreaker.RecordSuccess;  
 begin
   FFailureCount := 0;
 
@@ -1239,7 +1239,7 @@ begin
   end;
 end;
 
-procedure TCircuitBreaker.RecordFailure;
+procedure TCircuitBreaker.RecordFailure;  
 begin
   FLastFailureTime := Now;
 
@@ -1268,13 +1268,13 @@ begin
   end;
 end;
 
-procedure TCircuitBreaker.OnCallSuccess;
+procedure TCircuitBreaker.OnCallSuccess;  
 begin
   WriteLn(Format('[CircuitBreaker] %s: ✓ Appel réussi', [FServiceName]));
   RecordSuccess;
 end;
 
-procedure TCircuitBreaker.OnCallFailure;
+procedure TCircuitBreaker.OnCallFailure;  
 begin
   WriteLn(Format('[CircuitBreaker] %s: ✗ Appel échoué', [FServiceName]));
   RecordFailure;
@@ -1318,7 +1318,7 @@ uses
 
 // TCircuitBreakerGateway
 
-constructor TCircuitBreakerGateway.Create(APort: Integer);
+constructor TCircuitBreakerGateway.Create(APort: Integer);  
 begin
   inherited Create(APort);
   FCircuitBreakers := TDictionary<string, TCircuitBreaker>.Create;
@@ -1326,7 +1326,7 @@ begin
   WriteLn('[CBGateway] Gateway avec Circuit Breaker créée');
 end;
 
-destructor TCircuitBreakerGateway.Destroy;
+destructor TCircuitBreakerGateway.Destroy;  
 var
   CB: TCircuitBreaker;
 begin
@@ -1475,7 +1475,7 @@ uses
 
 // TXMLToJSONTransformer
 
-function TXMLToJSONTransformer.TransformRequest(const AContent: string): string;
+function TXMLToJSONTransformer.TransformRequest(const AContent: string): string;  
 begin
   // Implémentation simplifiée
   // En production, utiliser une vraie bibliothèque XML
@@ -1487,7 +1487,7 @@ end;
 
 // TJSONToXMLTransformer
 
-function TJSONToXMLTransformer.TransformResponse(const AContent: string): string;
+function TJSONToXMLTransformer.TransformResponse(const AContent: string): string;  
 begin
   WriteLn('[Transformer] Conversion JSON → XML');
 
@@ -1497,19 +1497,19 @@ end;
 
 // TRequestEnricher
 
-constructor TRequestEnricher.Create(AAdditionalData: TJSONObject);
+constructor TRequestEnricher.Create(AAdditionalData: TJSONObject);  
 begin
   inherited Create;
   FAdditionalData := AAdditionalData;
 end;
 
-destructor TRequestEnricher.Destroy;
+destructor TRequestEnricher.Destroy;  
 begin
   FAdditionalData.Free;
   inherited;
 end;
 
-function TRequestEnricher.TransformRequest(const AContent: string): string;
+function TRequestEnricher.TransformRequest(const AContent: string): string;  
 var
   Parser: TJSONParser;
   RequestJSON, EnrichedJSON: TJSONObject;
@@ -1550,7 +1550,7 @@ end;
 
 // TResponseFilter
 
-constructor TResponseFilter.Create(const AFieldsToKeep: array of string);
+constructor TResponseFilter.Create(const AFieldsToKeep: array of string);  
 var
   i: Integer;
 begin
@@ -1561,7 +1561,7 @@ begin
     FFieldsToKeep[i] := AFieldsToKeep[i];
 end;
 
-function TResponseFilter.TransformResponse(const AContent: string): string;
+function TResponseFilter.TransformResponse(const AContent: string): string;  
 var
   Parser: TJSONParser;
   OriginalJSON, FilteredJSON: TJSONObject;
@@ -1621,7 +1621,7 @@ uses
   SysUtils, fpjson,
   APIGateway.Transformer;
 
-procedure DemoEnrichissement;
+procedure DemoEnrichissement;  
 var
   Enricher: TRequestEnricher;
   AdditionalData: TJSONObject;
@@ -1656,7 +1656,7 @@ begin
   end;
 end;
 
-procedure DemoFiltrage;
+procedure DemoFiltrage;  
 var
   Filter: TResponseFilter;
   OriginalResponse, FilteredResponse: string;
@@ -1755,7 +1755,7 @@ implementation
 
 // TCacheManager
 
-constructor TCacheManager.Create(ATTLSeconds, AMaxSize: Integer);
+constructor TCacheManager.Create(ATTLSeconds, AMaxSize: Integer);  
 begin
   inherited Create;
   FCache := TDictionary<string, TCacheEntry>.Create;
@@ -1766,18 +1766,18 @@ begin
     [FTTLSeconds, FMaxSize]));
 end;
 
-destructor TCacheManager.Destroy;
+destructor TCacheManager.Destroy;  
 begin
   FCache.Free;
   inherited;
 end;
 
-function TCacheManager.GenerateKey(const AMethod, APath: string): string;
+function TCacheManager.GenerateKey(const AMethod, APath: string): string;  
 begin
   Result := AMethod + ':' + APath;
 end;
 
-function TCacheManager.IsExpired(const AEntry: TCacheEntry): Boolean;
+function TCacheManager.IsExpired(const AEntry: TCacheEntry): Boolean;  
 var
   ElapsedSeconds: Int64;
 begin
@@ -1785,7 +1785,7 @@ begin
   Result := ElapsedSeconds > FTTLSeconds;
 end;
 
-procedure TCacheManager.CleanupExpired;
+procedure TCacheManager.CleanupExpired;  
 var
   Key: string;
   Entry: TCacheEntry;
@@ -1813,7 +1813,7 @@ begin
   end;
 end;
 
-procedure TCacheManager.EnforceMaxSize;
+procedure TCacheManager.EnforceMaxSize;  
 var
   Key: string;
   OldestKey: string;
@@ -1878,7 +1878,7 @@ begin
   end;
 end;
 
-procedure TCacheManager.Put(const AMethod, APath, AContent: string);
+procedure TCacheManager.Put(const AMethod, APath, AContent: string);  
 var
   Key: string;
   Entry: TCacheEntry;
@@ -1895,7 +1895,7 @@ begin
   EnforceMaxSize;
 end;
 
-procedure TCacheManager.Invalidate(const AMethod, APath: string);
+procedure TCacheManager.Invalidate(const AMethod, APath: string);  
 var
   Key: string;
 begin
@@ -1907,13 +1907,13 @@ begin
     WriteLn(Format('[Cache] Entrée non trouvée: %s', [Key]));
 end;
 
-procedure TCacheManager.Clear;
+procedure TCacheManager.Clear;  
 begin
   FCache.Clear;
   WriteLn('[Cache] ✓ Cache vidé');
 end;
 
-function TCacheManager.GetStats: string;
+function TCacheManager.GetStats: string;  
 var
   TotalHits: Integer;
   Entry: TCacheEntry;
@@ -1965,7 +1965,7 @@ implementation
 
 // TCachedGateway
 
-constructor TCachedGateway.Create(APort, ACacheTTL: Integer);
+constructor TCachedGateway.Create(APort, ACacheTTL: Integer);  
 begin
   inherited Create(APort);
   FCacheManager := TCacheManager.Create(ACacheTTL);
@@ -1977,14 +1977,14 @@ begin
   WriteLn('[CachedGateway] Gateway avec cache créée');
 end;
 
-destructor TCachedGateway.Destroy;
+destructor TCachedGateway.Destroy;  
 begin
   WriteLn('[CachedGateway] Stats finales: ' + FCacheManager.GetStats);
   FCacheManager.Free;
   inherited;
 end;
 
-procedure TCachedGateway.AddCacheableMethod(const AMethod: string);
+procedure TCachedGateway.AddCacheableMethod(const AMethod: string);  
 var
   Len: Integer;
 begin
@@ -1995,7 +1995,7 @@ begin
   WriteLn(Format('[CachedGateway] Méthode cacheable: %s', [AMethod]));
 end;
 
-function TCachedGateway.IsCacheable(const AMethod: string): Boolean;
+function TCachedGateway.IsCacheable(const AMethod: string): Boolean;  
 var
   Method: string;
 begin
@@ -2130,7 +2130,7 @@ uses
 
 // TServiceRegistry
 
-constructor TServiceRegistry.Create;
+constructor TServiceRegistry.Create;  
 begin
   inherited Create;
   FServices := TDictionary<string, TList<TServiceInfo>>.Create;
@@ -2139,7 +2139,7 @@ begin
   WriteLn('[ServiceRegistry] Registre de services créé');
 end;
 
-destructor TServiceRegistry.Destroy;
+destructor TServiceRegistry.Destroy;  
 var
   ServiceList: TList<TServiceInfo>;
 begin
@@ -2202,7 +2202,7 @@ begin
   end;
 end;
 
-function TServiceRegistry.CheckServiceHealth(const AService: TServiceInfo): Boolean;
+function TServiceRegistry.CheckServiceHealth(const AService: TServiceInfo): Boolean;  
 var
   Client: TFPHTTPClient;
   URL: string;
@@ -2229,7 +2229,7 @@ begin
   end;
 end;
 
-function TServiceRegistry.GetService(const AServiceName: string): TServiceInfo;
+function TServiceRegistry.GetService(const AServiceName: string): TServiceInfo;  
 var
   ServiceList: TList<TServiceInfo>;
   CurrentIndex: Integer;
@@ -2270,7 +2270,7 @@ begin
   raise Exception.CreateFmt('Aucune instance saine pour: %s', [AServiceName]);
 end;
 
-function TServiceRegistry.GetAllServices(const AServiceName: string): TList<TServiceInfo>;
+function TServiceRegistry.GetAllServices(const AServiceName: string): TList<TServiceInfo>;  
 var
   ServiceList: TList<TServiceInfo>;
 begin
@@ -2282,7 +2282,7 @@ begin
   end;
 end;
 
-procedure TServiceRegistry.HealthCheck(const AServiceName: string);
+procedure TServiceRegistry.HealthCheck(const AServiceName: string);  
 var
   ServiceList: TList<TServiceInfo>;
   i: Integer;
@@ -2310,7 +2310,7 @@ begin
   end;
 end;
 
-procedure TServiceRegistry.HealthCheckAll;
+procedure TServiceRegistry.HealthCheckAll;  
 var
   ServiceName: string;
 begin
@@ -2320,7 +2320,7 @@ begin
     HealthCheck(ServiceName);
 end;
 
-procedure TServiceRegistry.PrintRegistry;
+procedure TServiceRegistry.PrintRegistry;  
 var
   ServiceName: string;
   ServiceList: TList<TServiceInfo>;
@@ -2402,7 +2402,7 @@ uses
 
 // TDiscoveryGateway
 
-constructor TDiscoveryGateway.Create(APort: Integer);
+constructor TDiscoveryGateway.Create(APort: Integer);  
 begin
   inherited Create(APort);
   FServiceRegistry := TServiceRegistry.Create;
@@ -2411,7 +2411,7 @@ begin
   WriteLn('[DiscoveryGateway] Gateway avec Service Discovery créée');
 end;
 
-destructor TDiscoveryGateway.Destroy;
+destructor TDiscoveryGateway.Destroy;  
 begin
   FServiceRegistry.Free;
   inherited;
@@ -2639,14 +2639,14 @@ uses
 
 // TAPIComposer
 
-constructor TAPIComposer.Create;
+constructor TAPIComposer.Create;  
 begin
   inherited Create;
   FAggregator := TResponseAggregator.Create;
   WriteLn('[Composer] API Composer créé');
 end;
 
-destructor TAPIComposer.Destroy;
+destructor TAPIComposer.Destroy;  
 begin
   FAggregator.Free;
   inherited;
@@ -2899,7 +2899,7 @@ uses
 
 // TBFFGateway
 
-constructor TBFFGateway.Create(APort: Integer; AClientType: TClientType);
+constructor TBFFGateway.Create(APort: Integer; AClientType: TClientType);  
 var
   MobileFields: array[0..3] of string;
   WebFields: array[0..5] of string;
@@ -2942,14 +2942,14 @@ begin
   end;
 end;
 
-destructor TBFFGateway.Destroy;
+destructor TBFFGateway.Destroy;  
 begin
   if FResponseFilter <> nil then
     FResponseFilter.Free;
   inherited;
 end;
 
-function TBFFGateway.GetClientTypeFromRequest(const AUserAgent: string): TClientType;
+function TBFFGateway.GetClientTypeFromRequest(const AUserAgent: string): TClientType;  
 begin
   if Pos('Mobile', AUserAgent) > 0 then
     Result := ctMobileApp
@@ -3087,7 +3087,7 @@ implementation
 
 // TGatewayMonitor
 
-constructor TGatewayMonitor.Create(AMaxMetrics: Integer);
+constructor TGatewayMonitor.Create(AMaxMetrics: Integer);  
 begin
   inherited Create;
   FMetrics := TList<TRequestMetric>.Create;
@@ -3097,13 +3097,13 @@ begin
   WriteLn('[Monitor] Monitoring initialisé');
 end;
 
-destructor TGatewayMonitor.Destroy;
+destructor TGatewayMonitor.Destroy;  
 begin
   FMetrics.Free;
   inherited;
 end;
 
-procedure TGatewayMonitor.CleanupOldMetrics;
+procedure TGatewayMonitor.CleanupOldMetrics;  
 begin
   while FMetrics.Count > FMaxMetrics do
   begin
@@ -3130,7 +3130,7 @@ begin
     [AMethod, APath, AStatusCode, ADurationMs]));
 end;
 
-function TGatewayMonitor.GetStats: TGatewayStats;
+function TGatewayMonitor.GetStats: TGatewayStats;  
 var
   Metric: TRequestMetric;
   TotalDuration: Int64;
@@ -3163,7 +3163,7 @@ begin
     Result.RequestsPerSecond := 0;
 end;
 
-function TGatewayMonitor.GetStatsForPath(const APath: string): TGatewayStats;
+function TGatewayMonitor.GetStatsForPath(const APath: string): TGatewayStats;  
 var
   Metric: TRequestMetric;
   TotalDuration: Int64;
@@ -3196,7 +3196,7 @@ begin
   Result.RequestsPerSecond := 0; // Non calculé pour une route spécifique
 end;
 
-procedure TGatewayMonitor.PrintStats;
+procedure TGatewayMonitor.PrintStats;  
 var
   Stats: TGatewayStats;
 begin
@@ -3218,7 +3218,7 @@ begin
   WriteLn('═══════════════════════════════════════════');
 end;
 
-procedure TGatewayMonitor.PrintDetailedReport;
+procedure TGatewayMonitor.PrintDetailedReport;  
 var
   PathStats: TDictionary<string, Integer>;
   Metric: TRequestMetric;
@@ -3293,7 +3293,7 @@ implementation
 
 // TMonitoredGateway
 
-constructor TMonitoredGateway.Create(APort: Integer);
+constructor TMonitoredGateway.Create(APort: Integer);  
 begin
   inherited Create(APort);
   FMonitor := TGatewayMonitor.Create;
@@ -3301,7 +3301,7 @@ begin
   WriteLn('[MonitoredGateway] Gateway avec monitoring créée');
 end;
 
-destructor TMonitoredGateway.Destroy;
+destructor TMonitoredGateway.Destroy;  
 begin
   WriteLn;
   WriteLn('Statistiques finales:');
@@ -3399,7 +3399,7 @@ uses
 
 // TCompleteGateway
 
-constructor TCompleteGateway.Create(APort: Integer; const ASecretKey: string);
+constructor TCompleteGateway.Create(APort: Integer; const ASecretKey: string);  
 begin
   inherited Create(APort);
 
@@ -3413,7 +3413,7 @@ begin
   WriteLn('[CompleteGateway] Gateway complète créée avec tous les patterns');
 end;
 
-destructor TCompleteGateway.Destroy;
+destructor TCompleteGateway.Destroy;  
 begin
   WriteLn;
   WriteLn('═══════════════════════════════════════════');
@@ -3475,7 +3475,7 @@ begin
   Result := FAuthManager.ValidateToken(Token);
 end;
 
-function TCompleteGateway.CheckRateLimit(const AClientId: string): Boolean;
+function TCompleteGateway.CheckRateLimit(const AClientId: string): Boolean;  
 begin
   Result := FRateLimiter.IsAllowed(AClientId);
 end;
@@ -3673,7 +3673,7 @@ end.
 1. **Toujours authentifier**
 ```pascal
 // ✅ BON: Vérifier l'authentification
-if not IsAuthenticated(Request) then
+if not IsAuthenticated(Request) then  
 begin
   Response.Code := 401;
   Exit;
@@ -3683,7 +3683,7 @@ end;
 2. **Limiter les requêtes**
 ```pascal
 // ✅ BON: Rate limiting
-if not RateLimiter.IsAllowed(ClientId) then
+if not RateLimiter.IsAllowed(ClientId) then  
 begin
   Response.Code := 429;
   Exit;
@@ -3706,7 +3706,7 @@ Monitor.RecordRequest(Method, Path, StatusCode, Duration);
 5. **Gérer les timeouts**
 ```pascal
 // ✅ BON: Timeout défini
-Client.ConnectTimeout := 5000; // 5 secondes
+Client.ConnectTimeout := 5000; // 5 secondes  
 Client.IOTimeout := 10000;     // 10 secondes
 ```
 

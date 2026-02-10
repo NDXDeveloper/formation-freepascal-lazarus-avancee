@@ -12,7 +12,7 @@ Dans un monolithe, les transactions sont simples :
 
 ```pascal
 // ❌ Dans un monolithe - FACILE
-Database.StartTransaction;
+Database.StartTransaction;  
 try
   ReserverStock(ProduitId, Quantite);
   DebiterCompte(ClientId, Montant);
@@ -30,8 +30,8 @@ Dans une architecture distribuée, c'est **impossible** :
 ```pascal
 // ❌ Dans des microservices - IMPOSSIBLE
 // Chaque service a sa propre base de données
-ServiceStock.ReserverStock(ProduitId, Quantite);     // ← Service 1
-ServicePaiement.DebiterCompte(ClientId, Montant);    // ← Service 2
+ServiceStock.ReserverStock(ProduitId, Quantite);     // ← Service 1  
+ServicePaiement.DebiterCompte(ClientId, Montant);    // ← Service 2  
 ServiceCommande.CreerCommande(ClientId, ProduitId);  // ← Service 3
 
 // Que faire si le service 3 échoue ?
@@ -53,7 +53,7 @@ SAGA ÉCHOUÉE :
 Étape 1: Réserver stock          ✓
 Étape 2: Débiter compte          ✓
 Étape 3: Créer commande          ✗  ← Échec !
-Compensation 2: Rembourser       ✓  ← Annulation
+Compensation 2: Rembourser       ✓  ← Annulation  
 Compensation 1: Libérer stock    ✓  ← Annulation
 = Retour à l'état initial
 ```
@@ -156,7 +156,7 @@ implementation
 uses
   Variants;
 
-function NewGUID: string;
+function NewGUID: string;  
 var
   G: TGUID;
 begin
@@ -166,19 +166,19 @@ end;
 
 // TSagaContext
 
-constructor TSagaContext.Create;
+constructor TSagaContext.Create;  
 begin
   inherited Create;
   FData := TJSONObject.Create;
 end;
 
-destructor TSagaContext.Destroy;
+destructor TSagaContext.Destroy;  
 begin
   FData.Free;
   inherited;
 end;
 
-procedure TSagaContext.SetValue(const AKey: string; const AValue: Variant);
+procedure TSagaContext.SetValue(const AKey: string; const AValue: Variant);  
 begin
   if VarIsStr(AValue) then
     FData.Add(AKey, VarToStr(AValue))
@@ -188,7 +188,7 @@ begin
     FData.Add(AKey, Boolean(AValue));
 end;
 
-function TSagaContext.GetValue(const AKey: string): Variant;
+function TSagaContext.GetValue(const AKey: string): Variant;  
 begin
   if FData.Find(AKey) <> nil then
     Result := FData.Get(AKey, '')
@@ -198,7 +198,7 @@ end;
 
 // TSagaStep
 
-constructor TSagaStep.Create(const AName: string);
+constructor TSagaStep.Create(const AName: string);  
 begin
   inherited Create;
   FName := AName;
@@ -207,7 +207,7 @@ end;
 
 // TSagaOrchestrator
 
-constructor TSagaOrchestrator.Create;
+constructor TSagaOrchestrator.Create;  
 begin
   inherited Create;
   FSteps := TObjectList<TSagaStep>.Create(True);
@@ -215,7 +215,7 @@ begin
   FExecutedSteps := TList<TSagaStep>.Create;
 end;
 
-destructor TSagaOrchestrator.Destroy;
+destructor TSagaOrchestrator.Destroy;  
 begin
   FExecutedSteps.Free;
   FContext.Free;
@@ -223,13 +223,13 @@ begin
   inherited;
 end;
 
-procedure TSagaOrchestrator.AddStep(AStep: TSagaStep);
+procedure TSagaOrchestrator.AddStep(AStep: TSagaStep);  
 begin
   FSteps.Add(AStep);
   WriteLn(Format('[Saga] Étape ajoutée: %s', [AStep.Name]));
 end;
 
-function TSagaOrchestrator.Execute: Boolean;
+function TSagaOrchestrator.Execute: Boolean;  
 var
   Step: TSagaStep;
   StepResult: TSagaStepResult;
@@ -371,14 +371,14 @@ implementation
 
 // TSagaReserverStock
 
-constructor TSagaReserverStock.Create(const AProduitId: string; AQuantite: Integer);
+constructor TSagaReserverStock.Create(const AProduitId: string; AQuantite: Integer);  
 begin
   inherited Create('Réserver Stock');
   FProduitId := AProduitId;
   FQuantite := AQuantite;
 end;
 
-function TSagaReserverStock.Execute(AContext: TSagaContext): TSagaStepResult;
+function TSagaReserverStock.Execute(AContext: TSagaContext): TSagaStepResult;  
 begin
   WriteLn(Format('  → Réservation de %d unités du produit %s',
     [FQuantite, FProduitId]));
@@ -404,7 +404,7 @@ begin
   end;
 end;
 
-function TSagaReserverStock.Compensate(AContext: TSagaContext): Boolean;
+function TSagaReserverStock.Compensate(AContext: TSagaContext): Boolean;  
 var
   ReservationId: string;
 begin
@@ -421,14 +421,14 @@ end;
 
 // TSagaDebiterCompte
 
-constructor TSagaDebiterCompte.Create(const AClientId: string; AMontant: Currency);
+constructor TSagaDebiterCompte.Create(const AClientId: string; AMontant: Currency);  
 begin
   inherited Create('Débiter Compte');
   FClientId := AClientId;
   FMontant := AMontant;
 end;
 
-function TSagaDebiterCompte.Execute(AContext: TSagaContext): TSagaStepResult;
+function TSagaDebiterCompte.Execute(AContext: TSagaContext): TSagaStepResult;  
 begin
   WriteLn(Format('  → Débit de %.2f € sur le compte %s', [FMontant, FClientId]));
 
@@ -452,7 +452,7 @@ begin
   end;
 end;
 
-function TSagaDebiterCompte.Compensate(AContext: TSagaContext): Boolean;
+function TSagaDebiterCompte.Compensate(AContext: TSagaContext): Boolean;  
 var
   TransactionId: string;
   Montant: Currency;
@@ -472,14 +472,14 @@ end;
 
 // TSagaCreerCommande
 
-constructor TSagaCreerCommande.Create(const AClientId, AProduitId: string);
+constructor TSagaCreerCommande.Create(const AClientId, AProduitId: string);  
 begin
   inherited Create('Créer Commande');
   FClientId := AClientId;
   FProduitId := AProduitId;
 end;
 
-function TSagaCreerCommande.Execute(AContext: TSagaContext): TSagaStepResult;
+function TSagaCreerCommande.Execute(AContext: TSagaContext): TSagaStepResult;  
 begin
   WriteLn(Format('  → Création commande pour client %s', [FClientId]));
 
@@ -502,7 +502,7 @@ begin
   end;
 end;
 
-function TSagaCreerCommande.Compensate(AContext: TSagaContext): Boolean;
+function TSagaCreerCommande.Compensate(AContext: TSagaContext): Boolean;  
 var
   CommandeId: string;
 begin
@@ -519,13 +519,13 @@ end;
 
 // TSagaEnvoyerNotification
 
-constructor TSagaEnvoyerNotification.Create(const AClientId: string);
+constructor TSagaEnvoyerNotification.Create(const AClientId: string);  
 begin
   inherited Create('Envoyer Notification');
   FClientId := AClientId;
 end;
 
-function TSagaEnvoyerNotification.Execute(AContext: TSagaContext): TSagaStepResult;
+function TSagaEnvoyerNotification.Execute(AContext: TSagaContext): TSagaStepResult;  
 var
   CommandeId: string;
 begin
@@ -541,7 +541,7 @@ begin
   Result := ssSuccess;
 end;
 
-function TSagaEnvoyerNotification.Compensate(AContext: TSagaContext): Boolean;
+function TSagaEnvoyerNotification.Compensate(AContext: TSagaContext): Boolean;  
 begin
   WriteLn('  → Aucune compensation nécessaire pour la notification');
   Result := True;
@@ -561,7 +561,7 @@ uses
   SysUtils,
   Saga.Core, Saga.ECommerce;
 
-procedure TestSagaReussie;
+procedure TestSagaReussie;  
 var
   Saga: TSagaOrchestrator;
 begin
@@ -586,7 +586,7 @@ begin
   end;
 end;
 
-procedure TestSagaEchecEtCompensation;
+procedure TestSagaEchecEtCompensation;  
 var
   Saga: TSagaOrchestrator;
 begin
@@ -708,7 +708,7 @@ end;
 
 // TStockReserveEvent
 
-constructor TStockReserveEvent.Create(const ACommandeId, AReservationId: string);
+constructor TStockReserveEvent.Create(const ACommandeId, AReservationId: string);  
 var
   Data: TJSONObject;
 begin
@@ -721,7 +721,7 @@ end;
 
 // TStockReservationEchoueeEvent
 
-constructor TStockReservationEchoueeEvent.Create(const ACommandeId, ARaison: string);
+constructor TStockReservationEchoueeEvent.Create(const ACommandeId, ARaison: string);  
 var
   Data: TJSONObject;
 begin
@@ -734,7 +734,7 @@ end;
 
 // TPaiementEffectueEvent
 
-constructor TPaiementEffectueEvent.Create(const ACommandeId, ATransactionId: string);
+constructor TPaiementEffectueEvent.Create(const ACommandeId, ATransactionId: string);  
 var
   Data: TJSONObject;
 begin
@@ -747,7 +747,7 @@ end;
 
 // TPaiementEchoueEvent
 
-constructor TPaiementEchoueEvent.Create(const ACommandeId, ARaison: string);
+constructor TPaiementEchoueEvent.Create(const ACommandeId, ARaison: string);  
 var
   Data: TJSONObject;
 begin
@@ -760,7 +760,7 @@ end;
 
 // TCommandeCreeeEvent
 
-constructor TCommandeCreeeEvent.Create(const ACommandeId: string);
+constructor TCommandeCreeeEvent.Create(const ACommandeId: string);  
 var
   Data: TJSONObject;
 begin
@@ -772,7 +772,7 @@ end;
 
 // TCommandeAnnuleeEvent
 
-constructor TCommandeAnnuleeEvent.Create(const ACommandeId, ARaison: string);
+constructor TCommandeAnnuleeEvent.Create(const ACommandeId, ARaison: string);  
 var
   Data: TJSONObject;
 begin
@@ -844,19 +844,19 @@ implementation
 
 // TServiceStock
 
-constructor TServiceStock.Create(AEventBus: TEventBus);
+constructor TServiceStock.Create(AEventBus: TEventBus);  
 begin
   inherited Create;
   FEventBus := AEventBus;
 end;
 
-procedure TServiceStock.Subscribe;
+procedure TServiceStock.Subscribe;  
 begin
   FEventBus.Subscribe('ServiceStock', 'commande.initiee', @OnCommandeInitiee);
   FEventBus.Subscribe('ServiceStock', 'commande.annulee', @OnCommandeAnnulee);
 end;
 
-procedure TServiceStock.OnCommandeInitiee(AEvent: TEvent);
+procedure TServiceStock.OnCommandeInitiee(AEvent: TEvent);  
 var
   CommandeId, ProduitId: string;
   Quantite: Integer;
@@ -885,7 +885,7 @@ begin
   end;
 end;
 
-procedure TServiceStock.OnCommandeAnnulee(AEvent: TEvent);
+procedure TServiceStock.OnCommandeAnnulee(AEvent: TEvent);  
 var
   CommandeId: string;
 begin
@@ -895,19 +895,19 @@ end;
 
 // TServicePaiement
 
-constructor TServicePaiement.Create(AEventBus: TEventBus);
+constructor TServicePaiement.Create(AEventBus: TEventBus);  
 begin
   inherited Create;
   FEventBus := AEventBus;
 end;
 
-procedure TServicePaiement.Subscribe;
+procedure TServicePaiement.Subscribe;  
 begin
   FEventBus.Subscribe('ServicePaiement', 'stock.reserve', @OnStockReserve);
   FEventBus.Subscribe('ServicePaiement', 'commande.annulee', @OnCommandeAnnulee);
 end;
 
-procedure TServicePaiement.OnStockReserve(AEvent: TEvent);
+procedure TServicePaiement.OnStockReserve(AEvent: TEvent);  
 var
   CommandeId: string;
   TransactionId: string;
@@ -933,7 +933,7 @@ begin
   end;
 end;
 
-procedure TServicePaiement.OnCommandeAnnulee(AEvent: TEvent);
+procedure TServicePaiement.OnCommandeAnnulee(AEvent: TEvent);  
 var
   CommandeId: string;
 begin
@@ -943,20 +943,20 @@ end;
 
 // TServiceCommande
 
-constructor TServiceCommande.Create(AEventBus: TEventBus);
+constructor TServiceCommande.Create(AEventBus: TEventBus);  
 begin
   inherited Create;
   FEventBus := AEventBus;
 end;
 
-procedure TServiceCommande.Subscribe;
+procedure TServiceCommande.Subscribe;  
 begin
   FEventBus.Subscribe('ServiceCommande', 'paiement.effectue', @OnPaiementEffectue);
   FEventBus.Subscribe('ServiceCommande', 'paiement.echoue', @OnPaiementEchoue);
   FEventBus.Subscribe('ServiceCommande', 'stock.reservation_echouee', @OnStockReservationEchouee);
 end;
 
-procedure TServiceCommande.OnPaiementEffectue(AEvent: TEvent);
+procedure TServiceCommande.OnPaiementEffectue(AEvent: TEvent);  
 var
   CommandeId: string;
 begin
@@ -979,7 +979,7 @@ begin
   end;
 end;
 
-procedure TServiceCommande.OnPaiementEchoue(AEvent: TEvent);
+procedure TServiceCommande.OnPaiementEchoue(AEvent: TEvent);  
 var
   CommandeId, Raison: string;
 begin
@@ -992,7 +992,7 @@ begin
   FEventBus.Publish(TCommandeAnnuleeEvent.Create(CommandeId, Raison));
 end;
 
-procedure TServiceCommande.OnStockReservationEchouee(AEvent: TEvent);
+procedure TServiceCommande.OnStockReservationEchouee(AEvent: TEvent);  
 var
   CommandeId, Raison: string;
 begin
@@ -1047,7 +1047,7 @@ implementation
 
 // TEvent
 
-constructor TEvent.Create(const AEventType, ASource: string; AData: TJSONObject);
+constructor TEvent.Create(const AEventType, ASource: string; AData: TJSONObject);  
 begin
   inherited Create;
   FEventId := NewGUID;
@@ -1057,7 +1057,7 @@ begin
   FData := AData;
 end;
 
-destructor TEvent.Destroy;
+destructor TEvent.Destroy;  
 begin
   FData.Free;
   inherited;
@@ -1109,7 +1109,7 @@ implementation
 
 // TEventBus
 
-constructor TEventBus.Create;
+constructor TEventBus.Create;  
 begin
   inherited Create;
   FSubscriptions := TList<TEventSubscription>.Create;
@@ -1117,7 +1117,7 @@ begin
   FMaxHistorySize := 1000;
 end;
 
-destructor TEventBus.Destroy;
+destructor TEventBus.Destroy;  
 begin
   FEventHistory.Free;
   FSubscriptions.Free;
@@ -1138,7 +1138,7 @@ begin
   WriteLn(Format('[EventBus] %s souscrit à %s', [ASubscriberId, AEventType]));
 end;
 
-procedure TEventBus.Unsubscribe(const ASubscriberId, AEventType: string);
+procedure TEventBus.Unsubscribe(const ASubscriberId, AEventType: string);  
 var
   i: Integer;
 begin
@@ -1153,7 +1153,7 @@ begin
   end;
 end;
 
-procedure TEventBus.Publish(AEvent: TEvent);
+procedure TEventBus.Publish(AEvent: TEvent);  
 var
   Subscription: TEventSubscription;
 begin
@@ -1187,7 +1187,7 @@ begin
   WriteLn;
 end;
 
-function TEventBus.GetHistory(const AEventType: string = ''): TList<TEvent>;
+function TEventBus.GetHistory(const AEventType: string = ''): TList<TEvent>;  
 var
   Event: TEvent;
 begin
@@ -1215,7 +1215,7 @@ uses
   EventBus.Events, EventBus.Bus,
   Saga.Choreography, Saga.Services;
 
-procedure TestChoreographieReussie;
+procedure TestChoreographieReussie;  
 var
   EventBus: TEventBus;
   ServiceStock: TServiceStock;
@@ -1269,7 +1269,7 @@ begin
   end;
 end;
 
-procedure TestChoreographieAvecEchec;
+procedure TestChoreographieAvecEchec;  
 var
   EventBus: TEventBus;
   ServiceStock: TServiceStock;
@@ -1425,13 +1425,13 @@ uses
 
 // TSagaStepWithTimeout
 
-constructor TSagaStepWithTimeout.Create(const AName: string; ATimeoutMs: Integer);
+constructor TSagaStepWithTimeout.Create(const AName: string; ATimeoutMs: Integer);  
 begin
   inherited Create(AName);
   FTimeoutMs := ATimeoutMs;
 end;
 
-function TSagaStepWithTimeout.IsTimeout: Boolean;
+function TSagaStepWithTimeout.IsTimeout: Boolean;  
 var
   ElapsedMs: Int64;
 begin
@@ -1439,7 +1439,7 @@ begin
   Result := ElapsedMs > FTimeoutMs;
 end;
 
-function TSagaStepWithTimeout.Execute(AContext: TSagaContext): TSagaStepResult;
+function TSagaStepWithTimeout.Execute(AContext: TSagaContext): TSagaStepResult;  
 begin
   FStartTime := Now;
   Result := ssSuccess; // Override dans les classes dérivées
@@ -1455,7 +1455,7 @@ begin
   FMontant := AMontant;
 end;
 
-function TSagaPaiementAvecTimeout.Execute(AContext: TSagaContext): TSagaStepResult;
+function TSagaPaiementAvecTimeout.Execute(AContext: TSagaContext): TSagaStepResult;  
 var
   DelayMs: Integer;
 begin
@@ -1483,7 +1483,7 @@ begin
   end;
 end;
 
-function TSagaPaiementAvecTimeout.Compensate(AContext: TSagaContext): Boolean;
+function TSagaPaiementAvecTimeout.Compensate(AContext: TSagaContext): Boolean;  
 begin
   WriteLn('  → Remboursement suite au timeout');
   Result := True;
@@ -1545,7 +1545,7 @@ begin
   FCurrentRetry := 0;
 end;
 
-function TSagaStepWithRetry.Execute(AContext: TSagaContext): TSagaStepResult;
+function TSagaStepWithRetry.Execute(AContext: TSagaContext): TSagaStepResult;  
 begin
   FCurrentRetry := 0;
 
@@ -1572,7 +1572,7 @@ end;
 
 // TSagaServiceExterneInstable
 
-constructor TSagaServiceExterneInstable.Create(const AServiceUrl: string);
+constructor TSagaServiceExterneInstable.Create(const AServiceUrl: string);  
 begin
   inherited Create('Service Externe Instable', 3, 1000);
   FServiceUrl := AServiceUrl;
@@ -1600,7 +1600,7 @@ begin
   end;
 end;
 
-function TSagaServiceExterneInstable.Compensate(AContext: TSagaContext): Boolean;
+function TSagaServiceExterneInstable.Compensate(AContext: TSagaContext): Boolean;  
 begin
   WriteLn('  → Annulation appel service externe');
   Result := True;
@@ -1653,7 +1653,7 @@ uses
 
 // TPersistentSaga
 
-constructor TPersistentSaga.Create(const ASagaId: string);
+constructor TPersistentSaga.Create(const ASagaId: string);  
 begin
   inherited Create;
   FSagaId := ASagaId;
@@ -1667,13 +1667,13 @@ begin
   {$ENDIF}
 end;
 
-destructor TPersistentSaga.Destroy;
+destructor TPersistentSaga.Destroy;  
 begin
   SaveState;
   inherited;
 end;
 
-procedure TPersistentSaga.SaveState;
+procedure TPersistentSaga.SaveState;  
 var
   JSON: TJSONObject;
   StateFile: TextFile;
@@ -1704,7 +1704,7 @@ begin
   end;
 end;
 
-procedure TPersistentSaga.LoadState;
+procedure TPersistentSaga.LoadState;  
 var
   StateFile: TextFile;
   JSONStr: string;
@@ -1739,7 +1739,7 @@ begin
   end;
 end;
 
-function TPersistentSaga.Execute: Boolean;
+function TPersistentSaga.Execute: Boolean;  
 begin
   FState := ssRunning;
   SaveState;
@@ -1754,7 +1754,7 @@ begin
   SaveState;
 end;
 
-procedure TPersistentSaga.Resume;
+procedure TPersistentSaga.Resume;  
 begin
   WriteLn('[PersistentSaga] Tentative de reprise...');
   LoadState;
@@ -1822,30 +1822,30 @@ implementation
 
 // TIdempotencyManager
 
-constructor TIdempotencyManager.Create;
+constructor TIdempotencyManager.Create;  
 begin
   inherited Create;
   FExecutedOperations := TDictionary<string, Boolean>.Create;
 end;
 
-destructor TIdempotencyManager.Destroy;
+destructor TIdempotencyManager.Destroy;  
 begin
   FExecutedOperations.Free;
   inherited;
 end;
 
-function TIdempotencyManager.IsAlreadyExecuted(const AOperationId: string): Boolean;
+function TIdempotencyManager.IsAlreadyExecuted(const AOperationId: string): Boolean;  
 begin
   Result := FExecutedOperations.ContainsKey(AOperationId);
 end;
 
-procedure TIdempotencyManager.MarkAsExecuted(const AOperationId: string);
+procedure TIdempotencyManager.MarkAsExecuted(const AOperationId: string);  
 begin
   FExecutedOperations.AddOrSetValue(AOperationId, True);
   WriteLn(Format('[Idempotency] Opération marquée: %s', [AOperationId]));
 end;
 
-procedure TIdempotencyManager.Clear;
+procedure TIdempotencyManager.Clear;  
 begin
   FExecutedOperations.Clear;
 end;
@@ -1860,7 +1860,7 @@ begin
   FIdempotencyManager := AManager;
 end;
 
-function TSagaIdempotentStep.Execute(AContext: TSagaContext): TSagaStepResult;
+function TSagaIdempotentStep.Execute(AContext: TSagaContext): TSagaStepResult;  
 begin
   if FIdempotencyManager.IsAlreadyExecuted(FOperationId) then
   begin
@@ -1882,7 +1882,7 @@ end.
 
 ```pascal
 // Exemple : Compensation partielle
-procedure TOrderSaga.HandlePartialFailure;
+procedure TOrderSaga.HandlePartialFailure;  
 begin
   WriteLn('[Saga] Gestion panne partielle');
 
@@ -1960,7 +1960,7 @@ implementation
 
 // TSagaMetrics
 
-constructor TSagaMetrics.Create(const ASagaId: string);
+constructor TSagaMetrics.Create(const ASagaId: string);  
 begin
   inherited Create;
   FSagaId := ASagaId;
@@ -1969,40 +1969,40 @@ begin
   FSuccess := False;
 end;
 
-destructor TSagaMetrics.Destroy;
+destructor TSagaMetrics.Destroy;  
 begin
   FStepMetrics.Free;
   inherited;
 end;
 
-procedure TSagaMetrics.StartSaga;
+procedure TSagaMetrics.StartSaga;  
 begin
   FStartTime := Now;
 end;
 
-procedure TSagaMetrics.EndSaga(ASuccess: Boolean; const AErrorMessage: string);
+procedure TSagaMetrics.EndSaga(ASuccess: Boolean; const AErrorMessage: string);  
 begin
   FEndTime := Now;
   FSuccess := ASuccess;
   FErrorMessage := AErrorMessage;
 end;
 
-procedure TSagaMetrics.RecordStepDuration(const AStepName: string; ADurationMs: Integer);
+procedure TSagaMetrics.RecordStepDuration(const AStepName: string; ADurationMs: Integer);  
 begin
   FStepMetrics.AddOrSetValue(AStepName, ADurationMs);
 end;
 
-procedure TSagaMetrics.IncrementCompensation;
+procedure TSagaMetrics.IncrementCompensation;  
 begin
   Inc(FCompensationCount);
 end;
 
-function TSagaMetrics.GetTotalDurationMs: Int64;
+function TSagaMetrics.GetTotalDurationMs: Int64;  
 begin
   Result := MilliSecondsBetween(FEndTime, FStartTime);
 end;
 
-function TSagaMetrics.GetAveragStepDurationMs: Double;
+function TSagaMetrics.GetAveragStepDurationMs: Double;  
 var
   Total: Integer;
   Duration: Integer;
@@ -2020,7 +2020,7 @@ begin
   Result := Total / FStepMetrics.Count;
 end;
 
-procedure TSagaMetrics.PrintReport;
+procedure TSagaMetrics.PrintReport;  
 var
   Pair: TPair<string, Integer>;
 begin
@@ -2047,24 +2047,24 @@ end;
 
 // TSagaMetricsCollector
 
-constructor TSagaMetricsCollector.Create;
+constructor TSagaMetricsCollector.Create;  
 begin
   inherited Create;
   FMetrics := TObjectList<TSagaMetrics>.Create(True);
 end;
 
-destructor TSagaMetricsCollector.Destroy;
+destructor TSagaMetricsCollector.Destroy;  
 begin
   FMetrics.Free;
   inherited;
 end;
 
-procedure TSagaMetricsCollector.AddMetrics(AMetrics: TSagaMetrics);
+procedure TSagaMetricsCollector.AddMetrics(AMetrics: TSagaMetrics);  
 begin
   FMetrics.Add(AMetrics);
 end;
 
-procedure TSagaMetricsCollector.PrintGlobalReport;
+procedure TSagaMetricsCollector.PrintGlobalReport;  
 var
   Metrics: TSagaMetrics;
   TotalSagas, SuccessCount, FailureCount: Integer;
@@ -2101,14 +2101,14 @@ begin
   WriteLn('═══════════════════════════════════════════');
 end;
 
-class function TSagaMetricsCollector.Instance: TSagaMetricsCollector;
+class function TSagaMetricsCollector.Instance: TSagaMetricsCollector;  
 begin
   if FInstance = nil then
     FInstance := TSagaMetricsCollector.Create;
   Result := FInstance;
 end;
 
-class procedure TSagaMetricsCollector.FreeInstance;
+class procedure TSagaMetricsCollector.FreeInstance;  
 begin
   if FInstance <> nil then
   begin
@@ -2191,7 +2191,7 @@ implementation
 
 // TSagaMessage
 
-constructor TSagaMessage.Create(const AMessageType: string; APayload: TJSONObject);
+constructor TSagaMessage.Create(const AMessageType: string; APayload: TJSONObject);  
 begin
   inherited Create;
   FMessageId := NewGUID;
@@ -2201,7 +2201,7 @@ begin
   FRetryCount := 0;
 end;
 
-destructor TSagaMessage.Destroy;
+destructor TSagaMessage.Destroy;  
 begin
   FPayload.Free;
   inherited;
@@ -2209,7 +2209,7 @@ end;
 
 // TMessageQueue
 
-constructor TMessageQueue.Create;
+constructor TMessageQueue.Create;  
 begin
   inherited Create;
   FQueue := TThreadList<TSagaMessage>.Create;
@@ -2217,7 +2217,7 @@ begin
   FProcessing := False;
 end;
 
-destructor TMessageQueue.Destroy;
+destructor TMessageQueue.Destroy;  
 var
   List: TList<TSagaMessage>;
   Msg: TSagaMessage;
@@ -2238,7 +2238,7 @@ begin
   inherited;
 end;
 
-procedure TMessageQueue.Publish(AMessage: TSagaMessage);
+procedure TMessageQueue.Publish(AMessage: TSagaMessage);  
 var
   List: TList<TSagaMessage>;
 begin
@@ -2259,19 +2259,19 @@ begin
   WriteLn(Format('[Queue] Souscription: %s', [AMessageType]));
 end;
 
-procedure TMessageQueue.StartProcessing;
+procedure TMessageQueue.StartProcessing;  
 begin
   FProcessing := True;
   WriteLn('[Queue] Traitement démarré');
 end;
 
-procedure TMessageQueue.StopProcessing;
+procedure TMessageQueue.StopProcessing;  
 begin
   FProcessing := False;
   WriteLn('[Queue] Traitement arrêté');
 end;
 
-procedure TMessageQueue.ProcessMessages;
+procedure TMessageQueue.ProcessMessages;  
 var
   List: TList<TSagaMessage>;
   Msg: TSagaMessage;
@@ -2324,14 +2324,14 @@ end;
 
 // TAsyncSagaStep
 
-constructor TAsyncSagaStep.Create(const AStepId: string; AQueue: TMessageQueue);
+constructor TAsyncSagaStep.Create(const AStepId: string; AQueue: TMessageQueue);  
 begin
   inherited Create;
   FStepId := AStepId;
   FQueue := AQueue;
 end;
 
-procedure TAsyncSagaStep.ExecuteAsync(AContext: TJSONObject);
+procedure TAsyncSagaStep.ExecuteAsync(AContext: TJSONObject);  
 var
   Msg: TSagaMessage;
 begin
@@ -2372,7 +2372,7 @@ type
 
 // TAsyncReservationStep
 
-procedure TAsyncReservationStep.OnComplete(AMessage: TSagaMessage);
+procedure TAsyncReservationStep.OnComplete(AMessage: TSagaMessage);  
 var
   CommandeId: string;
 begin
@@ -2383,7 +2383,7 @@ begin
   // ...
 end;
 
-procedure TAsyncReservationStep.OnError(AMessage: TSagaMessage);
+procedure TAsyncReservationStep.OnError(AMessage: TSagaMessage);  
 begin
   WriteLn('[AsyncReservation] Erreur réservation');
   // Déclencher compensation
@@ -2392,7 +2392,7 @@ end;
 
 // TAsyncPaymentStep
 
-procedure TAsyncPaymentStep.OnComplete(AMessage: TSagaMessage);
+procedure TAsyncPaymentStep.OnComplete(AMessage: TSagaMessage);  
 var
   CommandeId: string;
 begin
@@ -2400,7 +2400,7 @@ begin
   WriteLn(Format('[AsyncPayment] Paiement complété: %s', [CommandeId]));
 end;
 
-procedure TAsyncPaymentStep.OnError(AMessage: TSagaMessage);
+procedure TAsyncPaymentStep.OnError(AMessage: TSagaMessage);  
 begin
   WriteLn('[AsyncPayment] Erreur paiement');
   // Déclencher compensation
@@ -2510,19 +2510,19 @@ implementation
 
 // TSemanticCompensation
 
-constructor TSemanticCompensation.Create(const AName: string);
+constructor TSemanticCompensation.Create(const AName: string);  
 begin
   inherited Create(AName);
   FOriginalAmount := 0;
   FCompensationAmount := 0;
 end;
 
-function TSemanticCompensation.Execute(AContext: TSagaContext): TSagaStepResult;
+function TSemanticCompensation.Execute(AContext: TSagaContext): TSagaStepResult;  
 begin
   Result := ssSuccess;
 end;
 
-function TSemanticCompensation.Compensate(AContext: TSagaContext): Boolean;
+function TSemanticCompensation.Compensate(AContext: TSagaContext): Boolean;  
 begin
   WriteLn('  → Compensation sémantique (action équivalente)');
   Result := True;
@@ -2530,14 +2530,14 @@ end;
 
 // TSagaEnvoyerEmailCompensation
 
-constructor TSagaEnvoyerEmailCompensation.Create(const ADestinataire: string);
+constructor TSagaEnvoyerEmailCompensation.Create(const ADestinataire: string);  
 begin
   inherited Create('Envoyer Email');
   FDestinataire := ADestinataire;
   FMessageEnvoye := False;
 end;
 
-function TSagaEnvoyerEmailCompensation.Execute(AContext: TSagaContext): TSagaStepResult;
+function TSagaEnvoyerEmailCompensation.Execute(AContext: TSagaContext): TSagaStepResult;  
 begin
   WriteLn(Format('  → Envoi email à: %s', [FDestinataire]));
   WriteLn('  → Objet: Confirmation de commande');
@@ -2550,7 +2550,7 @@ begin
   Result := ssSuccess;
 end;
 
-function TSagaEnvoyerEmailCompensation.Compensate(AContext: TSagaContext): Boolean;
+function TSagaEnvoyerEmailCompensation.Compensate(AContext: TSagaContext): Boolean;  
 begin
   if not FMessageEnvoye then
   begin
@@ -2623,7 +2623,7 @@ implementation
 
 // TActionRecord
 
-constructor TActionRecord.Create(const AActionType: string; AData: TJSONObject);
+constructor TActionRecord.Create(const AActionType: string; AData: TJSONObject);  
 begin
   inherited Create;
   FActionId := NewGUID;
@@ -2633,7 +2633,7 @@ begin
   FCompensated := False;
 end;
 
-destructor TActionRecord.Destroy;
+destructor TActionRecord.Destroy;  
 begin
   FData.Free;
   inherited;
@@ -2641,13 +2641,13 @@ end;
 
 // TCompensationHistory
 
-constructor TCompensationHistory.Create;
+constructor TCompensationHistory.Create;  
 begin
   inherited Create;
   FActions := TObjectList<TActionRecord>.Create(True);
 end;
 
-destructor TCompensationHistory.Destroy;
+destructor TCompensationHistory.Destroy;  
 begin
   FActions.Free;
   inherited;
@@ -2665,7 +2665,7 @@ begin
     [AActionType, Action.ActionId]));
 end;
 
-procedure TCompensationHistory.MarkAsCompensated(const AActionId: string);
+procedure TCompensationHistory.MarkAsCompensated(const AActionId: string);  
 var
   Action: TActionRecord;
 begin
@@ -2680,7 +2680,7 @@ begin
   end;
 end;
 
-function TCompensationHistory.GetUncompensatedActions: TList<TActionRecord>;
+function TCompensationHistory.GetUncompensatedActions: TList<TActionRecord>;  
 var
   Action: TActionRecord;
 begin
@@ -2693,7 +2693,7 @@ begin
   end;
 end;
 
-procedure TCompensationHistory.PrintHistory;
+procedure TCompensationHistory.PrintHistory;  
 var
   Action: TActionRecord;
 begin
@@ -2724,7 +2724,7 @@ end.
 1. **Rendre les opérations idempotentes**
 ```pascal
 // ✅ BON: Vérifier avant d'agir
-if not IsAlreadyProcessed(OrderId) then
+if not IsAlreadyProcessed(OrderId) then  
 begin
   ProcessOrder(OrderId);
   MarkAsProcessed(OrderId);
@@ -2740,7 +2740,7 @@ Result := ExecuteWithTimeout(Operation, 5000); // 5 secondes max
 3. **Logger toutes les étapes**
 ```pascal
 // ✅ BON: Logging complet
-LogInfo('Début étape: ' + StepName);
+LogInfo('Début étape: ' + StepName);  
 try
   Result := ExecuteStep;
   LogSuccess('Étape réussie: ' + StepName);
@@ -2753,8 +2753,8 @@ end;
 4. **Utiliser des identifiants de corrélation**
 ```pascal
 // ✅ BON: Traçabilité complète
-Context.SetValue('correlation_id', CorrelationId);
-Context.SetValue('saga_id', SagaId);
+Context.SetValue('correlation_id', CorrelationId);  
+Context.SetValue('saga_id', SagaId);  
 Context.SetValue('step_id', StepId);
 ```
 
@@ -2769,7 +2769,7 @@ Stock := Stock - Quantity; // Sans vérification
 2. **Compensations partielles**
 ```pascal
 // ❌ MAUVAIS: Compensation incomplète
-procedure Compensate;
+procedure Compensate;  
 begin
   ReleaseStock; // Mais oublie de rembourser !
 end;

@@ -37,7 +37,7 @@ Le nom vient de la représentation graphique en forme d'hexagone, mais le nombre
 
 ```pascal
 // ❌ Mauvais : le domaine dépend de la base de données
-unit Domain.Client;
+unit Domain.Client;  
 uses
   SQLDB; // ← Dépendance externe !
 
@@ -150,12 +150,12 @@ begin
   FPrixUnitaire := APrixUnitaire;
 end;
 
-function TLigneCommande.CalculerSousTotal: Currency;
+function TLigneCommande.CalculerSousTotal: Currency;  
 begin
   Result := FQuantite * FPrixUnitaire;
 end;
 
-constructor TCommande.Create(const AClientId: string);
+constructor TCommande.Create(const AClientId: string);  
 begin
   inherited Create;
   FId := TGuid.NewGuid.ToString;
@@ -165,13 +165,13 @@ begin
   FDateCreation := Now;
 end;
 
-destructor TCommande.Destroy;
+destructor TCommande.Destroy;  
 begin
   FLignes.Free;
   inherited;
 end;
 
-procedure TCommande.ValiderReglesMetier;
+procedure TCommande.ValiderReglesMetier;  
 begin
   // Règle : une commande doit avoir au moins une ligne
   if FLignes.Count = 0 then
@@ -197,7 +197,7 @@ begin
   FLignes.Add(Ligne);
 end;
 
-procedure TCommande.SupprimerLigne(const AProduitId: string);
+procedure TCommande.SupprimerLigne(const AProduitId: string);  
 var
   i: Integer;
 begin
@@ -214,7 +214,7 @@ begin
   end;
 end;
 
-procedure TCommande.Valider;
+procedure TCommande.Valider;  
 begin
   if FStatut <> scBrouillon then
     raise Exception.Create('Seule une commande en brouillon peut être validée');
@@ -223,7 +223,7 @@ begin
   FStatut := scValidee;
 end;
 
-procedure TCommande.Expedier;
+procedure TCommande.Expedier;  
 begin
   if FStatut <> scValidee then
     raise Exception.Create('Seule une commande validée peut être expédiée');
@@ -231,7 +231,7 @@ begin
   FStatut := scExpediee;
 end;
 
-procedure TCommande.Livrer;
+procedure TCommande.Livrer;  
 begin
   if FStatut <> scExpediee then
     raise Exception.Create('Seule une commande expédiée peut être livrée');
@@ -239,7 +239,7 @@ begin
   FStatut := scLivree;
 end;
 
-procedure TCommande.Annuler;
+procedure TCommande.Annuler;  
 begin
   if FStatut in [scExpediee, scLivree] then
     raise Exception.Create('Une commande expédiée ou livrée ne peut être annulée');
@@ -247,7 +247,7 @@ begin
   FStatut := scAnnulee;
 end;
 
-function TCommande.CalculerTotal: Currency;
+function TCommande.CalculerTotal: Currency;  
 var
   Ligne: TLigneCommande;
 begin
@@ -256,7 +256,7 @@ begin
     Result := Result + Ligne.CalculerSousTotal;
 end;
 
-function TCommande.PeutEtreModifiee: Boolean;
+function TCommande.PeutEtreModifiee: Boolean;  
 begin
   Result := FStatut = scBrouillon;
 end;
@@ -374,13 +374,13 @@ implementation
 uses
   jsonparser;
 
-constructor TCommandeWebAPI.Create(const AService: IServiceCommande);
+constructor TCommandeWebAPI.Create(const AService: IServiceCommande);  
 begin
   inherited Create;
   FService := AService;
 end;
 
-procedure TCommandeWebAPI.EnregistrerRoutes;
+procedure TCommandeWebAPI.EnregistrerRoutes;  
 begin
   HTTPRouter.RegisterRoute('/api/commandes', rmPost, @RouteCreerCommande);
   HTTPRouter.RegisterRoute('/api/commandes/:id/produits', rmPost, @RouteAjouterProduit);
@@ -388,7 +388,7 @@ begin
   HTTPRouter.RegisterRoute('/api/commandes/:id', rmGet, @RouteObtenirCommande);
 end;
 
-procedure TCommandeWebAPI.RouteCreerCommande(ARequest: TRequest; AResponse: TResponse);
+procedure TCommandeWebAPI.RouteCreerCommande(ARequest: TRequest; AResponse: TResponse);  
 var
   JSON: TJSONObject;
   Parser: TJSONParser;
@@ -441,7 +441,7 @@ begin
   end;
 end;
 
-procedure TCommandeWebAPI.RouteAjouterProduit(ARequest: TRequest; AResponse: TResponse);
+procedure TCommandeWebAPI.RouteAjouterProduit(ARequest: TRequest; AResponse: TResponse);  
 var
   CommandeId: string;
   JSON: TJSONObject;
@@ -479,7 +479,7 @@ begin
   end;
 end;
 
-procedure TCommandeWebAPI.RouteValider(ARequest: TRequest; AResponse: TResponse);
+procedure TCommandeWebAPI.RouteValider(ARequest: TRequest; AResponse: TResponse);  
 var
   CommandeId: string;
 begin
@@ -500,7 +500,7 @@ begin
   end;
 end;
 
-procedure TCommandeWebAPI.RouteObtenirCommande(ARequest: TRequest; AResponse: TResponse);
+procedure TCommandeWebAPI.RouteObtenirCommande(ARequest: TRequest; AResponse: TResponse);  
 var
   CommandeId: string;
   Commande: TCommande;
@@ -572,13 +572,13 @@ type
 
 implementation
 
-constructor TCommandeConsole.Create(const AService: IServiceCommande);
+constructor TCommandeConsole.Create(const AService: IServiceCommande);  
 begin
   inherited Create;
   FService := AService;
 end;
 
-procedure TCommandeConsole.AfficherMenu;
+procedure TCommandeConsole.AfficherMenu;  
 begin
   WriteLn;
   WriteLn('=== GESTION DES COMMANDES ===');
@@ -590,7 +590,7 @@ begin
   Write('Votre choix: ');
 end;
 
-procedure TCommandeConsole.TraiterChoix(AChoix: Integer);
+procedure TCommandeConsole.TraiterChoix(AChoix: Integer);  
 begin
   case AChoix of
     1: CreerNouvelleCommande;
@@ -599,7 +599,7 @@ begin
   end;
 end;
 
-procedure TCommandeConsole.CreerNouvelleCommande;
+procedure TCommandeConsole.CreerNouvelleCommande;  
 var
   ClientId: string;
   CommandeId: string;
@@ -618,7 +618,7 @@ begin
   end;
 end;
 
-procedure TCommandeConsole.AjouterProduitCommande;
+procedure TCommandeConsole.AjouterProduitCommande;  
 var
   CommandeId, ProduitId: string;
   Quantite: Integer;
@@ -641,7 +641,7 @@ begin
   end;
 end;
 
-procedure TCommandeConsole.ValiderCommande;
+procedure TCommandeConsole.ValiderCommande;  
 var
   CommandeId: string;
 begin
@@ -659,7 +659,7 @@ begin
   end;
 end;
 
-procedure TCommandeConsole.Executer;
+procedure TCommandeConsole.Executer;  
 var
   Choix: Integer;
   Continuer: Boolean;
@@ -714,13 +714,13 @@ type
 
 implementation
 
-constructor TCommandeRepositorySQL.Create(AConnection: TSQLConnection);
+constructor TCommandeRepositorySQL.Create(AConnection: TSQLConnection);  
 begin
   inherited Create;
   FConnection := AConnection;
 end;
 
-procedure TCommandeRepositorySQL.Sauvegarder(const ACommande: TCommande);
+procedure TCommandeRepositorySQL.Sauvegarder(const ACommande: TCommande);  
 var
   Query: TSQLQuery;
 begin
@@ -757,7 +757,7 @@ begin
   end;
 end;
 
-function TCommandeRepositorySQL.ChargerParId(const AId: string): TCommande;
+function TCommandeRepositorySQL.ChargerParId(const AId: string): TCommande;  
 var
   Query: TSQLQuery;
 begin
@@ -777,7 +777,7 @@ begin
   end;
 end;
 
-function TCommandeRepositorySQL.Existe(const AId: string): Boolean;
+function TCommandeRepositorySQL.Existe(const AId: string): Boolean;  
 var
   Query: TSQLQuery;
 begin
@@ -794,7 +794,7 @@ begin
   end;
 end;
 
-procedure TCommandeRepositorySQL.Supprimer(const AId: string);
+procedure TCommandeRepositorySQL.Supprimer(const AId: string);  
 var
   Query: TSQLQuery;
 begin
@@ -809,7 +809,7 @@ begin
   end;
 end;
 
-function TCommandeRepositorySQL.MapperVersCommande(AQuery: TSQLQuery): TCommande;
+function TCommandeRepositorySQL.MapperVersCommande(AQuery: TSQLQuery): TCommande;  
 var
   ClientId: string;
 begin
@@ -863,26 +863,26 @@ type
 
 implementation
 
-constructor TCommandeRepositoryMemoire.Create;
+constructor TCommandeRepositoryMemoire.Create;  
 begin
   inherited Create;
   FCommandes := TObjectDictionary<string, TCommande>.Create([doOwnsValues]);
 end;
 
-destructor TCommandeRepositoryMemoire.Destroy;
+destructor TCommandeRepositoryMemoire.Destroy;  
 begin
   FCommandes.Free;
   inherited;
 end;
 
-function TCommandeRepositoryMemoire.ClonerCommande(const ACommande: TCommande): TCommande;
+function TCommandeRepositoryMemoire.ClonerCommande(const ACommande: TCommande): TCommande;  
 begin
   // Cloner la commande pour éviter les modifications externes
   // (Simplification - dans un cas réel, faire un vrai clone)
   Result := TCommande.Create(ACommande.ClientId);
 end;
 
-procedure TCommandeRepositoryMemoire.Sauvegarder(const ACommande: TCommande);
+procedure TCommandeRepositoryMemoire.Sauvegarder(const ACommande: TCommande);  
 var
   Clone: TCommande;
 begin
@@ -891,7 +891,7 @@ begin
   WriteLn(Format('[Repository] Commande %s sauvegardée en mémoire', [ACommande.Id]));
 end;
 
-function TCommandeRepositoryMemoire.ChargerParId(const AId: string): TCommande;
+function TCommandeRepositoryMemoire.ChargerParId(const AId: string): TCommande;  
 var
   CommandeStock: TCommande;
 begin
@@ -902,12 +902,12 @@ begin
   WriteLn(Format('[Repository] Commande %s chargée depuis mémoire', [AId]));
 end;
 
-function TCommandeRepositoryMemoire.Existe(const AId: string): Boolean;
+function TCommandeRepositoryMemoire.Existe(const AId: string): Boolean;  
 begin
   Result := FCommandes.ContainsKey(AId);
 end;
 
-procedure TCommandeRepositoryMemoire.Supprimer(const AId: string);
+procedure TCommandeRepositoryMemoire.Supprimer(const AId: string);  
 begin
   FCommandes.Remove(AId);
   WriteLn(Format('[Repository] Commande %s supprimée', [AId]));
@@ -961,7 +961,7 @@ begin
   FServiceNotification := AServiceNotification;
 end;
 
-function TServiceCommande.CreerCommande(const AClientId: string): string;
+function TServiceCommande.CreerCommande(const AClientId: string): string;  
 var
   Commande: TCommande;
 begin
@@ -1007,7 +1007,7 @@ begin
   end;
 end;
 
-procedure TServiceCommande.ValiderCommande(const ACommandeId: string);
+procedure TServiceCommande.ValiderCommande(const ACommandeId: string);  
 var
   Commande: TCommande;
 begin
@@ -1031,7 +1031,7 @@ begin
   end;
 end;
 
-function TServiceCommande.ObtenirCommande(const ACommandeId: string): TCommande;
+function TServiceCommande.ObtenirCommande(const ACommandeId: string): TCommande;  
 begin
   WriteLn(Format('[Service] Récupération commande %s', [ACommandeId]));
   Result := FRepository.ChargerParId(ACommandeId);
@@ -1071,7 +1071,7 @@ type
 
 implementation
 
-constructor TMockServicePrix.Create;
+constructor TMockServicePrix.Create;  
 begin
   inherited Create;
   FPrix := TStringList.Create;
@@ -1083,13 +1083,13 @@ begin
   DefinirPrix('prod-3', 99.99);
 end;
 
-destructor TMockServicePrix.Destroy;
+destructor TMockServicePrix.Destroy;  
 begin
   FPrix.Free;
   inherited;
 end;
 
-function TMockServicePrix.ObtenirPrix(const AProduitId: string): Currency;
+function TMockServicePrix.ObtenirPrix(const AProduitId: string): Currency;  
 var
   Index: Integer;
 begin
@@ -1107,7 +1107,7 @@ begin
   end;
 end;
 
-procedure TMockServicePrix.DefinirPrix(const AProduitId: string; APrix: Currency);
+procedure TMockServicePrix.DefinirPrix(const AProduitId: string; APrix: Currency);  
 begin
   FPrix.Values[AProduitId] := CurrToStr(APrix);
 end;
@@ -1137,7 +1137,7 @@ type
 
 implementation
 
-procedure TMockServiceNotification.EnvoyerConfirmationCommande(const ACommande: TCommande);
+procedure TMockServiceNotification.EnvoyerConfirmationCommande(const ACommande: TCommande);  
 begin
   WriteLn('═══════════════════════════════════════');
   WriteLn('    CONFIRMATION DE COMMANDE           ');
@@ -1149,7 +1149,7 @@ begin
   WriteLn('═══════════════════════════════════════');
 end;
 
-procedure TMockServiceNotification.EnvoyerNotificationExpedition(const ACommande: TCommande);
+procedure TMockServiceNotification.EnvoyerNotificationExpedition(const ACommande: TCommande);  
 begin
   WriteLn('═══════════════════════════════════════');
   WriteLn('    NOTIFICATION D''EXPÉDITION         ');
@@ -1200,7 +1200,7 @@ type
 
 implementation
 
-constructor TApplicationContainer.Create;
+constructor TApplicationContainer.Create;  
 begin
   inherited Create;
 
@@ -1305,7 +1305,7 @@ type
 
 implementation
 
-procedure TTestCommande.TestCreationCommande;
+procedure TTestCommande.TestCreationCommande;  
 var
   Commande: TCommande;
 begin
@@ -1319,7 +1319,7 @@ begin
   end;
 end;
 
-procedure TTestCommande.TestAjouterLigne;
+procedure TTestCommande.TestAjouterLigne;  
 var
   Commande: TCommande;
 begin
@@ -1333,7 +1333,7 @@ begin
   end;
 end;
 
-procedure TTestCommande.TestAjouterLigneQuantiteNegative;
+procedure TTestCommande.TestAjouterLigneQuantiteNegative;  
 var
   Commande: TCommande;
 begin
@@ -1352,7 +1352,7 @@ begin
   end;
 end;
 
-procedure TTestCommande.TestValiderCommandeVide;
+procedure TTestCommande.TestValiderCommandeVide;  
 var
   Commande: TCommande;
 begin
@@ -1371,7 +1371,7 @@ begin
   end;
 end;
 
-procedure TTestCommande.TestValiderCommandeOK;
+procedure TTestCommande.TestValiderCommandeOK;  
 var
   Commande: TCommande;
 begin
@@ -1386,7 +1386,7 @@ begin
   end;
 end;
 
-procedure TTestCommande.TestModifierCommandeValidee;
+procedure TTestCommande.TestModifierCommandeValidee;  
 var
   Commande: TCommande;
 begin
@@ -1408,7 +1408,7 @@ begin
   end;
 end;
 
-procedure TTestCommande.TestCalculerTotal;
+procedure TTestCommande.TestCalculerTotal;  
 var
   Commande: TCommande;
 begin
@@ -1463,7 +1463,7 @@ type
 
 implementation
 
-procedure TTestServiceCommande.SetUp;
+procedure TTestServiceCommande.SetUp;  
 begin
   // Créer les mocks
   FRepository := TCommandeRepositoryMemoire.Create;
@@ -1478,7 +1478,7 @@ begin
   );
 end;
 
-procedure TTestServiceCommande.TestCreerCommande;
+procedure TTestServiceCommande.TestCreerCommande;  
 var
   CommandeId: string;
 begin
@@ -1488,7 +1488,7 @@ begin
   AssertTrue('Commande existe', FRepository.Existe(CommandeId));
 end;
 
-procedure TTestServiceCommande.TestAjouterProduit;
+procedure TTestServiceCommande.TestAjouterProduit;  
 var
   CommandeId: string;
   Commande: TCommande;
@@ -1508,7 +1508,7 @@ begin
   end;
 end;
 
-procedure TTestServiceCommande.TestValiderCommande;
+procedure TTestServiceCommande.TestValiderCommande;  
 var
   CommandeId: string;
   Commande: TCommande;
@@ -1583,7 +1583,7 @@ MonProjet/
 
 ```pascal
 // Test du domaine sans aucune dépendance externe
-procedure TestLogiquePure;
+procedure TestLogiquePure;  
 var
   Commande: TCommande;
 begin
@@ -1717,7 +1717,7 @@ type
 
 ```pascal
 // ❌ MAUVAIS
-unit Domain.Commande;
+unit Domain.Commande;  
 uses
   SQLDB, // ← INTERDIT !
   fpjson; // ← INTERDIT !
@@ -1747,7 +1747,7 @@ type
 
 ```pascal
 // L'adaptateur traduit, il ne contient PAS de logique métier
-procedure TWebAPI.RouteCreer(AReq: TRequest; AResp: TResponse);
+procedure TWebAPI.RouteCreer(AReq: TRequest; AResp: TResponse);  
 begin
   // ✅ Juste de la traduction
   ClientId := JSON.Get('client_id');
@@ -1789,7 +1789,7 @@ type
 
 ```pascal
 // Tests sans aucune dépendance externe
-procedure TestDomaine;
+procedure TestDomaine;  
 var
   Commande: TCommande;
 begin

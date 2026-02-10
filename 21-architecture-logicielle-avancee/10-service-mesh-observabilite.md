@@ -134,7 +134,7 @@ uses
 
 // TSidecarProxy
 
-constructor TSidecarProxy.Create(const AConfig: TSidecarConfig);
+constructor TSidecarProxy.Create(const AConfig: TSidecarConfig);  
 begin
   inherited Create;
   FConfig := AConfig;
@@ -152,7 +152,7 @@ begin
     [FConfig.ServiceName, FConfig.ServicePort, FConfig.ProxyPort]));
 end;
 
-destructor TSidecarProxy.Destroy;
+destructor TSidecarProxy.Destroy;  
 begin
   Stop;
   FServer.Free;
@@ -242,7 +242,7 @@ begin
   end;
 end;
 
-procedure TSidecarProxy.RecordMetrics(ALatencyMs: Integer; ASuccess: Boolean);
+procedure TSidecarProxy.RecordMetrics(ALatencyMs: Integer; ASuccess: Boolean);  
 begin
   Inc(FMetrics.RequestCount);
 
@@ -262,7 +262,7 @@ begin
     ReportMetrics;
 end;
 
-procedure TSidecarProxy.ReportMetrics;
+procedure TSidecarProxy.ReportMetrics;  
 var
   Client: TFPHTTPClient;
   MetricsJSON: string;
@@ -296,14 +296,14 @@ begin
   end;
 end;
 
-procedure TSidecarProxy.Start;
+procedure TSidecarProxy.Start;  
 begin
   FServer.Active := True;
   WriteLn(Format('[Sidecar:%s] ✓ Démarré sur le port %d',
     [FConfig.ServiceName, FConfig.ProxyPort]));
 end;
 
-procedure TSidecarProxy.Stop;
+procedure TSidecarProxy.Stop;  
 begin
   if FServer.Active then
   begin
@@ -384,7 +384,7 @@ uses
 
 // TControlPlane
 
-constructor TControlPlane.Create(APort: Integer);
+constructor TControlPlane.Create(APort: Integer);  
 begin
   inherited Create;
   FPort := APort;
@@ -399,7 +399,7 @@ begin
   WriteLn('[ControlPlane] Créé sur le port ', FPort);
 end;
 
-destructor TControlPlane.Destroy;
+destructor TControlPlane.Destroy;  
 begin
   Stop;
   FMetrics.Free;
@@ -667,14 +667,14 @@ begin
   end;
 end;
 
-procedure TControlPlane.Start;
+procedure TControlPlane.Start;  
 begin
   FServer.Active := True;
   WriteLn(Format('[ControlPlane] ✓ Démarré sur http://localhost:%d', [FPort]));
   WriteLn('[ControlPlane] Dashboard: http://localhost:', FPort, '/dashboard');
 end;
 
-procedure TControlPlane.Stop;
+procedure TControlPlane.Stop;  
 begin
   if FServer.Active then
   begin
@@ -683,7 +683,7 @@ begin
   end;
 end;
 
-procedure TControlPlane.PrintStatus;
+procedure TControlPlane.PrintStatus;  
 var
   ServiceName: string;
   ServiceInfo: TServiceInfo;
@@ -910,13 +910,13 @@ begin
   WriteLn(Format('[Logger:%s] Initialisé → %s', [AServiceName, FileName]));
 end;
 
-destructor TServiceLogger.Destroy;
+destructor TServiceLogger.Destroy;  
 begin
   CloseFile(FLogFile);
   inherited;
 end;
 
-function TServiceLogger.LevelToString(ALevel: TLogLevel): string;
+function TServiceLogger.LevelToString(ALevel: TLogLevel): string;  
 begin
   case ALevel of
     llDebug: Result := 'DEBUG';
@@ -927,7 +927,7 @@ begin
   end;
 end;
 
-function TServiceLogger.FormatLogEntry(const AEntry: TLogEntry): string;
+function TServiceLogger.FormatLogEntry(const AEntry: TLogEntry): string;  
 var
   JSON: TJSONObject;
 begin
@@ -975,27 +975,27 @@ begin
     [LevelToString(ALevel), FServiceName, AMessage]));
 end;
 
-procedure TServiceLogger.Debug(const AMessage: string; const AContext: string);
+procedure TServiceLogger.Debug(const AMessage: string; const AContext: string);  
 begin
   Log(llDebug, AMessage, AContext);
 end;
 
-procedure TServiceLogger.Info(const AMessage: string; const AContext: string);
+procedure TServiceLogger.Info(const AMessage: string; const AContext: string);  
 begin
   Log(llInfo, AMessage, AContext);
 end;
 
-procedure TServiceLogger.Warning(const AMessage: string; const AContext: string);
+procedure TServiceLogger.Warning(const AMessage: string; const AContext: string);  
 begin
   Log(llWarning, AMessage, AContext);
 end;
 
-procedure TServiceLogger.Error(const AMessage: string; const AContext: string);
+procedure TServiceLogger.Error(const AMessage: string; const AContext: string);  
 begin
   Log(llError, AMessage, AContext);
 end;
 
-procedure TServiceLogger.Fatal(const AMessage: string; const AContext: string);
+procedure TServiceLogger.Fatal(const AMessage: string; const AContext: string);  
 begin
   Log(llFatal, AMessage, AContext);
 end;
@@ -1081,7 +1081,7 @@ uses
 
 // TMetric
 
-constructor TMetric.Create(const AName: string; AType: TMetricType);
+constructor TMetric.Create(const AName: string; AType: TMetricType);  
 begin
   inherited Create;
   FName := AName;
@@ -1091,19 +1091,19 @@ begin
   FCurrentValue := 0;
 end;
 
-destructor TMetric.Destroy;
+destructor TMetric.Destroy;  
 begin
   FValues.Free;
   FLabels.Free;
   inherited;
 end;
 
-procedure TMetric.AddLabel(const AKey, AValue: string);
+procedure TMetric.AddLabel(const AKey, AValue: string);  
 begin
   FLabels.AddOrSetValue(AKey, AValue);
 end;
 
-procedure TMetric.Inc(AValue: Double);
+procedure TMetric.Inc(AValue: Double);  
 var
   MetricValue: TMetricValue;
 begin
@@ -1117,7 +1117,7 @@ begin
   FValues.Add(MetricValue);
 end;
 
-procedure TMetric.Set_(AValue: Double);
+procedure TMetric.Set_(AValue: Double);  
 var
   MetricValue: TMetricValue;
 begin
@@ -1131,7 +1131,7 @@ begin
   FValues.Add(MetricValue);
 end;
 
-procedure TMetric.Observe(AValue: Double);
+procedure TMetric.Observe(AValue: Double);  
 var
   MetricValue: TMetricValue;
 begin
@@ -1143,12 +1143,12 @@ begin
   FValues.Add(MetricValue);
 end;
 
-function TMetric.GetValue: Double;
+function TMetric.GetValue: Double;  
 begin
   Result := FCurrentValue;
 end;
 
-function TMetric.GetAverage: Double;
+function TMetric.GetAverage: Double;  
 var
   Total: Double;
   Value: TMetricValue;
@@ -1166,7 +1166,7 @@ begin
   Result := Total / FValues.Count;
 end;
 
-function TMetric.GetPercentile(APercentile: Integer): Double;
+function TMetric.GetPercentile(APercentile: Integer): Double;  
 var
   SortedValues: TList<Double>;
   Value: TMetricValue;
@@ -1195,20 +1195,20 @@ end;
 
 // TMetricsRegistry
 
-constructor TMetricsRegistry.Create;
+constructor TMetricsRegistry.Create;  
 begin
   inherited Create;
   FMetrics := TObjectDictionary<string, TMetric>.Create([doOwnsValues]);
   WriteLn('[MetricsRegistry] Registre créé');
 end;
 
-destructor TMetricsRegistry.Destroy;
+destructor TMetricsRegistry.Destroy;  
 begin
   FMetrics.Free;
   inherited;
 end;
 
-function TMetricsRegistry.Counter(const AName: string): TMetric;
+function TMetricsRegistry.Counter(const AName: string): TMetric;  
 begin
   if not FMetrics.TryGetValue(AName, Result) then
   begin
@@ -1218,7 +1218,7 @@ begin
   end;
 end;
 
-function TMetricsRegistry.Gauge(const AName: string): TMetric;
+function TMetricsRegistry.Gauge(const AName: string): TMetric;  
 begin
   if not FMetrics.TryGetValue(AName, Result) then
   begin
@@ -1228,7 +1228,7 @@ begin
   end;
 end;
 
-function TMetricsRegistry.Histogram(const AName: string): TMetric;
+function TMetricsRegistry.Histogram(const AName: string): TMetric;  
 begin
   if not FMetrics.TryGetValue(AName, Result) then
   begin
@@ -1238,13 +1238,13 @@ begin
   end;
 end;
 
-function TMetricsRegistry.GetMetric(const AName: string): TMetric;
+function TMetricsRegistry.GetMetric(const AName: string): TMetric;  
 begin
   if not FMetrics.TryGetValue(AName, Result) then
     Result := nil;
 end;
 
-procedure TMetricsRegistry.ExportPrometheus(AOutput: TStrings);
+procedure TMetricsRegistry.ExportPrometheus(AOutput: TStrings);  
 var
   MetricName: string;
   Metric: TMetric;
@@ -1384,31 +1384,31 @@ begin
     [Copy(FSpanId, 1, 8), FServiceName, FOperationName]));
 end;
 
-destructor TSpan.Destroy;
+destructor TSpan.Destroy;  
 begin
   FLogs.Free;
   FTags.Free;
   inherited;
 end;
 
-procedure TSpan.AddTag(const AKey, AValue: string);
+procedure TSpan.AddTag(const AKey, AValue: string);  
 begin
   FTags.AddOrSetValue(AKey, AValue);
 end;
 
-procedure TSpan.Log(const AMessage: string);
+procedure TSpan.Log(const AMessage: string);  
 begin
   FLogs.Add(Format('%s: %s', [DateTimeToStr(Now), AMessage]));
 end;
 
-procedure TSpan.Finish;
+procedure TSpan.Finish;  
 begin
   FEndTime := Now;
   WriteLn(Format('[Trace:%s] Span terminé: %d ms',
     [Copy(FSpanId, 1, 8), GetDurationMs]));
 end;
 
-function TSpan.GetDurationMs: Integer;
+function TSpan.GetDurationMs: Integer;  
 begin
   if FEndTime = 0 then
     Result := MilliSecondsBetween(Now, FStartTime)
@@ -1416,7 +1416,7 @@ begin
     Result := MilliSecondsBetween(FEndTime, FStartTime);
 end;
 
-function TSpan.ToJSON: string;
+function TSpan.ToJSON: string;  
 var
   JSON, TagsJSON: TJSONObject;
   Key: string;
@@ -1448,7 +1448,7 @@ end;
 
 // TTracer
 
-constructor TTracer.Create(const AServiceName: string);
+constructor TTracer.Create(const AServiceName: string);  
 begin
   inherited Create;
   FServiceName := AServiceName;
@@ -1458,7 +1458,7 @@ begin
   WriteLn(Format('[Tracer:%s] Tracer créé', [AServiceName]));
 end;
 
-destructor TTracer.Destroy;
+destructor TTracer.Destroy;  
 begin
   FSpans.Free;
   inherited;
@@ -1490,13 +1490,13 @@ begin
   FActiveSpan := Result;
 end;
 
-procedure TTracer.FinishSpan(ASpan: TSpan);
+procedure TTracer.FinishSpan(ASpan: TSpan);  
 begin
   if ASpan <> nil then
     ASpan.Finish;
 end;
 
-function TTracer.ExportTraces: string;
+function TTracer.ExportTraces: string;  
 var
   JSON: TJSONArray;
   Span: TSpan;
@@ -1520,7 +1520,7 @@ begin
   end;
 end;
 
-procedure TTracer.PrintTraces;
+procedure TTracer.PrintTraces;  
 var
   Span: TSpan;
   Indent: string;
@@ -1607,7 +1607,7 @@ uses
 
 // TObservableService
 
-constructor TObservableService.Create(const AServiceName: string; APort: Integer);
+constructor TObservableService.Create(const AServiceName: string; APort: Integer);  
 begin
   inherited Create;
   FServiceName := AServiceName;
@@ -1631,7 +1631,7 @@ begin
   FLogger.Info('Service créé', Format('{"port": %d}', [APort]));
 end;
 
-destructor TObservableService.Destroy;
+destructor TObservableService.Destroy;  
 begin
   FLogger.Info('Service détruit');
 
@@ -1732,7 +1732,7 @@ begin
   end;
 end;
 
-procedure TObservableService.Start;
+procedure TObservableService.Start;  
 begin
   FServer.Active := True;
   FMetrics.Gauge('service_up').Set_(1);
@@ -1746,7 +1746,7 @@ begin
     [FServiceName, FPort]));
 end;
 
-procedure TObservableService.Stop;
+procedure TObservableService.Stop;  
 begin
   if FServer.Active then
   begin
@@ -1838,10 +1838,10 @@ http_requests_total 1247
 http_errors_total 12
 
 # TYPE http_request_duration_ms histogram
-http_request_duration_ms_sum 125478.50
-http_request_duration_ms_count 1247
-http_request_duration_ms{quantile="0.5"} 85.00
-http_request_duration_ms{quantile="0.95"} 250.00
+http_request_duration_ms_sum 125478.50  
+http_request_duration_ms_count 1247  
+http_request_duration_ms{quantile="0.5"} 85.00  
+http_request_duration_ms{quantile="0.95"} 250.00  
 http_request_duration_ms{quantile="0.99"} 450.00
 
 # TYPE service_up gauge
@@ -1926,19 +1926,19 @@ uses
 
 // TCorrelatedLogger
 
-procedure TCorrelatedLogger.SetTraceContext(const ATraceId, ASpanId: string);
+procedure TCorrelatedLogger.SetTraceContext(const ATraceId, ASpanId: string);  
 begin
   FCurrentTraceId := ATraceId;
   WriteLn(Format('[CorrelatedLogger] Contexte trace: %s',
     [Copy(ATraceId, 1, 16)]));
 end;
 
-procedure TCorrelatedLogger.ClearTraceContext;
+procedure TCorrelatedLogger.ClearTraceContext;  
 begin
   FCurrentTraceId := '';
 end;
 
-procedure TCorrelatedLogger.Info(const AMessage: string; const AContext: string);
+procedure TCorrelatedLogger.Info(const AMessage: string; const AContext: string);  
 var
   EnrichedContext: TJSONObject;
   Parser: TJSONParser;
@@ -1974,7 +1974,7 @@ begin
   end;
 end;
 
-procedure TCorrelatedLogger.Error(const AMessage: string; const AContext: string);
+procedure TCorrelatedLogger.Error(const AMessage: string; const AContext: string);  
 var
   EnrichedContext: TJSONObject;
   Parser: TJSONParser;
@@ -2023,7 +2023,7 @@ uses
   ServiceMesh.Tracing,
   ServiceMesh.Metrics;
 
-procedure SimulateRequest;
+procedure SimulateRequest;  
 var
   Logger: TCorrelatedLogger;
   Tracer: TTracer;
@@ -2236,7 +2236,7 @@ begin
   FState := asOK;
 end;
 
-procedure TAlert.Fire;
+procedure TAlert.Fire;  
 begin
   if FState <> asFiring then
   begin
@@ -2246,7 +2246,7 @@ begin
   end;
 end;
 
-procedure TAlert.Resolve;
+procedure TAlert.Resolve;  
 begin
   if FState = asFiring then
   begin
@@ -2270,7 +2270,7 @@ begin
   FConditionMet := False;
 end;
 
-function TAlertRule.Evaluate(AValue: Double): Boolean;
+function TAlertRule.Evaluate(AValue: Double): Boolean;  
 var
   ConditionNowMet: Boolean;
   DurationSeconds: Int64;
@@ -2317,7 +2317,7 @@ end;
 
 // TAlertManager
 
-constructor TAlertManager.Create;
+constructor TAlertManager.Create;  
 begin
   inherited Create;
   FRules := TObjectList<TAlertRule>.Create(True);
@@ -2327,21 +2327,21 @@ begin
   WriteLn('[AlertManager] Gestionnaire d''alertes créé');
 end;
 
-destructor TAlertManager.Destroy;
+destructor TAlertManager.Destroy;  
 begin
   FActiveAlerts.Free;
   FRules.Free;
   inherited;
 end;
 
-procedure TAlertManager.AddRule(ARule: TAlertRule);
+procedure TAlertManager.AddRule(ARule: TAlertRule);  
 begin
   FRules.Add(ARule);
   WriteLn(Format('[AlertManager] Règle ajoutée: %s (%s %.2f)',
     [ARule.Name, ARule.FCondition, ARule.FThreshold]));
 end;
 
-procedure TAlertManager.CheckMetric(const ARuleName: string; AValue: Double);
+procedure TAlertManager.CheckMetric(const ARuleName: string; AValue: Double);  
 var
   Rule: TAlertRule;
   Alert: TAlert;
@@ -2395,7 +2395,7 @@ begin
   end;
 end;
 
-procedure TAlertManager.SendNotification(AAlert: TAlert);
+procedure TAlertManager.SendNotification(AAlert: TAlert);  
 begin
   if Assigned(FNotificationCallback) then
     FNotificationCallback(AAlert);
@@ -2407,7 +2407,7 @@ begin
   FNotificationCallback := ACallback;
 end;
 
-procedure TAlertManager.PrintAlerts;
+procedure TAlertManager.PrintAlerts;  
 var
   Alert: TAlert;
   SeverityStr: string;
@@ -2458,7 +2458,7 @@ uses
   SysUtils,
   ServiceMesh.Alerting;
 
-procedure OnAlert(AAlert: TAlert);
+procedure OnAlert(AAlert: TAlert);  
 begin
   WriteLn;
   WriteLn('📧 NOTIFICATION ENVOYÉE:');
@@ -2549,7 +2549,7 @@ end.
 1. **Tracer toutes les requêtes**
 ```pascal
 // ✅ BON: Trace ID sur chaque requête
-Span := Tracer.StartSpan('handle_request', TraceId);
+Span := Tracer.StartSpan('handle_request', TraceId);  
 try
   // Traitement
 finally
@@ -2567,7 +2567,7 @@ Logger.Info('Order processed',
 3. **Métriques pertinentes**
 ```pascal
 // ✅ BON: Métriques métier
-Metrics.Counter('orders_completed').Inc;
+Metrics.Counter('orders_completed').Inc;  
 Metrics.Histogram('order_value').Observe(Amount);
 ```
 
@@ -2581,7 +2581,7 @@ AlertRule.Create('high_error_rate', '>', 5.0, asCritical, 60);
 5. **Corrélation complète**
 ```pascal
 // ✅ BON: Trace ID partout
-Logger.SetTraceContext(TraceId, SpanId);
+Logger.SetTraceContext(TraceId, SpanId);  
 Request.SetHeader('X-Trace-ID', TraceId);
 ```
 
@@ -2695,7 +2695,7 @@ Pour chaque service, suivre :
 
 ```pascal
 // Exemple d'implémentation RED
-Metrics.Counter('http_requests_total').Inc;              // Rate
+Metrics.Counter('http_requests_total').Inc;              // Rate  
 if IsError then
   Metrics.Counter('http_errors_total').Inc;              // Errors
 Metrics.Histogram('http_duration_seconds').Observe(Dur); // Duration

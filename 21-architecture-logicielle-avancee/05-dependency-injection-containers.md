@@ -31,7 +31,7 @@ type
     constructor Create;
   end;
 
-constructor TServiceCommande.Create;
+constructor TServiceCommande.Create;  
 begin
   inherited Create;
   // Création directe = couplage fort
@@ -57,7 +57,7 @@ type
     constructor Create(const ARepository: IRepository);  // ← Injection !
   end;
 
-constructor TServiceCommande.Create(const ARepository: IRepository);
+constructor TServiceCommande.Create(const ARepository: IRepository);  
 begin
   inherited Create;
   FRepository := ARepository;  // ← Reçoit la dépendance de l'extérieur
@@ -139,7 +139,7 @@ type
     property Cache: ICache read FCache write FCache;  // ← Injection optionnelle
   end;
 
-constructor TServiceCommande.Create(const ARepository: IRepository);
+constructor TServiceCommande.Create(const ARepository: IRepository);  
 begin
   inherited Create;
   FRepository := ARepository;
@@ -294,7 +294,7 @@ begin
   FSingletonInstance := nil;
 end;
 
-function TServiceRegistration.CreateInstance: IInterface;
+function TServiceRegistration.CreateInstance: IInterface;  
 begin
   case FLifetime of
     lsTransient:
@@ -315,26 +315,26 @@ begin
   end;
 end;
 
-constructor TDIContainer.Create;
+constructor TDIContainer.Create;  
 begin
   inherited Create;
   FServices := TObjectDictionary<string, TServiceRegistration>.Create([doOwnsValues]);
   InitCriticalSection(FLock);
 end;
 
-destructor TDIContainer.Destroy;
+destructor TDIContainer.Destroy;  
 begin
   DoneCriticalSection(FLock);
   FServices.Free;
   inherited;
 end;
 
-function TDIContainer.GUIDToString(const AGUID: TGUID): string;
+function TDIContainer.GUIDToString(const AGUID: TGUID): string;  
 begin
   Result := GUIDToString(AGUID);
 end;
 
-procedure TDIContainer.RegisterTransient(const AGUID: TGUID; AFactory: TFactoryFunc);
+procedure TDIContainer.RegisterTransient(const AGUID: TGUID; AFactory: TFactoryFunc);  
 var
   Registration: TServiceRegistration;
   Key: string;
@@ -351,7 +351,7 @@ begin
   end;
 end;
 
-procedure TDIContainer.RegisterSingleton(const AGUID: TGUID; AFactory: TFactoryFunc);
+procedure TDIContainer.RegisterSingleton(const AGUID: TGUID; AFactory: TFactoryFunc);  
 var
   Registration: TServiceRegistration;
   Key: string;
@@ -368,7 +368,7 @@ begin
   end;
 end;
 
-function TDIContainer.Resolve(const AGUID: TGUID): IInterface;
+function TDIContainer.Resolve(const AGUID: TGUID): IInterface;  
 var
   Registration: TServiceRegistration;
   Key: string;
@@ -387,7 +387,7 @@ begin
   end;
 end;
 
-function TDIContainer.TryResolve(const AGUID: TGUID; out AService: IInterface): Boolean;
+function TDIContainer.TryResolve(const AGUID: TGUID; out AService: IInterface): Boolean;  
 var
   Registration: TServiceRegistration;
   Key: string;
@@ -404,7 +404,7 @@ begin
   end;
 end;
 
-function TDIContainer.IsRegistered(const AGUID: TGUID): Boolean;
+function TDIContainer.IsRegistered(const AGUID: TGUID): Boolean;  
 var
   Key: string;
 begin
@@ -523,27 +523,27 @@ implementation
 
 // TRepositoryMemoire
 
-constructor TRepositoryMemoire.Create;
+constructor TRepositoryMemoire.Create;  
 begin
   inherited Create;
   FData := TStringList.Create;
   WriteLn('[RepositoryMemoire] Instance créée');
 end;
 
-destructor TRepositoryMemoire.Destroy;
+destructor TRepositoryMemoire.Destroy;  
 begin
   FData.Free;
   WriteLn('[RepositoryMemoire] Instance détruite');
   inherited;
 end;
 
-procedure TRepositoryMemoire.Sauvegarder(const AData: string);
+procedure TRepositoryMemoire.Sauvegarder(const AData: string);  
 begin
   FData.Add(AData);
   WriteLn('[Repository] Données sauvegardées: ', AData);
 end;
 
-function TRepositoryMemoire.Charger(const AId: string): string;
+function TRepositoryMemoire.Charger(const AId: string): string;  
 begin
   if FData.Count > 0 then
     Result := FData[0]
@@ -554,19 +554,19 @@ end;
 
 // TConsoleLogger
 
-procedure TConsoleLogger.Log(const AMessage: string);
+procedure TConsoleLogger.Log(const AMessage: string);  
 begin
   WriteLn('[INFO] ', AMessage);
 end;
 
-procedure TConsoleLogger.LogError(const AMessage: string);
+procedure TConsoleLogger.LogError(const AMessage: string);  
 begin
   WriteLn('[ERROR] ', AMessage);
 end;
 
 // TEmailNotificationService
 
-procedure TEmailNotificationService.Envoyer(const ADestinataire, AMessage: string);
+procedure TEmailNotificationService.Envoyer(const ADestinataire, AMessage: string);  
 begin
   WriteLn(Format('[Email] Envoi à %s: %s', [ADestinataire, AMessage]));
 end;
@@ -585,7 +585,7 @@ begin
   WriteLn('[CommandeService] Instance créée avec dépendances injectées');
 end;
 
-procedure TCommandeService.CreerCommande(const AClientId: string);
+procedure TCommandeService.CreerCommande(const AClientId: string);  
 begin
   FLogger.Log('Création commande pour client: ' + AClientId);
 
@@ -595,7 +595,7 @@ begin
   FLogger.Log('Commande créée avec succès');
 end;
 
-procedure TCommandeService.ValiderCommande(const ACommandeId: string);
+procedure TCommandeService.ValiderCommande(const ACommandeId: string);  
 begin
   FLogger.Log('Validation commande: ' + ACommandeId);
 
@@ -638,19 +638,19 @@ type
 
 implementation
 
-constructor TBootstrap.Create;
+constructor TBootstrap.Create;  
 begin
   inherited Create;
   FContainer := TDIContainer.Create;
 end;
 
-destructor TBootstrap.Destroy;
+destructor TBootstrap.Destroy;  
 begin
   FContainer.Free;
   inherited;
 end;
 
-procedure TBootstrap.ConfigurerServices;
+procedure TBootstrap.ConfigurerServices;  
 begin
   WriteLn('=== Configuration du conteneur IoC ===');
   WriteLn;
@@ -797,7 +797,7 @@ type
 
 implementation
 
-procedure TAutoWiringContainer.RegisterType<TInterface, TImplementation>();
+procedure TAutoWiringContainer.RegisterType<TInterface, TImplementation>();  
 begin
   RegisterTransient(
     GetTypeData(TypeInfo(TInterface))^.Guid,
@@ -809,7 +809,7 @@ begin
   );
 end;
 
-function TAutoWiringContainer.AutoResolve(const AGUID: TGUID): IInterface;
+function TAutoWiringContainer.AutoResolve(const AGUID: TGUID): IInterface;  
 begin
   // Implémentation simplifiée
   // Dans un container réel, il faudrait :
@@ -858,7 +858,7 @@ type
 
 implementation
 
-constructor TLifetimeScope.Create(AContainer: TDIContainer; AParent: TLifetimeScope);
+constructor TLifetimeScope.Create(AContainer: TDIContainer; AParent: TLifetimeScope);  
 begin
   inherited Create;
   FContainer := AContainer;
@@ -866,13 +866,13 @@ begin
   FInstances := TDictionary<string, IInterface>.Create;
 end;
 
-destructor TLifetimeScope.Destroy;
+destructor TLifetimeScope.Destroy;  
 begin
   FInstances.Free;
   inherited;
 end;
 
-function TLifetimeScope.Resolve(const AGUID: TGUID): IInterface;
+function TLifetimeScope.Resolve(const AGUID: TGUID): IInterface;  
 var
   Key: string;
 begin
@@ -889,7 +889,7 @@ begin
   FInstances.Add(Key, Result);
 end;
 
-function TLifetimeScope.BeginScope: TLifetimeScope;
+function TLifetimeScope.BeginScope: TLifetimeScope;  
 begin
   Result := TLifetimeScope.Create(FContainer, Self);
 end;
@@ -984,14 +984,14 @@ begin
   FLogger := ALogger;
 end;
 
-procedure TLoggingRepositoryDecorator.Sauvegarder(const AData: string);
+procedure TLoggingRepositoryDecorator.Sauvegarder(const AData: string);  
 begin
   FLogger.Log('Avant Sauvegarder: ' + AData);
   FInner.Sauvegarder(AData);
   FLogger.Log('Après Sauvegarder');
 end;
 
-function TLoggingRepositoryDecorator.Charger(const AId: string): string;
+function TLoggingRepositoryDecorator.Charger(const AId: string): string;  
 begin
   FLogger.Log('Avant Charger: ' + AId);
   Result := FInner.Charger(AId);
@@ -1000,26 +1000,26 @@ end;
 
 // TCachingRepositoryDecorator
 
-constructor TCachingRepositoryDecorator.Create(const AInner: IRepository);
+constructor TCachingRepositoryDecorator.Create(const AInner: IRepository);  
 begin
   inherited Create;
   FInner := AInner;
   FCache := TStringList.Create;
 end;
 
-destructor TCachingRepositoryDecorator.Destroy;
+destructor TCachingRepositoryDecorator.Destroy;  
 begin
   FCache.Free;
   inherited;
 end;
 
-procedure TCachingRepositoryDecorator.Sauvegarder(const AData: string);
+procedure TCachingRepositoryDecorator.Sauvegarder(const AData: string);  
 begin
   FInner.Sauvegarder(AData);
   FCache.Add(AData);  // Mettre en cache
 end;
 
-function TCachingRepositoryDecorator.Charger(const AId: string): string;
+function TCachingRepositoryDecorator.Charger(const AId: string): string;  
 begin
   // Chercher dans le cache d'abord
   if FCache.Count > 0 then
@@ -1095,13 +1095,13 @@ type
 
 implementation
 
-constructor TNamedDIContainer.Create;
+constructor TNamedDIContainer.Create;  
 begin
   inherited Create;
   FNamedServices := TDictionary<string, TServiceRegistration>.Create([doOwnsValues]);
 end;
 
-destructor TNamedDIContainer.Destroy;
+destructor TNamedDIContainer.Destroy;  
 begin
   FNamedServices.Free;
   inherited;
@@ -1118,7 +1118,7 @@ begin
   WriteLn(Format('[Container] Service nommé enregistré: %s', [AName]));
 end;
 
-function TNamedDIContainer.ResolveNamed(const AName: string): IInterface;
+function TNamedDIContainer.ResolveNamed(const AName: string): IInterface;  
 var
   Registration: TServiceRegistration;
 begin
@@ -1202,20 +1202,20 @@ type
 
 implementation
 
-constructor TContainerValidator.Create(AContainer: TDIContainer);
+constructor TContainerValidator.Create(AContainer: TDIContainer);  
 begin
   inherited Create;
   FContainer := AContainer;
   FErrors := TStringList.Create;
 end;
 
-destructor TContainerValidator.Destroy;
+destructor TContainerValidator.Destroy;  
 begin
   FErrors.Free;
   inherited;
 end;
 
-function TContainerValidator.Validate: Boolean;
+function TContainerValidator.Validate: Boolean;  
 var
   TestService: IInterface;
 begin
@@ -1249,7 +1249,7 @@ begin
   end;
 end;
 
-function TContainerValidator.GetErrors: TStringDynArray { de l'unité Types };
+function TContainerValidator.GetErrors: TStringDynArray { de l'unité Types };  
 var
   i: Integer;
 begin
@@ -1316,7 +1316,7 @@ uses
 
 // TLoggingInterceptor
 
-constructor TLoggingInterceptor.Create(const ALogger: ILogger);
+constructor TLoggingInterceptor.Create(const ALogger: ILogger);  
 begin
   inherited Create;
   FLogger := ALogger;
@@ -1351,7 +1351,7 @@ begin
   FInterceptor := AInterceptor;
 end;
 
-procedure TInterceptedRepository.Sauvegarder(const AData: string);
+procedure TInterceptedRepository.Sauvegarder(const AData: string);  
 begin
   FInterceptor.BeforeCall('Sauvegarder', [AData]);
   try
@@ -1366,7 +1366,7 @@ begin
   end;
 end;
 
-function TInterceptedRepository.Charger(const AId: string): string;
+function TInterceptedRepository.Charger(const AId: string): string;  
 begin
   FInterceptor.BeforeCall('Charger', [AId]);
   try
@@ -1413,13 +1413,13 @@ type
 
 implementation
 
-constructor TContainerConfigurator.Create(AContainer: TDIContainer);
+constructor TContainerConfigurator.Create(AContainer: TDIContainer);  
 begin
   inherited Create;
   FContainer := AContainer;
 end;
 
-procedure TContainerConfigurator.LoadFromJSON(AJSON: TJSONObject);
+procedure TContainerConfigurator.LoadFromJSON(AJSON: TJSONObject);  
 var
   Services: TJSONArray;
   i: Integer;
@@ -1446,7 +1446,7 @@ begin
   end;
 end;
 
-procedure TContainerConfigurator.LoadFromFile(const AFileName: string);
+procedure TContainerConfigurator.LoadFromFile(const AFileName: string);  
 var
   FileContent: string;
   Parser: TJSONParser;
@@ -1550,7 +1550,7 @@ finalization
   GlobalContainer.Free;
 
 // ❌ MAUVAIS : Créer des conteneurs partout
-procedure MaFonction;
+procedure MaFonction;  
 var
   Container: TDIContainer;  // ← Overhead inutile
 begin
@@ -1563,7 +1563,7 @@ end;
 
 ```pascal
 // ✅ BON : Configuration au démarrage
-procedure ConfigurerApplication;
+procedure ConfigurerApplication;  
 begin
   Container.RegisterSingleton(ILogger, @CreateLogger);
   Container.RegisterTransient(IService, @CreateService);
@@ -1571,7 +1571,7 @@ begin
 end;
 
 // Résolution à l'utilisation
-procedure TraiterRequete;
+procedure TraiterRequete;  
 var
   Service: IService;
 begin
@@ -1590,7 +1590,7 @@ type
     procedure DoSomething;
   end;
 
-procedure TMyClass.DoSomething;
+procedure TMyClass.DoSomething;  
 var
   Logger: ILogger;
 begin
@@ -1609,7 +1609,7 @@ type
     procedure DoSomething;
   end;
 
-procedure TMyClass.DoSomething;
+procedure TMyClass.DoSomething;  
 begin
   // Bon : dépendance explicite
   FLogger.Log('Something');
@@ -1619,7 +1619,7 @@ end;
 ### 6. Valider la configuration
 
 ```pascal
-procedure DemarrerApplication;
+procedure DemarrerApplication;  
 var
   Validator: TContainerValidator;
 begin
@@ -1714,12 +1714,12 @@ uses
 
 // TMockRepository
 
-procedure TMockRepository.Sauvegarder(const AData: string);
+procedure TMockRepository.Sauvegarder(const AData: string);  
 begin
   Inc(FSaveCount);
 end;
 
-function TMockRepository.Charger(const AId: string): string;
+function TMockRepository.Charger(const AId: string): string;  
 begin
   Inc(FLoadCount);
   Result := 'mock-data';
@@ -1727,31 +1727,31 @@ end;
 
 // TMockLogger
 
-constructor TMockLogger.Create;
+constructor TMockLogger.Create;  
 begin
   inherited Create;
   FMessages := TStringList.Create;
 end;
 
-destructor TMockLogger.Destroy;
+destructor TMockLogger.Destroy;  
 begin
   FMessages.Free;
   inherited;
 end;
 
-procedure TMockLogger.Log(const AMessage: string);
+procedure TMockLogger.Log(const AMessage: string);  
 begin
   FMessages.Add(AMessage);
 end;
 
-procedure TMockLogger.LogError(const AMessage: string);
+procedure TMockLogger.LogError(const AMessage: string);  
 begin
   FMessages.Add('[ERROR] ' + AMessage);
 end;
 
 // TTestServiceCommande
 
-procedure TTestServiceCommande.SetUp;
+procedure TTestServiceCommande.SetUp;  
 var
   MockNotif: INotificationService;
 begin
@@ -1768,7 +1768,7 @@ begin
   );
 end;
 
-procedure TTestServiceCommande.TestCreerCommande;
+procedure TTestServiceCommande.TestCreerCommande;  
 begin
   // Agir
   FService.CreerCommande('client-123');
@@ -1778,7 +1778,7 @@ begin
   AssertTrue('Logger utilisé', FMockLogger.Messages.Count > 0);
 end;
 
-procedure TTestServiceCommande.TestValiderCommande;
+procedure TTestServiceCommande.TestValiderCommande;  
 begin
   // Agir
   FService.ValiderCommande('commande-456');

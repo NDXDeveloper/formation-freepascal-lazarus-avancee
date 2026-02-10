@@ -78,7 +78,7 @@ type
     procedure ListerProduits(ARequest: TRequest; AResponse: TResponse);
   end;
 
-constructor TServiceCatalogue.Create;
+constructor TServiceCatalogue.Create;  
 begin
   // Initialisation connexion base de données
   FConnexionDB := TSQLConnection.Create(nil);
@@ -86,7 +86,7 @@ begin
   // Configuration spécifique au service
 end;
 
-procedure TServiceCatalogue.ObtenirProduit(ARequest: TRequest; AResponse: TResponse);
+procedure TServiceCatalogue.ObtenirProduit(ARequest: TRequest; AResponse: TResponse);  
 var
   ProduitId: string;
   JSON: TJSONObject;
@@ -159,20 +159,20 @@ type
 
 implementation
 
-constructor TClientServiceCatalogue.Create(const ABaseURL: string);
+constructor TClientServiceCatalogue.Create(const ABaseURL: string);  
 begin
   inherited Create;
   FBaseURL := ABaseURL;
   FHTTPClient := TFPHTTPClient.Create(nil);
 end;
 
-destructor TClientServiceCatalogue.Destroy;
+destructor TClientServiceCatalogue.Destroy;  
 begin
   FHTTPClient.Free;
   inherited;
 end;
 
-function TClientServiceCatalogue.ObtenirProduit(const AProduitId: string): TJSONObject;
+function TClientServiceCatalogue.ObtenirProduit(const AProduitId: string): TJSONObject;  
 var
   URL: string;
   Reponse: string;
@@ -197,7 +197,7 @@ begin
   end;
 end;
 
-function TClientServiceCatalogue.ListerProduits: TJSONArray;
+function TClientServiceCatalogue.ListerProduits: TJSONArray;  
 var
   URL: string;
   Reponse: string;
@@ -280,7 +280,7 @@ implementation
 uses
   Generics.Collections;
 
-constructor TMessage.Create(const AType: string; APayload: TJSONObject);
+constructor TMessage.Create(const AType: string; APayload: TJSONObject);  
 begin
   inherited Create;
   FId := TGuid.NewGuid.ToString;
@@ -289,27 +289,27 @@ begin
   FTimestamp := Now;
 end;
 
-destructor TMessage.Destroy;
+destructor TMessage.Destroy;  
 begin
   FPayload.Free;
   inherited;
 end;
 
-constructor TMessageQueueMemoire.Create;
+constructor TMessageQueueMemoire.Create;  
 begin
   inherited Create;
   FMessages := TThreadList.Create;
   FConsommateurs := TList.Create;
 end;
 
-destructor TMessageQueueMemoire.Destroy;
+destructor TMessageQueueMemoire.Destroy;  
 begin
   FMessages.Free;
   FConsommateurs.Free;
   inherited;
 end;
 
-procedure TMessageQueueMemoire.Publier(const AMessage: TMessage);
+procedure TMessageQueueMemoire.Publier(const AMessage: TMessage);  
 var
   Liste: TList;
 begin
@@ -329,7 +329,7 @@ begin
   FConsommateurs.Add(Pointer(AConsommateur));
 end;
 
-procedure TMessageQueueMemoire.Traiter;
+procedure TMessageQueueMemoire.Traiter;  
 var
   Liste: TList;
   Message: TMessage;
@@ -399,7 +399,7 @@ begin
   FPublisher.Publier(Message);
 end;
 
-procedure TServiceCommande.Consommer(const AMessage: TMessage);
+procedure TServiceCommande.Consommer(const AMessage: TMessage);  
 begin
   if AMessage.MessageType = 'StockMisAJour' then
   begin
@@ -452,14 +452,14 @@ implementation
 uses
   fphttpclient;
 
-constructor TRegistreServices.Create;
+constructor TRegistreServices.Create;  
 begin
   inherited Create;
   FServices := TDictionary<string, TList<TServiceInfo>>.Create;
   InitCriticalSection(FLock);
 end;
 
-destructor TRegistreServices.Destroy;
+destructor TRegistreServices.Destroy;  
 var
   Liste: TList<TServiceInfo>;
 begin
@@ -475,7 +475,7 @@ begin
   inherited;
 end;
 
-procedure TRegistreServices.Enregistrer(const AInfo: TServiceInfo);
+procedure TRegistreServices.Enregistrer(const AInfo: TServiceInfo);  
 var
   Liste: TList<TServiceInfo>;
   Info: TServiceInfo;
@@ -499,7 +499,7 @@ begin
   end;
 end;
 
-function TRegistreServices.Decouvrir(const ANom: string): TServiceInfo;
+function TRegistreServices.Decouvrir(const ANom: string): TServiceInfo;  
 var
   Services: TArray<TServiceInfo>;
   Service: TServiceInfo;
@@ -529,7 +529,7 @@ begin
   Result := MeilleurService;
 end;
 
-function TRegistreServices.DecouvrirTous(const ANom: string): TArray<TServiceInfo>;
+function TRegistreServices.DecouvrirTous(const ANom: string): TArray<TServiceInfo>;  
 var
   Liste: TList<TServiceInfo>;
 begin
@@ -544,7 +544,7 @@ begin
   end;
 end;
 
-procedure TRegistreServices.VerifierSante;
+procedure TRegistreServices.VerifierSante;  
 var
   Paire: TPair<string, TList<TServiceInfo>>;
   Liste: TList<TServiceInfo>;
@@ -616,20 +616,20 @@ type
     procedure RouteVersClients(ARequest: TRequest; AResponse: TResponse);
   end;
 
-constructor TAPIGateway.Create(const ARegistre: TRegistreServices);
+constructor TAPIGateway.Create(const ARegistre: TRegistreServices);  
 begin
   inherited Create;
   FRegistre := ARegistre;
   FHTTPClient := TFPHTTPClient.Create(nil);
 end;
 
-destructor TAPIGateway.Destroy;
+destructor TAPIGateway.Destroy;  
 begin
   FHTTPClient.Free;
   inherited;
 end;
 
-function TAPIGateway.AppelerService(const ANomService, APath: string): string;
+function TAPIGateway.AppelerService(const ANomService, APath: string): string;  
 var
   ServiceInfo: TServiceInfo;
   URL: string;
@@ -652,7 +652,7 @@ begin
   end;
 end;
 
-procedure TAPIGateway.RouteVersProduits(ARequest: TRequest; AResponse: TResponse);
+procedure TAPIGateway.RouteVersProduits(ARequest: TRequest; AResponse: TResponse);  
 var
   Reponse: string;
 begin
@@ -669,7 +669,7 @@ begin
   end;
 end;
 
-procedure TAPIGateway.RouteVersCommandes(ARequest: TRequest; AResponse: TResponse);
+procedure TAPIGateway.RouteVersCommandes(ARequest: TRequest; AResponse: TResponse);  
 var
   Reponse: string;
 begin
@@ -686,7 +686,7 @@ begin
   end;
 end;
 
-procedure TAPIGateway.RouteVersClients(ARequest: TRequest; AResponse: TResponse);
+procedure TAPIGateway.RouteVersClients(ARequest: TRequest; AResponse: TResponse);  
 var
   Reponse: string;
 begin
@@ -767,7 +767,7 @@ type
 
 implementation
 
-constructor TCircuitBreaker.Create(ASeuilEchecs: Integer; ADelaiReouverture: Integer);
+constructor TCircuitBreaker.Create(ASeuilEchecs: Integer; ADelaiReouverture: Integer);  
 begin
   inherited Create;
   FEtat := ecFerme;
@@ -777,13 +777,13 @@ begin
   InitCriticalSection(FLock);
 end;
 
-destructor TCircuitBreaker.Destroy;
+destructor TCircuitBreaker.Destroy;  
 begin
   DoneCriticalSection(FLock);
   inherited;
 end;
 
-function TCircuitBreaker.Executer(AOperation: TFunc<string>): string;
+function TCircuitBreaker.Executer(AOperation: TFunc<string>): string;  
 begin
   EnterCriticalSection(FLock);
   try
@@ -842,7 +842,7 @@ begin
   end;
 end;
 
-procedure TCircuitBreaker.Reinitialiser;
+procedure TCircuitBreaker.Reinitialiser;  
 begin
   EnterCriticalSection(FLock);
   try
@@ -864,7 +864,7 @@ var
   CircuitBreaker: TCircuitBreaker;
   Client: TFPHTTPClient;
 
-function AppelerServiceProtege: string;
+function AppelerServiceProtege: string;  
 begin
   Result := Client.Get('http://service-externe/api/data');
 end;
@@ -931,7 +931,7 @@ begin
   FFacteurMultiplication := AFacteur;
 end;
 
-function TRetryPolicy.ExecuterAvecRetry<T>(AOperation: TFunc<T>): T;
+function TRetryPolicy.ExecuterAvecRetry<T>(AOperation: TFunc<T>): T;  
 var
   Tentative: Integer;
   Delai: Integer;
@@ -1031,14 +1031,14 @@ begin
   FExecutee := False;
 end;
 
-procedure TSagaEtape.Executer;
+procedure TSagaEtape.Executer;  
 begin
   WriteLn('Exécution étape: ', FNom);
   FActionPrincipale();
   FExecutee := True;
 end;
 
-procedure TSagaEtape.Compenser;
+procedure TSagaEtape.Compenser;  
 begin
   if FExecutee then
   begin
@@ -1047,26 +1047,26 @@ begin
   end;
 end;
 
-constructor TSagaOrchestrator.Create;
+constructor TSagaOrchestrator.Create;  
 begin
   inherited Create;
   FEtapes := TObjectList<TSagaEtape>.Create(True);
   FEtapeExecutees := TList<TSagaEtape>.Create;
 end;
 
-destructor TSagaOrchestrator.Destroy;
+destructor TSagaOrchestrator.Destroy;  
 begin
   FEtapeExecutees.Free;
   FEtapes.Free;
   inherited;
 end;
 
-procedure TSagaOrchestrator.AjouterEtape(AEtape: TSagaEtape);
+procedure TSagaOrchestrator.AjouterEtape(AEtape: TSagaEtape);  
 begin
   FEtapes.Add(AEtape);
 end;
 
-function TSagaOrchestrator.Executer: Boolean;
+function TSagaOrchestrator.Executer: Boolean;  
 var
   Etape: TSagaEtape;
 begin
@@ -1093,7 +1093,7 @@ begin
   WriteLn('Saga complétée avec succès');
 end;
 
-procedure TSagaOrchestrator.Compenser;
+procedure TSagaOrchestrator.Compenser;  
 var
   i: Integer;
 begin
@@ -1116,7 +1116,7 @@ end.
 **Exemple d'utilisation - Transaction de commande distribuée :**
 
 ```pascal
-procedure ExempleCommandeSaga;
+procedure ExempleCommandeSaga;  
 var
   Saga: TSagaOrchestrator;
   CommandeId: string;
@@ -1228,7 +1228,7 @@ type
 
 implementation
 
-constructor TDatabaseCommandes.Create;
+constructor TDatabaseCommandes.Create;  
 begin
   FConnection := TPQConnection.Create(nil);
   FConnection.HostName := 'localhost';
@@ -1259,7 +1259,7 @@ type
 
 implementation
 
-constructor TDatabaseProduits.Create;
+constructor TDatabaseProduits.Create;  
 begin
   FConnection := TSQLite3Connection.Create(nil);
   FConnection.DatabaseName := 'produits.db';
@@ -1361,32 +1361,32 @@ begin
   FVersion := AVersion;
 end;
 
-destructor TEvenementDomaine.Destroy;
+destructor TEvenementDomaine.Destroy;  
 begin
   FDonnees.Free;
   inherited;
 end;
 
-constructor TEventStoreMemoire.Create;
+constructor TEventStoreMemoire.Create;  
 begin
   inherited Create;
   FEvenements := TObjectList<TEvenementDomaine>.Create(True);
 end;
 
-destructor TEventStoreMemoire.Destroy;
+destructor TEventStoreMemoire.Destroy;  
 begin
   FEvenements.Free;
   inherited;
 end;
 
-procedure TEventStoreMemoire.Ajouter(const AEvenement: TEvenementDomaine);
+procedure TEventStoreMemoire.Ajouter(const AEvenement: TEvenementDomaine);  
 begin
   FEvenements.Add(AEvenement);
   WriteLn(Format('Événement ajouté: %s (Agrégat: %s, Version: %d)',
     [AEvenement.TypeEvenement, AEvenement.AgregatId, AEvenement.Version]));
 end;
 
-function TEventStoreMemoire.ChargerEvenements(const AAgregatId: string): TList<TEvenementDomaine>;
+function TEventStoreMemoire.ChargerEvenements(const AAgregatId: string): TList<TEvenementDomaine>;  
 var
   Evt: TEvenementDomaine;
 begin
@@ -1413,7 +1413,7 @@ begin
   end;
 end;
 
-constructor TAgregatEventSource.Create(const AId: string);
+constructor TAgregatEventSource.Create(const AId: string);  
 begin
   inherited Create;
   FId := AId;
@@ -1421,13 +1421,13 @@ begin
   FEvenementsPendants := TObjectList<TEvenementDomaine>.Create(False);
 end;
 
-destructor TAgregatEventSource.Destroy;
+destructor TAgregatEventSource.Destroy;  
 begin
   FEvenementsPendants.Free;
   inherited;
 end;
 
-procedure TAgregatEventSource.AjouterEvenement(const AType: string; ADonnees: TJSONObject);
+procedure TAgregatEventSource.AjouterEvenement(const AType: string; ADonnees: TJSONObject);  
 var
   Evt: TEvenementDomaine;
 begin
@@ -1437,7 +1437,7 @@ begin
   AppliquerEvenement(Evt);
 end;
 
-procedure TAgregatEventSource.ChargerDepuisHistorique(const AEvenements: TList<TEvenementDomaine>);
+procedure TAgregatEventSource.ChargerDepuisHistorique(const AEvenements: TList<TEvenementDomaine>);  
 var
   Evt: TEvenementDomaine;
 begin
@@ -1448,13 +1448,13 @@ begin
   end;
 end;
 
-function TAgregatEventSource.ObtenirEvenementsPendants: TList<TEvenementDomaine>;
+function TAgregatEventSource.ObtenirEvenementsPendants: TList<TEvenementDomaine>;  
 begin
   Result := TList<TEvenementDomaine>.Create;
   Result.AddRange(FEvenementsPendants);
 end;
 
-procedure TAgregatEventSource.MarquerEvenementsSauvegardes;
+procedure TAgregatEventSource.MarquerEvenementsSauvegardes;  
 begin
   FEvenementsPendants.Clear;
 end;
@@ -1481,7 +1481,7 @@ type
     property Solde: Currency read FSolde;
   end;
 
-procedure TCompteEventSource.AppliquerEvenement(const AEvenement: TEvenementDomaine);
+procedure TCompteEventSource.AppliquerEvenement(const AEvenement: TEvenementDomaine);  
 begin
   if AEvenement.TypeEvenement = 'CompteOuvert' then
   begin
@@ -1498,7 +1498,7 @@ begin
   end;
 end;
 
-procedure TCompteEventSource.Ouvrir(const ATitulaire: string; ASoldeInitial: Currency);
+procedure TCompteEventSource.Ouvrir(const ATitulaire: string; ASoldeInitial: Currency);  
 var
   Donnees: TJSONObject;
 begin
@@ -1508,7 +1508,7 @@ begin
   AjouterEvenement('CompteOuvert', Donnees);
 end;
 
-procedure TCompteEventSource.Crediter(AMontant: Currency);
+procedure TCompteEventSource.Crediter(AMontant: Currency);  
 var
   Donnees: TJSONObject;
 begin
@@ -1520,7 +1520,7 @@ begin
   AjouterEvenement('CompteCredite', Donnees);
 end;
 
-procedure TCompteEventSource.Debiter(AMontant: Currency);
+procedure TCompteEventSource.Debiter(AMontant: Currency);  
 var
   Donnees: TJSONObject;
 begin
@@ -1600,7 +1600,7 @@ RUN apt-get update && \
 WORKDIR /app
 
 # Copier le code source
-COPY src/ ./src/
+COPY src/ ./src/  
 COPY compile.sh ./
 
 # Compiler le service
@@ -1725,20 +1725,20 @@ type
 
 implementation
 
-constructor TConfiguration.Create;
+constructor TConfiguration.Create;  
 begin
   inherited Create;
   FServiceURLs := TStringList.Create;
   FEnvironnement := 'development';
 end;
 
-destructor TConfiguration.Destroy;
+destructor TConfiguration.Destroy;  
 begin
   FServiceURLs.Free;
   inherited;
 end;
 
-procedure TConfiguration.ChargerDepuisFichier(const AFichier: string);
+procedure TConfiguration.ChargerDepuisFichier(const AFichier: string);  
 var
   JSON: TJSONObject;
   Parser: TJSONParser;
@@ -1770,7 +1770,7 @@ begin
   end;
 end;
 
-procedure TConfiguration.ChargerDepuisEnvironnement;
+procedure TConfiguration.ChargerDepuisEnvironnement;  
 begin
   // Variables d'environnement prioritaires
   FEnvironnement := GetEnvironmentVariable('APP_ENV');
@@ -1790,7 +1790,7 @@ begin
     FServiceURLs.Values['produits'] := GetEnvironmentVariable('SERVICE_PRODUITS_URL');
 end;
 
-procedure TConfiguration.Charger;
+procedure TConfiguration.Charger;  
 var
   FichierConfig: string;
 begin
@@ -1865,7 +1865,7 @@ uses
   {$ENDIF}
   DateUtils;
 
-constructor THealthCheck.Create(const ANom: string);
+constructor THealthCheck.Create(const ANom: string);  
 begin
   inherited Create;
   FNom := ANom;
@@ -1873,14 +1873,14 @@ begin
   FMessage := 'OK';
 end;
 
-constructor THealthCheckService.Create(AConnection: TSQLConnection);
+constructor THealthCheckService.Create(AConnection: TSQLConnection);  
 begin
   inherited Create;
   FChecks := TList.Create;
   FDatabaseConnection := AConnection;
 end;
 
-destructor THealthCheckService.Destroy;
+destructor THealthCheckService.Destroy;  
 var
   i: Integer;
 begin
@@ -1890,7 +1890,7 @@ begin
   inherited;
 end;
 
-function THealthCheckService.VerifierDatabase: THealthCheck;
+function THealthCheckService.VerifierDatabase: THealthCheck;  
 var
   Query: TSQLQuery;
 begin
@@ -1996,7 +1996,7 @@ begin
   {$ENDIF}
 end;
 
-function THealthCheckService.VerifierTout: TJSONObject;
+function THealthCheckService.VerifierTout: TJSONObject;  
 var
   CheckDB, CheckDisk, CheckMem: THealthCheck;
   StatutGlobal: THealthStatus;
@@ -2053,7 +2053,7 @@ end.
 **Endpoint de santé dans le service :**
 
 ```pascal
-procedure TMonService.EndpointHealth(ARequest: TRequest; AResponse: TResponse);
+procedure TMonService.EndpointHealth(ARequest: TRequest; AResponse: TResponse);  
 var
   HealthCheck: THealthCheckService;
   ResultJSON: TJSONObject;
@@ -2172,7 +2172,7 @@ uses
   Math;
 
 // TCounter
-constructor TCounter.Create(const ANom: string);
+constructor TCounter.Create(const ANom: string);  
 begin
   inherited Create;
   FNom := ANom;
@@ -2180,13 +2180,13 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TCounter.Destroy;
+destructor TCounter.Destroy;  
 begin
   FLock.Free;
   inherited;
 end;
 
-procedure TCounter.Incrementer(ADelta: Int64);
+procedure TCounter.Incrementer(ADelta: Int64);  
 begin
   FLock.Enter;
   try
@@ -2196,7 +2196,7 @@ begin
   end;
 end;
 
-function TCounter.ObtenirValeur: Int64;
+function TCounter.ObtenirValeur: Int64;  
 begin
   FLock.Enter;
   try
@@ -2207,7 +2207,7 @@ begin
 end;
 
 // TGauge
-constructor TGauge.Create(const ANom: string);
+constructor TGauge.Create(const ANom: string);  
 begin
   inherited Create;
   FNom := ANom;
@@ -2215,13 +2215,13 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TGauge.Destroy;
+destructor TGauge.Destroy;  
 begin
   FLock.Free;
   inherited;
 end;
 
-procedure TGauge.Definir(AValeur: Double);
+procedure TGauge.Definir(AValeur: Double);  
 begin
   FLock.Enter;
   try
@@ -2231,7 +2231,7 @@ begin
   end;
 end;
 
-procedure TGauge.Incrementer(ADelta: Double);
+procedure TGauge.Incrementer(ADelta: Double);  
 begin
   FLock.Enter;
   try
@@ -2241,7 +2241,7 @@ begin
   end;
 end;
 
-procedure TGauge.Decrementer(ADelta: Double);
+procedure TGauge.Decrementer(ADelta: Double);  
 begin
   FLock.Enter;
   try
@@ -2251,7 +2251,7 @@ begin
   end;
 end;
 
-function TGauge.ObtenirValeur: Double;
+function TGauge.ObtenirValeur: Double;  
 begin
   FLock.Enter;
   try
@@ -2262,7 +2262,7 @@ begin
 end;
 
 // THistogram
-constructor THistogram.Create(const ANom: string);
+constructor THistogram.Create(const ANom: string);  
 begin
   inherited Create;
   FNom := ANom;
@@ -2270,14 +2270,14 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor THistogram.Destroy;
+destructor THistogram.Destroy;  
 begin
   FValeurs.Free;
   FLock.Free;
   inherited;
 end;
 
-procedure THistogram.Observer(AValeur: Double);
+procedure THistogram.Observer(AValeur: Double);  
 begin
   FLock.Enter;
   try
@@ -2291,7 +2291,7 @@ begin
   end;
 end;
 
-function THistogram.ObtenirMoyenne: Double;
+function THistogram.ObtenirMoyenne: Double;  
 var
   Somme: Double;
   Valeur: Double;
@@ -2311,7 +2311,7 @@ begin
   end;
 end;
 
-function THistogram.ObtenirMin: Double;
+function THistogram.ObtenirMin: Double;  
 var
   Valeur: Double;
 begin
@@ -2329,7 +2329,7 @@ begin
   end;
 end;
 
-function THistogram.ObtenirMax: Double;
+function THistogram.ObtenirMax: Double;  
 var
   Valeur: Double;
 begin
@@ -2347,7 +2347,7 @@ begin
   end;
 end;
 
-function THistogram.ObtenirPercentile(APercentile: Double): Double;
+function THistogram.ObtenirPercentile(APercentile: Double): Double;  
 var
   ValeursTries: TList<Double>;
   Index: Integer;
@@ -2373,7 +2373,7 @@ begin
 end;
 
 // TMetricsRegistry
-constructor TMetricsRegistry.Create;
+constructor TMetricsRegistry.Create;  
 begin
   inherited Create;
   FCounters := TObjectDictionary<string, TCounter>.Create([doOwnsValues]);
@@ -2382,7 +2382,7 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TMetricsRegistry.Destroy;
+destructor TMetricsRegistry.Destroy;  
 begin
   FHistograms.Free;
   FGauges.Free;
@@ -2391,7 +2391,7 @@ begin
   inherited;
 end;
 
-function TMetricsRegistry.ObtenirCounter(const ANom: string): TCounter;
+function TMetricsRegistry.ObtenirCounter(const ANom: string): TCounter;  
 begin
   FLock.Enter;
   try
@@ -2405,7 +2405,7 @@ begin
   end;
 end;
 
-function TMetricsRegistry.ObtenirGauge(const ANom: string): TGauge;
+function TMetricsRegistry.ObtenirGauge(const ANom: string): TGauge;  
 begin
   FLock.Enter;
   try
@@ -2419,7 +2419,7 @@ begin
   end;
 end;
 
-function TMetricsRegistry.ObtenirHistogram(const ANom: string): THistogram;
+function TMetricsRegistry.ObtenirHistogram(const ANom: string): THistogram;  
 begin
   FLock.Enter;
   try
@@ -2433,7 +2433,7 @@ begin
   end;
 end;
 
-function TMetricsRegistry.ExporterPrometheus: string;
+function TMetricsRegistry.ExporterPrometheus: string;  
 var
   Builder: TStringBuilder;
   Paire: TPair<string, TCounter>;
@@ -2503,13 +2503,13 @@ type
     destructor Destroy; override;
   end;
 
-constructor TMonService.Create;
+constructor TMonService.Create;  
 begin
   inherited Create;
   FMetrics := TMetricsRegistry.Create;
 end;
 
-procedure TMonService.TraiterRequete(ARequest: TRequest; AResponse: TResponse);
+procedure TMonService.TraiterRequete(ARequest: TRequest; AResponse: TResponse);  
 var
   Debut: TDateTime;
   Duree: Double;
@@ -2546,7 +2546,7 @@ begin
   Histogram.Observer(Duree);
 end;
 
-procedure TMonService.EndpointMetrics(ARequest: TRequest; AResponse: TResponse);
+procedure TMonService.EndpointMetrics(ARequest: TRequest; AResponse: TResponse);  
 begin
   AResponse.ContentType := 'text/plain; version=0.0.4';
   AResponse.Content := FMetrics.ExporterPrometheus;
@@ -2588,14 +2588,14 @@ type
 
 implementation
 
-constructor TStructuredLogger.Create(const AServiceName, AEnvironment: string);
+constructor TStructuredLogger.Create(const AServiceName, AEnvironment: string);  
 begin
   inherited Create;
   FServiceName := AServiceName;
   FEnvironment := AEnvironment;
 end;
 
-function TStructuredLogger.LogLevelToString(ALevel: TLogLevel): string;
+function TStructuredLogger.LogLevelToString(ALevel: TLogLevel): string;  
 begin
   case ALevel of
     llDebug: Result := 'DEBUG';
@@ -2635,27 +2635,27 @@ begin
   end;
 end;
 
-procedure TStructuredLogger.Debug(const AMessage: string; AContext: TJSONObject);
+procedure TStructuredLogger.Debug(const AMessage: string; AContext: TJSONObject);  
 begin
   Log(llDebug, AMessage, AContext);
 end;
 
-procedure TStructuredLogger.Info(const AMessage: string; AContext: TJSONObject);
+procedure TStructuredLogger.Info(const AMessage: string; AContext: TJSONObject);  
 begin
   Log(llInfo, AMessage, AContext);
 end;
 
-procedure TStructuredLogger.Warning(const AMessage: string; AContext: TJSONObject);
+procedure TStructuredLogger.Warning(const AMessage: string; AContext: TJSONObject);  
 begin
   Log(llWarning, AMessage, AContext);
 end;
 
-procedure TStructuredLogger.Error(const AMessage: string; AContext: TJSONObject);
+procedure TStructuredLogger.Error(const AMessage: string; AContext: TJSONObject);  
 begin
   Log(llError, AMessage, AContext);
 end;
 
-procedure TStructuredLogger.Fatal(const AMessage: string; AContext: TJSONObject);
+procedure TStructuredLogger.Fatal(const AMessage: string; AContext: TJSONObject);  
 begin
   Log(llFatal, AMessage, AContext);
 end;
@@ -2752,7 +2752,7 @@ implementation
 uses
   DateUtils;
 
-constructor TJWTToken.Create;
+constructor TJWTToken.Create;  
 begin
   inherited Create;
   FHeader := TJSONObject.Create;
@@ -2762,14 +2762,14 @@ begin
   FPayload := TJSONObject.Create;
 end;
 
-destructor TJWTToken.Destroy;
+destructor TJWTToken.Destroy;  
 begin
   FPayload.Free;
   FHeader.Free;
   inherited;
 end;
 
-function TJWTToken.EncodeBase64URL(const AData: string): string;
+function TJWTToken.EncodeBase64URL(const AData: string): string;  
 begin
   Result := EncodeStringBase64(AData);
   // Rendre compatible URL
@@ -2778,7 +2778,7 @@ begin
   Result := StringReplace(Result, '=', '', [rfReplaceAll]);
 end;
 
-function TJWTToken.DecodeBase64URL(const AData: string): string;
+function TJWTToken.DecodeBase64URL(const AData: string): string;  
 var
   Data: string;
   Padding: Integer;
@@ -2796,7 +2796,7 @@ begin
   Result := DecodeStringBase64(Data);
 end;
 
-function TJWTToken.GenerateSignature(const AData, ASecret: string): string;
+function TJWTToken.GenerateSignature(const AData, ASecret: string): string;  
 var
   HMAC: THMAC;
   Hash: TBytes;
@@ -2812,17 +2812,17 @@ begin
   end;
 end;
 
-procedure TJWTToken.SetClaim(const AKey, AValue: string);
+procedure TJWTToken.SetClaim(const AKey, AValue: string);  
 begin
   FPayload.Add(AKey, AValue);
 end;
 
-procedure TJWTToken.SetClaim(const AKey: string; AValue: Integer);
+procedure TJWTToken.SetClaim(const AKey: string; AValue: Integer);  
 begin
   FPayload.Add(AKey, AValue);
 end;
 
-procedure TJWTToken.SetExpiration(ASeconds: Integer);
+procedure TJWTToken.SetExpiration(ASeconds: Integer);  
 var
   ExpirationTime: Int64;
 begin
@@ -2830,7 +2830,7 @@ begin
   FPayload.Add('exp', ExpirationTime);
 end;
 
-function TJWTToken.Generate(const ASecret: string): string;
+function TJWTToken.Generate(const ASecret: string): string;  
 var
   HeaderEncoded, PayloadEncoded: string;
   DataToSign: string;
@@ -2844,7 +2844,7 @@ begin
   Result := DataToSign + '.' + FSignature;
 end;
 
-class function TJWTToken.Verify(const AToken, ASecret: string): TJWTToken;
+class function TJWTToken.Verify(const AToken, ASecret: string): TJWTToken;  
 var
   Parts: TStringList;
   DataToSign: string;
@@ -2903,12 +2903,12 @@ begin
   end;
 end;
 
-function TJWTToken.GetClaim(const AKey: string): string;
+function TJWTToken.GetClaim(const AKey: string): string;  
 begin
   Result := FPayload.Get(AKey, '');
 end;
 
-function TJWTToken.IsExpired: Boolean;
+function TJWTToken.IsExpired: Boolean;  
 var
   Exp: Int64;
   Now: Int64;
@@ -2939,13 +2939,13 @@ type
 
 implementation
 
-constructor TAuthMiddleware.Create(const ASecretKey: string);
+constructor TAuthMiddleware.Create(const ASecretKey: string);  
 begin
   inherited Create;
   FSecretKey := ASecretKey;
 end;
 
-function TAuthMiddleware.Authenticate(ARequest: TRequest; AResponse: TResponse): Boolean;
+function TAuthMiddleware.Authenticate(ARequest: TRequest; AResponse: TResponse): Boolean;  
 var
   AuthHeader: string;
   Token: string;
@@ -3000,7 +3000,7 @@ end.
 **Utilisation du middleware :**
 
 ```pascal
-procedure TMonService.RouteProtegee(ARequest: TRequest; AResponse: TResponse);
+procedure TMonService.RouteProtegee(ARequest: TRequest; AResponse: TResponse);  
 var
   Auth: TAuthMiddleware;
   UserId: string;
@@ -3057,7 +3057,7 @@ type
 
 implementation
 
-constructor TRateLimiter.Create(ALimiteParMinute: Integer);
+constructor TRateLimiter.Create(ALimiteParMinute: Integer);  
 begin
   inherited Create;
   FLimiteParMinute := ALimiteParMinute;
@@ -3065,7 +3065,7 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TRateLimiter.Destroy;
+destructor TRateLimiter.Destroy;  
 var
   Liste: TList<TDateTime>;
 begin
@@ -3081,7 +3081,7 @@ begin
   inherited;
 end;
 
-procedure TRateLimiter.NettoyerVieuxEnregistrements;
+procedure TRateLimiter.NettoyerVieuxEnregistrements;  
 var
   Paire: TPair<string, TList<TDateTime>>;
   i: Integer;
@@ -3102,7 +3102,7 @@ begin
   end;
 end;
 
-function TRateLimiter.EstAutorise(const AIdentifiant: string): Boolean;
+function TRateLimiter.EstAutorise(const AIdentifiant: string): Boolean;  
 var
   Liste: TList<TDateTime>;
   LimiteTemps: TDateTime;
@@ -3136,7 +3136,7 @@ begin
   end;
 end;
 
-function TRateLimiter.ObtenirInfo(const AIdentifiant: string): TRateLimitInfo;
+function TRateLimiter.ObtenirInfo(const AIdentifiant: string): TRateLimitInfo;  
 var
   Liste: TList<TDateTime>;
   LimiteTemps: TDateTime;
@@ -3196,19 +3196,19 @@ type
 
 implementation
 
-constructor TRateLimitMiddleware.Create(ALimiteParMinute: Integer);
+constructor TRateLimitMiddleware.Create(ALimiteParMinute: Integer);  
 begin
   inherited Create;
   FRateLimiter := TRateLimiter.Create(ALimiteParMinute);
 end;
 
-destructor TRateLimitMiddleware.Destroy;
+destructor TRateLimitMiddleware.Destroy;  
 begin
   FRateLimiter.Free;
   inherited;
 end;
 
-function TRateLimitMiddleware.ExtraireIdentifiant(ARequest: TRequest): string;
+function TRateLimitMiddleware.ExtraireIdentifiant(ARequest: TRequest): string;  
 var
   JWT: TJWTToken;
   Token: string;
@@ -3296,18 +3296,18 @@ implementation
 uses
   MockRepository;
 
-procedure TTestServiceCommandes.SetUp;
+procedure TTestServiceCommandes.SetUp;  
 begin
   FMockRepository := TMockRepositoryCommande.Create;
   FService := TServiceCommandes.Create(FMockRepository);
 end;
 
-procedure TTestServiceCommandes.TearDown;
+procedure TTestServiceCommandes.TearDown;  
 begin
   FService.Free;
 end;
 
-procedure TTestServiceCommandes.TestCreerCommande;
+procedure TTestServiceCommandes.TestCreerCommande;  
 var
   CommandeId: string;
   Commande: TCommande;
@@ -3328,7 +3328,7 @@ begin
     TMockRepositoryCommande(FMockRepository).ASauvegarde);
 end;
 
-procedure TTestServiceCommandes.TestCreerCommandeSansLignes;
+procedure TTestServiceCommandes.TestCreerCommandeSansLignes;  
 begin
   // Assert
   AssertException('Doit lever une exception',
@@ -3340,7 +3340,7 @@ begin
   );
 end;
 
-procedure TTestServiceCommandes.TestAnnulerCommande;
+procedure TTestServiceCommandes.TestAnnulerCommande;  
 var
   Commande: TCommande;
 begin
@@ -3359,7 +3359,7 @@ begin
     Commande.Statut);
 end;
 
-procedure TTestServiceCommandes.TestCalculerTotal;
+procedure TTestServiceCommandes.TestCalculerTotal;  
 var
   Commande: TCommande;
   Total: Currency;
@@ -3415,18 +3415,18 @@ type
 
 implementation
 
-procedure TTestIntegrationAPI.SetUp;
+procedure TTestIntegrationAPI.SetUp;  
 begin
   FClient := TFPHTTPClient.Create(nil);
   FBaseURL := 'http://localhost:8080'; // URL du service de test
 end;
 
-procedure TTestIntegrationAPI.TearDown;
+procedure TTestIntegrationAPI.TearDown;  
 begin
   FClient.Free;
 end;
 
-function TTestIntegrationAPI.AppelGET(const APath: string): TJSONObject;
+function TTestIntegrationAPI.AppelGET(const APath: string): TJSONObject;  
 var
   Response: string;
   Parser: TJSONParser;
@@ -3459,7 +3459,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationAPI.TestHealthCheck;
+procedure TTestIntegrationAPI.TestHealthCheck;  
 var
   Response: TJSONObject;
 begin
@@ -3473,7 +3473,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationAPI.TestCreerCommandeAPI;
+procedure TTestIntegrationAPI.TestCreerCommandeAPI;  
 var
   Body, Response: TJSONObject;
   CommandeId: string;
@@ -3500,7 +3500,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationAPI.TestAuthenticationRequise;
+procedure TTestIntegrationAPI.TestAuthenticationRequise;  
 begin
   try
     AppelGET('/api/commandes/private');
@@ -3511,7 +3511,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationAPI.TestRateLimit;
+procedure TTestIntegrationAPI.TestRateLimit;  
 var
   i: Integer;
   RaisedException: Boolean;
@@ -3630,8 +3630,8 @@ set -e  # Arrêter en cas d'erreur
 echo "=== Compilation des microservices FreePascal ==="
 
 # Couleurs pour les messages
-GREEN='\033[0;32m'
-RED='\033[0;31m'
+GREEN='\033[0;32m'  
+RED='\033[0;31m'  
 NC='\033[0m' # No Color
 
 # Fonction de compilation
@@ -3666,16 +3666,16 @@ compile_service() {
 }
 
 # Compiler tous les services
-compile_service "api-gateway"
-compile_service "service-produits"
-compile_service "service-commandes"
-compile_service "service-paiements"
+compile_service "api-gateway"  
+compile_service "service-produits"  
+compile_service "service-commandes"  
+compile_service "service-paiements"  
 compile_service "service-notifications"
 
 echo -e "${GREEN}=== Tous les services sont compilés ===${NC}"
 
 # Construire les images Docker
-echo "=== Construction des images Docker ==="
+echo "=== Construction des images Docker ==="  
 docker-compose -f infrastructure/docker-compose.yml build
 
 echo -e "${GREEN}=== Build terminé avec succès ===${NC}"
@@ -3685,8 +3685,8 @@ echo -e "${GREEN}=== Build terminé avec succès ===${NC}"
 
 ```yaml
 # kubernetes/deployments/service-produits.yaml
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1  
+kind: Deployment  
 metadata:
   name: service-produits
   labels:
@@ -3741,8 +3741,8 @@ spec:
             memory: "128Mi"
             cpu: "200m"
 ---
-apiVersion: v1
-kind: Service
+apiVersion: v1  
+kind: Service  
 metadata:
   name: service-produits
 spec:
@@ -3782,7 +3782,7 @@ spec:
 
 ```pascal
 // ❌ Mauvais : Appel synchrone en cascade
-procedure TraiterCommande(Commande: TCommande);
+procedure TraiterCommande(Commande: TCommande);  
 begin
   // Appel synchrone 1
   VerifierStock(Commande.Produits);
@@ -3795,7 +3795,7 @@ begin
 end;
 
 // ✅ Bon : Communication asynchrone par événements
-procedure TraiterCommande(Commande: TCommande);
+procedure TraiterCommande(Commande: TCommande);  
 begin
   // Valider la commande localement
   Commande.Valider;
@@ -3813,7 +3813,7 @@ end;
 **Implémenter la résilience :**
 
 ```pascal
-function AppelerServiceAvecResilience(const URL: string): string;
+function AppelerServiceAvecResilience(const URL: string): string;  
 var
   CircuitBreaker: TCircuitBreaker;
   Retry: TRetryPolicy;
@@ -3845,11 +3845,11 @@ end;
 
 ```pascal
 // Enregistrer plusieurs versions de l'API
-HTTPRouter.RegisterRoute('/api/v1/produits', rmGet, @GetProduitsV1);
+HTTPRouter.RegisterRoute('/api/v1/produits', rmGet, @GetProduitsV1);  
 HTTPRouter.RegisterRoute('/api/v2/produits', rmGet, @GetProduitsV2);
 
 // Ou dans le header
-procedure GetProduits(ARequest: TRequest; AResponse: TResponse);
+procedure GetProduits(ARequest: TRequest; AResponse: TResponse);  
 var
   Version: string;
 begin
@@ -3869,7 +3869,7 @@ end;
 **Générer une documentation OpenAPI/Swagger :**
 
 ```pascal
-function GenererSpecificationOpenAPI: TJSONObject;
+function GenererSpecificationOpenAPI: TJSONObject;  
 var
   Spec: TJSONObject;
   Paths: TJSONObject;
@@ -3902,7 +3902,7 @@ begin
 end;
 
 // Endpoint pour servir la spec
-procedure EndpointOpenAPI(ARequest: TRequest; AResponse: TResponse);
+procedure EndpointOpenAPI(ARequest: TRequest; AResponse: TResponse);  
 var
   Spec: TJSONObject;
 begin
@@ -3968,7 +3968,7 @@ Les microservices avec FreePascal offrent une architecture moderne et performant
 
 ```pascal
 // Étape 1 : Monolithe bien structuré
-Program MonolitheModulaire;
+Program MonolitheModulaire;  
 uses
   ModuleProduits,    // Module bien isolé
   ModuleCommandes,   // Module bien isolé
@@ -3978,7 +3978,7 @@ begin
 end.
 
 // Étape 2 : Extraire un service à la fois
-Program ServiceProduits;
+Program ServiceProduits;  
 uses
   ModuleProduits;  // Réutiliser le module existant
 begin
@@ -4055,7 +4055,7 @@ type
     procedure Demarrer;
   end;
 
-constructor TServiceMinimal.Create;
+constructor TServiceMinimal.Create;  
 begin
   inherited Create;
 
@@ -4077,7 +4077,7 @@ begin
   FHealthCheck := THealthCheckService.Create(nil);
 end;
 
-destructor TServiceMinimal.Destroy;
+destructor TServiceMinimal.Destroy;  
 begin
   FLogger.Info('Arrêt du service');
   FHealthCheck.Free;
@@ -4087,7 +4087,7 @@ begin
   inherited;
 end;
 
-procedure TServiceMinimal.EndpointHealth(AReq: TRequest; AResp: TResponse);
+procedure TServiceMinimal.EndpointHealth(AReq: TRequest; AResp: TResponse);  
 var
   Result: TJSONObject;
 begin
@@ -4105,13 +4105,13 @@ begin
   end;
 end;
 
-procedure TServiceMinimal.EndpointMetrics(AReq: TRequest; AResp: TResponse);
+procedure TServiceMinimal.EndpointMetrics(AReq: TRequest; AResp: TResponse);  
 begin
   AResp.ContentType := 'text/plain';
   AResp.Content := FMetrics.ExporterPrometheus;
 end;
 
-procedure TServiceMinimal.EndpointAPI(AReq: TRequest; AResp: TResponse);
+procedure TServiceMinimal.EndpointAPI(AReq: TRequest; AResp: TResponse);  
 var
   Debut: TDateTime;
   Duree: Double;
@@ -4166,7 +4166,7 @@ begin
   Histogram.Observer(Duree);
 end;
 
-procedure TServiceMinimal.Demarrer;
+procedure TServiceMinimal.Demarrer;  
 begin
   // Enregistrer les routes
   HTTPRouter.RegisterRoute('/health', rmGet, @EndpointHealth);
@@ -4240,8 +4240,8 @@ end.
 **1. Microservices trop petits (Nanoservices)**
 ```pascal
 // ❌ Trop granulaire
-Service GetUserName
-Service GetUserEmail
+Service GetUserName  
+Service GetUserEmail  
 Service GetUserAge
 
 // ✅ Granularité appropriée
@@ -4254,7 +4254,7 @@ Service UserManagement
 ServiceA → [Base de données unique] ← ServiceB
 
 // ✅ Base par service
-ServiceA → [DB A]
+ServiceA → [DB A]  
 ServiceB → [DB B]
 ```
 

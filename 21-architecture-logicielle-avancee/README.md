@@ -143,7 +143,7 @@ end;
 
 ```pascal
 // ❌ Mauvais : tout mélangé
-procedure TraiterCommande;
+procedure TraiterCommande;  
 begin
   // Validation
   if Montant <= 0 then Exit;
@@ -177,7 +177,7 @@ type
     procedure LoggerCommande(const ACommande: TCommande);
   end;
 
-procedure TraiterCommande(const ACommande: TCommande);
+procedure TraiterCommande(const ACommande: TCommande);  
 var
   Validateur: TValidateurCommande;
   Repository: TRepositoryCommande;
@@ -234,12 +234,12 @@ type
 
 ```pascal
 // ❌ Mauvais : duplication
-function CalculerTotalCommande1(ACommande: TCommande): Currency;
+function CalculerTotalCommande1(ACommande: TCommande): Currency;  
 begin
   Result := ACommande.SousTotal * (1 + ACommande.TauxTVA / 100);
 end;
 
-function CalculerTotalCommande2(ACommande: TCommande): Currency;
+function CalculerTotalCommande2(ACommande: TCommande): Currency;  
 begin
   Result := ACommande.SousTotal * (1 + ACommande.TauxTVA / 100); // Duplication !
 end;
@@ -254,7 +254,7 @@ type
     function CalculerTotal: Currency;
   end;
 
-function TCommande.CalculerTotal: Currency;
+function TCommande.CalculerTotal: Currency;  
 begin
   Result := FSousTotal * (1 + FTauxTVA / 100);
 end;
@@ -439,7 +439,7 @@ type
     procedure BoutonCreerClick(Sender: TObject);
   end;
 
-procedure TFormCommande.BoutonCreerClick(Sender: TObject);
+procedure TFormCommande.BoutonCreerClick(Sender: TObject);  
 var
   Commande: TCommande;
 begin
@@ -486,7 +486,7 @@ type
     procedure Sauvegarder(const ACommande: TCommande);
   end;
 
-procedure TRepositoryCommande.Sauvegarder(const ACommande: TCommande);
+procedure TRepositoryCommande.Sauvegarder(const ACommande: TCommande);  
 var
   Query: TSQLQuery;
 begin

@@ -106,20 +106,20 @@ implementation
 
 // TAppConfig
 
-constructor TAppConfig.Create;
+constructor TAppConfig.Create;  
 begin
   inherited Create;
   LoadFromEnvironment;
 end;
 
-function TAppConfig.GetEnv(const AName: string; const ADefault: string): string;
+function TAppConfig.GetEnv(const AName: string; const ADefault: string): string;  
 begin
   Result := GetEnvironmentVariable(AName);
   if Result = '' then
     Result := ADefault;
 end;
 
-function TAppConfig.GetEnvInt(const AName: string; ADefault: Integer): Integer;
+function TAppConfig.GetEnvInt(const AName: string; ADefault: Integer): Integer;  
 var
   Value: string;
 begin
@@ -130,7 +130,7 @@ begin
     Result := StrToIntDef(Value, ADefault);
 end;
 
-procedure TAppConfig.LoadFromEnvironment;
+procedure TAppConfig.LoadFromEnvironment;  
 begin
   WriteLn('[Config] Chargement de la configuration depuis l''environnement...');
 
@@ -151,7 +151,7 @@ begin
   WriteLn('[Config] ✓ Configuration chargée');
 end;
 
-procedure TAppConfig.Validate;
+procedure TAppConfig.Validate;  
 begin
   WriteLn('[Config] Validation de la configuration...');
 
@@ -164,7 +164,7 @@ begin
   WriteLn('[Config] ✓ Configuration valide');
 end;
 
-procedure TAppConfig.Print;
+procedure TAppConfig.Print;  
 begin
   WriteLn;
   WriteLn('═══════════════════════════════════════════');
@@ -195,15 +195,15 @@ end.
 # Dockerfile
 FROM fpc:3.2.2
 
-WORKDIR /app
+WORKDIR /app  
 COPY . .
 
 RUN fpc -O2 myapp.pas
 
 # Variables d'environnement avec valeurs par défaut
-ENV PORT=8080
-ENV LOG_LEVEL=info
-ENV DB_HOST=localhost
+ENV PORT=8080  
+ENV LOG_LEVEL=info  
+ENV DB_HOST=localhost  
 ENV DB_PORT=5432
 
 EXPOSE 8080
@@ -245,7 +245,7 @@ volumes:
 
 ```bash
 # .env (ne JAMAIS commiter ce fichier)
-DB_PASSWORD=SuperSecretPassword123!
+DB_PASSWORD=SuperSecretPassword123!  
 API_KEY=my-secret-api-key-xyz
 ```
 
@@ -377,7 +377,7 @@ begin
   end;
 end;
 
-function TSessionManager.RedisGet(const AKey: string): string;
+function TSessionManager.RedisGet(const AKey: string): string;  
 var
   Client: TFPHTTPClient;
   URL: string;
@@ -407,7 +407,7 @@ begin
   end;
 end;
 
-function TSessionManager.RedisDelete(const AKey: string): Boolean;
+function TSessionManager.RedisDelete(const AKey: string): Boolean;  
 var
   Client: TFPHTTPClient;
   URL: string;
@@ -435,7 +435,7 @@ begin
   end;
 end;
 
-function TSessionManager.CreateSession(const AUserId: string): string;
+function TSessionManager.CreateSession(const AUserId: string): string;  
 var
   SessionData: TJSONObject;
   SessionId: string;
@@ -467,7 +467,7 @@ begin
   end;
 end;
 
-function TSessionManager.GetSession(const ASessionId: string): TJSONObject;
+function TSessionManager.GetSession(const ASessionId: string): TJSONObject;  
 var
   SessionJSON: string;
   Parser: TJSONParser;
@@ -502,7 +502,7 @@ begin
   WriteLn('[SessionManager] ✓ Session mise à jour: ', ASessionId);
 end;
 
-procedure TSessionManager.DeleteSession(const ASessionId: string);
+procedure TSessionManager.DeleteSession(const ASessionId: string);  
 begin
   if RedisDelete(ASessionId) then
     WriteLn('[SessionManager] ✓ Session supprimée: ', ASessionId)
@@ -510,7 +510,7 @@ begin
     WriteLn('[SessionManager] ✗ Erreur suppression session: ', ASessionId);
 end;
 
-function TSessionManager.IsValidSession(const ASessionId: string): Boolean;
+function TSessionManager.IsValidSession(const ASessionId: string): Boolean;  
 var
   SessionData: TJSONObject;
 begin
@@ -586,7 +586,7 @@ begin
   WriteLn('[StatelessApp] Application créée (port ', FPort, ')');
 end;
 
-destructor TStatelessApp.Destroy;
+destructor TStatelessApp.Destroy;  
 begin
   Stop;
   FServer.Free;
@@ -724,13 +724,13 @@ begin
   AResponse.Content := '{"message": "Logged out"}';
 end;
 
-procedure TStatelessApp.Start;
+procedure TStatelessApp.Start;  
 begin
   FServer.Active := True;
   WriteLn(Format('[StatelessApp] ✓ Démarrée sur http://localhost:%d', [FPort]));
 end;
 
-procedure TStatelessApp.Stop;
+procedure TStatelessApp.Stop;  
 begin
   if FServer.Active then
   begin
@@ -858,7 +858,7 @@ uses
 
 // THealthCheck
 
-constructor THealthCheck.Create(const AName: string);
+constructor THealthCheck.Create(const AName: string);  
 begin
   inherited Create;
   FName := AName;
@@ -866,7 +866,7 @@ begin
   FMessage := '';
 end;
 
-function THealthCheck.ToJSON: TJSONObject;
+function THealthCheck.ToJSON: TJSONObject;  
 var
   StatusStr: string;
 begin
@@ -885,13 +885,13 @@ end;
 
 // TDatabaseHealthCheck
 
-constructor TDatabaseHealthCheck.Create(const AConnectionString: string);
+constructor TDatabaseHealthCheck.Create(const AConnectionString: string);  
 begin
   inherited Create('database');
   FConnectionString := AConnectionString;
 end;
 
-function TDatabaseHealthCheck.Check: THealthStatus;
+function TDatabaseHealthCheck.Check: THealthStatus;  
 begin
   FLastCheck := Now;
 
@@ -937,7 +937,7 @@ begin
   FTimeout := ATimeout;
 end;
 
-function TExternalServiceHealthCheck.Check: THealthStatus;
+function TExternalServiceHealthCheck.Check: THealthStatus;  
 var
   Client: TFPHTTPClient;
 begin
@@ -976,7 +976,7 @@ end;
 
 // THealthManager
 
-constructor THealthManager.Create;
+constructor THealthManager.Create;  
 begin
   inherited Create;
   FChecks := TObjectList<THealthCheck>.Create(True);
@@ -986,26 +986,26 @@ begin
   WriteLn('[HealthManager] Gestionnaire créé');
 end;
 
-destructor THealthManager.Destroy;
+destructor THealthManager.Destroy;  
 begin
   FChecks.Free;
   inherited;
 end;
 
-procedure THealthManager.AddCheck(ACheck: THealthCheck);
+procedure THealthManager.AddCheck(ACheck: THealthCheck);  
 begin
   FChecks.Add(ACheck);
   WriteLn(Format('[HealthManager] Check ajouté: %s', [ACheck.Name]));
 end;
 
-function THealthManager.CheckLiveness: THealthStatus;
+function THealthManager.CheckLiveness: THealthStatus;  
 begin
   // Liveness: juste vérifier que l'app répond
   Result := hsUp;
   WriteLn('[HealthManager] Liveness: UP');
 end;
 
-function THealthManager.CheckReadiness: THealthStatus;
+function THealthManager.CheckReadiness: THealthStatus;  
 var
   Check: THealthCheck;
   AllUp: Boolean;
@@ -1038,7 +1038,7 @@ begin
   end;
 end;
 
-function THealthManager.CheckStartup: THealthStatus;
+function THealthManager.CheckStartup: THealthStatus;  
 var
   ElapsedSeconds: Int64;
 begin
@@ -1057,7 +1057,7 @@ begin
   end;
 end;
 
-function THealthManager.GetHealthReport: TJSONObject;
+function THealthManager.GetHealthReport: TJSONObject;  
 var
   Check: THealthCheck;
   ChecksArray: TJSONArray;
@@ -1089,7 +1089,7 @@ begin
   Result.Add('checks', ChecksArray);
 end;
 
-procedure THealthManager.SetReady(AReady: Boolean);
+procedure THealthManager.SetReady(AReady: Boolean);  
 begin
   FIsReady := AReady;
   WriteLn(Format('[HealthManager] Ready status: %s',
@@ -1141,7 +1141,7 @@ implementation
 
 // THealthyApp
 
-constructor THealthyApp.Create(APort: Integer);
+constructor THealthyApp.Create(APort: Integer);  
 begin
   inherited Create;
   FPort := APort;
@@ -1155,7 +1155,7 @@ begin
   WriteLn('[HealthyApp] Application créée');
 end;
 
-destructor THealthyApp.Destroy;
+destructor THealthyApp.Destroy;  
 begin
   Stop;
   FHealthManager.Free;
@@ -1183,7 +1183,7 @@ begin
   end;
 end;
 
-procedure THealthyApp.HandleLiveness(var AResponse: TFPHTTPConnectionResponse);
+procedure THealthyApp.HandleLiveness(var AResponse: TFPHTTPConnectionResponse);  
 var
   Status: THealthStatus;
 begin
@@ -1203,7 +1203,7 @@ begin
   AResponse.ContentType := 'application/json';
 end;
 
-procedure THealthyApp.HandleReadiness(var AResponse: TFPHTTPConnectionResponse);
+procedure THealthyApp.HandleReadiness(var AResponse: TFPHTTPConnectionResponse);  
 var
   Status: THealthStatus;
 begin
@@ -1223,7 +1223,7 @@ begin
   AResponse.ContentType := 'application/json';
 end;
 
-procedure THealthyApp.HandleHealth(var AResponse: TFPHTTPConnectionResponse);
+procedure THealthyApp.HandleHealth(var AResponse: TFPHTTPConnectionResponse);  
 var
   Report: TJSONObject;
 begin
@@ -1237,7 +1237,7 @@ begin
   end;
 end;
 
-procedure THealthyApp.Start;
+procedure THealthyApp.Start;  
 begin
   FServer.Active := True;
   WriteLn(Format('[HealthyApp] ✓ Démarrée sur http://localhost:%d', [FPort]));
@@ -1247,7 +1247,7 @@ begin
   WriteLn('  /health       - Rapport complet');
 end;
 
-procedure THealthyApp.Stop;
+procedure THealthyApp.Stop;  
 begin
   if FServer.Active then
   begin
@@ -1263,8 +1263,8 @@ end.
 
 ```yaml
 # deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1  
+kind: Deployment  
 metadata:
   name: myapp
 spec:
@@ -1409,7 +1409,7 @@ uses
   DateUtils;
 
 // Handler de signal global
-procedure SignalHandler(Signal: cInt); cdecl;
+procedure SignalHandler(Signal: cInt); cdecl;  
 begin
   if Assigned(GlobalShutdownManager) then
     GlobalShutdownManager.HandleSignal(Signal);
@@ -1417,7 +1417,7 @@ end;
 
 // TShutdownManager
 
-constructor TShutdownManager.Create(AGracePeriodSeconds: Integer);
+constructor TShutdownManager.Create(AGracePeriodSeconds: Integer);  
 begin
   inherited Create;
   FShuttingDown := False;
@@ -1427,12 +1427,12 @@ begin
   WriteLn('[ShutdownManager] Créé (grace period: ', AGracePeriodSeconds, 's)');
 end;
 
-destructor TShutdownManager.Destroy;
+destructor TShutdownManager.Destroy;  
 begin
   inherited;
 end;
 
-procedure TShutdownManager.RegisterCallback(ACallback: TShutdownCallback);
+procedure TShutdownManager.RegisterCallback(ACallback: TShutdownCallback);  
 var
   Len: Integer;
 begin
@@ -1443,7 +1443,7 @@ begin
   WriteLn('[ShutdownManager] Callback enregistré');
 end;
 
-procedure TShutdownManager.HandleSignal(Signal: LongInt);
+procedure TShutdownManager.HandleSignal(Signal: LongInt);  
 var
   Callback: TShutdownCallback;
   StartTime: TDateTime;
@@ -1480,7 +1480,7 @@ begin
   Halt(0);
 end;
 
-procedure TShutdownManager.Start;
+procedure TShutdownManager.Start;  
 begin
   {$IFDEF UNIX}
   // Enregistrer les handlers de signaux
@@ -1490,7 +1490,7 @@ begin
   {$ENDIF}
 end;
 
-function TShutdownManager.IsShuttingDown: Boolean;
+function TShutdownManager.IsShuttingDown: Boolean;  
 begin
   Result := FShuttingDown;
 end;
@@ -1552,7 +1552,7 @@ uses
 
 // TGracefulApp
 
-constructor TGracefulApp.Create(APort: Integer);
+constructor TGracefulApp.Create(APort: Integer);  
 begin
   inherited Create;
   FPort := APort;
@@ -1571,7 +1571,7 @@ begin
   WriteLn('[GracefulApp] Application créée');
 end;
 
-destructor TGracefulApp.Destroy;
+destructor TGracefulApp.Destroy;  
 begin
   Stop;
   FActiveRequests.Free;
@@ -1628,7 +1628,7 @@ begin
   end;
 end;
 
-procedure TGracefulApp.WaitForActiveRequests;
+procedure TGracefulApp.WaitForActiveRequests;  
 var
   WaitCount: Integer;
   Req: TActiveRequest;
@@ -1656,7 +1656,7 @@ begin
     WriteLn('[GracefulApp] ✓ Toutes les requêtes terminées');
 end;
 
-procedure TGracefulApp.OnShutdown;
+procedure TGracefulApp.OnShutdown;  
 begin
   WriteLn('[GracefulApp] Début du shutdown gracieux...');
   WriteLn;
@@ -1685,7 +1685,7 @@ begin
   WriteLn('[GracefulApp] ✓ Shutdown gracieux complété');
 end;
 
-procedure TGracefulApp.Start;
+procedure TGracefulApp.Start;  
 begin
   FServer.Active := True;
   FShutdownManager.Start;
@@ -1694,7 +1694,7 @@ begin
   WriteLn('[GracefulApp] Utilisez Ctrl+C pour tester le graceful shutdown');
 end;
 
-procedure TGracefulApp.Stop;
+procedure TGracefulApp.Stop;  
 begin
   if FServer.Active then
   begin
@@ -1755,7 +1755,7 @@ begin
   FVersion := AVersion;
 end;
 
-function TStructuredLogger.CreateBaseObject: TJSONObject;
+function TStructuredLogger.CreateBaseObject: TJSONObject;  
 begin
   Result := TJSONObject.Create;
   Result.Add('timestamp', FormatDateTime('yyyy-mm-dd"T"hh:nn:ss.zzz"Z"', Now));
@@ -1847,8 +1847,8 @@ Les conteneurs Cloud-Native sont **immutables** : on ne les modifie pas, on les 
 
 ```bash
 # ❌ MAUVAIS : Modifier un conteneur en cours
-docker exec myapp apt-get update
-docker exec myapp apt-get install -y new-package
+docker exec myapp apt-get update  
+docker exec myapp apt-get install -y new-package  
 docker exec myapp service myapp restart
 
 # Problème : changements perdus au prochain redémarrage
@@ -1868,14 +1868,14 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Code
-COPY src/ /app/src/
+COPY src/ /app/src/  
 RUN fpc -O2 /app/src/myapp.pas
 
 # Configuration
 COPY config/ /app/config/
 
 # User non-root
-RUN useradd -m -u 1000 appuser
+RUN useradd -m -u 1000 appuser  
 USER appuser
 
 # Health check
@@ -1891,9 +1891,9 @@ CMD ["./myapp"]
 
 ```bash
 # ✅ BON : Tags sémantiques
-docker build -t myapp:1.2.3 .
-docker build -t myapp:1.2 .
-docker build -t myapp:1 .
+docker build -t myapp:1.2.3 .  
+docker build -t myapp:1.2 .  
+docker build -t myapp:1 .  
 docker build -t myapp:latest .
 
 # Déploiement
@@ -2012,8 +2012,8 @@ project/
 
 ```yaml
 # k8s/configmap.yaml
-apiVersion: v1
-kind: ConfigMap
+apiVersion: v1  
+kind: ConfigMap  
 metadata:
   name: myapp-config
 data:
@@ -2026,11 +2026,11 @@ data:
 
 ```yaml
 # k8s/secret.yaml
-apiVersion: v1
-kind: Secret
+apiVersion: v1  
+kind: Secret  
 metadata:
   name: myapp-secret
-type: Opaque
+type: Opaque  
 stringData:
   DB_PASSWORD: "SuperSecretPassword123!"
   API_KEY: "my-secret-api-key"
@@ -2038,8 +2038,8 @@ stringData:
 
 ```yaml
 # k8s/service.yaml
-apiVersion: v1
-kind: Service
+apiVersion: v1  
+kind: Service  
 metadata:
   name: myapp-service
 spec:
@@ -2054,8 +2054,8 @@ spec:
 
 ```yaml
 # k8s/deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1  
+kind: Deployment  
 metadata:
   name: myapp
   labels:
@@ -2226,8 +2226,8 @@ jobs:
 
 ```yaml
 # k8s/hpa.yaml
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v2  
+kind: HorizontalPodAutoscaler  
 metadata:
   name: myapp-hpa
 spec:
@@ -2273,8 +2273,8 @@ spec:
 
 ```yaml
 # k8s/vpa.yaml
-apiVersion: autoscaling.k8s.io/v1
-kind: VerticalPodAutoscaler
+apiVersion: autoscaling.k8s.io/v1  
+kind: VerticalPodAutoscaler  
 metadata:
   name: myapp-vpa
 spec:
@@ -2375,7 +2375,7 @@ begin
     [FServiceName, AFailureThreshold, ATimeoutSeconds]));
 end;
 
-function TCircuitBreaker.ShouldAttemptCall: Boolean;
+function TCircuitBreaker.ShouldAttemptCall: Boolean;  
 var
   ElapsedSeconds: Int64;
 begin
@@ -2403,7 +2403,7 @@ begin
   end;
 end;
 
-procedure TCircuitBreaker.RecordSuccess;
+procedure TCircuitBreaker.RecordSuccess;  
 begin
   case FState of
     csClose:
@@ -2423,7 +2423,7 @@ begin
   end;
 end;
 
-procedure TCircuitBreaker.RecordFailure;
+procedure TCircuitBreaker.RecordFailure;  
 begin
   FLastFailureTime := Now;
 
@@ -2449,7 +2449,7 @@ begin
   end;
 end;
 
-function TCircuitBreaker.Execute(AOperation: TBooleanFunc): Boolean;
+function TCircuitBreaker.Execute(AOperation: TBooleanFunc): Boolean;  
 begin
   if not ShouldAttemptCall then
   begin
@@ -2489,7 +2489,7 @@ begin
   FMaxDelayMs := AMaxDelayMs;
 end;
 
-function TRetryPolicy.CalculateDelay(AAttempt: Integer): Integer;
+function TRetryPolicy.CalculateDelay(AAttempt: Integer): Integer;  
 begin
   // Backoff exponentiel : delay = initial * 2^attempt
   Result := FInitialDelayMs * (1 shl AAttempt);
@@ -2501,7 +2501,7 @@ begin
   Result := Result + Random(Result div 5) - (Result div 10);
 end;
 
-function TRetryPolicy.ExecuteWithRetry(AOperation: TBooleanFunc): Boolean;
+function TRetryPolicy.ExecuteWithRetry(AOperation: TBooleanFunc): Boolean;  
 var
   Attempt: Integer;
   Delay: Integer;
@@ -2581,7 +2581,7 @@ implementation
 
 // TBulkhead
 
-constructor TBulkhead.Create(const AName: string; AMaxConcurrent: Integer);
+constructor TBulkhead.Create(const AName: string; AMaxConcurrent: Integer);  
 begin
   inherited Create;
   FName := AName;
@@ -2594,13 +2594,13 @@ begin
     [FName, AMaxConcurrent]));
 end;
 
-destructor TBulkhead.Destroy;
+destructor TBulkhead.Destroy;  
 begin
   FSemaphore.Free;
   inherited;
 end;
 
-function TBulkhead.TryAcquire: Boolean;
+function TBulkhead.TryAcquire: Boolean;  
 begin
   Result := FSemaphore.WaitFor(0) = wrSignaled;
 
@@ -2617,7 +2617,7 @@ begin
   end;
 end;
 
-procedure TBulkhead.Release;
+procedure TBulkhead.Release;  
 begin
   FSemaphore.Release;
   InterlockedDecrement(FActiveCount);
@@ -2625,7 +2625,7 @@ begin
     [FName, FActiveCount, FMaxConcurrent]));
 end;
 
-function TBulkhead.Execute(AOperation: TSimpleProc): Boolean;
+function TBulkhead.Execute(AOperation: TSimpleProc): Boolean;  
 begin
   Result := TryAcquire;
 
@@ -2678,7 +2678,7 @@ implementation
 
 // TPrometheusExporter
 
-constructor TPrometheusExporter.Create(APort: Integer);
+constructor TPrometheusExporter.Create(APort: Integer);  
 begin
   inherited Create;
   FPort := APort;
@@ -2690,7 +2690,7 @@ begin
   WriteLn('[PrometheusExporter] Créé sur le port ', FPort);
 end;
 
-destructor TPrometheusExporter.Destroy;
+destructor TPrometheusExporter.Destroy;  
 begin
   Stop;
   FServer.Free;
@@ -2735,14 +2735,14 @@ begin
   end;
 end;
 
-procedure TPrometheusExporter.Start;
+procedure TPrometheusExporter.Start;  
 begin
   FServer.Active := True;
   WriteLn(Format('[PrometheusExporter] ✓ Démarré sur http://localhost:%d/metrics',
     [FPort]));
 end;
 
-procedure TPrometheusExporter.Stop;
+procedure TPrometheusExporter.Stop;  
 begin
   if FServer.Active then
   begin
@@ -2758,8 +2758,8 @@ end.
 
 ```yaml
 # k8s/servicemonitor.yaml
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+apiVersion: monitoring.coreos.com/v1  
+kind: ServiceMonitor  
 metadata:
   name: myapp
   labels:
@@ -2781,7 +2781,7 @@ spec:
 1. **Configuration externalisée**
 ```pascal
 // ✅ BON
-Config := TAppConfig.Create;
+Config := TAppConfig.Create;  
 Config.LoadFromEnvironment;
 ```
 
@@ -2795,7 +2795,7 @@ Logger.LogInfo('Order created',
 3. **Health checks complets**
 ```pascal
 // ✅ BON
-HealthManager.AddCheck(TDatabaseHealthCheck.Create);
+HealthManager.AddCheck(TDatabaseHealthCheck.Create);  
 HealthManager.AddCheck(TRedisHealthCheck.Create);
 ```
 
@@ -2809,7 +2809,7 @@ ShutdownManager.RegisterCallback(@OnShutdown);
 5. **Résilience**
 ```pascal
 // ✅ BON
-CircuitBreaker.Execute(function: Boolean
+CircuitBreaker.Execute(function: Boolean  
 begin
   Result := CallExternalService;
 end);
