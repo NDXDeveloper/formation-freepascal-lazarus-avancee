@@ -97,7 +97,7 @@ program HelloWeb;
 uses
   fphttpapp;
 
-procedure HandleRequest(ARequest: TRequest; AResponse: TResponse);
+procedure HandleRequest(ARequest: TRequest; AResponse: TResponse);  
 begin
   AResponse.Content :=
     '<html><body><h1>Bonjour depuis fpWeb !</h1></body></html>';
@@ -149,17 +149,17 @@ program WebRoutes;
 uses
   fphttpapp, httproute, httpdefs;
 
-procedure ShowHomePage(ARequest: TRequest; AResponse: TResponse);
+procedure ShowHomePage(ARequest: TRequest; AResponse: TResponse);  
 begin
   AResponse.Content := '<h1>Page d''accueil</h1><p>Bienvenue !</p>';
 end;
 
-procedure ShowAboutPage(ARequest: TRequest; AResponse: TResponse);
+procedure ShowAboutPage(ARequest: TRequest; AResponse: TResponse);  
 begin
   AResponse.Content := '<h1>À propos</h1><p>Application fpWeb</p>';
 end;
 
-procedure ShowUserProfile(ARequest: TRequest; AResponse: TResponse);
+procedure ShowUserProfile(ARequest: TRequest; AResponse: TResponse);  
 var
   Username: String;
 begin
@@ -196,7 +196,7 @@ fpWeb reconnaît automatiquement les différentes méthodes HTTP (GET, POST, PUT
 ### Exemple avec différentes méthodes
 
 ```pascal
-procedure HandleUsers(ARequest: TRequest; AResponse: TResponse);
+procedure HandleUsers(ARequest: TRequest; AResponse: TResponse);  
 var
   Method: string;
 begin
@@ -231,7 +231,7 @@ end;
 Les paramètres GET sont accessibles via `QueryFields` :
 
 ```pascal
-procedure SearchProducts(ARequest: TRequest; AResponse: TResponse);
+procedure SearchProducts(ARequest: TRequest; AResponse: TResponse);  
 var
   SearchTerm: String;
 begin
@@ -247,7 +247,7 @@ end;
 Les données POST sont dans `ContentFields` :
 
 ```pascal
-procedure HandleLogin(ARequest: TRequest; AResponse: TResponse);
+procedure HandleLogin(ARequest: TRequest; AResponse: TResponse);  
 var
   Username, Password: String;
 begin
@@ -294,7 +294,7 @@ end.
 ### Utilisation des sessions
 
 ```pascal
-procedure HandleUserArea(ARequest: TRequest; AResponse: TResponse);
+procedure HandleUserArea(ARequest: TRequest; AResponse: TResponse);  
 var
   Session: TCustomSession;
   Username: String;
@@ -331,7 +331,7 @@ Les sessions peuvent être stockées de différentes manières :
 uses
   fphtml;
 
-procedure GeneratePage(ARequest: TRequest; AResponse: TResponse);
+procedure GeneratePage(ARequest: TRequest; AResponse: TResponse);  
 var
   Doc: THTMLDocument;
   Body, H1, Para: THTMLElement;
@@ -364,7 +364,7 @@ end;
 uses
   fpjson, jsonparser;
 
-procedure GetUserJSON(ARequest: TRequest; AResponse: TResponse);
+procedure GetUserJSON(ARequest: TRequest; AResponse: TResponse);  
 var
   JSONObj: TJSONObject;
 begin
@@ -385,7 +385,7 @@ end;
 ### Parsing de JSON reçu
 
 ```pascal
-procedure CreateUser(ARequest: TRequest; AResponse: TResponse);
+procedure CreateUser(ARequest: TRequest; AResponse: TResponse);  
 var
   JSONData: TJSONData;
   JSONObj: TJSONObject;
@@ -416,14 +416,14 @@ end;
 ### Codes de statut HTTP
 
 ```pascal
-procedure HandleNotFound(ARequest: TRequest; AResponse: TResponse);
+procedure HandleNotFound(ARequest: TRequest; AResponse: TResponse);  
 begin
   AResponse.Code := 404;
   AResponse.CodeText := 'Not Found';
   AResponse.Content := '<h1>Page non trouvée</h1>';
 end;
 
-procedure HandleServerError(ARequest: TRequest; AResponse: TResponse);
+procedure HandleServerError(ARequest: TRequest; AResponse: TResponse);  
 begin
   AResponse.Code := 500;
   AResponse.CodeText := 'Internal Server Error';
@@ -434,7 +434,7 @@ end;
 ### Gestion globale des exceptions
 
 ```pascal
-procedure SafeHandler(ARequest: TRequest; AResponse: TResponse);
+procedure SafeHandler(ARequest: TRequest; AResponse: TResponse);  
 begin
   try
     // Code potentiellement dangereux
@@ -454,7 +454,7 @@ end;
 ### Définir des headers
 
 ```pascal
-procedure HandleCORS(ARequest: TRequest; AResponse: TResponse);
+procedure HandleCORS(ARequest: TRequest; AResponse: TResponse);  
 begin
   // Autoriser les requêtes cross-origin
   AResponse.SetCustomHeader('Access-Control-Allow-Origin', '*');
@@ -470,7 +470,7 @@ end;
 ### Lire les headers de la requête
 
 ```pascal
-procedure CheckAuthorization(ARequest: TRequest; AResponse: TResponse);
+procedure CheckAuthorization(ARequest: TRequest; AResponse: TResponse);  
 var
   AuthHeader: String;
 begin
@@ -492,7 +492,7 @@ end;
 ### Créer un cookie
 
 ```pascal
-procedure SetUserCookie(ARequest: TRequest; AResponse: TResponse);
+procedure SetUserCookie(ARequest: TRequest; AResponse: TResponse);  
 var
   Cookie: TCookie;
 begin
@@ -511,7 +511,7 @@ end;
 ### Lire un cookie
 
 ```pascal
-procedure ReadUserCookie(ARequest: TRequest; AResponse: TResponse);
+procedure ReadUserCookie(ARequest: TRequest; AResponse: TResponse);  
 var
   Username: String;
 begin
@@ -527,7 +527,7 @@ end;
 ## Upload de fichiers
 
 ```pascal
-procedure HandleFileUpload(ARequest: TRequest; AResponse: TResponse);
+procedure HandleFileUpload(ARequest: TRequest; AResponse: TResponse);  
 var
   UploadedFile: TUploadedFile;
   FileStream: TFileStream;
@@ -566,7 +566,7 @@ end;
 uses
   sysutils;
 
-function GetSessionPath: String;
+function GetSessionPath: String;  
 begin
   {$IFDEF WINDOWS}
   Result := 'C:\webapp\sessions\';
@@ -605,7 +605,7 @@ uses
 var
   Logger: TEventLog;
 
-procedure LogRequest(ARequest: TRequest);
+procedure LogRequest(ARequest: TRequest);  
 begin
   Logger.Info(Format('Requête: %s %s depuis %s',
     [ARequest.Method, ARequest.URI, ARequest.RemoteAddr]));
@@ -627,7 +627,7 @@ end.
 ```pascal
 {$DEFINE DEBUG}
 
-procedure HandleRequest(ARequest: TRequest; AResponse: TResponse);
+procedure HandleRequest(ARequest: TRequest; AResponse: TResponse);  
 begin
   {$IFDEF DEBUG}
   WriteLn('URI: ', ARequest.URI);
@@ -647,7 +647,7 @@ end;
 var
   GlobalJSONFactory: TJSONObject;
 
-procedure OptimizedHandler(ARequest: TRequest; AResponse: TResponse);
+procedure OptimizedHandler(ARequest: TRequest; AResponse: TResponse);  
 begin
   // Réutiliser des objets plutôt que créer/détruire
   GlobalJSONFactory.Clear;
@@ -664,7 +664,7 @@ var
   CachedContent: String;
   CacheTime: TDateTime;
 
-procedure CachedHandler(ARequest: TRequest; AResponse: TResponse);
+procedure CachedHandler(ARequest: TRequest; AResponse: TResponse);  
 begin
   // Cache de 5 minutes
   if (CachedContent = '') or (Now - CacheTime > 1/288) then
@@ -683,7 +683,7 @@ end;
 uses
   zstream;
 
-procedure CompressedResponse(ARequest: TRequest; AResponse: TResponse);
+procedure CompressedResponse(ARequest: TRequest; AResponse: TResponse);  
 var
   Content: String;
   Compressed: TMemoryStream;

@@ -46,13 +46,13 @@ pas2js --version
 
 ```bash
 # Installer via les packages
-sudo apt-get update
+sudo apt-get update  
 sudo apt-get install pas2js
 
 # Ou compiler depuis les sources
-git clone https://gitlab.com/freepascal.org/fpc/pas2js.git
-cd pas2js
-make
+git clone https://gitlab.com/freepascal.org/fpc/pas2js.git  
+cd pas2js  
+make  
 sudo make install
 
 # Vérifier l'installation
@@ -88,7 +88,7 @@ program HelloWorld;
 uses
   JS, Web;
 
-procedure ShowMessage;
+procedure ShowMessage;  
 begin
   window.alert('Hello World depuis Pascal!');
   console.log('Application démarrée');
@@ -162,13 +162,13 @@ var
   MyButton: TJSHTMLElement;
   MyParagraph: TJSHTMLElement;
 
-procedure ButtonClick(Event: TJSMouseEvent);
+procedure ButtonClick(Event: TJSMouseEvent);  
 begin
   MyParagraph.innerHTML := 'Vous avez cliqué sur le bouton!';
   console.log('Bouton cliqué');
 end;
 
-procedure InitializeApp;
+procedure InitializeApp;  
 begin
   // Récupérer les éléments par ID
   MyButton := TJSHTMLElement(document.getElementById('myButton'));
@@ -215,7 +215,7 @@ program DynamicElements;
 uses
   JS, Web;
 
-procedure CreateList;
+procedure CreateList;  
 var
   Container: TJSHTMLElement;
   List: TJSHTMLElement;
@@ -240,7 +240,7 @@ begin
   Container.appendChild(List);
 end;
 
-procedure AddButton;
+procedure AddButton;  
 var
   Container: TJSHTMLElement;
   Button: TJSHTMLElement;
@@ -261,7 +261,7 @@ begin
   Container.appendChild(Button);
 end;
 
-procedure Initialize;
+procedure Initialize;  
 begin
   CreateList;
   AddButton;
@@ -288,30 +288,30 @@ var
   Box: TJSHTMLElement;
   StatusText: TJSHTMLElement;
 
-procedure OnMouseEnter(Event: TJSMouseEvent);
+procedure OnMouseEnter(Event: TJSMouseEvent);  
 begin
   Box.style.setProperty('background-color', 'lightblue');
   StatusText.innerHTML := 'Souris entrée dans la boîte';
 end;
 
-procedure OnMouseLeave(Event: TJSMouseEvent);
+procedure OnMouseLeave(Event: TJSMouseEvent);  
 begin
   Box.style.setProperty('background-color', 'lightgray');
   StatusText.innerHTML := 'Souris sortie de la boîte';
 end;
 
-procedure OnMouseMove(Event: TJSMouseEvent);
+procedure OnMouseMove(Event: TJSMouseEvent);  
 begin
   StatusText.innerHTML := Format('Position: X=%d, Y=%d',
                                  [Event.clientX, Event.clientY]);
 end;
 
-procedure OnClick(Event: TJSMouseEvent);
+procedure OnClick(Event: TJSMouseEvent);  
 begin
   window.alert('Clic détecté!');
 end;
 
-procedure Initialize;
+procedure Initialize;  
 begin
   Box := TJSHTMLElement(document.getElementById('box'));
   StatusText := TJSHTMLElement(document.getElementById('status'));
@@ -341,13 +341,13 @@ var
   InputField: TJSHTMLElement;
   Output: TJSHTMLElement;
 
-procedure OnKeyPress(Event: TJSKeyboardEvent);
+procedure OnKeyPress(Event: TJSKeyboardEvent);  
 begin
   Output.innerHTML := Format('Touche pressée: %s (Code: %d)',
                             [Event.key, Event.keyCode]);
 end;
 
-procedure OnKeyDown(Event: TJSKeyboardEvent);
+procedure OnKeyDown(Event: TJSKeyboardEvent);  
 begin
   // Détecter les touches spéciales
   if Event.keyCode = 13 then // Entrée
@@ -362,7 +362,7 @@ begin
   end;
 end;
 
-procedure Initialize;
+procedure Initialize;  
 begin
   InputField := TJSHTMLElement(document.getElementById('inputField'));
   Output := TJSHTMLElement(document.getElementById('output'));
@@ -386,7 +386,7 @@ program FormEvents;
 uses
   JS, Web;
 
-procedure ValidateForm(Event: TJSEvent);
+procedure ValidateForm(Event: TJSEvent);  
 var
   Form: TJSHTMLFormElement;
   NameInput: TJSHTMLInputElement;
@@ -427,7 +427,7 @@ begin
   end;
 end;
 
-procedure Initialize;
+procedure Initialize;  
 var
   Form: TJSHTMLElement;
 begin
@@ -452,7 +452,7 @@ program AjaxExample;
 uses
   JS, Web;
 
-procedure HandleResponse(Event: TJSEvent);
+procedure HandleResponse(Event: TJSEvent);  
 var
   XHR: TJSXMLHttpRequest;
   Response: string;
@@ -477,7 +477,7 @@ begin
   end;
 end;
 
-procedure LoadData;
+procedure LoadData;  
 var
   XHR: TJSXMLHttpRequest;
 begin
@@ -491,7 +491,7 @@ begin
   console.log('Requête envoyée...');
 end;
 
-procedure Initialize;
+procedure Initialize;  
 var
   LoadButton: TJSHTMLElement;
 begin
@@ -519,7 +519,7 @@ program FetchExample;
 uses
   JS, Web;
 
-procedure HandleData(Response: TJSPromiseResolver);
+procedure HandleData(Response: TJSPromiseResolver);  
 var
   Data: TJSObject;
   OutputDiv: TJSHTMLElement;
@@ -537,13 +537,13 @@ begin
   OutputDiv.innerHTML := HTML;
 end;
 
-procedure HandleError(Reason: TJSPromiseResolver);
+procedure HandleError(Reason: TJSPromiseResolver);  
 begin
   console.error('Erreur:', Reason);
   window.alert('Erreur lors du chargement des données');
 end;
 
-procedure FetchUserData;
+procedure FetchUserData;  
 begin
   window.fetch('https://jsonplaceholder.typicode.com/users/1')
     ._then(
@@ -555,7 +555,7 @@ begin
     .catch(@HandleError);
 end;
 
-procedure Initialize;
+procedure Initialize;  
 var
   FetchButton: TJSHTMLElement;
 begin
@@ -583,7 +583,7 @@ program PostExample;
 uses
   JS, Web, SysUtils;
 
-procedure SendData;
+procedure SendData;  
 var
   XHR: TJSXMLHttpRequest;
   PostData: TJSObject;
@@ -618,7 +618,7 @@ begin
   XHR.send(JSONString);
 end;
 
-procedure Initialize;
+procedure Initialize;  
 var
   SendButton: TJSHTMLElement;
 begin
@@ -648,7 +648,7 @@ program LocalStorageExample;
 uses
   JS, Web;
 
-procedure SaveToStorage;
+procedure SaveToStorage;  
 var
   NameInput: TJSHTMLInputElement;
   EmailInput: TJSHTMLInputElement;
@@ -672,7 +672,7 @@ begin
   window.alert('Données sauvegardées!');
 end;
 
-procedure LoadFromStorage;
+procedure LoadFromStorage;  
 var
   NameInput: TJSHTMLInputElement;
   EmailInput: TJSHTMLInputElement;
@@ -697,7 +697,7 @@ begin
   window.alert('Données chargées!');
 end;
 
-procedure ClearStorage;
+procedure ClearStorage;  
 begin
   window.localStorage.removeItem('userName');
   window.localStorage.removeItem('userEmail');
@@ -709,7 +709,7 @@ begin
   window.alert('Stockage vidé!');
 end;
 
-procedure Initialize;
+procedure Initialize;  
 var
   SaveBtn, LoadBtn, ClearBtn: TJSHTMLElement;
 begin
@@ -778,7 +778,7 @@ type
 
 { TTask }
 
-constructor TTask.Create(AID: Integer; const ATitle: string);
+constructor TTask.Create(AID: Integer; const ATitle: string);  
 begin
   inherited Create;
   FID := AID;
@@ -786,12 +786,12 @@ begin
   FCompleted := False;
 end;
 
-procedure TTask.Toggle;
+procedure TTask.Toggle;  
 begin
   FCompleted := not FCompleted;
 end;
 
-function TTask.ToHTML: string;
+function TTask.ToHTML: string;  
 var
   CheckedAttr: string;
   CompletedClass: string;
@@ -819,14 +819,14 @@ end;
 
 { TTaskManager }
 
-constructor TTaskManager.Create(AContainer: TJSHTMLElement);
+constructor TTaskManager.Create(AContainer: TJSHTMLElement);  
 begin
   inherited Create;
   FContainer := AContainer;
   SetLength(FTasks, 0);
 end;
 
-destructor TTaskManager.Destroy;
+destructor TTaskManager.Destroy;  
 var
   i: Integer;
 begin
@@ -835,12 +835,12 @@ begin
   inherited Destroy;
 end;
 
-function TTaskManager.GetTaskCount: Integer;
+function TTaskManager.GetTaskCount: Integer;  
 begin
   Result := Length(FTasks);
 end;
 
-procedure TTaskManager.AddTask(const Title: string);
+procedure TTaskManager.AddTask(const Title: string);  
 var
   NewTask: TTask;
   NewID: Integer;
@@ -857,7 +857,7 @@ begin
   Render;
 end;
 
-procedure TTaskManager.RemoveTask(TaskID: Integer);
+procedure TTaskManager.RemoveTask(TaskID: Integer);  
 var
   i, j: Integer;
 begin
@@ -878,7 +878,7 @@ begin
   end;
 end;
 
-procedure TTaskManager.ToggleTask(TaskID: Integer);
+procedure TTaskManager.ToggleTask(TaskID: Integer);  
 var
   i: Integer;
 begin
@@ -893,7 +893,7 @@ begin
   end;
 end;
 
-procedure TTaskManager.Render;
+procedure TTaskManager.Render;  
 var
   HTML: string;
   i: Integer;
@@ -938,7 +938,7 @@ end;
 var
   TaskManager: TTaskManager;
 
-procedure Initialize;
+procedure Initialize;  
 var
   Container: TJSHTMLElement;
   AddButton: TJSHTMLElement;
@@ -992,7 +992,7 @@ var
   TimeLeft: Integer;
   IntervalID: NativeInt;
 
-procedure UpdateCountdown;
+procedure UpdateCountdown;  
 begin
   if TimeLeft > 0 then
   begin
@@ -1007,13 +1007,13 @@ begin
   end;
 end;
 
-procedure StartCountdown;
+procedure StartCountdown;  
 begin
   TimeLeft := 10;
   IntervalID := window.setInterval(@UpdateCountdown, 1000); // 1000 ms = 1 seconde
 end;
 
-procedure DelayedMessage;
+procedure DelayedMessage;  
 begin
   window.setTimeout(
     procedure
@@ -1024,7 +1024,7 @@ begin
   );
 end;
 
-procedure Initialize;
+procedure Initialize;  
 var
   StartBtn, DelayBtn: TJSHTMLElement;
 begin
@@ -1060,7 +1060,7 @@ var
   AnimationID: NativeInt;
   IsAnimating: Boolean;
 
-procedure Animate(Timestamp: Double);
+procedure Animate(Timestamp: Double);  
 begin
   if not IsAnimating then
     Exit;
@@ -1075,7 +1075,7 @@ begin
   AnimationID := window.requestAnimationFrame(@Animate);
 end;
 
-procedure StartAnimation;
+procedure StartAnimation;  
 begin
   if not IsAnimating then
   begin
@@ -1084,14 +1084,14 @@ begin
   end;
 end;
 
-procedure StopAnimation;
+procedure StopAnimation;  
 begin
   IsAnimating := False;
   if AnimationID <> 0 then
     window.cancelAnimationFrame(AnimationID);
 end;
 
-procedure Initialize;
+procedure Initialize;  
 var
   StartBtn, StopBtn: TJSHTMLElement;
 begin
@@ -1185,7 +1185,7 @@ type
   end;
 
 // Fonction globale jQuery
-function jQuery(Selector: string): TJQuery; external name 'jQuery';
+function jQuery(Selector: string): TJQuery; external name 'jQuery';  
 function $(Selector: string): TJQuery; external name 'jQuery';
 
 implementation
@@ -1203,7 +1203,7 @@ program jQueryExample;
 uses
   JS, Web, jQueryBinding;
 
-procedure Initialize;
+procedure Initialize;  
 begin
   // Utiliser jQuery pour manipuler le DOM
   $('#myButton').click(
@@ -1301,7 +1301,7 @@ program ChartExample;
 uses
   JS, Web, ChartJSBinding;
 
-procedure CreateBarChart;
+procedure CreateBarChart;  
 var
   Canvas: TJSHTMLCanvasElement;
   Context: TJSCanvasRenderingContext2D;
@@ -1345,7 +1345,7 @@ begin
   console.log('Graphique créé avec succès');
 end;
 
-procedure Initialize;
+procedure Initialize;  
 begin
   CreateBarChart;
 end;
@@ -1449,7 +1449,7 @@ type
 
 { TContact }
 
-constructor TContact.Create(AID: Integer; const AName, AEmail, APhone: string);
+constructor TContact.Create(AID: Integer; const AName, AEmail, APhone: string);  
 begin
   inherited Create;
   FID := AID;
@@ -1458,7 +1458,7 @@ begin
   FPhone := APhone;
 end;
 
-function TContact.ToJSON: TJSObject;
+function TContact.ToJSON: TJSObject;  
 begin
   Result := TJSObject.new;
   Result['id'] := FID;
@@ -1467,7 +1467,7 @@ begin
   Result['phone'] := FPhone;
 end;
 
-class function TContact.FromJSON(JSON: TJSObject): TContact;
+class function TContact.FromJSON(JSON: TJSObject): TContact;  
 begin
   Result := TContact.Create(
     Integer(JSON['id']),
@@ -1479,7 +1479,7 @@ end;
 
 { TContactManager }
 
-constructor TContactManager.Create;
+constructor TContactManager.Create;  
 begin
   inherited Create;
   SetLength(FContacts, 0);
@@ -1487,7 +1487,7 @@ begin
   LoadFromStorage;
 end;
 
-destructor TContactManager.Destroy;
+destructor TContactManager.Destroy;  
 var
   i: Integer;
 begin
@@ -1496,12 +1496,12 @@ begin
   inherited Destroy;
 end;
 
-function TContactManager.GetContactCount: Integer;
+function TContactManager.GetContactCount: Integer;  
 begin
   Result := Length(FContacts);
 end;
 
-procedure TContactManager.SaveToStorage;
+procedure TContactManager.SaveToStorage;  
 var
   ContactsArray: TJSArray;
   i: Integer;
@@ -1515,7 +1515,7 @@ begin
   window.localStorage.setItem('nextID', IntToStr(FNextID));
 end;
 
-procedure TContactManager.LoadFromStorage;
+procedure TContactManager.LoadFromStorage;  
 var
   ContactsJSON: string;
   ContactsArray: TJSArray;
@@ -1539,7 +1539,7 @@ begin
   FNextID := StrToIntDef(window.localStorage.getItem('nextID'), 1);
 end;
 
-function TContactManager.FindContactIndex(ContactID: Integer): Integer;
+function TContactManager.FindContactIndex(ContactID: Integer): Integer;  
 var
   i: Integer;
 begin
@@ -1554,7 +1554,7 @@ begin
   end;
 end;
 
-procedure TContactManager.AddContact(const Name, Email, Phone: string);
+procedure TContactManager.AddContact(const Name, Email, Phone: string);  
 var
   NewContact: TContact;
 begin
@@ -1583,7 +1583,7 @@ begin
   end;
 end;
 
-procedure TContactManager.DeleteContact(ContactID: Integer);
+procedure TContactManager.DeleteContact(ContactID: Integer);  
 var
   Index, i: Integer;
 begin
@@ -1601,7 +1601,7 @@ begin
   end;
 end;
 
-function TContactManager.GetContact(ContactID: Integer): TContact;
+function TContactManager.GetContact(ContactID: Integer): TContact;  
 var
   Index: Integer;
 begin
@@ -1612,14 +1612,14 @@ begin
     Result := FContacts[Index];
 end;
 
-function TContactManager.GetAllContacts: array of TContact;
+function TContactManager.GetAllContacts: array of TContact;  
 begin
   Result := FContacts;
 end;
 
 { TContactUI }
 
-constructor TContactUI.Create;
+constructor TContactUI.Create;  
 begin
   inherited Create;
   FManager := TContactManager.Create;
@@ -1635,13 +1635,13 @@ begin
   RenderContactList;
 end;
 
-destructor TContactUI.Destroy;
+destructor TContactUI.Destroy;  
 begin
   FManager.Free;
   inherited Destroy;
 end;
 
-procedure TContactUI.SetupEventHandlers;
+procedure TContactUI.SetupEventHandlers;  
 var
   AddBtn, CancelBtn: TJSHTMLElement;
   Form: TJSHTMLFormElement;
@@ -1666,7 +1666,7 @@ begin
   Form.addEventListener('submit', @HandleSubmit);
 end;
 
-procedure TContactUI.RenderContactList;
+procedure TContactUI.RenderContactList;  
 var
   HTML: string;
   Contacts: array of TContact;
@@ -1737,7 +1737,7 @@ begin
   end;
 end;
 
-procedure TContactUI.ShowAddForm;
+procedure TContactUI.ShowAddForm;  
 begin
   FEditingID := -1;
   FNameInput.value := '';
@@ -1749,7 +1749,7 @@ begin
   FNameInput.focus;
 end;
 
-procedure TContactUI.ShowEditForm(ContactID: Integer);
+procedure TContactUI.ShowEditForm(ContactID: Integer);  
 var
   Contact: TContact;
 begin
@@ -1768,13 +1768,13 @@ begin
   end;
 end;
 
-procedure TContactUI.HideForm;
+procedure TContactUI.HideForm;  
 begin
   FContactForm.style.setProperty('display', 'none');
   FEditingID := -1;
 end;
 
-procedure TContactUI.HandleSubmit(Event: TJSEvent);
+procedure TContactUI.HandleSubmit(Event: TJSEvent);  
 var
   Name, Email, Phone: string;
 begin
@@ -1806,12 +1806,12 @@ begin
   RenderContactList;
 end;
 
-procedure TContactUI.HandleEdit(ContactID: Integer);
+procedure TContactUI.HandleEdit(ContactID: Integer);  
 begin
   ShowEditForm(ContactID);
 end;
 
-procedure TContactUI.HandleDelete(ContactID: Integer);
+procedure TContactUI.HandleDelete(ContactID: Integer);  
 begin
   if window.confirm('Êtes-vous sûr de vouloir supprimer ce contact?') then
   begin
@@ -1823,7 +1823,7 @@ end;
 var
   App: TContactUI;
 
-procedure Initialize;
+procedure Initialize;  
 begin
   App := TContactUI.Create;
 end;
@@ -2018,7 +2018,7 @@ program DebuggingExample;
 uses
   JS, Web, SysUtils;
 
-procedure DebugExample;
+procedure DebugExample;  
 var
   MyObject: TJSObject;
   MyArray: TJSArray;
@@ -2075,7 +2075,7 @@ program ErrorHandling;
 uses
   JS, Web;
 
-procedure SafeFunction;
+procedure SafeFunction;  
 begin
   try
     // Code qui peut générer une erreur
@@ -2090,7 +2090,7 @@ begin
   end;
 end;
 
-procedure CustomError;
+procedure CustomError;  
 begin
   raise Exception.Create('Ceci est une erreur personnalisée');
 end;
@@ -2136,7 +2136,7 @@ program LazyLoading;
 uses
   JS, Web;
 
-procedure LoadModule(const ModuleName: string);
+procedure LoadModule(const ModuleName: string);  
 var
   Script: TJSHTMLScriptElement;
 begin
@@ -2153,7 +2153,7 @@ begin
   document.head.appendChild(Script);
 end;
 
-procedure Initialize;
+procedure Initialize;  
 begin
   // Charger un module uniquement quand nécessaire
   var LoadBtn := document.getElementById('loadModuleBtn');
@@ -2196,7 +2196,7 @@ type
     procedure RemoveAllEventHandlers;
   end;
 
-constructor TDataProcessor.Create;
+constructor TDataProcessor.Create;  
 begin
   inherited Create;
   FData := TJSArray.new;
@@ -2204,14 +2204,14 @@ begin
   SetLength(FEventHandlers, 0);
 end;
 
-destructor TDataProcessor.Destroy;
+destructor TDataProcessor.Destroy;  
 begin
   ClearData;
   RemoveAllEventHandlers;
   inherited Destroy;
 end;
 
-procedure TDataProcessor.LoadData;
+procedure TDataProcessor.LoadData;  
 var
   i: Integer;
 begin
@@ -2225,7 +2225,7 @@ begin
   console.log('Données chargées:', FData.length);
 end;
 
-procedure TDataProcessor.ClearData;
+procedure TDataProcessor.ClearData;  
 begin
   // Libérer explicitement la mémoire
   FData := TJSArray.new;
@@ -2248,7 +2248,7 @@ begin
   FEventHandlers[High(FEventHandlers)] := Handler;
 end;
 
-procedure TDataProcessor.RemoveAllEventHandlers;
+procedure TDataProcessor.RemoveAllEventHandlers;  
 var
   i: Integer;
 begin
@@ -2266,7 +2266,7 @@ end;
 var
   Processor: TDataProcessor;
 
-procedure Initialize;
+procedure Initialize;  
 var
   LoadBtn, ClearBtn: TJSHTMLElement;
 begin
@@ -2317,14 +2317,14 @@ type
     destructor Destroy; override;
   end;
 
-constructor TCleanComponent.Create(Element: TJSHTMLElement);
+constructor TCleanComponent.Create(Element: TJSHTMLElement);  
 begin
   inherited Create;
   FElement := Element;
   StartUpdate;
 end;
 
-destructor TCleanComponent.Destroy;
+destructor TCleanComponent.Destroy;  
 begin
   // Nettoyer avant de détruire
   StopUpdate;
@@ -2332,7 +2332,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TCleanComponent.StartUpdate;
+procedure TCleanComponent.StartUpdate;  
 begin
   FIntervalID := window.setInterval(
     procedure
@@ -2345,7 +2345,7 @@ begin
   );
 end;
 
-procedure TCleanComponent.StopUpdate;
+procedure TCleanComponent.StopUpdate;  
 begin
   if FIntervalID <> 0 then
   begin
@@ -2375,7 +2375,7 @@ const
 var
   UrlsToCache: TJSArray;
 
-procedure HandleInstall(Event: TJSEvent);
+procedure HandleInstall(Event: TJSEvent);  
 begin
   console.log('Service Worker: Installation');
 
@@ -2401,7 +2401,7 @@ begin
   );
 end;
 
-procedure HandleActivate(Event: TJSEvent);
+procedure HandleActivate(Event: TJSEvent);  
 begin
   console.log('Service Worker: Activation');
 
@@ -2426,7 +2426,7 @@ begin
   );
 end;
 
-procedure HandleFetch(Event: TJSEvent);
+procedure HandleFetch(Event: TJSEvent);  
 var
   Request: TJSObject;
 begin
@@ -2468,7 +2468,7 @@ end.
 **app.pas :**
 
 ```pascal
-procedure RegisterServiceWorker;
+procedure RegisterServiceWorker;  
 begin
   if window['navigator']['serviceWorker'] <> undefined then
   begin
@@ -2536,15 +2536,15 @@ end;
 @echo off
 echo Compilation pour Windows...
 
-REM Compiler avec Pas2JS
+REM Compiler avec Pas2JS  
 pas2js -Jirtl.js -O3 app.pas
 
-REM Copier les fichiers dans le dossier de sortie
-xcopy /Y *.html output\
-xcopy /Y *.css output\
+REM Copier les fichiers dans le dossier de sortie  
+xcopy /Y *.html output\  
+xcopy /Y *.css output\  
 xcopy /Y *.js output\
 
-echo Terminé!
+echo Terminé!  
 pause
 ```
 
@@ -2558,8 +2558,8 @@ echo "Compilation pour Linux..."
 pas2js -Jirtl.js -O3 app.pas
 
 # Copier les fichiers dans le dossier de sortie
-cp -f *.html output/
-cp -f *.css output/
+cp -f *.html output/  
+cp -f *.css output/  
 cp -f *.js output/
 
 echo "Terminé!"
@@ -2577,7 +2577,7 @@ program BuildScript;
 uses
   SysUtils, Process, Classes;
 
-procedure ExecuteCommand(const Command: string);
+procedure ExecuteCommand(const Command: string);  
 var
   Process: TProcess;
   OutputLines: TStringList;
@@ -2599,14 +2599,14 @@ begin
   end;
 end;
 
-procedure CompileProject;
+procedure CompileProject;  
 begin
   WriteLn('=== Compilation Pas2JS ===');
   ExecuteCommand('pas2js -Jirtl.js -O3 app.pas');
   WriteLn('Compilation terminée!');
 end;
 
-procedure CopyFiles;
+procedure CopyFiles;  
 var
   SourceDir, OutputDir: string;
 begin
@@ -2631,7 +2631,7 @@ begin
   WriteLn('Fichiers copiés!');
 end;
 
-procedure MinifyJS;
+procedure MinifyJS;  
 begin
   WriteLn('=== Minification JavaScript ===');
 
@@ -2726,7 +2726,7 @@ var
   AppElement: TReactElement;
   Container: TJSHTMLElement;
 
-procedure CreateApp;
+procedure CreateApp;  
 var
   Props: TJSObject;
   Title: TReactElement;
@@ -2744,7 +2744,7 @@ begin
   AppElement := Content;
 end;
 
-procedure Initialize;
+procedure Initialize;  
 begin
   CreateApp;
   Container := TJSHTMLElement(document.getElementById('root'));
@@ -2792,7 +2792,7 @@ program DeployScript;
 uses
   SysUtils, Process;
 
-procedure PrepareForProduction;
+procedure PrepareForProduction;  
 begin
   WriteLn('Préparation pour la production...');
 
@@ -2809,7 +2809,7 @@ begin
   WriteLn('Préparation terminée!');
 end;
 
-procedure DeployToServer;
+procedure DeployToServer;  
 var
   {$IFDEF WINDOWS}
   SCPCommand: string = 'pscp';
@@ -2939,11 +2939,11 @@ MonProjet/
 
 ```pascal
 // Utiliser des noms descriptifs
-procedure ShowUserProfile(UserID: Integer);  // Bon
+procedure ShowUserProfile(UserID: Integer);  // Bon  
 procedure SUP(ID: Integer);                  // Mauvais
 
 // Commenter les sections complexes
-procedure ProcessData(Data: TJSArray);
+procedure ProcessData(Data: TJSArray);  
 begin
   // Étape 1: Filtrer les données invalides
   FilterInvalidData(Data);
@@ -2967,7 +2967,7 @@ const
 **Validation des entrées :**
 
 ```pascal
-function SanitizeInput(const Input: string): string;
+function SanitizeInput(const Input: string): string;  
 begin
   Result := Input;
 
@@ -2982,7 +2982,7 @@ begin
     Result := Copy(Result, 1, 1000);
 end;
 
-procedure HandleUserInput;
+procedure HandleUserInput;  
 var
   UserInput: string;
   SafeInput: string;
@@ -2998,13 +2998,13 @@ end;
 **Protection CSRF pour les formulaires :**
 
 ```pascal
-function GenerateCSRFToken: string;
+function GenerateCSRFToken: string;  
 begin
   Result := IntToHex(Random(MaxInt), 16) + IntToHex(Random(MaxInt), 16);
   window.sessionStorage.setItem('csrf_token', Result);
 end;
 
-function ValidateCSRFToken(const Token: string): Boolean;
+function ValidateCSRFToken(const Token: string): Boolean;  
 var
   StoredToken: string;
 begin
@@ -3033,7 +3033,7 @@ uses
   JS, Web;
 
 // Manipulation DOM
-var Element := document.getElementById('myId');
+var Element := document.getElementById('myId');  
 Element.innerHTML := 'Nouveau contenu';
 
 // Événements
@@ -3043,16 +3043,16 @@ Element.addEventListener('click', @MyHandler);
 window.fetch('url').then(@HandleResponse);
 
 // LocalStorage
-window.localStorage.setItem('key', 'value');
+window.localStorage.setItem('key', 'value');  
 var Value := window.localStorage.getItem('key');
 
 // Timers
-window.setTimeout(@MyProc, 1000);
-var ID := window.setInterval(@MyProc, 1000);
+window.setTimeout(@MyProc, 1000);  
+var ID := window.setInterval(@MyProc, 1000);  
 window.clearInterval(ID);
 
 // Console
-console.log('Message');
+console.log('Message');  
 console.error('Erreur');
 ```
 

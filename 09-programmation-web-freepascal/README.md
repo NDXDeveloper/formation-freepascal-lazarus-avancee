@@ -208,16 +208,16 @@ HTTP (HyperText Transfer Protocol) est le protocole de communication du web.
 
 **Exemple de requête GET** :
 ```
-GET /users/123 HTTP/1.1
-Host: api.example.com
-Accept: application/json
+GET /users/123 HTTP/1.1  
+Host: api.example.com  
+Accept: application/json  
 Authorization: Bearer token123
 ```
 
 **Exemple de réponse** :
 ```
-HTTP/1.1 200 OK
-Content-Type: application/json
+HTTP/1.1 200 OK  
+Content-Type: application/json  
 Content-Length: 87
 
 {"id":123,"name":"Alice","email":"alice@example.com"}
@@ -330,8 +330,8 @@ HTTP est **stateless** (sans état), chaque requête est indépendante.
 
 **Windows** :
 ```
-C:\inetpub\wwwroot\
-C:\Program Files\MyApp\
+C:\inetpub\wwwroot\  
+C:\Program Files\MyApp\  
 Séparateur : \
 ```
 
@@ -347,7 +347,7 @@ Séparateur : /
 uses
   sysutils;
 
-function GetWebRoot: String;
+function GetWebRoot: String;  
 begin
   {$IFDEF WINDOWS}
   Result := 'C:\inetpub\wwwroot\';
@@ -414,7 +414,7 @@ end;
 **Ubuntu** :
 ```bash
 # Installation FreePascal/Lazarus
-sudo apt update
+sudo apt update  
 sudo apt install fpc lazarus
 
 # Installation serveur web
@@ -465,10 +465,10 @@ fpc -Tlinux webapp.pas
 
 **Exemple d'API REST** :
 ```
-GET    /api/users          → Liste tous les utilisateurs
-GET    /api/users/123      → Détails de l'utilisateur 123
-POST   /api/users          → Crée un utilisateur
-PUT    /api/users/123      → Modifie l'utilisateur 123
+GET    /api/users          → Liste tous les utilisateurs  
+GET    /api/users/123      → Détails de l'utilisateur 123  
+POST   /api/users          → Crée un utilisateur  
+PUT    /api/users/123      → Modifie l'utilisateur 123  
 DELETE /api/users/123      → Supprime l'utilisateur 123
 ```
 

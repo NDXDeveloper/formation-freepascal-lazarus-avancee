@@ -13,7 +13,7 @@ La génération de pages HTML dynamiques est au cœur du développement web. Fre
 La méthode la plus simple consiste à construire le HTML directement dans le code :
 
 ```pascal
-function GenerateSimplePage(const Title, Content: string): string;
+function GenerateSimplePage(const Title, Content: string): string;  
 begin
   Result := '<!DOCTYPE html>' + LineEnding +
             '<html>' + LineEnding +
@@ -44,7 +44,7 @@ end;
 Pour améliorer la lisibilité, on peut utiliser `TStringList` :
 
 ```pascal
-function GeneratePageWithStringList(const Title, Content: string): string;
+function GeneratePageWithStringList(const Title, Content: string): string;  
 var
   HTML: TStringList;
 begin
@@ -74,7 +74,7 @@ end;
 Lorsqu'on insère du contenu utilisateur dans le HTML, il faut obligatoirement échapper les caractères spéciaux pour éviter les failles de sécurité (XSS - Cross-Site Scripting).
 
 ```pascal
-function HTMLEscape(const Text: string): string;
+function HTMLEscape(const Text: string): string;  
 begin
   Result := StringReplace(Text, '&', '&amp;', [rfReplaceAll]);
   Result := StringReplace(Result, '<', '&lt;', [rfReplaceAll]);
@@ -84,7 +84,7 @@ begin
 end;
 
 // Utilisation sécurisée
-function SafeGeneratePage(const Title, UserContent: string): string;
+function SafeGeneratePage(const Title, UserContent: string): string;  
 begin
   Result := '<!DOCTYPE html>' + LineEnding +
             '<html>' + LineEnding +
@@ -199,13 +199,13 @@ type
                     const Values: array of string): string;
   end;
 
-constructor TTemplateEngine.Create(const TemplateDirectory: string);
+constructor TTemplateEngine.Create(const TemplateDirectory: string);  
 begin
   inherited Create;
   FTemplateDir := IncludeTrailingPathDelimiter(TemplateDirectory);
 end;
 
-function TTemplateEngine.LoadTemplate(const FileName: string): string;
+function TTemplateEngine.LoadTemplate(const FileName: string): string;  
 var
   FileStream: TFileStream;
   StringStream: TStringStream;
@@ -553,19 +553,19 @@ type
 
 implementation
 
-constructor TMyWebModule.Create(AOwner: TComponent);
+constructor TMyWebModule.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FTemplateEngine := TTemplateParser.Create;
 end;
 
-destructor TMyWebModule.Destroy;
+destructor TMyWebModule.Destroy;  
 begin
   FTemplateEngine.Free;
   inherited Destroy;
 end;
 
-procedure TMyWebModule.HandleRequest(ARequest: TRequest; AResponse: TResponse);
+procedure TMyWebModule.HandleRequest(ARequest: TRequest; AResponse: TResponse);  
 var
   TemplatePath: string;
 begin
@@ -611,7 +611,7 @@ type
     procedure ClearCache;
   end;
 
-constructor TTemplateCache.Create(const TemplateDirectory: string);
+constructor TTemplateCache.Create(const TemplateDirectory: string);  
 begin
   inherited Create;
   FTemplateDir := IncludeTrailingPathDelimiter(TemplateDirectory);
@@ -619,13 +619,13 @@ begin
   FCache.Sorted := True;
 end;
 
-destructor TTemplateCache.Destroy;
+destructor TTemplateCache.Destroy;  
 begin
   FCache.Free;
   inherited Destroy;
 end;
 
-function TTemplateCache.GetTemplate(const FileName: string): string;
+function TTemplateCache.GetTemplate(const FileName: string): string;  
 var
   Index: Integer;
   Content: string;
@@ -642,7 +642,7 @@ begin
   end;
 end;
 
-procedure TTemplateCache.ClearCache;
+procedure TTemplateCache.ClearCache;  
 begin
   FCache.Clear;
 end;
@@ -695,7 +695,7 @@ end;
 ### Gestion des chemins
 
 ```pascal
-function GetTemplatePath(const FileName: string): string;
+function GetTemplatePath(const FileName: string): string;  
 begin
   {$IFDEF WINDOWS}
   Result := 'C:\inetpub\wwwroot\templates\' + FileName;
@@ -710,7 +710,7 @@ end;
 Sur Linux/Ubuntu, les fichiers sont généralement en UTF-8, tandis que Windows peut utiliser différents encodages. Il est recommandé d'utiliser UTF-8 partout :
 
 ```pascal
-function LoadTemplateUTF8(const FileName: string): string;
+function LoadTemplateUTF8(const FileName: string): string;  
 var
   FileStream: TFileStream;
   StringStream: TStringStream;

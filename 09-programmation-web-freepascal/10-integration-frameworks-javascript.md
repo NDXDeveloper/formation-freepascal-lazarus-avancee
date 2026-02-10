@@ -50,7 +50,7 @@ type
     function ToJSON: TJSONObject;
   end;
 
-function TProduct.ToJSON: TJSONObject;
+function TProduct.ToJSON: TJSONObject;  
 begin
   Result := TJSONObject.Create;
   Result.Add('id', ID);
@@ -63,7 +63,7 @@ var
   Products: array of TProduct;
 
 // Initialiser des données de test
-procedure InitializeData;
+procedure InitializeData;  
 var
   P: TProduct;
 begin
@@ -85,7 +85,7 @@ begin
 end;
 
 // Activer CORS pour permettre les requêtes depuis JavaScript
-procedure EnableCORS(AResponse: TResponse);
+procedure EnableCORS(AResponse: TResponse);  
 begin
   AResponse.SetCustomHeader('Access-Control-Allow-Origin', '*');
   AResponse.SetCustomHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -93,7 +93,7 @@ begin
 end;
 
 // GET /api/products - Liste tous les produits
-procedure GetProducts(ARequest: TRequest; AResponse: TResponse);
+procedure GetProducts(ARequest: TRequest; AResponse: TResponse);  
 var
   JSONArray: TJSONArray;
   i: Integer;
@@ -114,7 +114,7 @@ begin
 end;
 
 // GET /api/products/:id - Obtenir un produit par ID
-procedure GetProduct(ARequest: TRequest; AResponse: TResponse);
+procedure GetProduct(ARequest: TRequest; AResponse: TResponse);  
 var
   ProductID: Integer;
   i: Integer;
@@ -146,7 +146,7 @@ begin
 end;
 
 // POST /api/products - Créer un nouveau produit
-procedure CreateProduct(ARequest: TRequest; AResponse: TResponse);
+procedure CreateProduct(ARequest: TRequest; AResponse: TResponse);  
 var
   InputJSON: TJSONObject;
   NewProduct: TProduct;
@@ -189,7 +189,7 @@ begin
 end;
 
 // PUT /api/products/:id - Mettre à jour un produit
-procedure UpdateProduct(ARequest: TRequest; AResponse: TResponse);
+procedure UpdateProduct(ARequest: TRequest; AResponse: TResponse);  
 var
   ProductID: Integer;
   InputJSON: TJSONObject;
@@ -245,7 +245,7 @@ begin
 end;
 
 // DELETE /api/products/:id - Supprimer un produit
-procedure DeleteProduct(ARequest: TRequest; AResponse: TResponse);
+procedure DeleteProduct(ARequest: TRequest; AResponse: TResponse);  
 var
   ProductID: Integer;
   i, j: Integer;
@@ -283,7 +283,7 @@ begin
 end;
 
 // OPTIONS - Pour les requêtes CORS preflight
-procedure HandleOptions(ARequest: TRequest; AResponse: TResponse);
+procedure HandleOptions(ARequest: TRequest; AResponse: TResponse);  
 begin
   EnableCORS(AResponse);
   AResponse.Code := 204;
@@ -441,8 +441,8 @@ export default ProductsAPI;
 **src/components/ProductList.jsx :**
 
 ```jsx
-import React, { useState, useEffect } from 'react';
-import ProductsAPI from '../api/productsApi';
+import React, { useState, useEffect } from 'react';  
+import ProductsAPI from '../api/productsApi';  
 import './ProductList.css';
 
 function ProductList() {
@@ -734,8 +734,8 @@ input {
 **src/App.jsx :**
 
 ```jsx
-import React from 'react';
-import ProductList from './components/ProductList';
+import React from 'react';  
+import ProductList from './components/ProductList';  
 import './App.css';
 
 function App() {
@@ -1151,9 +1151,9 @@ export default {
 **src/app/services/product.service.ts :**
 
 ```typescript
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Injectable } from '@angular/core';  
+import { HttpClient, HttpHeaders } from '@angular/common/http';  
+import { Observable, throwError } from 'rxjs';  
 import { catchError, retry } from 'rxjs/operators';
 
 export interface Product {
@@ -1239,7 +1239,7 @@ export class ProductService {
 **src/app/components/product-list/product-list.component.ts :**
 
 ```typescript
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';  
 import { ProductService, Product } from '../../services/product.service';
 
 @Component({
@@ -1464,17 +1464,17 @@ Parfois, il est utile de créer un proxy Node.js qui fait le lien entre le front
 **server.js (Node.js/Express) :**
 
 ```javascript
-const express = require('express');
-const cors = require('cors');
+const express = require('express');  
+const cors = require('cors');  
 const axios = require('axios');
 
-const app = express();
-const PORT = 3000;
+const app = express();  
+const PORT = 3000;  
 const PASCAL_API = 'http://localhost:8080/api';
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.use(cors());  
+app.use(express.json());  
 app.use(express.static('public'));
 
 // Logger middleware
@@ -1609,7 +1609,7 @@ var
   ConnectedClients: TList;
 
 // Diffuser un message à tous les clients connectés
-procedure BroadcastMessage(const Message: string);
+procedure BroadcastMessage(const Message: string);  
 var
   i: Integer;
   Client: TWebSocketConnection;
@@ -1627,7 +1627,7 @@ begin
 end;
 
 // Gestionnaire de connexion WebSocket
-procedure HandleWebSocketConnect(Sender: TObject; AConnection: TWebSocketConnection);
+procedure HandleWebSocketConnect(Sender: TObject; AConnection: TWebSocketConnection);  
 begin
   WriteLn('Nouveau client connecté');
   ConnectedClients.Add(AConnection);
@@ -1637,7 +1637,7 @@ begin
 end;
 
 // Gestionnaire de déconnexion
-procedure HandleWebSocketDisconnect(Sender: TObject; AConnection: TWebSocketConnection);
+procedure HandleWebSocketDisconnect(Sender: TObject; AConnection: TWebSocketConnection);  
 begin
   WriteLn('Client déconnecté');
   ConnectedClients.Remove(AConnection);
@@ -1922,13 +1922,13 @@ type
 
 implementation
 
-constructor TJWTManager.Create(const SecretKey: string);
+constructor TJWTManager.Create(const SecretKey: string);  
 begin
   inherited Create;
   FSecretKey := SecretKey;
 end;
 
-function TJWTManager.Base64URLEncode(const Data: string): string;
+function TJWTManager.Base64URLEncode(const Data: string): string;  
 begin
   Result := EncodeStringBase64(Data);
   Result := StringReplace(Result, '+', '-', [rfReplaceAll]);
@@ -1936,7 +1936,7 @@ begin
   Result := StringReplace(Result, '=', '', [rfReplaceAll]);
 end;
 
-function TJWTManager.Base64URLDecode(const Data: string): string;
+function TJWTManager.Base64URLDecode(const Data: string): string;  
 var
   Temp: string;
 begin
@@ -1957,7 +1957,7 @@ begin
   Result := SHA256Print(SHA256String(Key + Data));
 end;
 
-function TJWTManager.CreateToken(const Payload: TJSONObject): string;
+function TJWTManager.CreateToken(const Payload: TJSONObject): string;  
 var
   Header: TJSONObject;
   HeaderStr, PayloadStr, Signature: string;
@@ -1979,7 +1979,7 @@ begin
   end;
 end;
 
-function TJWTManager.VerifyToken(const Token: string): TJSONObject;
+function TJWTManager.VerifyToken(const Token: string): TJSONObject;  
 var
   HeaderStr, PayloadStr, SignatureStr: string;
   ExpectedSignature: string;
@@ -2011,7 +2011,7 @@ begin
   Result := GetJSON(PayloadJSON) as TJSONObject;
 end;
 
-function TJWTManager.IsTokenValid(const Token: string): Boolean;
+function TJWTManager.IsTokenValid(const Token: string): Boolean;  
 var
   Payload: TJSONObject;
 begin
@@ -2038,7 +2038,7 @@ end.
 ### Utilisation dans l'API
 
 ```pascal
-procedure HandleLogin(ARequest: TRequest; AResponse: TResponse);
+procedure HandleLogin(ARequest: TRequest; AResponse: TResponse);  
 var
   InputJSON: TJSONObject;
   Username, Password: string;
@@ -2113,7 +2113,7 @@ begin
 end;
 
 // Middleware pour vérifier le token JWT
-function VerifyJWTToken(ARequest: TRequest; AResponse: TResponse): Boolean;
+function VerifyJWTToken(ARequest: TRequest; AResponse: TResponse): Boolean;  
 var
   AuthHeader: string;
   Token: string;
@@ -2157,7 +2157,7 @@ begin
 end;
 
 // Endpoint protégé nécessitant l'authentification
-procedure HandleProtectedResource(ARequest: TRequest; AResponse: TResponse);
+procedure HandleProtectedResource(ARequest: TRequest; AResponse: TResponse);  
 begin
   EnableCORS(AResponse);
 
@@ -2398,7 +2398,7 @@ type
 var
   SSEConnections: TThreadList;
 
-procedure EnableSSEHeaders(AResponse: TResponse);
+procedure EnableSSEHeaders(AResponse: TResponse);  
 begin
   AResponse.ContentType := 'text/event-stream';
   AResponse.SetCustomHeader('Cache-Control', 'no-cache');
@@ -2425,7 +2425,7 @@ begin
   AResponse.SendContent;
 end;
 
-procedure HandleSSEConnect(ARequest: TRequest; AResponse: TResponse);
+procedure HandleSSEConnect(ARequest: TRequest; AResponse: TResponse);  
 var
   Connection: TSSEConnection;
   LastEventID: string;
@@ -2450,7 +2450,7 @@ begin
 end;
 
 // Diffuser un événement à tous les clients SSE
-procedure BroadcastSSEEvent(const EventType, Data: string);
+procedure BroadcastSSEEvent(const EventType, Data: string);  
 var
   List: TList;
   i: Integer;
@@ -2480,7 +2480,7 @@ begin
 end;
 
 // Simuler des événements périodiques
-procedure SimulateEvents;
+procedure SimulateEvents;  
 var
   Counter: Integer;
   Data: string;
@@ -2694,19 +2694,19 @@ if [ $? -eq 0 ]; then
     # Créer le service systemd
     sudo tee /etc/systemd/system/pascal-api.service > /dev/null <<EOF
 [Unit]
-Description=FreePascal API Server
+Description=FreePascal API Server  
 After=network.target
 
 [Service]
-Type=simple
-User=www-data
-WorkingDirectory=/var/www/api
-ExecStart=/usr/local/bin/api_server
-Restart=always
+Type=simple  
+User=www-data  
+WorkingDirectory=/var/www/api  
+ExecStart=/usr/local/bin/api_server  
+Restart=always  
 RestartSec=10
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=multi-user.target  
 EOF
 
     # Activer et démarrer le service
@@ -2727,7 +2727,7 @@ fi
 @echo off
 echo === Compilation API FreePascal ===
 
-REM Compiler l'API
+REM Compiler l'API  
 fpc -O3 api_server.pas
 
 if %ERRORLEVEL% EQU 0 (
@@ -2969,7 +2969,7 @@ var
   CacheTime: TDateTime;
   CacheDuration: Integer = 5; // 5 minutes
 
-procedure GetProductsCached(ARequest: TRequest; AResponse: TResponse);
+procedure GetProductsCached(ARequest: TRequest; AResponse: TResponse);  
 begin
   EnableCORS(AResponse);
 

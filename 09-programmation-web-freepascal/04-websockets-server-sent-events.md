@@ -10,13 +10,13 @@ Les applications web modernes nécessitent souvent une **communication en temps 
 
 **HTTP classique (polling)** :
 ```
-Client → Serveur : Y a-t-il des nouveautés ?
+Client → Serveur : Y a-t-il des nouveautés ?  
 Serveur → Client : Non
 [attente 5 secondes]
-Client → Serveur : Y a-t-il des nouveautés ?
+Client → Serveur : Y a-t-il des nouveautés ?  
 Serveur → Client : Non
 [attente 5 secondes]
-Client → Serveur : Y a-t-il des nouveautés ?
+Client → Serveur : Y a-t-il des nouveautés ?  
 Serveur → Client : Oui, voici les données !
 ```
 
@@ -30,7 +30,7 @@ Serveur → Client : Oui, voici les données !
 ```
 Client ↔ Serveur : Connexion établie
 [connexion maintenue]
-Serveur → Client : Nouvelles données disponibles !
+Serveur → Client : Nouvelles données disponibles !  
 Serveur → Client : Autre événement !
 [la connexion reste ouverte]
 ```
@@ -100,20 +100,20 @@ WebSocket commence par un **handshake HTTP** classique, puis passe à un protoco
 **Handshake (effectué par le navigateur)** :
 
 ```http
-GET /chat HTTP/1.1
-Host: example.com
-Upgrade: websocket
-Connection: Upgrade
-Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==
+GET /chat HTTP/1.1  
+Host: example.com  
+Upgrade: websocket  
+Connection: Upgrade  
+Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==  
 Sec-WebSocket-Version: 13
 ```
 
 **Réponse du serveur** :
 
 ```http
-HTTP/1.1 101 Switching Protocols
-Upgrade: websocket
-Connection: Upgrade
+HTTP/1.1 101 Switching Protocols  
+Upgrade: websocket  
+Connection: Upgrade  
 Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
 ```
 
@@ -153,7 +153,7 @@ type
     procedure DoDisconnect(ASocket: TWebSocketConnection); override;
   end;
 
-procedure TMyWebSocketHandler.DoConnect(ASocket: TWebSocketConnection);
+procedure TMyWebSocketHandler.DoConnect(ASocket: TWebSocketConnection);  
 begin
   WriteLn(Format('[%s] Client connecté', [FormatDateTime('hh:nn:ss', Now)]));
 
@@ -161,7 +161,7 @@ begin
   ASocket.SendText('{"type":"welcome","message":"Connecté au serveur WebSocket"}');
 end;
 
-procedure TMyWebSocketHandler.DoDisconnect(ASocket: TWebSocketConnection);
+procedure TMyWebSocketHandler.DoDisconnect(ASocket: TWebSocketConnection);  
 begin
   WriteLn(Format('[%s] Client déconnecté', [FormatDateTime('hh:nn:ss', Now)]));
 end;
@@ -402,13 +402,13 @@ type
     procedure DoHandleMessage(ASocket: TWebSocketConnection; AMessage: TWebSocketMessage); override;
   end;
 
-constructor TChatHandler.Create;
+constructor TChatHandler.Create;  
 begin
   inherited Create;
   FUsers := TList.Create;
 end;
 
-destructor TChatHandler.Destroy;
+destructor TChatHandler.Destroy;  
 var
   i: Integer;
 begin
@@ -418,7 +418,7 @@ begin
   inherited;
 end;
 
-procedure TChatHandler.BroadcastMessage(const Msg: string; ExceptSocket: TWebSocketConnection);
+procedure TChatHandler.BroadcastMessage(const Msg: string; ExceptSocket: TWebSocketConnection);  
 var
   i: Integer;
   User: TChatUser;
@@ -431,7 +431,7 @@ begin
   end;
 end;
 
-procedure TChatHandler.SendUserList(ASocket: TWebSocketConnection);
+procedure TChatHandler.SendUserList(ASocket: TWebSocketConnection);  
 var
   JSONArray: TJSONArray;
   JSONObj: TJSONObject;
@@ -461,7 +461,7 @@ begin
   end;
 end;
 
-procedure TChatHandler.DoConnect(ASocket: TWebSocketConnection);
+procedure TChatHandler.DoConnect(ASocket: TWebSocketConnection);  
 var
   User: TChatUser;
 begin
@@ -478,7 +478,7 @@ begin
   ASocket.Data := User;
 end;
 
-procedure TChatHandler.DoDisconnect(ASocket: TWebSocketConnection);
+procedure TChatHandler.DoDisconnect(ASocket: TWebSocketConnection);  
 var
   User: TChatUser;
   JSONObj: TJSONObject;
@@ -917,18 +917,18 @@ fpc chat_server.lpr
 SSE utilise une connexion HTTP normale qui reste ouverte. Le serveur envoie des événements au format texte :
 
 ```
-data: Premier message\n\n
-data: Deuxième message\n\n
+data: Premier message\n\n  
+data: Deuxième message\n\n  
 data: {"type":"update","value":42}\n\n
 ```
 
 **Format d'un événement** :
 
 ```
-event: custom_event
-id: 123
-data: Contenu du message
-data: Ligne 2 du contenu
+event: custom_event  
+id: 123  
+data: Contenu du message  
+data: Ligne 2 du contenu  
 retry: 10000
 
 ```
@@ -952,7 +952,7 @@ uses
   SysUtils, Classes,
   fphttpapp, httpdefs, httproute;
 
-procedure HandleSSE(ARequest: TRequest; AResponse: TResponse);
+procedure HandleSSE(ARequest: TRequest; AResponse: TResponse);  
 var
   i: Integer;
   EventData: string;
@@ -992,7 +992,7 @@ begin
 end;
 
 // Page HTML de démonstration
-procedure HandleHome(ARequest: TRequest; AResponse: TResponse);
+procedure HandleHome(ARequest: TRequest; AResponse: TResponse);  
 begin
   AResponse.Content :=
     '<!DOCTYPE html>' +
@@ -1210,7 +1210,7 @@ Les SSE permettent de définir différents **types d'événements**.
 **Serveur avec événements typés** :
 
 ```pascal
-procedure HandleTypedSSE(ARequest: TRequest; AResponse: TResponse);
+procedure HandleTypedSSE(ARequest: TRequest; AResponse: TResponse);  
 var
   EventData: string;
   i: Integer;
@@ -1317,7 +1317,7 @@ type
     ActiveConnections: Integer;
   end;
 
-function GetSystemStats: TSystemStats;
+function GetSystemStats: TSystemStats;  
 begin
   // Simulation de statistiques système
   // En production, utiliser les API système appropriées
@@ -1329,7 +1329,7 @@ begin
   Result.ActiveConnections := Random(50) + 10;
 end;
 
-function StatsToJSON(const Stats: TSystemStats): string;
+function StatsToJSON(const Stats: TSystemStats): string;  
 var
   JSONObj: TJSONObject;
 begin
@@ -1351,7 +1351,7 @@ begin
   end;
 end;
 
-procedure HandleMonitoring(ARequest: TRequest; AResponse: TResponse);
+procedure HandleMonitoring(ARequest: TRequest; AResponse: TResponse);  
 var
   Stats: TSystemStats;
   EventData: string;
@@ -1398,7 +1398,7 @@ begin
 end;
 
 // Page HTML intégrée
-procedure HandleDashboard(ARequest: TRequest; AResponse: TResponse);
+procedure HandleDashboard(ARequest: TRequest; AResponse: TResponse);  
 const
   HTML =
     '<!DOCTYPE html>' +
@@ -1505,7 +1505,7 @@ Un avantage majeur de SSE est la **reconnexion automatique**.
 **Côté serveur - définir le délai de reconnexion** :
 
 ```pascal
-procedure HandleSSEWithRetry(ARequest: TRequest; AResponse: TResponse);
+procedure HandleSSEWithRetry(ARequest: TRequest; AResponse: TResponse);  
 var
   EventData: string;
 begin
@@ -1545,7 +1545,7 @@ eventSource.onerror = function() {
 **Serveur qui reprend depuis le dernier ID** :
 
 ```pascal
-procedure HandleSSEWithResume(ARequest: TRequest; AResponse: TResponse);
+procedure HandleSSEWithResume(ARequest: TRequest; AResponse: TResponse);  
 var
   LastEventID: Integer;
   StartFrom: Integer;
@@ -1636,7 +1636,7 @@ end;
 **1. Authentification pour WebSocket**
 
 ```pascal
-procedure TMyWebSocketHandler.DoConnect(ASocket: TWebSocketConnection);
+procedure TMyWebSocketHandler.DoConnect(ASocket: TWebSocketConnection);  
 var
   Token: string;
 begin
@@ -1658,7 +1658,7 @@ end;
 **2. CORS pour SSE**
 
 ```pascal
-procedure HandleSSE(ARequest: TRequest; AResponse: TResponse);
+procedure HandleSSE(ARequest: TRequest; AResponse: TResponse);  
 begin
   // Headers CORS
   AResponse.SetCustomHeader('Access-Control-Allow-Origin', 'https://myapp.com');
@@ -1709,7 +1709,7 @@ var
   MaxConnections: Integer = 100;
   CurrentConnections: Integer = 0;
 
-procedure TMyWebSocketHandler.DoConnect(ASocket: TWebSocketConnection);
+procedure TMyWebSocketHandler.DoConnect(ASocket: TWebSocketConnection);  
 begin
   if CurrentConnections >= MaxConnections then
   begin
@@ -1723,7 +1723,7 @@ begin
   WriteLn(Format('Connexions actives: %d/%d', [CurrentConnections, MaxConnections]));
 end;
 
-procedure TMyWebSocketHandler.DoDisconnect(ASocket: TWebSocketConnection);
+procedure TMyWebSocketHandler.DoDisconnect(ASocket: TWebSocketConnection);  
 begin
   Dec(CurrentConnections);
   WriteLn(Format('Connexions actives: %d/%d', [CurrentConnections, MaxConnections]));
@@ -1746,7 +1746,7 @@ type
     procedure DoConnect(ASocket: TWebSocketConnection); override;
   end;
 
-constructor TWebSocketHandlerWithHeartbeat.Create;
+constructor TWebSocketHandlerWithHeartbeat.Create;  
 begin
   inherited;
   FHeartbeatTimer := TTimer.Create(nil);
@@ -1755,7 +1755,7 @@ begin
   FHeartbeatTimer.Enabled := True;
 end;
 
-procedure TWebSocketHandlerWithHeartbeat.OnHeartbeat(Sender: TObject);
+procedure TWebSocketHandlerWithHeartbeat.OnHeartbeat(Sender: TObject);  
 var
   i: Integer;
 begin
@@ -1774,7 +1774,7 @@ end;
 **SSE keep-alive** :
 
 ```pascal
-procedure HandleSSEWithKeepAlive(ARequest: TRequest; AResponse: TResponse);
+procedure HandleSSEWithKeepAlive(ARequest: TRequest; AResponse: TResponse);  
 var
   LastActivity: TDateTime;
   EventData: string;
@@ -1856,7 +1856,7 @@ begin
   end;
 end;
 
-procedure TRobustWebSocketHandler.DoHandleError(ASocket: TWebSocketConnection; AError: Exception);
+procedure TRobustWebSocketHandler.DoHandleError(ASocket: TWebSocketConnection; AError: Exception);  
 begin
   WriteLn(Format('[WebSocket Error] %s', [AError.Message]));
 
@@ -1890,7 +1890,7 @@ type
     procedure LogError(const ErrorMsg: string);
   end;
 
-constructor TLogger.Create(const FileName: string);
+constructor TLogger.Create(const FileName: string);  
 begin
   inherited Create;
   AssignFile(FLogFile, FileName);
@@ -1905,14 +1905,14 @@ begin
   end;
 end;
 
-destructor TLogger.Destroy;
+destructor TLogger.Destroy;  
 begin
   if FEnabled then
     CloseFile(FLogFile);
   inherited;
 end;
 
-procedure TLogger.Log(Level: TLogLevel; const Msg: string);
+procedure TLogger.Log(Level: TLogLevel; const Msg: string);  
 const
   LevelStr: array[TLogLevel] of string = ('DEBUG', 'INFO', 'WARN', 'ERROR');
 var
@@ -1936,7 +1936,7 @@ begin
   end;
 end;
 
-procedure TLogger.LogConnection(const ClientIP: string; Connected: Boolean);
+procedure TLogger.LogConnection(const ClientIP: string; Connected: Boolean);  
 begin
   if Connected then
     Log(llInfo, Format('Client connected: %s', [ClientIP]))
@@ -1944,12 +1944,12 @@ begin
     Log(llInfo, Format('Client disconnected: %s', [ClientIP]));
 end;
 
-procedure TLogger.LogMessage(const ClientIP, Msg: string);
+procedure TLogger.LogMessage(const ClientIP, Msg: string);  
 begin
   Log(llDebug, Format('Message from %s: %s', [ClientIP, Msg]));
 end;
 
-procedure TLogger.LogError(const ErrorMsg: string);
+procedure TLogger.LogError(const ErrorMsg: string);  
 begin
   Log(llError, ErrorMsg);
 end;
@@ -2086,8 +2086,8 @@ server {
 **Activer** :
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/websocket-app /etc/nginx/sites-enabled/
-sudo nginx -t
+sudo ln -s /etc/nginx/sites-available/websocket-app /etc/nginx/sites-enabled/  
+sudo nginx -t  
 sudo systemctl reload nginx
 ```
 
@@ -2099,33 +2099,33 @@ sudo systemctl reload nginx
 
 ```ini
 [Unit]
-Description=WebSocket Application FreePascal
+Description=WebSocket Application FreePascal  
 After=network.target
 
 [Service]
-Type=simple
-User=www-data
-Group=www-data
+Type=simple  
+User=www-data  
+Group=www-data  
 WorkingDirectory=/var/www/websocket-app
 
 # Exécutable
 ExecStart=/var/www/websocket-app/websocket_server
 
 # Redémarrage automatique
-Restart=always
+Restart=always  
 RestartSec=5
 
 # Variables d'environnement
-Environment="APP_ENV=production"
+Environment="APP_ENV=production"  
 Environment="APP_PORT=8080"
 
 # Limites
-LimitNOFILE=65536
+LimitNOFILE=65536  
 MemoryLimit=512M
 
 # Logging
-StandardOutput=journal
-StandardError=journal
+StandardOutput=journal  
+StandardError=journal  
 SyslogIdentifier=websocket-app
 
 [Install]
@@ -2135,9 +2135,9 @@ WantedBy=multi-user.target
 **Activer et démarrer** :
 
 ```bash
-sudo systemctl daemon-reload
-sudo systemctl enable websocket-app
-sudo systemctl start websocket-app
+sudo systemctl daemon-reload  
+sudo systemctl enable websocket-app  
+sudo systemctl start websocket-app  
 sudo systemctl status websocket-app
 
 # Logs
@@ -2163,13 +2163,13 @@ var
   AppMetrics: TMetrics;
   AppStartTime: TDateTime;
 
-procedure InitMetrics;
+procedure InitMetrics;  
 begin
   FillChar(AppMetrics, SizeOf(AppMetrics), 0);
   AppStartTime := Now;
 end;
 
-procedure HandleMetricsEndpoint(ARequest: TRequest; AResponse: TResponse);
+procedure HandleMetricsEndpoint(ARequest: TRequest; AResponse: TResponse);  
 var
   JSONObj: TJSONObject;
 begin
@@ -2191,14 +2191,14 @@ begin
 end;
 
 // Dans le handler WebSocket
-procedure TMetricsWebSocketHandler.DoConnect(ASocket: TWebSocketConnection);
+procedure TMetricsWebSocketHandler.DoConnect(ASocket: TWebSocketConnection);  
 begin
   Inc(AppMetrics.TotalConnections);
   Inc(AppMetrics.ActiveConnections);
   inherited;
 end;
 
-procedure TMetricsWebSocketHandler.DoDisconnect(ASocket: TWebSocketConnection);
+procedure TMetricsWebSocketHandler.DoDisconnect(ASocket: TWebSocketConnection);  
 begin
   Dec(AppMetrics.ActiveConnections);
   inherited;
@@ -2395,20 +2395,20 @@ type
     procedure DoHandleMessage(ASocket: TWebSocketConnection; AMessage: TWebSocketMessage); override;
   end;
 
-constructor TNotificationHandler.Create;
+constructor TNotificationHandler.Create;  
 begin
   inherited;
   FNotifications := TNotificationList.Create;
   FNextID := 1;
 end;
 
-destructor TNotificationHandler.Destroy;
+destructor TNotificationHandler.Destroy;  
 begin
   FNotifications.Free;
   inherited;
 end;
 
-procedure TNotificationHandler.BroadcastNotification(const Notif: TNotification);
+procedure TNotificationHandler.BroadcastNotification(const Notif: TNotification);  
 var
   JSONObj: TJSONObject;
   i: Integer;
@@ -2435,7 +2435,7 @@ begin
   end;
 end;
 
-procedure TNotificationHandler.DoConnect(ASocket: TWebSocketConnection);
+procedure TNotificationHandler.DoConnect(ASocket: TWebSocketConnection);  
 var
   JSONArray: TJSONArray;
   JSONObj: TJSONObject;

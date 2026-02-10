@@ -80,13 +80,13 @@ implementation
 uses
   SysUtils;
 
-constructor TConfig.Create;
+constructor TConfig.Create;  
 begin
   inherited Create;
   LoadFromEnvironment;
 end;
 
-procedure TConfig.LoadFromEnvironment;
+procedure TConfig.LoadFromEnvironment;  
 var
   EnvStr: string;
 begin
@@ -145,22 +145,22 @@ end.
 
 set -e  # Arrêter en cas d'erreur
 
-echo "==================================="
-echo "  Build pour Production - Linux"
+echo "==================================="  
+echo "  Build pour Production - Linux"  
 echo "==================================="
 
 # Variables
-APP_NAME="mywebapp"
-BUILD_DIR="build"
+APP_NAME="mywebapp"  
+BUILD_DIR="build"  
 DIST_DIR="dist"
 
 # Nettoyage
-echo "Nettoyage..."
-rm -rf $BUILD_DIR $DIST_DIR
+echo "Nettoyage..."  
+rm -rf $BUILD_DIR $DIST_DIR  
 mkdir -p $BUILD_DIR $DIST_DIR
 
 # Compilation
-echo "Compilation..."
+echo "Compilation..."  
 fpc -O3 -Xs -XX -CX \
     -FU$BUILD_DIR \
     -o$DIST_DIR/$APP_NAME \
@@ -174,18 +174,18 @@ else
 fi
 
 # Copie des fichiers nécessaires
-echo "Copie des ressources..."
-cp -r config $DIST_DIR/
-cp -r templates $DIST_DIR/
+echo "Copie des ressources..."  
+cp -r config $DIST_DIR/  
+cp -r templates $DIST_DIR/  
 cp -r public $DIST_DIR/
 
 # Création de l'archive
-echo "Création de l'archive..."
-cd $DIST_DIR
-tar -czf ../${APP_NAME}_linux_$(date +%Y%m%d).tar.gz *
+echo "Création de l'archive..."  
+cd $DIST_DIR  
+tar -czf ../${APP_NAME}_linux_$(date +%Y%m%d).tar.gz *  
 cd ..
 
-echo "✓ Build terminé"
+echo "✓ Build terminé"  
 echo "Archive: ${APP_NAME}_linux_$(date +%Y%m%d).tar.gz"
 ```
 
@@ -195,24 +195,24 @@ echo "Archive: ${APP_NAME}_linux_$(date +%Y%m%d).tar.gz"
 @echo off
 setlocal enabledelayedexpansion
 
-echo ===================================
-echo   Build pour Production - Windows
+echo ===================================  
+echo   Build pour Production - Windows  
 echo ===================================
 
-REM Variables
-set APP_NAME=mywebapp
-set BUILD_DIR=build
+REM Variables  
+set APP_NAME=mywebapp  
+set BUILD_DIR=build  
 set DIST_DIR=dist
 
-REM Nettoyage
-echo Nettoyage...
-if exist %BUILD_DIR% rmdir /s /q %BUILD_DIR%
-if exist %DIST_DIR% rmdir /s /q %DIST_DIR%
-mkdir %BUILD_DIR%
+REM Nettoyage  
+echo Nettoyage...  
+if exist %BUILD_DIR% rmdir /s /q %BUILD_DIR%  
+if exist %DIST_DIR% rmdir /s /q %DIST_DIR%  
+mkdir %BUILD_DIR%  
 mkdir %DIST_DIR%
 
-REM Compilation
-echo Compilation...
+REM Compilation  
+echo Compilation...  
 fpc -O3 -Xs -XX -CX -Twin64 ^
     -FU%BUILD_DIR% ^
     -o%DIST_DIR%\%APP_NAME%.exe ^
@@ -225,19 +225,19 @@ if %ERRORLEVEL% EQU 0 (
     exit /b 1
 )
 
-REM Copie des fichiers nécessaires
-echo Copie des ressources...
-xcopy /E /I config %DIST_DIR%\config
-xcopy /E /I templates %DIST_DIR%\templates
+REM Copie des fichiers nécessaires  
+echo Copie des ressources...  
+xcopy /E /I config %DIST_DIR%\config  
+xcopy /E /I templates %DIST_DIR%\templates  
 xcopy /E /I public %DIST_DIR%\public
 
-REM Création de l'archive
-echo Creation de l'archive...
-cd %DIST_DIR%
-tar -czf ..\%APP_NAME%_windows_%date:~-4,4%%date:~-10,2%%date:~-7,2%.tar.gz *
+REM Création de l'archive  
+echo Creation de l'archive...  
+cd %DIST_DIR%  
+tar -czf ..\%APP_NAME%_windows_%date:~-4,4%%date:~-10,2%%date:~-7,2%.tar.gz *  
 cd ..
 
-echo Build termine
+echo Build termine  
 echo Archive: %APP_NAME%_windows_%date:~-4,4%%date:~-10,2%%date:~-7,2%.tar.gz
 ```
 
@@ -247,7 +247,7 @@ echo Archive: %APP_NAME%_windows_%date:~-4,4%%date:~-10,2%%date:~-7,2%.tar.gz
 
 ```bash
 # Mise à jour du système
-sudo apt-get update
+sudo apt-get update  
 sudo apt-get upgrade -y
 
 # Installation des outils nécessaires
@@ -257,12 +257,12 @@ sudo apt-get install -y nginx postgresql supervisor
 sudo useradd -r -s /bin/false mywebapp
 
 # Création des répertoires
-sudo mkdir -p /opt/mywebapp
-sudo mkdir -p /var/log/mywebapp
+sudo mkdir -p /opt/mywebapp  
+sudo mkdir -p /var/log/mywebapp  
 sudo mkdir -p /etc/mywebapp
 
 # Permissions
-sudo chown -R mywebapp:mywebapp /opt/mywebapp
+sudo chown -R mywebapp:mywebapp /opt/mywebapp  
 sudo chown -R mywebapp:mywebapp /var/log/mywebapp
 ```
 
@@ -276,19 +276,19 @@ sudo tar -xzf mywebapp_linux_*.tar.gz -C /opt/mywebapp/
 sudo chmod +x /opt/mywebapp/mywebapp
 
 # Créer le fichier de configuration
-sudo tee /etc/mywebapp/config.env > /dev/null <<EOF
-APP_ENV=production
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=mywebapp_prod
-DB_USER=mywebapp
-DB_PASSWORD=SecurePassword123
-SERVER_PORT=8080
-LOG_LEVEL=INFO
+sudo tee /etc/mywebapp/config.env > /dev/null <<EOF  
+APP_ENV=production  
+DB_HOST=localhost  
+DB_PORT=5432  
+DB_NAME=mywebapp_prod  
+DB_USER=mywebapp  
+DB_PASSWORD=SecurePassword123  
+SERVER_PORT=8080  
+LOG_LEVEL=INFO  
 EOF
 
 # Protéger le fichier de configuration
-sudo chmod 600 /etc/mywebapp/config.env
+sudo chmod 600 /etc/mywebapp/config.env  
 sudo chown mywebapp:mywebapp /etc/mywebapp/config.env
 ```
 
@@ -300,19 +300,19 @@ Supervisor permet de gérer l'application comme un service et de la redémarrer 
 
 ```ini
 [program:mywebapp]
-command=/opt/mywebapp/mywebapp
-directory=/opt/mywebapp
-user=mywebapp
-autostart=true
-autorestart=true
-redirect_stderr=true
-stdout_logfile=/var/log/mywebapp/app.log
-stdout_logfile_maxbytes=10MB
-stdout_logfile_backups=10
+command=/opt/mywebapp/mywebapp  
+directory=/opt/mywebapp  
+user=mywebapp  
+autostart=true  
+autorestart=true  
+redirect_stderr=true  
+stdout_logfile=/var/log/mywebapp/app.log  
+stdout_logfile_maxbytes=10MB  
+stdout_logfile_backups=10  
 environment=APP_ENV="production",DB_HOST="localhost",DB_PORT="5432"
 
 [group:mywebapp]
-programs=mywebapp
+programs=mywebapp  
 priority=999
 ```
 
@@ -320,7 +320,7 @@ priority=999
 
 ```bash
 # Recharger la configuration
-sudo supervisorctl reread
+sudo supervisorctl reread  
 sudo supervisorctl update
 
 # Démarrer l'application
@@ -466,8 +466,8 @@ sudo certbot renew --dry-run
 sudo -u postgres psql
 
 # Créer la base de données et l'utilisateur
-CREATE DATABASE mywebapp_prod;
-CREATE USER mywebapp WITH ENCRYPTED PASSWORD 'SecurePassword123';
+CREATE DATABASE mywebapp_prod;  
+CREATE USER mywebapp WITH ENCRYPTED PASSWORD 'SecurePassword123';  
 GRANT ALL PRIVILEGES ON DATABASE mywebapp_prod TO mywebapp;
 
 # Sortir
@@ -494,7 +494,7 @@ sudo ufw enable
 sudo ufw allow 22/tcp
 
 # Autoriser HTTP et HTTPS
-sudo ufw allow 80/tcp
+sudo ufw allow 80/tcp  
 sudo ufw allow 443/tcp
 
 # Vérifier les règles
@@ -514,13 +514,13 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 # Installer les outils nécessaires
-choco install -y iis-urlrewrite
-choco install -y nssm
+choco install -y iis-urlrewrite  
+choco install -y nssm  
 choco install -y postgresql15
 
 # Activer IIS
-Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServerRole
-Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServer
+Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServerRole  
+Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServer  
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-ApplicationDevelopment
 ```
 
@@ -528,8 +528,8 @@ Enable-WindowsOptionalFeature -Online -FeatureName IIS-ApplicationDevelopment
 
 ```powershell
 # Créer les répertoires
-New-Item -Path "C:\inetpub\mywebapp" -ItemType Directory
-New-Item -Path "C:\ProgramData\mywebapp\config" -ItemType Directory
+New-Item -Path "C:\inetpub\mywebapp" -ItemType Directory  
+New-Item -Path "C:\ProgramData\mywebapp\config" -ItemType Directory  
 New-Item -Path "C:\ProgramData\mywebapp\logs" -ItemType Directory
 
 # Extraire l'application
@@ -537,13 +537,13 @@ Expand-Archive -Path "mywebapp_windows_*.tar.gz" -DestinationPath "C:\inetpub\my
 
 # Créer le fichier de configuration
 @"
-APP_ENV=production
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=mywebapp_prod
-DB_USER=mywebapp
-DB_PASSWORD=SecurePassword123
-SERVER_PORT=8080
+APP_ENV=production  
+DB_HOST=localhost  
+DB_PORT=5432  
+DB_NAME=mywebapp_prod  
+DB_USER=mywebapp  
+DB_PASSWORD=SecurePassword123  
+SERVER_PORT=8080  
 LOG_LEVEL=INFO
 "@ | Out-File -FilePath "C:\ProgramData\mywebapp\config\config.env" -Encoding UTF8
 
@@ -563,12 +563,12 @@ Set-Acl "C:\inetpub\mywebapp" $acl
 nssm install MyWebApp "C:\inetpub\mywebapp\mywebapp.exe"
 
 # Configuration du service
-nssm set MyWebApp AppDirectory "C:\inetpub\mywebapp"
-nssm set MyWebApp AppEnvironmentExtra "APP_ENV=production" "DB_HOST=localhost"
-nssm set MyWebApp DisplayName "My Web Application"
-nssm set MyWebApp Description "Application web FreePascal"
-nssm set MyWebApp Start SERVICE_AUTO_START
-nssm set MyWebApp AppStdout "C:\ProgramData\mywebapp\logs\app.log"
+nssm set MyWebApp AppDirectory "C:\inetpub\mywebapp"  
+nssm set MyWebApp AppEnvironmentExtra "APP_ENV=production" "DB_HOST=localhost"  
+nssm set MyWebApp DisplayName "My Web Application"  
+nssm set MyWebApp Description "Application web FreePascal"  
+nssm set MyWebApp Start SERVICE_AUTO_START  
+nssm set MyWebApp AppStdout "C:\ProgramData\mywebapp\logs\app.log"  
 nssm set MyWebApp AppStderr "C:\ProgramData\mywebapp\logs\error.log"
 
 # Démarrer le service
@@ -592,7 +592,7 @@ nssm status MyWebApp
 choco install -y iis-arr
 
 # Activer le proxy
-Import-Module WebAdministration
+Import-Module WebAdministration  
 Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' `
     -filter "system.webServer/proxy" -name "enabled" -value "True"
 ```
@@ -743,7 +743,7 @@ type
 
 implementation
 
-constructor TLogger.Create(const LogFilePath: string; Level: TLogLevel);
+constructor TLogger.Create(const LogFilePath: string; Level: TLogLevel);  
 begin
   inherited Create;
   FLogFile := LogFilePath;
@@ -761,13 +761,13 @@ begin
   FFileStream.Seek(0, soEnd);
 end;
 
-destructor TLogger.Destroy;
+destructor TLogger.Destroy;  
 begin
   FFileStream.Free;
   inherited Destroy;
 end;
 
-procedure TLogger.WriteToFile(const Message: string);
+procedure TLogger.WriteToFile(const Message: string);  
 var
   Line: string;
 begin
@@ -775,7 +775,7 @@ begin
   FFileStream.WriteBuffer(Line[1], Length(Line));
 end;
 
-procedure TLogger.Log(Level: TLogLevel; const Message: string);
+procedure TLogger.Log(Level: TLogLevel; const Message: string);  
 const
   LevelNames: array[TLogLevel] of string = ('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL');
 var
@@ -794,27 +794,27 @@ begin
   WriteLn(LogMessage); // Aussi sur la console
 end;
 
-procedure TLogger.Debug(const Message: string);
+procedure TLogger.Debug(const Message: string);  
 begin
   Log(llDebug, Message);
 end;
 
-procedure TLogger.Info(const Message: string);
+procedure TLogger.Info(const Message: string);  
 begin
   Log(llInfo, Message);
 end;
 
-procedure TLogger.Warning(const Message: string);
+procedure TLogger.Warning(const Message: string);  
 begin
   Log(llWarning, Message);
 end;
 
-procedure TLogger.Error(const Message: string);
+procedure TLogger.Error(const Message: string);  
 begin
   Log(llError, Message);
 end;
 
-procedure TLogger.Critical(const Message: string);
+procedure TLogger.Critical(const Message: string);  
 begin
   Log(llCritical, Message);
 end;
@@ -938,7 +938,7 @@ type
 
 implementation
 
-constructor TMetricsCollector.Create;
+constructor TMetricsCollector.Create;  
 begin
   inherited Create;
   FRequestCount := 0;
@@ -948,13 +948,13 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TMetricsCollector.Destroy;
+destructor TMetricsCollector.Destroy;  
 begin
   FLock.Free;
   inherited Destroy;
 end;
 
-procedure TMetricsCollector.IncRequestCount;
+procedure TMetricsCollector.IncRequestCount;  
 begin
   FLock.Enter;
   try
@@ -964,7 +964,7 @@ begin
   end;
 end;
 
-procedure TMetricsCollector.IncErrorCount;
+procedure TMetricsCollector.IncErrorCount;  
 begin
   FLock.Enter;
   try
@@ -974,7 +974,7 @@ begin
   end;
 end;
 
-procedure TMetricsCollector.IncActiveRequests;
+procedure TMetricsCollector.IncActiveRequests;  
 begin
   FLock.Enter;
   try
@@ -984,7 +984,7 @@ begin
   end;
 end;
 
-procedure TMetricsCollector.DecActiveRequests;
+procedure TMetricsCollector.DecActiveRequests;  
 begin
   FLock.Enter;
   try
@@ -994,7 +994,7 @@ begin
   end;
 end;
 
-procedure TMetricsCollector.AddResponseTime(TimeMs: Double);
+procedure TMetricsCollector.AddResponseTime(TimeMs: Double);  
 begin
   FLock.Enter;
   try
@@ -1004,7 +1004,7 @@ begin
   end;
 end;
 
-function TMetricsCollector.GetMetrics: string;
+function TMetricsCollector.GetMetrics: string;  
 var
   AvgResponseTime: Double;
 begin
@@ -1044,7 +1044,7 @@ end.
 **Endpoint de métriques :**
 
 ```pascal
-procedure HandleMetrics(ARequest: TRequest; AResponse: TResponse);
+procedure HandleMetrics(ARequest: TRequest; AResponse: TResponse);  
 begin
   AResponse.ContentType := 'text/plain; version=0.0.4';
   AResponse.Content := GlobalMetrics.GetMetrics;
@@ -1079,16 +1079,16 @@ scrape_configs:
 
 ```bash
 # Ajouter le repository Grafana
-sudo apt-get install -y software-properties-common
-sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"
+sudo apt-get install -y software-properties-common  
+sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"  
 wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
 
 # Installer Grafana
-sudo apt-get update
+sudo apt-get update  
 sudo apt-get install -y grafana
 
 # Démarrer Grafana
-sudo systemctl enable grafana-server
+sudo systemctl enable grafana-server  
 sudo systemctl start grafana-server
 
 # Grafana sera accessible sur http://localhost:3000
@@ -1169,11 +1169,11 @@ Start-Service grafana
 #!/bin/bash
 
 # Configuration
-APP_NAME="mywebapp"
-BACKUP_DIR="/var/backups/mywebapp"
-DB_NAME="mywebapp_prod"
-DB_USER="mywebapp"
-RETENTION_DAYS=30
+APP_NAME="mywebapp"  
+BACKUP_DIR="/var/backups/mywebapp"  
+DB_NAME="mywebapp_prod"  
+DB_USER="mywebapp"  
+RETENTION_DAYS=30  
 DATE=$(date +%Y%m%d_%H%M%S)
 
 # Créer le répertoire de sauvegarde
@@ -1182,7 +1182,7 @@ mkdir -p $BACKUP_DIR
 echo "=== Sauvegarde de $APP_NAME - $DATE ==="
 
 # 1. Sauvegarde de la base de données
-echo "Sauvegarde de la base de données..."
+echo "Sauvegarde de la base de données..."  
 pg_dump -U $DB_USER -h localhost $DB_NAME | gzip > "$BACKUP_DIR/db_${DATE}.sql.gz"
 
 if [ $? -eq 0 ]; then
@@ -1193,7 +1193,7 @@ else
 fi
 
 # 2. Sauvegarde des fichiers de l'application
-echo "Sauvegarde des fichiers..."
+echo "Sauvegarde des fichiers..."  
 tar -czf "$BACKUP_DIR/files_${DATE}.tar.gz" \
     -C /opt/$APP_NAME \
     --exclude='logs' \
@@ -1208,20 +1208,20 @@ else
 fi
 
 # 3. Sauvegarde de la configuration
-echo "Sauvegarde de la configuration..."
+echo "Sauvegarde de la configuration..."  
 tar -czf "$BACKUP_DIR/config_${DATE}.tar.gz" /etc/mywebapp
 
 # 4. Nettoyage des anciennes sauvegardes
-echo "Nettoyage des anciennes sauvegardes (>$RETENTION_DAYS jours)..."
+echo "Nettoyage des anciennes sauvegardes (>$RETENTION_DAYS jours)..."  
 find $BACKUP_DIR -name "*.gz" -mtime +$RETENTION_DAYS -delete
 
 # 5. Rapport de sauvegarde
-BACKUP_SIZE=$(du -sh $BACKUP_DIR | cut -f1)
-echo ""
-echo "=== Sauvegarde terminée ==="
-echo "Date: $DATE"
-echo "Taille totale: $BACKUP_SIZE"
-echo "Fichiers:"
+BACKUP_SIZE=$(du -sh $BACKUP_DIR | cut -f1)  
+echo ""  
+echo "=== Sauvegarde terminée ==="  
+echo "Date: $DATE"  
+echo "Taille totale: $BACKUP_SIZE"  
+echo "Fichiers:"  
 ls -lh $BACKUP_DIR/*${DATE}*
 
 # 6. Optionnel : Copier vers un stockage distant
@@ -1287,7 +1287,7 @@ $SourcePath = "C:\inetpub\mywebapp"
 $FilesToBackup = Get-ChildItem -Path $SourcePath -Recurse |
     Where-Object { $_.FullName -notlike "*\logs\*" -and $_.FullName -notlike "*\tmp\*" }
 
-Compress-Archive -Path $FilesToBackup.FullName -DestinationPath $FilesBackup -Force
+Compress-Archive -Path $FilesToBackup.FullName -DestinationPath $FilesBackup -Force  
 Write-Host "✓ Fichiers sauvegardés"
 
 # 3. Sauvegarde de la configuration
@@ -1304,11 +1304,11 @@ Get-ChildItem -Path $BackupDir -Filter "*.zip" |
 
 # 5. Rapport de sauvegarde
 $BackupSize = (Get-ChildItem -Path $BackupDir -Recurse | Measure-Object -Property Length -Sum).Sum / 1MB
-Write-Host ""
-Write-Host "=== Sauvegarde terminée ==="
-Write-Host "Date: $Date"
-Write-Host "Taille totale: $([Math]::Round($BackupSize, 2)) MB"
-Write-Host "Fichiers:"
+Write-Host ""  
+Write-Host "=== Sauvegarde terminée ==="  
+Write-Host "Date: $Date"  
+Write-Host "Taille totale: $([Math]::Round($BackupSize, 2)) MB"  
+Write-Host "Fichiers:"  
 Get-ChildItem -Path $BackupDir -Filter "*${Date}*" | Format-Table Name, Length, LastWriteTime
 
 # 6. Optionnel : Copier vers un stockage réseau
@@ -1347,27 +1347,27 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-DATE=$1
-BACKUP_DIR="/var/backups/mywebapp"
-APP_DIR="/opt/mywebapp"
-DB_NAME="mywebapp_prod"
+DATE=$1  
+BACKUP_DIR="/var/backups/mywebapp"  
+APP_DIR="/opt/mywebapp"  
+DB_NAME="mywebapp_prod"  
 DB_USER="mywebapp"
 
-echo "=== Restauration de MyWebApp - $DATE ==="
-echo ""
-read -p "ATTENTION: Cela va écraser les données actuelles. Continuer? (oui/non) " -n 3 -r
-echo
+echo "=== Restauration de MyWebApp - $DATE ==="  
+echo ""  
+read -p "ATTENTION: Cela va écraser les données actuelles. Continuer? (oui/non) " -n 3 -r  
+echo  
 if [[ ! $REPLY =~ ^oui$ ]]; then
     echo "Restauration annulée"
     exit 1
 fi
 
 # 1. Arrêter l'application
-echo "Arrêt de l'application..."
+echo "Arrêt de l'application..."  
 sudo supervisorctl stop mywebapp
 
 # 2. Restaurer la base de données
-echo "Restauration de la base de données..."
+echo "Restauration de la base de données..."  
 DB_BACKUP="$BACKUP_DIR/db_${DATE}.sql.gz"
 
 if [ ! -f "$DB_BACKUP" ]; then
@@ -1376,7 +1376,7 @@ if [ ! -f "$DB_BACKUP" ]; then
 fi
 
 # Supprimer la base existante et la recréer
-sudo -u postgres psql -c "DROP DATABASE IF EXISTS $DB_NAME;"
+sudo -u postgres psql -c "DROP DATABASE IF EXISTS $DB_NAME;"  
 sudo -u postgres psql -c "CREATE DATABASE $DB_NAME OWNER $DB_USER;"
 
 # Restaurer depuis la sauvegarde
@@ -1390,7 +1390,7 @@ else
 fi
 
 # 3. Restaurer les fichiers
-echo "Restauration des fichiers..."
+echo "Restauration des fichiers..."  
 FILES_BACKUP="$BACKUP_DIR/files_${DATE}.tar.gz"
 
 if [ ! -f "$FILES_BACKUP" ]; then
@@ -1407,7 +1407,7 @@ sudo tar -xzf "$FILES_BACKUP" -C $(dirname $APP_DIR)
 echo "✓ Fichiers restaurés"
 
 # 4. Restaurer la configuration
-echo "Restauration de la configuration..."
+echo "Restauration de la configuration..."  
 CONFIG_BACKUP="$BACKUP_DIR/config_${DATE}.tar.gz"
 
 if [ -f "$CONFIG_BACKUP" ]; then
@@ -1416,19 +1416,19 @@ if [ -f "$CONFIG_BACKUP" ]; then
 fi
 
 # 5. Ajuster les permissions
-echo "Ajustement des permissions..."
-sudo chown -R mywebapp:mywebapp $APP_DIR
+echo "Ajustement des permissions..."  
+sudo chown -R mywebapp:mywebapp $APP_DIR  
 sudo chmod +x $APP_DIR/mywebapp
 
 # 6. Redémarrer l'application
-echo "Redémarrage de l'application..."
+echo "Redémarrage de l'application..."  
 sudo supervisorctl start mywebapp
 
 # 7. Vérifier le statut
-sleep 2
+sleep 2  
 sudo supervisorctl status mywebapp
 
-echo ""
+echo ""  
 echo "=== Restauration terminée ==="
 ```
 
@@ -1443,8 +1443,8 @@ echo "=== Restauration terminée ==="
 
 set -e
 
-APP_NAME="mywebapp"
-APP_DIR="/opt/mywebapp"
+APP_NAME="mywebapp"  
+APP_DIR="/opt/mywebapp"  
 NEW_VERSION=$1
 
 if [ -z "$NEW_VERSION" ]; then
@@ -1456,8 +1456,8 @@ fi
 echo "=== Déploiement de $APP_NAME v$NEW_VERSION ==="
 
 # 1. Télécharger la nouvelle version
-echo "Téléchargement de la nouvelle version..."
-cd /tmp
+echo "Téléchargement de la nouvelle version..."  
+cd /tmp  
 wget "https://releases.example.com/mywebapp_${NEW_VERSION}.tar.gz"
 
 # 2. Créer une sauvegarde
@@ -1465,12 +1465,12 @@ echo "Création d'une sauvegarde..."
 /opt/mywebapp/scripts/backup.sh
 
 # 3. Extraire la nouvelle version dans un répertoire temporaire
-echo "Extraction de la nouvelle version..."
-mkdir -p /tmp/mywebapp_new
+echo "Extraction de la nouvelle version..."  
+mkdir -p /tmp/mywebapp_new  
 tar -xzf "mywebapp_${NEW_VERSION}.tar.gz" -C /tmp/mywebapp_new
 
 # 4. Tester la nouvelle version (compilation, sanity check)
-echo "Validation de la nouvelle version..."
+echo "Validation de la nouvelle version..."  
 if [ ! -x "/tmp/mywebapp_new/mywebapp" ]; then
     echo "✗ Exécutable non trouvé ou non exécutable"
     exit 1
@@ -1489,19 +1489,19 @@ sudo mv /tmp/mywebapp_new $APP_DIR
 sudo cp ${APP_DIR}.old/config/* $APP_DIR/config/ 2>/dev/null || true
 
 # Ajuster les permissions
-sudo chown -R mywebapp:mywebapp $APP_DIR
+sudo chown -R mywebapp:mywebapp $APP_DIR  
 sudo chmod +x $APP_DIR/mywebapp
 
 # 6. Redémarrer l'application
-echo "Redémarrage de l'application..."
+echo "Redémarrage de l'application..."  
 sudo supervisorctl restart mywebapp
 
 # 7. Attendre que l'application démarre
-echo "Vérification du démarrage..."
+echo "Vérification du démarrage..."  
 sleep 3
 
 # 8. Health check
-HEALTH_CHECK_URL="http://localhost:8080/health"
+HEALTH_CHECK_URL="http://localhost:8080/health"  
 HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" $HEALTH_CHECK_URL)
 
 if [ "$HEALTH_STATUS" = "200" ]; then
@@ -1527,8 +1527,8 @@ else
     exit 1
 fi
 
-echo ""
-echo "=== Déploiement terminé avec succès ==="
+echo ""  
+echo "=== Déploiement terminé avec succès ==="  
 echo "Version: $NEW_VERSION"
 ```
 
@@ -1540,8 +1540,8 @@ echo "Version: $NEW_VERSION"
 #!/bin/bash
 
 # Configuration
-BLUE_PORT=8080
-GREEN_PORT=8081
+BLUE_PORT=8080  
+GREEN_PORT=8081  
 NGINX_UPSTREAM="mywebapp_backend"
 
 # Déterminer quel environnement est actuellement actif
@@ -1557,7 +1557,7 @@ else
     INACTIVE_PORT=$BLUE_PORT
 fi
 
-echo "Environnement actif: $ACTIVE (port $CURRENT_PORT)"
+echo "Environnement actif: $ACTIVE (port $CURRENT_PORT)"  
 echo "Déploiement sur: $INACTIVE (port $INACTIVE_PORT)"
 
 # 1. Déployer sur l'environnement inactif
@@ -1565,11 +1565,11 @@ echo "Déploiement de la nouvelle version..."
 # [Logique de déploiement]
 
 # 2. Démarrer l'environnement inactif
-echo "Démarrage de l'environnement $INACTIVE..."
+echo "Démarrage de l'environnement $INACTIVE..."  
 sudo supervisorctl start mywebapp_$INACTIVE
 
 # 3. Health check
-sleep 5
+sleep 5  
 HEALTH=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:$INACTIVE_PORT/health")
 
 if [ "$HEALTH" != "200" ]; then
@@ -1579,13 +1579,13 @@ if [ "$HEALTH" != "200" ]; then
 fi
 
 # 4. Basculer Nginx vers le nouvel environnement
-echo "Bascule du trafic vers $INACTIVE..."
-sudo sed -i "s/server 127.0.0.1:$CURRENT_PORT;/server 127.0.0.1:$INACTIVE_PORT;/" /etc/nginx/sites-available/mywebapp
+echo "Bascule du trafic vers $INACTIVE..."  
+sudo sed -i "s/server 127.0.0.1:$CURRENT_PORT;/server 127.0.0.1:$INACTIVE_PORT;/" /etc/nginx/sites-available/mywebapp  
 sudo nginx -t && sudo nginx -s reload
 
 # 5. Arrêter l'ancien environnement
-sleep 10  # Laisser le temps aux connexions de se terminer
-echo "Arrêt de l'environnement $ACTIVE..."
+sleep 10  # Laisser le temps aux connexions de se terminer  
+echo "Arrêt de l'environnement $ACTIVE..."  
 sudo supervisorctl stop mywebapp_$ACTIVE
 
 echo "✓ Déploiement blue-green terminé"
@@ -1623,7 +1623,7 @@ echo "✓ Déploiement blue-green terminé"
 echo "=== Hardening du serveur ==="
 
 # 1. Mettre à jour le système
-sudo apt-get update
+sudo apt-get update  
 sudo apt-get upgrade -y
 
 # 2. Installer Fail2ban
@@ -1632,8 +1632,8 @@ sudo apt-get install -y fail2ban
 # Configuration Fail2ban
 sudo tee /etc/fail2ban/jail.local > /dev/null <<EOF
 [DEFAULT]
-bantime = 3600
-findtime = 600
+bantime = 3600  
+findtime = 600  
 maxretry = 5
 
 [sshd]
@@ -1643,24 +1643,24 @@ enabled = true
 enabled = true
 
 [nginx-noscript]
-enabled = true
+enabled = true  
 EOF
 
-sudo systemctl enable fail2ban
+sudo systemctl enable fail2ban  
 sudo systemctl restart fail2ban
 
 # 3. Désactiver l'accès root SSH
-sudo sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
-sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+sudo sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config  
+sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config  
 sudo systemctl restart sshd
 
 # 4. Configurer les mises à jour automatiques
-sudo apt-get install -y unattended-upgrades
+sudo apt-get install -y unattended-upgrades  
 sudo dpkg-reconfigure -plow unattended-upgrades
 
 # 5. Installer et configurer AppArmor
-sudo apt-get install -y apparmor apparmor-utils
-sudo systemctl enable apparmor
+sudo apt-get install -y apparmor apparmor-utils  
+sudo systemctl enable apparmor  
 sudo systemctl start apparmor
 
 echo "✓ Hardening terminé"
@@ -1689,13 +1689,13 @@ foreach ($Service in $ServicesToDisable) {
 }
 
 # 4. Configurer les stratégies de mot de passe
-net accounts /minpwlen:12
-net accounts /maxpwage:90
-net accounts /minpwage:1
+net accounts /minpwlen:12  
+net accounts /maxpwage:90  
+net accounts /minpwage:1  
 net accounts /uniquepw:5
 
 # 5. Activer l'audit
-auditpol /set /category:"Logon/Logoff" /success:enable /failure:enable
+auditpol /set /category:"Logon/Logoff" /success:enable /failure:enable  
 auditpol /set /category:"Object Access" /success:enable /failure:enable
 
 # 6. Activer les mises à jour automatiques
@@ -1713,7 +1713,7 @@ Write-Host "✓ Hardening terminé"
 
 ```bash
 # Linux - Vérifier les logs
-sudo tail -f /var/log/mywebapp/app.log
+sudo tail -f /var/log/mywebapp/app.log  
 sudo supervisorctl tail -f mywebapp
 
 # Vérifier les permissions
@@ -1723,7 +1723,7 @@ ls -la /opt/mywebapp/mywebapp
 ldd /opt/mywebapp/mywebapp
 
 # Tester manuellement
-cd /opt/mywebapp
+cd /opt/mywebapp  
 sudo -u mywebapp ./mywebapp
 
 # Vérifier si le port est déjà utilisé
@@ -1812,17 +1812,17 @@ sudo netstat -tlnp | grep nginx
 
 ```bash
 # Monitorer les ressources système
-top
-htop
-vmstat 1
+top  
+htop  
+vmstat 1  
 iostat -x 1
 
 # Vérifier l'utilisation disque
-df -h
+df -h  
 du -sh /opt/mywebapp/*
 
 # Analyser les connexions
-ss -s
+ss -s  
 netstat -an | grep ESTABLISHED | wc -l
 
 # Vérifier les logs pour les erreurs
@@ -1831,7 +1831,7 @@ sudo grep -i error /var/log/mywebapp/app.log | tail -20
 
 ```powershell
 # Windows - Monitorer les ressources
-Get-Counter '\Processor(_Total)\% Processor Time'
+Get-Counter '\Processor(_Total)\% Processor Time'  
 Get-Counter '\Memory\Available MBytes'
 
 # Vérifier l'utilisation disque
@@ -1854,7 +1854,7 @@ Get-NetTCPConnection | Where-Object State -eq Established | Measure-Object
 // Vérifier les fuites mémoire dans le code
 // Ajouter du monitoring mémoire
 
-procedure MonitorMemory;
+procedure MonitorMemory;  
 var
   HeapStatus: TFPCHeapStatus;
 begin
@@ -1892,7 +1892,7 @@ sudo apt-get install -y \
 sudo strace -p $(pgrep mywebapp)
 
 # Profiler avec perf
-sudo perf record -p $(pgrep mywebapp) -g -- sleep 30
+sudo perf record -p $(pgrep mywebapp) -g -- sleep 30  
 sudo perf report
 
 # Analyser les connexions réseau
@@ -2177,7 +2177,7 @@ wget https://releases.example.com/mywebapp_latest.tar.gz
 sudo bash install.sh
 
 # 3. Configurer la base de données
-sudo -u postgres createdb mywebapp_prod
+sudo -u postgres createdb mywebapp_prod  
 sudo -u postgres createuser mywebapp
 
 # 4. Configurer l'application

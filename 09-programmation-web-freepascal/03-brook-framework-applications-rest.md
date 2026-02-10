@@ -82,14 +82,14 @@ sudo apt install -y git  # Ubuntu
 
 ```bash
 # Créer un répertoire pour les bibliothèques
-mkdir -p ~/fpclibs
+mkdir -p ~/fpclibs  
 cd ~/fpclibs
 
 # Cloner Brook Framework
 git clone https://github.com/risoflora/brookframework.git
 
 # Se positionner sur la version stable
-cd brookframework
+cd brookframework  
 git checkout v5.8.0  # Remplacer par la dernière version stable
 ```
 
@@ -106,7 +106,7 @@ export BROOK_PATH="$HOME/fpclibs/brookframework/Source"
 **Compiler les exemples pour tester** :
 
 ```bash
-cd ~/fpclibs/brookframework/Examples/Simple
+cd ~/fpclibs/brookframework/Examples/Simple  
 fpc -Fu../../Source simple.lpr
 ./simple
 # Tester : http://localhost:8080
@@ -210,20 +210,20 @@ uses
   BrookHTTPResponse;
 
 // Page d'accueil
-procedure HandleHome(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure HandleHome(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 begin
   AResponse.Send('<h1>Bienvenue sur l''API Brook</h1>' +
                  '<p>Essayez /api/hello</p>');
 end;
 
 // Route API
-procedure HandleHello(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure HandleHello(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 begin
   AResponse.Send('{"message": "Hello from API!"}', 'application/json');
 end;
 
 // Route avec paramètre
-procedure HandleGreet(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure HandleGreet(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   Name: string;
 begin
@@ -251,8 +251,8 @@ end.
 **Tester les routes** :
 
 ```bash
-curl http://localhost:8080/
-curl http://localhost:8080/api/hello
+curl http://localhost:8080/  
+curl http://localhost:8080/api/hello  
 curl http://localhost:8080/api/greet/Alice
 ```
 
@@ -265,7 +265,7 @@ curl http://localhost:8080/api/greet/Alice
 BrookHTTPRouter.Route('/users', @HandleUsers);
 
 // Méthode spécifique
-BrookHTTPRouter.Route('/users', @HandleUsersGET).Method('GET');
+BrookHTTPRouter.Route('/users', @HandleUsersGET).Method('GET');  
 BrookHTTPRouter.Route('/users', @HandleUsersPOST).Method('POST');
 ```
 
@@ -276,7 +276,7 @@ BrookHTTPRouter.Route('/users', @HandleUsersPOST).Method('POST');
 BrookHTTPRouter.Route('/users/:id', @HandleUser);
 
 // Accès au paramètre
-procedure HandleUser(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure HandleUser(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   UserID: string;
 begin
@@ -294,7 +294,7 @@ BrookHTTPRouter.Route('/posts/:id/comments/:comment_id', @HandleComment);
 // Capturer tout après /files/
 BrookHTTPRouter.Route('/files/*path', @HandleFiles);
 
-procedure HandleFiles(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure HandleFiles(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   FilePath: string;
 begin
@@ -333,7 +333,7 @@ Brook facilite grandement le travail avec JSON.
 ### Envoyer du JSON
 
 ```pascal
-procedure HandleUserJSON(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure HandleUserJSON(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   JSONStr: string;
 begin
@@ -348,7 +348,7 @@ end;
 uses
   fpjson, jsonparser;
 
-procedure HandleUser(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure HandleUser(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   JSONObj: TJSONObject;
 begin
@@ -369,7 +369,7 @@ end;
 ### Tableau JSON
 
 ```pascal
-procedure HandleUsers(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure HandleUsers(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   JSONArray: TJSONArray;
   User: TJSONObject;
@@ -398,7 +398,7 @@ end;
 ### Parser le JSON reçu
 
 ```pascal
-procedure HandleCreateUser(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure HandleCreateUser(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   JSONData: TJSONData;
   JSONObj: TJSONObject;
@@ -476,7 +476,7 @@ var
   NextID: Integer = 1;
 
 // Fonctions helper
-function FindUserByID(ID: Integer): Integer;
+function FindUserByID(ID: Integer): Integer;  
 var
   i: Integer;
 begin
@@ -486,7 +486,7 @@ begin
       Exit(i);
 end;
 
-function UserToJSON(const User: TUser): TJSONObject;
+function UserToJSON(const User: TUser): TJSONObject;  
 begin
   Result := TJSONObject.Create;
   Result.Add('id', User.ID);
@@ -496,7 +496,7 @@ begin
 end;
 
 // GET /api/users - Liste tous les utilisateurs
-procedure GetUsers(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure GetUsers(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   JSONArray: TJSONArray;
   i: Integer;
@@ -513,7 +513,7 @@ begin
 end;
 
 // GET /api/users/:id - Détails d'un utilisateur
-procedure GetUser(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure GetUser(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   UserID, Index: Integer;
   JSONObj: TJSONObject;
@@ -536,7 +536,7 @@ begin
 end;
 
 // POST /api/users - Créer un utilisateur
-procedure CreateUser(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure CreateUser(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   JSONData: TJSONData;
   JSONObj: TJSONObject;
@@ -590,7 +590,7 @@ begin
 end;
 
 // PUT /api/users/:id - Modifier un utilisateur
-procedure UpdateUser(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure UpdateUser(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   UserID, Index: Integer;
   JSONData: TJSONData;
@@ -645,7 +645,7 @@ begin
 end;
 
 // DELETE /api/users/:id - Supprimer un utilisateur
-procedure DeleteUser(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure DeleteUser(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   UserID, Index, i: Integer;
 begin
@@ -737,7 +737,7 @@ Les middlewares sont des fonctions qui s'exécutent avant ou après les gestionn
 ### Middleware de logging
 
 ```pascal
-procedure LoggingMiddleware(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure LoggingMiddleware(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 begin
   WriteLn(Format('[%s] %s %s', [
     FormatDateTime('yyyy-mm-dd hh:nn:ss', Now),
@@ -753,7 +753,7 @@ BrookHTTPRouter.Use(@LoggingMiddleware);
 ### Middleware CORS
 
 ```pascal
-procedure CORSMiddleware(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure CORSMiddleware(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 begin
   AResponse.Headers['Access-Control-Allow-Origin'] := '*';
   AResponse.Headers['Access-Control-Allow-Methods'] := 'GET, POST, PUT, DELETE, OPTIONS';
@@ -774,7 +774,7 @@ BrookHTTPRouter.Use(@CORSMiddleware);
 ### Middleware d'authentification
 
 ```pascal
-procedure AuthMiddleware(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure AuthMiddleware(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   Token: string;
 begin
@@ -822,7 +822,7 @@ var
   DBConnection: TSQLConnection;
   DBTransaction: TSQLTransaction;
 
-procedure InitDatabase;
+procedure InitDatabase;  
 begin
   // MySQL
   DBConnection := TMySQL57Connection.Create(nil);
@@ -850,7 +850,7 @@ end;
 ### GET avec base de données
 
 ```pascal
-procedure GetUsersFromDB(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure GetUsersFromDB(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   Query: TSQLQuery;
   JSONArray: TJSONArray;
@@ -891,7 +891,7 @@ end;
 ### POST avec base de données
 
 ```pascal
-procedure CreateUserInDB(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure CreateUserInDB(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   JSONData: TJSONData;
   JSONObj: TJSONObject;
@@ -963,7 +963,7 @@ end;
 ### PUT avec base de données
 
 ```pascal
-procedure UpdateUserInDB(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure UpdateUserInDB(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   JSONData: TJSONData;
   JSONObj: TJSONObject;
@@ -1052,7 +1052,7 @@ end;
 ### DELETE avec base de données
 
 ```pascal
-procedure DeleteUserFromDB(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure DeleteUserFromDB(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   Query: TSQLQuery;
   UserID: Integer;
@@ -1110,7 +1110,7 @@ end;
 ### Pagination
 
 ```pascal
-procedure GetUsersPaginated(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure GetUsersPaginated(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   Query: TSQLQuery;
   JSONArray: TJSONArray;
@@ -1204,7 +1204,7 @@ curl http://localhost:8080/api/users?page=2&limit=20
 ### Recherche et filtres
 
 ```pascal
-procedure SearchUsers(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure SearchUsers(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   Query: TSQLQuery;
   JSONArray: TJSONArray;
@@ -1339,7 +1339,7 @@ type
     class function ValidateJSON(const JSONStr: string; out ErrorMsg: string): Boolean;
   end;
 
-class function TValidator.ValidateEmail(const Email: string): Boolean;
+class function TValidator.ValidateEmail(const Email: string): Boolean;  
 var
   AtPos: Integer;
 begin
@@ -1351,12 +1351,12 @@ begin
     Result := Pos('.', Email, AtPos) > AtPos;
 end;
 
-class function TValidator.ValidateRequired(const Value: string): Boolean;
+class function TValidator.ValidateRequired(const Value: string): Boolean;  
 begin
   Result := Trim(Value) <> '';
 end;
 
-class function TValidator.ValidateLength(const Value: string; MinLen, MaxLen: Integer): Boolean;
+class function TValidator.ValidateLength(const Value: string; MinLen, MaxLen: Integer): Boolean;  
 var
   Len: Integer;
 begin
@@ -1364,7 +1364,7 @@ begin
   Result := (Len >= MinLen) and (Len <= MaxLen);
 end;
 
-class function TValidator.ValidateJSON(const JSONStr: string; out ErrorMsg: string): Boolean;
+class function TValidator.ValidateJSON(const JSONStr: string; out ErrorMsg: string): Boolean;  
 var
   JSONData: TJSONData;
 begin
@@ -1388,7 +1388,7 @@ end;
 ### Utilisation dans les routes
 
 ```pascal
-procedure CreateUserValidated(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure CreateUserValidated(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   JSONData: TJSONData;
   JSONObj: TJSONObject;
@@ -1460,19 +1460,19 @@ end;
 
 ```ini
 [server]
-port=8080
+port=8080  
 host=0.0.0.0
 
 [database]
-host=localhost
-name=myapp
-user=root
-password=secret
+host=localhost  
+name=myapp  
+user=root  
+password=secret  
 port=3306
 
 [app]
-environment=development
-debug=true
+environment=development  
+debug=true  
 log_level=info
 ```
 
@@ -1502,20 +1502,20 @@ type
     procedure Load;
   end;
 
-constructor TAppConfig.Create(const FileName: string);
+constructor TAppConfig.Create(const FileName: string);  
 begin
   inherited Create;
   FIni := TIniFile.Create(FileName);
   Load;
 end;
 
-destructor TAppConfig.Destroy;
+destructor TAppConfig.Destroy;  
 begin
   FIni.Free;
   inherited;
 end;
 
-procedure TAppConfig.Load;
+procedure TAppConfig.Load;  
 begin
   // Server
   ServerPort := FIni.ReadInteger('server', 'port', 8080);
@@ -1574,29 +1574,29 @@ fpc -O3 -MObjFPC -Scghi -XX -CX api.lpr
 
 ```ini
 [Unit]
-Description=API REST Brook Framework
+Description=API REST Brook Framework  
 After=network.target mysql.service
 
 [Service]
-Type=simple
-User=www-data
-Group=www-data
-WorkingDirectory=/var/www/myapi
-ExecStart=/var/www/myapi/api
-Restart=always
+Type=simple  
+User=www-data  
+Group=www-data  
+WorkingDirectory=/var/www/myapi  
+ExecStart=/var/www/myapi/api  
+Restart=always  
 RestartSec=5
 
 # Variables d'environnement
-Environment="APP_ENV=production"
+Environment="APP_ENV=production"  
 Environment="APP_CONFIG=/var/www/myapi/config.ini"
 
 # Limites
-LimitNOFILE=65536
+LimitNOFILE=65536  
 MemoryLimit=512M
 
 # Logs
-StandardOutput=journal
-StandardError=journal
+StandardOutput=journal  
+StandardError=journal  
 SyslogIdentifier=myapi
 
 [Install]
@@ -1606,9 +1606,9 @@ WantedBy=multi-user.target
 **Activer et démarrer** :
 
 ```bash
-sudo systemctl daemon-reload
-sudo systemctl enable myapi
-sudo systemctl start myapi
+sudo systemctl daemon-reload  
+sudo systemctl enable myapi  
+sudo systemctl start myapi  
 sudo systemctl status myapi
 
 # Logs
@@ -1684,8 +1684,8 @@ server {
 **Activer** :
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/myapi /etc/nginx/sites-enabled/
-sudo nginx -t
+sudo ln -s /etc/nginx/sites-available/myapi /etc/nginx/sites-enabled/  
+sudo nginx -t  
 sudo systemctl reload nginx
 ```
 
@@ -1702,7 +1702,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Copier les sources
-WORKDIR /app
+WORKDIR /app  
 COPY . .
 
 # Compiler
@@ -1755,7 +1755,7 @@ volumes:
 **Utilisation** :
 
 ```bash
-docker-compose up -d
+docker-compose up -d  
 docker-compose logs -f api
 ```
 
@@ -1764,7 +1764,7 @@ docker-compose logs -f api
 ### Endpoint de santé
 
 ```pascal
-procedure HandleHealth(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure HandleHealth(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   JSONObj: TJSONObject;
   DBConnected: Boolean;
@@ -1803,7 +1803,7 @@ BrookHTTPRouter.Route('/health', @HandleHealth);
 type
   TLogLevel = (llDebug, llInfo, llWarning, llError);
 
-procedure Log(Level: TLogLevel; const Msg: string);
+procedure Log(Level: TLogLevel; const Msg: string);  
 const
   LevelStr: array[TLogLevel] of string = ('DEBUG', 'INFO', 'WARN', 'ERROR');
 var
@@ -1833,7 +1833,7 @@ begin
 end;
 
 // Utilisation
-Log(llInfo, 'Application démarrée');
+Log(llInfo, 'Application démarrée');  
 Log(llError, 'Erreur de connexion BDD: ' + E.Message);
 ```
 
@@ -1875,8 +1875,8 @@ API_URL="http://localhost:8080/api"
 echo "=== Tests API REST ==="
 
 # Test 1: Health check
-echo -n "Health check... "
-HEALTH=$(curl -s $API_URL/../health | jq -r '.status')
+echo -n "Health check... "  
+HEALTH=$(curl -s $API_URL/../health | jq -r '.status')  
 if [ "$HEALTH" = "ok" ]; then
     echo "✓ OK"
 else
@@ -1885,11 +1885,11 @@ else
 fi
 
 # Test 2: Créer un utilisateur
-echo -n "Create user... "
+echo -n "Create user... "  
 RESPONSE=$(curl -s -X POST $API_URL/users \
     -H "Content-Type: application/json" \
     -d '{"name":"Test User","email":"test@example.com"}')
-USER_ID=$(echo $RESPONSE | jq -r '.id')
+USER_ID=$(echo $RESPONSE | jq -r '.id')  
 if [ "$USER_ID" != "null" ] && [ "$USER_ID" != "" ]; then
     echo "✓ OK (ID: $USER_ID)"
 else
@@ -1898,8 +1898,8 @@ else
 fi
 
 # Test 3: Récupérer l'utilisateur
-echo -n "Get user... "
-NAME=$(curl -s $API_URL/users/$USER_ID | jq -r '.name')
+echo -n "Get user... "  
+NAME=$(curl -s $API_URL/users/$USER_ID | jq -r '.name')  
 if [ "$NAME" = "Test User" ]; then
     echo "✓ OK"
 else
@@ -1908,11 +1908,11 @@ else
 fi
 
 # Test 4: Modifier l'utilisateur
-echo -n "Update user... "
+echo -n "Update user... "  
 curl -s -X PUT $API_URL/users/$USER_ID \
     -H "Content-Type: application/json" \
     -d '{"name":"Updated User","email":"updated@example.com"}' > /dev/null
-NAME=$(curl -s $API_URL/users/$USER_ID | jq -r '.name')
+NAME=$(curl -s $API_URL/users/$USER_ID | jq -r '.name')  
 if [ "$NAME" = "Updated User" ]; then
     echo "✓ OK"
 else
@@ -1921,8 +1921,8 @@ else
 fi
 
 # Test 5: Lister les utilisateurs
-echo -n "List users... "
-COUNT=$(curl -s $API_URL/users | jq '. | length')
+echo -n "List users... "  
+COUNT=$(curl -s $API_URL/users | jq '. | length')  
 if [ "$COUNT" -gt 0 ]; then
     echo "✓ OK ($COUNT users)"
 else
@@ -1931,8 +1931,8 @@ else
 fi
 
 # Test 6: Supprimer l'utilisateur
-echo -n "Delete user... "
-HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE $API_URL/users/$USER_ID)
+echo -n "Delete user... "  
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE $API_URL/users/$USER_ID)  
 if [ "$HTTP_CODE" = "204" ]; then
     echo "✓ OK"
 else
@@ -1941,8 +1941,8 @@ else
 fi
 
 # Test 7: Vérifier la suppression
-echo -n "Verify deletion... "
-HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" $API_URL/users/$USER_ID)
+echo -n "Verify deletion... "  
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" $API_URL/users/$USER_ID)  
 if [ "$HTTP_CODE" = "404" ]; then
     echo "✓ OK"
 else
@@ -1950,7 +1950,7 @@ else
     exit 1
 fi
 
-echo ""
+echo ""  
 echo "✓ Tous les tests sont passés avec succès !"
 ```
 
@@ -2086,13 +2086,13 @@ uses
   AppConfig,
   DatabaseConnection;
 
-procedure SetupMiddlewares;
+procedure SetupMiddlewares;  
 begin
   BrookHTTPRouter.Use(@CORSMiddleware.Handle);
   BrookHTTPRouter.Use(@LoggingMiddleware.Handle);
 end;
 
-procedure SetupRoutes;
+procedure SetupRoutes;  
 begin
   // Routes publiques
   BrookHTTPRouter.Route('/health', @HandleHealth);
@@ -2114,7 +2114,7 @@ begin
   );
 end;
 
-procedure HandleHealth(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure HandleHealth(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   JSONStr: string;
 begin
@@ -2190,7 +2190,7 @@ uses
   SysUtils, fpjson, jsonparser,
   UserModel, DatabaseConnection;
 
-class procedure TUserController.List(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+class procedure TUserController.List(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   Users: TUserArray;
   JSONArray: TJSONArray;
@@ -2216,7 +2216,7 @@ begin
   end;
 end;
 
-class procedure TUserController.Get(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+class procedure TUserController.Get(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   UserID: Integer;
   User: TUser;
@@ -2250,7 +2250,7 @@ begin
   end;
 end;
 
-class procedure TUserController.Create(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+class procedure TUserController.Create(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   JSONData: TJSONData;
   User: TUser;
@@ -2335,7 +2335,7 @@ uses
 
 { TUser }
 
-function TUser.ToJSON: TJSONObject;
+function TUser.ToJSON: TJSONObject;  
 begin
   Result := TJSONObject.Create;
   Result.Add('id', ID);
@@ -2345,14 +2345,14 @@ begin
   Result.Add('created_at', FormatDateTime('yyyy-mm-dd"T"hh:nn:ss', CreatedAt));
 end;
 
-procedure TUser.FromJSON(JSONObj: TJSONObject);
+procedure TUser.FromJSON(JSONObj: TJSONObject);  
 begin
   Name := JSONObj.Get('name', '');
   Email := JSONObj.Get('email', '');
   Active := JSONObj.Get('active', True);
 end;
 
-function TUser.Validate: Boolean;
+function TUser.Validate: Boolean;  
 begin
   Result := (Trim(Name) <> '') and
             (Trim(Email) <> '') and
@@ -2361,7 +2361,7 @@ end;
 
 { TUserModel }
 
-class function TUserModel.GetAll: TUserArray;
+class function TUserModel.GetAll: TUserArray;  
 var
   Query: TSQLQuery;
   i: Integer;
@@ -2395,7 +2395,7 @@ begin
   end;
 end;
 
-class function TUserModel.GetByID(ID: Integer; out User: TUser): Boolean;
+class function TUserModel.GetByID(ID: Integer; out User: TUser): Boolean;  
 var
   Query: TSQLQuery;
 begin
@@ -2424,7 +2424,7 @@ begin
   end;
 end;
 
-class function TUserModel.Create(const User: TUser): Integer;
+class function TUserModel.Create(const User: TUser): Integer;  
 var
   Query: TSQLQuery;
 begin
@@ -2482,7 +2482,7 @@ implementation
 uses
   SysUtils, base64, md5;
 
-class procedure TAuthMiddleware.Check(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+class procedure TAuthMiddleware.Check(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   AuthHeader, Token: string;
   UserID: Integer;
@@ -2514,7 +2514,7 @@ begin
   ARequest.Values['user_id'] := IntToStr(UserID);
 end;
 
-class function TAuthMiddleware.GenerateToken(UserID: Integer): string;
+class function TAuthMiddleware.GenerateToken(UserID: Integer): string;  
 var
   Payload, Secret, Signature: string;
 begin
@@ -2530,7 +2530,7 @@ begin
   Result := EncodeStringBase64(Payload) + '.' + Signature;
 end;
 
-class function TAuthMiddleware.ValidateToken(const Token: string; out UserID: Integer): Boolean;
+class function TAuthMiddleware.ValidateToken(const Token: string; out UserID: Integer): Boolean;  
 var
   Payload, Signature, ExpectedSignature, Secret: string;
   Timestamp: Int64;
@@ -2578,7 +2578,7 @@ end.
 **controllers/auth.pas** :
 
 ```pascal
-procedure Login(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure Login(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   JSONData: TJSONData;
   JSONObj, ResponseObj: TJSONObject;
@@ -2633,13 +2633,13 @@ end;
 
 ```makefile
 # Variables
-FPC = fpc
-FPC_FLAGS = -O3 -MObjFPC -Scghi -Fu./src
-TARGET = api
+FPC = fpc  
+FPC_FLAGS = -O3 -MObjFPC -Scghi -Fu./src  
+TARGET = api  
 SOURCES = api.lpr
 
 # Répertoires
-BUILD_DIR = build
+BUILD_DIR = build  
 BIN_DIR = bin
 
 .PHONY: all clean run test deploy
@@ -2713,7 +2713,7 @@ API RESTful moderne construite avec Brook Framework et FreePascal.
 
 ```bash
 # Cloner le dépôt
-git clone https://github.com/user/myapi.git
+git clone https://github.com/user/myapi.git  
 cd myapi
 
 # Installer les dépendances
@@ -2824,7 +2824,7 @@ MIT
 var
   ConnectionPool: array[0..9] of TSQLConnection;
 
-procedure InitConnectionPool;
+procedure InitConnectionPool;  
 var
   i: Integer;
 begin
@@ -2836,7 +2836,7 @@ begin
   end;
 end;
 
-function GetFreeConnection: TSQLConnection;
+function GetFreeConnection: TSQLConnection;  
 var
   i: Integer;
 begin
@@ -2861,7 +2861,7 @@ var
 type
   TFetchFunc = function: string;
 
-function GetCachedOrFetch(const Key: string; FetchFunc: TFetchFunc): string;
+function GetCachedOrFetch(const Key: string; FetchFunc: TFetchFunc): string;  
 var
   Entry: TCacheEntry;
 begin
@@ -2890,7 +2890,7 @@ end;
 uses
   zstream;
 
-procedure CompressResponse(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);
+procedure CompressResponse(ARequest: TBrookHTTPRequest; AResponse: TBrookHTTPResponse);  
 var
   Original, Compressed: TMemoryStream;
   Compressor: TCompressionStream;

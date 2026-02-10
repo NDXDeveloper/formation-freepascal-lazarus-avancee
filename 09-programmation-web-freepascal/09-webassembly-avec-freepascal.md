@@ -50,14 +50,14 @@ Pour compiler du FreePascal vers WebAssembly, vous avez besoin de :
 **Windows :**
 
 ```batch
-REM Télécharger la version avec support WASM depuis
+REM Télécharger la version avec support WASM depuis  
 REM https://www.freepascal.org/download.html
 
-REM Ou compiler FPC avec support WASM
-git clone https://gitlab.com/freepascal.org/fpc/source.git fpc
-cd fpc
-make clean
-make all OPT="-dWASM"
+REM Ou compiler FPC avec support WASM  
+git clone https://gitlab.com/freepascal.org/fpc/source.git fpc  
+cd fpc  
+make clean  
+make all OPT="-dWASM"  
 make install
 ```
 
@@ -65,14 +65,14 @@ make install
 
 ```bash
 # Installer les dépendances
-sudo apt-get update
+sudo apt-get update  
 sudo apt-get install build-essential binutils
 
 # Cloner et compiler FPC avec support WASM
-git clone https://gitlab.com/freepascal.org/fpc/source.git fpc
-cd fpc
-make clean
-make all OPT="-dWASM"
+git clone https://gitlab.com/freepascal.org/fpc/source.git fpc  
+cd fpc  
+make clean  
+make all OPT="-dWASM"  
 sudo make install
 
 # Vérifier l'installation
@@ -101,12 +101,12 @@ program HelloWasm;
 {$H+}
 
 // Fonction exportée vers JavaScript
-function Add(A, B: Integer): Integer; cdecl; export; public name 'add';
+function Add(A, B: Integer): Integer; cdecl; export; public name 'add';  
 begin
   Result := A + B;
 end;
 
-function Multiply(A, B: Integer): Integer; cdecl; export; public name 'multiply';
+function Multiply(A, B: Integer): Integer; cdecl; export; public name 'multiply';  
 begin
   Result := A * B;
 end;
@@ -235,34 +235,34 @@ program TypesWasm;
 {$mode objfpc}
 
 // Entiers
-function AddInt32(A, B: LongInt): LongInt; cdecl; export; public name 'addInt32';
+function AddInt32(A, B: LongInt): LongInt; cdecl; export; public name 'addInt32';  
 begin
   Result := A + B;
 end;
 
-function AddInt64(A, B: Int64): Int64; cdecl; export; public name 'addInt64';
+function AddInt64(A, B: Int64): Int64; cdecl; export; public name 'addInt64';  
 begin
   Result := A + B;
 end;
 
 // Flottants
-function AddFloat32(A, B: Single): Single; cdecl; export; public name 'addFloat32';
+function AddFloat32(A, B: Single): Single; cdecl; export; public name 'addFloat32';  
 begin
   Result := A + B;
 end;
 
-function AddFloat64(A, B: Double): Double; cdecl; export; public name 'addFloat64';
+function AddFloat64(A, B: Double): Double; cdecl; export; public name 'addFloat64';  
 begin
   Result := A + B;
 end;
 
 // Booléens (représentés comme i32)
-function LogicalAnd(A, B: Boolean): Boolean; cdecl; export; public name 'logicalAnd';
+function LogicalAnd(A, B: Boolean): Boolean; cdecl; export; public name 'logicalAnd';  
 begin
   Result := A and B;
 end;
 
-begin
+begin  
 end.
 ```
 
@@ -305,12 +305,12 @@ var
   SharedMemory: array[0..4095] of Byte;
 
 // Fonction pour écrire une chaîne dans la mémoire
-function GetMemoryPointer: PByte; cdecl; export; public name 'getMemoryPointer';
+function GetMemoryPointer: PByte; cdecl; export; public name 'getMemoryPointer';  
 begin
   Result := @SharedMemory[0];
 end;
 
-function GetMemorySize: Integer; cdecl; export; public name 'getMemorySize';
+function GetMemorySize: Integer; cdecl; export; public name 'getMemorySize';  
 begin
   Result := SizeOf(SharedMemory);
 end;
@@ -338,7 +338,7 @@ begin
   Result := System.Length(OutputStr);
 end;
 
-begin
+begin  
 end.
 ```
 
@@ -402,7 +402,7 @@ program PrimesWasm;
 {$mode objfpc}
 
 // Vérifier si un nombre est premier
-function IsPrime(N: Integer): Boolean; cdecl; export; public name 'isPrime';
+function IsPrime(N: Integer): Boolean; cdecl; export; public name 'isPrime';  
 var
   i: Integer;
 begin
@@ -427,7 +427,7 @@ begin
 end;
 
 // Compter les nombres premiers jusqu'à N
-function CountPrimes(N: Integer): Integer; cdecl; export; public name 'countPrimes';
+function CountPrimes(N: Integer): Integer; cdecl; export; public name 'countPrimes';  
 var
   i, Count: Integer;
 begin
@@ -441,7 +441,7 @@ begin
 end;
 
 // Calculer la somme des N premiers nombres premiers
-function SumFirstNPrimes(N: Integer): Int64; cdecl; export; public name 'sumFirstNPrimes';
+function SumFirstNPrimes(N: Integer): Int64; cdecl; export; public name 'sumFirstNPrimes';  
 var
   Sum: Int64;
   Count, Current: Integer;
@@ -463,7 +463,7 @@ begin
   Result := Sum;
 end;
 
-begin
+begin  
 end.
 ```
 
@@ -583,13 +583,13 @@ var
   ImageBuffer: array of TRGBA;
 
 // Obtenir un pointeur vers le buffer
-function GetImageBuffer: Pointer; cdecl; export; public name 'getImageBuffer';
+function GetImageBuffer: Pointer; cdecl; export; public name 'getImageBuffer';  
 begin
   Result := @ImageBuffer[0];
 end;
 
 // Allouer le buffer
-procedure AllocateBuffer(PixelCount: Integer); cdecl; export; public name 'allocateBuffer';
+procedure AllocateBuffer(PixelCount: Integer); cdecl; export; public name 'allocateBuffer';  
 begin
   SetLength(ImageBuffer, PixelCount);
 end;
@@ -720,7 +720,7 @@ begin
   ImageBuffer := TempBuffer;
 end;
 
-begin
+begin  
 end.
 ```
 
@@ -898,8 +898,8 @@ uses
   SysUtils;
 
 // Déclarer les fonctions JavaScript que WASM peut appeler
-procedure JSConsoleLog(Message: PChar); external 'env' name 'consoleLog';
-procedure JSAlert(Message: PChar); external 'env' name 'showAlert';
+procedure JSConsoleLog(Message: PChar); external 'env' name 'consoleLog';  
+procedure JSAlert(Message: PChar); external 'env' name 'showAlert';  
 function JSGetTimestamp: Double; external 'env' name 'getTimestamp';
 
 // Fonction qui utilise JavaScript
@@ -924,7 +924,7 @@ begin
   Exit(Result);
 end;
 
-begin
+begin  
 end.
 ```
 
@@ -993,25 +993,25 @@ var
   UsedMemory: Integer;
 
 // Obtenir la taille de la mémoire disponible
-function GetMemorySize: Integer; cdecl; export; public name 'getMemorySize';
+function GetMemorySize: Integer; cdecl; export; public name 'getMemorySize';  
 begin
   Result := BUFFER_SIZE;
 end;
 
 // Obtenir la mémoire utilisée
-function GetUsedMemory: Integer; cdecl; export; public name 'getUsedMemory';
+function GetUsedMemory: Integer; cdecl; export; public name 'getUsedMemory';  
 begin
   Result := UsedMemory;
 end;
 
 // Obtenir un pointeur vers le buffer
-function GetBufferPointer: Pointer; cdecl; export; public name 'getBufferPointer';
+function GetBufferPointer: Pointer; cdecl; export; public name 'getBufferPointer';  
 begin
   Result := @GlobalBuffer[0];
 end;
 
 // Allouer de l'espace dans le buffer
-function AllocateMemory(Size: Integer): Integer; cdecl; export; public name 'allocateMemory';
+function AllocateMemory(Size: Integer): Integer; cdecl; export; public name 'allocateMemory';  
 var
   Offset: Integer;
 begin
@@ -1024,7 +1024,7 @@ begin
 end;
 
 // Libérer toute la mémoire (réinitialisation simple)
-procedure FreeAllMemory; cdecl; export; public name 'freeAllMemory';
+procedure FreeAllMemory; cdecl; export; public name 'freeAllMemory';  
 begin
   UsedMemory := 0;
   FillByte(GlobalBuffer, BUFFER_SIZE, 0);
@@ -1142,7 +1142,7 @@ const
   PAGE_SIZE = 65536; // 64 KB
 
 // Obtenir le nombre de pages actuelles
-function GetCurrentPages: Integer; cdecl; export; public name 'getCurrentPages';
+function GetCurrentPages: Integer; cdecl; export; public name 'getCurrentPages';  
 begin
   Result := CurrentPages;
 end;
@@ -1245,7 +1245,7 @@ begin
   Result := Sum;
 end;
 
-begin
+begin  
 end.
 ```
 
@@ -1291,7 +1291,7 @@ begin
   Result := Sum;
 end;
 
-begin
+begin  
 end.
 ```
 
@@ -1571,7 +1571,7 @@ begin
   end;
 end;
 
-begin
+begin  
 end.
 ```
 
@@ -1740,7 +1740,7 @@ begin
   SharedData^.Status := 2; // Done
 end;
 
-begin
+begin  
 end.
 ```
 
@@ -1997,7 +1997,7 @@ input {
 @echo off
 echo Compilation WebAssembly pour Windows...
 
-REM Compiler le module WASM
+REM Compiler le module WASM  
 fpc -Twasm -O3 -WmMyModule myprogram.pas
 
 echo Compilation terminée.

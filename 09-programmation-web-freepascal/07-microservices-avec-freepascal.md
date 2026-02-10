@@ -86,7 +86,7 @@ type
     function ToJSON: TJSONObject;
   end;
 
-function TUser.ToJSON: TJSONObject;
+function TUser.ToJSON: TJSONObject;  
 begin
   Result := TJSONObject.Create;
   Result.Add('id', ID);
@@ -96,7 +96,7 @@ begin
 end;
 
 { Gestionnaire de routes }
-procedure GetUsers(ARequest: TRequest; AResponse: TResponse);
+procedure GetUsers(ARequest: TRequest; AResponse: TResponse);  
 var
   Users: TJSONArray;
   User: TUser;
@@ -129,7 +129,7 @@ begin
   end;
 end;
 
-procedure GetUserByID(ARequest: TRequest; AResponse: TResponse);
+procedure GetUserByID(ARequest: TRequest; AResponse: TResponse);  
 var
   UserID: Integer;
   User: TUser;
@@ -167,7 +167,7 @@ begin
   end;
 end;
 
-procedure CreateUser(ARequest: TRequest; AResponse: TResponse);
+procedure CreateUser(ARequest: TRequest; AResponse: TResponse);  
 var
   InputJSON: TJSONObject;
   Username, Email: string;
@@ -223,7 +223,7 @@ begin
   end;
 end;
 
-procedure HealthCheck(ARequest: TRequest; AResponse: TResponse);
+procedure HealthCheck(ARequest: TRequest; AResponse: TResponse);  
 var
   HealthJSON: TJSONObject;
 begin
@@ -278,9 +278,9 @@ fpc UserService.pas
 ./UserService
 
 # Tester avec curl
-curl http://localhost:8001/health
-curl http://localhost:8001/api/users
-curl http://localhost:8001/api/users/1
+curl http://localhost:8001/health  
+curl http://localhost:8001/api/users  
+curl http://localhost:8001/api/users/1  
 curl -X POST http://localhost:8001/api/users \
   -H "Content-Type: application/json" \
   -d '{"username":"alice","email":"alice@example.com"}'
@@ -316,14 +316,14 @@ type
 
 implementation
 
-constructor TServiceClient.Create(const BaseURL: string; Timeout: Integer);
+constructor TServiceClient.Create(const BaseURL: string; Timeout: Integer);  
 begin
   inherited Create;
   FBaseURL := BaseURL;
   FTimeout := Timeout;
 end;
 
-function TServiceClient.Get(const Endpoint: string): TJSONData;
+function TServiceClient.Get(const Endpoint: string): TJSONData;  
 var
   HTTPClient: TFPHTTPClient;
   Response: string;
@@ -343,7 +343,7 @@ begin
   end;
 end;
 
-function TServiceClient.Post(const Endpoint: string; const Data: TJSONObject): TJSONData;
+function TServiceClient.Post(const Endpoint: string; const Data: TJSONObject): TJSONData;  
 var
   HTTPClient: TFPHTTPClient;
   Response: string;
@@ -372,7 +372,7 @@ begin
   end;
 end;
 
-function TServiceClient.Put(const Endpoint: string; const Data: TJSONObject): TJSONData;
+function TServiceClient.Put(const Endpoint: string; const Data: TJSONObject): TJSONData;  
 var
   HTTPClient: TFPHTTPClient;
   Response: string;
@@ -401,7 +401,7 @@ begin
   end;
 end;
 
-function TServiceClient.Delete(const Endpoint: string): Boolean;
+function TServiceClient.Delete(const Endpoint: string): Boolean;  
 var
   HTTPClient: TFPHTTPClient;
 begin
@@ -443,7 +443,7 @@ type
     function ToJSON: TJSONObject;
   end;
 
-function TOrder.ToJSON: TJSONObject;
+function TOrder.ToJSON: TJSONObject;  
 begin
   Result := TJSONObject.Create;
   Result.Add('id', ID);
@@ -454,7 +454,7 @@ begin
   Result.Add('created_at', FormatDateTime('yyyy-mm-dd hh:nn:ss', CreatedAt));
 end;
 
-procedure CreateOrder(ARequest: TRequest; AResponse: TResponse);
+procedure CreateOrder(ARequest: TRequest; AResponse: TResponse);  
 var
   InputJSON: TJSONObject;
   UserID: Integer;
@@ -532,7 +532,7 @@ begin
   end;
 end;
 
-procedure HealthCheck(ARequest: TRequest; AResponse: TResponse);
+procedure HealthCheck(ARequest: TRequest; AResponse: TResponse);  
 var
   HealthJSON: TJSONObject;
 begin
@@ -600,14 +600,14 @@ type
     procedure GetUserOrders(ARequest: TRequest; AResponse: TResponse);
   end;
 
-constructor TGateway.Create;
+constructor TGateway.Create;  
 begin
   inherited Create;
   FUserServiceURL := 'http://localhost:8001';
   FOrderServiceURL := 'http://localhost:8002';
 end;
 
-function TGateway.IsAuthenticated(ARequest: TRequest): Boolean;
+function TGateway.IsAuthenticated(ARequest: TRequest): Boolean;  
 var
   AuthHeader: string;
 begin
@@ -616,7 +616,7 @@ begin
   Result := (AuthHeader <> '') and (Copy(AuthHeader, 1, 7) = 'Bearer ');
 end;
 
-procedure TGateway.RouteToUserService(ARequest: TRequest; AResponse: TResponse);
+procedure TGateway.RouteToUserService(ARequest: TRequest; AResponse: TResponse);  
 var
   Client: TServiceClient;
   Response: TJSONData;
@@ -672,7 +672,7 @@ begin
   end;
 end;
 
-procedure TGateway.RouteToOrderService(ARequest: TRequest; AResponse: TResponse);
+procedure TGateway.RouteToOrderService(ARequest: TRequest; AResponse: TResponse);  
 var
   Client: TServiceClient;
   Response: TJSONData;
@@ -722,7 +722,7 @@ begin
   end;
 end;
 
-procedure TGateway.GetUserOrders(ARequest: TRequest; AResponse: TResponse);
+procedure TGateway.GetUserOrders(ARequest: TRequest; AResponse: TResponse);  
 var
   UserClient, OrderClient: TServiceClient;
   UserID: Integer;
@@ -853,26 +853,26 @@ type
 
 implementation
 
-function TServiceInfo.GetURL: string;
+function TServiceInfo.GetURL: string;  
 begin
   Result := Format('http://%s:%d', [Host, Port]);
 end;
 
-constructor TServiceRegistry.Create;
+constructor TServiceRegistry.Create;  
 begin
   inherited Create;
   FServices := TObjectDictionary<string, TObjectList<TServiceInfo>>.Create([doOwnsValues]);
   FLock := TCriticalSection.Create;
 end;
 
-destructor TServiceRegistry.Destroy;
+destructor TServiceRegistry.Destroy;  
 begin
   FServices.Free;
   FLock.Free;
   inherited Destroy;
 end;
 
-procedure TServiceRegistry.RegisterService(const ServiceName, Host: string; Port: Integer);
+procedure TServiceRegistry.RegisterService(const ServiceName, Host: string; Port: Integer);  
 var
   ServiceList: TObjectList<TServiceInfo>;
   ServiceInfo: TServiceInfo;
@@ -902,7 +902,7 @@ begin
   end;
 end;
 
-procedure TServiceRegistry.DeregisterService(const ServiceName, Host: string; Port: Integer);
+procedure TServiceRegistry.DeregisterService(const ServiceName, Host: string; Port: Integer);  
 var
   ServiceList: TObjectList<TServiceInfo>;
   i: Integer;
@@ -927,7 +927,7 @@ begin
   end;
 end;
 
-function TServiceRegistry.GetService(const ServiceName: string): TServiceInfo;
+function TServiceRegistry.GetService(const ServiceName: string): TServiceInfo;  
 var
   ServiceList: TObjectList<TServiceInfo>;
   i, RandomIndex: Integer;
@@ -963,7 +963,7 @@ begin
   end;
 end;
 
-function TServiceRegistry.GetAllInstances(const ServiceName: string): TObjectList<TServiceInfo>;
+function TServiceRegistry.GetAllInstances(const ServiceName: string): TObjectList<TServiceInfo>;  
 begin
   Result := nil;
   FLock.Enter;
@@ -975,7 +975,7 @@ begin
   end;
 end;
 
-procedure TServiceRegistry.UpdateHeartbeat(const ServiceName, Host: string; Port: Integer);
+procedure TServiceRegistry.UpdateHeartbeat(const ServiceName, Host: string; Port: Integer);  
 var
   ServiceList: TObjectList<TServiceInfo>;
   i: Integer;
@@ -999,7 +999,7 @@ begin
   end;
 end;
 
-procedure TServiceRegistry.MarkUnhealthy(const ServiceName, Host: string; Port: Integer);
+procedure TServiceRegistry.MarkUnhealthy(const ServiceName, Host: string; Port: Integer);  
 var
   ServiceList: TObjectList<TServiceInfo>;
   i: Integer;
@@ -1040,7 +1040,7 @@ uses
 var
   Registry: TServiceRegistry;
 
-procedure RegisterServiceEndpoint(ARequest: TRequest; AResponse: TResponse);
+procedure RegisterServiceEndpoint(ARequest: TRequest; AResponse: TResponse);  
 var
   InputJSON: TJSONObject;
   ServiceName, Host: string;
@@ -1080,7 +1080,7 @@ begin
   end;
 end;
 
-procedure DiscoverServiceEndpoint(ARequest: TRequest; AResponse: TResponse);
+procedure DiscoverServiceEndpoint(ARequest: TRequest; AResponse: TResponse);  
 var
   ServiceName: string;
   ServiceInfo: TServiceInfo;
@@ -1114,7 +1114,7 @@ begin
   end;
 end;
 
-procedure HeartbeatEndpoint(ARequest: TRequest; AResponse: TResponse);
+procedure HeartbeatEndpoint(ARequest: TRequest; AResponse: TResponse);  
 var
   InputJSON: TJSONObject;
   ServiceName, Host: string;
@@ -1226,18 +1226,18 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TCircuitBreaker.Destroy;
+destructor TCircuitBreaker.Destroy;  
 begin
   FLock.Free;
   inherited Destroy;
 end;
 
-function TCircuitBreaker.ShouldAttemptReset: Boolean;
+function TCircuitBreaker.ShouldAttemptReset: Boolean;  
 begin
   Result := SecondsBetween(Now, FLastFailureTime) >= FTimeout;
 end;
 
-function TCircuitBreaker.CanExecute: Boolean;
+function TCircuitBreaker.CanExecute: Boolean;  
 begin
   FLock.Enter;
   try
@@ -1265,7 +1265,7 @@ begin
   end;
 end;
 
-procedure TCircuitBreaker.RecordSuccess;
+procedure TCircuitBreaker.RecordSuccess;  
 begin
   FLock.Enter;
   try
@@ -1281,7 +1281,7 @@ begin
   end;
 end;
 
-procedure TCircuitBreaker.RecordFailure;
+procedure TCircuitBreaker.RecordFailure;  
 begin
   FLock.Enter;
   try
@@ -1306,7 +1306,7 @@ begin
   end;
 end;
 
-function TCircuitBreaker.GetState: TCircuitState;
+function TCircuitBreaker.GetState: TCircuitState;  
 begin
   FLock.Enter;
   try
@@ -1358,13 +1358,13 @@ begin
   FCircuitBreaker := TCircuitBreaker.Create(ServiceName, 5, 60);
 end;
 
-destructor TResilientServiceClient.Destroy;
+destructor TResilientServiceClient.Destroy;  
 begin
   FCircuitBreaker.Free;
   inherited Destroy;
 end;
 
-function TResilientServiceClient.Get(const Endpoint: string): TJSONData;
+function TResilientServiceClient.Get(const Endpoint: string): TJSONData;  
 var
   HTTPClient: TFPHTTPClient;
   Response: string;
@@ -1537,14 +1537,14 @@ begin
   Refresh;
 end;
 
-destructor TConfigManager.Destroy;
+destructor TConfigManager.Destroy;  
 begin
   if Assigned(FCache) then
     FCache.Free;
   inherited Destroy;
 end;
 
-function TConfigManager.FetchConfig: TJSONObject;
+function TConfigManager.FetchConfig: TJSONObject;  
 var
   HTTPClient: TFPHTTPClient;
   Response: string;
@@ -1573,7 +1573,7 @@ begin
   end;
 end;
 
-procedure TConfigManager.Refresh;
+procedure TConfigManager.Refresh;  
 var
   NewConfig: TJSONObject;
 begin
@@ -1594,7 +1594,7 @@ begin
   end;
 end;
 
-function TConfigManager.GetString(const Key, DefaultValue: string): string;
+function TConfigManager.GetString(const Key, DefaultValue: string): string;  
 begin
   Refresh;
 
@@ -1604,7 +1604,7 @@ begin
     Result := DefaultValue;
 end;
 
-function TConfigManager.GetInteger(const Key: string; DefaultValue: Integer): Integer;
+function TConfigManager.GetInteger(const Key: string; DefaultValue: Integer): Integer;  
 begin
   Refresh;
 
@@ -1614,7 +1614,7 @@ begin
     Result := DefaultValue;
 end;
 
-function TConfigManager.GetBoolean(const Key: string; DefaultValue: Boolean): Boolean;
+function TConfigManager.GetBoolean(const Key: string; DefaultValue: Boolean): Boolean;  
 begin
   Refresh;
 
@@ -1640,7 +1640,7 @@ uses
 var
   Config: TConfigManager;
 
-procedure HandleRequest(ARequest: TRequest; AResponse: TResponse);
+procedure HandleRequest(ARequest: TRequest; AResponse: TResponse);  
 var
   MaxConnections: Integer;
   EnableLogging: Boolean;
@@ -1734,7 +1734,7 @@ type
 
 implementation
 
-function TLogEntry.ToJSON: TJSONObject;
+function TLogEntry.ToJSON: TJSONObject;  
 const
   LevelNames: array[TLogLevel] of string = ('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL');
 begin
@@ -1762,7 +1762,7 @@ begin
   // (implémentation simplifiée - en production, utiliser un vrai thread)
 end;
 
-destructor TDistributedLogger.Destroy;
+destructor TDistributedLogger.Destroy;  
 begin
   FRunning := False;
   FlushLogs;
@@ -1770,7 +1770,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TDistributedLogger.FlushLogs;
+procedure TDistributedLogger.FlushLogs;  
 var
   HTTPClient: TFPHTTPClient;
   LogList: TList;
@@ -1842,27 +1842,27 @@ begin
   end;
 end;
 
-procedure TDistributedLogger.Debug(const Message: string; const TraceID: string);
+procedure TDistributedLogger.Debug(const Message: string; const TraceID: string);  
 begin
   Log(llDebug, Message, TraceID);
 end;
 
-procedure TDistributedLogger.Info(const Message: string; const TraceID: string);
+procedure TDistributedLogger.Info(const Message: string; const TraceID: string);  
 begin
   Log(llInfo, Message, TraceID);
 end;
 
-procedure TDistributedLogger.Warning(const Message: string; const TraceID: string);
+procedure TDistributedLogger.Warning(const Message: string; const TraceID: string);  
 begin
   Log(llWarning, Message, TraceID);
 end;
 
-procedure TDistributedLogger.Error(const Message: string; const TraceID: string);
+procedure TDistributedLogger.Error(const Message: string; const TraceID: string);  
 begin
   Log(llError, Message, TraceID);
 end;
 
-procedure TDistributedLogger.Critical(const Message: string; const TraceID: string);
+procedure TDistributedLogger.Critical(const Message: string; const TraceID: string);  
 begin
   Log(llCritical, Message, TraceID);
 end;
@@ -1919,12 +1919,12 @@ type
     function GetDuration: Int64; // En millisecondes
   end;
 
-function GenerateTraceID: string;
+function GenerateTraceID: string;  
 function GenerateSpanID: string;
 
 implementation
 
-function GenerateTraceID: string;
+function GenerateTraceID: string;  
 var
   GUID: TGUID;
 begin
@@ -1936,12 +1936,12 @@ begin
   Result := LowerCase(Result);
 end;
 
-function GenerateSpanID: string;
+function GenerateSpanID: string;  
 begin
   Result := IntToHex(Random(MaxInt), 16);
 end;
 
-constructor TTraceContext.Create(const ServiceName: string);
+constructor TTraceContext.Create(const ServiceName: string);  
 begin
   inherited Create;
   FServiceName := ServiceName;
@@ -1960,12 +1960,12 @@ begin
   FSpanID := GenerateSpanID;
 end;
 
-function TTraceContext.GenerateSpanID: string;
+function TTraceContext.GenerateSpanID: string;  
 begin
   Result := IntToHex(Random(MaxInt), 16);
 end;
 
-constructor TSpan.Create(const Context: TTraceContext; const OperationName: string);
+constructor TSpan.Create(const Context: TTraceContext; const OperationName: string);  
 begin
   inherited Create;
   FTraceID := Context.TraceID;
@@ -1977,13 +1977,13 @@ begin
   FTags := TStringList.Create;
 end;
 
-destructor TSpan.Destroy;
+destructor TSpan.Destroy;  
 begin
   FTags.Free;
   inherited Destroy;
 end;
 
-procedure TSpan.Finish;
+procedure TSpan.Finish;  
 begin
   FEndTime := Now;
 
@@ -1992,12 +1992,12 @@ begin
                 [FServiceName, FOperationName, GetDuration, FTraceID, FSpanID]));
 end;
 
-procedure TSpan.AddTag(const Key, Value: string);
+procedure TSpan.AddTag(const Key, Value: string);  
 begin
   FTags.Add(Format('%s=%s', [Key, Value]));
 end;
 
-function TSpan.GetDuration: Int64;
+function TSpan.GetDuration: Int64;  
 begin
   if FEndTime = 0 then
     Result := MilliSecondsBetween(Now, FStartTime)
@@ -2019,7 +2019,7 @@ uses
   SysUtils, fphttpapp, httpdefs, httproute, fpjson,
   DistributedTracing, ServiceClient;
 
-procedure HandleTracedRequest(ARequest: TRequest; AResponse: TResponse);
+procedure HandleTracedRequest(ARequest: TRequest; AResponse: TResponse);  
 var
   TraceID, ParentSpanID: string;
   Context: TTraceContext;
@@ -2101,7 +2101,7 @@ RUN powershell -Command \
     Start-Process -FilePath "fpc-setup.exe" -ArgumentList "/VERYSILENT" -Wait
 
 # Copier le code source
-COPY . /app
+COPY . /app  
 WORKDIR /app
 
 # Compiler le service
@@ -2256,23 +2256,23 @@ volumes:
 echo "Compilation de tous les microservices..."
 
 # User Service
-cd user-service
-fpc -O3 UserService.pas
+cd user-service  
+fpc -O3 UserService.pas  
 cd ..
 
 # Order Service
-cd order-service
-fpc -O3 OrderService.pas
+cd order-service  
+fpc -O3 OrderService.pas  
 cd ..
 
 # API Gateway
-cd gateway
-fpc -O3 APIGateway.pas
+cd gateway  
+fpc -O3 APIGateway.pas  
 cd ..
 
 # Registry
-cd registry
-fpc -O3 RegistryService.pas
+cd registry  
+fpc -O3 RegistryService.pas  
 cd ..
 
 echo "Compilation terminée!"
@@ -2284,20 +2284,20 @@ echo "Compilation terminée!"
 @echo off
 echo Compilation de tous les microservices...
 
-cd user-service
-fpc -O3 UserService.pas
+cd user-service  
+fpc -O3 UserService.pas  
 cd ..
 
-cd order-service
-fpc -O3 OrderService.pas
+cd order-service  
+fpc -O3 OrderService.pas  
 cd ..
 
-cd gateway
-fpc -O3 APIGateway.pas
+cd gateway  
+fpc -O3 APIGateway.pas  
 cd ..
 
-cd registry
-fpc -O3 RegistryService.pas
+cd registry  
+fpc -O3 RegistryService.pas  
 cd ..
 
 echo Compilation terminée!
@@ -2352,7 +2352,7 @@ type
 
 implementation
 
-constructor TMetric.Create(const Name, Help: string; MetricType: TMetricType);
+constructor TMetric.Create(const Name, Help: string; MetricType: TMetricType);  
 begin
   inherited Create;
   FName := Name;
@@ -2362,13 +2362,13 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TMetric.Destroy;
+destructor TMetric.Destroy;  
 begin
   FLock.Free;
   inherited Destroy;
 end;
 
-procedure TMetric.Inc(Value: Double);
+procedure TMetric.Inc(Value: Double);  
 begin
   FLock.Enter;
   try
@@ -2378,7 +2378,7 @@ begin
   end;
 end;
 
-procedure TMetric.Dec(Value: Double);
+procedure TMetric.Dec(Value: Double);  
 begin
   FLock.Enter;
   try
@@ -2388,7 +2388,7 @@ begin
   end;
 end;
 
-procedure TMetric.SetValue(Value: Double);
+procedure TMetric.SetValue(Value: Double);  
 begin
   FLock.Enter;
   try
@@ -2398,7 +2398,7 @@ begin
   end;
 end;
 
-function TMetric.GetValue: Double;
+function TMetric.GetValue: Double;  
 begin
   FLock.Enter;
   try
@@ -2408,7 +2408,7 @@ begin
   end;
 end;
 
-function TMetric.FormatMetric: string;
+function TMetric.FormatMetric: string;  
 const
   TypeNames: array[TMetricType] of string = ('counter', 'gauge', 'histogram');
 begin
@@ -2418,7 +2418,7 @@ begin
                   [FName, FHelp, FName, TypeNames[FMetricType], FName, GetValue]);
 end;
 
-constructor TMetricsRegistry.Create;
+constructor TMetricsRegistry.Create;  
 begin
   inherited Create;
   FMetrics := TStringList.Create;
@@ -2427,14 +2427,14 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TMetricsRegistry.Destroy;
+destructor TMetricsRegistry.Destroy;  
 begin
   FMetrics.Free;
   FLock.Free;
   inherited Destroy;
 end;
 
-function TMetricsRegistry.RegisterCounter(const Name, Help: string): TMetric;
+function TMetricsRegistry.RegisterCounter(const Name, Help: string): TMetric;  
 begin
   FLock.Enter;
   try
@@ -2445,7 +2445,7 @@ begin
   end;
 end;
 
-function TMetricsRegistry.RegisterGauge(const Name, Help: string): TMetric;
+function TMetricsRegistry.RegisterGauge(const Name, Help: string): TMetric;  
 begin
   FLock.Enter;
   try
@@ -2456,7 +2456,7 @@ begin
   end;
 end;
 
-function TMetricsRegistry.GetMetric(const Name: string): TMetric;
+function TMetricsRegistry.GetMetric(const Name: string): TMetric;  
 var
   Index: Integer;
 begin
@@ -2470,7 +2470,7 @@ begin
   end;
 end;
 
-function TMetricsRegistry.ExportMetrics: string;
+function TMetricsRegistry.ExportMetrics: string;  
 var
   i: Integer;
   Metric: TMetric;
@@ -2507,14 +2507,14 @@ var
   ActiveRequests: TMetric;
   ErrorCounter: TMetric;
 
-procedure MetricsEndpoint(ARequest: TRequest; AResponse: TResponse);
+procedure MetricsEndpoint(ARequest: TRequest; AResponse: TResponse);  
 begin
   AResponse.ContentType := 'text/plain; version=0.0.4';
   AResponse.Content := Metrics.ExportMetrics;
   AResponse.SendResponse;
 end;
 
-procedure HandleRequest(ARequest: TRequest; AResponse: TResponse);
+procedure HandleRequest(ARequest: TRequest; AResponse: TResponse);  
 var
   StartTime: TDateTime;
   Duration: Int64;
@@ -2621,7 +2621,7 @@ type
 
 implementation
 
-constructor TMessage.Create(const ATopic, APayload: string);
+constructor TMessage.Create(const ATopic, APayload: string);  
 begin
   inherited Create;
   ID := GenerateRandomString(16);
@@ -2630,7 +2630,7 @@ begin
   Timestamp := Now;
 end;
 
-constructor TMessageBroker.Create;
+constructor TMessageBroker.Create;  
 begin
   inherited Create;
   FTopics := TObjectDictionary<string, TObjectList<TSubscriber>>.Create([doOwnsValues]);
@@ -2638,7 +2638,7 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TMessageBroker.Destroy;
+destructor TMessageBroker.Destroy;  
 begin
   FTopics.Free;
   FMessageQueue.Free;
@@ -2646,7 +2646,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TMessageBroker.Publish(const Topic, Payload: string);
+procedure TMessageBroker.Publish(const Topic, Payload: string);  
 var
   Message: TMessage;
   MessageList: TList;
@@ -2690,7 +2690,7 @@ begin
   end;
 end;
 
-procedure TMessageBroker.Unsubscribe(const SubscriberID: string);
+procedure TMessageBroker.Unsubscribe(const SubscriberID: string);  
 var
   TopicPair: TPair<string, TObjectList<TSubscriber>>;
   i: Integer;
@@ -2714,7 +2714,7 @@ begin
   end;
 end;
 
-procedure TMessageBroker.ProcessMessages;
+procedure TMessageBroker.ProcessMessages;  
 var
   MessageList: TList;
   Message: TMessage;
@@ -2785,7 +2785,7 @@ type
     procedure OnOrderCreated(const Message: TMessage);
   end;
 
-constructor TOrderService.Create(ABroker: TMessageBroker);
+constructor TOrderService.Create(ABroker: TMessageBroker);  
 begin
   inherited Create;
   FBroker := ABroker;
@@ -2794,7 +2794,7 @@ begin
   FBroker.Subscribe('payment.processed', @OnPaymentProcessed);
 end;
 
-procedure TOrderService.CreateOrder(const UserID: Integer; const Product: string);
+procedure TOrderService.CreateOrder(const UserID: Integer; const Product: string);  
 var
   OrderData: string;
 begin
@@ -2806,12 +2806,12 @@ begin
   FBroker.Publish('order.created', OrderData);
 end;
 
-procedure TOrderService.OnPaymentProcessed(const Message: TMessage);
+procedure TOrderService.OnPaymentProcessed(const Message: TMessage);  
 begin
   WriteLn(Format('[OrderService] Paiement traité: %s', [Message.Payload]));
 end;
 
-constructor TPaymentService.Create(ABroker: TMessageBroker);
+constructor TPaymentService.Create(ABroker: TMessageBroker);  
 begin
   inherited Create;
   FBroker := ABroker;
@@ -2820,7 +2820,7 @@ begin
   FBroker.Subscribe('order.created', @OnOrderCreated);
 end;
 
-procedure TPaymentService.OnOrderCreated(const Message: TMessage);
+procedure TPaymentService.OnOrderCreated(const Message: TMessage);  
 begin
   WriteLn(Format('[PaymentService] Traitement paiement pour: %s', [Message.Payload]));
 
@@ -2881,7 +2881,7 @@ end.
 **3. Tolérance aux pannes**
 ```pascal
 // Implémenter des mécanismes de fallback
-function GetUserWithFallback(UserID: Integer): TUser;
+function GetUserWithFallback(UserID: Integer): TUser;  
 begin
   try
     Result := UserClient.GetUser(UserID);
@@ -2909,7 +2909,7 @@ end;
 uses
   Windows;
 
-procedure ConfigureWindowsService;
+procedure ConfigureWindowsService;  
 begin
   // Configuration spécifique Windows
   SetProcessWorkingSetSize(GetCurrentProcess, $FFFFFFFF, $FFFFFFFF);
@@ -2923,7 +2923,7 @@ end;
 uses
   BaseUnix;
 
-procedure ConfigureLinuxService;
+procedure ConfigureLinuxService;  
 begin
   // Configuration spécifique Linux
   FpSetrlimit(RLIMIT_NOFILE, 65536); // Augmenter limite fichiers ouverts

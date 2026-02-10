@@ -160,7 +160,7 @@ Le serveur web passe des informations via des variables d'environnement standard
 uses
   SysUtils;
 
-function GetCGIVar(const VarName: String): String;
+function GetCGIVar(const VarName: String): String;  
 begin
   Result := GetEnvironmentVariable(VarName);
 end;
@@ -188,7 +188,7 @@ type
     Key, Value: String;
   end;
 
-function ParseQueryString(const QS: String): TStringPairArray;
+function ParseQueryString(const QS: String): TStringPairArray;  
 var
   Pairs: TStringList;
   Pair: String;
@@ -222,7 +222,7 @@ begin
   end;
 end;
 
-function HTTPDecode(const AStr: String): String;
+function HTTPDecode(const AStr: String): String;  
 var
   i: Integer;
   HexStr: String;
@@ -269,7 +269,7 @@ Les données POST arrivent sur l'**entrée standard** (stdin).
 uses
   Classes, SysUtils;
 
-function ReadPOSTData: String;
+function ReadPOSTData: String;  
 var
   ContentLength: Integer;
   Buffer: String;
@@ -314,12 +314,12 @@ program FormCGI;
 uses
   Classes, SysUtils;
 
-function GetCGIVar(const VarName: String): String;
+function GetCGIVar(const VarName: String): String;  
 begin
   Result := GetEnvironmentVariable(VarName);
 end;
 
-function ReadPOSTData: String;
+function ReadPOSTData: String;  
 var
   ContentLength: Integer;
   Buffer: String;
@@ -335,7 +335,7 @@ begin
   end;
 end;
 
-procedure ShowForm;
+procedure ShowForm;  
 begin
   WriteLn('<form method="POST">');
   WriteLn('  <label>Nom: <input type="text" name="name"></label><br>');
@@ -344,7 +344,7 @@ begin
   WriteLn('</form>');
 end;
 
-procedure ProcessForm(const POSTData: String);
+procedure ProcessForm(const POSTData: String);  
 var
   Name, Email: String;
 begin
@@ -391,7 +391,7 @@ end.
 
 **Envoyer un cookie** :
 ```pascal
-procedure SetCookie(const Name, Value: String; MaxAge: Integer = 3600);
+procedure SetCookie(const Name, Value: String; MaxAge: Integer = 3600);  
 begin
   WriteLn('Set-Cookie: ', Name, '=', Value,
           '; Max-Age=', MaxAge, '; Path=/');
@@ -410,7 +410,7 @@ end;
 
 **Lire les cookies** :
 ```pascal
-function GetCookie(const Name: String): String;
+function GetCookie(const Name: String): String;  
 var
   CookieHeader: String;
   Pos1, Pos2: Integer;
@@ -452,7 +452,7 @@ program SimpleFastCGI;
 uses
   fphttpapp, httpdefs;
 
-procedure HandleRequest(ARequest: TRequest; AResponse: TResponse);
+procedure HandleRequest(ARequest: TRequest; AResponse: TResponse);  
 begin
   AResponse.Content :=
     '<html><body>' +
@@ -487,12 +487,12 @@ uses
   fphttpapp, httpdefs, httproute, fpjson;
 
 // Gestionnaires de routes
-procedure ShowHome(ARequest: TRequest; AResponse: TResponse);
+procedure ShowHome(ARequest: TRequest; AResponse: TResponse);  
 begin
   AResponse.Content := '<h1>Page d''accueil</h1>';
 end;
 
-procedure ShowUser(ARequest: TRequest; AResponse: TResponse);
+procedure ShowUser(ARequest: TRequest; AResponse: TResponse);  
 var
   UserID: String;
 begin
@@ -500,7 +500,7 @@ begin
   AResponse.Content := Format('<h1>Utilisateur %s</h1>', [UserID]);
 end;
 
-procedure GetUserJSON(ARequest: TRequest; AResponse: TResponse);
+procedure GetUserJSON(ARequest: TRequest; AResponse: TResponse);  
 var
   JSONObj: TJSONObject;
 begin
@@ -534,7 +534,7 @@ end.
 L'objet `TRequest` fournit toutes les informations :
 
 ```pascal
-procedure AnalyzeRequest(ARequest: TRequest; AResponse: TResponse);
+procedure AnalyzeRequest(ARequest: TRequest; AResponse: TResponse);  
 var
   Info: String;
   i: Integer;
@@ -579,7 +579,7 @@ uses
 var
   SessionFactory: TFPWebSessionFactory;
 
-procedure ConfigureSessions;
+procedure ConfigureSessions;  
 begin
   SessionFactory := TFPWebSessionFactory.Create;
   SessionFactory.SessionCookieName := 'SESSIONID';
@@ -588,7 +588,7 @@ begin
   SetDefaultSessionFactory(SessionFactory);
 end;
 
-procedure HandleUserArea(ARequest: TRequest; AResponse: TResponse);
+procedure HandleUserArea(ARequest: TRequest; AResponse: TResponse);  
 var
   Session: TCustomSession;
   Username: String;
@@ -628,7 +628,7 @@ var
   GlobalCache: TStringList;
   CacheLastUpdate: TDateTime;
 
-procedure InitializeCache;
+procedure InitializeCache;  
 begin
   GlobalCache := TStringList.Create;
   GlobalCache.Add('key1=value1');
@@ -636,7 +636,7 @@ begin
   CacheLastUpdate := Now;
 end;
 
-procedure RefreshCacheIfNeeded;
+procedure RefreshCacheIfNeeded;  
 begin
   // Rafraîchir toutes les 5 minutes
   if (Now - CacheLastUpdate) > (5 / (24 * 60)) then
@@ -648,7 +648,7 @@ begin
   end;
 end;
 
-procedure HandleCachedData(ARequest: TRequest; AResponse: TResponse);
+procedure HandleCachedData(ARequest: TRequest; AResponse: TResponse);  
 var
   i: Integer;
 begin
@@ -677,7 +677,7 @@ var
   DBConnection: TSQLConnection;
   DBTransaction: TSQLTransaction;
 
-procedure InitializeDatabase;
+procedure InitializeDatabase;  
 begin
   DBConnection := TMySQL55Connection.Create(nil);
   DBConnection.HostName := 'localhost';
@@ -692,7 +692,7 @@ begin
   DBConnection.Open; // Une seule fois !
 end;
 
-procedure HandleDBQuery(ARequest: TRequest; AResponse: TResponse);
+procedure HandleDBQuery(ARequest: TRequest; AResponse: TResponse);  
 var
   Query: TSQLQuery;
 begin
@@ -743,7 +743,7 @@ FastCGI peut utiliser deux modes de communication :
 
 #### 1. Socket TCP/IP
 ```pascal
-Application.Port := 9000; // Port d'écoute
+Application.Port := 9000; // Port d'écoute  
 Application.Address := '127.0.0.1'; // Localhost uniquement
 ```
 
@@ -761,7 +761,7 @@ Plus rapide que TCP, mais uniquement local.
 ### Gestion des exceptions
 
 ```pascal
-procedure SafeHandler(ARequest: TRequest; AResponse: TResponse);
+procedure SafeHandler(ARequest: TRequest; AResponse: TResponse);  
 begin
   try
     // Code potentiellement dangereux
@@ -791,7 +791,7 @@ uses
 var
   Logger: TEventLog;
 
-procedure InitLogger;
+procedure InitLogger;  
 begin
   Logger := TEventLog.Create(nil);
   Logger.LogType := ltFile;
@@ -805,7 +805,7 @@ begin
   Logger.Active := True;
 end;
 
-procedure LogRequest(ARequest: TRequest);
+procedure LogRequest(ARequest: TRequest);  
 begin
   Logger.Info(Format('[%s] %s %s from %s', [
     FormatDateTime('yyyy-mm-dd hh:nn:ss', Now),
@@ -815,7 +815,7 @@ begin
   ]));
 end;
 
-procedure LogError(const ErrorMsg: String);
+procedure LogError(const ErrorMsg: String);  
 begin
   Logger.Error(Format('[%s] ERROR: %s', [
     FormatDateTime('yyyy-mm-dd hh:nn:ss', Now),
@@ -862,7 +862,7 @@ Pour tester en mode CGI sans serveur web :
 
 ```bash
 # Linux/macOS
-export REQUEST_METHOD=GET
+export REQUEST_METHOD=GET  
 export QUERY_STRING="name=Alice&age=30"
 ./app.cgi
 
@@ -878,7 +878,7 @@ $env:QUERY_STRING="name=Alice&age=30"
 
 1. **Toujours valider les entrées**
 ```pascal
-function SanitizeInput(const Input: String): String;
+function SanitizeInput(const Input: String): String;  
 begin
   Result := StringReplace(Input, '<', '&lt;', [rfReplaceAll]);
   Result := StringReplace(Result, '>', '&gt;', [rfReplaceAll]);
@@ -891,7 +891,7 @@ end;
 const
   MAX_POST_SIZE = 10 * 1024 * 1024; // 10 MB
 
-function ReadPOSTData: String;
+function ReadPOSTData: String;  
 var
   ContentLength: Integer;
 begin
@@ -906,7 +906,7 @@ end;
 
 3. **Headers de sécurité**
 ```pascal
-procedure SetSecurityHeaders(AResponse: TResponse);
+procedure SetSecurityHeaders(AResponse: TResponse);  
 begin
   AResponse.SetCustomHeader('X-Content-Type-Options', 'nosniff');
   AResponse.SetCustomHeader('X-Frame-Options', 'DENY');

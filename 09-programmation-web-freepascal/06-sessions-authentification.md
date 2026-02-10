@@ -67,7 +67,7 @@ type
 
 implementation
 
-procedure TMyWebModule.InitSession;
+procedure TMyWebModule.InitSession;  
 begin
   // Active les sessions
   CreateSession := True;
@@ -76,7 +76,7 @@ begin
   SessionTimeout := 30;
 end;
 
-procedure TMyWebModule.HandleRequest(ARequest: TRequest; AResponse: TResponse);
+procedure TMyWebModule.HandleRequest(ARequest: TRequest; AResponse: TResponse);  
 var
   SessionObj: TCustomSession;
 begin
@@ -105,7 +105,7 @@ end;
 On peut stocker des valeurs dans la session sous forme de paires clé-valeur :
 
 ```pascal
-procedure TMyWebModule.HandleRequest(ARequest: TRequest; AResponse: TResponse);
+procedure TMyWebModule.HandleRequest(ARequest: TRequest; AResponse: TResponse);  
 var
   SessionObj: TCustomSession;
   VisitCount: Integer;
@@ -157,7 +157,7 @@ uses
 // Avantages : persistantes, simples
 // Inconvénients : performances limitées avec beaucoup d'utilisateurs
 
-procedure TMyWebModule.InitSession;
+procedure TMyWebModule.InitSession;  
 begin
   CreateSession := True;
 
@@ -187,7 +187,7 @@ type
     procedure InitDatabase;
   end;
 
-procedure TMyWebModule.InitDatabase;
+procedure TMyWebModule.InitDatabase;  
 begin
   FConnection := TSQLConnection.Create(nil);
   // Configuration de la connexion...
@@ -215,7 +215,7 @@ CREATE TABLE sessions (
 Un cookie est une petite donnée stockée par le navigateur et renvoyée au serveur à chaque requête. Par défaut, fpWeb utilise un cookie nommé `FPWEBSID` pour stocker le Session ID.
 
 ```pascal
-procedure TMyWebModule.HandleRequest(ARequest: TRequest; AResponse: TResponse);
+procedure TMyWebModule.HandleRequest(ARequest: TRequest; AResponse: TResponse);  
 var
   CookieValue: string;
 begin
@@ -246,7 +246,7 @@ end;
 **Options importantes pour les cookies de session :**
 
 ```pascal
-procedure ConfigureSessionCookie(AResponse: TResponse);
+procedure ConfigureSessionCookie(AResponse: TResponse);  
 begin
   with AResponse.Cookies.FindCookie('FPWEBSID') do
   begin
@@ -330,14 +330,14 @@ type
 
 implementation
 
-function TLoginModule.HashPassword(const Password: string): string;
+function TLoginModule.HashPassword(const Password: string): string;  
 begin
   // Utilise MD5 pour hasher le mot de passe
   // ATTENTION : MD5 est obsolète, utiliser bcrypt ou Argon2 en production !
   Result := MD5Print(MD5String(Password));
 end;
 
-function TLoginModule.VerifyCredentials(const Username, Password: string): Boolean;
+function TLoginModule.VerifyCredentials(const Username, Password: string): Boolean;  
 var
   HashedPassword: string;
 begin
@@ -348,7 +348,7 @@ begin
   Result := (Username = 'admin') and (HashedPassword = HashPassword('secret123'));
 end;
 
-procedure TLoginModule.HandleLoginPage(ARequest: TRequest; AResponse: TResponse);
+procedure TLoginModule.HandleLoginPage(ARequest: TRequest; AResponse: TResponse);  
 var
   HTML: string;
 begin
@@ -363,7 +363,7 @@ begin
   AResponse.SendResponse;
 end;
 
-procedure TLoginModule.HandleLoginPost(ARequest: TRequest; AResponse: TResponse);
+procedure TLoginModule.HandleLoginPost(ARequest: TRequest; AResponse: TResponse);  
 var
   Username, Password: string;
   SessionObj: TCustomSession;
@@ -402,7 +402,7 @@ begin
   end;
 end;
 
-procedure TLoginModule.HandleLogout(ARequest: TRequest; AResponse: TResponse);
+procedure TLoginModule.HandleLogout(ARequest: TRequest; AResponse: TResponse);  
 var
   SessionObj: TCustomSession;
 begin
@@ -428,7 +428,7 @@ end;
 Créer une fonction de vérification pour protéger les pages :
 
 ```pascal
-function IsAuthenticated(ARequest: TRequest): Boolean;
+function IsAuthenticated(ARequest: TRequest): Boolean;  
 var
   SessionObj: TCustomSession;
 begin
@@ -444,7 +444,7 @@ begin
   end;
 end;
 
-procedure HandleProtectedPage(ARequest: TRequest; AResponse: TResponse);
+procedure HandleProtectedPage(ARequest: TRequest; AResponse: TResponse);  
 begin
   if not IsAuthenticated(ARequest) then
   begin
@@ -481,13 +481,13 @@ type
     property SessionTimeout: Integer read FSessionTimeout write FSessionTimeout;
   end;
 
-constructor TAuthManager.Create;
+constructor TAuthManager.Create;  
 begin
   inherited Create;
   FSessionTimeout := 30; // 30 minutes par défaut
 end;
 
-function TAuthManager.Login(ARequest: TRequest; const Username, Password: string): Boolean;
+function TAuthManager.Login(ARequest: TRequest; const Username, Password: string): Boolean;  
 var
   SessionObj: TCustomSession;
 begin
@@ -507,7 +507,7 @@ begin
   end;
 end;
 
-procedure TAuthManager.Logout(ARequest: TRequest);
+procedure TAuthManager.Logout(ARequest: TRequest);  
 var
   SessionObj: TCustomSession;
 begin
@@ -516,7 +516,7 @@ begin
     SessionObj.Terminate;
 end;
 
-function TAuthManager.IsAuthenticated(ARequest: TRequest): Boolean;
+function TAuthManager.IsAuthenticated(ARequest: TRequest): Boolean;  
 var
   SessionObj: TCustomSession;
 begin
@@ -527,7 +527,7 @@ begin
     Result := SessionObj.Variables['authenticated'] = 'true';
 end;
 
-function TAuthManager.GetCurrentUser(ARequest: TRequest): string;
+function TAuthManager.GetCurrentUser(ARequest: TRequest): string;  
 var
   SessionObj: TCustomSession;
 begin
@@ -538,7 +538,7 @@ begin
     Result := SessionObj.Variables['username'];
 end;
 
-function TAuthManager.RequireAuth(ARequest: TRequest; AResponse: TResponse): Boolean;
+function TAuthManager.RequireAuth(ARequest: TRequest; AResponse: TResponse): Boolean;  
 begin
   Result := IsAuthenticated(ARequest);
 
@@ -574,20 +574,20 @@ type
     class function VerifyPassword(const Password, Hash: string): Boolean;
   end;
 
-class function TPasswordManager.HashPassword(const Password: string): string;
+class function TPasswordManager.HashPassword(const Password: string): string;  
 begin
   // Générer un hash bcrypt avec un coût de 12
   Result := BCryptHash(Password, BCryptGenerateSalt(12));
 end;
 
-class function TPasswordManager.VerifyPassword(const Password, Hash: string): Boolean;
+class function TPasswordManager.VerifyPassword(const Password, Hash: string): Boolean;  
 begin
   // Vérifier si le mot de passe correspond au hash
   Result := BCryptVerify(Password, Hash);
 end;
 
 // Utilisation lors de l'inscription
-procedure RegisterUser(const Username, Password: string);
+procedure RegisterUser(const Username, Password: string);  
 var
   HashedPassword: string;
 begin
@@ -599,7 +599,7 @@ begin
 end;
 
 // Utilisation lors de la connexion
-function AuthenticateUser(const Username, Password: string): Boolean;
+function AuthenticateUser(const Username, Password: string): Boolean;  
 var
   StoredHash: string;
 begin
@@ -617,7 +617,7 @@ end;
 uses
   DCPsha256, DCPcrypt2;
 
-function PBKDF2_SHA256(const Password, Salt: string; Iterations: Integer): string;
+function PBKDF2_SHA256(const Password, Salt: string; Iterations: Integer): string;  
 var
   Hash: TDCP_sha256;
   Key: array[0..31] of Byte;
@@ -662,13 +662,13 @@ type
     function HasRole(MinRole: TUserRole): Boolean;
   end;
 
-function TUser.HasRole(MinRole: TUserRole): Boolean;
+function TUser.HasRole(MinRole: TUserRole): Boolean;  
 begin
   Result := FRole >= MinRole;
 end;
 
 // Stockage dans la session
-procedure StoreUserInSession(ARequest: TRequest; User: TUser);
+procedure StoreUserInSession(ARequest: TRequest; User: TUser);  
 var
   SessionObj: TCustomSession;
 begin
@@ -679,7 +679,7 @@ begin
 end;
 
 // Récupération depuis la session
-function GetUserFromSession(ARequest: TRequest): TUser;
+function GetUserFromSession(ARequest: TRequest): TUser;  
 var
   SessionObj: TCustomSession;
 begin
@@ -727,7 +727,7 @@ begin
 end;
 
 // Exemple d'utilisation
-procedure HandleAdminPage(ARequest: TRequest; AResponse: TResponse);
+procedure HandleAdminPage(ARequest: TRequest; AResponse: TResponse);  
 begin
   if not RequireRole(ARequest, AResponse, urAdmin) then
     Exit;
@@ -758,7 +758,7 @@ Une attaque CSRF se produit quand un site malveillant fait exécuter une action 
 uses
   SysUtils, md5;
 
-function GenerateCSRFToken(SessionID: string): string;
+function GenerateCSRFToken(SessionID: string): string;  
 var
   RandomData: string;
 begin
@@ -767,7 +767,7 @@ begin
   Result := MD5Print(MD5String(RandomData));
 end;
 
-procedure AddCSRFToken(ARequest: TRequest);
+procedure AddCSRFToken(ARequest: TRequest);  
 var
   SessionObj: TCustomSession;
   Token: string;
@@ -782,7 +782,7 @@ begin
   end;
 end;
 
-function VerifyCSRFToken(ARequest: TRequest; const SubmittedToken: string): Boolean;
+function VerifyCSRFToken(ARequest: TRequest; const SubmittedToken: string): Boolean;  
 var
   SessionObj: TCustomSession;
   StoredToken: string;
@@ -798,7 +798,7 @@ begin
 end;
 
 // Utilisation dans un formulaire
-procedure HandleFormPage(ARequest: TRequest; AResponse: TResponse);
+procedure HandleFormPage(ARequest: TRequest; AResponse: TResponse);  
 var
   SessionObj: TCustomSession;
   CSRFToken: string;
@@ -817,7 +817,7 @@ begin
 end;
 
 // Vérification lors de la soumission
-procedure HandleFormSubmit(ARequest: TRequest; AResponse: TResponse);
+procedure HandleFormSubmit(ARequest: TRequest; AResponse: TResponse);  
 var
   SubmittedToken: string;
 begin
@@ -849,7 +849,7 @@ type
     Expiry: TDateTime;
   end;
 
-function GenerateRememberMeToken(UserID: Integer): TRememberMeToken;
+function GenerateRememberMeToken(UserID: Integer): TRememberMeToken;  
 begin
   Result.UserID := UserID;
   Result.Selector := GenerateRandomString(16);
@@ -863,7 +863,7 @@ begin
                      Result.Expiry);
 end;
 
-procedure SetRememberMeCookie(AResponse: TResponse; Token: TRememberMeToken);
+procedure SetRememberMeCookie(AResponse: TResponse; Token: TRememberMeToken);  
 var
   CookieValue: string;
 begin
@@ -882,7 +882,7 @@ begin
   end;
 end;
 
-function ValidateRememberMeToken(const CookieValue: string): Integer;
+function ValidateRememberMeToken(const CookieValue: string): Integer;  
 var
   Parts: TStringArray;
   Selector, Validator: string;
@@ -921,7 +921,7 @@ end;
 ### Chemins de stockage des sessions
 
 ```pascal
-function GetSessionStoragePath: string;
+function GetSessionStoragePath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := 'C:\ProgramData\MyApp\sessions\';
@@ -947,7 +947,7 @@ Pour activer HTTPS (recommandé pour l'authentification) :
 
 ```bash
 # Avec Let's Encrypt
-sudo apt-get install certbot python3-certbot-apache
+sudo apt-get install certbot python3-certbot-apache  
 sudo certbot --apache -d mondomaine.com
 
 # Ou avec Nginx
@@ -960,8 +960,8 @@ sudo certbot --nginx -d mondomaine.com
 
 ```bash
 # Créer le répertoire avec les bonnes permissions
-sudo mkdir -p /var/lib/myapp/sessions
-sudo chown www-data:www-data /var/lib/myapp/sessions
+sudo mkdir -p /var/lib/myapp/sessions  
+sudo chown www-data:www-data /var/lib/myapp/sessions  
 sudo chmod 700 /var/lib/myapp/sessions
 ```
 
@@ -976,7 +976,7 @@ sudo chmod 700 /var/lib/myapp/sessions
 uses
   BaseUnix;
 
-function CheckSessionDirectoryPermissions(const DirPath: string): Boolean;
+function CheckSessionDirectoryPermissions(const DirPath: string): Boolean;  
 var
   StatInfo: TStat;
 begin
@@ -991,7 +991,7 @@ begin
 end;
 {$ENDIF}
 
-procedure InitializeSessionDirectory;
+procedure InitializeSessionDirectory;  
 var
   SessionPath: string;
 begin
@@ -1082,13 +1082,13 @@ type
     function HandleCallback(const Code, State: string): TJSONObject;
   end;
 
-constructor TOAuthManager.Create(const Config: TOAuthConfig);
+constructor TOAuthManager.Create(const Config: TOAuthConfig);  
 begin
   inherited Create;
   FConfig := Config;
 end;
 
-function TOAuthManager.GetAuthorizationURL(const State: string): string;
+function TOAuthManager.GetAuthorizationURL(const State: string): string;  
 begin
   // Construire l'URL d'autorisation
   Result := FConfig.AuthURL +
@@ -1099,7 +1099,7 @@ begin
             '&state=' + State;
 end;
 
-function TOAuthManager.ExchangeCodeForToken(const Code: string): string;
+function TOAuthManager.ExchangeCodeForToken(const Code: string): string;  
 var
   HTTPClient: TFPHTTPClient;
   Response: string;
@@ -1134,7 +1134,7 @@ begin
   end;
 end;
 
-function TOAuthManager.GetUserInfo(const AccessToken: string): TJSONObject;
+function TOAuthManager.GetUserInfo(const AccessToken: string): TJSONObject;  
 var
   HTTPClient: TFPHTTPClient;
   Response: string;
@@ -1149,7 +1149,7 @@ begin
   end;
 end;
 
-function TOAuthManager.HandleCallback(const Code, State: string): TJSONObject;
+function TOAuthManager.HandleCallback(const Code, State: string): TJSONObject;  
 var
   AccessToken: string;
 begin
@@ -1166,7 +1166,7 @@ begin
 end;
 
 // Configuration pour Google
-function CreateGoogleOAuthConfig: TOAuthConfig;
+function CreateGoogleOAuthConfig: TOAuthConfig;  
 begin
   Result.ClientID := 'VOTRE_CLIENT_ID.apps.googleusercontent.com';
   Result.ClientSecret := 'VOTRE_CLIENT_SECRET';
@@ -1177,7 +1177,7 @@ begin
 end;
 
 // Gestionnaire de connexion OAuth
-procedure HandleOAuthLogin(ARequest: TRequest; AResponse: TResponse);
+procedure HandleOAuthLogin(ARequest: TRequest; AResponse: TResponse);  
 var
   OAuthManager: TOAuthManager;
   State: string;
@@ -1204,7 +1204,7 @@ begin
 end;
 
 // Gestionnaire du callback OAuth
-procedure HandleOAuthCallback(ARequest: TRequest; AResponse: TResponse);
+procedure HandleOAuthCallback(ARequest: TRequest; AResponse: TResponse);  
 var
   OAuthManager: TOAuthManager;
   Code, State, StoredState: string;
@@ -1302,13 +1302,13 @@ type
     function IsTokenValid(const Token: string): Boolean;
   end;
 
-constructor TJWTManager.Create(const SecretKey: string);
+constructor TJWTManager.Create(const SecretKey: string);  
 begin
   inherited Create;
   FSecretKey := SecretKey;
 end;
 
-function TJWTManager.Base64URLEncode(const Data: string): string;
+function TJWTManager.Base64URLEncode(const Data: string): string;  
 begin
   Result := EncodeStringBase64(Data);
   // Remplacer les caractères pour le format URL-safe
@@ -1317,7 +1317,7 @@ begin
   Result := StringReplace(Result, '=', '', [rfReplaceAll]);
 end;
 
-function TJWTManager.Base64URLDecode(const Data: string): string;
+function TJWTManager.Base64URLDecode(const Data: string): string;  
 var
   Temp: string;
   Padding: Integer;
@@ -1335,7 +1335,7 @@ begin
   Result := DecodeStringBase64(Temp);
 end;
 
-function TJWTManager.HMACSHA256(const Data, Key: string): string;
+function TJWTManager.HMACSHA256(const Data, Key: string): string;  
 var
   Hash: TSHA256Digest;
   i: Integer;
@@ -1349,7 +1349,7 @@ begin
     Result := Result + IntToHex(Hash[i], 2);
 end;
 
-function TJWTManager.CreateToken(const Payload: TJSONObject): string;
+function TJWTManager.CreateToken(const Payload: TJSONObject): string;  
 var
   Header: TJSONObject;
   HeaderStr, PayloadStr, Signature: string;
@@ -1376,7 +1376,7 @@ begin
   end;
 end;
 
-function TJWTManager.VerifyToken(const Token: string): TJSONObject;
+function TJWTManager.VerifyToken(const Token: string): TJSONObject;  
 var
   HeaderStr, PayloadStr, SignatureStr: string;
   DataToVerify, ExpectedSignature: string;
@@ -1409,7 +1409,7 @@ begin
   Result := GetJSON(PayloadJSON) as TJSONObject;
 end;
 
-function TJWTManager.IsTokenValid(const Token: string): Boolean;
+function TJWTManager.IsTokenValid(const Token: string): Boolean;  
 var
   Payload: TJSONObject;
   ExpirationTime: Int64;
@@ -1433,7 +1433,7 @@ begin
 end;
 
 // Utilisation pour l'authentification API
-procedure HandleAPILogin(ARequest: TRequest; AResponse: TResponse);
+procedure HandleAPILogin(ARequest: TRequest; AResponse: TResponse);  
 var
   JWTManager: TJWTManager;
   Payload: TJSONObject;
@@ -1480,7 +1480,7 @@ begin
 end;
 
 // Middleware pour vérifier le token JWT
-function RequireJWT(ARequest: TRequest; AResponse: TResponse): TJSONObject;
+function RequireJWT(ARequest: TRequest; AResponse: TResponse): TJSONObject;  
 var
   JWTManager: TJWTManager;
   AuthHeader, Token: string;
@@ -1518,7 +1518,7 @@ begin
 end;
 
 // Utilisation dans une API protégée
-procedure HandleProtectedAPI(ARequest: TRequest; AResponse: TResponse);
+procedure HandleProtectedAPI(ARequest: TRequest; AResponse: TResponse);  
 var
   UserPayload: TJSONObject;
   Username: string;
@@ -1563,7 +1563,7 @@ type
     function GetQRCodeURL(const Secret, AccountName, Issuer: string): string;
   end;
 
-function TTOTPManager.GenerateSecret: string;
+function TTOTPManager.GenerateSecret: string;  
 const
   Base32Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
 var
@@ -1575,17 +1575,17 @@ begin
     Result := Result + Base32Chars[Random(32) + 1];
 end;
 
-function TTOTPManager.GetCurrentTimestamp: Int64;
+function TTOTPManager.GetCurrentTimestamp: Int64;  
 begin
   Result := DateTimeToUnix(Now) div 30; // Fenêtre de 30 secondes
 end;
 
-function TTOTPManager.CreateSecret: string;
+function TTOTPManager.CreateSecret: string;  
 begin
   Result := GenerateSecret;
 end;
 
-function TTOTPManager.GetTOTPCode(const Secret: string; TimeOffset: Integer = 0): string;
+function TTOTPManager.GetTOTPCode(const Secret: string; TimeOffset: Integer = 0): string;  
 var
   TimeCounter: Int64;
   Hash: string;
@@ -1607,7 +1607,7 @@ begin
   Result := Format('%.6d', [Code]);
 end;
 
-function TTOTPManager.VerifyTOTPCode(const Secret, Code: string): Boolean;
+function TTOTPManager.VerifyTOTPCode(const Secret, Code: string): Boolean;  
 var
   ExpectedCode: string;
   i: Integer;
@@ -1626,7 +1626,7 @@ begin
   end;
 end;
 
-function TTOTPManager.GetQRCodeURL(const Secret, AccountName, Issuer: string): string;
+function TTOTPManager.GetQRCodeURL(const Secret, AccountName, Issuer: string): string;  
 var
   OTPAuthURL: string;
 begin
@@ -1641,7 +1641,7 @@ begin
 end;
 
 // Activation du 2FA pour un utilisateur
-procedure HandleEnable2FA(ARequest: TRequest; AResponse: TResponse);
+procedure HandleEnable2FA(ARequest: TRequest; AResponse: TResponse);  
 var
   TOTPManager: TTOTPManager;
   Secret, QRCodeURL: string;
@@ -1690,7 +1690,7 @@ begin
 end;
 
 // Vérification et activation du 2FA
-procedure HandleVerify2FA(ARequest: TRequest; AResponse: TResponse);
+procedure HandleVerify2FA(ARequest: TRequest; AResponse: TResponse);  
 var
   TOTPManager: TTOTPManager;
   Code, Secret, Username: string;
@@ -1736,7 +1736,7 @@ begin
 end;
 
 // Login avec 2FA
-procedure HandleLoginWith2FA(ARequest: TRequest; AResponse: TResponse);
+procedure HandleLoginWith2FA(ARequest: TRequest; AResponse: TResponse);  
 var
   Username, Password, Code: string;
   TOTPSecret: string;
@@ -1832,7 +1832,7 @@ type
     function GetBlockTimeRemaining(const IPAddress: string): Integer; // En secondes
   end;
 
-constructor TRateLimiter.Create(MaxAttempts: Integer; TimeWindowMinutes: Integer);
+constructor TRateLimiter.Create(MaxAttempts: Integer; TimeWindowMinutes: Integer);  
 begin
   inherited Create;
   FAttempts := TObjectList.Create(True);
@@ -1840,13 +1840,13 @@ begin
   FTimeWindow := TimeWindowMinutes;
 end;
 
-destructor TRateLimiter.Destroy;
+destructor TRateLimiter.Destroy;  
 begin
   FAttempts.Free;
   inherited Destroy;
 end;
 
-procedure TRateLimiter.CleanOldAttempts;
+procedure TRateLimiter.CleanOldAttempts;  
 var
   i: Integer;
   Attempt: TLoginAttempt;
@@ -1862,7 +1862,7 @@ begin
   end;
 end;
 
-function TRateLimiter.CountRecentAttempts(const IPAddress: string): Integer;
+function TRateLimiter.CountRecentAttempts(const IPAddress: string): Integer;  
 var
   i: Integer;
   Attempt: TLoginAttempt;
@@ -1879,7 +1879,7 @@ begin
   end;
 end;
 
-procedure TRateLimiter.RecordAttempt(const IPAddress, Username: string);
+procedure TRateLimiter.RecordAttempt(const IPAddress, Username: string);  
 var
   Attempt: TLoginAttempt;
 begin
@@ -1893,13 +1893,13 @@ begin
   FAttempts.Add(Attempt);
 end;
 
-function TRateLimiter.IsBlocked(const IPAddress: string): Boolean;
+function TRateLimiter.IsBlocked(const IPAddress: string): Boolean;  
 begin
   CleanOldAttempts;
   Result := CountRecentAttempts(IPAddress) >= FMaxAttempts;
 end;
 
-function TRateLimiter.GetBlockTimeRemaining(const IPAddress: string): Integer;
+function TRateLimiter.GetBlockTimeRemaining(const IPAddress: string): Integer;  
 var
   i: Integer;
   Attempt: TLoginAttempt;
@@ -1934,7 +1934,7 @@ finalization
   GlobalRateLimiter.Free;
 
 // Utilisation dans la procédure de login
-procedure HandleLoginWithRateLimit(ARequest: TRequest; AResponse: TResponse);
+procedure HandleLoginWithRateLimit(ARequest: TRequest; AResponse: TResponse);  
 var
   Username, Password: string;
   ClientIP: string;
@@ -2002,13 +2002,13 @@ type
     procedure RefreshSession(ARequest: TRequest);
   end;
 
-constructor TSessionManager.Create(InactivityTimeoutMinutes: Integer);
+constructor TSessionManager.Create(InactivityTimeoutMinutes: Integer);  
 begin
   inherited Create;
   FInactivityTimeout := InactivityTimeoutMinutes;
 end;
 
-procedure TSessionManager.UpdateLastActivity(ARequest: TRequest);
+procedure TSessionManager.UpdateLastActivity(ARequest: TRequest);  
 var
   SessionObj: TCustomSession;
 begin
@@ -2017,7 +2017,7 @@ begin
     SessionObj.Variables['last_activity'] := DateTimeToStr(Now);
 end;
 
-function TSessionManager.IsSessionExpired(ARequest: TRequest): Boolean;
+function TSessionManager.IsSessionExpired(ARequest: TRequest): Boolean;  
 var
   SessionObj: TCustomSession;
   LastActivity: TDateTime;
@@ -2037,7 +2037,7 @@ begin
   Result := MinutesBetween(Now, LastActivity) > FInactivityTimeout;
 end;
 
-procedure TSessionManager.RefreshSession(ARequest: TRequest);
+procedure TSessionManager.RefreshSession(ARequest: TRequest);  
 var
   SessionObj: TCustomSession;
   OldSessionID: string;
@@ -2054,7 +2054,7 @@ begin
 end;
 
 // Middleware de vérification de session
-function CheckSessionValidity(ARequest: TRequest; AResponse: TResponse): Boolean;
+function CheckSessionValidity(ARequest: TRequest; AResponse: TResponse): Boolean;  
 var
   SessionManager: TSessionManager;
 begin
@@ -2111,7 +2111,7 @@ type
                               Details: string);
   end;
 
-constructor TAuditLogger.Create(const LogFilePath: string);
+constructor TAuditLogger.Create(const LogFilePath: string);  
 begin
   inherited Create;
   FLogFile := LogFilePath;
@@ -2120,7 +2120,7 @@ begin
   ForceDirectories(ExtractFilePath(FLogFile));
 end;
 
-procedure TAuditLogger.WriteLog(const Message: string);
+procedure TAuditLogger.WriteLog(const Message: string);  
 var
   LogFileStream: TFileStream;
   LogLine: string;
@@ -2182,7 +2182,7 @@ finalization
   AuditLogger.Free;
 
 // Utilisation dans les fonctions d'authentification
-procedure HandleLoginWithAudit(ARequest: TRequest; AResponse: TResponse);
+procedure HandleLoginWithAudit(ARequest: TRequest; AResponse: TResponse);  
 var
   Username, Password: string;
   ClientIP: string;
@@ -2217,7 +2217,7 @@ begin
   end;
 end;
 
-procedure HandleLogoutWithAudit(ARequest: TRequest; AResponse: TResponse);
+procedure HandleLogoutWithAudit(ARequest: TRequest; AResponse: TResponse);  
 var
   Username, ClientIP: string;
 begin
@@ -2294,7 +2294,7 @@ type
     function HandleSAMLResponse(const SAMLResponse: string): TJSONObject;
   end;
 
-constructor TSAMLManager.Create(const EntityID, ACSURL, Certificate: string);
+constructor TSAMLManager.Create(const EntityID, ACSURL, Certificate: string);  
 begin
   inherited Create;
   FEntityID := EntityID;
@@ -2302,7 +2302,7 @@ begin
   FCertificate := Certificate;
 end;
 
-function TSAMLManager.CreateAuthRequest: string;
+function TSAMLManager.CreateAuthRequest: string;  
 var
   Doc: TXMLDocument;
   Root, Element: TDOMElement;
@@ -2339,7 +2339,7 @@ begin
   end;
 end;
 
-function TSAMLManager.GetSSORedirectURL(const IdPURL: string): string;
+function TSAMLManager.GetSSORedirectURL(const IdPURL: string): string;  
 var
   AuthRequest: string;
   EncodedRequest: string;
@@ -2354,7 +2354,7 @@ begin
   Result := IdPURL + '?SAMLRequest=' + HTTPEncode(EncodedRequest);
 end;
 
-function TSAMLManager.ValidateAssertion(const SAMLResponse: string): Boolean;
+function TSAMLManager.ValidateAssertion(const SAMLResponse: string): Boolean;  
 begin
   // Implémentation simplifiée
   // En production, vérifier :
@@ -2365,7 +2365,7 @@ begin
   Result := True; // Placeholder
 end;
 
-function TSAMLManager.ExtractUserInfo(const SAMLResponse: string): TJSONObject;
+function TSAMLManager.ExtractUserInfo(const SAMLResponse: string): TJSONObject;  
 var
   Doc: TXMLDocument;
   DecodedResponse: string;
@@ -2394,7 +2394,7 @@ begin
   end;
 end;
 
-function TSAMLManager.HandleSAMLResponse(const SAMLResponse: string): TJSONObject;
+function TSAMLManager.HandleSAMLResponse(const SAMLResponse: string): TJSONObject;  
 begin
   Result := nil;
 
@@ -2407,7 +2407,7 @@ begin
 end;
 
 // Utilisation dans l'application
-procedure HandleSAMLLogin(ARequest: TRequest; AResponse: TResponse);
+procedure HandleSAMLLogin(ARequest: TRequest; AResponse: TResponse);  
 var
   SAMLManager: TSAMLManager;
   RedirectURL: string;
@@ -2430,7 +2430,7 @@ begin
   end;
 end;
 
-procedure HandleSAMLCallback(ARequest: TRequest; AResponse: TResponse);
+procedure HandleSAMLCallback(ARequest: TRequest; AResponse: TResponse);  
 var
   SAMLManager: TSAMLManager;
   SAMLResponse: string;
@@ -2510,7 +2510,7 @@ end;
 ### Exemple de configuration sécurisée complète
 
 ```pascal
-procedure ConfigureSecureSession(ARequest: TRequest; AResponse: TResponse);
+procedure ConfigureSecureSession(ARequest: TRequest; AResponse: TResponse);  
 begin
   // Activer les sessions
   CreateSession := True;
