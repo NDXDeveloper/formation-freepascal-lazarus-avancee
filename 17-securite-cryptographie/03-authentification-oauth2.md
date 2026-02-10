@@ -228,30 +228,37 @@ end;
 
 function ValidateJWT(const Token, Secret: string): Boolean;
 var
-  Parts: TStringArray;
+  Parts: TStringList;
   Header, Payload, Signature, ComputedSignature: string;
   ToSign: string;
 begin
   Result := False;
 
   // Séparer les parties
-  Parts := Token.Split(['.']);
-  if Length(Parts) <> 3 then Exit;
+  Parts := TStringList.Create;
+  try
+    Parts.Delimiter := '.';
+    Parts.StrictDelimiter := True;
+    Parts.DelimitedText := Token;
+    if Parts.Count <> 3 then Exit;
 
-  Header := Parts[0];
-  Payload := Parts[1];
-  Signature := Parts[2];
+    Header := Parts[0];
+    Payload := Parts[1];
+    Signature := Parts[2];
 
   // Vérifier la signature
   ToSign := Header + '.' + Payload;
   ComputedSignature := Base64URLEncode(HMACSHA256(ToSign, Secret));
 
-  if Signature <> ComputedSignature then Exit;
+    if Signature <> ComputedSignature then Exit;
 
-  // Vérifier l'expiration
-  // (parser le payload et vérifier exp > now)
+    // Vérifier l'expiration
+    // (parser le payload et vérifier exp > now)
 
-  Result := True;
+    Result := True;
+  finally
+    Parts.Free;
+  end;
 end;
 ```
 
@@ -747,7 +754,7 @@ begin
   end;
 
   // 3. Valider le redirect_uri
-  if not Client.RedirectURIs.Contains(RedirectURI) then
+  if Client.RedirectURIs.IndexOf(RedirectURI) < 0 then
   begin
     Response.StatusCode := 400;
     Response.Content := 'Invalid redirect_uri';
@@ -790,61 +797,56 @@ begin
   // 1. Extraire les paramètres
   GrantType := Request.Post['grant_type'];
 
-  case GrantType of
-    'authorization_code':
+  if GrantType = 'authorization_code' then
+  begin
+    Code := Request.Post['code'];
+    ClientID := Request.Post['client_id'];
+    ClientSecret := Request.Post['client_secret'];
+
+    // Vérifier le client
+    if not ValidateClient(ClientID, ClientSecret) then
     begin
-      Code := Request.Post['code'];
-      ClientID := Request.Post['client_id'];
-      ClientSecret := Request.Post['client_secret'];
-
-      // Vérifier le client
-      if not ValidateClient(ClientID, ClientSecret) then
-      begin
-        Response.StatusCode := 401;
-        Response.Content := '{"error":"invalid_client"}';
-        Exit;
-      end;
-
-      // Vérifier le code
-      if not ValidateAuthorizationCode(Code, ClientID) then
-      begin
-        Response.StatusCode := 400;
-        Response.Content := '{"error":"invalid_grant"}';
-        Exit;
-      end;
-
-      // Générer les tokens
-      AccessToken := GenerateAccessToken(ClientID, GetUserIDFromCode(Code));
-      RefreshToken := GenerateRefreshToken(ClientID, GetUserIDFromCode(Code));
-
-      // Invalider le code
-      InvalidateAuthorizationCode(Code);
-
-      // Retourner les tokens
-      Response.ContentType := 'application/json';
-      Response.Content := Format(
-        '{"access_token":"%s","token_type":"Bearer","expires_in":3600,"refresh_token":"%s"}',
-        [AccessToken, RefreshToken]
-      );
+      Response.StatusCode := 401;
+      Response.Content := '{"error":"invalid_client"}';
+      Exit;
     end;
 
-    'refresh_token':
-    begin
-      // Gérer le refresh token
-      // ...
-    end;
-
-    'client_credentials':
-    begin
-      // Gérer client credentials
-      // ...
-    end;
-
-    else
+    // Vérifier le code
+    if not ValidateAuthorizationCode(Code, ClientID) then
     begin
       Response.StatusCode := 400;
-      Response.Content := '{"error":"unsupported_grant_type"}';
+      Response.Content := '{"error":"invalid_grant"}';
+      Exit;
     end;
+
+    // Générer les tokens
+    AccessToken := GenerateAccessToken(ClientID, GetUserIDFromCode(Code));
+    RefreshToken := GenerateRefreshToken(ClientID, GetUserIDFromCode(Code));
+
+    // Invalider le code
+    InvalidateAuthorizationCode(Code);
+
+    // Retourner les tokens
+    Response.ContentType := 'application/json';
+    Response.Content := Format(
+      '{"access_token":"%s","token_type":"Bearer","expires_in":3600,"refresh_token":"%s"}',
+      [AccessToken, RefreshToken]
+    );
+  end
+  else if GrantType = 'refresh_token' then
+  begin
+    // Gérer le refresh token
+    // ...
+  end
+  else if GrantType = 'client_credentials' then
+  begin
+    // Gérer client credentials
+    // ...
+  end
+  else
+  begin
+    Response.StatusCode := 400;
+    Response.Content := '{"error":"unsupported_grant_type"}';
   end;
 end;
 ```
@@ -2009,7 +2011,7 @@ begin
       '<button>Se connecter avec GitHub</button></a>' +
       '</body></html>';
   end
-  else if ARequest.URI.StartsWith('/callback') then
+  else if Copy(ARequest.URI, 1, 9) = '/callback' then
   begin
     // Callback OAuth
     FCode := ARequest.QueryFields.Values['code'];

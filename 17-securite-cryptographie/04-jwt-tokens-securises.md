@@ -245,31 +245,38 @@ end;
 ```pascal
 function VerifyJWT(const Token, Secret: string): Boolean;
 var
-  Parts: TStringArray;
+  Parts: TStringList;
   EncodedHeader, EncodedPayload, ReceivedSignature: string;
   ToSign, ComputedSignature: string;
 begin
   Result := False;
 
   // 1. Séparer les parties du JWT
-  Parts := Token.Split(['.']);
-  if Length(Parts) <> 3 then
-    Exit; // Format invalide
+  Parts := TStringList.Create;
+  try
+    Parts.Delimiter := '.';
+    Parts.StrictDelimiter := True;
+    Parts.DelimitedText := Token;
+    if Parts.Count <> 3 then
+      Exit; // Format invalide
 
-  EncodedHeader := Parts[0];
-  EncodedPayload := Parts[1];
-  ReceivedSignature := Parts[2];
+    EncodedHeader := Parts[0];
+    EncodedPayload := Parts[1];
+    ReceivedSignature := Parts[2];
 
-  // 2. Recalculer la signature
-  ToSign := EncodedHeader + '.' + EncodedPayload;
-  ComputedSignature := Base64URLEncode(HMACSHA256(ToSign, Secret));
+    // 2. Recalculer la signature
+    ToSign := EncodedHeader + '.' + EncodedPayload;
+    ComputedSignature := Base64URLEncode(HMACSHA256(ToSign, Secret));
 
-  // 3. Comparer les signatures
-  if ComputedSignature <> ReceivedSignature then
-    Exit; // Signature invalide
+    // 3. Comparer les signatures
+    if ComputedSignature <> ReceivedSignature then
+      Exit; // Signature invalide
 
-  // 4. Vérifier l'expiration
-  Result := VerifyExpiration(EncodedPayload);
+    // 4. Vérifier l'expiration
+    Result := VerifyExpiration(EncodedPayload);
+  finally
+    Parts.Free;
+  end;
 end;
 
 function VerifyExpiration(const EncodedPayload: string): Boolean;
@@ -299,36 +306,43 @@ end;
 ```pascal
 function DecodeJWT(const Token: string; out Payload: TJWTPayload): Boolean;
 var
-  Parts: TStringArray;
+  Parts: TStringList;
   PayloadJSON: string;
   JSON: TJSONData;
   JSONObj: TJSONObject;
 begin
   Result := False;
 
-  Parts := Token.Split(['.']);
-  if Length(Parts) <> 3 then
-    Exit;
-
+  Parts := TStringList.Create;
   try
-    PayloadJSON := Base64URLDecode(Parts[1]);
-    JSON := GetJSON(PayloadJSON);
+    Parts.Delimiter := '.';
+    Parts.StrictDelimiter := True;
+    Parts.DelimitedText := Token;
+    if Parts.Count <> 3 then
+      Exit;
+
     try
-      JSONObj := TJSONObject(JSON);
+      PayloadJSON := Base64URLDecode(Parts[1]);
+      JSON := GetJSON(PayloadJSON);
+      try
+        JSONObj := TJSONObject(JSON);
 
-      Payload.Sub := JSONObj.Get('sub', '');
-      Payload.Name := JSONObj.Get('name', '');
-      Payload.Email := JSONObj.Get('email', '');
-      Payload.Role := JSONObj.Get('role', '');
-      Payload.Iat := JSONObj.Get('iat', Int64(0));
-      Payload.Exp := JSONObj.Get('exp', Int64(0));
+        Payload.Sub := JSONObj.Get('sub', '');
+        Payload.Name := JSONObj.Get('name', '');
+        Payload.Email := JSONObj.Get('email', '');
+        Payload.Role := JSONObj.Get('role', '');
+        Payload.Iat := JSONObj.Get('iat', Int64(0));
+        Payload.Exp := JSONObj.Get('exp', Int64(0));
 
-      Result := True;
-    finally
-      JSON.Free;
+        Result := True;
+      finally
+        JSON.Free;
+      end;
+    except
+      Result := False;
     end;
-  except
-    Result := False;
+  finally
+    Parts.Free;
   end;
 end;
 ```
@@ -469,7 +483,7 @@ end;
 function VerifyJWTWithRSA(const Token: string;
                           const PublicKeyFile: string): Boolean;
 var
-  Parts: TStringArray;
+  Parts: TStringList;
   HeaderPayload, Signature: string;
   PublicKey: PEVP_PKEY;
   Context: PEVP_MD_CTX;
@@ -478,11 +492,18 @@ begin
   Result := False;
 
   // Séparer le token
-  Parts := Token.Split(['.']);
-  if Length(Parts) <> 3 then Exit;
+  Parts := TStringList.Create;
+  try
+    Parts.Delimiter := '.';
+    Parts.StrictDelimiter := True;
+    Parts.DelimitedText := Token;
+    if Parts.Count <> 3 then Exit;
 
-  HeaderPayload := Parts[0] + '.' + Parts[1];
-  Signature := Base64URLDecode(Parts[2]);
+    HeaderPayload := Parts[0] + '.' + Parts[1];
+    Signature := Base64URLDecode(Parts[2]);
+  finally
+    Parts.Free;
+  end;
 
   // Convertir la signature en bytes
   SetLength(SigBytes, Length(Signature));
@@ -677,27 +698,34 @@ end;
 ```pascal
 function IsJWTExpired(const Token: string): Boolean;
 var
-  Parts: TStringArray;
+  Parts: TStringList;
   PayloadJSON: string;
   JSON: TJSONData;
   Exp: Int64;
 begin
   Result := True; // Par défaut, considérer comme expiré
 
-  Parts := Token.Split(['.']);
-  if Length(Parts) <> 3 then Exit;
-
+  Parts := TStringList.Create;
   try
-    PayloadJSON := Base64URLDecode(Parts[1]);
-    JSON := GetJSON(PayloadJSON);
+    Parts.Delimiter := '.';
+    Parts.StrictDelimiter := True;
+    Parts.DelimitedText := Token;
+    if Parts.Count <> 3 then Exit;
+
     try
-      Exp := TJSONObject(JSON).Get('exp', Int64(0));
-      Result := DateTimeToUnix(Now) >= Exp;
-    finally
-      JSON.Free;
+      PayloadJSON := Base64URLDecode(Parts[1]);
+      JSON := GetJSON(PayloadJSON);
+      try
+        Exp := TJSONObject(JSON).Get('exp', Int64(0));
+        Result := DateTimeToUnix(Now) >= Exp;
+      finally
+        JSON.Free;
+      end;
+    except
+      Result := True;
     end;
-  except
-    Result := True;
+  finally
+    Parts.Free;
   end;
 end;
 ```
@@ -771,7 +799,7 @@ begin
   Result := False;
 
   // Décoder le header
-  HeaderJSON := Base64URLDecode(Token.Split(['.'])[0]);
+  HeaderJSON := Base64URLDecode(Copy(Token, 1, Pos('.', Token) - 1));
   JSON := GetJSON(HeaderJSON);
   try
     Alg := TJSONObject(JSON).Get('alg', '');
@@ -1076,7 +1104,7 @@ begin
   // 1. Extraire le token du header Authorization
   AuthHeader := Request.GetHeader('Authorization');
 
-  if not AuthHeader.StartsWith('Bearer ') then
+  if Copy(AuthHeader, 1, 7) <> 'Bearer ' then
   begin
     Response.StatusCode := 401;
     Response.ContentType := 'application/json';
@@ -1162,7 +1190,7 @@ begin
   Result := '';
 
   // 1. Essayer le header Authorization
-  if Request.GetHeader('Authorization').StartsWith('Bearer ') then
+  if Copy(Request.GetHeader('Authorization'), 1, 7) = 'Bearer ' then
   begin
     Result := Copy(Request.GetHeader('Authorization'), 8, MaxInt);
     Exit;
@@ -1583,46 +1611,53 @@ end;
 ```pascal
 procedure DebugJWT(const Token: string);
 var
-  Parts: TStringArray;
+  Parts: TStringList;
   Header, Payload: string;
 begin
   WriteLn('=== JWT Debug ===');
   WriteLn('Token: ', Token);
   WriteLn;
 
-  Parts := Token.Split(['.']);
-  if Length(Parts) <> 3 then
-  begin
-    WriteLn('ERREUR: Format invalide');
-    Exit;
+  Parts := TStringList.Create;
+  try
+    Parts.Delimiter := '.';
+    Parts.StrictDelimiter := True;
+    Parts.DelimitedText := Token;
+    if Parts.Count <> 3 then
+    begin
+      WriteLn('ERREUR: Format invalide');
+      Exit;
+    end;
+
+    // Décoder le header
+    Header := Base64URLDecode(Parts[0]);
+    WriteLn('Header:');
+    WriteLn(FormatJSON(Header));
+    WriteLn;
+
+    // Décoder le payload
+    Payload := Base64URLDecode(Parts[1]);
+    WriteLn('Payload:');
+    WriteLn(FormatJSON(Payload));
+    WriteLn;
+
+    // Afficher la signature (premiers caractères)
+    WriteLn('Signature: ', Copy(Parts[2], 1, 20), '...');
+    WriteLn;
+
+    // Vérifier la validité
+    if VerifyJWT(Token, SECRET_KEY) then
+      WriteLn('✓ Signature valide')
+    else
+      WriteLn('✗ Signature invalide');
+
+    if not IsJWTExpired(Token) then
+      WriteLn('✓ Token non expiré')
+    else
+      WriteLn('✗ Token expiré');
+  finally
+    Parts.Free;
   end;
-
-  // Décoder le header
-  Header := Base64URLDecode(Parts[0]);
-  WriteLn('Header:');
-  WriteLn(FormatJSON(Header));
-  WriteLn;
-
-  // Décoder le payload
-  Payload := Base64URLDecode(Parts[1]);
-  WriteLn('Payload:');
-  WriteLn(FormatJSON(Payload));
-  WriteLn;
-
-  // Afficher la signature (premiers caractères)
-  WriteLn('Signature: ', Copy(Parts[2], 1, 20), '...');
-  WriteLn;
-
-  // Vérifier la validité
-  if VerifyJWT(Token, SECRET_KEY) then
-    WriteLn('✓ Signature valide')
-  else
-    WriteLn('✗ Signature invalide');
-
-  if not IsJWTExpired(Token) then
-    WriteLn('✓ Token non expiré')
-  else
-    WriteLn('✗ Token expiré');
 end;
 ```
 
@@ -1655,8 +1690,10 @@ begin
   Token := CreateJWT(Payload, 'test-secret');
 
   AssertTrue('Token should not be empty', Token <> '');
+  // Un JWT valide a le format xxx.yyy.zzz (exactement 2 points)
   AssertTrue('Token should have 3 parts',
-    Length(Token.Split(['.'])) = 3);
+    (Pos('.', Token) > 0) and
+    (Pos('.', Copy(Token, Pos('.', Token) + 1, Length(Token))) > 0));
 end;
 
 procedure TJWTTests.TestVerifyValidJWT;
@@ -1819,6 +1856,7 @@ function TJWTCache.ValidateToken(const Token, Secret: string): Boolean;
 var
   Cached: TCachedValidation;
   TokenHash: string;
+  Payload: TJWTPayload;
 begin
   // Utiliser un hash du token comme clé (pour économiser mémoire)
   TokenHash := SHA256Hash(Token);
@@ -1840,7 +1878,6 @@ begin
   Cached.CachedAt := Now;
   if Result then
   begin
-    var Payload: TJWTPayload;
     if DecodeJWT(Token, Payload) then
       Cached.UserID := Payload.Sub;
   end;
@@ -1996,6 +2033,8 @@ procedure TAPIServer.HandleRequest(var ARequest: TFPHTTPConnectionRequest;
   var AResponse: TFPHTTPConnectionResponse);
 var
   AuthHeader, Token, UserID: string;
+  Email, Password: string;
+  Payload: TJWTPayload;
   Response: TJSONObject;
 begin
   AResponse.ContentType := 'application/json';
@@ -2004,13 +2043,12 @@ begin
   if (ARequest.Method = 'POST') and (ARequest.URI = '/login') then
   begin
     // Authentifier et créer un JWT
-    var Email := ARequest.ContentFields.Values['email'];
-    var Password := ARequest.ContentFields.Values['password'];
+    Email := ARequest.ContentFields.Values['email'];
+    Password := ARequest.ContentFields.Values['password'];
 
     // Vérifier les identifiants (simplifié pour l'exemple)
     if (Email = 'user@example.com') and (Password = 'password123') then
     begin
-      var Payload: TJWTPayload;
       Payload.Sub := '12345';
       Payload.Email := Email;
       Payload.Name := 'John Doe';
@@ -2052,7 +2090,7 @@ begin
     // Extraire le token
     AuthHeader := ARequest.GetHeader('Authorization');
 
-    if not AuthHeader.StartsWith('Bearer ') then
+    if Copy(AuthHeader, 1, 7) <> 'Bearer ' then
     begin
       AResponse.Code := 401;
       AResponse.Content := '{"error":"Missing authorization header"}';

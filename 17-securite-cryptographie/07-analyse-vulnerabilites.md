@@ -191,7 +191,7 @@ begin
   RealPath := ExpandFileName(DataDirectory);
 
   // Vérifier que le fichier est bien dans le répertoire autorisé
-  if not SafePath.StartsWith(RealPath) then
+  if Copy(SafePath, 1, Length(RealPath)) <> RealPath then
   begin
     LogSecurityEvent('PATH_TRAVERSAL_BLOCKED', 'Path: ' + SafePath);
     raise Exception.Create('Accès refusé');
@@ -849,13 +849,14 @@ const
   );
 var
   i: Integer;
+  Content: string;
 begin
   WriteLn('=== Path Traversal Test ===');
 
   for i := 0 to High(PATH_PAYLOADS) do
   begin
     try
-      var Content := ReadUserFile(PATH_PAYLOADS[i]);
+      Content := ReadUserFile(PATH_PAYLOADS[i]);
       if Content <> '' then
         WriteLn('⚠️ VULNERABLE: Successfully read ', PATH_PAYLOADS[i]);
     except
@@ -1512,16 +1513,16 @@ end;
 
 ### Template de rapport de vulnérabilité
 
-```markdown
+````markdown
 # Vulnerability Report
 
 ## Summary
-**ID**: VULN-2024-001
-**Title**: SQL Injection in User Search
-**Severity**: High (CVSS 8.2)
-**Status**: Fixed
-**Discovered**: 2024-01-15
-**Fixed**: 2024-01-16
+**ID**: VULN-2024-001  
+**Title**: SQL Injection in User Search  
+**Severity**: High (CVSS 8.2)  
+**Status**: Fixed  
+**Discovered**: 2024-01-15  
+**Fixed**: 2024-01-16  
 
 ## Description
 The user search functionality in UserSearchForm.pas is vulnerable to SQL injection
@@ -1570,7 +1571,7 @@ Query.ParamByName('username').AsString := EditUsername.Text;
 - 2024-01-15 14:00: Fix developed
 - 2024-01-16 09:00: Fix tested and deployed
 - 2024-01-16 10:00: Verified in production
-```
+````
 
 ## Ressources et outils
 

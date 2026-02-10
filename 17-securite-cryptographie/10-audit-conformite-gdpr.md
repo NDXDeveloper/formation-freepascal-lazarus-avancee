@@ -2364,15 +2364,18 @@ begin
   Locale := UpperCase(GetSystemLocale);
 
   // Retourner l'autorité compétente selon le pays
-  case Locale of
-    'FR': Result := 'CNIL - Commission Nationale de l''Informatique et des Libertés';
-    'DE': Result := 'BfDI - Bundesbeauftragte für den Datenschutz';
-    'UK': Result := 'ICO - Information Commissioner''s Office';
-    'IT': Result := 'Garante per la protezione dei dati personali';
-    'ES': Result := 'AEPD - Agencia Española de Protección de Datos';
+  if Locale = 'FR' then
+    Result := 'CNIL - Commission Nationale de l''Informatique et des Libertés'
+  else if Locale = 'DE' then
+    Result := 'BfDI - Bundesbeauftragte für den Datenschutz'
+  else if Locale = 'UK' then
+    Result := 'ICO - Information Commissioner''s Office'
+  else if Locale = 'IT' then
+    Result := 'Garante per la protezione dei dati personali'
+  else if Locale = 'ES' then
+    Result := 'AEPD - Agencia Española de Protección de Datos'
   else
     Result := 'EDPB - European Data Protection Board';
-  end;
 end;
 
 class procedure TGDPRPlatformManager.StoreConsentLocally(UserID: Integer; Consent: Boolean);

@@ -359,6 +359,7 @@ function GenerateSalt(Length: Integer = 16): string;
 var
   Bytes: TBytes;
   i: Integer;
+  F: File;
 begin
   SetLength(Bytes, Length);
 
@@ -368,7 +369,6 @@ begin
   CryptGenRandom(hProv, Length, @Bytes[0]);
   {$ELSE}
   // Utiliser /dev/urandom sur Linux
-  var F: File;
   AssignFile(F, '/dev/urandom');
   Reset(F, 1);
   BlockRead(F, Bytes[0], Length);
@@ -668,13 +668,15 @@ function VerifyAPISignature(const Request: TAPIRequest;
                             const Signature, APISecret: string): Boolean;
 var
   ComputedSignature: string;
+  RequestTime: TDateTime;
+  TimeDiff: TDateTime;
 begin
   ComputedSignature := SignAPIRequest(Request, APISecret);
   Result := (ComputedSignature = Signature);
 
   // Vérifier aussi le timestamp (éviter replay attacks)
-  var RequestTime := ISO8601ToDateTime(Request.Timestamp);
-  var TimeDiff := Abs(Now - RequestTime);
+  RequestTime := ISO8601ToDateTime(Request.Timestamp);
+  TimeDiff := Abs(Now - RequestTime);
 
   if TimeDiff > (5 / 1440) then // Plus de 5 minutes
   begin
@@ -1079,6 +1081,7 @@ var
   StoreCtx: PX509_STORE_CTX;
   Cert, ChainCert: PX509;
   i: Integer;
+  ErrorCode: Integer;
 begin
   Result := False;
 
@@ -1108,7 +1111,7 @@ begin
 
         if not Result then
         begin
-          var ErrorCode := X509_STORE_CTX_get_error(StoreCtx);
+          ErrorCode := X509_STORE_CTX_get_error(StoreCtx);
           WriteLn('Erreur de vérification: ',
                   X509_verify_cert_error_string(ErrorCode));
         end;
@@ -1465,7 +1468,7 @@ procedure TIntegrityMonitor.LoadHashes(const HashFile: string);
 var
   F: TextFile;
   Line: string;
-  Parts: TStringArray;
+  SepPos: Integer;
   FileHash: TFileHash;
 begin
   FHashes.Clear;
@@ -1478,11 +1481,11 @@ begin
     while not Eof(F) do
     begin
       ReadLn(F, Line);
-      Parts := Line.Split(['|']);
-      if Length(Parts) = 2 then
+      SepPos := Pos('|', Line);
+      if SepPos > 0 then
       begin
-        FileHash.FileName := Parts[0];
-        FileHash.Hash := Parts[1];
+        FileHash.FileName := Copy(Line, 1, SepPos - 1);
+        FileHash.Hash := Copy(Line, SepPos + 1, Length(Line) - SepPos);
         FileHash.LastCheck := Now;
         FHashes.Add(FileHash);
       end;

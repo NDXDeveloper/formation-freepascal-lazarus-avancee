@@ -109,11 +109,12 @@ begin
 
   Output := LowerCase(Trim(ExecuteCommand('getenforce')));
 
-  case Output of
-    'disabled': Result := slDisabled;
-    'permissive': Result := slPermissive;
-    'enforcing': Result := slEnforcing;
-  end;
+  if Output = 'disabled' then
+    Result := slDisabled
+  else if Output = 'permissive' then
+    Result := slPermissive
+  else if Output = 'enforcing' then
+    Result := slEnforcing;
 end;
 
 function TSELinuxManager.GetStatus: string;
@@ -2232,7 +2233,7 @@ end;
 
 **Exemple de documentation :**
 
-```markdown
+````markdown
 ## Configuration de sécurité
 
 ### Linux (Ubuntu)
@@ -2244,7 +2245,7 @@ sudo nano /etc/apparmor.d/usr.local.bin.myapp
 ```
 
 Contenu du profil :
-```
+````
 /usr/local/bin/myapp {
   #include <abstractions/base>
 
