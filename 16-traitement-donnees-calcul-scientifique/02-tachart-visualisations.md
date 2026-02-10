@@ -138,7 +138,7 @@ end.
 ### Méthode 1 : Ajout direct à la série
 
 ```pascal
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 var
   i: Integer;
 begin
@@ -164,7 +164,7 @@ end;
 uses
   TAGraph, TASeries, TAChartListbox;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 var
   Source: TListChartSource;
   i: Integer;
@@ -184,7 +184,7 @@ end;
 ### Méthode 3 : Depuis un tableau
 
 ```pascal
-procedure TForm1.ChargerDonnees;
+procedure TForm1.ChargerDonnees;  
 var
   valeurs: array of Double;
   i: Integer;
@@ -208,7 +208,7 @@ end;
 Le plus courant, idéal pour montrer des tendances.
 
 ```pascal
-procedure TForm1.CreerGraphiqueLigne;
+procedure TForm1.CreerGraphiqueLigne;  
 var
   Serie: TLineSeries;
   i: Integer;
@@ -239,7 +239,7 @@ end;
 Parfait pour comparer des catégories.
 
 ```pascal
-procedure TForm1.CreerGraphiqueBarres;
+procedure TForm1.CreerGraphiqueBarres;  
 var
   Serie: TBarSeries;
 begin
@@ -269,7 +269,7 @@ end;
 Pour montrer des volumes ou des proportions.
 
 ```pascal
-procedure TForm1.CreerGraphiqueAire;
+procedure TForm1.CreerGraphiqueAire;  
 var
   Serie: TAreaSeries;
   i: Integer;
@@ -298,7 +298,7 @@ end;
 Pour montrer des parts d'un tout.
 
 ```pascal
-procedure TForm1.CreerDiagrammeCirculaire;
+procedure TForm1.CreerDiagrammeCirculaire;  
 var
   Serie: TPieSeries;
 begin
@@ -324,7 +324,7 @@ end;
 Pour visualiser la corrélation entre deux variables.
 
 ```pascal
-procedure TForm1.CreerNuagePoints;
+procedure TForm1.CreerNuagePoints;  
 var
   Serie: TPointSeries;
   i: Integer;
@@ -350,7 +350,7 @@ end;
 ### Titres et légendes
 
 ```pascal
-procedure TForm1.PersonnaliserTitres;
+procedure TForm1.PersonnaliserTitres;  
 begin
   // Titre principal
   Chart1.Title.Text.Text := 'Évolution des ventes 2024';
@@ -374,7 +374,7 @@ end;
 ### Configuration des axes
 
 ```pascal
-procedure TForm1.ConfigurerAxes;
+procedure TForm1.ConfigurerAxes;  
 begin
   // Axe horizontal (X)
   with Chart1.BottomAxis do
@@ -407,7 +407,7 @@ end;
 ### Couleurs et style
 
 ```pascal
-procedure TForm1.PersonnaliserStyle;
+procedure TForm1.PersonnaliserStyle;  
 begin
   // Fond du graphique
   Chart1.BackColor := clWhite;
@@ -434,7 +434,7 @@ end;
 uses
   TATools;
 
-procedure TForm1.ActiverZoom;
+procedure TForm1.ActiverZoom;  
 var
   ZoomTool: TChartToolset;
   ZoomDrag: TZoomDragTool;
@@ -462,7 +462,7 @@ end;
 uses
   TATools;
 
-procedure TForm1.ActiverInfoBulles;
+procedure TForm1.ActiverInfoBulles;  
 var
   DataTool: TDataPointHintTool;
 begin
@@ -496,7 +496,7 @@ end;
 uses
   TATools;
 
-procedure TForm1.ActiverSelection;
+procedure TForm1.ActiverSelection;  
 var
   SelectTool: TDataPointClickTool;
 begin
@@ -508,7 +508,7 @@ begin
   Chart1.Toolset.Tools.Add(SelectTool);
 end;
 
-procedure TForm1.PointClique(ATool: TChartTool; APoint: TPoint);
+procedure TForm1.PointClique(ATool: TChartTool; APoint: TPoint);  
 var
   x, y: Double;
 begin
@@ -526,7 +526,7 @@ end;
 ### Plusieurs séries sur un graphique
 
 ```pascal
-procedure TForm1.CreerGraphiqueMultiple;
+procedure TForm1.CreerGraphiqueMultiple;  
 var
   Serie1, Serie2, Serie3: TLineSeries;
   i: Integer;
@@ -568,7 +568,7 @@ end;
 ### Deux axes Y
 
 ```pascal
-procedure TForm1.CreerGraphiqueDeuxAxes;
+procedure TForm1.CreerGraphiqueDeuxAxes;  
 var
   Serie1, Serie2: TLineSeries;
   i: Integer;
@@ -642,7 +642,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   // Configuration initiale
   Chart1.Title.Text.Text := 'Analyseur de données';
@@ -658,23 +658,23 @@ begin
   ComboBox1.ItemIndex := 0;
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 begin
   ChargerDonnees;
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
+procedure TForm1.Button2Click(Sender: TObject);  
 begin
   Chart1.SaveToFile(TPortableNetworkGraphic, 'graphique.png');
   ShowMessage('Graphique sauvegardé : graphique.png');
 end;
 
-procedure TForm1.ComboBox1Change(Sender: TObject);
+procedure TForm1.ComboBox1Change(Sender: TObject);  
 begin
   ChangerTypeGraphique;
 end;
 
-procedure TForm1.ChargerDonnees;
+procedure TForm1.ChargerDonnees;  
 var
   i: Integer;
 begin
@@ -691,7 +691,7 @@ begin
     Format('Données chargées : %d points', [LineSeries1.Count]);
 end;
 
-procedure TForm1.ChangerTypeGraphique;
+procedure TForm1.ChangerTypeGraphique;  
 var
   OldSeries: TBasicChartSeries;
   NewSeries: TBasicChartSeries;
@@ -731,18 +731,18 @@ end.
 uses
   TADrawerCanvas;
 
-procedure TForm1.ExporterEnPNG;
+procedure TForm1.ExporterEnPNG;  
 begin
   Chart1.SaveToFile(TPortableNetworkGraphic, 'mon_graphique.png');
   ShowMessage('Graphique sauvegardé en PNG');
 end;
 
-procedure TForm1.ExporterEnJPEG;
+procedure TForm1.ExporterEnJPEG;  
 begin
   Chart1.SaveToFile(TJPEGImage, 'mon_graphique.jpg');
 end;
 
-procedure TForm1.ExporterEnBMP;
+procedure TForm1.ExporterEnBMP;  
 begin
   Chart1.SaveToFile(TBitmap, 'mon_graphique.bmp');
 end;
@@ -754,7 +754,7 @@ end;
 uses
   Clipbrd;
 
-procedure TForm1.CopierPressePapier;
+procedure TForm1.CopierPressePapier;  
 var
   Bitmap: TBitmap;
 begin
@@ -785,7 +785,7 @@ type
     FCompteur: Integer;
   end;
 
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TForm1.Timer1Timer(Sender: TObject);  
 begin
   Inc(FCompteur);
 
@@ -809,7 +809,7 @@ end;
 ### Performance avec beaucoup de données
 
 ```pascal
-procedure TForm1.ChargerBeaucoupDeDonnees;
+procedure TForm1.ChargerBeaucoupDeDonnees;  
 var
   i: Integer;
 begin
@@ -828,7 +828,7 @@ end;
 ### Gestion de la mémoire
 
 ```pascal
-procedure TForm1.FormDestroy(Sender: TObject);
+procedure TForm1.FormDestroy(Sender: TObject);  
 begin
   // Les séries sont automatiquement libérées avec le Chart
   // Mais si vous créez des sources de données :
@@ -840,7 +840,7 @@ end;
 ### Adapter le graphique à la taille
 
 ```pascal
-procedure TForm1.FormResize(Sender: TObject);
+procedure TForm1.FormResize(Sender: TObject);  
 begin
   Chart1.Width := ClientWidth - 20;
   Chart1.Height := ClientHeight - 20;
@@ -873,7 +873,7 @@ TAChart fonctionne de manière identique sur tous les systèmes, mais quelques d
 
 **Polices** :
 ```pascal
-procedure TForm1.ConfigurerPolice;
+procedure TForm1.ConfigurerPolice;  
 begin
   {$IFDEF WINDOWS}
     Chart1.Title.Font.Name := 'Segoe UI';
@@ -887,7 +887,7 @@ end;
 
 **Export de fichiers** :
 ```pascal
-procedure TForm1.ExporterGraphique;
+procedure TForm1.ExporterGraphique;  
 var
   CheminFichier: String;
 begin
@@ -915,7 +915,7 @@ TAChart s'intègre parfaitement avec NumLib pour visualiser les résultats de ca
 uses
   uTypes, uMatrix, TAGraph, TASeries;
 
-procedure TForm1.VisualiserResultats;
+procedure TForm1.VisualiserResultats;  
 var
   vecteur: TVector;
   i: Integer;
@@ -972,7 +972,7 @@ Lazarus inclut de nombreux exemples TAChart que vous pouvez étudier :
 uses
   TAGraph, TASeries, TAChartUtils;
 
-procedure TForm1.CreerGraphiqueChandelles;
+procedure TForm1.CreerGraphiqueChandelles;  
 var
   Serie: TOpenHighLowCloseSeries;
   i: Integer;
@@ -1009,7 +1009,7 @@ end;
 uses
   TAGraph, TASeries, TAChartAxis;
 
-procedure TForm1.CreerGraphiqueAvecZones;
+procedure TForm1.CreerGraphiqueAvecZones;  
 var
   SerieDonnees: TLineSeries;
   ZoneVerte, ZoneRouge: TAreaSeries;
@@ -1058,7 +1058,7 @@ end;
 uses
   TAGraph, TASeries, Math;
 
-procedure TForm1.CreerHistogramme;
+procedure TForm1.CreerHistogramme;  
 var
   Serie: TBarSeries;
   donnees: array of Double;
@@ -1108,7 +1108,7 @@ end;
 uses
   TAGraph, TASeries, TARadialSeries;
 
-procedure TForm1.CreerGraphiqueRadar;
+procedure TForm1.CreerGraphiqueRadar;  
 var
   Serie: TPolarSeries;
   angles: array[0..5] of Double;
@@ -1143,7 +1143,7 @@ end;
 uses
   TAGraph, TASeries, TATransformations;
 
-procedure TForm1.CreerGraphiqueLog;
+procedure TForm1.CreerGraphiqueLog;  
 var
   Serie: TLineSeries;
   TransfoY: TLogarithmAxisTransform;
@@ -1185,14 +1185,14 @@ type
     FPhase: Double;
   end;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   FPhase := 0;
   Timer1.Interval := 50; // 20 FPS
   Timer1.Enabled := True;
 end;
 
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TForm1.Timer1Timer(Sender: TObject);  
 var
   i: Integer;
   x, y: Double;
@@ -1228,7 +1228,7 @@ type
     FEtapeAnimation: Integer;
   end;
 
-procedure TForm1.AnimerTransition;
+procedure TForm1.AnimerTransition;  
 var
   i: Integer;
   facteur: Double;
@@ -1263,7 +1263,7 @@ end;
 uses
   TAGraph, TASeries, DB, SQLDB;
 
-procedure TForm1.ChargerDepuisBaseDeDonnees;
+procedure TForm1.ChargerDepuisBaseDeDonnees;  
 var
   Serie: TLineSeries;
 begin
@@ -1295,7 +1295,7 @@ end;
 uses
   TAGraph, TADbSource;
 
-procedure TForm1.LierAvecDataSource;
+procedure TForm1.LierAvecDataSource;  
 var
   DBSource: TDbChartSource;
   Serie: TLineSeries;
@@ -1321,7 +1321,7 @@ end;
 uses
   Printers, TADrawUtils;
 
-procedure TForm1.ImprimerGraphique;
+procedure TForm1.ImprimerGraphique;  
 var
   R: TRect;
 begin
@@ -1341,7 +1341,7 @@ begin
   end;
 end;
 
-procedure TForm1.AperçuAvantImpression;
+procedure TForm1.AperçuAvantImpression;  
 var
   Bitmap: TBitmap;
 begin
@@ -1383,22 +1383,22 @@ Chart1.Invalidate;
 **Les axes ne sont pas corrects** :
 ```pascal
 // Réinitialiser l'étendue automatique
-Chart1.Extent.UseXMin := False;
-Chart1.Extent.UseXMax := False;
-Chart1.Extent.UseYMin := False;
+Chart1.Extent.UseXMin := False;  
+Chart1.Extent.UseXMax := False;  
+Chart1.Extent.UseYMin := False;  
 Chart1.Extent.UseYMax := False;
 
 // Ou définir manuellement
-Chart1.Extent.UseYMin := True;
-Chart1.Extent.YMin := 0;
-Chart1.Extent.UseYMax := True;
+Chart1.Extent.UseYMin := True;  
+Chart1.Extent.YMin := 0;  
+Chart1.Extent.UseYMax := True;  
 Chart1.Extent.YMax := 100;
 ```
 
 **Performance lente avec beaucoup de données** :
 ```pascal
 // Utiliser DisableRedrawing
-Chart1.DisableRedrawing;
+Chart1.DisableRedrawing;  
 try
   // Ajouter toutes les données
 finally
@@ -1416,7 +1416,7 @@ if Serie.Count > 1000 then
 **Mémoire qui augmente** :
 ```pascal
 // Libérer les anciennes séries
-procedure TForm1.NettoyerSeries;
+procedure TForm1.NettoyerSeries;  
 var
   i: Integer;
 begin

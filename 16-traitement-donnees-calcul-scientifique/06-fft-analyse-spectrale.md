@@ -68,40 +68,40 @@ end.
 
 ```pascal
 // Addition
-function AdditionComplexe(const a, b: TComplexe): TComplexe;
+function AdditionComplexe(const a, b: TComplexe): TComplexe;  
 begin
   Result.Reel := a.Reel + b.Reel;
   Result.Imag := a.Imag + b.Imag;
 end;
 
 // Soustraction
-function SoustractionComplexe(const a, b: TComplexe): TComplexe;
+function SoustractionComplexe(const a, b: TComplexe): TComplexe;  
 begin
   Result.Reel := a.Reel - b.Reel;
   Result.Imag := a.Imag - b.Imag;
 end;
 
 // Multiplication
-function MultiplicationComplexe(const a, b: TComplexe): TComplexe;
+function MultiplicationComplexe(const a, b: TComplexe): TComplexe;  
 begin
   Result.Reel := a.Reel * b.Reel - a.Imag * b.Imag;
   Result.Imag := a.Reel * b.Imag + a.Imag * b.Reel;
 end;
 
 // Module (magnitude)
-function ModuleComplexe(const c: TComplexe): TFloat;
+function ModuleComplexe(const c: TComplexe): TFloat;  
 begin
   Result := Sqrt(Sqr(c.Reel) + Sqr(c.Imag));
 end;
 
 // Phase (argument)
-function PhaseComplexe(const c: TComplexe): TFloat;
+function PhaseComplexe(const c: TComplexe): TFloat;  
 begin
   Result := ArcTan2(c.Imag, c.Reel);
 end;
 
 // Exponentielle complexe : e^(i*θ) = cos(θ) + i*sin(θ)
-function ExponentielleComplexe(angle: TFloat): TComplexe;
+function ExponentielleComplexe(angle: TFloat): TComplexe;  
 begin
   Result.Reel := Cos(angle);
   Result.Imag := Sin(angle);
@@ -113,7 +113,7 @@ end;
 ### FFT récursive
 
 ```pascal
-procedure FFTRecursive(var data: TSpectre);
+procedure FFTRecursive(var data: TSpectre);  
 var
   n, k: Integer;
   pair, impair: TSpectre;
@@ -155,7 +155,7 @@ end;
 ### FFT itérative (plus efficace)
 
 ```pascal
-procedure FFTIterative(var data: TSpectre);
+procedure FFTIterative(var data: TSpectre);  
 var
   n, bits, i, j, k: Integer;
   temp: TComplexe;
@@ -214,7 +214,7 @@ begin
   end;
 end;
 
-function InverserBits(valeur, nbBits: Integer): Integer;
+function InverserBits(valeur, nbBits: Integer): Integer;  
 var
   i: Integer;
 begin
@@ -230,7 +230,7 @@ end;
 ### FFT inverse (IFFT)
 
 ```pascal
-procedure IFFTIterative(var data: TSpectre);
+procedure IFFTIterative(var data: TSpectre);  
 var
   i, n: Integer;
 begin
@@ -258,7 +258,7 @@ end;
 ### Conversion signal réel → complexe
 
 ```pascal
-function SignalVersSpectre(const signal: TSignal): TSpectre;
+function SignalVersSpectre(const signal: TSignal): TSpectre;  
 var
   i: Integer;
 begin
@@ -274,7 +274,7 @@ end;
 ### Extraction des magnitudes
 
 ```pascal
-function ExtraireMagnitudes(const spectre: TSpectre): TSignal;
+function ExtraireMagnitudes(const spectre: TSpectre): TSignal;  
 var
   i: Integer;
 begin
@@ -287,7 +287,7 @@ end;
 ### Extraction des phases
 
 ```pascal
-function ExtrairePhases(const spectre: TSpectre): TSignal;
+function ExtrairePhases(const spectre: TSpectre): TSignal;  
 var
   i: Integer;
 begin
@@ -300,7 +300,7 @@ end;
 ### Densité spectrale de puissance
 
 ```pascal
-function DensiteSpectralePuissance(const spectre: TSpectre): TSignal;
+function DensiteSpectralePuissance(const spectre: TSpectre): TSignal;  
 var
   i, n: Integer;
 begin
@@ -364,7 +364,7 @@ begin
   Result.FrequenceDominante := Result.Frequences[indexMax];
 end;
 
-procedure AfficherAnalyseSpectrale(const analyse: TAnalyseSpectrale);
+procedure AfficherAnalyseSpectrale(const analyse: TAnalyseSpectrale);  
 begin
   WriteLn('=== Analyse Spectrale ===');
   WriteLn(Format('Fréquence dominante : %.2f Hz',
@@ -382,7 +382,7 @@ Le fenêtrage réduit les artefacts spectraux (fuites spectrales).
 ### Fenêtre rectangulaire (pas de fenêtre)
 
 ```pascal
-procedure FenetreRectangulaire(var signal: TSignal);
+procedure FenetreRectangulaire(var signal: TSignal);  
 begin
   // Ne fait rien - le signal reste inchangé
 end;
@@ -391,7 +391,7 @@ end;
 ### Fenêtre de Hann (Hanning)
 
 ```pascal
-procedure FenetreHann(var signal: TSignal);
+procedure FenetreHann(var signal: TSignal);  
 var
   i, n: Integer;
   facteur: TFloat;
@@ -408,7 +408,7 @@ end;
 ### Fenêtre de Hamming
 
 ```pascal
-procedure FenetreHamming(var signal: TSignal);
+procedure FenetreHamming(var signal: TSignal);  
 var
   i, n: Integer;
   facteur: TFloat;
@@ -425,7 +425,7 @@ end;
 ### Fenêtre de Blackman
 
 ```pascal
-procedure FenetreBlackman(var signal: TSignal);
+procedure FenetreBlackman(var signal: TSignal);  
 var
   i, n: Integer;
   facteur: TFloat;
@@ -447,7 +447,7 @@ end;
 ### Fenêtre de Kaiser
 
 ```pascal
-function BesselI0(x: TFloat): TFloat;
+function BesselI0(x: TFloat): TFloat;  
 var
   somme, terme: TFloat;
   k: Integer;
@@ -465,7 +465,7 @@ begin
   Result := somme;
 end;
 
-procedure FenetreKaiser(var signal: TSignal; beta: TFloat);
+procedure FenetreKaiser(var signal: TSignal; beta: TFloat);  
 var
   i, n: Integer;
   facteur, alpha: TFloat;
@@ -484,7 +484,7 @@ end;
 ### Comparaison des fenêtres
 
 ```pascal
-procedure ComparerFenetres(const signal: TSignal);
+procedure ComparerFenetres(const signal: TSignal);  
 var
   s1, s2, s3, s4: TSignal;
   a1, a2, a3, a4: TAnalyseSpectrale;
@@ -621,7 +621,7 @@ begin
   Result := analyse.FrequenceDominante;
 end;
 
-function FrequenceVersNote(frequence: TFloat): String;
+function FrequenceVersNote(frequence: TFloat): String;  
 const
   NOTES: array[0..11] of String =
     ('Do', 'Do#', 'Ré', 'Ré#', 'Mi', 'Fa',
@@ -642,7 +642,7 @@ begin
 end;
 
 // Exemple : Accordeur de guitare
-procedure AccordeurGuitare(const signal: TSignal; sampleRate: Integer);
+procedure AccordeurGuitare(const signal: TSignal; sampleRate: Integer);  
 var
   freq: TFloat;
   note: String;
@@ -796,7 +796,7 @@ end;
 La convolution dans le domaine temporel = multiplication dans le domaine fréquentiel.
 
 ```pascal
-function ConvolutionFFT(const signal1, signal2: TSignal): TSignal;
+function ConvolutionFFT(const signal1, signal2: TSignal): TSignal;  
 var
   n, i: Integer;
   s1Pad, s2Pad: TSignal;
@@ -849,7 +849,7 @@ end;
 Augmenter la résolution fréquentielle en ajoutant des zéros.
 
 ```pascal
-function ZeroPadding(const signal: TSignal; nouvelleTaille: Integer): TSignal;
+function ZeroPadding(const signal: TSignal; nouvelleTaille: Integer): TSignal;  
 var
   i: Integer;
 begin
@@ -863,7 +863,7 @@ begin
 end;
 
 // Arrondir à la prochaine puissance de 2
-function ProchainePuissanceDe2(n: Integer): Integer;
+function ProchainePuissanceDe2(n: Integer): Integer;  
 begin
   Result := 1;
   while Result < n do
@@ -874,7 +874,7 @@ end;
 ### Optimisation de la taille
 
 ```pascal
-procedure OptimiserPourFFT(var signal: TSignal);
+procedure OptimiserPourFFT(var signal: TSignal);  
 var
   nouvelleTaille: Integer;
 begin
@@ -896,7 +896,7 @@ end;
 Utilisée dans la compression JPEG et MP3.
 
 ```pascal
-function DCT(const signal: TSignal): TSignal;
+function DCT(const signal: TSignal): TSignal;  
 var
   n, k, i: Integer;
   somme, facteur: TFloat;
@@ -919,7 +919,7 @@ begin
   end;
 end;
 
-function IDCT(const coefficients: TSignal): TSignal;
+function IDCT(const coefficients: TSignal): TSignal;  
 var
   n, k, i: Integer;
   somme, facteur: TFloat;
@@ -950,7 +950,7 @@ end;
 Pour l'analyse de signaux analytiques.
 
 ```pascal
-function TransformeeHilbert(const signal: TSignal): TSignal;
+function TransformeeHilbert(const signal: TSignal): TSignal;  
 var
   spectre: TSpectre;
   n, i: Integer;
@@ -1001,14 +1001,14 @@ Alternative à la FFT pour signaux non-stationnaires.
 type
   TOndelette = (owMorlet, owMexicanHat, owHaar);
 
-function OndeletteMorlet(t, scale: TFloat): TFloat;
+function OndeletteMorlet(t, scale: TFloat): TFloat;  
 const
   SIGMA = 1.0;
 begin
   Result := Exp(-Sqr(t) / (2 * Sqr(SIGMA))) * Cos(5 * t / scale);
 end;
 
-function OndeletteMexicanHat(t, scale: TFloat): TFloat;
+function OndeletteMexicanHat(t, scale: TFloat): TFloat;  
 begin
   Result := (1 - Sqr(t / scale)) * Exp(-Sqr(t / scale) / 2);
 end;
@@ -1107,7 +1107,7 @@ begin
   end;
 end;
 
-function ISTFT(const stft: TSTFT; hop: Integer): TSignal;
+function ISTFT(const stft: TSTFT; hop: Integer): TSignal;  
 var
   i, j, k, pos: Integer;
   fenetre: TSignal;
@@ -1218,7 +1218,7 @@ begin
   end;
 end;
 
-procedure AfficherAnalyseOctaves(const bandes: array of TBandeFrequence);
+procedure AfficherAnalyseOctaves(const bandes: array of TBandeFrequence);  
 var
   i: Integer;
   maxPuissance, puissanceDB: TFloat;
@@ -1473,7 +1473,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TFormAnalyseur.FormCreate(Sender: TObject);
+procedure TFormAnalyseur.FormCreate(Sender: TObject);  
 begin
   FSampleRate := 44100;
 
@@ -1493,13 +1493,13 @@ begin
   TrackBarVolume.Position := 50;
 end;
 
-procedure TFormAnalyseur.ButtonGenererClick(Sender: TObject);
+procedure TFormAnalyseur.ButtonGenererClick(Sender: TObject);  
 begin
   GenererSignalTest;
   AnalyserEtAfficher;
 end;
 
-procedure TFormAnalyseur.GenererSignalTest;
+procedure TFormAnalyseur.GenererSignalTest;  
 var
   i: Integer;
   freq: TFloat;
@@ -1545,7 +1545,7 @@ begin
   end;
 end;
 
-procedure TFormAnalyseur.AnalyserEtAfficher;
+procedure TFormAnalyseur.AnalyserEtAfficher;  
 var
   signalFenetre: TSignal;
   analyse: TAnalyseSpectrale;
@@ -1616,7 +1616,7 @@ begin
      FrequenceVersNote(analyse.FrequenceDominante)]);
 end;
 
-procedure TFormAnalyseur.ButtonChargerClick(Sender: TObject);
+procedure TFormAnalyseur.ButtonChargerClick(Sender: TObject);  
 var
   OpenDialog: TOpenDialog;
 begin
@@ -1634,13 +1634,13 @@ begin
   end;
 end;
 
-procedure TFormAnalyseur.ComboBoxFenetreChange(Sender: TObject);
+procedure TFormAnalyseur.ComboBoxFenetreChange(Sender: TObject);  
 begin
   if Length(FSignal) > 0 then
     AnalyserEtAfficher;
 end;
 
-procedure TFormAnalyseur.CheckBoxDBChange(Sender: TObject);
+procedure TFormAnalyseur.CheckBoxDBChange(Sender: TObject);  
 begin
   if Length(FSignal) > 0 then
     AnalyserEtAfficher;
@@ -1660,14 +1660,14 @@ end.
 {$ENDIF}
 
 {$IFDEF USE_SIMD}
-procedure FFTOptimiseeSIMD(var data: TSpectre);
+procedure FFTOptimiseeSIMD(var data: TSpectre);  
 begin
   // Implémentation avec instructions SSE/AVX
   // Pour des performances maximales
   FFTIterative(data);  // Fallback pour l'instant
 end;
 {$ELSE}
-procedure FFTOptimiseeSIMD(var data: TSpectre);
+procedure FFTOptimiseeSIMD(var data: TSpectre);  
 begin
   FFTIterative(data);  // Version standard
 end;
@@ -1723,8 +1723,8 @@ function fftw_plan_dft_c2r_1d(n: Integer; input: Pfftw_complex;
          output: PDouble; flags: Cardinal): fftw_plan;
          cdecl; external FFTW_DLL;
 
-procedure fftw_execute(plan: fftw_plan); cdecl; external FFTW_DLL;
-procedure fftw_destroy_plan(plan: fftw_plan); cdecl; external FFTW_DLL;
+procedure fftw_execute(plan: fftw_plan); cdecl; external FFTW_DLL;  
+procedure fftw_destroy_plan(plan: fftw_plan); cdecl; external FFTW_DLL;  
 procedure fftw_free(ptr: Pointer); cdecl; external FFTW_DLL;
 
 implementation
@@ -1738,7 +1738,7 @@ end.
 uses
   UnitFFTW;
 
-function FFTAvecFFTW(const signal: TSignal): TSpectre;
+function FFTAvecFFTW(const signal: TSignal): TSpectre;  
 var
   plan: fftw_plan;
   input: array of Double;
@@ -1784,7 +1784,7 @@ end;
 ### Gestion des chemins de bibliothèques
 
 ```pascal
-function TrouverBibliothequeFFTW: String;
+function TrouverBibliothequeFFTW: String;  
 begin
   {$IFDEF WINDOWS}
   Result := ExtractFilePath(ParamStr(0)) + 'libfftw3-3.dll';
@@ -1811,7 +1811,7 @@ end;
 uses
   DateUtils;
 
-procedure BenchmarkFFT;
+procedure BenchmarkFFT;  
 var
   tailles: array[0..5] of Integer = (256, 512, 1024, 2048, 4096, 8192);
   i, j, taille: Integer;
@@ -1854,7 +1854,7 @@ end;
 ### Comparaison avec FFTW
 
 ```pascal
-procedure ComparerFFTImplementations;
+procedure ComparerFFTImplementations;  
 var
   signal: TSignal;
   spectre1, spectre2: TSpectre;
@@ -1993,7 +1993,7 @@ end;
 ### Changement de hauteur (pitch shifting)
 
 ```pascal
-function ChangerHauteur(const signal: TSignal; facteur: TFloat): TSignal;
+function ChangerHauteur(const signal: TSignal; facteur: TFloat): TSignal;  
 var
   spectre: TSpectre;
   nouveauSpectre: TSpectre;
@@ -2085,7 +2085,7 @@ end;
 ### Vérifications de validité
 
 ```pascal
-function VerifierFFT(const signal: TSignal; const spectre: TSpectre): Boolean;
+function VerifierFFT(const signal: TSignal; const spectre: TSpectre): Boolean;  
 var
   spectreInverse: TSpectre;
   signalReconstruit: TSignal;
@@ -2138,7 +2138,7 @@ end;
 ### Détection de problèmes
 
 ```pascal
-procedure DiagnostiquerProblemes(const signal: TSignal);
+procedure DiagnostiquerProblemes(const signal: TSignal);  
 var
   i: Integer;
   hasNaN, hasInf, hasZero: Boolean;
@@ -2177,7 +2177,7 @@ end;
 ### Checklist pour analyse spectrale
 
 ```pascal
-procedure ChecklistAnalyseSpectrale;
+procedure ChecklistAnalyseSpectrale;  
 begin
   WriteLn('=== Checklist Analyse Spectrale ===');
   WriteLn;

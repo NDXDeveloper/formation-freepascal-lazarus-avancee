@@ -193,12 +193,12 @@ end.
 const
   EPSILON = 1e-10;  // Tolérance pour les comparaisons
 
-function SontEgaux(a, b: Double): Boolean;
+function SontEgaux(a, b: Double): Boolean;  
 begin
   Result := Abs(a - b) < EPSILON;
 end;
 
-function EstZero(x: Double): Boolean;
+function EstZero(x: Double): Boolean;  
 begin
   Result := Abs(x) < EPSILON;
 end;
@@ -264,15 +264,15 @@ type
   TMatrix = array of array of Double;
 
 // Fonctions de création
-function CreerVecteur(taille: Integer): TVector;
+function CreerVecteur(taille: Integer): TVector;  
 function CreerMatrice(lignes, colonnes: Integer): TMatrix;
 
 // Opérations de base
-function AdditionVecteurs(const a, b: TVector): TVector;
+function AdditionVecteurs(const a, b: TVector): TVector;  
 function MultiplicationMatrices(const a, b: TMatrix): TMatrix;
 
 // Fonctions avancées
-function InverseMatrice(const m: TMatrix): TMatrix;
+function InverseMatrice(const m: TMatrix): TMatrix;  
 function Determinant(const m: TMatrix): Double;
 
 implementation
@@ -351,7 +351,7 @@ end.
 ### 1. Acquisition de données
 
 ```pascal
-procedure ChargerDonneesCSV(nomFichier: String; out donnees: TMatrix);
+procedure ChargerDonneesCSV(nomFichier: String; out donnees: TMatrix);  
 var
   fichier: TextFile;
   ligne: String;
@@ -391,7 +391,7 @@ end;
 ### 2. Prétraitement
 
 ```pascal
-procedure NormaliserDonnees(var donnees: TMatrix);
+procedure NormaliserDonnees(var donnees: TMatrix);  
 var
   i, j: Integer;
   moyenne, ecartType: Double;
@@ -419,7 +419,7 @@ end;
 ### 3. Analyse
 
 ```pascal
-procedure AnalyserDonnees(const donnees: TMatrix);
+procedure AnalyserDonnees(const donnees: TMatrix);  
 var
   statistiques: TStatistiques;
   correlation: TMatrix;
@@ -441,7 +441,7 @@ end;
 ### 4. Visualisation
 
 ```pascal
-procedure VisualiserResultats(Chart: TChart; const donnees: TVector);
+procedure VisualiserResultats(Chart: TChart; const donnees: TVector);  
 var
   serie: TLineSeries;
   i: Integer;
@@ -459,7 +459,7 @@ end;
 ### 5. Export des résultats
 
 ```pascal
-procedure ExporterResultats(nomFichier: String; const resultats: TMatrix);
+procedure ExporterResultats(nomFichier: String; const resultats: TMatrix);  
 var
   fichier: TextFile;
   i, j: Integer;
@@ -518,7 +518,7 @@ begin
 end;
 
 // Détection de tendance
-function DetecterTendance(const serie: TSerieTemporelle): String;
+function DetecterTendance(const serie: TSerieTemporelle): String;  
 var
   debut, fin, pente: Double;
 begin
@@ -591,7 +591,7 @@ begin
   b := (sommeY - a * sommeX) / n;
 end;
 
-function CalculerR2(const donnees: TDonnees; a, b: Double): Double;
+function CalculerR2(const donnees: TDonnees; a, b: Double): Double;  
 var
   i: Integer;
   yMoyen, ssTot, ssRes, yPred: Double;

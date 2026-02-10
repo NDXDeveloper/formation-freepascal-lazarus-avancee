@@ -211,10 +211,10 @@ function fftw_plan_dft_1d(
   flags: Cardinal
 ): PFFTWPlan; cdecl; external FFTWLib;
 
-procedure fftw_execute(plan: PFFTWPlan); cdecl; external FFTWLib;
+procedure fftw_execute(plan: PFFTWPlan); cdecl; external FFTWLib;  
 procedure fftw_destroy_plan(plan: PFFTWPlan); cdecl; external FFTWLib;
 
-function fftw_malloc(size: NativeUInt): Pointer; cdecl; external FFTWLib;
+function fftw_malloc(size: NativeUInt): Pointer; cdecl; external FFTWLib;  
 procedure fftw_free(p: Pointer); cdecl; external FFTWLib;
 
 const
@@ -392,11 +392,11 @@ BLAS (Basic Linear Algebra Subprograms) et LAPACK (Linear Algebra Package) sont 
 
 ```bash
 # Installation via apt
-sudo apt update
+sudo apt update  
 sudo apt install libblas-dev liblapack-dev
 
 # Vérifier l'installation
-ldconfig -p | grep blas
+ldconfig -p | grep blas  
 ldconfig -p | grep lapack
 ```
 
@@ -513,9 +513,9 @@ function fftw_plan_dft_1d(
   flags: Cardinal
 ): PFFTWPlan; cdecl; external FFTWLib;
 
-procedure fftw_execute(plan: PFFTWPlan); cdecl; external FFTWLib;
-procedure fftw_destroy_plan(plan: PFFTWPlan); cdecl; external FFTWLib;
-function fftw_malloc(size: NativeUInt): Pointer; cdecl; external FFTWLib;
+procedure fftw_execute(plan: PFFTWPlan); cdecl; external FFTWLib;  
+procedure fftw_destroy_plan(plan: PFFTWPlan); cdecl; external FFTWLib;  
+function fftw_malloc(size: NativeUInt): Pointer; cdecl; external FFTWLib;  
 procedure fftw_free(p: Pointer); cdecl; external FFTWLib;
 
 const
@@ -601,10 +601,10 @@ type
   Pgsl_rng = Pointer;
 
 // Générateur de nombres aléatoires
-function gsl_rng_alloc(T: Pointer): Pgsl_rng; cdecl; external GSLLib;
-procedure gsl_rng_free(r: Pgsl_rng); cdecl; external GSLLib;
-procedure gsl_rng_set(r: Pgsl_rng; seed: LongWord); cdecl; external GSLLib;
-function gsl_rng_uniform(r: Pgsl_rng): Double; cdecl; external GSLLib;
+function gsl_rng_alloc(T: Pointer): Pgsl_rng; cdecl; external GSLLib;  
+procedure gsl_rng_free(r: Pgsl_rng); cdecl; external GSLLib;  
+procedure gsl_rng_set(r: Pgsl_rng; seed: LongWord); cdecl; external GSLLib;  
+function gsl_rng_uniform(r: Pgsl_rng): Double; cdecl; external GSLLib;  
 function gsl_ran_gaussian(r: Pgsl_rng; sigma: Double): Double; cdecl; external GSLLib;
 
 // Type de générateur
@@ -633,12 +633,12 @@ var
 
 function gsl_interp_alloc(T: Pgsl_interp_type; size: NativeUInt): Pgsl_interp;
   cdecl; external GSLLib;
-function gsl_interp_accel_alloc: Pgsl_interp_accel; cdecl; external GSLLib;
+function gsl_interp_accel_alloc: Pgsl_interp_accel; cdecl; external GSLLib;  
 function gsl_interp_init(interp: Pgsl_interp; xa, ya: PDouble; size: NativeUInt): Integer;
   cdecl; external GSLLib;
 function gsl_interp_eval(interp: Pgsl_interp; xa, ya: PDouble; x: Double;
                          acc: Pgsl_interp_accel): Double; cdecl; external GSLLib;
-procedure gsl_interp_free(interp: Pgsl_interp); cdecl; external GSLLib;
+procedure gsl_interp_free(interp: Pgsl_interp); cdecl; external GSLLib;  
 procedure gsl_interp_accel_free(acc: Pgsl_interp_accel); cdecl; external GSLLib;
 
 var
@@ -730,7 +730,7 @@ OpenBLAS est une implémentation optimisée de BLAS, souvent plus rapide que la 
 sudo apt install libopenblas-dev
 
 # Définir OpenBLAS comme implémentation par défaut
-sudo update-alternatives --config libblas.so.3
+sudo update-alternatives --config libblas.so.3  
 sudo update-alternatives --config liblapack.so.3
 ```
 
@@ -857,9 +857,9 @@ type
 
 function fftw_plan_dft_1d(n: Integer; input, output: PFFTWComplex;
   sign: Integer; flags: Cardinal): PFFTWPlan; cdecl; external FFTWLib;
-procedure fftw_execute(plan: PFFTWPlan); cdecl; external FFTWLib;
-procedure fftw_destroy_plan(plan: PFFTWPlan); cdecl; external FFTWLib;
-function fftw_malloc(size: NativeUInt): Pointer; cdecl; external FFTWLib;
+procedure fftw_execute(plan: PFFTWPlan); cdecl; external FFTWLib;  
+procedure fftw_destroy_plan(plan: PFFTWPlan); cdecl; external FFTWLib;  
+function fftw_malloc(size: NativeUInt): Pointer; cdecl; external FFTWLib;  
 procedure fftw_free(p: Pointer); cdecl; external FFTWLib;
 
 // GSL - Identique sur les deux plateformes
@@ -872,7 +872,7 @@ function gsl_stats_sd(data: PDouble; stride, n: NativeUInt): Double;
 
 // ===== FONCTIONS PORTABLES =====
 
-function CalculateFFT(const SignalData: array of Double): TArray<TFFTWComplex>;
+function CalculateFFT(const SignalData: array of Double): TArray<TFFTWComplex>;  
 var
   N: Integer;
   input, output: PFFTWComplex;
@@ -909,7 +909,7 @@ begin
   end;
 end;
 
-procedure PrintStatistics(const Data: array of Double);
+procedure PrintStatistics(const Data: array of Double);  
 var
   mean, variance, sd: Double;
 begin
@@ -1058,25 +1058,25 @@ type
 
 function fftw_plan_dft_1d(n: Integer; input, output: PFFTWComplex;
   sign: Integer; flags: Cardinal): PFFTWPlan; cdecl; external FFTWLib;
-procedure fftw_execute(plan: PFFTWPlan); cdecl; external FFTWLib;
-procedure fftw_destroy_plan(plan: PFFTWPlan); cdecl; external FFTWLib;
-function fftw_malloc(size: NativeUInt): Pointer; cdecl; external FFTWLib;
+procedure fftw_execute(plan: PFFTWPlan); cdecl; external FFTWLib;  
+procedure fftw_destroy_plan(plan: PFFTWPlan); cdecl; external FFTWLib;  
+function fftw_malloc(size: NativeUInt): Pointer; cdecl; external FFTWLib;  
 procedure fftw_free(p: Pointer); cdecl; external FFTWLib;
 
 { TScientificComputer }
 
-constructor TScientificComputer.Create;
+constructor TScientificComputer.Create;  
 begin
   inherited Create;
   FLibrariesLoaded := LoadLibraries;
 end;
 
-destructor TScientificComputer.Destroy;
+destructor TScientificComputer.Destroy;  
 begin
   inherited Destroy;
 end;
 
-function TScientificComputer.LoadLibraries: Boolean;
+function TScientificComputer.LoadLibraries: Boolean;  
 begin
   // Tenter de charger les bibliothèques
   try
@@ -1088,7 +1088,7 @@ begin
   end;
 end;
 
-function TScientificComputer.Mean(const Data: array of Double): Double;
+function TScientificComputer.Mean(const Data: array of Double): Double;  
 begin
   if Length(Data) = 0 then
     Exit(0);
@@ -1096,7 +1096,7 @@ begin
   Result := gsl_stats_mean(@Data[0], 1, Length(Data));
 end;
 
-function TScientificComputer.Variance(const Data: array of Double): Double;
+function TScientificComputer.Variance(const Data: array of Double): Double;  
 begin
   if Length(Data) = 0 then
     Exit(0);
@@ -1104,7 +1104,7 @@ begin
   Result := gsl_stats_variance(@Data[0], 1, Length(Data));
 end;
 
-function TScientificComputer.StandardDeviation(const Data: array of Double): Double;
+function TScientificComputer.StandardDeviation(const Data: array of Double): Double;  
 begin
   if Length(Data) = 0 then
     Exit(0);
@@ -1112,7 +1112,7 @@ begin
   Result := gsl_stats_sd(@Data[0], 1, Length(Data));
 end;
 
-function TScientificComputer.Correlation(const X, Y: array of Double): Double;
+function TScientificComputer.Correlation(const X, Y: array of Double): Double;  
 begin
   if (Length(X) = 0) or (Length(Y) = 0) or (Length(X) <> Length(Y)) then
     Exit(0);
@@ -1120,7 +1120,7 @@ begin
   Result := gsl_stats_correlation(@X[0], 1, @Y[0], 1, Length(X));
 end;
 
-function TScientificComputer.FFT(const Signal: array of Double): TArray<Double>;
+function TScientificComputer.FFT(const Signal: array of Double): TArray<Double>;  
 var
   N, i: Integer;
   input, output: PFFTWComplex;
@@ -1157,7 +1157,7 @@ begin
   end;
 end;
 
-function TScientificComputer.InverseFFT(const Spectrum: array of Double): TArray<Double>;
+function TScientificComputer.InverseFFT(const Spectrum: array of Double): TArray<Double>;  
 var
   N, i: Integer;
   input, output: PFFTWComplex;
@@ -1194,7 +1194,7 @@ begin
   end;
 end;
 
-function TScientificComputer.MatrixMultiply(const A, B: array of array of Double): TArray<TArray<Double>>;
+function TScientificComputer.MatrixMultiply(const A, B: array of array of Double): TArray<TArray<Double>>;  
 var
   i, j, k: Integer;
   rows, cols, inner: Integer;
@@ -1348,13 +1348,13 @@ const
 {$ENDIF}
 
 // Déclarations PLplot
-procedure plinit; cdecl; external PLPlotLib;
-procedure plend; cdecl; external PLPlotLib;
+procedure plinit; cdecl; external PLPlotLib;  
+procedure plend; cdecl; external PLPlotLib;  
 procedure plenv(xmin, xmax, ymin, ymax: Double; just, axis: Integer);
   cdecl; external PLPlotLib;
-procedure pllab(xlabel, ylabel, title: PChar); cdecl; external PLPlotLib;
-procedure plline(n: Integer; x, y: PDouble); cdecl; external PLPlotLib;
-procedure plcol0(color: Integer); cdecl; external PLPlotLib;
+procedure pllab(xlabel, ylabel, title: PChar); cdecl; external PLPlotLib;  
+procedure plline(n: Integer; x, y: PDouble); cdecl; external PLPlotLib;  
+procedure plcol0(color: Integer); cdecl; external PLPlotLib;  
 procedure plpoin(n: Integer; x, y: PDouble; symbol: Integer);
   cdecl; external PLPlotLib;
 
@@ -1436,13 +1436,13 @@ type
     procedure SavePlot(const FileName: string);
   end;
 
-constructor TGnuplotPlotter.Create;
+constructor TGnuplotPlotter.Create;  
 begin
   FDataFile := 'plot_data.dat';
   FScriptFile := 'plot_script.gp';
 end;
 
-destructor TGnuplotPlotter.Destroy;
+destructor TGnuplotPlotter.Destroy;  
 begin
   // Nettoyer les fichiers temporaires
   if FileExists(FDataFile) then
@@ -1453,7 +1453,7 @@ begin
   inherited;
 end;
 
-function TGnuplotPlotter.GetGnuplotCommand: string;
+function TGnuplotPlotter.GetGnuplotCommand: string;  
 begin
   {$IFDEF WINDOWS}
   Result := 'gnuplot';  // Doit être dans le PATH
@@ -1463,7 +1463,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TGnuplotPlotter.PlotData(const X, Y: array of Double; const Title: string);
+procedure TGnuplotPlotter.PlotData(const X, Y: array of Double; const Title: string);  
 var
   DataFile, ScriptFile: TextFile;
   Process: TProcess;
@@ -1569,7 +1569,7 @@ begin
   end;
 end;
 
-procedure TGnuplotPlotter.SavePlot(const FileName: string);
+procedure TGnuplotPlotter.SavePlot(const FileName: string);  
 var
   ScriptFile: TextFile;
   Process: TProcess;
@@ -1719,7 +1719,7 @@ procedure dgemm_(
 ); cdecl; external BLASLib;
 
 // Multiplication manuelle (pour comparaison)
-procedure NaiveMatrixMultiply(N: Integer; const A, B: array of Double; var C: array of Double);
+procedure NaiveMatrixMultiply(N: Integer; const A, B: array of Double; var C: array of Double);  
 var
   i, j, k: Integer;
   sum: Double;
@@ -1734,7 +1734,7 @@ begin
     end;
 end;
 
-procedure RunBenchmark(N: Integer);
+procedure RunBenchmark(N: Integer);  
 var
   A, B, C: array of Double;
   transa, transb: Char;
@@ -1893,7 +1893,7 @@ Créez un script PowerShell pour installer automatiquement les bibliothèques :
 # install_scientific_libs.ps1
 # Script d'installation des bibliothèques scientifiques pour Windows
 
-Write-Host "=== Installation des bibliothèques scientifiques ===" -ForegroundColor Green
+Write-Host "=== Installation des bibliothèques scientifiques ===" -ForegroundColor Green  
 Write-Host ""
 
 # Vérifier si Chocolatey est installé
@@ -1904,19 +1904,19 @@ if (!(Get-Command choco -ErrorAction SilentlyContinue)) {
     Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 }
 
-Write-Host "Chocolatey installé !" -ForegroundColor Green
+Write-Host "Chocolatey installé !" -ForegroundColor Green  
 Write-Host ""
 
 # Installer les bibliothèques via Chocolatey
-Write-Host "Installation de gnuplot..." -ForegroundColor Yellow
+Write-Host "Installation de gnuplot..." -ForegroundColor Yellow  
 choco install gnuplot -y
 
-Write-Host "Installation de Python (pour bibliothèques scientifiques)..." -ForegroundColor Yellow
+Write-Host "Installation de Python (pour bibliothèques scientifiques)..." -ForegroundColor Yellow  
 choco install python -y
 
 # Installer les bibliothèques Python scientifiques
-Write-Host "Installation de NumPy, SciPy, Matplotlib..." -ForegroundColor Yellow
-python -m pip install --upgrade pip
+Write-Host "Installation de NumPy, SciPy, Matplotlib..." -ForegroundColor Yellow  
+python -m pip install --upgrade pip  
 python -m pip install numpy scipy matplotlib pandas scikit-learn
 
 # Télécharger FFTW
@@ -1925,7 +1925,7 @@ $fftwUrl = "https://fftw.org/pub/fftw/fftw-3.3.10-dll64.zip"
 $fftwPath = "$env:TEMP\fftw.zip"
 $fftwExtract = "C:\fftw"
 
-Invoke-WebRequest -Uri $fftwUrl -OutFile $fftwPath
+Invoke-WebRequest -Uri $fftwUrl -OutFile $fftwPath  
 Expand-Archive -Path $fftwPath -DestinationPath $fftwExtract -Force
 
 Write-Host "FFTW installé dans : $fftwExtract" -ForegroundColor Green
@@ -1937,14 +1937,14 @@ if ($currentPath -notlike "*$fftwExtract*") {
     Write-Host "FFTW ajouté au PATH" -ForegroundColor Green
 }
 
-Write-Host ""
-Write-Host "=== Installation terminée ===" -ForegroundColor Green
-Write-Host ""
-Write-Host "Bibliothèques installées :" -ForegroundColor Cyan
-Write-Host "  - Gnuplot" -ForegroundColor White
-Write-Host "  - Python + NumPy, SciPy, Matplotlib" -ForegroundColor White
-Write-Host "  - FFTW (dans $fftwExtract)" -ForegroundColor White
-Write-Host ""
+Write-Host ""  
+Write-Host "=== Installation terminée ===" -ForegroundColor Green  
+Write-Host ""  
+Write-Host "Bibliothèques installées :" -ForegroundColor Cyan  
+Write-Host "  - Gnuplot" -ForegroundColor White  
+Write-Host "  - Python + NumPy, SciPy, Matplotlib" -ForegroundColor White  
+Write-Host "  - FFTW (dans $fftwExtract)" -ForegroundColor White  
+Write-Host ""  
 Write-Host "IMPORTANT : Redémarrez votre terminal pour appliquer les changements du PATH" -ForegroundColor Yellow
 ```
 
@@ -1957,18 +1957,18 @@ Créez un script Bash pour Ubuntu :
 # install_scientific_libs.sh
 # Script d'installation des bibliothèques scientifiques pour Ubuntu
 
-echo "================================================"
-echo "  Installation des bibliothèques scientifiques"
-echo "================================================"
+echo "================================================"  
+echo "  Installation des bibliothèques scientifiques"  
+echo "================================================"  
 echo ""
 
 # Mise à jour des paquets
-echo "Mise à jour de la liste des paquets..."
+echo "Mise à jour de la liste des paquets..."  
 sudo apt update
 
 # Installation des bibliothèques de base
-echo ""
-echo "Installation des bibliothèques mathématiques..."
+echo ""  
+echo "Installation des bibliothèques mathématiques..."  
 sudo apt install -y \
     build-essential \
     gfortran \
@@ -1978,21 +1978,21 @@ sudo apt install -y \
     libatlas-base-dev
 
 # Installation GSL
-echo ""
-echo "Installation de GSL (GNU Scientific Library)..."
+echo ""  
+echo "Installation de GSL (GNU Scientific Library)..."  
 sudo apt install -y libgsl-dev
 
 # Installation FFTW
-echo ""
-echo "Installation de FFTW..."
+echo ""  
+echo "Installation de FFTW..."  
 sudo apt install -y \
     libfftw3-dev \
     libfftw3-3 \
     libfftw3-mpi-dev
 
 # Installation des outils de visualisation
-echo ""
-echo "Installation des outils de visualisation..."
+echo ""  
+echo "Installation des outils de visualisation..."  
 sudo apt install -y \
     gnuplot \
     gnuplot-x11 \
@@ -2000,8 +2000,8 @@ sudo apt install -y \
     plplot-driver-cairo
 
 # Installation Python et bibliothèques scientifiques
-echo ""
-echo "Installation de Python et des bibliothèques scientifiques..."
+echo ""  
+echo "Installation de Python et des bibliothèques scientifiques..."  
 sudo apt install -y \
     python3 \
     python3-pip \
@@ -2013,9 +2013,9 @@ sudo apt install -y \
     python3-sklearn
 
 # Installation de R (optionnel)
-echo ""
-read -p "Installer R et ses bibliothèques ? (o/n) " -n 1 -r
-echo
+echo ""  
+read -p "Installer R et ses bibliothèques ? (o/n) " -n 1 -r  
+echo  
 if [[ $REPLY =~ ^[Oo]$ ]]; then
     echo "Installation de R..."
     sudo apt install -y r-base r-base-dev
@@ -2025,43 +2025,43 @@ if [[ $REPLY =~ ^[Oo]$ ]]; then
 fi
 
 # Vérification des installations
-echo ""
-echo "================================================"
-echo "  Vérification des installations"
-echo "================================================"
+echo ""  
+echo "================================================"  
+echo "  Vérification des installations"  
+echo "================================================"  
 echo ""
 
-echo "BLAS/LAPACK:"
-ldconfig -p | grep blas | head -n 2
+echo "BLAS/LAPACK:"  
+ldconfig -p | grep blas | head -n 2  
 ldconfig -p | grep lapack | head -n 2
 
-echo ""
-echo "GSL:"
+echo ""  
+echo "GSL:"  
 gsl-config --version 2>/dev/null || echo "  Non installé"
 
-echo ""
-echo "FFTW:"
+echo ""  
+echo "FFTW:"  
 pkg-config --modversion fftw3 2>/dev/null || echo "  Non installé"
 
-echo ""
-echo "Gnuplot:"
+echo ""  
+echo "Gnuplot:"  
 gnuplot --version 2>/dev/null || echo "  Non installé"
 
-echo ""
-echo "Python:"
+echo ""  
+echo "Python:"  
 python3 --version
 
-echo ""
-echo "NumPy:"
+echo ""  
+echo "NumPy:"  
 python3 -c "import numpy; print(f'  Version: {numpy.__version__}')" 2>/dev/null || echo "  Non installé"
 
-echo ""
-echo "================================================"
-echo "  Installation terminée !"
-echo "================================================"
-echo ""
-echo "Vous pouvez maintenant compiler et exécuter vos"
-echo "programmes FreePascal utilisant ces bibliothèques."
+echo ""  
+echo "================================================"  
+echo "  Installation terminée !"  
+echo "================================================"  
+echo ""  
+echo "Vous pouvez maintenant compiler et exécuter vos"  
+echo "programmes FreePascal utilisant ces bibliothèques."  
 echo ""
 ```
 
@@ -2095,7 +2095,7 @@ type
 var
   Libraries: array of TLibraryInfo;
 
-procedure AddLibrary(const Name, LibName: string);
+procedure AddLibrary(const Name, LibName: string);  
 var
   Idx: Integer;
 begin
@@ -2107,7 +2107,7 @@ begin
   Libraries[Idx].ErrorMessage := '';
 end;
 
-procedure CheckLibrary(var Lib: TLibraryInfo);
+procedure CheckLibrary(var Lib: TLibraryInfo);  
 var
   Handle: TLibHandle;
 begin
@@ -2125,7 +2125,7 @@ begin
   end;
 end;
 
-procedure PrintResults;
+procedure PrintResults;  
 var
   i: Integer;
   LoadedCount, TotalCount: Integer;
@@ -2310,7 +2310,7 @@ fpc -O3 src/main.pas
 
 ## Vérification
 
-Exécutez `tests/test_libraries` pour vérifier que toutes les bibliothèques
+Exécutez `tests/test_libraries` pour vérifier que toutes les bibliothèques  
 sont correctement installées.
 
 ## Documentation

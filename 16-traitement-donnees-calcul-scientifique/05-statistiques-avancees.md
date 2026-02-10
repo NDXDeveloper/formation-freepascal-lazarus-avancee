@@ -93,7 +93,7 @@ end.
 #### Moyenne arithmétique
 
 ```pascal
-function Moyenne(const donnees: TDonnees): TFloat;
+function Moyenne(const donnees: TDonnees): TFloat;  
 var
   i: Integer;
   somme: TFloat;
@@ -112,7 +112,7 @@ end;
 #### Moyenne pondérée
 
 ```pascal
-function MoyennePonderee(const valeurs, poids: TDonnees): TFloat;
+function MoyennePonderee(const valeurs, poids: TDonnees): TFloat;  
 var
   i: Integer;
   sommeValeurs, sommePoids: TFloat;
@@ -141,7 +141,7 @@ end;
 La valeur centrale qui divise les données en deux moitiés égales.
 
 ```pascal
-function Mediane(const donnees: TDonnees): TFloat;
+function Mediane(const donnees: TDonnees): TFloat;  
 var
   tri: TDonnees;
   n: Integer;
@@ -163,7 +163,7 @@ begin
     Result := (tri[n div 2 - 1] + tri[n div 2]) / 2;
 end;
 
-procedure TrierDonnees(var donnees: TDonnees);
+procedure TrierDonnees(var donnees: TDonnees);  
 var
   i, j: Integer;
   temp: TFloat;
@@ -185,7 +185,7 @@ end;
 La valeur la plus fréquente.
 
 ```pascal
-function Mode(const donnees: TDonnees): TFloat;
+function Mode(const donnees: TDonnees): TFloat;  
 var
   i, j, compteur, maxCompteur: Integer;
 begin
@@ -216,7 +216,7 @@ end;
 #### Variance et écart-type
 
 ```pascal
-function Variance(const donnees: TDonnees; population: Boolean = True): TFloat;
+function Variance(const donnees: TDonnees; population: Boolean = True): TFloat;  
 var
   i, n: Integer;
   moy, somme: TFloat;
@@ -241,7 +241,7 @@ begin
   end;
 end;
 
-function EcartType(const donnees: TDonnees; population: Boolean = True): TFloat;
+function EcartType(const donnees: TDonnees; population: Boolean = True): TFloat;  
 begin
   Result := Sqrt(Variance(donnees, population));
 end;
@@ -250,7 +250,7 @@ end;
 #### Étendue (Range)
 
 ```pascal
-function Etendue(const donnees: TDonnees): TFloat;
+function Etendue(const donnees: TDonnees): TFloat;  
 var
   min, max: TFloat;
   i: Integer;
@@ -274,7 +274,7 @@ end;
 #### Quartiles et écart interquartile
 
 ```pascal
-function Quartile(const donnees: TDonnees; q: Integer): TFloat;
+function Quartile(const donnees: TDonnees; q: Integer): TFloat;  
 var
   tri: TDonnees;
   position: TFloat;
@@ -300,7 +300,7 @@ begin
               (position - index) * (tri[index] - tri[index - 1]);
 end;
 
-function EcartInterquartile(const donnees: TDonnees): TFloat;
+function EcartInterquartile(const donnees: TDonnees): TFloat;  
 begin
   Result := Quartile(donnees, 3) - Quartile(donnees, 1);
 end;
@@ -313,7 +313,7 @@ end;
 Mesure l'asymétrie de la distribution.
 
 ```pascal
-function Asymetrie(const donnees: TDonnees): TFloat;
+function Asymetrie(const donnees: TDonnees): TFloat;  
 var
   i, n: Integer;
   moy, ecart, somme: TFloat;
@@ -336,7 +336,7 @@ begin
 end;
 
 // Interprétation
-procedure InterpreterAsymetrie(asymetrie: TFloat);
+procedure InterpreterAsymetrie(asymetrie: TFloat);  
 begin
   if Abs(asymetrie) < 0.5 then
     WriteLn('Distribution approximativement symétrique')
@@ -352,7 +352,7 @@ end;
 Mesure le caractère pointu de la distribution.
 
 ```pascal
-function Aplatissement(const donnees: TDonnees): TFloat;
+function Aplatissement(const donnees: TDonnees): TFloat;  
 var
   i, n: Integer;
   moy, ecart, somme: TFloat;
@@ -376,7 +376,7 @@ begin
             - (3 * Sqr(n - 1)) / ((n - 2) * (n - 3));
 end;
 
-procedure InterpreterAplatissement(kurtosis: TFloat);
+procedure InterpreterAplatissement(kurtosis: TFloat);  
 begin
   if Abs(kurtosis) < 0.5 then
     WriteLn('Distribution mésokurtique (normale)')
@@ -390,7 +390,7 @@ end;
 ### Fonction complète de statistiques descriptives
 
 ```pascal
-function CalculerStatistiquesDescriptives(const donnees: TDonnees): TStatistiquesDescriptives;
+function CalculerStatistiquesDescriptives(const donnees: TDonnees): TStatistiquesDescriptives;  
 var
   i: Integer;
 begin
@@ -431,7 +431,7 @@ begin
   Result.EIQ := Result.Q3 - Result.Q1;
 end;
 
-procedure AfficherStatistiquesDescriptives(const stats: TStatistiquesDescriptives);
+procedure AfficherStatistiquesDescriptives(const stats: TStatistiquesDescriptives);  
 begin
   WriteLn('=== Statistiques Descriptives ===');
   WriteLn(Format('Effectif       : %d', [stats.Effectif]));
@@ -461,7 +461,7 @@ uses
   Math;
 
 // Fonction de densité de probabilité (PDF)
-function PDFNormale(x, moyenne, ecartType: TFloat): TFloat;
+function PDFNormale(x, moyenne, ecartType: TFloat): TFloat;  
 var
   z: TFloat;
 begin
@@ -470,7 +470,7 @@ begin
 end;
 
 // Fonction de répartition (CDF) - approximation
-function CDFNormale(x, moyenne, ecartType: TFloat): TFloat;
+function CDFNormale(x, moyenne, ecartType: TFloat): TFloat;  
 var
   z, t, p: TFloat;
 const
@@ -496,7 +496,7 @@ begin
 end;
 
 // Génération de nombres aléatoires selon loi normale (Box-Muller)
-function AleatoireNormal(moyenne, ecartType: TFloat): TFloat;
+function AleatoireNormal(moyenne, ecartType: TFloat): TFloat;  
 var
   u1, u2, z: TFloat;
 begin
@@ -512,7 +512,7 @@ end;
 
 ```pascal
 // Fonction de densité de Student
-function PDFStudent(t: TFloat; degreLiberte: Integer): TFloat;
+function PDFStudent(t: TFloat; degreLiberte: Integer): TFloat;  
 var
   gamma1, gamma2: TFloat;
 begin
@@ -525,7 +525,7 @@ begin
 end;
 
 // Valeur critique de Student (approximation)
-function ValeurCritiqueStudent(alpha: TFloat; degreLiberte: Integer): TFloat;
+function ValeurCritiqueStudent(alpha: TFloat; degreLiberte: Integer): TFloat;  
 begin
   // Approximation simple - pour production, utiliser table complète
   if degreLiberte >= 30 then
@@ -546,7 +546,7 @@ begin
   end;
 end;
 
-function ValeurCritiqueNormale(alpha: TFloat): TFloat;
+function ValeurCritiqueNormale(alpha: TFloat): TFloat;  
 begin
   // Pour alpha = 0.05 (bilatéral), z = 1.96
   if Abs(alpha - 0.05) < 0.001 then
@@ -562,7 +562,7 @@ end;
 ### Distribution du Chi-carré (χ²)
 
 ```pascal
-function PDFChiCarre(x: TFloat; degreLiberte: Integer): TFloat;
+function PDFChiCarre(x: TFloat; degreLiberte: Integer): TFloat;  
 var
   k: TFloat;
 begin
@@ -578,7 +578,7 @@ end;
 ### Distribution F de Fisher
 
 ```pascal
-function PDFF(x: TFloat; dl1, dl2: Integer): TFloat;
+function PDFF(x: TFloat; dl1, dl2: Integer): TFloat;  
 var
   d1, d2: TFloat;
 begin
@@ -599,7 +599,7 @@ end;
 ### Covariance
 
 ```pascal
-function Covariance(const x, y: TDonnees; population: Boolean = True): TFloat;
+function Covariance(const x, y: TDonnees; population: Boolean = True): TFloat;  
 var
   i, n: Integer;
   moyX, moyY, somme: TFloat;
@@ -634,7 +634,7 @@ end;
 Mesure la relation linéaire entre deux variables (-1 ≤ r ≤ 1).
 
 ```pascal
-function CorrelationPearson(const x, y: TDonnees): TFloat;
+function CorrelationPearson(const x, y: TDonnees): TFloat;  
 var
   cov, ecartX, ecartY: TFloat;
 begin
@@ -648,7 +648,7 @@ begin
   Result := cov / (ecartX * ecartY);
 end;
 
-procedure InterpreterCorrelation(r: TFloat);
+procedure InterpreterCorrelation(r: TFloat);  
 begin
   WriteLn(Format('Corrélation de Pearson : r = %.4f', [r]));
 
@@ -671,7 +671,7 @@ end;
 Pour relations non linéaires (utilise les rangs).
 
 ```pascal
-function RangsDonnees(const donnees: TDonnees): TDonnees;
+function RangsDonnees(const donnees: TDonnees): TDonnees;  
 var
   i, j: Integer;
   tri: TDonnees;
@@ -691,7 +691,7 @@ begin
   end;
 end;
 
-function CorrelationSpearman(const x, y: TDonnees): TFloat;
+function CorrelationSpearman(const x, y: TDonnees): TFloat;  
 var
   rangsX, rangsY: TDonnees;
 begin
@@ -704,7 +704,7 @@ end;
 ### Matrice de corrélation
 
 ```pascal
-function MatriceCorrelation(const donnees: TMatriceDonnees): TMatriceDonnees;
+function MatriceCorrelation(const donnees: TMatriceDonnees): TMatriceDonnees;  
 var
   i, j, nbVariables: Integer;
   colonneI, colonneJ: TDonnees;
@@ -781,7 +781,7 @@ begin
     Result.ValeurP := 0.1;
 end;
 
-procedure AfficherResultatTest(const resultat: TResultatTest; nomTest: String);
+procedure AfficherResultatTest(const resultat: TResultatTest; nomTest: String);  
 begin
   WriteLn('=== ', nomTest, ' ===');
   WriteLn(Format('Statistique    : %.4f', [resultat.Statistique]));
@@ -864,7 +864,7 @@ begin
 end;
 
 // Exemple d'utilisation
-procedure ExempleTestTApparie;
+procedure ExempleTestTApparie;  
 var
   avant, apres: TDonnees;
   resultat: TResultatTest;
@@ -951,7 +951,7 @@ begin
     Result.ValeurP := 0.1;
 end;
 
-function ValeurCritiqueChiCarre(alpha: TFloat; dl: Integer): TFloat;
+function ValeurCritiqueChiCarre(alpha: TFloat; dl: Integer): TFloat;  
 begin
   // Approximation simple - pour alpha = 0.05
   case dl of
@@ -969,7 +969,7 @@ end;
 ### Test de normalité (Shapiro-Wilk simplifié)
 
 ```pascal
-function TestNormalite(const donnees: TDonnees): Boolean;
+function TestNormalite(const donnees: TDonnees): Boolean;  
 var
   stats: TStatistiquesDescriptives;
   asymetrie, aplatissement: TFloat;
@@ -1004,7 +1004,7 @@ type
     ValeurP: TFloat;
   end;
 
-function RegressionLineaireSimple(const x, y: TDonnees): TRegressionSimple;
+function RegressionLineaireSimple(const x, y: TDonnees): TRegressionSimple;  
 var
   n, i: Integer;
   sommeX, sommeY, sommeXY, sommeX2: TFloat;
@@ -1069,7 +1069,7 @@ begin
     Result.ValeurP := 0.1;
 end;
 
-procedure AfficherRegressionSimple(const reg: TRegressionSimple);
+procedure AfficherRegressionSimple(const reg: TRegressionSimple);  
 begin
   WriteLn('=== Régression Linéaire Simple ===');
   WriteLn(Format('Équation : y = %.4f + %.4f × x',
@@ -1098,7 +1098,7 @@ function PredireAvecIntervalle(const reg: TRegressionSimple;
   Prediction: TFloat;
   IC_Inf: TFloat;
   IC_Sup: TFloat;
-end;
+end;  
 var
   n: Integer;
   moyX, sxx, erreur: TFloat;
@@ -1215,7 +1215,7 @@ begin
   Result := RegressionLineaireMultiple(xMatrix, y).Coefficients;
 end;
 
-function EvaluerPolynome(const coefficients: TDonnees; x: TFloat): TFloat;
+function EvaluerPolynome(const coefficients: TDonnees; x: TFloat): TFloat;  
 var
   i: Integer;
 begin
@@ -1322,7 +1322,7 @@ begin
   end;
 end;
 
-procedure AfficherResultatANOVA(const anova: TResultatANOVA);
+procedure AfficherResultatANOVA(const anova: TResultatANOVA);  
 begin
   WriteLn('=== ANOVA à un facteur ===');
   WriteLn;
@@ -1403,7 +1403,7 @@ function IntervalleConfianceMoyenne(const donnees: TDonnees;
   IC_Inf: TFloat;
   IC_Sup: TFloat;
   MargeErreur: TFloat;
-end;
+end;  
 var
   n: Integer;
   moy, ecart, erreurStandard, t: TFloat;
@@ -1430,7 +1430,7 @@ procedure AfficherIntervalleConfiance(const ic: record
   IC_Inf: TFloat;
   IC_Sup: TFloat;
   MargeErreur: TFloat;
-end; niveau: TFloat);
+end; niveau: TFloat);  
 begin
   WriteLn(Format('Moyenne : %.4f', [ic.Moyenne]));
   WriteLn(Format('IC à %d%% : [%.4f ; %.4f]',
@@ -1447,7 +1447,7 @@ function IntervalleConfianceProportion(succes, total: Integer;
   Proportion: TFloat;
   IC_Inf: TFloat;
   IC_Sup: TFloat;
-end;
+end;  
 var
   p, erreurStandard, z: TFloat;
 begin
@@ -1538,7 +1538,7 @@ function ICBootstrap(const donnees: TDonnees;
   Estimation: TFloat;
   IC_Inf: TFloat;
   IC_Sup: TFloat;
-end;
+end;  
 var
   bootstrapStats: TDonnees;
   alpha: TFloat;
@@ -1571,7 +1571,7 @@ function PCAStatistiques(const donnees: TMatriceDonnees;
   ValeursPropres: TDonnees;
   VarianceExpliquee: TDonnees;
   Scores: TMatriceDonnees;
-end;
+end;  
 var
   i, j, n, p: Integer;
   moyennes: TDonnees;
@@ -1629,7 +1629,7 @@ begin
     WriteLn(Format('PC%d : %.2f%%', [i + 1, Result.VarianceExpliquee[i]]));
 end;
 
-function MatriceCovariance(const donnees: TMatriceDonnees): TMatriceDonnees;
+function MatriceCovariance(const donnees: TMatriceDonnees): TMatriceDonnees;  
 var
   n, p, i, j, k: Integer;
   somme: TFloat;
@@ -1663,7 +1663,7 @@ type
     Classes: array of TClasse;
   end;
 
-function AnalyseDiscriminanteLineaire(const donnees: TDonneesClassees): TMatrix;
+function AnalyseDiscriminanteLineaire(const donnees: TDonneesClassees): TMatrix;  
 var
   nbClasses, i, j: Integer;
   moyenneGenerale, moyennesClasses: TMatriceDonnees;
@@ -1694,7 +1694,7 @@ end;
 ### Moyennes mobiles
 
 ```pascal
-function MoyenneMobile(const serie: TDonnees; fenetre: Integer): TDonnees;
+function MoyenneMobile(const serie: TDonnees; fenetre: Integer): TDonnees;  
 var
   i, j: Integer;
   somme: TFloat;
@@ -1783,7 +1783,7 @@ end;
 ### Autocorrélation
 
 ```pascal
-function Autocorrelation(const serie: TDonnees; lag: Integer): TFloat;
+function Autocorrelation(const serie: TDonnees; lag: Integer): TFloat;  
 var
   i, n: Integer;
   moy, variance, covariance: TFloat;
@@ -1827,7 +1827,7 @@ end;
 ### Test de Dickey-Fuller augmenté (simplifié)
 
 ```pascal
-function TestDickeyFuller(const serie: TDonnees): TResultatTest;
+function TestDickeyFuller(const serie: TDonnees): TResultatTest;  
 var
   differences: TDonnees;
   i: Integer;
@@ -1865,13 +1865,13 @@ end;
 ### Théorème de Bayes
 
 ```pascal
-function ProbabiliteAPriori(hypothese: String): TFloat;
+function ProbabiliteAPriori(hypothese: String): TFloat;  
 begin
   // À définir selon le contexte
   Result := 0.5;  // Cas uniforme
 end;
 
-function Vraisemblance(donnees: TDonnees; hypothese: String): TFloat;
+function Vraisemblance(donnees: TDonnees; hypothese: String): TFloat;  
 begin
   // Calculer P(données | hypothèse)
   // Implémentation dépend du modèle
@@ -1901,7 +1901,7 @@ function MoyenneBayesienne(const donnees: TDonnees;
   VariancePosteriori: TFloat;
   IC95_Inf: TFloat;
   IC95_Sup: TFloat;
-end;
+end;  
 var
   n: Integer;
   moyenneObservee, varianceObservee: TFloat;
@@ -2002,7 +2002,7 @@ end;
 ### Graphique de corrélation (scatter plot)
 
 ```pascal
-procedure GraphiqueCorrelation(Chart: TChart; const x, y: TDonnees);
+procedure GraphiqueCorrelation(Chart: TChart; const x, y: TDonnees);  
 var
   Serie: TPointSeries;
   SerieRegression: TLineSeries;
@@ -2078,7 +2078,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TFormAnalyse.FormCreate(Sender: TObject);
+procedure TFormAnalyse.FormCreate(Sender: TObject);  
 begin
   ComboBoxTest.Items.Add('Statistiques descriptives');
   ComboBoxTest.Items.Add('Test t (un échantillon)');
@@ -2092,7 +2092,7 @@ begin
   StringGrid1.Cells[1, 0] := 'Valeur';
 end;
 
-procedure TFormAnalyse.ButtonChargerClick(Sender: TObject);
+procedure TFormAnalyse.ButtonChargerClick(Sender: TObject);  
 var
   i: Integer;
 begin
@@ -2115,7 +2115,7 @@ begin
                          ' observations');
 end;
 
-procedure TFormAnalyse.ButtonAnalyserClick(Sender: TObject);
+procedure TFormAnalyse.ButtonAnalyserClick(Sender: TObject);  
 begin
   if Length(FDonnees) = 0 then
   begin
@@ -2143,7 +2143,7 @@ begin
   end;
 end;
 
-procedure TFormAnalyse.AfficherStatistiquesDescriptives;
+procedure TFormAnalyse.AfficherStatistiquesDescriptives;  
 var
   stats: TStatistiquesDescriptives;
 begin
@@ -2167,7 +2167,7 @@ begin
   MemoResultats.Lines.Add(Format('Aplatissement  : %.3f', [stats.Aplatissement]));
 end;
 
-procedure TFormAnalyse.EffectuerTestHypothese;
+procedure TFormAnalyse.EffectuerTestHypothese;  
 var
   resultat: TResultatTest;
   moyenneTheorique: TFloat;
@@ -2196,12 +2196,12 @@ begin
     MemoResultats.Lines.Add('✗ Résultat NON SIGNIFICATIF (p ≥ 0.05)');
 end;
 
-procedure TFormAnalyse.ButtonGraphiqueClick(Sender: TObject);
+procedure TFormAnalyse.ButtonGraphiqueClick(Sender: TObject);  
 begin
   CreerVisualisations;
 end;
 
-procedure TFormAnalyse.CreerVisualisations;
+procedure TFormAnalyse.CreerVisualisations;  
 begin
   CreerHistogramme(Chart1, FDonnees, 10);
   Chart1.Title.Text.Text := 'Distribution des données';
@@ -2225,7 +2225,7 @@ uses
   BaseUnix;  // Pour performances Linux
 {$ENDIF}
 
-procedure OptimiserCalculs;
+procedure OptimiserCalculs;  
 begin
   {$IFDEF WINDOWS}
   // Augmenter la priorité du thread
@@ -2241,7 +2241,7 @@ end;
 ### Export de résultats
 
 ```pascal
-procedure ExporterResultatsCSV(nomFichier: String; const stats: TStatistiquesDescriptives);
+procedure ExporterResultatsCSV(nomFichier: String; const stats: TStatistiquesDescriptives);  
 var
   fichier: TextFile;
   separateur: Char;
@@ -2281,13 +2281,13 @@ end;
 
 ```pascal
 // Appeler R pour analyses avancées
-procedure AppelerR(script: String);
+procedure AppelerR(script: String);  
 begin
   ExecuteProcess('Rscript', [script], []);
 end;
 
 // Appeler Python avec SciPy/NumPy
-procedure AppelerPythonStats(donnees: TDonnees);
+procedure AppelerPythonStats(donnees: TDonnees);  
 var
   i: Integer;
   fichier: TextFile;
@@ -2309,7 +2309,7 @@ end;
 ### Validation des données
 
 ```pascal
-function ValiderDonnees(const donnees: TDonnees): Boolean;
+function ValiderDonnees(const donnees: TDonnees): Boolean;  
 var
   i: Integer;
 begin
@@ -2347,7 +2347,7 @@ type
     Conclusions: TStringList;
   end;
 
-procedure GenererRapport(const rapport: TRapportStatistique; nomFichier: String);
+procedure GenererRapport(const rapport: TRapportStatistique; nomFichier: String);  
 var
   fichier: TextFile;
   i: Integer;
@@ -2426,7 +2426,7 @@ Les statistiques avancées sont essentielles pour l'analyse de données scientif
 #### Analyse exploratoire de données
 
 ```pascal
-procedure AnalyseExploratoire(const donnees: TDonnees);
+procedure AnalyseExploratoire(const donnees: TDonnees);  
 var
   stats: TStatistiquesDescriptives;
 begin
@@ -2448,7 +2448,7 @@ begin
   CreerBoiteAMoustaches(Chart2, donnees);
 end;
 
-procedure DetecterValeursAberrantes(const donnees: TDonnees);
+procedure DetecterValeursAberrantes(const donnees: TDonnees);  
 var
   stats: TStatistiquesDescriptives;
   i: Integer;
@@ -2472,7 +2472,7 @@ end;
 #### Comparaison de groupes
 
 ```pascal
-procedure ComparerGroupes(const groupe1, groupe2: TDonnees);
+procedure ComparerGroupes(const groupe1, groupe2: TDonnees);  
 var
   resultat: TResultatTest;
   normal1, normal2: Boolean;
@@ -2503,7 +2503,7 @@ begin
   CalculerTailleEffet(groupe1, groupe2);
 end;
 
-procedure CalculerTailleEffet(const groupe1, groupe2: TDonnees);
+procedure CalculerTailleEffet(const groupe1, groupe2: TDonnees);  
 var
   moy1, moy2, ecart1, ecart2, ecartPooled, cohenD: TFloat;
   n1, n2: Integer;
@@ -2537,7 +2537,7 @@ end;
 #### Analyse de régression complète
 
 ```pascal
-procedure AnalyseRegressionComplete(const x, y: TDonnees);
+procedure AnalyseRegressionComplete(const x, y: TDonnees);  
 var
   regression: TRegressionSimple;
   residus: TDonnees;
@@ -2578,7 +2578,7 @@ end;
 La puissance est la probabilité de détecter un effet s'il existe vraiment.
 
 ```pascal
-function PuissanceTestT(tailleEffet, alpha: TFloat; n: Integer): TFloat;
+function PuissanceTestT(tailleEffet, alpha: TFloat; n: Integer): TFloat;  
 var
   nc: TFloat;  // Non-centrality parameter
   tc: TFloat;  // Critical t value
@@ -2601,7 +2601,7 @@ begin
     Result := 0.40;
 end;
 
-procedure AnalysePuissance;
+procedure AnalysePuissance;  
 var
   taillesEffet: array[0..2] of TFloat = (0.2, 0.5, 0.8);
   tailles: array[0..4] of Integer = (10, 20, 50, 100, 200);
@@ -2645,7 +2645,7 @@ function MetaAnalyseEffetsFixes(const etudes: array of TEtude): record
   IC95_Sup: TFloat;
   StatistiqueZ: TFloat;
   ValeurP: TFloat;
-end;
+end;  
 var
   i: Integer;
   poids, sommePoidsEffet, sommePoids: TFloat;
@@ -2738,7 +2738,7 @@ begin
   end;
 end;
 
-function MoyenneSansNaN(const donnees: TDonnees): TFloat;
+function MoyenneSansNaN(const donnees: TDonnees): TFloat;  
 var
   i, n: Integer;
   somme: TFloat;

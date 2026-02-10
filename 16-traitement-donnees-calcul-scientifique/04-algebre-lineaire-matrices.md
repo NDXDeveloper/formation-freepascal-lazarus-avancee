@@ -126,7 +126,7 @@ end;
 ### Addition et soustraction
 
 ```pascal
-function AdditionVecteurs(const a, b: TVector): TVector;
+function AdditionVecteurs(const a, b: TVector): TVector;  
 var
   i: Integer;
 begin
@@ -138,7 +138,7 @@ begin
     Result[i] := a[i] + b[i];
 end;
 
-function SoustractionVecteurs(const a, b: TVector): TVector;
+function SoustractionVecteurs(const a, b: TVector): TVector;  
 var
   i: Integer;
 begin
@@ -167,7 +167,7 @@ end;
 ### Multiplication par un scalaire
 
 ```pascal
-function MultiplicationScalaire(const v: TVector; scalaire: TFloat): TVector;
+function MultiplicationScalaire(const v: TVector; scalaire: TFloat): TVector;  
 var
   i: Integer;
 begin
@@ -192,7 +192,7 @@ end;
 Le produit scalaire mesure à quel point deux vecteurs pointent dans la même direction.
 
 ```pascal
-function ProduitScalaire(const a, b: TVector): TFloat;
+function ProduitScalaire(const a, b: TVector): TFloat;  
 var
   i: Integer;
 begin
@@ -222,7 +222,7 @@ end;
 ### Norme (longueur) d'un vecteur
 
 ```pascal
-function Norme(const v: TVector): TFloat;
+function Norme(const v: TVector): TFloat;  
 var
   i: Integer;
 begin
@@ -233,7 +233,7 @@ begin
 end;
 
 // Norme L1 (somme des valeurs absolues)
-function NormeL1(const v: TVector): TFloat;
+function NormeL1(const v: TVector): TFloat;  
 var
   i: Integer;
 begin
@@ -243,7 +243,7 @@ begin
 end;
 
 // Norme infinie (valeur maximale)
-function NormeInfinie(const v: TVector): TFloat;
+function NormeInfinie(const v: TVector): TFloat;  
 var
   i: Integer;
 begin
@@ -259,7 +259,7 @@ end;
 Créer un vecteur de longueur 1 dans la même direction.
 
 ```pascal
-function Normaliser(const v: TVector): TVector;
+function Normaliser(const v: TVector): TVector;  
 var
   norme: TFloat;
   i: Integer;
@@ -277,7 +277,7 @@ end;
 ### Produit vectoriel (cross product) - 3D uniquement
 
 ```pascal
-function ProduitVectoriel(const a, b: TVector3D): TVector3D;
+function ProduitVectoriel(const a, b: TVector3D): TVector3D;  
 begin
   Result[0] := a[1] * b[2] - a[2] * b[1];
   Result[1] := a[2] * b[0] - a[0] * b[2];
@@ -298,7 +298,7 @@ end;
 ### Angle entre deux vecteurs
 
 ```pascal
-function AngleEntreVecteurs(const a, b: TVector): TFloat;
+function AngleEntreVecteurs(const a, b: TVector): TFloat;  
 var
   dot, normeA, normeB: TFloat;
 begin
@@ -314,7 +314,7 @@ begin
 end;
 
 // Convertir en degrés
-function AngleEnDegres(const a, b: TVector): TFloat;
+function AngleEnDegres(const a, b: TVector): TFloat;  
 begin
   Result := RadToDeg(AngleEntreVecteurs(a, b));
 end;
@@ -326,7 +326,7 @@ end;
 
 ```pascal
 // Matrice nulle
-function MatriceNulle(lignes, colonnes: Integer): TMatrix;
+function MatriceNulle(lignes, colonnes: Integer): TMatrix;  
 var
   i, j: Integer;
 begin
@@ -337,7 +337,7 @@ begin
 end;
 
 // Matrice identité
-function MatriceIdentite(taille: Integer): TMatrix;
+function MatriceIdentite(taille: Integer): TMatrix;  
 var
   i, j: Integer;
 begin
@@ -351,7 +351,7 @@ begin
 end;
 
 // Matrice diagonale
-function MatriceDiagonale(const diagonale: TVector): TMatrix;
+function MatriceDiagonale(const diagonale: TVector): TMatrix;  
 var
   i, j, n: Integer;
 begin
@@ -384,7 +384,7 @@ end;
 ### Addition et soustraction de matrices
 
 ```pascal
-function AdditionMatrices(const a, b: TMatrix): TMatrix;
+function AdditionMatrices(const a, b: TMatrix): TMatrix;  
 var
   i, j: Integer;
 begin
@@ -399,7 +399,7 @@ begin
       Result[i, j] := a[i, j] + b[i, j];
 end;
 
-function SoustractionMatrices(const a, b: TMatrix): TMatrix;
+function SoustractionMatrices(const a, b: TMatrix): TMatrix;  
 var
   i, j: Integer;
 begin
@@ -418,7 +418,7 @@ end;
 ### Multiplication de matrices
 
 ```pascal
-function MultiplicationMatrices(const a, b: TMatrix): TMatrix;
+function MultiplicationMatrices(const a, b: TMatrix): TMatrix;  
 var
   i, j, k: Integer;
   somme: TFloat;
@@ -469,7 +469,7 @@ end;
 ### Transposition
 
 ```pascal
-function Transposee(const m: TMatrix): TMatrix;
+function Transposee(const m: TMatrix): TMatrix;  
 var
   i, j: Integer;
 begin
@@ -500,7 +500,7 @@ end;
 ### Trace (somme de la diagonale)
 
 ```pascal
-function Trace(const m: TMatrix): TFloat;
+function Trace(const m: TMatrix): TFloat;  
 var
   i, n: Integer;
 begin
@@ -521,7 +521,7 @@ Le déterminant indique si une matrice est inversible (déterminant ≠ 0).
 ### Déterminant 2×2
 
 ```pascal
-function Determinant2x2(const m: TMatrix2x2): TFloat;
+function Determinant2x2(const m: TMatrix2x2): TFloat;  
 begin
   Result := m[0, 0] * m[1, 1] - m[0, 1] * m[1, 0];
 end;
@@ -530,7 +530,7 @@ end;
 ### Déterminant 3×3
 
 ```pascal
-function Determinant3x3(const m: TMatrix3x3): TFloat;
+function Determinant3x3(const m: TMatrix3x3): TFloat;  
 begin
   Result := m[0, 0] * (m[1, 1] * m[2, 2] - m[1, 2] * m[2, 1])
           - m[0, 1] * (m[1, 0] * m[2, 2] - m[1, 2] * m[2, 0])
@@ -541,7 +541,7 @@ end;
 ### Déterminant général (méthode de Laplace)
 
 ```pascal
-function Determinant(const m: TMatrix): TFloat;
+function Determinant(const m: TMatrix): TFloat;  
 var
   n, j: Integer;
   sousMatrice: TMatrix;
@@ -603,7 +603,7 @@ end;
 ### Inverse 2×2
 
 ```pascal
-function Inverse2x2(const m: TMatrix2x2): TMatrix2x2;
+function Inverse2x2(const m: TMatrix2x2): TMatrix2x2;  
 var
   det: TFloat;
 begin
@@ -622,7 +622,7 @@ end;
 ### Inverse 3×3
 
 ```pascal
-function Inverse3x3(const m: TMatrix3x3): TMatrix3x3;
+function Inverse3x3(const m: TMatrix3x3): TMatrix3x3;  
 var
   det: TFloat;
 begin
@@ -649,7 +649,7 @@ end;
 ### Inverse générale (méthode de Gauss-Jordan)
 
 ```pascal
-function InverseMatrice(const m: TMatrix): TMatrix;
+function InverseMatrice(const m: TMatrix): TMatrix;  
 var
   n, i, j, k: Integer;
   augmentee: TMatrix;
@@ -712,7 +712,7 @@ end;
 Factoriser A = L × U (Lower × Upper)
 
 ```pascal
-procedure DecompositionLU(const a: TMatrix; out l, u: TMatrix);
+procedure DecompositionLU(const a: TMatrix; out l, u: TMatrix);  
 var
   n, i, j, k: Integer;
   somme: TFloat;
@@ -763,7 +763,7 @@ end;
 Factoriser A = Q × R (Orthogonale × Triangulaire supérieure)
 
 ```pascal
-procedure DecompositionQR(const a: TMatrix; out q, r: TMatrix);
+procedure DecompositionQR(const a: TMatrix; out q, r: TMatrix);  
 var
   n, m, i, j, k: Integer;
   colonneA, colonneQ: TVector;
@@ -822,7 +822,7 @@ end;
 Pour matrices symétriques définies positives : A = L × L^T
 
 ```pascal
-function DecompositionCholesky(const a: TMatrix): TMatrix;
+function DecompositionCholesky(const a: TMatrix): TMatrix;  
 var
   n, i, j, k: Integer;
   somme: TFloat;
@@ -861,7 +861,7 @@ begin
 end;
 
 // Utilisation de Cholesky pour résoudre Ax = b
-function ResoudreAvecCholesky(const a: TMatrix; const b: TVector): TVector;
+function ResoudreAvecCholesky(const a: TMatrix; const b: TVector): TVector;  
 var
   l: TMatrix;
   y: TVector;
@@ -976,7 +976,7 @@ begin
     valeursPropres[i] := ak[i, i];
 end;
 
-function CopierMatrice(const m: TMatrix): TMatrix;
+function CopierMatrice(const m: TMatrix): TMatrix;  
 var
   i, j: Integer;
 begin
@@ -999,7 +999,7 @@ type
     VT: TMatrix;     // Matrice orthogonale droite transposée
   end;
 
-procedure DecompositionSVD(const a: TMatrix; out svd: TSVD);
+procedure DecompositionSVD(const a: TMatrix; out svd: TSVD);  
 var
   aTa, aaT: TMatrix;
   valeursPropres: TVector;
@@ -1028,7 +1028,7 @@ end;
 Pour résoudre des systèmes sur-déterminés ou sous-déterminés.
 
 ```pascal
-function PseudoInverse(const a: TMatrix): TMatrix;
+function PseudoInverse(const a: TMatrix): TMatrix;  
 var
   aT, aTa: TMatrix;
 begin
@@ -1050,7 +1050,7 @@ begin
 end;
 
 // Résolution de systèmes par moindres carrés
-function MoindresCarres(const a: TMatrix; const b: TVector): TVector;
+function MoindresCarres(const a: TMatrix; const b: TVector): TVector;  
 var
   aPlus: TMatrix;
 begin
@@ -1065,7 +1065,7 @@ end;
 Le rang est le nombre de lignes/colonnes linéairement indépendantes.
 
 ```pascal
-function RangMatrice(const a: TMatrix; tolerance: TFloat = 1e-10): Integer;
+function RangMatrice(const a: TMatrix; tolerance: TFloat = 1e-10): Integer;  
 var
   m: TMatrix;
   n, i, j, k: Integer;
@@ -1125,7 +1125,7 @@ end;
 Pour systèmes triangulaires inférieurs : L × x = b
 
 ```pascal
-function SubstitutionAvant(const l: TMatrix; const b: TVector): TVector;
+function SubstitutionAvant(const l: TMatrix; const b: TVector): TVector;  
 var
   n, i, j: Integer;
   somme: TFloat;
@@ -1148,7 +1148,7 @@ end;
 Pour systèmes triangulaires supérieurs : U × x = b
 
 ```pascal
-function SubstitutionArriere(const u: TMatrix; const b: TVector): TVector;
+function SubstitutionArriere(const u: TMatrix; const b: TVector): TVector;  
 var
   n, i, j: Integer;
   somme: TFloat;
@@ -1169,7 +1169,7 @@ end;
 ### Résolution avec décomposition LU
 
 ```pascal
-function ResoudreSystemeLU(const a: TMatrix; const b: TVector): TVector;
+function ResoudreSystemeLU(const a: TMatrix; const b: TVector): TVector;  
 var
   l, u: TMatrix;
   y: TVector;
@@ -1190,7 +1190,7 @@ end;
 ### Norme de Frobenius
 
 ```pascal
-function NormeFrobenius(const m: TMatrix): TFloat;
+function NormeFrobenius(const m: TMatrix): TFloat;  
 var
   i, j: Integer;
 begin
@@ -1205,7 +1205,7 @@ end;
 ### Norme infinie (maximum de ligne)
 
 ```pascal
-function NormeInfinieMatrice(const m: TMatrix): TFloat;
+function NormeInfinieMatrice(const m: TMatrix): TFloat;  
 var
   i, j: Integer;
   sommeLigne: TFloat;
@@ -1225,7 +1225,7 @@ end;
 ### Norme 1 (maximum de colonne)
 
 ```pascal
-function Norme1Matrice(const m: TMatrix): TFloat;
+function Norme1Matrice(const m: TMatrix): TFloat;  
 var
   i, j: Integer;
   sommeColonne: TFloat;
@@ -1247,7 +1247,7 @@ end;
 Mesure la sensibilité d'un système aux erreurs.
 
 ```pascal
-function NombreCondition(const m: TMatrix): TFloat;
+function NombreCondition(const m: TMatrix): TFloat;  
 var
   mInv: TMatrix;
   normeA, normeAInv: TFloat;
@@ -1263,7 +1263,7 @@ begin
 end;
 
 // Interprétation
-procedure AnalyserCondition(const m: TMatrix);
+procedure AnalyserCondition(const m: TMatrix);  
 var
   cond: TFloat;
 begin
@@ -1287,7 +1287,7 @@ end;
 ### Matrices de rotation 2D
 
 ```pascal
-function MatriceRotation2D(angleRadians: TFloat): TMatrix3x3;
+function MatriceRotation2D(angleRadians: TFloat): TMatrix3x3;  
 var
   c, s: TFloat;
 begin
@@ -1300,14 +1300,14 @@ begin
   Result[2, 0] := 0;  Result[2, 1] :=  0; Result[2, 2] := 1;
 end;
 
-function MatriceTranslation2D(dx, dy: TFloat): TMatrix3x3;
+function MatriceTranslation2D(dx, dy: TFloat): TMatrix3x3;  
 begin
   Result[0, 0] := 1; Result[0, 1] := 0; Result[0, 2] := dx;
   Result[1, 0] := 0; Result[1, 1] := 1; Result[1, 2] := dy;
   Result[2, 0] := 0; Result[2, 1] := 0; Result[2, 2] := 1;
 end;
 
-function MatriceEchelle2D(sx, sy: TFloat): TMatrix3x3;
+function MatriceEchelle2D(sx, sy: TFloat): TMatrix3x3;  
 begin
   Result[0, 0] := sx; Result[0, 1] := 0;  Result[0, 2] := 0;
   Result[1, 0] := 0;  Result[1, 1] := sy; Result[1, 2] := 0;
@@ -1319,7 +1319,7 @@ end;
 
 ```pascal
 // Rotation autour de l'axe X
-function MatriceRotationX(angleRadians: TFloat): TMatrix4x4;
+function MatriceRotationX(angleRadians: TFloat): TMatrix4x4;  
 var
   c, s: TFloat;
 begin
@@ -1333,7 +1333,7 @@ begin
 end;
 
 // Rotation autour de l'axe Y
-function MatriceRotationY(angleRadians: TFloat): TMatrix4x4;
+function MatriceRotationY(angleRadians: TFloat): TMatrix4x4;  
 var
   c, s: TFloat;
 begin
@@ -1347,7 +1347,7 @@ begin
 end;
 
 // Rotation autour de l'axe Z
-function MatriceRotationZ(angleRadians: TFloat): TMatrix4x4;
+function MatriceRotationZ(angleRadians: TFloat): TMatrix4x4;  
 var
   c, s: TFloat;
 begin
@@ -1361,7 +1361,7 @@ begin
 end;
 
 // Translation 3D
-function MatriceTranslation3D(dx, dy, dz: TFloat): TMatrix4x4;
+function MatriceTranslation3D(dx, dy, dz: TFloat): TMatrix4x4;  
 begin
   Result[0, 0] := 1; Result[0, 1] := 0; Result[0, 2] := 0; Result[0, 3] := dx;
   Result[1, 0] := 0; Result[1, 1] := 1; Result[1, 2] := 0; Result[1, 3] := dy;
@@ -1373,7 +1373,7 @@ end;
 ### Application de transformations
 
 ```pascal
-procedure TransformerPoint2D(var point: TVector2D; const transformation: TMatrix3x3);
+procedure TransformerPoint2D(var point: TVector2D; const transformation: TMatrix3x3);  
 var
   pointHomogene: array[0..2] of TFloat;
   i, j: Integer;
@@ -1416,7 +1416,7 @@ end;
 ### Affichage formaté
 
 ```pascal
-procedure AfficherVecteur(const v: TVector; nom: String = '');
+procedure AfficherVecteur(const v: TVector; nom: String = '');  
 var
   i: Integer;
 begin
@@ -1431,7 +1431,7 @@ begin
   WriteLn(']');
 end;
 
-procedure AfficherMatrice(const m: TMatrix; nom: String = '');
+procedure AfficherMatrice(const m: TMatrix; nom: String = '');  
 var
   i, j: Integer;
 begin
@@ -1455,7 +1455,7 @@ end;
 ### Vérification d'égalité avec tolérance
 
 ```pascal
-function VecteursEgaux(const a, b: TVector; tolerance: TFloat = 1e-10): Boolean;
+function VecteursEgaux(const a, b: TVector; tolerance: TFloat = 1e-10): Boolean;  
 var
   i: Integer;
 begin
@@ -1469,7 +1469,7 @@ begin
   Result := True;
 end;
 
-function MatricesEgales(const a, b: TMatrix; tolerance: TFloat = 1e-10): Boolean;
+function MatricesEgales(const a, b: TMatrix; tolerance: TFloat = 1e-10): Boolean;  
 var
   i, j: Integer;
 begin
@@ -1488,7 +1488,7 @@ end;
 ### Propriétés des matrices
 
 ```pascal
-function EstSymetrique(const m: TMatrix; tolerance: TFloat = 1e-10): Boolean;
+function EstSymetrique(const m: TMatrix; tolerance: TFloat = 1e-10): Boolean;  
 var
   i, j, n: Integer;
 begin
@@ -1504,7 +1504,7 @@ begin
   Result := True;
 end;
 
-function EstOrthogonale(const m: TMatrix; tolerance: TFloat = 1e-10): Boolean;
+function EstOrthogonale(const m: TMatrix; tolerance: TFloat = 1e-10): Boolean;  
 var
   mT, produit, identite: TMatrix;
 begin
@@ -1518,7 +1518,7 @@ begin
   Result := MatricesEgales(produit, identite, tolerance);
 end;
 
-function EstDiagonale(const m: TMatrix; tolerance: TFloat = 1e-10): Boolean;
+function EstDiagonale(const m: TMatrix; tolerance: TFloat = 1e-10): Boolean;  
 var
   i, j, n: Integer;
 begin
@@ -1548,7 +1548,7 @@ uses
 // Résoudre y = X × β par moindres carrés
 // β = (X^T × X)^(-1) × X^T × y
 
-function RegressionLineaire(const x: TMatrix; const y: TVector): TVector;
+function RegressionLineaire(const x: TMatrix; const y: TVector): TVector;  
 var
   xT, xTx, xTxInv: TMatrix;
   xTy: TVector;
@@ -1603,7 +1603,7 @@ end.
 // Résoudre un système de masses reliées par des ressorts
 // K × x = F où K est la matrice de raideur
 
-procedure SystemeMassesRessorts;
+procedure SystemeMassesRessorts;  
 var
   k: TMatrix;
   f, x: TVector;
@@ -1637,7 +1637,7 @@ end;
 ### Exemple 3 : Analyse en composantes principales (PCA)
 
 ```pascal
-procedure AnalysePCA(const donnees: TMatrix; nbComposantes: Integer);
+procedure AnalysePCA(const donnees: TMatrix; nbComposantes: Integer);  
 var
   moyenne: TVector;
   donneesCentrees, covariance: TMatrix;
@@ -1817,7 +1817,7 @@ type
     NbColonnes: Integer;
   end;
 
-function CreerMatriceCreuse(lignes, colonnes: Integer): TMatriceCreuse;
+function CreerMatriceCreuse(lignes, colonnes: Integer): TMatriceCreuse;  
 begin
   Result.NbLignes := lignes;
   Result.NbColonnes := colonnes;
@@ -1886,7 +1886,7 @@ type
     end;
   end;
 
-function ExtraireBloc(const m: TMatrix; const bloc: TBlocMatrice): TMatrix;
+function ExtraireBloc(const m: TMatrix; const bloc: TBlocMatrice): TMatrix;  
 var
   i, j: Integer;
 begin
@@ -2152,7 +2152,7 @@ procedure dgemv(trans: PChar; m, n: PInteger; alpha: PDouble;
                beta: PDouble; y: PDouble; incy: PInteger);
                cdecl; external BLAS_LIB;
 
-function MultiplicationAvecBLAS(const a: TMatrix; const v: TVector): TVector;
+function MultiplicationAvecBLAS(const a: TMatrix; const v: TVector): TVector;  
 var
   m, n, lda, incx, incy: Integer;
   alpha, beta: Double;
@@ -2182,7 +2182,7 @@ program TestsAlgebreLineaire;
 uses
   UnitAlgebreLineaire;
 
-procedure TestAdditionVecteurs;
+procedure TestAdditionVecteurs;  
 var
   v1, v2, resultat, attendu: TVector;
 begin
@@ -2203,7 +2203,7 @@ begin
     WriteLn('✗ TestAdditionVecteurs ÉCHOUÉ');
 end;
 
-procedure TestInverseMatrice;
+procedure TestInverseMatrice;  
 var
   m, mInv, produit, identite: TMatrix;
 begin
@@ -2221,7 +2221,7 @@ begin
     WriteLn('✗ TestInverseMatrice ÉCHOUÉ');
 end;
 
-procedure TestDeterminant;
+procedure TestDeterminant;  
 var
   m: TMatrix;
   det: TFloat;
@@ -2240,7 +2240,7 @@ begin
     WriteLn('✗ TestDeterminant ÉCHOUÉ (calculé: ', det:0:2, ')');
 end;
 
-procedure TestDecompositionLU;
+procedure TestDecompositionLU;  
 var
   a, l, u, produit: TMatrix;
 begin
@@ -2281,7 +2281,7 @@ type
   EMatriceSinguliere = class(EAlgebreLineaire);
   EDivisionParZero = class(EAlgebreLineaire);
 
-procedure VerifierDimensionsMultiplication(const a, b: TMatrix);
+procedure VerifierDimensionsMultiplication(const a, b: TMatrix);  
 begin
   if Length(a[0]) <> Length(b) then
     raise EDimensionIncompatible.CreateFmt(
@@ -2289,7 +2289,7 @@ begin
       [Length(a[0]), Length(b)]);
 end;
 
-procedure VerifierMatriceCarree(const m: TMatrix; nom: String);
+procedure VerifierMatriceCarree(const m: TMatrix; nom: String);  
 begin
   if Length(m) <> Length(m[0]) then
     raise EAlgebreLineaire.CreateFmt(
@@ -2297,7 +2297,7 @@ begin
       [nom, Length(m), Length(m[0])]);
 end;
 
-function InverseSecurisee(const m: TMatrix): TMatrix;
+function InverseSecurisee(const m: TMatrix): TMatrix;  
 var
   det: TFloat;
 begin
@@ -2318,7 +2318,7 @@ end;
 uses
   SysUtils, DateUtils;
 
-procedure BenchmarkMultiplication;
+procedure BenchmarkMultiplication;  
 var
   a, b, c: TMatrix;
   i, taille: Integer;

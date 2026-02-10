@@ -77,7 +77,7 @@ const
 L'amplitude représente l'intensité du signal.
 
 ```pascal
-procedure NormaliserSignal(var signal: TSignal);
+procedure NormaliserSignal(var signal: TSignal);  
 var
   i: Integer;
   maxVal: Double;
@@ -186,7 +186,7 @@ end;
 ### Addition de signaux
 
 ```pascal
-function AdditionnerSignaux(const s1, s2: TSignal): TSignal;
+function AdditionnerSignaux(const s1, s2: TSignal): TSignal;  
 var
   i, longueur: Integer;
 begin
@@ -210,7 +210,7 @@ end;
 ### Multiplication (modulation)
 
 ```pascal
-function MultiplierSignaux(const s1, s2: TSignal): TSignal;
+function MultiplierSignaux(const s1, s2: TSignal): TSignal;  
 var
   i, longueur: Integer;
 begin
@@ -225,7 +225,7 @@ end;
 ### Amplification
 
 ```pascal
-procedure AmplifierSignal(var signal: TSignal; gain: Double);
+procedure AmplifierSignal(var signal: TSignal; gain: Double);  
 var
   i: Integer;
 begin
@@ -237,7 +237,7 @@ end;
 ### Inversion de phase
 
 ```pascal
-procedure InverserPhase(var signal: TSignal);
+procedure InverserPhase(var signal: TSignal);  
 var
   i: Integer;
 begin
@@ -255,7 +255,7 @@ Les filtres permettent de modifier le contenu fréquentiel d'un signal.
 Ce filtre atténue les hautes fréquences (bruit rapide) et conserve les basses fréquences.
 
 ```pascal
-function FiltrePasseBas(const signal: TSignal; tailleFenetre: Integer): TSignal;
+function FiltrePasseBas(const signal: TSignal; tailleFenetre: Integer): TSignal;  
 var
   i, j: Integer;
   somme: Double;
@@ -287,7 +287,7 @@ end;
 Ce filtre atténue les basses fréquences et conserve les hautes fréquences.
 
 ```pascal
-function FiltrePasseHaut(const signal: TSignal; tailleFenetre: Integer): TSignal;
+function FiltrePasseHaut(const signal: TSignal; tailleFenetre: Integer): TSignal;  
 var
   signalFiltre: TSignal;
   i: Integer;
@@ -309,7 +309,7 @@ Très efficace pour éliminer le bruit impulsionnel.
 uses
   Math;
 
-function FiltreMedian(const signal: TSignal; tailleFenetre: Integer): TSignal;
+function FiltreMedian(const signal: TSignal; tailleFenetre: Integer): TSignal;  
 var
   i, j, debut, fin: Integer;
   fenetre: array of Double;
@@ -337,7 +337,7 @@ end;
 Filtre récursif très efficace.
 
 ```pascal
-function FiltreIIR(const signal: TSignal; alpha: Double): TSignal;
+function FiltreIIR(const signal: TSignal; alpha: Double): TSignal;  
 var
   i: Integer;
 begin
@@ -376,7 +376,7 @@ type
 
   TComplexArray = array of TComplex;
 
-function FFT(const signal: TSignal): TComplexArray;
+function FFT(const signal: TSignal): TComplexArray;  
 var
   n, i: Integer;
 begin
@@ -404,7 +404,7 @@ Il est recommandé d'utiliser une bibliothèque optimisée comme **FFTW** ou **K
 uses
   FFTW; // Bibliothèque à installer séparément
 
-procedure AnalyserSpectre(const signal: TSignal);
+procedure AnalyserSpectre(const signal: TSignal);  
 var
   spectre: TComplexArray;
   i: Integer;
@@ -426,7 +426,7 @@ end;
 ### Implémentation complète de la FFT (Cooley-Tukey)
 
 ```pascal
-procedure FFTRecursive(var data: TComplexArray; n: Integer);
+procedure FFTRecursive(var data: TComplexArray; n: Integer);  
 var
   i, j, k, m: Integer;
   temp: TComplex;
@@ -539,7 +539,7 @@ begin
   end;
 end;
 
-procedure AppliquerFenetreHamming(var signal: TSignal);
+procedure AppliquerFenetreHamming(var signal: TSignal);  
 var
   i, n: Integer;
 begin
@@ -590,7 +590,7 @@ end;
 La convolution est une opération fondamentale en DSP, utilisée pour appliquer des filtres.
 
 ```pascal
-function Convoluer(const signal, noyau: TSignal): TSignal;
+function Convoluer(const signal, noyau: TSignal): TSignal;  
 var
   i, j: Integer;
   somme: Double;
@@ -631,7 +631,7 @@ end;
 La corrélation mesure la similitude entre deux signaux.
 
 ```pascal
-function Correlat ion(const signal1, signal2: TSignal): TSignal;
+function Correlat ion(const signal1, signal2: TSignal): TSignal;  
 var
   i, j: Integer;
   somme: Double;
@@ -654,7 +654,7 @@ begin
 end;
 
 // Auto-corrélation (corrélation d'un signal avec lui-même)
-function AutoCorrelation(const signal: TSignal): TSignal;
+function AutoCorrelation(const signal: TSignal): TSignal;  
 begin
   Result := Correlation(signal, signal);
 end;
@@ -667,7 +667,7 @@ Le fenêtrage réduit les artefacts lors de l'analyse spectrale.
 ### Fenêtre de Hanning
 
 ```pascal
-procedure AppliquerFenetreHanning(var signal: TSignal);
+procedure AppliquerFenetreHanning(var signal: TSignal);  
 var
   i, n: Integer;
 begin
@@ -680,7 +680,7 @@ end;
 ### Fenêtre de Blackman
 
 ```pascal
-procedure AppliquerFenetreBlackman(var signal: TSignal);
+procedure AppliquerFenetreBlackman(var signal: TSignal);  
 var
   i, n: Integer;
   a0, a1, a2: Double;
@@ -702,7 +702,7 @@ end;
 uses
   Math;
 
-function BesselI0(x: Double): Double;
+function BesselI0(x: Double): Double;  
 var
   somme, terme: Double;
   k: Integer;
@@ -717,7 +717,7 @@ begin
   Result := somme;
 end;
 
-procedure AppliquerFenetreKaiser(var signal: TSignal; beta: Double);
+procedure AppliquerFenetreKaiser(var signal: TSignal; beta: Double);  
 var
   i, n: Integer;
   w: Double;
@@ -779,7 +779,7 @@ implementation
 const
   SAMPLE_RATE = 44100;
 
-procedure TFormAnalyseur.ButtonChargerClick(Sender: TObject);
+procedure TFormAnalyseur.ButtonChargerClick(Sender: TObject);  
 var
   i: Integer;
 begin
@@ -798,7 +798,7 @@ begin
   ShowMessage('Signal chargé : 1 seconde à 44.1 kHz');
 end;
 
-procedure TFormAnalyseur.ButtonAnalyserClick(Sender: TObject);
+procedure TFormAnalyseur.ButtonAnalyserClick(Sender: TObject);  
 var
   freqDom: Double;
   note: String;
@@ -819,7 +819,7 @@ begin
   AfficherSpectre;
 end;
 
-procedure TFormAnalyseur.AfficherSignal;
+procedure TFormAnalyseur.AfficherSignal;  
 var
   i, pas: Integer;
 begin
@@ -838,7 +838,7 @@ begin
   ChartSignal.BottomAxis.Title.Caption := 'Temps (s)';
 end;
 
-procedure TFormAnalyseur.AfficherSpectre;
+procedure TFormAnalyseur.AfficherSpectre;  
 var
   spectre: TComplexArray;
   i, nbFreq: Integer;
@@ -862,7 +862,7 @@ begin
   ChartSpectre.BottomAxis.Title.Caption := 'Fréquence (Hz)';
 end;
 
-function TFormAnalyseur.DetecterNote: String;
+function TFormAnalyseur.DetecterNote: String;  
 const
   NOTES: array[0..11] of String =
     ('Do', 'Do#', 'Ré', 'Ré#', 'Mi', 'Fa', 'Fa#', 'Sol', 'Sol#', 'La', 'La#', 'Si');
@@ -881,7 +881,7 @@ begin
   Result := NOTES[noteIndex];
 end;
 
-procedure TFormAnalyseur.Timer1Timer(Sender: TObject);
+procedure TFormAnalyseur.Timer1Timer(Sender: TObject);  
 begin
   // Mise à jour en temps réel (optionnel)
   if Length(FSignal) > 0 then
@@ -903,8 +903,8 @@ Bibliothèque complète de traitement du signal pour FreePascal.
 sudo apt-get install fp-units-math
 
 # Ou télécharger depuis GitHub
-git clone https://github.com/dort/pasdsp.git
-cd pasdsp
+git clone https://github.com/dort/pasdsp.git  
+cd pasdsp  
 fpc -B pasdsp.pas
 ```
 
@@ -1009,7 +1009,7 @@ uses
 const
   FFTW_ESTIMATE = 64;
 
-procedure CalculerFFTAvecFFTW(const signal: array of Double);
+procedure CalculerFFTAvecFFTW(const signal: array of Double);  
 var
   plan: fftw_plan;
   output: array of fftw_complex;
@@ -1093,7 +1093,7 @@ const
   BUFFER_SIZE = 4096;
 
 {$IFDEF WINDOWS}
-procedure EnregistrerAudioWindows(duree: Integer);
+procedure EnregistrerAudioWindows(duree: Integer);  
 var
   hWaveIn: HWAVEIN;
   waveFormat: TWAVEFORMATEX;
@@ -1156,7 +1156,7 @@ end;
 {$ENDIF}
 
 {$IFDEF UNIX}
-procedure EnregistrerAudioLinux(duree: Integer);
+procedure EnregistrerAudioLinux(duree: Integer);  
 var
   buffer: TAudioBuffer;
   fichier: TFileStream;
@@ -1190,13 +1190,13 @@ type
     property OnAudioData: TAudioCallback read FCallback write FCallback;
   end;
 
-constructor TAudioPlayer.Create(sampleRate: Integer);
+constructor TAudioPlayer.Create(sampleRate: Integer);  
 begin
   FSampleRate := sampleRate;
   SetLength(FBuffer, BUFFER_SIZE);
 end;
 
-procedure TAudioPlayer.ProcessAudio;
+procedure TAudioPlayer.ProcessAudio;  
 begin
   if Assigned(FCallback) then
     FCallback(FBuffer, Length(FBuffer));
@@ -1240,7 +1240,7 @@ end;
 ### Effet de réverbération
 
 ```pascal
-function AjouterReverb(const signal: TSignal; sampleRate: Integer): TSignal;
+function AjouterReverb(const signal: TSignal; sampleRate: Integer): TSignal;  
 const
   DELAIS: array[0..5] of Double = (0.029, 0.037, 0.041, 0.043, 0.047, 0.051);
   GAINS: array[0..5] of Double = (0.7, 0.6, 0.5, 0.4, 0.3, 0.2);
@@ -1272,7 +1272,7 @@ end;
 ### Effet de distorsion
 
 ```pascal
-function AppliquerDistorsion(const signal: TSignal; gain: Double): TSignal;
+function AppliquerDistorsion(const signal: TSignal; gain: Double): TSignal;  
 var
   i: Integer;
   valeur: Double;
@@ -1294,7 +1294,7 @@ begin
 end;
 
 // Distorsion avec fonction tangente hyperbolique (plus musical)
-function DistorsionTanh(const signal: TSignal; drive: Double): TSignal;
+function DistorsionTanh(const signal: TSignal; drive: Double): TSignal;  
 var
   i: Integer;
 begin
@@ -1308,7 +1308,7 @@ end;
 ### Effet de chorus
 
 ```pascal
-function AppliquerChorus(const signal: TSignal; sampleRate: Integer): TSignal;
+function AppliquerChorus(const signal: TSignal; sampleRate: Integer): TSignal;  
 var
   i: Integer;
   lfo: Double;
@@ -1424,7 +1424,7 @@ end;
 ### Compression simple par quantification
 
 ```pascal
-function CompresserSignal(const signal: TSignal; bits: Integer): TSignal;
+function CompresserSignal(const signal: TSignal; bits: Integer): TSignal;  
 var
   i: Integer;
   niveaux, niveau: Integer;
@@ -1456,7 +1456,7 @@ end;
 ### Codage μ-law (utilisé en téléphonie)
 
 ```pascal
-function MuLawEncode(valeur: Double): Byte;
+function MuLawEncode(valeur: Double): Byte;  
 const
   MU = 255.0;
 var
@@ -1485,7 +1485,7 @@ begin
   Result := Round((compressed + 1) * 127.5);
 end;
 
-function MuLawDecode(code: Byte): Double;
+function MuLawDecode(code: Byte): Double;  
 const
   MU = 255.0;
 var
@@ -1505,7 +1505,7 @@ end;
 ### Détection d'énergie (activité vocale)
 
 ```pascal
-function CalculerEnergie(const signal: TSignal; debut, longueur: Integer): Double;
+function CalculerEnergie(const signal: TSignal; debut, longueur: Integer): Double;  
 var
   i: Integer;
 begin
@@ -1536,7 +1536,7 @@ end;
 ### Détection de passages par zéro
 
 ```pascal
-function CompterPassagesParZero(const signal: TSignal): Integer;
+function CompterPassagesParZero(const signal: TSignal): Integer;  
 var
   i: Integer;
 begin
@@ -1639,7 +1639,7 @@ type
     function Filtrer(entree, desire: Double): Double;
   end;
 
-constructor TFiltreLMS.Create(ordre: Integer; mu: Double);
+constructor TFiltreLMS.Create(ordre: Integer; mu: Double);  
 var
   i: Integer;
 begin
@@ -1655,7 +1655,7 @@ begin
   end;
 end;
 
-function TFiltreLMS.Filtrer(entree, desire: Double): Double;
+function TFiltreLMS.Filtrer(entree, desire: Double): Double;  
 var
   i: Integer;
   sortie, erreur: Double;
@@ -1737,7 +1737,7 @@ end;
 ### Afficher signal et spectre côte à côte
 
 ```pascal
-procedure AfficherSignalEtSpectre(Form: TForm; const signal: TSignal);
+procedure AfficherSignalEtSpectre(Form: TForm; const signal: TSignal);  
 var
   ChartSignal, ChartSpectre: TChart;
   SerieTemps: TLineSeries;
@@ -1941,8 +1941,8 @@ BASS est une bibliothèque audio cross-platform très populaire.
 **Installation** :
 ```bash
 # Ubuntu
-wget http://www.un4seen.com/files/bass24-linux.zip
-unzip bass24-linux.zip
+wget http://www.un4seen.com/files/bass24-linux.zip  
+unzip bass24-linux.zip  
 sudo cp libbass.so /usr/lib/
 
 # Windows : télécharger bass.dll et la placer dans le dossier du projet
@@ -1997,7 +1997,7 @@ end.
 uses
   Bass;
 
-procedure LireFichierAudio(nomFichier: String);
+procedure LireFichierAudio(nomFichier: String);  
 var
   stream: HSTREAM;
 begin
@@ -2027,7 +2027,7 @@ begin
   BASS_Free;
 end;
 
-procedure ExtraireEchantillons(nomFichier: String; out signal: TSignal);
+procedure ExtraireEchantillons(nomFichier: String; out signal: TSignal);  
 var
   stream: HSTREAM;
   buffer: array of Single;
@@ -2080,7 +2080,7 @@ type
     procedure SetProcessCallback(callback: TAudioCallback);
   end;
 
-constructor TAudioProcessor.Create(sampleRate, bufferSize: Integer);
+constructor TAudioProcessor.Create(sampleRate, bufferSize: Integer);  
 begin
   inherited Create(False);
   FSampleRate := sampleRate;
@@ -2090,7 +2090,7 @@ begin
   FreeOnTerminate := False;
 end;
 
-procedure TAudioProcessor.Execute;
+procedure TAudioProcessor.Execute;  
 begin
   while not Terminated do
   begin
@@ -2108,7 +2108,7 @@ begin
   end;
 end;
 
-procedure TAudioProcessor.SetProcessCallback(callback: TAudioCallback);
+procedure TAudioProcessor.SetProcessCallback(callback: TAudioCallback);  
 begin
   FProcessCallback := callback;
 end;
@@ -2133,14 +2133,14 @@ type
     procedure ProcessAudio(buffer: TAudioBuffer; size: Integer);
   end;
 
-procedure TFormFiltreTempsReel.ButtonStartClick(Sender: TObject);
+procedure TFormFiltreTempsReel.ButtonStartClick(Sender: TObject);  
 begin
   FProcessor := TAudioProcessor.Create(44100, 512);
   FProcessor.SetProcessCallback(@ProcessAudio);
   LabelStatus.Caption := 'Traitement actif';
 end;
 
-procedure TFormFiltreTempsReel.ButtonStopClick(Sender: TObject);
+procedure TFormFiltreTempsReel.ButtonStopClick(Sender: TObject);  
 begin
   if Assigned(FProcessor) then
   begin
@@ -2152,7 +2152,7 @@ begin
   LabelStatus.Caption := 'Arrêté';
 end;
 
-procedure TFormFiltreTempsReel.ProcessAudio(buffer: TAudioBuffer; size: Integer);
+procedure TFormFiltreTempsReel.ProcessAudio(buffer: TAudioBuffer; size: Integer);  
 var
   i: Integer;
   alpha: Double;
@@ -2170,7 +2170,7 @@ begin
   end;
 end;
 
-procedure TFormFiltreTempsReel.TrackBarCutoffChange(Sender: TObject);
+procedure TFormFiltreTempsReel.TrackBarCutoffChange(Sender: TObject);  
 begin
   FCutoffFreq := TrackBarCutoff.Position;
   LabelFrequence.Caption := Format('Fréquence de coupure: %d Hz',
@@ -2183,7 +2183,7 @@ end;
 ### Cepstre (analyse de la hauteur vocale)
 
 ```pascal
-function CalculerCepstre(const signal: TSignal): TSignal;
+function CalculerCepstre(const signal: TSignal): TSignal;  
 var
   spectre: TComplexArray;
   logSpectre: array of Double;
@@ -2218,7 +2218,7 @@ Très utilisé en reconnaissance vocale.
 type
   TMelFilterBank = array of array of Double;
 
-function CreerBanqueFiltresMel(nbFiltres, tailleFFT, sampleRate: Integer): TMelFilterBank;
+function CreerBanqueFiltresMel(nbFiltres, tailleFFT, sampleRate: Integer): TMelFilterBank;  
 var
   i, j: Integer;
   melMin, melMax, melStep: Double;
@@ -2266,7 +2266,7 @@ begin
   end;
 end;
 
-function CalculerMFCC(const signal: TSignal; nbCoefficients: Integer): TSignal;
+function CalculerMFCC(const signal: TSignal; nbCoefficients: Integer): TSignal;  
 var
   spectre: TComplexArray;
   banqueFiltres: TMelFilterBank;
@@ -2316,7 +2316,7 @@ Alternative à la transformée de Fourier, meilleure pour les signaux non-statio
 type
   TOndelette = (owHaar, owDaubechies4, owMorlet);
 
-procedure TransformeeOndelettes(var signal: TSignal; ondelette: TOndelette);
+procedure TransformeeOndelettes(var signal: TSignal; ondelette: TOndelette);  
 var
   temp: TSignal;
   i, n: Integer;
@@ -2367,7 +2367,7 @@ begin
   signal := temp;
 end;
 
-procedure TransformeeOndelettesInverse(var signal: TSignal; ondelette: TOndelette);
+procedure TransformeeOndelettesInverse(var signal: TSignal; ondelette: TOndelette);  
 var
   temp: TSignal;
   i, n: Integer;
@@ -2403,7 +2403,7 @@ FreePascal supporte les intrinsèques SIMD pour accélérer les calculs.
 uses
   cpu;
 
-procedure AdditionVectorielleSSE(var a, b: array of Single; n: Integer);
+procedure AdditionVectorielleSSE(var a, b: array of Single; n: Integer);  
 var
   i: Integer;
   va, vb: TM128;
@@ -2432,7 +2432,7 @@ end;
 
 ```pascal
 // Utiliser des tailles de puissance de 2
-procedure OptimiserTailleFFT(var signal: TSignal);
+procedure OptimiserTailleFFT(var signal: TSignal);  
 var
   nouvelleTaille, i: Integer;
 begin
@@ -2451,7 +2451,7 @@ end;
 var
   TwiddleFactors: TComplexArray;
 
-procedure PrecalculerTwiddle(n: Integer);
+procedure PrecalculerTwiddle(n: Integer);  
 var
   i: Integer;
   angle: Double;
@@ -2558,7 +2558,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TFormStation.FormCreate(Sender: TObject);
+procedure TFormStation.FormCreate(Sender: TObject);  
 begin
   FSampleRate := 44100;
   FLecture := False;
@@ -2579,7 +2579,7 @@ begin
   StatusBar1.SimpleText := 'Prêt';
 end;
 
-procedure TFormStation.ButtonChargerClick(Sender: TObject);
+procedure TFormStation.ButtonChargerClick(Sender: TObject);  
 var
   OpenDialog: TOpenDialog;
 begin
@@ -2598,7 +2598,7 @@ begin
   end;
 end;
 
-procedure TFormStation.ChargerFichier(nomFichier: String);
+procedure TFormStation.ChargerFichier(nomFichier: String);  
 begin
   try
     FSignal := ChargerFichierWAV(nomFichier, FSampleRate);
@@ -2610,7 +2610,7 @@ begin
   end;
 end;
 
-procedure TFormStation.MettreAJourAffichage;
+procedure TFormStation.MettreAJourAffichage;  
 var
   i, pas: Integer;
   spectre: TComplexArray;
@@ -2643,7 +2643,7 @@ begin
   ChartSpectre.BottomAxis.Title.Caption := 'Fréquence (Hz)';
 end;
 
-procedure TFormStation.ButtonLireClick(Sender: TObject);
+procedure TFormStation.ButtonLireClick(Sender: TObject);  
 begin
   if Length(FSignal) = 0 then
   begin
@@ -2671,7 +2671,7 @@ begin
   end;
 end;
 
-procedure TFormStation.ButtonSauvegarderClick(Sender: TObject);
+procedure TFormStation.ButtonSauvegarderClick(Sender: TObject);  
 var
   SaveDialog: TSaveDialog;
 begin
@@ -2697,7 +2697,7 @@ begin
   end;
 end;
 
-procedure TFormStation.TrackBarVolumeChange(Sender: TObject);
+procedure TFormStation.TrackBarVolumeChange(Sender: TObject);  
 var
   gain: Double;
   i: Integer;
@@ -2721,13 +2721,13 @@ begin
   StatusBar1.SimpleText := Format('Volume: %d%%', [TrackBarVolume.Position]);
 end;
 
-procedure TFormStation.ComboBoxEffetChange(Sender: TObject);
+procedure TFormStation.ComboBoxEffetChange(Sender: TObject);  
 begin
   AppliquerEffet;
   MettreAJourAffichage;
 end;
 
-procedure TFormStation.AppliquerEffet;
+procedure TFormStation.AppliquerEffet;  
 begin
   if Length(FSignal) = 0 then Exit;
 
@@ -2760,13 +2760,13 @@ begin
   end;
 end;
 
-procedure TFormStation.TrackBarEgaliseurChange(Sender: TObject);
+procedure TFormStation.TrackBarEgaliseurChange(Sender: TObject);  
 begin
   AppliquerEgaliseur;
   MettreAJourAffichage;
 end;
 
-procedure TFormStation.AppliquerEgaliseur;
+procedure TFormStation.AppliquerEgaliseur;  
 var
   gainBas, gainMedium, gainAigu: Double;
 begin
@@ -2822,14 +2822,14 @@ type
     timeInfo, statusFlags, userData: Pointer): Integer; cdecl;
 
 // Fonctions principales
-function Pa_Initialize: PaError; cdecl; external PA_DLL;
-function Pa_Terminate: PaError; cdecl; external PA_DLL;
+function Pa_Initialize: PaError; cdecl; external PA_DLL;  
+function Pa_Terminate: PaError; cdecl; external PA_DLL;  
 function Pa_OpenDefaultStream(var stream: PaStream; numInputChannels,
   numOutputChannels: Integer; sampleFormat: Cardinal; sampleRate: Double;
   framesPerBuffer: Cardinal; callback: PaStreamCallback;
   userData: Pointer): PaError; cdecl; external PA_DLL;
-function Pa_StartStream(stream: PaStream): PaError; cdecl; external PA_DLL;
-function Pa_StopStream(stream: PaStream): PaError; cdecl; external PA_DLL;
+function Pa_StartStream(stream: PaStream): PaError; cdecl; external PA_DLL;  
+function Pa_StopStream(stream: PaStream): PaError; cdecl; external PA_DLL;  
 function Pa_CloseStream(stream: PaStream): PaError; cdecl; external PA_DLL;
 
 implementation
@@ -2845,7 +2845,7 @@ Appeler SoX depuis FreePascal pour des opérations complexes.
 uses
   Process;
 
-procedure AppliquerEffetSoX(fichierEntree, fichierSortie, effet: String);
+procedure AppliquerEffetSoX(fichierEntree, fichierSortie, effet: String);  
 var
   commande: String;
 begin
@@ -2887,7 +2887,7 @@ type
 
 function new_aubio_pitch(method: PChar; buf_size, hop_size, samplerate: Cardinal):
   aubio_pitch_t; cdecl; external AUBIO_LIB;
-procedure del_aubio_pitch(o: aubio_pitch_t); cdecl; external AUBIO_LIB;
+procedure del_aubio_pitch(o: aubio_pitch_t); cdecl; external AUBIO_LIB;  
 procedure aubio_pitch_do(o: aubio_pitch_t; input, output: fvec_t);
   cdecl; external AUBIO_LIB;
 
@@ -2918,7 +2918,7 @@ begin
 end;
 
 // Fondu en entrée
-procedure FonduEntree(var signal: TSignal; duree: Integer);
+procedure FonduEntree(var signal: TSignal; duree: Integer);  
 var
   i: Integer;
   facteur: Double;
@@ -2931,7 +2931,7 @@ begin
 end;
 
 // Fondu en sortie
-procedure FonduSortie(var signal: TSignal; duree: Integer);
+procedure FonduSortie(var signal: TSignal; duree: Integer);  
 var
   i, debut: Integer;
   facteur: Double;
@@ -3018,7 +3018,7 @@ begin
 end;
 
 // Limiteur doux (soft limiter)
-function LimiteurDoux(valeur, seuil: Double): Double;
+function LimiteurDoux(valeur, seuil: Double): Double;  
 begin
   if Abs(valeur) <= seuil then
     Result := valeur
@@ -3028,7 +3028,7 @@ begin
     Result := -seuil + (1 - seuil) * Tanh((valeur + seuil) / (1 - seuil));
 end;
 
-procedure AppliquerLimiteur(var signal: TSignal; seuil: Double);
+procedure AppliquerLimiteur(var signal: TSignal; seuil: Double);  
 var
   i: Integer;
 begin
@@ -3054,7 +3054,7 @@ type
     function Disponible: Integer;
   end;
 
-constructor TBufferCirculaire.Create(taille: Integer);
+constructor TBufferCirculaire.Create(taille: Integer);  
 begin
   FTaille := taille;
   SetLength(FBuffer, taille);
@@ -3062,19 +3062,19 @@ begin
   FEcriture := 0;
 end;
 
-procedure TBufferCirculaire.Ecrire(valeur: Double);
+procedure TBufferCirculaire.Ecrire(valeur: Double);  
 begin
   FBuffer[FEcriture] := valeur;
   FEcriture := (FEcriture + 1) mod FTaille;
 end;
 
-function TBufferCirculaire.Lire: Double;
+function TBufferCirculaire.Lire: Double;  
 begin
   Result := FBuffer[FLecture];
   FLecture := (FLecture + 1) mod FTaille;
 end;
 
-function TBufferCirculaire.Disponible: Integer;
+function TBufferCirculaire.Disponible: Integer;  
 begin
   if FEcriture >= FLecture then
     Result := FEcriture - FLecture
@@ -3089,7 +3089,7 @@ end;
 
 ```pascal
 // Signal impulsionnel
-function GenererImpulsion(position, longueur: Integer): TSignal;
+function GenererImpulsion(position, longueur: Integer): TSignal;  
 var
   i: Integer;
 begin
@@ -3102,7 +3102,7 @@ begin
 end;
 
 // Bruit rose (1/f)
-function GenererBruitRose(longueur, sampleRate: Integer): TSignal;
+function GenererBruitRose(longueur, sampleRate: Integer): TSignal;  
 var
   bruitBlanc: TSignal;
   spectre: TComplexArray;
@@ -3153,7 +3153,7 @@ end;
 
 ```pascal
 // Rapport signal/bruit (SNR)
-function CalculerSNR(const signal, bruit: TSignal): Double;
+function CalculerSNR(const signal, bruit: TSignal): Double;  
 var
   i: Integer;
   puissanceSignal, puissanceBruit: Double;
@@ -3210,7 +3210,7 @@ begin
 end;
 
 // Corrélation croisée normalisée
-function CalculerCorrelationNormalisee(const signal1, signal2: TSignal): Double;
+function CalculerCorrelationNormalisee(const signal1, signal2: TSignal): Double;  
 var
   i: Integer;
   somme12, somme1, somme2, sommeCarres1, sommeCarres2: Double;
@@ -3243,7 +3243,7 @@ end;
 ### 1. Enregistrement de traces
 
 ```pascal
-procedure EnregistrerTrace(const signal: TSignal; nomFichier: String);
+procedure EnregistrerTrace(const signal: TSignal; nomFichier: String);  
 var
   fichier: TextFile;
   i: Integer;
@@ -3259,7 +3259,7 @@ begin
 end;
 
 // Pour visualiser avec gnuplot ou autre outil externe
-procedure VisualiserAvecGnuplot(const signal: TSignal; titre: String);
+procedure VisualiserAvecGnuplot(const signal: TSignal; titre: String);  
 var
   nomFichier: String;
 begin

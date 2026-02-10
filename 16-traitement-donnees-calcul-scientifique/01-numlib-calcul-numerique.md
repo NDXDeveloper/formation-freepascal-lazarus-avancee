@@ -44,11 +44,11 @@ sudo apt-get install fp-units-math
 2. **Installation manuelle** :
 ```bash
 # Télécharger NumLib
-git clone https://github.com/numlib/numlib.git
+git clone https://github.com/numlib/numlib.git  
 cd numlib
 
 # Compiler et installer
-make
+make  
 sudo make install
 ```
 
@@ -229,9 +229,9 @@ NumLib propose plusieurs algorithmes :
 
 ```pascal
 // Choix de la méthode
-x := GaussElimination(A, b);        // Élimination de Gauss
-x := LUDecomposition(A, b);         // Décomposition LU
-x := CholeskyMethod(A, b);          // Cholesky (si applicable)
+x := GaussElimination(A, b);        // Élimination de Gauss  
+x := LUDecomposition(A, b);         // Décomposition LU  
+x := CholeskyMethod(A, b);          // Cholesky (si applicable)  
 x := JacobiMethod(A, b, tolerance); // Méthode itérative
 ```
 
@@ -278,7 +278,7 @@ uses
   uTypes, uIntegral;
 
 // Définition de la fonction à intégrer
-function MonFonction(x: TFloat): TFloat;
+function MonFonction(x: TFloat): TFloat;  
 begin
   Result := x * x; // f(x) = x²
 end;
@@ -311,7 +311,7 @@ uses
   uTypes, uRoots;
 
 // Fonction dont on cherche les racines
-function Equation(x: TFloat): TFloat;
+function Equation(x: TFloat): TFloat;  
 begin
   Result := x * x - 4; // x² - 4 = 0, racines : x = ±2
 end;

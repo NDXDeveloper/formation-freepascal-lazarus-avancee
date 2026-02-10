@@ -118,7 +118,7 @@ begin
 end;
 
 // Exemple d'utilisation
-function MaFonction(x: TFloat): TFloat;
+function MaFonction(x: TFloat): TFloat;  
 begin
   Result := Sqr(x - 3) + 2;  // Minimum en x = 3
 end;
@@ -539,7 +539,7 @@ begin
   end;
 end;
 
-function Selection(const pop: TPopulation): TPopulation;
+function Selection(const pop: TPopulation): TPopulation;  
 var
   i, index1, index2: Integer;
 begin
@@ -558,7 +558,7 @@ begin
   end;
 end;
 
-function Croisement(const pop: TPopulation): TPopulation;
+function Croisement(const pop: TPopulation): TPopulation;  
 var
   i, j, pointCroisement: Integer;
   parent1, parent2: TIndividu;
@@ -824,7 +824,7 @@ end;
 
 ```pascal
 // Fonction de Rosenbrock (banane)
-function Rosenbrock(const x: TVecteur): TFloat;
+function Rosenbrock(const x: TVecteur): TFloat;  
 var
   i: Integer;
 begin
@@ -834,7 +834,7 @@ begin
 end;
 
 // Fonction de Rastrigin
-function Rastrigin(const x: TVecteur): TFloat;
+function Rastrigin(const x: TVecteur): TFloat;  
 var
   i: Integer;
 begin
@@ -844,7 +844,7 @@ begin
 end;
 
 // Fonction sphère (simple)
-function Sphere(const x: TVecteur): TFloat;
+function Sphere(const x: TVecteur): TFloat;  
 var
   i: Integer;
 begin
@@ -854,7 +854,7 @@ begin
 end;
 
 // Fonction d'Ackley
-function Ackley(const x: TVecteur): TFloat;
+function Ackley(const x: TVecteur): TFloat;  
 var
   i, n: Integer;
   somme1, somme2: TFloat;
@@ -878,7 +878,7 @@ end;
 
 ```pascal
 // Opérations sur vecteurs
-function Addition(const a, b: TVecteur): TVecteur;
+function Addition(const a, b: TVecteur): TVecteur;  
 var
   i: Integer;
 begin
@@ -887,7 +887,7 @@ begin
     Result[i] := a[i] + b[i];
 end;
 
-function Soustraction(const a, b: TVecteur): TVecteur;
+function Soustraction(const a, b: TVecteur): TVecteur;  
 var
   i: Integer;
 begin
@@ -896,7 +896,7 @@ begin
     Result[i] := a[i] - b[i];
 end;
 
-function MultiplyByScalar(const v: TVecteur; scalaire: TFloat): TVecteur;
+function MultiplyByScalar(const v: TVecteur; scalaire: TFloat): TVecteur;  
 var
   i: Integer;
 begin
@@ -905,7 +905,7 @@ begin
     Result[i] := v[i] * scalaire;
 end;
 
-function ProduitScalaire(const a, b: TVecteur): TFloat;
+function ProduitScalaire(const a, b: TVecteur): TFloat;  
 var
   i: Integer;
 begin
@@ -914,7 +914,7 @@ begin
     Result := Result + a[i] * b[i];
 end;
 
-function Norme(const v: TVecteur): TFloat;
+function Norme(const v: TVecteur): TFloat;  
 var
   i: Integer;
 begin
@@ -925,7 +925,7 @@ begin
 end;
 
 // Résolution de système linéaire simple (pour Newton)
-function ResoudreSysteme(const A: TMatrice; const b: TVecteur): TVecteur;
+function ResoudreSysteme(const A: TMatrice; const b: TVecteur): TVecteur;  
 var
   n, i, j, k: Integer;
   augmentee: TMatrice;
@@ -1002,7 +1002,7 @@ begin
   end;
 end;
 
-procedure RegressionContrainte;
+procedure RegressionContrainte;  
 var
   donnees: TDonnees;
   i: Integer;
@@ -1064,7 +1064,7 @@ type
 
   TItineraire = array of Integer;
 
-function DistanceVilles(const v1, v2: TVille): TFloat;
+function DistanceVilles(const v1, v2: TVille): TFloat;  
 begin
   Result := Sqrt(Sqr(v2.X - v1.X) + Sqr(v2.Y - v1.Y));
 end;
@@ -1171,7 +1171,7 @@ begin
   Result := Sqrt(Result);
 end;
 
-procedure OptimiserPortefeuille;
+procedure OptimiserPortefeuille;  
 var
   actifs: array[0..4] of TActif;
   contraintes: TListeContraintes;
@@ -1263,7 +1263,7 @@ type
     MatierePremiereNecessaire: TFloat;
   end;
 
-procedure OptimiserProduction;
+procedure OptimiserProduction;  
 var
   produits: array[0..2] of TProduit;
   contraintes: TListeContraintes;
@@ -1353,7 +1353,7 @@ end;
 uses
   TAGraph, TASeries;
 
-procedure VisualiserConvergence(Chart: TChart; const historique: array of TFloat);
+procedure VisualiserConvergence(Chart: TChart; const historique: array of TFloat);  
 var
   Serie: TLineSeries;
   i: Integer;
@@ -1427,7 +1427,7 @@ begin
   Chart.AddSeries(Serie);
 end;
 
-function ValeurVersCouleur(valeur, min, max: TFloat): TColor;
+function ValeurVersCouleur(valeur, min, max: TFloat): TColor;  
 var
   ratio: TFloat;
 begin
@@ -1445,7 +1445,7 @@ end;
 ### Benchmark sur fonctions de test
 
 ```pascal
-procedure BenchmarkAlgorithmes;
+procedure BenchmarkAlgorithmes;  
 var
   fonctions: array[0..3] of TFonctionObjectif;
   nomsfonctions: array[0..3] of String;
@@ -1556,7 +1556,7 @@ const
   BLAS_LIB = 'libblas.dll';
 {$ENDIF}
 
-function UtiliserBLAS: Boolean;
+function UtiliserBLAS: Boolean;  
 begin
   Result := FileExists(BLAS_LIB);
 end;

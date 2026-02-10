@@ -48,7 +48,7 @@ type
     property Result: Double read FResult;
   end;
 
-constructor TSumThread.Create(const Data: array of Double; AStart, AEnd: Integer);
+constructor TSumThread.Create(const Data: array of Double; AStart, AEnd: Integer);  
 var
   i: Integer;
 begin
@@ -63,7 +63,7 @@ begin
     FData[i] := Data[i];
 end;
 
-procedure TSumThread.Execute;
+procedure TSumThread.Execute;  
 var
   i: Integer;
 begin
@@ -73,7 +73,7 @@ begin
 end;
 
 // Fonction qui utilise plusieurs threads
-function ParallelSum(const Data: array of Double; NumThreads: Integer): Double;
+function ParallelSum(const Data: array of Double; NumThreads: Integer): Double;  
 var
   Threads: array of TSumThread;
   ChunkSize, i, Start, Finish: Integer;
@@ -116,7 +116,7 @@ uses
   MTProcs;
 
 // Exemple : Traitement parallèle d'un tableau
-procedure ProcessArrayParallel(var Data: array of Double);
+procedure ProcessArrayParallel(var Data: array of Double);  
 var
   i: Integer;
 begin
@@ -129,7 +129,7 @@ begin
 end;
 
 // Fonction appliquée à chaque élément
-procedure ProcessElement(Index: PtrInt; Data: Pointer; Item: TMultiThreadProcItem);
+procedure ProcessElement(Index: PtrInt; Data: Pointer; Item: TMultiThreadProcItem);  
 var
   Arr: ^array of Double;
 begin
@@ -210,9 +210,9 @@ SIMD (Single Instruction Multiple Data) permet d'appliquer une même opération 
 
 **Exemple concret :** Au lieu d'additionner 4 paires de nombres en 4 opérations :
 ```
-a1 + b1 = c1
-a2 + b2 = c2
-a3 + b3 = c3
+a1 + b1 = c1  
+a2 + b2 = c2  
+a3 + b3 = c3  
 a4 + b4 = c4
 ```
 
@@ -249,7 +249,7 @@ fpc -O3 -CpCOREAVX2 -FaAVX2 monprogramme.pas
 #### Exemple de code vectorisable
 
 ```pascal
-procedure AddArrays(const A, B: array of Single; var C: array of Single);
+procedure AddArrays(const A, B: array of Single; var C: array of Single);  
 var
   i: Integer;
 begin
@@ -268,7 +268,7 @@ Pour un contrôle total, vous pouvez écrire du code SIMD directement en assembl
 #### Exemple SSE : Addition de 4 floats
 
 ```pascal
-procedure AddVectorsSSE(const A, B: array of Single; var Result: array of Single; Count: Integer);
+procedure AddVectorsSSE(const A, B: array of Single; var Result: array of Single; Count: Integer);  
 var
   i: Integer;
 begin
@@ -311,7 +311,7 @@ end;
 #### Exemple AVX : Addition de 8 floats
 
 ```pascal
-procedure AddVectorsAVX(const A, B: array of Single; var Result: array of Single; Count: Integer);
+procedure AddVectorsAVX(const A, B: array of Single; var Result: array of Single; Count: Integer);  
 var
   i: Integer;
 begin
@@ -359,7 +359,7 @@ Avant d'utiliser des instructions SIMD avancées, vérifiez que le processeur le
 uses
   CPU;  // Unit incluse dans FreePascal
 
-function GetCPUFeatures: string;
+function GetCPUFeatures: string;  
 begin
   Result := '';
 
@@ -382,7 +382,7 @@ begin
 end;
 
 // Utilisation adaptative
-procedure AddVectorsAdaptive(const A, B: array of Single; var Result: array of Single);
+procedure AddVectorsAdaptive(const A, B: array of Single; var Result: array of Single);  
 begin
   if AVX2Support then
     AddVectorsAVX(A, B, Result, Length(A))
@@ -405,7 +405,7 @@ Pour des performances optimales, combinez calcul parallèle ET vectorisation :
 uses
   MTProcs;
 
-procedure OptimizedMatrixMultiply(const A, B: TMatrix; var C: TMatrix);
+procedure OptimizedMatrixMultiply(const A, B: TMatrix; var C: TMatrix);  
 begin
   // Parallélisation sur les lignes
   ProcThreadPool.DoParallelLocalProc(
@@ -449,7 +449,7 @@ type
   TImageData = array of array of TPixel;
 
 // Applique un flou gaussien en parallèle et vectorisé
-procedure ApplyBlurParallel(var Image: TImageData; Radius: Integer);
+procedure ApplyBlurParallel(var Image: TImageData; Radius: Integer);  
 var
   Height, Width: Integer;
 begin
@@ -576,7 +576,7 @@ uses
   {$IFDEF UNIX}BaseUnix{$ENDIF}
   {$IFDEF WINDOWS}Windows{$ENDIF};
 
-function GetCPUCount: Integer;
+function GetCPUCount: Integer;  
 begin
   {$IFDEF WINDOWS}
   Result := GetCPUCount; // Fonction système Windows

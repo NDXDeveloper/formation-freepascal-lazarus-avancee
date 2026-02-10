@@ -64,7 +64,7 @@ Il existe plusieurs façons d'intégrer Python dans vos applications FreePascal 
 
 ```bash
 # Installer Python et les dépendances
-sudo apt update
+sudo apt update  
 sudo apt install python3 python3-dev python3-pip
 
 # Installer Python4Lazarus via OPM (Online Package Manager) dans Lazarus
@@ -172,7 +172,7 @@ type
     function PredictWithML(const Features: array of Double): Double;
   end;
 
-constructor TDataAnalyzer.Create;
+constructor TDataAnalyzer.Create;  
 begin
   FPythonEngine := TPythonEngine.Create(nil);
   FPythonEngine.LoadDll;
@@ -181,14 +181,14 @@ begin
   FPythonIO.PythonEngine := FPythonEngine;
 end;
 
-destructor TDataAnalyzer.Destroy;
+destructor TDataAnalyzer.Destroy;  
 begin
   FPythonIO.Free;
   FPythonEngine.Free;
   inherited;
 end;
 
-procedure TDataAnalyzer.AnalyzeData(const Data: array of Double);
+procedure TDataAnalyzer.AnalyzeData(const Data: array of Double);  
 var
   DataStr: string;
   i: Integer;
@@ -228,7 +228,7 @@ begin
   end;
 end;
 
-function TDataAnalyzer.PredictWithML(const Features: array of Double): Double;
+function TDataAnalyzer.PredictWithML(const Features: array of Double): Double;  
 var
   PythonCode: TStringList;
   ResultObj: PPyObject;
@@ -312,7 +312,7 @@ program PythonCommandLine;
 uses
   SysUtils, Process, Classes;
 
-function RunPythonScript(const ScriptPath: string; const Args: array of string): string;
+function RunPythonScript(const ScriptPath: string; const Args: array of string): string;  
 var
   Process: TProcess;
   OutputLines: TStringList;
@@ -353,7 +353,7 @@ begin
 end;
 
 // Créer un script Python temporaire
-procedure CreatePythonScript(const FileName: string);
+procedure CreatePythonScript(const FileName: string);  
 var
   Script: TStringList;
 begin
@@ -413,7 +413,7 @@ end.
 Pour éviter les conflits de bibliothèques, utilisez des environnements virtuels :
 
 ```pascal
-procedure SetupPythonEnvironment;
+procedure SetupPythonEnvironment;  
 var
   Process: TProcess;
 begin
@@ -478,7 +478,7 @@ program RIntegration;
 uses
   SysUtils, Process, Classes;
 
-function RunRScript(const ScriptPath: string): string;
+function RunRScript(const ScriptPath: string): string;  
 var
   Process: TProcess;
   OutputLines: TStringList;
@@ -510,7 +510,7 @@ begin
   end;
 end;
 
-procedure CreateStatisticalAnalysisScript(const FileName: string);
+procedure CreateStatisticalAnalysisScript(const FileName: string);  
 var
   Script: TStringList;
 begin
@@ -548,7 +548,7 @@ begin
   end;
 end;
 
-procedure CreateSampleData;
+procedure CreateSampleData;  
 var
   Data: TStringList;
 begin
@@ -616,7 +616,7 @@ program RGraphics;
 uses
   SysUtils, Process, Classes;
 
-procedure GeneratePlotScript(const DataFile, OutputFile: string);
+procedure GeneratePlotScript(const DataFile, OutputFile: string);  
 var
   Script: TStringList;
 begin
@@ -717,14 +717,14 @@ type
     procedure ExecuteRAnalysis;
   end;
 
-constructor TRIntegration.Create;
+constructor TRIntegration.Create;  
 begin
   FDataPath := 'r_input.json';
   FResultPath := 'r_output.json';
   FScriptPath := 'analysis.R';
 end;
 
-procedure TRIntegration.SendData(const Data: array of Double);
+procedure TRIntegration.SendData(const Data: array of Double);  
 var
   JSON: TJSONObject;
   JSONArray: TJSONArray;
@@ -756,7 +756,7 @@ begin
   end;
 end;
 
-function TRIntegration.ReceiveResults: TJSONObject;
+function TRIntegration.ReceiveResults: TJSONObject;  
 var
   FileStream: TFileStream;
   Parser: TJSONParser;
@@ -778,7 +778,7 @@ begin
   end;
 end;
 
-procedure TRIntegration.ExecuteRAnalysis;
+procedure TRIntegration.ExecuteRAnalysis;  
 var
   Script: TStringList;
   Process: TProcess;
@@ -943,13 +943,13 @@ type
     function GetModelAccuracy: Double;
   end;
 
-constructor TMLModel.Create;
+constructor TMLModel.Create;  
 begin
   FModelPath := 'model.pkl';
   FPythonScript := 'ml_script.py';
 end;
 
-destructor TMLModel.Destroy;
+destructor TMLModel.Destroy;  
 begin
   // Nettoyer les fichiers temporaires
   if FileExists(FPythonScript) then
@@ -957,7 +957,7 @@ begin
   inherited;
 end;
 
-procedure TMLModel.CreateTrainingScript;
+procedure TMLModel.CreateTrainingScript;  
 var
   Script: TStringList;
 begin
@@ -1009,7 +1009,7 @@ begin
   end;
 end;
 
-procedure TMLModel.CreatePredictionScript;
+procedure TMLModel.CreatePredictionScript;  
 var
   Script: TStringList;
 begin
@@ -1045,7 +1045,7 @@ begin
   end;
 end;
 
-function TMLModel.ExecutePython(const ScriptName: string; const Args: array of string): string;
+function TMLModel.ExecutePython(const ScriptName: string; const Args: array of string): string;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -1076,7 +1076,7 @@ begin
   end;
 end;
 
-procedure TMLModel.Train(const XData, YData: array of array of Double);
+procedure TMLModel.Train(const XData, YData: array of array of Double);  
 var
   JSON: TJSONObject;
   XArray, YArray: TJSONArray;
@@ -1126,7 +1126,7 @@ begin
   WriteLn(ExecutePython('train_model.py', []));
 end;
 
-function TMLModel.Predict(const Features: array of Double): Double;
+function TMLModel.Predict(const Features: array of Double): Double;  
 var
   JSON: TJSONArray;
   i: Integer;
@@ -1183,7 +1183,7 @@ begin
   end;
 end;
 
-function TMLModel.GetModelAccuracy: Double;
+function TMLModel.GetModelAccuracy: Double;  
 var
   Parser: TJSONParser;
   FileStream: TFileStream;
@@ -1300,7 +1300,7 @@ type
     function GetReportPath: string;
   end;
 
-constructor TReportGenerator.Create(const ReportName: string);
+constructor TReportGenerator.Create(const ReportName: string);  
 begin
   FDataFile := 'report_data.csv';
   FReportPath := ReportName + '_' + FormatDateTime('yyyymmdd_hhnnss', Now) + '.html';
@@ -1333,7 +1333,7 @@ begin
   end;
 end;
 
-procedure TReportGenerator.GenerateRMarkdownScript;
+procedure TReportGenerator.GenerateRMarkdownScript;  
 var
   Script: TStringList;
 begin
@@ -1445,7 +1445,7 @@ begin
   end;
 end;
 
-function TReportGenerator.ExecuteR(const ScriptName: string): Boolean;
+function TReportGenerator.ExecuteR(const ScriptName: string): Boolean;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -1476,7 +1476,7 @@ begin
   end;
 end;
 
-function TReportGenerator.GenerateReport: Boolean;
+function TReportGenerator.GenerateReport: Boolean;  
 begin
   WriteLn('Génération du script R Markdown...');
   GenerateRMarkdownScript;
@@ -1490,7 +1490,7 @@ begin
     WriteLn('Erreur lors de la génération du rapport');
 end;
 
-function TReportGenerator.GetReportPath: string;
+function TReportGenerator.GetReportPath: string;  
 begin
   Result := FReportPath;
 end;
@@ -1574,7 +1574,7 @@ type
     function ExtractFeatures(const ImagePath: string): string;
   end;
 
-procedure TImageProcessor.CreateOpenCVScript;
+procedure TImageProcessor.CreateOpenCVScript;  
 var
   Script: TStringList;
 begin
@@ -1654,7 +1654,7 @@ begin
   end;
 end;
 
-function TImageProcessor.ExecutePython(const ScriptName: string): string;
+function TImageProcessor.ExecutePython(const ScriptName: string): string;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -1685,7 +1685,7 @@ begin
   end;
 end;
 
-function TImageProcessor.DetectFaces(const ImagePath: string): Integer;
+function TImageProcessor.DetectFaces(const ImagePath: string): Integer;  
 var
   Output: string;
 begin
@@ -1732,7 +1732,7 @@ begin
   end;
 end;
 
-function TImageProcessor.ExtractFeatures(const ImagePath: string): string;
+function TImageProcessor.ExtractFeatures(const ImagePath: string): string;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -1844,7 +1844,7 @@ Toujours gérer les cas où Python/R n'est pas installé ou rencontre une erreur
 type
   TIntegrationError = (ieNone, ieNotInstalled, ieScriptError, ieTimeout, ieInvalidData);
 
-function CheckPythonInstallation: Boolean;
+function CheckPythonInstallation: Boolean;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -1888,7 +1888,7 @@ begin
   end;
 end;
 
-function CheckRInstallation: Boolean;
+function CheckRInstallation: Boolean;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -1927,7 +1927,7 @@ begin
   end;
 end;
 
-procedure CheckEnvironment;
+procedure CheckEnvironment;  
 begin
   WriteLn('=== Vérification de l''environnement ===');
   WriteLn;
@@ -2011,7 +2011,7 @@ end;
 Toujours valider les données avant de les envoyer à Python/R :
 
 ```pascal
-function ValidateNumericArray(const Data: array of Double): Boolean;
+function ValidateNumericArray(const Data: array of Double): Boolean;  
 var
   i: Integer;
 begin
@@ -2036,7 +2036,7 @@ begin
   end;
 end;
 
-function SanitizeStringForJSON(const S: string): string;
+function SanitizeStringForJSON(const S: string): string;  
 begin
   // Échapper les caractères spéciaux pour JSON
   Result := StringReplace(S, '\', '\\', [rfReplaceAll]);
@@ -2052,7 +2052,7 @@ end;
 Les chemins de fichiers diffèrent entre Windows et Linux :
 
 ```pascal
-function GetPythonExecutable: string;
+function GetPythonExecutable: string;  
 begin
   {$IFDEF WINDOWS}
   Result := 'python.exe';
@@ -2061,7 +2061,7 @@ begin
   {$ENDIF}
 end;
 
-function GetRExecutable: string;
+function GetRExecutable: string;  
 begin
   {$IFDEF WINDOWS}
   Result := 'Rscript.exe';
@@ -2070,7 +2070,7 @@ begin
   {$ENDIF}
 end;
 
-function NormalizePath(const Path: string): string;
+function NormalizePath(const Path: string): string;  
 begin
   Result := Path;
   {$IFDEF WINDOWS}
@@ -2082,7 +2082,7 @@ begin
   {$ENDIF}
 end;
 
-function GetTempDirectory: string;
+function GetTempDirectory: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('TEMP');
@@ -2105,7 +2105,7 @@ Implémentez un système de logging pour faciliter le débogage :
 type
   TLogLevel = (llDebug, llInfo, llWarning, llError);
 
-procedure Log(const Message: string; Level: TLogLevel = llInfo);
+procedure Log(const Message: string; Level: TLogLevel = llInfo);  
 var
   LogFile: TextFile;
   TimeStamp: string;
@@ -2139,7 +2139,7 @@ begin
 end;
 
 // Utilisation
-procedure ExecuteWithLogging;
+procedure ExecuteWithLogging;  
 begin
   Log('Démarrage de l''intégration Python', llInfo);
 
@@ -2188,21 +2188,21 @@ type
     property Active: Boolean read FActive;
   end;
 
-constructor TPersistentPython.Create;
+constructor TPersistentPython.Create;  
 begin
   FProcess := TProcess.Create(nil);
   FActive := False;
   StartPython;
 end;
 
-destructor TPersistentPython.Destroy;
+destructor TPersistentPython.Destroy;  
 begin
   StopPython;
   FProcess.Free;
   inherited;
 end;
 
-procedure TPersistentPython.StartPython;
+procedure TPersistentPython.StartPython;  
 begin
   if FActive then Exit;
 
@@ -2228,7 +2228,7 @@ begin
   end;
 end;
 
-procedure TPersistentPython.StopPython;
+procedure TPersistentPython.StopPython;  
 begin
   if not FActive then Exit;
 
@@ -2239,7 +2239,7 @@ begin
   Log('Python arrêté', llInfo);
 end;
 
-function TPersistentPython.Execute(const Code: string): string;
+function TPersistentPython.Execute(const Code: string): string;  
 var
   Output: TStringList;
 begin
@@ -2308,13 +2308,13 @@ type
     procedure Clear;
   end;
 
-constructor TResultCache.Create(MaxSize: Integer);
+constructor TResultCache.Create(MaxSize: Integer);  
 begin
   FCache := TDictionary<string, string>.Create;
   FMaxSize := MaxSize;
 end;
 
-destructor TResultCache.Destroy;
+destructor TResultCache.Destroy;  
 begin
   FCache.Free;
   inherited;
@@ -2359,7 +2359,7 @@ begin
   Log('Résultat mis en cache : ' + Key, llDebug);
 end;
 
-procedure TResultCache.Clear;
+procedure TResultCache.Clear;  
 begin
   FCache.Clear;
   Log('Cache vidé', llDebug);
@@ -2370,7 +2370,7 @@ var
   Cache: TResultCache;
   Result: string;
 
-function CalculateWithPython(const Expression: string): string;
+function CalculateWithPython(const Expression: string): string;  
 begin
   // Vérifier le cache
   if Cache.Get('calculate', [Expression], Result) then
@@ -2406,7 +2406,7 @@ Pour traiter plusieurs requêtes Python/R en parallèle :
 uses
   Classes, MTProcs;
 
-procedure ProcessDataInParallel(const DataSets: array of TDoubleArray);
+procedure ProcessDataInParallel(const DataSets: array of TDoubleArray);  
 var
   Results: array of string;
   i: Integer;
