@@ -37,7 +37,7 @@ L'Infrastructure as Code (IaC) est une approche qui consiste à **gérer et prov
 ssh user@serveur1.com
 
 # Installer FreePascal
-sudo apt update
+sudo apt update  
 sudo apt install fpc lazarus
 
 # Configurer le firewall
@@ -78,7 +78,7 @@ terraform apply && ansible-playbook playbook.yml
 
 **1. Reproductibilité**
 ```
-Développement → Staging → Production
+Développement → Staging → Production  
 Toujours la même configuration !
 ```
 
@@ -100,13 +100,13 @@ Git log :
 
 **4. Documentation vivante**
 ```
-Le code = La documentation
+Le code = La documentation  
 Toujours à jour automatiquement
 ```
 
 **5. Disaster Recovery**
 ```
-Serveur crashé ?
+Serveur crashé ?  
 terraform apply → Serveur recréé en 5 minutes
 ```
 
@@ -404,9 +404,9 @@ output "database_password" {
 
 **Fichier : `terraform.tfvars`** (Ne JAMAIS committer ce fichier !)
 ```hcl
-do_token      = "dop_v1_xxxxxxxxxxxxxxxxxxxxx"
-ssh_key_name  = "ma-cle-ssh"
-region        = "fra1"
+do_token      = "dop_v1_xxxxxxxxxxxxxxxxxxxxx"  
+ssh_key_name  = "ma-cle-ssh"  
+region        = "fra1"  
 server_size   = "s-2vcpu-2gb"
 ```
 
@@ -449,9 +449,9 @@ Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-server_ip = "165.227.xxx.xxx"
-database_host = <sensitive>
-database_port = 25060
+server_ip = "165.227.xxx.xxx"  
+database_host = <sensitive>  
+database_port = 25060  
 database_user = "freepascal_app"
 ```
 
@@ -548,13 +548,13 @@ module "app_servers" {
 **Déployer par environnement :**
 ```bash
 # Dev
-cd environments/dev
-terraform init
+cd environments/dev  
+terraform init  
 terraform apply
 
 # Production
-cd ../production
-terraform init
+cd ../production  
+terraform init  
 terraform apply
 ```
 
@@ -623,7 +623,7 @@ terraform {
 
 **Sur Ubuntu :**
 ```bash
-sudo apt update
+sudo apt update  
 sudo apt install ansible
 
 # Vérifier
@@ -652,15 +652,15 @@ Liste des serveurs à gérer.
 **Fichier : `inventory.ini`**
 ```ini
 [app_servers]
-app1.example.com
-app2.example.com
+app1.example.com  
+app2.example.com  
 app3.example.com
 
 [db_servers]
 db1.example.com
 
 [all:vars]
-ansible_user=deployer
+ansible_user=deployer  
 ansible_python_interpreter=/usr/bin/python3
 ```
 
@@ -819,19 +819,19 @@ Tâches exécutées uniquement si notifiées (ex: redémarrer un service).
 **Template systemd : `templates/freepascal-app.service.j2`**
 ```ini
 [Unit]
-Description=FreePascal Application
+Description=FreePascal Application  
 After=network.target postgresql.service
 
 [Service]
-Type=simple
-User={{ app_user }}
-WorkingDirectory={{ app_dir }}
-ExecStart={{ app_dir }}/bin/app
-Restart=always
+Type=simple  
+User={{ app_user }}  
+WorkingDirectory={{ app_dir }}  
+ExecStart={{ app_dir }}/bin/app  
+Restart=always  
 RestartSec=10
 
-Environment="DB_HOST={{ db_host }}"
-Environment="DB_PORT={{ db_port }}"
+Environment="DB_HOST={{ db_host }}"  
+Environment="DB_PORT={{ db_port }}"  
 Environment="DB_NAME={{ db_name }}"
 
 [Install]
@@ -921,37 +921,37 @@ ansible-playbook -i inventory.ini setup-freepascal.yml -v
 **Template de configuration : `templates/config.ini.j2`**
 ```ini
 [Application]
-Name={{ app_name }}
-Version={{ app_version }}
+Name={{ app_name }}  
+Version={{ app_version }}  
 Environment={{ environment }}
 
 [Database]
-Host={{ db_host }}
-Port={{ db_port }}
-Name={{ db_name }}
-User={{ db_user }}
+Host={{ db_host }}  
+Port={{ db_port }}  
+Name={{ db_name }}  
+User={{ db_user }}  
 Password={{ db_password }}
 
 [Redis]
-Host={{ redis_host }}
+Host={{ redis_host }}  
 Port={{ redis_port }}
 
 [Logging]
-Level={{ log_level }}
+Level={{ log_level }}  
 Path={{ app_dir }}/logs
 ```
 
 **Variables d'environnement : `group_vars/production.yml`**
 ```yaml
 ---
-environment: production
-app_name: MonAppli
+environment: production  
+app_name: MonAppli  
 log_level: INFO
 
 # Base de données
-db_host: db1.example.com
-db_port: 5432
-db_name: freepascal_prod
+db_host: db1.example.com  
+db_port: 5432  
+db_name: freepascal_prod  
 db_user: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           ...crypté...
@@ -960,7 +960,7 @@ db_password: !vault |
           ...crypté...
 
 # Redis
-redis_host: redis1.example.com
+redis_host: redis1.example.com  
 redis_port: 6379
 ```
 
@@ -1087,8 +1087,8 @@ ansible-vault create secrets.yml
 **Contenu du fichier `secrets.yml` :**
 ```yaml
 ---
-db_password: supersecret123
-api_key: abcdef123456
+db_password: supersecret123  
+api_key: abcdef123456  
 ssl_private_key: |
   -----BEGIN PRIVATE KEY-----
   MIIEvgIBADANBgkqhk...
@@ -1134,11 +1134,11 @@ ansible-vault edit secrets.yml
 ansible-playbook -i inventory.ini deploy.yml --ask-vault-pass
 
 # Ou utiliser un fichier de mot de passe
-echo "motdepasse" > .vault_pass
+echo "motdepasse" > .vault_pass  
 ansible-playbook -i inventory.ini deploy.yml --vault-password-file .vault_pass
 
 # Variables d'environnement
-export ANSIBLE_VAULT_PASSWORD_FILE=.vault_pass
+export ANSIBLE_VAULT_PASSWORD_FILE=.vault_pass  
 ansible-playbook -i inventory.ini deploy.yml
 ```
 
@@ -1201,14 +1201,14 @@ ${ip}
 %{ endfor ~}
 
 [app_servers:vars]
-ansible_user=root
+ansible_user=root  
 ansible_python_interpreter=/usr/bin/python3
 
 [db_servers]
 ${db_host}
 
 [all:vars]
-db_host=${db_host}
+db_host=${db_host}  
 db_port=${db_port}
 ```
 
@@ -1220,14 +1220,14 @@ db_port=${db_port}
 165.227.zzz.zzz
 
 [app_servers:vars]
-ansible_user=root
+ansible_user=root  
 ansible_python_interpreter=/usr/bin/python3
 
 [db_servers]
 db-postgresql-fra1-12345.b.db.ondigitalocean.com
 
 [all:vars]
-db_host=db-postgresql-fra1-12345.b.db.ondigitalocean.com
+db_host=db-postgresql-fra1-12345.b.db.ondigitalocean.com  
 db_port=25060
 ```
 
@@ -1278,29 +1278,29 @@ set -e
 echo "=== Déploiement complet de l'infrastructure ==="
 
 # Variables
-ENVIRONMENT=${1:-production}
+ENVIRONMENT=${1:-production}  
 VERSION=${2:-latest}
 
-echo "[1/5] Initialisation Terraform..."
-cd terraform/
+echo "[1/5] Initialisation Terraform..."  
+cd terraform/  
 terraform init
 
-echo "[2/5] Application Terraform..."
+echo "[2/5] Application Terraform..."  
 terraform apply -var-file="environments/${ENVIRONMENT}.tfvars" -auto-approve
 
-echo "[3/5] Attente de la disponibilité des serveurs (30s)..."
+echo "[3/5] Attente de la disponibilité des serveurs (30s)..."  
 sleep 30
 
-echo "[4/5] Configuration des serveurs avec Ansible..."
-cd ../ansible/
+echo "[4/5] Configuration des serveurs avec Ansible..."  
+cd ../ansible/  
 ansible-playbook -i inventory.ini site.yml
 
-echo "[5/5] Déploiement de l'application..."
+echo "[5/5] Déploiement de l'application..."  
 ansible-playbook -i inventory.ini deploy-app.yml -e "version=${VERSION}"
 
-echo ""
-echo "=== Déploiement terminé avec succès ==="
-terraform output -json > ../deployment-info.json
+echo ""  
+echo "=== Déploiement terminé avec succès ==="  
+terraform output -json > ../deployment-info.json  
 echo "Informations de déploiement dans deployment-info.json"
 ```
 
@@ -1372,29 +1372,29 @@ freepascal-infrastructure/
 **Fichier : `ansible/ansible.cfg`**
 ```ini
 [defaults]
-inventory = inventory/production.ini
-remote_user = deployer
-host_key_checking = False
-retry_files_enabled = False
-gathering = smart
-fact_caching = jsonfile
-fact_caching_connection = /tmp/ansible_facts
+inventory = inventory/production.ini  
+remote_user = deployer  
+host_key_checking = False  
+retry_files_enabled = False  
+gathering = smart  
+fact_caching = jsonfile  
+fact_caching_connection = /tmp/ansible_facts  
 fact_caching_timeout = 3600
 
 # Parallélisme
 forks = 10
 
 # Callbacks pour meilleurs outputs
-stdout_callback = yaml
+stdout_callback = yaml  
 callbacks_enabled = timer, profile_tasks
 
 # SSH
 ssh_args = -o ControlMaster=auto -o ControlPersist=60s
 
 [privilege_escalation]
-become = True
-become_method = sudo
-become_user = root
+become = True  
+become_method = sudo  
+become_user = root  
 become_ask_pass = False
 ```
 
@@ -1405,8 +1405,8 @@ Plutôt qu'un fichier statique, générez l'inventory dynamiquement.
 **Script : `ansible/inventory/digital_ocean.py`**
 ```python
 #!/usr/bin/env python3
-import json
-import os
+import json  
+import os  
 import requests
 
 def get_droplets():
@@ -1536,9 +1536,9 @@ verifier:
 molecule test
 
 # Étapes individuelles
-molecule create    # Créer l'environnement
-molecule converge  # Appliquer le rôle
-molecule verify    # Vérifier
+molecule create    # Créer l'environnement  
+molecule converge  # Appliquer le rôle  
+molecule verify    # Vérifier  
 molecule destroy   # Nettoyer
 ```
 
@@ -1859,7 +1859,7 @@ brew install terraform-docs  # macOS
 # ou télécharger depuis github.com/terraform-docs/terraform-docs
 
 # Générer la documentation
-cd terraform/modules/compute
+cd terraform/modules/compute  
 terraform-docs markdown table . > README.md
 ```
 
@@ -1891,16 +1891,16 @@ terraform-docs markdown table . > README.md
 **Générer des diagrammes avec Terraform Graph :**
 
 ```bash
-cd terraform/environments/production
+cd terraform/environments/production  
 terraform graph | dot -Tpng > architecture.png
 ```
 
 **Ou utiliser des outils comme Diagrams (Python) :**
 
 ```python
-from diagrams import Diagram, Cluster
-from diagrams.digitalocean.compute import Droplet
-from diagrams.digitalocean.database import DbaasPrimary
+from diagrams import Diagram, Cluster  
+from diagrams.digitalocean.compute import Droplet  
+from diagrams.digitalocean.database import DbaasPrimary  
 from diagrams.onprem.network import Nginx
 
 with Diagram("FreePascal Infrastructure", show=False):
@@ -1932,7 +1932,7 @@ with Diagram("FreePascal Infrastructure", show=False):
 ### 1. Préparation
 ```bash
 # Vérifier l'état actuel
-ansible all -i inventory.ini -m ping
+ansible all -i inventory.ini -m ping  
 terraform plan
 ```
 

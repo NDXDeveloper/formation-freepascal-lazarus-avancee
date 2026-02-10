@@ -61,13 +61,13 @@ Avec DevOps, chaque modification est automatiquement testée sur Windows et Ubun
 
 Le cycle traditionnel de développement :
 ```
-Développement → Tests manuels → Compilation manuelle →
+Développement → Tests manuels → Compilation manuelle →  
 Copie sur serveur → Configuration manuelle → Mise en production
 ```
 
 Le cycle DevOps :
 ```
-Commit Git → Tests automatiques → Build automatique →
+Commit Git → Tests automatiques → Build automatique →  
 Déploiement automatique → Vérification automatique
 ```
 
@@ -280,7 +280,7 @@ end;
 Adoptez un format de logs cohérent :
 
 ```pascal
-procedure Log(Level, Message: String);
+procedure Log(Level, Message: String);  
 var
   Timestamp: String;
 begin
@@ -289,8 +289,8 @@ begin
 end;
 
 // Utilisation
-Log('INFO', 'Application démarrée');
-Log('ERROR', 'Connexion base de données échouée');
+Log('INFO', 'Application démarrée');  
+Log('ERROR', 'Connexion base de données échouée');  
 Log('WARN', 'Mémoire faible');
 ```
 

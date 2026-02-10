@@ -28,7 +28,7 @@ Vous avez appris à conteneuriser vos applications FreePascal/Lazarus avec Docke
 
 **Scénario sans Kubernetes :**
 ```
-Vous avez développé une API FreePascal qui fonctionne super bien.
+Vous avez développé une API FreePascal qui fonctionne super bien.  
 Soudain, 1000 utilisateurs se connectent simultanément.
 → Votre serveur plante
 → Vous devez manuellement lancer plus d'instances
@@ -80,8 +80,8 @@ Pod = 1 ou plusieurs conteneurs Docker qui partagent :
 **Deployment**
 Déclare l'état désiré de votre application.
 ```yaml
-Je veux 3 instances de mon API FreePascal,
-avec la version 1.2.3,
+Je veux 3 instances de mon API FreePascal,  
+avec la version 1.2.3,  
 utilisant 512MB de RAM chacune
 ```
 
@@ -94,8 +94,8 @@ Service = Load Balancer interne pour vos Pods
 **Namespace**
 Espace de noms pour isoler les ressources.
 ```
-namespace "production"
-namespace "staging"
+namespace "production"  
+namespace "staging"  
 namespace "dev"
 ```
 
@@ -190,7 +190,7 @@ Minikube crée un cluster Kubernetes local sur votre machine.
 
 ```bash
 # Télécharger Minikube
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64  
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
 
 # Vérifier
@@ -242,8 +242,8 @@ Kind crée des clusters Kubernetes dans des conteneurs Docker.
 
 ```bash
 # Installation
-curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
-chmod +x ./kind
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64  
+chmod +x ./kind  
 sudo mv ./kind /usr/local/bin/kind
 
 # Créer un cluster
@@ -298,7 +298,7 @@ kubectl version --client
 
 **Vérifier la connexion au cluster :**
 ```bash
-kubectl cluster-info
+kubectl cluster-info  
 kubectl get nodes
 ```
 
@@ -354,8 +354,8 @@ RUN apt-get update && \
     apt-get install -y fpc && \
     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
-COPY hello.pas .
+WORKDIR /app  
+COPY hello.pas .  
 RUN fpc hello.pas
 
 EXPOSE 8080
@@ -381,8 +381,8 @@ Un Deployment décrit comment déployer votre application.
 
 **Fichier : `deployment.yaml`**
 ```yaml
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1  
+kind: Deployment  
 metadata:
   name: hello-fpc-deployment
   labels:
@@ -452,8 +452,8 @@ Un Service expose votre application sur le réseau.
 
 **Fichier : `service.yaml`**
 ```yaml
-apiVersion: v1
-kind: Service
+apiVersion: v1  
+kind: Service  
 metadata:
   name: hello-fpc-service
 spec:
@@ -536,8 +536,8 @@ Les applications ont besoin de configuration. Kubernetes offre ConfigMap et Secr
 
 **Fichier : `configmap.yaml`**
 ```yaml
-apiVersion: v1
-kind: ConfigMap
+apiVersion: v1  
+kind: ConfigMap  
 metadata:
   name: app-config
 data:
@@ -558,8 +558,8 @@ data:
 
 **Utiliser dans un Deployment :**
 ```yaml
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1  
+kind: Deployment  
 metadata:
   name: hello-fpc-deployment
 spec:
@@ -599,7 +599,7 @@ spec:
 AppName := GetEnvironmentVariable('APP_NAME');
 
 // Lire fichier de config monté
-AssignFile(F, '/app/config/config.ini');
+AssignFile(F, '/app/config/config.ini');  
 Reset(F);
 // ...
 ```
@@ -617,11 +617,11 @@ kubectl create secret generic db-secret \
 
 **Ou depuis un fichier YAML (Base64 encodé) :**
 ```yaml
-apiVersion: v1
-kind: Secret
+apiVersion: v1  
+kind: Secret  
 metadata:
   name: db-secret
-type: Opaque
+type: Opaque  
 data:
   username: ZGJ1c2Vy  # "dbuser" en Base64
   password: c3VwZXJzZWNyZXQxMjM=  # "supersecret123" en Base64
@@ -629,14 +629,14 @@ data:
 
 **Encoder en Base64 :**
 ```bash
-echo -n "dbuser" | base64
+echo -n "dbuser" | base64  
 echo -n "supersecret123" | base64
 ```
 
 **Utiliser dans un Deployment :**
 ```yaml
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1  
+kind: Deployment  
 metadata:
   name: hello-fpc-deployment
 spec:
@@ -660,7 +660,7 @@ spec:
 
 **Dans votre code FreePascal :**
 ```pascal
-DBUsername := GetEnvironmentVariable('DB_USERNAME');
+DBUsername := GetEnvironmentVariable('DB_USERNAME');  
 DBPassword := GetEnvironmentVariable('DB_PASSWORD');
 ```
 
@@ -672,8 +672,8 @@ Les conteneurs sont éphémères. Pour persister des données, utilisez des Pers
 
 **Fichier : `pvc.yaml`**
 ```yaml
-apiVersion: v1
-kind: PersistentVolumeClaim
+apiVersion: v1  
+kind: PersistentVolumeClaim  
 metadata:
   name: app-data-pvc
 spec:
@@ -692,8 +692,8 @@ spec:
 
 **Utiliser dans un Deployment :**
 ```yaml
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1  
+kind: Deployment  
 metadata:
   name: hello-fpc-deployment
 spec:
@@ -714,8 +714,8 @@ spec:
 **Dans votre code FreePascal :**
 ```pascal
 // Écrire dans le volume persistant
-DataPath := '/app/data/';
-AssignFile(F, DataPath + 'database.db');
+DataPath := '/app/data/';  
+AssignFile(F, DataPath + 'database.db');  
 Rewrite(F);
 // Les données survivent aux redémarrages du Pod
 ```
@@ -752,8 +752,8 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/late
 
 **Créer un HPA :**
 ```yaml
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v2  
+kind: HorizontalPodAutoscaler  
 metadata:
   name: hello-fpc-hpa
 spec:
@@ -809,7 +809,7 @@ Kubernetes facilite les mises à jour sans interruption.
 **Nouvelle version de votre app :**
 ```bash
 # Construire la v1.1.0
-docker build -t votre-username/hello-fpc:1.1.0 .
+docker build -t votre-username/hello-fpc:1.1.0 .  
 docker push votre-username/hello-fpc:1.1.0
 ```
 
@@ -856,7 +856,7 @@ Si la nouvelle version a des problèmes :
 kubectl rollout undo deployment/hello-fpc-deployment
 
 # Retourner à une révision spécifique
-kubectl rollout history deployment/hello-fpc-deployment
+kubectl rollout history deployment/hello-fpc-deployment  
 kubectl rollout undo deployment/hello-fpc-deployment --to-revision=2
 ```
 
@@ -894,8 +894,8 @@ Déployons une application complète avec API FreePascal, base de données Postg
 
 **Fichier : `postgres-statefulset.yaml`**
 ```yaml
-apiVersion: apps/v1
-kind: StatefulSet
+apiVersion: apps/v1  
+kind: StatefulSet  
 metadata:
   name: postgres
 spec:
@@ -942,8 +942,8 @@ spec:
 
 **Service PostgreSQL :**
 ```yaml
-apiVersion: v1
-kind: Service
+apiVersion: v1  
+kind: Service  
 metadata:
   name: postgres
 spec:
@@ -959,8 +959,8 @@ spec:
 
 **Fichier : `redis-deployment.yaml`**
 ```yaml
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1  
+kind: Deployment  
 metadata:
   name: redis
 spec:
@@ -992,8 +992,8 @@ spec:
 
 **Fichier : `api-deployment.yaml`**
 ```yaml
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1  
+kind: Deployment  
 metadata:
   name: api-fpc
 spec:
@@ -1056,8 +1056,8 @@ spec:
 
 **Service API :**
 ```yaml
-apiVersion: v1
-kind: Service
+apiVersion: v1  
+kind: Service  
 metadata:
   name: api-fpc-service
 spec:
@@ -1075,8 +1075,8 @@ L'Ingress gère l'accès HTTP/HTTPS depuis l'extérieur.
 
 **Fichier : `ingress.yaml`**
 ```yaml
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: networking.k8s.io/v1  
+kind: Ingress  
 metadata:
   name: api-ingress
   annotations:
@@ -1116,55 +1116,55 @@ set -e
 echo "=== Déploiement de la stack FreePascal sur Kubernetes ==="
 
 # Créer le namespace
-kubectl create namespace freepascal-app || true
+kubectl create namespace freepascal-app || true  
 kubectl config set-context --current --namespace=freepascal-app
 
 # Secrets
-echo "[1/7] Création des secrets..."
+echo "[1/7] Création des secrets..."  
 kubectl create secret generic db-secret \
   --from-literal=username=dbuser \
   --from-literal=password=supersecret123 \
   --dry-run=client -o yaml | kubectl apply -f -
 
 # PostgreSQL
-echo "[2/7] Déploiement PostgreSQL..."
-kubectl apply -f postgres-statefulset.yaml
+echo "[2/7] Déploiement PostgreSQL..."  
+kubectl apply -f postgres-statefulset.yaml  
 kubectl apply -f postgres-service.yaml
 
 # Attendre que PostgreSQL soit prêt
-echo "   Attente de PostgreSQL..."
+echo "   Attente de PostgreSQL..."  
 kubectl wait --for=condition=ready pod -l app=postgres --timeout=300s
 
 # Redis
-echo "[3/7] Déploiement Redis..."
-kubectl apply -f redis-pvc.yaml
-kubectl apply -f redis-deployment.yaml
+echo "[3/7] Déploiement Redis..."  
+kubectl apply -f redis-pvc.yaml  
+kubectl apply -f redis-deployment.yaml  
 kubectl apply -f redis-service.yaml
 
 # API FreePascal
-echo "[4/7] Déploiement API FreePascal..."
-kubectl apply -f api-deployment.yaml
+echo "[4/7] Déploiement API FreePascal..."  
+kubectl apply -f api-deployment.yaml  
 kubectl apply -f api-service.yaml
 
 # ConfigMap
-echo "[5/7] Application de la configuration..."
+echo "[5/7] Application de la configuration..."  
 kubectl apply -f configmap.yaml
 
 # HPA
-echo "[6/7] Configuration de l'autoscaling..."
+echo "[6/7] Configuration de l'autoscaling..."  
 kubectl apply -f hpa.yaml
 
 # Ingress
-echo "[7/7] Configuration de l'Ingress..."
+echo "[7/7] Configuration de l'Ingress..."  
 kubectl apply -f ingress.yaml
 
-echo ""
-echo "=== Déploiement terminé ==="
-echo ""
-echo "Vérifiez l'état avec :"
-echo "  kubectl get all"
-echo ""
-echo "Accédez à l'API via :"
+echo ""  
+echo "=== Déploiement terminé ==="  
+echo ""  
+echo "Vérifiez l'état avec :"  
+echo "  kubectl get all"  
+echo ""  
+echo "Accédez à l'API via :"  
 if command -v minikube &> /dev/null; then
     minikube service api-fpc-service --url
 fi
@@ -1205,7 +1205,7 @@ var
   DBConnection: TPQConnection;
   IsReady: Boolean = False;
 
-function CheckDatabaseConnection: Boolean;
+function CheckDatabaseConnection: Boolean;  
 begin
   try
     if not DBConnection.Connected then
@@ -1216,7 +1216,7 @@ begin
   end;
 end;
 
-procedure HandleHealth(var Response: TFPHTTPConnectionResponse);
+procedure HandleHealth(var Response: TFPHTTPConnectionResponse);  
 begin
   // Liveness : L'application tourne-t-elle ?
   Response.Code := 200;
@@ -1225,7 +1225,7 @@ begin
   Response.ContentType := 'application/json';
 end;
 
-procedure HandleReadiness(var Response: TFPHTTPConnectionResponse);
+procedure HandleReadiness(var Response: TFPHTTPConnectionResponse);  
 begin
   // Readiness : Peut-on servir des requêtes ?
   if IsReady and CheckDatabaseConnection then
@@ -1263,7 +1263,7 @@ begin
   end;
 end;
 
-procedure InitializeDatabase;
+procedure InitializeDatabase;  
 begin
   DBConnection := TPQConnection.Create(nil);
   DBConnection.HostName := GetEnvironmentVariable('DB_HOST');
@@ -1337,8 +1337,8 @@ Les Namespaces isolent les ressources dans un cluster.
 
 ```bash
 # Créer des namespaces
-kubectl create namespace production
-kubectl create namespace staging
+kubectl create namespace production  
+kubectl create namespace staging  
 kubectl create namespace development
 
 # Lister les namespaces
@@ -1375,8 +1375,8 @@ development/
 
 **Fichier avec namespace explicite :**
 ```yaml
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1  
+kind: Deployment  
 metadata:
   name: api-fpc
   namespace: production  # Namespace explicite
@@ -1390,8 +1390,8 @@ spec:
 Limitez les ressources par namespace :
 
 ```yaml
-apiVersion: v1
-kind: ResourceQuota
+apiVersion: v1  
+kind: ResourceQuota  
 metadata:
   name: dev-quota
   namespace: development
@@ -1416,7 +1416,7 @@ Surveiller vos applications dans Kubernetes est crucial.
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 # Ajouter le repo Prometheus
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts  
 helm repo update
 
 # Installer Prometheus + Grafana
@@ -1440,7 +1440,7 @@ kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80
 **Ajouter un endpoint /metrics :**
 
 ```pascal
-procedure HandleMetrics(var Response: TFPHTTPConnectionResponse);
+procedure HandleMetrics(var Response: TFPHTTPConnectionResponse);  
 var
   Metrics: String;
 begin
@@ -1462,8 +1462,8 @@ end;
 **Service Monitor pour Prometheus :**
 
 ```yaml
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+apiVersion: monitoring.coreos.com/v1  
+kind: ServiceMonitor  
 metadata:
   name: api-fpc-monitor
 spec:
@@ -1486,8 +1486,8 @@ Pods (logs) → Fluentd → Elasticsearch → Kibana
 **DaemonSet Fluentd :**
 
 ```yaml
-apiVersion: apps/v1
-kind: DaemonSet
+apiVersion: apps/v1  
+kind: DaemonSet  
 metadata:
   name: fluentd
   namespace: kube-system
@@ -1526,7 +1526,7 @@ spec:
 **Dans votre application FreePascal, loggez en JSON :**
 
 ```pascal
-procedure LogJSON(Level, Message: String);
+procedure LogJSON(Level, Message: String);  
 var
   LogEntry: String;
 begin
@@ -1538,7 +1538,7 @@ begin
 end;
 
 // Utilisation
-LogJSON('INFO', 'Application démarrée');
+LogJSON('INFO', 'Application démarrée');  
 LogJSON('ERROR', 'Connexion base de données échouée');
 ```
 
@@ -1551,8 +1551,8 @@ Contrôlez qui peut faire quoi dans le cluster.
 **ServiceAccount pour votre application :**
 
 ```yaml
-apiVersion: v1
-kind: ServiceAccount
+apiVersion: v1  
+kind: ServiceAccount  
 metadata:
   name: api-fpc-sa
   namespace: production
@@ -1561,8 +1561,8 @@ metadata:
 **Role (permissions dans un namespace) :**
 
 ```yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+apiVersion: rbac.authorization.k8s.io/v1  
+kind: Role  
 metadata:
   name: api-fpc-role
   namespace: production
@@ -1575,8 +1575,8 @@ rules:
 **RoleBinding (lier le Role au ServiceAccount) :**
 
 ```yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1  
+kind: RoleBinding  
 metadata:
   name: api-fpc-binding
   namespace: production
@@ -1608,8 +1608,8 @@ Contrôlez le trafic réseau entre Pods.
 **Exemple : Seuls les Pods API peuvent contacter PostgreSQL**
 
 ```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1  
+kind: NetworkPolicy  
 metadata:
   name: postgres-policy
 spec:
@@ -1633,8 +1633,8 @@ spec:
 Configurez les options de sécurité des conteneurs.
 
 ```yaml
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1  
+kind: Deployment  
 metadata:
   name: api-fpc
 spec:
@@ -1698,11 +1698,11 @@ freepascal-app/
 **Fichier : `Chart.yaml`**
 
 ```yaml
-apiVersion: v2
-name: freepascal-app
-description: Application FreePascal sur Kubernetes
-type: application
-version: 1.0.0
+apiVersion: v2  
+name: freepascal-app  
+description: Application FreePascal sur Kubernetes  
+type: application  
+version: 1.0.0  
 appVersion: "1.0.0"
 ```
 
@@ -1753,8 +1753,8 @@ database:
 **Fichier : `templates/deployment.yaml`**
 
 ```yaml
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1  
+kind: Deployment  
 metadata:
   name: {{ include "freepascal-app.fullname" . }}
   labels:
@@ -1831,7 +1831,7 @@ helm repo index .
 
 # Héberger sur GitHub Pages ou serveur web
 # Les utilisateurs peuvent alors :
-helm repo add mon-repo https://example.com/helm-charts
+helm repo add mon-repo https://example.com/helm-charts  
 helm install mon-app mon-repo/freepascal-app
 ```
 
@@ -1887,7 +1887,7 @@ uses
 var
   ShuttingDown: Boolean = False;
 
-procedure SignalHandler(Signal: cint); cdecl;
+procedure SignalHandler(Signal: cint); cdecl;  
 begin
   WriteLn('Signal SIGTERM reçu, arrêt gracieux...');
   ShuttingDown := True;
@@ -1960,7 +1960,7 @@ Automatisez le déploiement depuis Git.
 **Installation ArgoCD :**
 
 ```bash
-kubectl create namespace argocd
+kubectl create namespace argocd  
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 # Accéder à l'interface
@@ -1970,8 +1970,8 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 **Application ArgoCD :**
 
 ```yaml
-apiVersion: argoproj.io/v1alpha1
-kind: Application
+apiVersion: argoproj.io/v1alpha1  
+kind: Application  
 metadata:
   name: freepascal-app
   namespace: argocd
@@ -2025,7 +2025,7 @@ kubectl port-forward pod/<pod-name> 8080:8080
 kubectl get events --sort-by='.lastTimestamp'
 
 # Utilisation des ressources
-kubectl top nodes
+kubectl top nodes  
 kubectl top pods
 ```
 
@@ -2071,7 +2071,7 @@ kubectl describe pod <pod-name>
 
 ```bash
 # Vérifier le Service
-kubectl get svc
+kubectl get svc  
 kubectl describe svc <service-name>
 
 # Vérifier les endpoints

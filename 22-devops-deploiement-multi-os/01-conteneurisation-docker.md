@@ -164,10 +164,10 @@ Une image est un **modèle en lecture seule** qui contient :
 
 **Exemple :**
 ```dockerfile
-FROM ubuntu:22.04
-RUN apt-get update && apt-get install -y fpc
-COPY monapp.pas /app/
-RUN fpc /app/monapp.pas
+FROM ubuntu:22.04  
+RUN apt-get update && apt-get install -y fpc  
+COPY monapp.pas /app/  
+RUN fpc /app/monapp.pas  
 CMD ["/app/monapp"]
 ```
 
@@ -179,8 +179,8 @@ Un conteneur est une **instance en cours d'exécution** d'une image.
 
 Vous pouvez créer plusieurs conteneurs à partir de la même image :
 ```bash
-docker run --name app1 mon-image
-docker run --name app2 mon-image
+docker run --name app1 mon-image  
+docker run --name app2 mon-image  
 docker run --name app3 mon-image
 ```
 
@@ -232,7 +232,7 @@ Par défaut, les données dans un conteneur sont **éphémères** : elles dispar
 
 Les volumes permettent de **persister** les données :
 ```bash
-docker volume create mes-donnees
+docker volume create mes-donnees  
 docker run -v mes-donnees:/app/data mon-application
 ```
 
@@ -262,7 +262,7 @@ Docker Compose permet de **définir et gérer plusieurs conteneurs** avec un seu
 
 **Exemple : `docker-compose.yml`**
 ```yaml
-version: '3.8'
+version: '3.8'  
 services:
   app:
     build: .
@@ -346,7 +346,7 @@ Votre équipe a 5 développeurs avec des configurations différentes. Les bugs "
 **Solution Docker :**
 ```yaml
 # docker-compose.yml
-version: '3.8'
+version: '3.8'  
 services:
   dev:
     image: ubuntu:22.04
@@ -379,11 +379,11 @@ Déployer sur un serveur Ubuntu nécessite 20 étapes de configuration manuelle.
 **Solution Docker :**
 ```bash
 # Sur votre machine
-docker build -t mon-app:1.0 .
+docker build -t mon-app:1.0 .  
 docker push mon-app:1.0
 
 # Sur le serveur
-docker pull mon-app:1.0
+docker pull mon-app:1.0  
 docker run -d -p 80:80 mon-app:1.0
 
 # Terminé !
@@ -400,7 +400,7 @@ Vous devez faire une démo de votre application mais le laptop du client a une c
 docker save mon-app:1.0 > mon-app.tar
 
 # Sur le laptop client
-docker load < mon-app.tar
+docker load < mon-app.tar  
 docker run mon-app:1.0
 
 # L'application fonctionne instantanément !
@@ -420,7 +420,7 @@ docker run -d -p 5432:5432 \
 
 # Utiliser, tester
 # Puis supprimer complètement
-docker stop <id>
+docker stop <id>  
 docker rm <id>
 
 # Aucune trace sur votre système !
@@ -471,7 +471,7 @@ docker build -t mon-app:1.0 .
 docker push mon-app:1.0
 
 # Sur le serveur de production
-docker pull mon-app:1.0
+docker pull mon-app:1.0  
 docker run -d mon-app:1.0
 
 # Déploiement en quelques secondes
@@ -484,8 +484,8 @@ docker run -d mon-app:1.0
 **Sans Docker :**
 ```bash
 # Sur chaque machine, manuellement :
-sudo apt-get update
-sudo apt-get install fpc lazarus
+sudo apt-get update  
+sudo apt-get install fpc lazarus  
 sudo apt-get install postgresql-client libpq-dev
 # ... 20 autres lignes ...
 # Configuration manuelle des variables d'environnement
@@ -640,34 +640,34 @@ Voici les commandes que vous utiliserez le plus souvent :
 
 ```bash
 # Gestion des images
-docker images                    # Lister les images locales
-docker pull ubuntu:22.04        # Télécharger une image
-docker build -t mon-app:1.0 .   # Construire une image
+docker images                    # Lister les images locales  
+docker pull ubuntu:22.04        # Télécharger une image  
+docker build -t mon-app:1.0 .   # Construire une image  
 docker rmi mon-app:1.0          # Supprimer une image
 
 # Gestion des conteneurs
-docker ps                       # Conteneurs actifs
-docker ps -a                    # Tous les conteneurs
-docker run ubuntu:22.04         # Créer et démarrer
-docker start <id>               # Démarrer
-docker stop <id>                # Arrêter
-docker rm <id>                  # Supprimer
-docker logs <id>                # Voir les logs
+docker ps                       # Conteneurs actifs  
+docker ps -a                    # Tous les conteneurs  
+docker run ubuntu:22.04         # Créer et démarrer  
+docker start <id>               # Démarrer  
+docker stop <id>                # Arrêter  
+docker rm <id>                  # Supprimer  
+docker logs <id>                # Voir les logs  
 docker exec -it <id> bash       # Shell interactif
 
 # Gestion des volumes
-docker volume ls                # Lister les volumes
-docker volume create mon-vol    # Créer un volume
+docker volume ls                # Lister les volumes  
+docker volume create mon-vol    # Créer un volume  
 docker volume rm mon-vol        # Supprimer un volume
 
 # Gestion des réseaux
-docker network ls               # Lister les réseaux
+docker network ls               # Lister les réseaux  
 docker network create mon-net   # Créer un réseau
 
 # Docker Compose
-docker-compose up              # Démarrer tous les services
-docker-compose down            # Arrêter et supprimer
-docker-compose logs            # Voir tous les logs
+docker-compose up              # Démarrer tous les services  
+docker-compose down            # Arrêter et supprimer  
+docker-compose logs            # Voir tous les logs  
 docker-compose ps              # Status des services
 
 # Nettoyage
@@ -680,7 +680,7 @@ Pour vous donner un avant-goût de ce qui vous attend :
 
 **Fichier : `hello.pas`**
 ```pascal
-program HelloDocker;
+program HelloDocker;  
 begin
   WriteLn('Bonjour depuis Docker !');
   WriteLn('FreePascal + Docker = ❤️');
@@ -689,10 +689,10 @@ end.
 
 **Fichier : `Dockerfile`**
 ```dockerfile
-FROM ubuntu:22.04
-RUN apt-get update && apt-get install -y fpc
-COPY hello.pas /app/
-RUN fpc /app/hello.pas
+FROM ubuntu:22.04  
+RUN apt-get update && apt-get install -y fpc  
+COPY hello.pas /app/  
+RUN fpc /app/hello.pas  
 CMD ["/app/hello"]
 ```
 
@@ -707,7 +707,7 @@ docker run hello-fpc
 
 **Résultat :**
 ```
-Bonjour depuis Docker !
+Bonjour depuis Docker !  
 FreePascal + Docker = ❤️
 ```
 

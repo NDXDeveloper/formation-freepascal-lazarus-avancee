@@ -63,25 +63,25 @@ Un seul commit → Builds Windows + Linux automatiques
 
 **2. Qualité garantie**
 ```
-Tests sur toutes les plateformes avant déploiement
+Tests sur toutes les plateformes avant déploiement  
 Bug détecté ? → Build échoue → Pas de déploiement
 ```
 
 **3. Gain de temps massif**
 ```
-Manuelle : 1h par release
+Manuelle : 1h par release  
 Automatique : 10 minutes sans intervention
 ```
 
 **4. Déploiements fréquents**
 ```
-Sans CI/CD : 1 release par mois (risqué)
+Sans CI/CD : 1 release par mois (risqué)  
 Avec CI/CD : Plusieurs releases par jour (sûr)
 ```
 
 **5. Traçabilité complète**
 ```
-Qui a déployé quoi, quand, pourquoi
+Qui a déployé quoi, quand, pourquoi  
 Rollback en un clic
 ```
 
@@ -751,7 +751,7 @@ Jenkins offre une flexibilité maximale mais nécessite plus de configuration.
 **Sur Ubuntu :**
 ```bash
 # Java requis
-sudo apt update
+sudo apt update  
 sudo apt install -y openjdk-11-jdk
 
 # Jenkins
@@ -760,11 +760,11 @@ curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
 echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
   https://pkg.jenkins.io/debian binary/ | sudo tee \
   /etc/apt/sources.list.d/jenkins.list > /dev/null
-sudo apt update
+sudo apt update  
 sudo apt install -y jenkins
 
 # Démarrer Jenkins
-sudo systemctl start jenkins
+sudo systemctl start jenkins  
 sudo systemctl enable jenkins
 
 # Obtenir le mot de passe initial
@@ -933,30 +933,30 @@ pipeline {
 #!/bin/bash
 set -e
 
-VERSION=$1
-APP_DIR="/opt/monappli"
-BACKUP_DIR="/opt/monappli-backups"
+VERSION=$1  
+APP_DIR="/opt/monappli"  
+BACKUP_DIR="/opt/monappli-backups"  
 NEW_BINARY="/tmp/monappli"
 
 echo "=== Déploiement version ${VERSION} ==="
 
 # 1. Backup
-echo "[1/6] Backup de l'ancienne version..."
-mkdir -p ${BACKUP_DIR}
+echo "[1/6] Backup de l'ancienne version..."  
+mkdir -p ${BACKUP_DIR}  
 cp ${APP_DIR}/monappli ${BACKUP_DIR}/monappli-$(date +%Y%m%d-%H%M%S)
 
 # 2. Arrêt du service
-echo "[2/6] Arrêt du service..."
+echo "[2/6] Arrêt du service..."  
 sudo systemctl stop monappli
 
 # 3. Remplacement du binaire
-echo "[3/6] Remplacement du binaire..."
-mv ${NEW_BINARY} ${APP_DIR}/monappli
-chmod +x ${APP_DIR}/monappli
+echo "[3/6] Remplacement du binaire..."  
+mv ${NEW_BINARY} ${APP_DIR}/monappli  
+chmod +x ${APP_DIR}/monappli  
 chown monappli:monappli ${APP_DIR}/monappli
 
 # 4. Migration base de données (si nécessaire)
-echo "[4/6] Migration base de données..."
+echo "[4/6] Migration base de données..."  
 if [ -f "${APP_DIR}/migrations/${VERSION}.sql" ]; then
     psql -h localhost -U monappli -d monappli_prod < ${APP_DIR}/migrations/${VERSION}.sql
     echo "Migration ${VERSION} appliquée"
@@ -965,11 +965,11 @@ else
 fi
 
 # 5. Redémarrage du service
-echo "[5/6] Redémarrage du service..."
+echo "[5/6] Redémarrage du service..."  
 sudo systemctl start monappli
 
 # 6. Health check
-echo "[6/6] Vérification de santé..."
+echo "[6/6] Vérification de santé..."  
 sleep 5
 
 for i in {1..10}; do
@@ -983,12 +983,12 @@ for i in {1..10}; do
 done
 
 # Échec - Rollback
-echo "❌ Échec du health check - Rollback"
-sudo systemctl stop monappli
-LAST_BACKUP=$(ls -t ${BACKUP_DIR}/monappli-* | head -1)
-cp ${LAST_BACKUP} ${APP_DIR}/monappli
-sudo systemctl start monappli
-echo "❌ Rollback effectué vers ${LAST_BACKUP}"
+echo "❌ Échec du health check - Rollback"  
+sudo systemctl stop monappli  
+LAST_BACKUP=$(ls -t ${BACKUP_DIR}/monappli-* | head -1)  
+cp ${LAST_BACKUP} ${APP_DIR}/monappli  
+sudo systemctl start monappli  
+echo "❌ Rollback effectué vers ${LAST_BACKUP}"  
 exit 1
 ```
 
@@ -999,13 +999,13 @@ exit 1
 #!/bin/bash
 set -e
 
-BACKUP_DIR="/opt/monappli-backups"
+BACKUP_DIR="/opt/monappli-backups"  
 APP_DIR="/opt/monappli"
 
 echo "=== Rollback de l'application ==="
 
 # Lister les backups disponibles
-echo "Backups disponibles :"
+echo "Backups disponibles :"  
 ls -lh ${BACKUP_DIR}/monappli-*
 
 # Prendre le dernier backup
@@ -1016,9 +1016,9 @@ if [ -z "$LAST_BACKUP" ]; then
     exit 1
 fi
 
-echo "Rollback vers : ${LAST_BACKUP}"
-read -p "Confirmer ? (y/n) " -n 1 -r
-echo
+echo "Rollback vers : ${LAST_BACKUP}"  
+read -p "Confirmer ? (y/n) " -n 1 -r  
+echo  
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo "Rollback annulé"
     exit 0
@@ -1028,15 +1028,15 @@ fi
 sudo systemctl stop monappli
 
 # Restaurer le backup
-cp ${LAST_BACKUP} ${APP_DIR}/monappli
-chmod +x ${APP_DIR}/monappli
+cp ${LAST_BACKUP} ${APP_DIR}/monappli  
+chmod +x ${APP_DIR}/monappli  
 chown monappli:monappli ${APP_DIR}/monappli
 
 # Redémarrer
 sudo systemctl start monappli
 
 # Vérifier
-sleep 5
+sleep 5  
 if curl -f http://localhost:8080/health; then
     echo "✓ Rollback réussi"
 else
@@ -1060,7 +1060,7 @@ Tester GREEN
                       ↓
 Basculer le trafic : BLUE → GREEN
                       ↓
-GREEN devient production
+GREEN devient production  
 BLUE reste en backup
 ```
 
@@ -1104,10 +1104,10 @@ server {
 #!/bin/bash
 set -e
 
-BLUE_PORT=8080
-GREEN_PORT=8081
-NGINX_CONF="/etc/nginx/sites-available/monappli"
-APP_DIR="/opt/monappli"
+BLUE_PORT=8080  
+GREEN_PORT=8081  
+NGINX_CONF="/etc/nginx/sites-available/monappli"  
+APP_DIR="/opt/monappli"  
 NEW_BINARY="/tmp/monappli"
 
 # Déterminer quelle version est active
@@ -1126,8 +1126,8 @@ else
 fi
 
 # Déployer sur l'environnement inactif
-echo "Déploiement sur ${NEW} (port ${TARGET_PORT})..."
-cp ${NEW_BINARY} ${APP_DIR}/monappli-${NEW}
+echo "Déploiement sur ${NEW} (port ${TARGET_PORT})..."  
+cp ${NEW_BINARY} ${APP_DIR}/monappli-${NEW}  
 chmod +x ${APP_DIR}/monappli-${NEW}
 
 # Arrêter l'ancien processus inactif
@@ -1140,7 +1140,7 @@ NEW_PID=$!
 echo "Nouvelle version démarrée (PID: ${NEW_PID})"
 
 # Attendre et health check
-sleep 5
+sleep 5  
 for i in {1..10}; do
     if curl -f http://localhost:${TARGET_PORT}/health; then
         echo "✓ Health check OK sur ${NEW}"
@@ -1155,11 +1155,11 @@ for i in {1..10}; do
 done
 
 # Basculer Nginx
-echo "Basculement du trafic vers ${NEW}..."
-sed -i "s/server 127.0.0.1:[0-9]*;/server 127.0.0.1:${TARGET_PORT};/" ${NGINX_CONF}
+echo "Basculement du trafic vers ${NEW}..."  
+sed -i "s/server 127.0.0.1:[0-9]*;/server 127.0.0.1:${TARGET_PORT};/" ${NGINX_CONF}  
 sudo nginx -t && sudo nginx -s reload
 
-echo "✓ Trafic basculé vers ${NEW}"
+echo "✓ Trafic basculé vers ${NEW}"  
 echo "Ancien environnement ${CURRENT} reste actif comme backup"
 ```
 
@@ -1339,12 +1339,12 @@ type
     procedure TestSubtraction;
   end;
 
-procedure TTestCalculator.TestAddition;
+procedure TTestCalculator.TestAddition;  
 begin
   AssertEquals('2 + 2 devrait égaler 4', 4, 2 + 2);
 end;
 
-procedure TTestCalculator.TestSubtraction;
+procedure TTestCalculator.TestSubtraction;  
 begin
   AssertEquals('5 - 3 devrait égaler 2', 2, 5 - 3);
 end;
@@ -1389,7 +1389,7 @@ type
     procedure TestQuery;
   end;
 
-procedure TTestDatabase.SetUp;
+procedure TTestDatabase.SetUp;  
 begin
   FConnection := TPQConnection.Create(nil);
   FConnection.HostName := GetEnvironmentVariable('DB_HOST');
@@ -1398,19 +1398,19 @@ begin
   FConnection.Password := GetEnvironmentVariable('DB_PASSWORD');
 end;
 
-procedure TTestDatabase.TearDown;
+procedure TTestDatabase.TearDown;  
 begin
   FConnection.Free;
 end;
 
-procedure TTestDatabase.TestConnection;
+procedure TTestDatabase.TestConnection;  
 begin
   FConnection.Open;
   AssertTrue('Connexion devrait être établie', FConnection.Connected);
   FConnection.Close;
 end;
 
-procedure TTestDatabase.TestInsert;
+procedure TTestDatabase.TestInsert;  
 var
   Query: TSQLQuery;
 begin
@@ -1449,8 +1449,8 @@ end.
 ```bash
 #!/bin/bash
 
-URL="http://localhost:8080/api/endpoint"
-CONCURRENT_USERS=100
+URL="http://localhost:8080/api/endpoint"  
+CONCURRENT_USERS=100  
 DURATION=60  # secondes
 
 echo "Test de charge : ${CONCURRENT_USERS} utilisateurs pendant ${DURATION}s"
@@ -1487,27 +1487,27 @@ config/
 **Fichier : `config/production.ini`**
 ```ini
 [Application]
-Environment=production
-Debug=false
+Environment=production  
+Debug=false  
 LogLevel=WARNING
 
 [Database]
-Host=${DB_HOST}
-Port=${DB_PORT}
-Name=${DB_NAME}
-User=${DB_USER}
-Password=${DB_PASSWORD}
-MaxConnections=100
+Host=${DB_HOST}  
+Port=${DB_PORT}  
+Name=${DB_NAME}  
+User=${DB_USER}  
+Password=${DB_PASSWORD}  
+MaxConnections=100  
 Timeout=30
 
 [Cache]
-Enabled=true
-Host=${REDIS_HOST}
-Port=${REDIS_PORT}
+Enabled=true  
+Host=${REDIS_HOST}  
+Port=${REDIS_PORT}  
 TTL=3600
 
 [Monitoring]
-Enabled=true
+Enabled=true  
 MetricsPort=9090
 ```
 
@@ -1677,37 +1677,37 @@ Mesurez la performance de votre CI/CD avec les métriques DORA :
 
 **1. Deployment Frequency (Fréquence de déploiement)**
 ```
-Combien de fois déployez-vous en production ?
-Elite: Multiple fois par jour
-High: Une fois par jour à une fois par semaine
-Medium: Une fois par semaine à une fois par mois
+Combien de fois déployez-vous en production ?  
+Elite: Multiple fois par jour  
+High: Une fois par jour à une fois par semaine  
+Medium: Une fois par semaine à une fois par mois  
 Low: Moins d'une fois par mois
 ```
 
 **2. Lead Time for Changes**
 ```
-Temps entre commit et production
-Elite: Moins d'une heure
-High: Un jour à une semaine
-Medium: Une semaine à un mois
+Temps entre commit et production  
+Elite: Moins d'une heure  
+High: Un jour à une semaine  
+Medium: Une semaine à un mois  
 Low: Plus d'un mois
 ```
 
 **3. Time to Restore Service**
 ```
-Temps pour restaurer le service après incident
-Elite: Moins d'une heure
-High: Moins d'un jour
-Medium: Un jour à une semaine
+Temps pour restaurer le service après incident  
+Elite: Moins d'une heure  
+High: Moins d'un jour  
+Medium: Un jour à une semaine  
 Low: Plus d'une semaine
 ```
 
 **4. Change Failure Rate**
 ```
 % de déploiements causant des problèmes
-Elite: 0-15%
-High: 16-30%
-Medium: 31-45%
+Elite: 0-15%  
+High: 16-30%  
+Medium: 31-45%  
 Low: 46-100%
 ```
 
@@ -1717,8 +1717,8 @@ Low: 46-100%
 # calculate-dora.sh
 
 # Deployment Frequency (derniers 30 jours)
-DEPLOYMENTS=$(git log --since="30 days ago" --grep="deploy:" --oneline | wc -l)
-echo "Déploiements (30j): ${DEPLOYMENTS}"
+DEPLOYMENTS=$(git log --since="30 days ago" --grep="deploy:" --oneline | wc -l)  
+echo "Déploiements (30j): ${DEPLOYMENTS}"  
 echo "Fréquence: $((DEPLOYMENTS / 30)) par jour"
 
 # Lead Time (moyenne derniers 10 commits)
@@ -1726,9 +1726,9 @@ git log -10 --pretty=format:"%h %ci" > /tmp/commits.txt
 # Calculer différence entre commit et tag deploy...
 
 # Change Failure Rate
-TOTAL_DEPLOYS=$(git log --grep="deploy:" --oneline | wc -l)
-FAILED_DEPLOYS=$(git log --grep="rollback:" --oneline | wc -l)
-FAILURE_RATE=$((FAILED_DEPLOYS * 100 / TOTAL_DEPLOYS))
+TOTAL_DEPLOYS=$(git log --grep="deploy:" --oneline | wc -l)  
+FAILED_DEPLOYS=$(git log --grep="rollback:" --oneline | wc -l)  
+FAILURE_RATE=$((FAILED_DEPLOYS * 100 / TOTAL_DEPLOYS))  
 echo "Taux d'échec: ${FAILURE_RATE}%"
 ```
 

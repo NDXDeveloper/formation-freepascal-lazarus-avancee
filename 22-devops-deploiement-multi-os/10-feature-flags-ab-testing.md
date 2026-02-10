@@ -77,7 +77,7 @@ if FeatureFlags.IsEnabled('maintenance_mode') then
 **But** : A/B testing et expériences utilisateur
 
 ```pascal
-Variant := FeatureFlags.GetVariant('button_color_test');
+Variant := FeatureFlags.GetVariant('button_color_test');  
 if Variant = 'red' then
   ShowRedButton
 else if Variant = 'blue' then
@@ -299,7 +299,7 @@ uses
 
 { TFeatureFlag }
 
-constructor TFeatureFlag.Create(const AName: string);
+constructor TFeatureFlag.Create(const AName: string);  
 begin
   FName := AName;
   FEnabled := False;
@@ -310,14 +310,14 @@ begin
   FDefaultVariant := 'control';
 end;
 
-destructor TFeatureFlag.Destroy;
+destructor TFeatureFlag.Destroy;  
 begin
   FUserList.Free;
   FVariants.Free;
   inherited;
 end;
 
-function TFeatureFlag.ToJSON: TJSONObject;
+function TFeatureFlag.ToJSON: TJSONObject;  
 var
   i: Integer;
   UsersArray, VariantsArray: TJSONArray;
@@ -345,7 +345,7 @@ begin
   Result.Add('variants', VariantsArray);
 end;
 
-procedure TFeatureFlag.FromJSON(AJSON: TJSONObject);
+procedure TFeatureFlag.FromJSON(AJSON: TJSONObject);  
 var
   i: Integer;
   UsersArray, VariantsArray: TJSONArray;
@@ -379,32 +379,32 @@ end;
 
 { TUserContext }
 
-constructor TUserContext.Create(const AUserID: string);
+constructor TUserContext.Create(const AUserID: string);  
 begin
   FUserID := AUserID;
   FAttributes := TStringList.Create;
   FAttributes.NameValueSeparator := '=';
 end;
 
-destructor TUserContext.Destroy;
+destructor TUserContext.Destroy;  
 begin
   FAttributes.Free;
   inherited;
 end;
 
-function TUserContext.GetAttribute(const Key: string): string;
+function TUserContext.GetAttribute(const Key: string): string;  
 begin
   Result := FAttributes.Values[Key];
 end;
 
-procedure TUserContext.SetAttribute(const Key, Value: string);
+procedure TUserContext.SetAttribute(const Key, Value: string);  
 begin
   FAttributes.Values[Key] := Value;
 end;
 
 { TFeatureFlagManager }
 
-constructor TFeatureFlagManager.Create(ABackend: TObject; ACacheTTL: Integer);
+constructor TFeatureFlagManager.Create(ABackend: TObject; ACacheTTL: Integer);  
 begin
   FFlags := TFeatureFlagMap.Create;
   FLock := TCriticalSection.Create;
@@ -413,7 +413,7 @@ begin
   RefreshFromBackend;
 end;
 
-destructor TFeatureFlagManager.Destroy;
+destructor TFeatureFlagManager.Destroy;  
 var
   i: Integer;
 begin
@@ -426,7 +426,7 @@ begin
   inherited;
 end;
 
-procedure TFeatureFlagManager.RefreshFromBackend;
+procedure TFeatureFlagManager.RefreshFromBackend;  
 begin
   // Vérifier si le cache est encore valide
   if (SecondsBetween(Now, FCacheTime) < FCacheTTL) and (FFlags.Count > 0) then
@@ -442,7 +442,7 @@ begin
   end;
 end;
 
-function TFeatureFlagManager.HashUserForPercentage(const UserID, FlagName: string): Integer;
+function TFeatureFlagManager.HashUserForPercentage(const UserID, FlagName: string): Integer;  
 var
   HashStr: string;
 begin
@@ -452,7 +452,7 @@ begin
   Result := StrToInt64('$' + Copy(HashStr, 1, 8)) mod 100;
 end;
 
-function TFeatureFlagManager.EvaluateFlag(AFlag: TFeatureFlag; AUser: TUserContext): Boolean;
+function TFeatureFlagManager.EvaluateFlag(AFlag: TFeatureFlag; AUser: TUserContext): Boolean;  
 var
   UserHash: Integer;
   UserAttribute: string;
@@ -498,7 +498,7 @@ begin
   end;
 end;
 
-function TFeatureFlagManager.GetVariantForUser(AFlag: TFeatureFlag; AUser: TUserContext): string;
+function TFeatureFlagManager.GetVariantForUser(AFlag: TFeatureFlag; AUser: TUserContext): string;  
 var
   UserHash: Integer;
   VariantIndex: Integer;
@@ -516,7 +516,7 @@ begin
   Result := AFlag.Variants[VariantIndex];
 end;
 
-procedure TFeatureFlagManager.RegisterFlag(AFlag: TFeatureFlag);
+procedure TFeatureFlagManager.RegisterFlag(AFlag: TFeatureFlag);  
 begin
   FLock.Enter;
   try
@@ -526,7 +526,7 @@ begin
   end;
 end;
 
-function TFeatureFlagManager.GetFlag(const FlagName: string): TFeatureFlag;
+function TFeatureFlagManager.GetFlag(const FlagName: string): TFeatureFlag;  
 var
   Index: Integer;
 begin
@@ -544,7 +544,7 @@ begin
   end;
 end;
 
-function TFeatureFlagManager.IsEnabled(const FlagName: string; AUser: TUserContext): Boolean;
+function TFeatureFlagManager.IsEnabled(const FlagName: string; AUser: TUserContext): Boolean;  
 var
   Flag: TFeatureFlag;
 begin
@@ -555,7 +555,7 @@ begin
   Result := EvaluateFlag(Flag, AUser);
 end;
 
-function TFeatureFlagManager.GetVariant(const FlagName: string; AUser: TUserContext): string;
+function TFeatureFlagManager.GetVariant(const FlagName: string; AUser: TUserContext): string;  
 var
   Flag: TFeatureFlag;
 begin
@@ -569,7 +569,7 @@ begin
   Result := GetVariantForUser(Flag, AUser);
 end;
 
-procedure TFeatureFlagManager.EnableFlag(const FlagName: string);
+procedure TFeatureFlagManager.EnableFlag(const FlagName: string);  
 var
   Flag: TFeatureFlag;
 begin
@@ -581,7 +581,7 @@ begin
   end;
 end;
 
-procedure TFeatureFlagManager.DisableFlag(const FlagName: string);
+procedure TFeatureFlagManager.DisableFlag(const FlagName: string);  
 var
   Flag: TFeatureFlag;
 begin
@@ -593,7 +593,7 @@ begin
   end;
 end;
 
-function TFeatureFlagManager.ListAllFlags: TStringList;
+function TFeatureFlagManager.ListAllFlags: TStringList;  
 var
   i: Integer;
 begin
@@ -608,7 +608,7 @@ begin
   end;
 end;
 
-procedure TFeatureFlagManager.Refresh;
+procedure TFeatureFlagManager.Refresh;  
 begin
   FCacheTime := 0; // Force refresh
   RefreshFromBackend;
@@ -710,18 +710,18 @@ implementation
 
 { TFeatureFlagRedisBackend }
 
-constructor TFeatureFlagRedisBackend.Create(ARedis: TRedisClient; const APrefix: string);
+constructor TFeatureFlagRedisBackend.Create(ARedis: TRedisClient; const APrefix: string);  
 begin
   FRedis := ARedis;
   FPrefix := APrefix;
 end;
 
-destructor TFeatureFlagRedisBackend.Destroy;
+destructor TFeatureFlagRedisBackend.Destroy;  
 begin
   inherited;
 end;
 
-procedure TFeatureFlagRedisBackend.SaveFlag(AFlag: TFeatureFlag);
+procedure TFeatureFlagRedisBackend.SaveFlag(AFlag: TFeatureFlag);  
 var
   JSON: TJSONObject;
   Key: string;
@@ -736,7 +736,7 @@ begin
   end;
 end;
 
-function TFeatureFlagRedisBackend.LoadFlag(const FlagName: string): TFeatureFlag;
+function TFeatureFlagRedisBackend.LoadFlag(const FlagName: string): TFeatureFlag;  
 var
   Key: string;
   JSONStr: string;
@@ -763,7 +763,7 @@ begin
   end;
 end;
 
-function TFeatureFlagRedisBackend.LoadAllFlags: TStringList;
+function TFeatureFlagRedisBackend.LoadAllFlags: TStringList;  
 var
   Keys: TStringList;
   i: Integer;
@@ -782,7 +782,7 @@ begin
   end;
 end;
 
-procedure TFeatureFlagRedisBackend.DeleteFlag(const FlagName: string);
+procedure TFeatureFlagRedisBackend.DeleteFlag(const FlagName: string);  
 var
   Key: string;
 begin
@@ -790,7 +790,7 @@ begin
   // FRedis.Del(Key); // Méthode à implémenter
 end;
 
-procedure TFeatureFlagRedisBackend.PublishFlagUpdate(const FlagName: string);
+procedure TFeatureFlagRedisBackend.PublishFlagUpdate(const FlagName: string);  
 begin
   // Publier sur un canal Redis pour notifier les autres instances
   // FRedis.Publish('ff:updates', FlagName);
@@ -825,7 +825,7 @@ Après quelques jours, vous analysez :
 #### 1. Configuration du test
 
 ```pascal
-procedure SetupABTest;
+procedure SetupABTest;  
 var
   FFManager: TFeatureFlagManager;
   ButtonColorTest: TFeatureFlag;
@@ -850,7 +850,7 @@ end;
 #### 2. Utilisation dans le code
 
 ```pascal
-procedure ShowCheckoutButton(User: TUserContext);
+procedure ShowCheckoutButton(User: TUserContext);  
 var
   FFManager: TFeatureFlagManager;
   Variant: string;
@@ -914,7 +914,7 @@ type
 
 implementation
 
-constructor TEventTracker.Create(AConnection: TObject);
+constructor TEventTracker.Create(AConnection: TObject);  
 begin
   FDatabaseConnection := AConnection;
 end;
@@ -965,7 +965,7 @@ begin
   end;
 end;
 
-procedure TEventTracker.SaveToDatabase(AEvent: TJSONObject);
+procedure TEventTracker.SaveToDatabase(AEvent: TJSONObject);  
 begin
   // Exemple d'insertion SQL
   // INSERT INTO ab_test_events (event_name, user_id, flag_name, variant, timestamp, properties)
@@ -1006,13 +1006,13 @@ type
 
 implementation
 
-procedure TCheckoutForm.FormCreate(Sender: TObject);
+procedure TCheckoutForm.FormCreate(Sender: TObject);  
 begin
   FTracker := TEventTracker.Create(DatabaseConnection);
   SetupButtonTest;
 end;
 
-procedure TCheckoutForm.SetupButtonTest;
+procedure TCheckoutForm.SetupButtonTest;  
 var
   FFManager: TFeatureFlagManager;
 begin
@@ -1053,7 +1053,7 @@ begin
   );
 end;
 
-procedure TCheckoutForm.ButtonBuyClick(Sender: TObject);
+procedure TCheckoutForm.ButtonBuyClick(Sender: TObject);  
 var
   OrderAmount: Double;
 begin
@@ -1148,8 +1148,8 @@ SELECT
     ) as conversion_rate_percent,
     COALESCE(c.total_revenue, 0) as total_revenue,
     COALESCE(c.avg_order_value, 0) as avg_order_value
-FROM exposures e
-LEFT JOIN conversions c ON e.variant = c.variant
+FROM exposures e  
+LEFT JOIN conversions c ON e.variant = c.variant  
 ORDER BY e.variant;
 ```
 
@@ -1157,8 +1157,8 @@ ORDER BY e.variant;
 ```
 variant | exposed_users | converted_users | conversion_rate | total_revenue | avg_order_value
 --------|---------------|-----------------|-----------------|---------------|----------------
-blue    | 5000          | 125             | 2.50%           | 12500.00      | 100.00
-red     | 5000          | 155             | 3.10%           | 15810.00      | 102.00
+blue    | 5000          | 125             | 2.50%           | 12500.00      | 100.00  
+red     | 5000          | 155             | 3.10%           | 15810.00      | 102.00  
 green   | 5000          | 140             | 2.80%           | 14280.00      | 102.00
 ```
 
@@ -1174,11 +1174,11 @@ SELECT
     DATE(timestamp) as date,
     variant,
     COUNT(DISTINCT user_id) as exposed_users
-FROM ab_test_events
+FROM ab_test_events  
 WHERE event_name = 'button_shown'
     AND flag_name = 'button_color_test'
     AND timestamp >= NOW() - INTERVAL '7 days'
-GROUP BY DATE(timestamp), variant
+GROUP BY DATE(timestamp), variant  
 ORDER BY date, variant;
 ```
 
@@ -1214,8 +1214,8 @@ type
     Uplift: Double; // Amélioration en pourcentage
   end;
 
-function CalculateConversionRate(Conversions, Exposures: Integer): Double;
-function CalculateZScore(VariantA, VariantB: TVariantStats): Double;
+function CalculateConversionRate(Conversions, Exposures: Integer): Double;  
+function CalculateZScore(VariantA, VariantB: TVariantStats): Double;  
 function PerformSignificanceTest(
   VariantA, VariantB: TVariantStats;
   ConfidenceLevel: Double = 0.95
@@ -1223,7 +1223,7 @@ function PerformSignificanceTest(
 
 implementation
 
-function CalculateConversionRate(Conversions, Exposures: Integer): Double;
+function CalculateConversionRate(Conversions, Exposures: Integer): Double;  
 begin
   if Exposures = 0 then
     Result := 0
@@ -1231,7 +1231,7 @@ begin
     Result := Conversions / Exposures;
 end;
 
-function CalculateZScore(VariantA, VariantB: TVariantStats): Double;
+function CalculateZScore(VariantA, VariantB: TVariantStats): Double;  
 var
   p1, p2: Double;
   n1, n2: Integer;
@@ -1405,7 +1405,7 @@ Vous pouvez tester plus de 2 variants simultanément.
 **Exemple** : Tester 3 couleurs de bouton + 2 textes = 6 combinaisons
 
 ```pascal
-procedure SetupMultivariateTest;
+procedure SetupMultivariateTest;  
 var
   FFManager: TFeatureFlagManager;
   ButtonTest: TFeatureFlag;
@@ -1429,7 +1429,7 @@ begin
   FFManager.RegisterFlag(ButtonTest);
 end;
 
-procedure ApplyButtonVariant(const Variant: string; Button: TButton);
+procedure ApplyButtonVariant(const Variant: string; Button: TButton);  
 begin
   // Extraire couleur et texte du nom du variant
   if Pos('blue', Variant) > 0 then
@@ -1453,7 +1453,7 @@ end;
 ### Tests basés sur les attributs utilisateurs
 
 ```pascal
-procedure SetupSegmentedTest;
+procedure SetupSegmentedTest;  
 var
   FFManager: TFeatureFlagManager;
   PremiumFeature: TFeatureFlag;
@@ -1471,7 +1471,7 @@ begin
 end;
 
 // Utilisation
-procedure ShowAnalytics(User: TUserContext);
+procedure ShowAnalytics(User: TUserContext);  
 var
   FFManager: TFeatureFlagManager;
 begin
@@ -1489,7 +1489,7 @@ end;
 ### Tests géographiques
 
 ```pascal
-procedure SetupGeoTest;
+procedure SetupGeoTest;  
 var
   User: TUserContext;
 begin
@@ -1530,7 +1530,7 @@ type
 
 implementation
 
-function TTemporalFeatureFlag.IsActive: Boolean;
+function TTemporalFeatureFlag.IsActive: Boolean;  
 var
   CurrentTime: TDateTime;
 begin
@@ -1605,7 +1605,7 @@ begin
   FBackend := ABackend;
 end;
 
-procedure TFeatureFlagAPIServer.HandleListFlags(ARequest: TRequest; AResponse: TResponse);
+procedure TFeatureFlagAPIServer.HandleListFlags(ARequest: TRequest; AResponse: TResponse);  
 var
   Flags: TStringList;
   ResultArray: TJSONArray;
@@ -1630,7 +1630,7 @@ begin
   end;
 end;
 
-procedure TFeatureFlagAPIServer.HandleGetFlag(ARequest: TRequest; AResponse: TResponse);
+procedure TFeatureFlagAPIServer.HandleGetFlag(ARequest: TRequest; AResponse: TResponse);  
 var
   FlagName: string;
   Flag: TFeatureFlag;
@@ -1653,7 +1653,7 @@ begin
   end;
 end;
 
-procedure TFeatureFlagAPIServer.HandleCreateFlag(ARequest: TRequest; AResponse: TResponse);
+procedure TFeatureFlagAPIServer.HandleCreateFlag(ARequest: TRequest; AResponse: TResponse);  
 var
   RequestBody: TJSONObject;
   Parser: TJSONParser;
@@ -1690,7 +1690,7 @@ begin
   end;
 end;
 
-procedure TFeatureFlagAPIServer.HandleToggleFlag(ARequest: TRequest; AResponse: TResponse);
+procedure TFeatureFlagAPIServer.HandleToggleFlag(ARequest: TRequest; AResponse: TResponse);  
 var
   FlagName: string;
   Flag: TFeatureFlag;
@@ -1727,12 +1727,12 @@ begin
   end;
 end;
 
-procedure TFeatureFlagAPIServer.HandleUpdateFlag(ARequest: TRequest; AResponse: TResponse);
+procedure TFeatureFlagAPIServer.HandleUpdateFlag(ARequest: TRequest; AResponse: TResponse);  
 begin
   // Similaire à HandleToggleFlag mais met à jour tous les champs
 end;
 
-procedure TFeatureFlagAPIServer.HandleDeleteFlag(ARequest: TRequest; AResponse: TResponse);
+procedure TFeatureFlagAPIServer.HandleDeleteFlag(ARequest: TRequest; AResponse: TResponse);  
 var
   FlagName: string;
 begin
@@ -1743,7 +1743,7 @@ begin
   AResponse.Code := 204; // No Content
 end;
 
-procedure TFeatureFlagAPIServer.RegisterRoutes(Server: TFPHTTPServer);
+procedure TFeatureFlagAPIServer.RegisterRoutes(Server: TFPHTTPServer);  
 begin
   // Enregistrer les routes
   // Cette partie dépend de votre framework HTTP
@@ -1988,7 +1988,7 @@ Chaque flag devrait avoir :
 - **Dépendances** : Quels autres flags ou systèmes sont affectés ?
 
 ```pascal
-procedure DocumentFlag(var Flag: TFeatureFlag);
+procedure DocumentFlag(var Flag: TFeatureFlag);  
 begin
   Flag.Description := 'Active la nouvelle interface de checkout redesignée';
   Flag.SetAttribute('owner', 'equipe_frontend');
@@ -2026,18 +2026,18 @@ ShowNewUI;  // L'ancien code est supprimé
 
 1. **Identifier les flags obsolètes**
 ```sql
-SELECT flag_name, created_date, last_updated
-FROM feature_flags
+SELECT flag_name, created_date, last_updated  
+FROM feature_flags  
 WHERE last_updated < NOW() - INTERVAL '90 days'
   AND flag_type = 'release';
 ```
 
 2. **Analyser l'utilisation**
 ```sql
-SELECT flag_name, COUNT(*) as checks
-FROM flag_evaluations
-WHERE timestamp > NOW() - INTERVAL '7 days'
-GROUP BY flag_name
+SELECT flag_name, COUNT(*) as checks  
+FROM flag_evaluations  
+WHERE timestamp > NOW() - INTERVAL '7 days'  
+GROUP BY flag_name  
 ORDER BY checks DESC;
 ```
 
@@ -2073,7 +2073,7 @@ type
 
 implementation
 
-function TSecureFeatureFlagManager.CanModifyFlag(const FlagName: string; Role: TUserRole): Boolean;
+function TSecureFeatureFlagManager.CanModifyFlag(const FlagName: string; Role: TUserRole): Boolean;  
 var
   Flag: TFeatureFlag;
 begin
@@ -2093,7 +2093,7 @@ begin
   Result := False;
 end;
 
-procedure TSecureFeatureFlagManager.EnableFlagSecure(const FlagName: string; Role: TUserRole);
+procedure TSecureFeatureFlagManager.EnableFlagSecure(const FlagName: string; Role: TUserRole);  
 begin
   if not CanModifyFlag(FlagName, Role) then
     raise Exception.Create('Permission refusée pour modifier ce flag');
@@ -2101,7 +2101,7 @@ begin
   EnableFlag(FlagName);
 end;
 
-procedure TSecureFeatureFlagManager.DisableFlagSecure(const FlagName: string; Role: TUserRole);
+procedure TSecureFeatureFlagManager.DisableFlagSecure(const FlagName: string; Role: TUserRole);  
 begin
   if not CanModifyFlag(FlagName, Role) then
     raise Exception.Create('Permission refusée pour modifier ce flag');
@@ -2158,7 +2158,7 @@ type
 
 implementation
 
-constructor TFeatureFlagAudit.Create(AConnection: TObject);
+constructor TFeatureFlagAudit.Create(AConnection: TObject);  
 begin
   FDatabaseConnection := AConnection;
 end;
@@ -2183,7 +2183,7 @@ begin
   WriteToDatabase(Entry);
 end;
 
-procedure TFeatureFlagAudit.WriteToDatabase(Entry: TAuditEntry);
+procedure TFeatureFlagAudit.WriteToDatabase(Entry: TAuditEntry);  
 var
   ActionStr: string;
 begin
@@ -2199,7 +2199,7 @@ begin
   // TODO: Implémenter selon votre base de données
 end;
 
-function TFeatureFlagAudit.GetAuditHistory(const FlagName: string): string;
+function TFeatureFlagAudit.GetAuditHistory(const FlagName: string): string;  
 begin
   // SELECT * FROM feature_flag_audit WHERE flag_name = ? ORDER BY timestamp DESC
   // TODO: Implémenter
@@ -2242,7 +2242,7 @@ type
 
 implementation
 
-procedure TFeatureFlagTests.SetUp;
+procedure TFeatureFlagTests.SetUp;  
 begin
   FFManager := TFeatureFlagManager.Create(nil, 60);
   FUser := TUserContext.Create('test_user_123');
@@ -2250,13 +2250,13 @@ begin
   FUser.SetAttribute('country', 'FR');
 end;
 
-procedure TFeatureFlagTests.TearDown;
+procedure TFeatureFlagTests.TearDown;  
 begin
   FUser.Free;
   FFManager.Free;
 end;
 
-procedure TFeatureFlagTests.TestFlagEnabled;
+procedure TFeatureFlagTests.TestFlagEnabled;  
 var
   Flag: TFeatureFlag;
 begin
@@ -2269,7 +2269,7 @@ begin
     FFManager.IsEnabled('test_feature', FUser));
 end;
 
-procedure TFeatureFlagTests.TestFlagDisabled;
+procedure TFeatureFlagTests.TestFlagDisabled;  
 var
   Flag: TFeatureFlag;
 begin
@@ -2281,7 +2281,7 @@ begin
     FFManager.IsEnabled('test_feature', FUser));
 end;
 
-procedure TFeatureFlagTests.TestPercentageRollout;
+procedure TFeatureFlagTests.TestPercentageRollout;  
 var
   Flag: TFeatureFlag;
   EnabledCount, TotalTests, i: Integer;
@@ -2313,7 +2313,7 @@ begin
     (EnabledCount >= 450) and (EnabledCount <= 550));
 end;
 
-procedure TFeatureFlagTests.TestUserListTargeting;
+procedure TFeatureFlagTests.TestUserListTargeting;  
 var
   Flag: TFeatureFlag;
   AllowedUser, DeniedUser: TUserContext;
@@ -2338,7 +2338,7 @@ begin
   end;
 end;
 
-procedure TFeatureFlagTests.TestAttributeTargeting;
+procedure TFeatureFlagTests.TestAttributeTargeting;  
 var
   Flag: TFeatureFlag;
   FrenchUser, UsUser: TUserContext;
@@ -2368,7 +2368,7 @@ begin
   end;
 end;
 
-procedure TFeatureFlagTests.TestVariantAssignment;
+procedure TFeatureFlagTests.TestVariantAssignment;  
 var
   Flag: TFeatureFlag;
   Variant: string;
@@ -2404,7 +2404,7 @@ end.
 
 ```pascal
 // Tester avec différents scenarios
-procedure TestCheckoutWithDifferentFlags;
+procedure TestCheckoutWithDifferentFlags;  
 begin
   // Scenario 1 : Flag désactivé
   FFManager.DisableFlag('new_checkout');
@@ -2455,7 +2455,7 @@ implementation
 uses
   fpjson;
 
-constructor TFeatureFlagMetrics.Create;
+constructor TFeatureFlagMetrics.Create;  
 begin
   FLock := TCriticalSection.Create;
   FEvaluationCount := 0;
@@ -2463,13 +2463,13 @@ begin
   FLatencySum := 0;
 end;
 
-destructor TFeatureFlagMetrics.Destroy;
+destructor TFeatureFlagMetrics.Destroy;  
 begin
   FLock.Free;
   inherited;
 end;
 
-procedure TFeatureFlagMetrics.RecordEvaluation(LatencyMs: Integer; Success: Boolean);
+procedure TFeatureFlagMetrics.RecordEvaluation(LatencyMs: Integer; Success: Boolean);  
 begin
   FLock.Enter;
   try
@@ -2483,7 +2483,7 @@ begin
   end;
 end;
 
-function TFeatureFlagMetrics.GetMetricsJSON: string;
+function TFeatureFlagMetrics.GetMetricsJSON: string;  
 var
   JSON: TJSONObject;
   AvgLatency: Double;
@@ -2529,7 +2529,7 @@ end.
 ### Alertes sur les anomalies
 
 ```pascal
-procedure CheckFeatureFlagHealth;
+procedure CheckFeatureFlagHealth;  
 var
   Metrics: string;
   ErrorRate: Double;
@@ -2593,7 +2593,7 @@ curl -X POST http://api.example.com/flags/$FLAG_NAME \
 Exécuter du nouveau code sans exposer les résultats aux utilisateurs :
 
 ```pascal
-procedure ProcessOrder(Order: TOrder);
+procedure ProcessOrder(Order: TOrder);  
 var
   OldResult, NewResult: TOrderResult;
 begin
@@ -2635,7 +2635,7 @@ end;
 
 ```pascal
 // Fonctionnalités différentes selon le plan d'abonnement
-procedure ShowFeatures(User: TUserContext);
+procedure ShowFeatures(User: TUserContext);  
 begin
   User.SetAttribute('plan', User.SubscriptionPlan);
 
@@ -2749,7 +2749,7 @@ var
   RedisBackend: TFeatureFlagRedisBackend;
   Tracker: TEventTracker;
 
-procedure InitializeFeatureFlags;
+procedure InitializeFeatureFlags;  
 var
   NewUIFlag: TFeatureFlag;
 begin
@@ -2865,7 +2865,7 @@ begin
   FMetrics := AMetrics;
 end;
 
-procedure TPrometheusExporter.HandleMetricsRequest(ARequest: TRequest; AResponse: TResponse);
+procedure TPrometheusExporter.HandleMetricsRequest(ARequest: TRequest; AResponse: TResponse);  
 var
   Output: TStringList;
   Flags: TStringList;
@@ -2951,9 +2951,9 @@ feature_flag_enabled
 #!/bin/bash
 # migrate-flags.sh - Migrer les flags d'un environnement à l'autre
 
-SOURCE_ENV="staging"
-TARGET_ENV="production"
-SOURCE_REDIS="redis-staging:6379"
+SOURCE_ENV="staging"  
+TARGET_ENV="production"  
+SOURCE_REDIS="redis-staging:6379"  
 TARGET_REDIS="redis-prod:6379"
 
 echo "Migration des feature flags de $SOURCE_ENV vers $TARGET_ENV"
@@ -2988,7 +2988,7 @@ echo "Migration terminée"
 #!/bin/bash
 # cleanup-flags.sh - Supprimer les flags obsolètes
 
-REDIS_HOST="localhost:6379"
+REDIS_HOST="localhost:6379"  
 DAYS_INACTIVE=90
 
 echo "Recherche des flags inactifs depuis plus de $DAYS_INACTIVE jours..."
@@ -3001,10 +3001,10 @@ INACTIVE_FLAGS=$(psql -t -c "
       AND flag_type = 'release'
 ")
 
-echo "Flags inactifs trouvés:"
+echo "Flags inactifs trouvés:"  
 echo "$INACTIVE_FLAGS"
 
-read -p "Supprimer ces flags? (o/n) " -n 1 -r
+read -p "Supprimer ces flags? (o/n) " -n 1 -r  
 echo
 
 if [[ $REPLY =~ ^[Oo]$ ]]; then
@@ -3187,8 +3187,8 @@ jobs:
 
 ```python
 # scripts/check_flag_docs.py
-import re
-import sys
+import re  
+import sys  
 import json
 
 def extract_flags_from_code(file_path):
@@ -3323,7 +3323,7 @@ type
 
 implementation
 
-constructor TFeatureFlagLocalCache.Create(ABackend: TFeatureFlagRedisBackend; ATTL: Integer);
+constructor TFeatureFlagLocalCache.Create(ABackend: TFeatureFlagRedisBackend; ATTL: Integer);  
 begin
   FCache := TFlagCache.Create;
   FLock := TCriticalSection.Create;
@@ -3331,7 +3331,7 @@ begin
   FBackend := ABackend;
 end;
 
-destructor TFeatureFlagLocalCache.Destroy;
+destructor TFeatureFlagLocalCache.Destroy;  
 var
   i: Integer;
 begin
@@ -3344,12 +3344,12 @@ begin
   inherited;
 end;
 
-function TFeatureFlagLocalCache.IsCacheValid(const CachedFlag: TCachedFlag): Boolean;
+function TFeatureFlagLocalCache.IsCacheValid(const CachedFlag: TCachedFlag): Boolean;  
 begin
   Result := SecondsBetween(Now, CachedFlag.CachedAt) < FTTL;
 end;
 
-function TFeatureFlagLocalCache.GetFlag(const FlagName: string): TFeatureFlag;
+function TFeatureFlagLocalCache.GetFlag(const FlagName: string): TFeatureFlag;  
 var
   Index: Integer;
   CachedFlag: TCachedFlag;
@@ -3387,7 +3387,7 @@ begin
   end;
 end;
 
-procedure TFeatureFlagLocalCache.InvalidateFlag(const FlagName: string);
+procedure TFeatureFlagLocalCache.InvalidateFlag(const FlagName: string);  
 var
   Index: Integer;
 begin
@@ -3404,7 +3404,7 @@ begin
   end;
 end;
 
-procedure TFeatureFlagLocalCache.InvalidateAll;
+procedure TFeatureFlagLocalCache.InvalidateAll;  
 var
   i: Integer;
 begin
@@ -3464,7 +3464,7 @@ begin
   FreeOnTerminate := False;
 end;
 
-procedure TFeatureFlagPubSub.Execute;
+procedure TFeatureFlagPubSub.Execute;  
 var
   Message: string;
 begin

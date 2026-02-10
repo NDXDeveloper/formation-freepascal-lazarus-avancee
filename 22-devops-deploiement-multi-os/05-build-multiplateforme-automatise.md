@@ -99,20 +99,20 @@ Créez un fichier `build-windows.bat` :
 
 ```batch
 @echo off
-echo ======================================
-echo Build automatique pour Windows
+echo ======================================  
+echo Build automatique pour Windows  
 echo ======================================
 
-SET LAZARUS_DIR=C:\lazarus
-SET PROJECT_DIR=%~dp0
+SET LAZARUS_DIR=C:\lazarus  
+SET PROJECT_DIR=%~dp0  
 SET PROJECT_NAME=MonApplication
 
-echo.
-echo Nettoyage des anciens builds...
-if exist "%PROJECT_DIR%lib" rd /s /q "%PROJECT_DIR%lib"
+echo.  
+echo Nettoyage des anciens builds...  
+if exist "%PROJECT_DIR%lib" rd /s /q "%PROJECT_DIR%lib"  
 if exist "%PROJECT_DIR%bin" rd /s /q "%PROJECT_DIR%bin"
 
-echo.
+echo.  
 echo Compilation en mode Debug...
 "%LAZARUS_DIR%\lazbuild.exe" --build-mode=Debug "%PROJECT_DIR%\%PROJECT_NAME%.lpi"
 
@@ -122,7 +122,7 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
-echo.
+echo.  
 echo Compilation en mode Release...
 "%LAZARUS_DIR%\lazbuild.exe" --build-mode=Release "%PROJECT_DIR%\%PROJECT_NAME%.lpi"
 
@@ -132,10 +132,10 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
-echo.
-echo ======================================
-echo Build termine avec succes!
-echo ======================================
+echo.  
+echo ======================================  
+echo Build termine avec succes!  
+echo ======================================  
 pause
 ```
 
@@ -146,20 +146,20 @@ Créez un fichier `build-linux.sh` :
 ```bash
 #!/bin/bash
 
-echo "======================================"
-echo "Build automatique pour Ubuntu/Linux"
+echo "======================================"  
+echo "Build automatique pour Ubuntu/Linux"  
 echo "======================================"
 
-PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"  
 PROJECT_NAME="MonApplication"
 
-echo ""
-echo "Nettoyage des anciens builds..."
-rm -rf "$PROJECT_DIR/lib"
+echo ""  
+echo "Nettoyage des anciens builds..."  
+rm -rf "$PROJECT_DIR/lib"  
 rm -rf "$PROJECT_DIR/bin"
 
-echo ""
-echo "Compilation en mode Debug..."
+echo ""  
+echo "Compilation en mode Debug..."  
 lazbuild --build-mode=Debug "$PROJECT_DIR/$PROJECT_NAME.lpi"
 
 if [ $? -ne 0 ]; then
@@ -167,8 +167,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo ""
-echo "Compilation en mode Release..."
+echo ""  
+echo "Compilation en mode Release..."  
 lazbuild --build-mode=Release "$PROJECT_DIR/$PROJECT_NAME.lpi"
 
 if [ $? -ne 0 ]; then
@@ -176,9 +176,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo ""
-echo "======================================"
-echo "Build terminé avec succès!"
+echo ""  
+echo "======================================"  
+echo "Build terminé avec succès!"  
 echo "======================================"
 ```
 
@@ -248,10 +248,10 @@ Créez un fichier `Makefile` :
 
 ```makefile
 # Configuration
-PROJECT_NAME = MonApplication
-PROJECT_FILE = $(PROJECT_NAME).lpi
-LAZBUILD = lazbuild
-BUILD_DIR = build
+PROJECT_NAME = MonApplication  
+PROJECT_FILE = $(PROJECT_NAME).lpi  
+LAZBUILD = lazbuild  
+BUILD_DIR = build  
 BIN_DIR = bin
 
 # Détection automatique de la plateforme
@@ -320,17 +320,17 @@ Créez un fichier `build-and-test.sh` :
 
 set -e  # Arrête le script en cas d'erreur
 
-PROJECT_NAME="MonApplication"
-PROJECT_FILE="$PROJECT_NAME.lpi"
+PROJECT_NAME="MonApplication"  
+PROJECT_FILE="$PROJECT_NAME.lpi"  
 TEST_PROJECT="tests/TestsUnitaires.lpi"
 
-echo "======================================"
-echo "Build et tests automatiques"
+echo "======================================"  
+echo "Build et tests automatiques"  
 echo "======================================"
 
 # Build principal
-echo ""
-echo "1. Compilation du projet principal..."
+echo ""  
+echo "1. Compilation du projet principal..."  
 lazbuild --build-mode=Release "$PROJECT_FILE"
 
 # Build des tests
@@ -356,8 +356,8 @@ else
 fi
 
 # Vérification de l'exécutable
-echo ""
-echo "4. Vérification de l'exécutable..."
+echo ""  
+echo "4. Vérification de l'exécutable..."  
 if [ -f "bin/$PROJECT_NAME" ]; then
     echo "✓ Exécutable créé : bin/$PROJECT_NAME"
     ls -lh "bin/$PROJECT_NAME"
@@ -366,9 +366,9 @@ else
     exit 1
 fi
 
-echo ""
-echo "======================================"
-echo "Build et tests terminés avec succès!"
+echo ""  
+echo "======================================"  
+echo "Build et tests terminés avec succès!"  
 echo "======================================"
 ```
 
@@ -381,8 +381,8 @@ La cross-compilation permet de compiler pour Windows depuis Linux, ou vice-versa
 1. **Installer les outils de cross-compilation** :
 
 ```bash
-sudo apt-get install fpc-source
-cd /usr/lib/fpc/$(fpc -iV)/
+sudo apt-get install fpc-source  
+cd /usr/lib/fpc/$(fpc -iV)/  
 sudo make crossinstall OS_TARGET=win64 CPU_TARGET=x86_64
 ```
 
@@ -400,8 +400,8 @@ C'est plus complexe et nécessite une chaîne de compilation croisée. Une alter
 
 ```bash
 # Dans WSL Ubuntu
-sudo apt-get install lazarus fpc
-cd /mnt/c/mes_projets/MonApplication
+sudo apt-get install lazarus fpc  
+cd /mnt/c/mes_projets/MonApplication  
 lazbuild MonApplication.lpi
 ```
 
@@ -415,19 +415,19 @@ Créez un fichier `build-versioned.sh` :
 #!/bin/bash
 
 # Récupérer les informations Git
-GIT_COMMIT=$(git rev-parse --short HEAD)
-GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+GIT_COMMIT=$(git rev-parse --short HEAD)  
+GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)  
 BUILD_DATE=$(date +"%Y-%m-%d %H:%M:%S")
 
-echo "======================================"
-echo "Build versionné"
-echo "Commit: $GIT_COMMIT"
-echo "Branche: $GIT_BRANCH"
-echo "Date: $BUILD_DATE"
+echo "======================================"  
+echo "Build versionné"  
+echo "Commit: $GIT_COMMIT"  
+echo "Branche: $GIT_BRANCH"  
+echo "Date: $BUILD_DATE"  
 echo "======================================"
 
 # Créer un fichier de version
-cat > version.inc <<EOF
+cat > version.inc <<EOF  
 const
   APP_VERSION = '1.0.0';
   GIT_COMMIT = '$GIT_COMMIT';
@@ -447,7 +447,7 @@ Dans votre code Pascal, incluez le fichier de version :
 ```pascal
 {$I version.inc}
 
-procedure TFormPrincipal.AfficherVersion;
+procedure TFormPrincipal.AfficherVersion;  
 begin
   ShowMessage(Format('Version %s'#13#10'Commit: %s'#13#10'Date: %s',
     [APP_VERSION, GIT_COMMIT, BUILD_DATE]));
@@ -496,8 +496,8 @@ Pour éviter de versionner les fichiers compilés :
 *.rst
 
 # Répertoires de build
-lib/
-bin/
+lib/  
+bin/  
 backup/
 
 # Fichiers Lazarus temporaires
@@ -515,8 +515,8 @@ Si votre projet utilise des bibliothèques externes (DLL sur Windows, .so sur Li
 ```bash
 #!/bin/bash
 
-PROJECT_NAME="MonApplication"
-BIN_DIR="bin"
+PROJECT_NAME="MonApplication"  
+BIN_DIR="bin"  
 LIB_DIR="libs"
 
 echo "Copie des dépendances..."
@@ -550,11 +550,11 @@ Si votre projet nécessite des packages spécifiques, documentez-les dans un fic
 ## Installation
 
 ### Ubuntu
-sudo apt-get install lazarus-ide-gtk2
+sudo apt-get install lazarus-ide-gtk2  
 Dans Lazarus: Package → Online Package Manager → BGRABitmap → Install
 
 ### Windows
-Télécharger l'installeur Lazarus depuis https://www.lazarus-ide.org
+Télécharger l'installeur Lazarus depuis https://www.lazarus-ide.org  
 Dans Lazarus: Package → Online Package Manager → BGRABitmap → Install
 ```
 
@@ -565,13 +565,13 @@ Dans Lazarus: Package → Online Package Manager → BGRABitmap → Install
 ```bash
 #!/bin/bash
 
-LOG_DIR="build-logs"
+LOG_DIR="build-logs"  
 LOG_FILE="$LOG_DIR/build-$(date +%Y%m%d-%H%M%S).log"
 
 mkdir -p "$LOG_DIR"
 
-echo "Démarrage du build..." | tee "$LOG_FILE"
-echo "Date: $(date)" | tee -a "$LOG_FILE"
+echo "Démarrage du build..." | tee "$LOG_FILE"  
+echo "Date: $(date)" | tee -a "$LOG_FILE"  
 echo "======================================" | tee -a "$LOG_FILE"
 
 # Compiler avec redirection des logs

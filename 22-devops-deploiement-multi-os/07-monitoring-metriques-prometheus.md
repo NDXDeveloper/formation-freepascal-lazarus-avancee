@@ -63,7 +63,7 @@ Ces métriques vous aident à répondre à des questions cruciales :
 
 ```bash
 # Télécharger la dernière version
-cd /tmp
+cd /tmp  
 wget https://github.com/prometheus/prometheus/releases/download/v2.45.0/prometheus-2.45.0.linux-amd64.tar.gz
 
 # Extraire
@@ -76,15 +76,15 @@ sudo mv prometheus-2.45.0.linux-amd64 /opt/prometheus
 sudo useradd --no-create-home --shell /bin/false prometheus
 
 # Créer les répertoires nécessaires
-sudo mkdir -p /etc/prometheus
+sudo mkdir -p /etc/prometheus  
 sudo mkdir -p /var/lib/prometheus
 
 # Copier les fichiers de configuration
 sudo cp /opt/prometheus/prometheus.yml /etc/prometheus/
 
 # Définir les permissions
-sudo chown -R prometheus:prometheus /opt/prometheus
-sudo chown -R prometheus:prometheus /etc/prometheus
+sudo chown -R prometheus:prometheus /opt/prometheus  
+sudo chown -R prometheus:prometheus /etc/prometheus  
 sudo chown -R prometheus:prometheus /var/lib/prometheus
 ```
 
@@ -92,14 +92,14 @@ sudo chown -R prometheus:prometheus /var/lib/prometheus
 
 ```ini
 [Unit]
-Description=Prometheus
-Wants=network-online.target
+Description=Prometheus  
+Wants=network-online.target  
 After=network-online.target
 
 [Service]
-User=prometheus
-Group=prometheus
-Type=simple
+User=prometheus  
+Group=prometheus  
+Type=simple  
 ExecStart=/opt/prometheus/prometheus \
     --config.file=/etc/prometheus/prometheus.yml \
     --storage.tsdb.path=/var/lib/prometheus/ \
@@ -113,8 +113,8 @@ WantedBy=multi-user.target
 **Démarrer Prometheus** :
 
 ```bash
-sudo systemctl daemon-reload
-sudo systemctl start prometheus
+sudo systemctl daemon-reload  
+sudo systemctl start prometheus  
 sudo systemctl enable prometheus
 
 # Vérifier le statut
@@ -151,15 +151,15 @@ https://nssm.cc/download
 
 Installez Prometheus comme service :
 ```cmd
-nssm install Prometheus "C:\prometheus\prometheus.exe"
-nssm set Prometheus AppParameters "--config.file=C:\prometheus\prometheus.yml"
-nssm set Prometheus AppDirectory "C:\prometheus"
+nssm install Prometheus "C:\prometheus\prometheus.exe"  
+nssm set Prometheus AppParameters "--config.file=C:\prometheus\prometheus.yml"  
+nssm set Prometheus AppDirectory "C:\prometheus"  
 nssm start Prometheus
 ```
 
 5. **Ou exécutez directement** :
 ```cmd
-cd C:\prometheus
+cd C:\prometheus  
 prometheus.exe --config.file=prometheus.yml
 ```
 
@@ -223,7 +223,7 @@ nom_metrique{label1="valeur1",label2="valeur2"} valeur timestamp
 # Exemple concret :
 # HELP http_requests_total Nombre total de requêtes HTTP
 # TYPE http_requests_total counter
-http_requests_total{method="GET",endpoint="/api/users"} 1234
+http_requests_total{method="GET",endpoint="/api/users"} 1234  
 http_requests_total{method="POST",endpoint="/api/users"} 567
 ```
 
@@ -389,7 +389,7 @@ implementation
 
 { TPrometheusCounter }
 
-constructor TPrometheusCounter.Create(const AName, AHelp: string);
+constructor TPrometheusCounter.Create(const AName, AHelp: string);  
 begin
   FName := AName;
   FHelp := AHelp;
@@ -397,13 +397,13 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TPrometheusCounter.Destroy;
+destructor TPrometheusCounter.Destroy;  
 begin
   FLock.Free;
   inherited;
 end;
 
-procedure TPrometheusCounter.Inc(AAmount: Int64);
+procedure TPrometheusCounter.Inc(AAmount: Int64);  
 begin
   FLock.Acquire;
   try
@@ -413,7 +413,7 @@ begin
   end;
 end;
 
-function TPrometheusCounter.GetValue: Int64;
+function TPrometheusCounter.GetValue: Int64;  
 begin
   FLock.Acquire;
   try
@@ -423,7 +423,7 @@ begin
   end;
 end;
 
-function TPrometheusCounter.AsPrometheusFormat: string;
+function TPrometheusCounter.AsPrometheusFormat: string;  
 begin
   Result := Format('# HELP %s %s'#10, [FName, FHelp]) +
             Format('# TYPE %s counter'#10, [FName]) +
@@ -432,7 +432,7 @@ end;
 
 { TPrometheusGauge }
 
-constructor TPrometheusGauge.Create(const AName, AHelp: string);
+constructor TPrometheusGauge.Create(const AName, AHelp: string);  
 begin
   FName := AName;
   FHelp := AHelp;
@@ -440,13 +440,13 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TPrometheusGauge.Destroy;
+destructor TPrometheusGauge.Destroy;  
 begin
   FLock.Free;
   inherited;
 end;
 
-procedure TPrometheusGauge.SetValue(AValue: Double);
+procedure TPrometheusGauge.SetValue(AValue: Double);  
 begin
   FLock.Acquire;
   try
@@ -456,7 +456,7 @@ begin
   end;
 end;
 
-procedure TPrometheusGauge.Inc(AAmount: Double);
+procedure TPrometheusGauge.Inc(AAmount: Double);  
 begin
   FLock.Acquire;
   try
@@ -466,7 +466,7 @@ begin
   end;
 end;
 
-procedure TPrometheusGauge.Dec(AAmount: Double);
+procedure TPrometheusGauge.Dec(AAmount: Double);  
 begin
   FLock.Acquire;
   try
@@ -476,7 +476,7 @@ begin
   end;
 end;
 
-function TPrometheusGauge.GetValue: Double;
+function TPrometheusGauge.GetValue: Double;  
 begin
   FLock.Acquire;
   try
@@ -486,7 +486,7 @@ begin
   end;
 end;
 
-function TPrometheusGauge.AsPrometheusFormat: string;
+function TPrometheusGauge.AsPrometheusFormat: string;  
 begin
   Result := Format('# HELP %s %s'#10, [FName, FHelp]) +
             Format('# TYPE %s gauge'#10, [FName]) +
@@ -495,13 +495,13 @@ end;
 
 { TPrometheusRegistry }
 
-constructor TPrometheusRegistry.Create;
+constructor TPrometheusRegistry.Create;  
 begin
   FCounters := TList.Create;
   FGauges := TList.Create;
 end;
 
-destructor TPrometheusRegistry.Destroy;
+destructor TPrometheusRegistry.Destroy;  
 var
   i: Integer;
 begin
@@ -516,19 +516,19 @@ begin
   inherited;
 end;
 
-function TPrometheusRegistry.RegisterCounter(const AName, AHelp: string): TPrometheusCounter;
+function TPrometheusRegistry.RegisterCounter(const AName, AHelp: string): TPrometheusCounter;  
 begin
   Result := TPrometheusCounter.Create(AName, AHelp);
   FCounters.Add(Result);
 end;
 
-function TPrometheusRegistry.RegisterGauge(const AName, AHelp: string): TPrometheusGauge;
+function TPrometheusRegistry.RegisterGauge(const AName, AHelp: string): TPrometheusGauge;  
 begin
   Result := TPrometheusGauge.Create(AName, AHelp);
   FGauges.Add(Result);
 end;
 
-function TPrometheusRegistry.GetMetrics: string;
+function TPrometheusRegistry.GetMetrics: string;  
 var
   i: Integer;
   Output: TStringList;
@@ -669,7 +669,7 @@ implementation
 
 { TSystemMetrics }
 
-constructor TSystemMetrics.Create;
+constructor TSystemMetrics.Create;  
 begin
   FMemoryUsage := DefaultRegistry.RegisterGauge(
     'process_memory_bytes',
@@ -758,7 +758,7 @@ var
   ConnexionsDB: TPrometheusGauge;
   ErreursSQL: TPrometheusCounter;
 
-procedure ExecuterRequeteSQL(const SQL: string);
+procedure ExecuterRequeteSQL(const SQL: string);  
 var
   Debut, Fin: TDateTime;
   DureeMS: Double;
@@ -841,16 +841,16 @@ end.
 **Ubuntu :**
 ```bash
 # Ajouter le dépôt Grafana
-sudo apt-get install -y software-properties-common
-sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"
+sudo apt-get install -y software-properties-common  
+sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"  
 wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
 
 # Installer
-sudo apt-get update
+sudo apt-get update  
 sudo apt-get install grafana
 
 # Démarrer le service
-sudo systemctl start grafana-server
+sudo systemctl start grafana-server  
 sudo systemctl enable grafana-server
 ```
 
@@ -979,8 +979,8 @@ Suivez les conventions Prometheus :
 Ajoutez des labels pour segmenter vos métriques :
 
 ```
-http_requests_total{method="GET", endpoint="/api/users", status="200"} 1234
-http_requests_total{method="POST", endpoint="/api/users", status="201"} 567
+http_requests_total{method="GET", endpoint="/api/users", status="200"} 1234  
+http_requests_total{method="POST", endpoint="/api/users", status="201"} 567  
 http_requests_total{method="GET", endpoint="/api/products", status="200"} 890
 ```
 
@@ -989,7 +989,7 @@ http_requests_total{method="GET", endpoint="/api/products", status="200"} 890
 **Exemple de mauvaise pratique :**
 ```
 # NE PAS FAIRE : utiliser l'ID utilisateur comme label
-http_requests_total{user_id="12345"} 1
+http_requests_total{user_id="12345"} 1  
 http_requests_total{user_id="67890"} 1
 # Cela créera des millions de séries temporelles !
 ```
@@ -997,7 +997,7 @@ http_requests_total{user_id="67890"} 1
 **Bonne pratique :**
 ```
 # Utiliser des catégories limitées
-http_requests_total{user_type="premium"} 5678
+http_requests_total{user_type="premium"} 5678  
 http_requests_total{user_type="free"} 12345
 ```
 
@@ -1013,7 +1013,7 @@ Combien de temps prend une requête pour être traitée ?
 var
   RequestDuration: TPrometheusGauge;
 
-procedure TraiterRequete;
+procedure TraiterRequete;  
 var
   Debut, Fin: TDateTime;
   DureeSecondes: Double;
@@ -1038,7 +1038,7 @@ Combien de requêtes le système reçoit-il ?
 var
   RequestsTotal: TPrometheusCounter;
 
-procedure OnNouvelleRequete;
+procedure OnNouvelleRequete;  
 begin
   RequestsTotal.Inc;
   // Traiter la requête...
@@ -1053,7 +1053,7 @@ Quel pourcentage de requêtes échoue ?
 var
   ErrorsTotal: TPrometheusCounter;
 
-procedure TraiterRequete;
+procedure TraiterRequete;  
 begin
   try
     // Traiter la requête
@@ -1078,7 +1078,7 @@ var
   MaxConnections: Integer = 100;
   ActiveConnections: Integer = 0;
 
-procedure UpdateSaturation;
+procedure UpdateSaturation;  
 var
   UsagePercent: Double;
 begin
@@ -1171,13 +1171,13 @@ begin
   FCounts[High(FCounts)] := 0; // Bucket +Inf
 end;
 
-destructor TPrometheusHistogram.Destroy;
+destructor TPrometheusHistogram.Destroy;  
 begin
   FLock.Free;
   inherited;
 end;
 
-procedure TPrometheusHistogram.Observe(AValue: Double);
+procedure TPrometheusHistogram.Observe(AValue: Double);  
 var
   i: Integer;
 begin
@@ -1206,7 +1206,7 @@ begin
   end;
 end;
 
-function TPrometheusHistogram.AsPrometheusFormat: string;
+function TPrometheusHistogram.AsPrometheusFormat: string;  
 var
   i: Integer;
   Output: TStringList;
@@ -1322,7 +1322,7 @@ type
 
 { TMetricsHTTPServer }
 
-constructor TMetricsHTTPServer.Create(APort: Word);
+constructor TMetricsHTTPServer.Create(APort: Word);  
 begin
   // Initialiser les métriques
   FSystemMetrics := TSystemMetrics.Create;
@@ -1343,7 +1343,7 @@ begin
   FServer.OnRequest := @HandleRequest;
 end;
 
-destructor TMetricsHTTPServer.Destroy;
+destructor TMetricsHTTPServer.Destroy;  
 begin
   FServer.Free;
   FSystemMetrics.Free;
@@ -1387,14 +1387,14 @@ begin
   end;
 end;
 
-procedure TMetricsHTTPServer.Start;
+procedure TMetricsHTTPServer.Start;  
 begin
   FServer.Active := True;
   WriteLn('Serveur de métriques démarré sur http://localhost:', FServer.Port);
   WriteLn('Métriques disponibles sur http://localhost:', FServer.Port, '/metrics');
 end;
 
-procedure TMetricsHTTPServer.Stop;
+procedure TMetricsHTTPServer.Stop;  
 begin
   FServer.Active := False;
   WriteLn('Serveur arrêté');
@@ -1452,7 +1452,7 @@ implementation
 
 { TFormMetrics }
 
-constructor TFormMetrics.Create;
+constructor TFormMetrics.Create;  
 begin
   FFormOpenCount := DefaultRegistry.RegisterCounter(
     'gui_forms_opened_total',
@@ -1475,24 +1475,24 @@ begin
   );
 end;
 
-procedure TFormMetrics.OnFormCreate(AForm: TForm);
+procedure TFormMetrics.OnFormCreate(AForm: TForm);  
 begin
   FFormOpenCount.Inc;
   UpdateActiveForms;
 end;
 
-procedure TFormMetrics.OnFormClose(AForm: TForm);
+procedure TFormMetrics.OnFormClose(AForm: TForm);  
 begin
   FFormCloseCount.Inc;
   UpdateActiveForms;
 end;
 
-procedure TFormMetrics.OnButtonClick(const ButtonName: string);
+procedure TFormMetrics.OnButtonClick(const ButtonName: string);  
 begin
   FButtonClickCount.Inc;
 end;
 
-procedure TFormMetrics.UpdateActiveForms;
+procedure TFormMetrics.UpdateActiveForms;  
 begin
   FActiveFormsGauge.SetValue(Screen.FormCount);
 end;
@@ -1539,7 +1539,7 @@ implementation
 
 { TDatabaseMetrics }
 
-constructor TDatabaseMetrics.Create;
+constructor TDatabaseMetrics.Create;  
 begin
   FQueriesExecuted := DefaultRegistry.RegisterCounter(
     'db_queries_executed_total',
@@ -1567,7 +1567,7 @@ begin
   );
 end;
 
-procedure TDatabaseMetrics.OnQueryExecute(AQuery: TSQLQuery; StartTime: TDateTime);
+procedure TDatabaseMetrics.OnQueryExecute(AQuery: TSQLQuery; StartTime: TDateTime);  
 var
   Duration: Double;
 begin
@@ -1582,17 +1582,17 @@ begin
     FRowsReturned.Inc(AQuery.RecordCount);
 end;
 
-procedure TDatabaseMetrics.OnQueryError(AQuery: TSQLQuery);
+procedure TDatabaseMetrics.OnQueryError(AQuery: TSQLQuery);  
 begin
   FQueriesFailed.Inc;
 end;
 
-procedure TDatabaseMetrics.OnConnectionOpen;
+procedure TDatabaseMetrics.OnConnectionOpen;  
 begin
   FActiveConnections.Inc;
 end;
 
-procedure TDatabaseMetrics.OnConnectionClose;
+procedure TDatabaseMetrics.OnConnectionClose;  
 begin
   FActiveConnections.Dec;
 end;
@@ -1739,7 +1739,7 @@ Agrégez les métriques localement avant de les exposer :
 
 ```pascal
 // Au lieu de mettre à jour immédiatement
-procedure OnPetiteOperation;
+procedure OnPetiteOperation;  
 var
   LocalCounter: Integer;
 begin
@@ -1857,7 +1857,7 @@ type
 
 { TFileServerMetrics }
 
-constructor TFileServerMetrics.Create;
+constructor TFileServerMetrics.Create;  
 begin
   FFilesUploaded := DefaultRegistry.RegisterCounter(
     'fileserver_files_uploaded_total',
@@ -1895,34 +1895,34 @@ begin
   );
 end;
 
-procedure TFileServerMetrics.OnFileUpload(FileSize: Int64);
+procedure TFileServerMetrics.OnFileUpload(FileSize: Int64);  
 begin
   FFilesUploaded.Inc;
   FBytesUploaded.Inc(FileSize);
 end;
 
-procedure TFileServerMetrics.OnFileDownload(FileSize: Int64);
+procedure TFileServerMetrics.OnFileDownload(FileSize: Int64);  
 begin
   FFilesDownloaded.Inc;
   FBytesDownloaded.Inc(FileSize);
 end;
 
-procedure TFileServerMetrics.OnTransferStart;
+procedure TFileServerMetrics.OnTransferStart;  
 begin
   FActiveTransfers.Inc;
 end;
 
-procedure TFileServerMetrics.OnTransferEnd;
+procedure TFileServerMetrics.OnTransferEnd;  
 begin
   FActiveTransfers.Dec;
 end;
 
-procedure TFileServerMetrics.OnError;
+procedure TFileServerMetrics.OnError;  
 begin
   FErrors.Inc;
 end;
 
-procedure TFileServerMetrics.UpdateDiskSpace(UsedBytes: Int64);
+procedure TFileServerMetrics.UpdateDiskSpace(UsedBytes: Int64);  
 begin
   FDiskSpaceUsed.SetValue(UsedBytes);
 end;
@@ -2099,15 +2099,15 @@ Créez un fichier `deploy-monitoring.sh` :
 
 set -e
 
-echo "====================================="
-echo "Déploiement du monitoring Prometheus"
+echo "====================================="  
+echo "Déploiement du monitoring Prometheus"  
 echo "====================================="
 
 # Variables
-PROMETHEUS_VERSION="2.45.0"
-GRAFANA_VERSION="latest"
-APP_PORT="8080"
-PROMETHEUS_PORT="9090"
+PROMETHEUS_VERSION="2.45.0"  
+GRAFANA_VERSION="latest"  
+APP_PORT="8080"  
+PROMETHEUS_PORT="9090"  
 GRAFANA_PORT="3000"
 
 # Fonction d'installation de Prometheus
@@ -2144,14 +2144,14 @@ EOF
     # Service systemd
     cat <<EOF | sudo tee /etc/systemd/system/prometheus.service
 [Unit]
-Description=Prometheus
-Wants=network-online.target
+Description=Prometheus  
+Wants=network-online.target  
 After=network-online.target
 
 [Service]
-User=prometheus
-Group=prometheus
-Type=simple
+User=prometheus  
+Group=prometheus  
+Type=simple  
 ExecStart=/opt/prometheus/prometheus \\
     --config.file=/etc/prometheus/prometheus.yml \\
     --storage.tsdb.path=/var/lib/prometheus/ \\
@@ -2159,7 +2159,7 @@ ExecStart=/opt/prometheus/prometheus \\
     --web.console.libraries=/opt/prometheus/console_libraries
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=multi-user.target  
 EOF
 
     sudo systemctl daemon-reload
@@ -2226,14 +2226,14 @@ check_ports() {
 }
 
 # Menu principal
-echo ""
-echo "Que souhaitez-vous installer ?"
-echo "1) Prometheus seulement"
-echo "2) Grafana seulement"
-echo "3) Node Exporter seulement"
-echo "4) Tout installer"
-echo "5) Vérifier l'installation"
-echo ""
+echo ""  
+echo "Que souhaitez-vous installer ?"  
+echo "1) Prometheus seulement"  
+echo "2) Grafana seulement"  
+echo "3) Node Exporter seulement"  
+echo "4) Tout installer"  
+echo "5) Vérifier l'installation"  
+echo ""  
 read -p "Votre choix (1-5): " choice
 
 case $choice in
@@ -2260,25 +2260,25 @@ case $choice in
         ;;
 esac
 
-echo ""
-echo "====================================="
-echo "Déploiement terminé!"
-echo "====================================="
-echo ""
-echo "URLs d'accès :"
-echo "  Prometheus: http://localhost:${PROMETHEUS_PORT}"
-echo "  Grafana:    http://localhost:${GRAFANA_PORT}"
-echo "             (admin/admin)"
-echo ""
-echo "Pour votre application FreePascal :"
-echo "  Exposez les métriques sur http://localhost:${APP_PORT}/metrics"
+echo ""  
+echo "====================================="  
+echo "Déploiement terminé!"  
+echo "====================================="  
+echo ""  
+echo "URLs d'accès :"  
+echo "  Prometheus: http://localhost:${PROMETHEUS_PORT}"  
+echo "  Grafana:    http://localhost:${GRAFANA_PORT}"  
+echo "             (admin/admin)"  
+echo ""  
+echo "Pour votre application FreePascal :"  
+echo "  Exposez les métriques sur http://localhost:${APP_PORT}/metrics"  
 echo ""
 ```
 
 Rendez le script exécutable et lancez-le :
 
 ```bash
-chmod +x deploy-monitoring.sh
+chmod +x deploy-monitoring.sh  
 sudo ./deploy-monitoring.sh
 ```
 
@@ -2292,8 +2292,8 @@ Créez un fichier `deploy-monitoring.ps1` :
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "=====================================" -ForegroundColor Cyan
-Write-Host "Déploiement du monitoring Prometheus" -ForegroundColor Cyan
+Write-Host "=====================================" -ForegroundColor Cyan  
+Write-Host "Déploiement du monitoring Prometheus" -ForegroundColor Cyan  
 Write-Host "=====================================" -ForegroundColor Cyan
 
 # Variables
@@ -2437,14 +2437,14 @@ function Test-Installation {
 }
 
 # Menu principal
-Write-Host ""
-Write-Host "Que souhaitez-vous installer ?"
-Write-Host "1) Prometheus seulement"
-Write-Host "2) Grafana seulement"
-Write-Host "3) Tout installer"
-Write-Host "4) Créer les services Windows"
-Write-Host "5) Démarrer les services"
-Write-Host "6) Vérifier l'installation"
+Write-Host ""  
+Write-Host "Que souhaitez-vous installer ?"  
+Write-Host "1) Prometheus seulement"  
+Write-Host "2) Grafana seulement"  
+Write-Host "3) Tout installer"  
+Write-Host "4) Créer les services Windows"  
+Write-Host "5) Démarrer les services"  
+Write-Host "6) Vérifier l'installation"  
 Write-Host ""
 $choice = Read-Host "Votre choix (1-6)"
 
@@ -2467,18 +2467,18 @@ switch ($choice) {
     }
 }
 
-Write-Host ""
-Write-Host "=====================================" -ForegroundColor Cyan
-Write-Host "Déploiement terminé!" -ForegroundColor Cyan
-Write-Host "=====================================" -ForegroundColor Cyan
-Write-Host ""
-Write-Host "URLs d'accès :"
-Write-Host "  Prometheus: http://localhost:$PrometheusPort" -ForegroundColor Yellow
-Write-Host "  Grafana:    http://localhost:$GrafanaPort" -ForegroundColor Yellow
-Write-Host "             (admin/admin)" -ForegroundColor Gray
-Write-Host ""
-Write-Host "Pour votre application FreePascal :"
-Write-Host "  Exposez les métriques sur http://localhost:$AppPort/metrics" -ForegroundColor Yellow
+Write-Host ""  
+Write-Host "=====================================" -ForegroundColor Cyan  
+Write-Host "Déploiement terminé!" -ForegroundColor Cyan  
+Write-Host "=====================================" -ForegroundColor Cyan  
+Write-Host ""  
+Write-Host "URLs d'accès :"  
+Write-Host "  Prometheus: http://localhost:$PrometheusPort" -ForegroundColor Yellow  
+Write-Host "  Grafana:    http://localhost:$GrafanaPort" -ForegroundColor Yellow  
+Write-Host "             (admin/admin)" -ForegroundColor Gray  
+Write-Host ""  
+Write-Host "Pour votre application FreePascal :"  
+Write-Host "  Exposez les métriques sur http://localhost:$AppPort/metrics" -ForegroundColor Yellow  
 Write-Host ""
 ```
 

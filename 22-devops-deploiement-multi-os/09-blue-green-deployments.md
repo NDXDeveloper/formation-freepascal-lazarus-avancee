@@ -143,7 +143,7 @@ type
 
 implementation
 
-constructor TAppConfig.Create;
+constructor TAppConfig.Create;  
 begin
   // Priorité : Variables d'environnement > Fichier config
   LoadFromEnvironment;
@@ -152,7 +152,7 @@ begin
     LoadFromFile('config.ini');
 end;
 
-procedure TAppConfig.LoadFromEnvironment;
+procedure TAppConfig.LoadFromEnvironment;  
 begin
   FEnvironmentName := GetEnvironmentVariable('APP_ENVIRONMENT');
   FDatabaseHost := GetEnvironmentVariable('DB_HOST');
@@ -161,7 +161,7 @@ begin
   FAppVersion := GetEnvironmentVariable('APP_VERSION');
 end;
 
-procedure TAppConfig.LoadFromFile(const AFileName: string);
+procedure TAppConfig.LoadFromFile(const AFileName: string);  
 var
   Ini: TIniFile;
 begin
@@ -226,14 +226,14 @@ implementation
 uses
   DateUtils;
 
-constructor THealthCheck.Create;
+constructor THealthCheck.Create;  
 begin
   FStartTime := Now;
   FDatabaseConnected := False;
   FRedisConnected := False;
 end;
 
-procedure THealthCheck.CheckDatabase;
+procedure THealthCheck.CheckDatabase;  
 begin
   // Vérifier la connexion à la base de données
   try
@@ -245,7 +245,7 @@ begin
   end;
 end;
 
-procedure THealthCheck.CheckRedis;
+procedure THealthCheck.CheckRedis;  
 begin
   // Vérifier la connexion à Redis
   try
@@ -257,7 +257,7 @@ begin
   end;
 end;
 
-function THealthCheck.GetStatus: THealthStatus;
+function THealthCheck.GetStatus: THealthStatus;  
 begin
   if FDatabaseConnected and FRedisConnected then
     Result := hsHealthy
@@ -267,12 +267,12 @@ begin
     Result := hsUnhealthy;
 end;
 
-function THealthCheck.GetUptimeSeconds: Int64;
+function THealthCheck.GetUptimeSeconds: Int64;  
 begin
   Result := SecondsBetween(Now, FStartTime);
 end;
 
-function THealthCheck.GetHealthJSON: TJSONObject;
+function THealthCheck.GetHealthJSON: TJSONObject;  
 var
   StatusStr: string;
 begin
@@ -297,7 +297,7 @@ end.
 **Utilisation dans votre serveur HTTP** :
 
 ```pascal
-procedure TMyHTTPServer.HandleHealthCheck(ARequest: TRequest; AResponse: TResponse);
+procedure TMyHTTPServer.HandleHealthCheck(ARequest: TRequest; AResponse: TResponse);  
 var
   Health: THealthCheck;
   JSON: TJSONObject;
@@ -350,7 +350,7 @@ Nginx est un excellent choix pour gérer le trafic entre vos environnements Blue
 
 **Ubuntu** :
 ```bash
-sudo apt update
+sudo apt update  
 sudo apt install nginx
 ```
 
@@ -542,7 +542,7 @@ sudo systemctl reload haproxy
 **Méthode 2 : Via l'API Runtime (sans redémarrage)**
 ```bash
 # Se connecter au socket admin
-echo "set server green_back/green1 state ready" | sudo socat stdio /run/haproxy/admin.sock
+echo "set server green_back/green1 state ready" | sudo socat stdio /run/haproxy/admin.sock  
 echo "set server blue_back/blue1 state drain" | sudo socat stdio /run/haproxy/admin.sock
 ```
 
@@ -557,18 +557,18 @@ echo "set server blue_back/blue1 state drain" | sudo socat stdio /run/haproxy/ad
 set -e  # Arrêter en cas d'erreur
 
 # Configuration
-APP_NAME="myfreepascalapp"
-BLUE_SERVER="192.168.1.10"
-GREEN_SERVER="192.168.1.20"
-DEPLOY_USER="deploy"
-APP_PATH="/opt/$APP_NAME"
-BINARY_NAME="$APP_NAME"
+APP_NAME="myfreepascalapp"  
+BLUE_SERVER="192.168.1.10"  
+GREEN_SERVER="192.168.1.20"  
+DEPLOY_USER="deploy"  
+APP_PATH="/opt/$APP_NAME"  
+BINARY_NAME="$APP_NAME"  
 VERSION=$1
 
 # Couleurs pour les messages
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
+RED='\033[0;31m'  
+GREEN='\033[0;32m'  
+YELLOW='\033[1;33m'  
 NC='\033[0m' # No Color
 
 log_info() {
@@ -597,7 +597,7 @@ get_active_environment() {
 }
 
 # Déterminer l'environnement de déploiement (l'inactif)
-ACTIVE_ENV=$(get_active_environment)
+ACTIVE_ENV=$(get_active_environment)  
 if [ "$ACTIVE_ENV" = "blue" ]; then
     TARGET_ENV="green"
     TARGET_SERVER=$GREEN_SERVER
@@ -606,23 +606,23 @@ else
     TARGET_SERVER=$BLUE_SERVER
 fi
 
-log_info "Environnement actif : $ACTIVE_ENV"
+log_info "Environnement actif : $ACTIVE_ENV"  
 log_info "Déploiement vers : $TARGET_ENV ($TARGET_SERVER)"
 
 # Étape 1 : Compilation
-log_info "Compilation de la version $VERSION..."
+log_info "Compilation de la version $VERSION..."  
 lazbuild --build-mode=Release MyProject.lpi
 
 # Étape 2 : Transfert vers le serveur cible
-log_info "Transfert du binaire vers $TARGET_SERVER..."
+log_info "Transfert du binaire vers $TARGET_SERVER..."  
 scp $BINARY_NAME $DEPLOY_USER@$TARGET_SERVER:$APP_PATH/$BINARY_NAME.new
 
 # Étape 3 : Arrêt de l'ancienne version sur le serveur cible
-log_info "Arrêt du service sur $TARGET_ENV..."
+log_info "Arrêt du service sur $TARGET_ENV..."  
 ssh $DEPLOY_USER@$TARGET_SERVER "sudo systemctl stop $APP_NAME"
 
 # Étape 4 : Remplacement du binaire
-log_info "Mise à jour du binaire..."
+log_info "Mise à jour du binaire..."  
 ssh $DEPLOY_USER@$TARGET_SERVER "
     cd $APP_PATH && \
     sudo mv $BINARY_NAME $BINARY_NAME.old && \
@@ -631,20 +631,20 @@ ssh $DEPLOY_USER@$TARGET_SERVER "
 "
 
 # Étape 5 : Configuration de l'environnement
-log_info "Configuration de l'environnement..."
+log_info "Configuration de l'environnement..."  
 ssh $DEPLOY_USER@$TARGET_SERVER "
     export APP_ENVIRONMENT=$TARGET_ENV && \
     export APP_VERSION=$VERSION
 "
 
 # Étape 6 : Démarrage du nouveau service
-log_info "Démarrage du service sur $TARGET_ENV..."
+log_info "Démarrage du service sur $TARGET_ENV..."  
 ssh $DEPLOY_USER@$TARGET_SERVER "sudo systemctl start $APP_NAME"
 
 # Étape 7 : Attendre que le service soit prêt
-log_info "Vérification de la santé du service..."
-MAX_ATTEMPTS=30
-ATTEMPT=0
+log_info "Vérification de la santé du service..."  
+MAX_ATTEMPTS=30  
+ATTEMPT=0  
 while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
     HEALTH_STATUS=$(curl -s http://$TARGET_SERVER:8080/health | jq -r '.status' || echo "error")
 
@@ -665,18 +665,18 @@ if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
 fi
 
 # Étape 8 : Tests de fumée (smoke tests)
-log_info "Exécution des tests de fumée..."
-SMOKE_TEST_RESULT=$(curl -s -o /dev/null -w "%{http_code}" http://$TARGET_SERVER:8080/api/test)
+log_info "Exécution des tests de fumée..."  
+SMOKE_TEST_RESULT=$(curl -s -o /dev/null -w "%{http_code}" http://$TARGET_SERVER:8080/api/test)  
 if [ "$SMOKE_TEST_RESULT" != "200" ]; then
     log_error "Les tests de fumée ont échoué (Code: $SMOKE_TEST_RESULT)"
     exit 1
-fi
+fi  
 log_info "Tests de fumée réussis !"
 
 # Étape 9 : Basculer le trafic
-log_info "Prêt à basculer le trafic vers $TARGET_ENV"
-read -p "Continuer avec la bascule ? (o/n) " -n 1 -r
-echo
+log_info "Prêt à basculer le trafic vers $TARGET_ENV"  
+read -p "Continuer avec la bascule ? (o/n) " -n 1 -r  
+echo  
 if [[ ! $REPLY =~ ^[Oo]$ ]]; then
     log_warn "Bascule annulée par l'utilisateur"
     exit 0
@@ -688,19 +688,19 @@ if [ "$TARGET_ENV" = "green" ]; then
     sudo sed -i 's/server 192.168.1.10:8080/server 192.168.1.20:8080/' /etc/nginx/sites-available/myapp
 else
     sudo sed -i 's/server 192.168.1.20:8080/server 192.168.1.10:8080/' /etc/nginx/sites-available/myapp
-fi
+fi  
 sudo systemctl reload nginx
 
 # Étape 10 : Surveillance post-déploiement
-log_info "Surveillance de l'environnement $TARGET_ENV pendant 60 secondes..."
+log_info "Surveillance de l'environnement $TARGET_ENV pendant 60 secondes..."  
 for i in {1..12}; do
     HEALTH=$(curl -s http://localhost/health | jq -r '.status')
     log_info "[$i/12] Health status: $HEALTH"
     sleep 5
 done
 
-log_info "Déploiement terminé avec succès ! 🎉"
-log_info "Environnement $TARGET_ENV est maintenant en production"
+log_info "Déploiement terminé avec succès ! 🎉"  
+log_info "Environnement $TARGET_ENV est maintenant en production"  
 log_info "Environnement $ACTIVE_ENV reste disponible pour rollback si nécessaire"
 ```
 
@@ -758,7 +758,7 @@ if ($ActiveEnv -eq "blue") {
     $TargetServer = $BlueServer
 }
 
-Log-Info "Environnement actif : $ActiveEnv"
+Log-Info "Environnement actif : $ActiveEnv"  
 Log-Info "Déploiement vers : $TargetEnv ($TargetServer)"
 
 # Compilation
@@ -770,17 +770,17 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # Transfert (utilise PSRemoting ou un partage réseau)
-Log-Info "Transfert du binaire vers $TargetServer..."
+Log-Info "Transfert du binaire vers $TargetServer..."  
 Copy-Item -Path $BinaryName -Destination "\\$TargetServer\$AppPath\$BinaryName.new"
 
 # Arrêt du service distant
-Log-Info "Arrêt du service sur $TargetEnv..."
+Log-Info "Arrêt du service sur $TargetEnv..."  
 Invoke-Command -ComputerName $TargetServer -ScriptBlock {
     Stop-Service -Name $using:AppName
 }
 
 # Remplacement du binaire
-Log-Info "Mise à jour du binaire..."
+Log-Info "Mise à jour du binaire..."  
 Invoke-Command -ComputerName $TargetServer -ScriptBlock {
     $AppPath = $using:AppPath
     $BinaryName = $using:BinaryName
@@ -794,7 +794,7 @@ Invoke-Command -ComputerName $TargetServer -ScriptBlock {
 }
 
 # Démarrage du service
-Log-Info "Démarrage du service sur $TargetEnv..."
+Log-Info "Démarrage du service sur $TargetEnv..."  
 Invoke-Command -ComputerName $TargetServer -ScriptBlock {
     [Environment]::SetEnvironmentVariable("APP_ENVIRONMENT", $using:TargetEnv, "Process")
     [Environment]::SetEnvironmentVariable("APP_VERSION", $using:Version, "Process")
@@ -830,7 +830,7 @@ if (-not $Healthy) {
 }
 
 # Tests de fumée
-Log-Info "Exécution des tests de fumée..."
+Log-Info "Exécution des tests de fumée..."  
 try {
     $response = Invoke-WebRequest -Uri "http://${TargetServer}:8080/api/test" -Method Get
     if ($response.StatusCode -ne 200) {
@@ -887,7 +887,7 @@ Ne JAMAIS renommer directement. Utilisez une approche en 3 phases :
 
 ```sql
 -- Phase 1 : Ajouter la nouvelle colonne (déploiement N)
-ALTER TABLE users ADD COLUMN email_address VARCHAR(255);
+ALTER TABLE users ADD COLUMN email_address VARCHAR(255);  
 UPDATE users SET email_address = email WHERE email_address IS NULL;
 
 -- Phase 2 : Modifier l'application pour écrire dans les deux colonnes
@@ -918,7 +918,7 @@ CREATE TABLE user_profiles (
 );
 
 -- Migrer les données existantes
-INSERT INTO user_profiles (user_id, bio, avatar_url)
+INSERT INTO user_profiles (user_id, bio, avatar_url)  
 SELECT id, bio, avatar_url FROM users;
 ```
 
@@ -927,7 +927,7 @@ Modifier l'application pour lire depuis les deux tables :
 ```pascal
 // L'application continue d'écrire dans users.bio (ancien)
 // Mais lit depuis user_profiles.bio si disponible (nouveau)
-function TUserService.GetUserBio(UserID: Integer): string;
+function TUserService.GetUserBio(UserID: Integer): string;  
 begin
   // Essayer d'abord la nouvelle table
   Result := GetFromUserProfiles(UserID);
@@ -941,7 +941,7 @@ end;
 **Étape 3** (Déploiement Blue-Green #3) :
 Maintenant l'application écrit dans les deux endroits :
 ```pascal
-procedure TUserService.UpdateUserBio(UserID: Integer; const Bio: string);
+procedure TUserService.UpdateUserBio(UserID: Integer; const Bio: string);  
 begin
   // Écrire dans les deux tables pour compatibilité
   UpdateUsersTable(UserID, Bio);      // Pour les anciennes versions
@@ -952,7 +952,7 @@ end;
 **Étape 4** (Déploiement Blue-Green #4) :
 L'application ne lit/écrit plus que dans `user_profiles` :
 ```pascal
-procedure TUserService.UpdateUserBio(UserID: Integer; const Bio: string);
+procedure TUserService.UpdateUserBio(UserID: Integer; const Bio: string);  
 begin
   UpdateUserProfiles(UserID, Bio);  // Uniquement la nouvelle table
 end;
@@ -961,7 +961,7 @@ end;
 **Étape 5** (Maintenance ultérieure) :
 ```sql
 -- Supprimer les anciennes colonnes devenues inutiles
-ALTER TABLE users DROP COLUMN bio;
+ALTER TABLE users DROP COLUMN bio;  
 ALTER TABLE users DROP COLUMN avatar_url;
 ```
 
@@ -971,7 +971,7 @@ ALTER TABLE users DROP COLUMN avatar_url;
 
 ```pascal
 // ❌ MAUVAIS : Transaction qui bloque pendant la bascule
-Connection.StartTransaction;
+Connection.StartTransaction;  
 try
   // Beaucoup d'opérations qui prennent du temps...
   ProcessBigBatch;
@@ -981,7 +981,7 @@ except
 end;
 
 // ✅ BON : Transactions courtes
-for Item in BatchItems do
+for Item in BatchItems do  
 begin
   Connection.StartTransaction;
   try
@@ -1030,19 +1030,19 @@ type
 
 implementation
 
-constructor TSessionManager.Create(const ARedisHost: string; ARedisPort: Integer);
+constructor TSessionManager.Create(const ARedisHost: string; ARedisPort: Integer);  
 begin
   FRedisClient := TRedisClient.Create(ARedisHost, ARedisPort);
   FSessionPrefix := 'session:';
 end;
 
-destructor TSessionManager.Destroy;
+destructor TSessionManager.Destroy;  
 begin
   FRedisClient.Free;
   inherited;
 end;
 
-procedure TSessionManager.SetSession(const SessionID, Key, Value: string; TTLSeconds: Integer);
+procedure TSessionManager.SetSession(const SessionID, Key, Value: string; TTLSeconds: Integer);  
 var
   RedisKey: string;
 begin
@@ -1050,7 +1050,7 @@ begin
   FRedisClient.SetEx(RedisKey, Value, TTLSeconds);
 end;
 
-function TSessionManager.GetSession(const SessionID, Key: string): string;
+function TSessionManager.GetSession(const SessionID, Key: string): string;  
 var
   RedisKey: string;
 begin
@@ -1058,7 +1058,7 @@ begin
   Result := FRedisClient.Get(RedisKey);
 end;
 
-procedure TSessionManager.DeleteSession(const SessionID: string);
+procedure TSessionManager.DeleteSession(const SessionID: string);  
 var
   Pattern: string;
 begin
@@ -1067,7 +1067,7 @@ begin
   FRedisClient.DeletePattern(Pattern);
 end;
 
-function TSessionManager.SessionExists(const SessionID: string): Boolean;
+function TSessionManager.SessionExists(const SessionID: string): Boolean;  
 var
   Pattern: string;
 begin
@@ -1142,7 +1142,7 @@ implementation
 uses
   fpjson;
 
-constructor TMetricsCollector.Create;
+constructor TMetricsCollector.Create;  
 begin
   FLock := TCriticalSection.Create;
   FRequestCount := 0;
@@ -1150,13 +1150,13 @@ begin
   FTotalResponseTime := 0;
 end;
 
-destructor TMetricsCollector.Destroy;
+destructor TMetricsCollector.Destroy;  
 begin
   FLock.Free;
   inherited;
 end;
 
-procedure TMetricsCollector.IncrementRequests;
+procedure TMetricsCollector.IncrementRequests;  
 begin
   FLock.Enter;
   try
@@ -1166,7 +1166,7 @@ begin
   end;
 end;
 
-procedure TMetricsCollector.IncrementErrors;
+procedure TMetricsCollector.IncrementErrors;  
 begin
   FLock.Enter;
   try
@@ -1176,7 +1176,7 @@ begin
   end;
 end;
 
-procedure TMetricsCollector.RecordResponseTime(Milliseconds: Integer);
+procedure TMetricsCollector.RecordResponseTime(Milliseconds: Integer);  
 begin
   FLock.Enter;
   try
@@ -1186,7 +1186,7 @@ begin
   end;
 end;
 
-function TMetricsCollector.GetMetrics: string;
+function TMetricsCollector.GetMetrics: string;  
 var
   JSON: TJSONObject;
   AvgResponseTime: Double;
@@ -1226,7 +1226,7 @@ end.
 **Exposer via un endpoint** :
 
 ```pascal
-procedure TMyHTTPServer.HandleMetrics(ARequest: TRequest; AResponse: TResponse);
+procedure TMyHTTPServer.HandleMetrics(ARequest: TRequest; AResponse: TResponse);  
 begin
   AResponse.ContentType := 'application/json';
   AResponse.Content := GlobalMetrics.GetMetrics;
@@ -1241,11 +1241,11 @@ Créez un script qui compare les métriques entre Blue et Green pendant la bascu
 #!/bin/bash
 # monitor-deployment.sh
 
-BLUE_URL="http://192.168.1.10:8080"
-GREEN_URL="http://192.168.1.20:8080"
+BLUE_URL="http://192.168.1.10:8080"  
+GREEN_URL="http://192.168.1.20:8080"  
 DURATION=300  # 5 minutes de monitoring
 
-echo "Surveillance Blue vs Green pendant $DURATION secondes"
+echo "Surveillance Blue vs Green pendant $DURATION secondes"  
 echo "Timestamp,Blue_Requests,Blue_Errors,Blue_AvgTime,Green_Requests,Green_Errors,Green_AvgTime"
 
 END_TIME=$((SECONDS + DURATION))
@@ -1283,12 +1283,12 @@ Configurez des alertes qui se déclenchent si :
 #!/bin/bash
 # check-health-regression.sh
 
-ACTIVE_URL="http://localhost"
-THRESHOLD_ERROR_RATE=5.0  # 5% d'erreurs max
+ACTIVE_URL="http://localhost"  
+THRESHOLD_ERROR_RATE=5.0  # 5% d'erreurs max  
 THRESHOLD_AVG_TIME=500    # 500ms max
 
-METRICS=$(curl -s $ACTIVE_URL/metrics)
-ERROR_RATE=$(echo $METRICS | jq -r '.error_rate_percent')
+METRICS=$(curl -s $ACTIVE_URL/metrics)  
+ERROR_RATE=$(echo $METRICS | jq -r '.error_rate_percent')  
 AVG_TIME=$(echo $METRICS | jq -r '.avg_response_time_ms')
 
 # Comparer avec les seuils
@@ -1339,11 +1339,11 @@ else
     ROLLBACK_SERVER="192.168.1.10"
 fi
 
-log_info "Environnement actuel: $ACTIVE_ENV"
+log_info "Environnement actuel: $ACTIVE_ENV"  
 log_info "ROLLBACK vers: $ROLLBACK_TO"
 
 # Vérifier que l'environnement de rollback est disponible
-HEALTH=$(curl -s http://$ROLLBACK_SERVER:8080/health | jq -r '.status')
+HEALTH=$(curl -s http://$ROLLBACK_SERVER:8080/health | jq -r '.status')  
 if [ "$HEALTH" != "healthy" ]; then
     log_error "L'environnement $ROLLBACK_TO n'est pas disponible!"
     exit 1
@@ -1357,14 +1357,14 @@ if [ "$ROLLBACK_TO" = "blue" ]; then
     sudo sed -i 's/server 192.168.1.20:8080/server 192.168.1.10:8080/' /etc/nginx/sites-available/myapp
 else
     sudo sed -i 's/server 192.168.1.10:8080/server 192.168.1.20:8080/' /etc/nginx/sites-available/myapp
-fi
+fi  
 sudo systemctl reload nginx
 
 log_info "ROLLBACK effectué avec succès vers $ROLLBACK_TO"
 
 # Vérification
-sleep 2
-NEW_ENV=$(curl -s http://localhost/health | jq -r '.environment')
+sleep 2  
+NEW_ENV=$(curl -s http://localhost/health | jq -r '.environment')  
 log_info "Environnement actif: $NEW_ENV"
 ```
 
@@ -1425,7 +1425,7 @@ frontend http_front
 # canary-deployment.sh
 
 # Étapes : 10% -> 25% -> 50% -> 100%
-CANARY_STEPS=(10 25 50 100)
+CANARY_STEPS=(10 25 50 100)  
 MONITORING_DURATION=300  # 5 minutes par étape
 
 for PERCENTAGE in "${CANARY_STEPS[@]}"; do
@@ -1509,7 +1509,7 @@ implementation
 uses
   DateUtils;
 
-constructor TFeatureFlagManager.Create(const RedisHost: string; RedisPort: Integer);
+constructor TFeatureFlagManager.Create(const RedisHost: string; RedisPort: Integer);  
 begin
   FRedisClient := TRedisClient.Create(RedisHost, RedisPort);
   FCache := TJSONObject.Create;
@@ -1517,14 +1517,14 @@ begin
   RefreshCache;
 end;
 
-destructor TFeatureFlagManager.Destroy;
+destructor TFeatureFlagManager.Destroy;  
 begin
   FCache.Free;
   FRedisClient.Free;
   inherited;
 end;
 
-procedure TFeatureFlagManager.RefreshCache;
+procedure TFeatureFlagManager.RefreshCache;  
 var
   Keys: TStringList;
   i: Integer;
@@ -1551,7 +1551,7 @@ begin
   FCacheTime := Now;
 end;
 
-function TFeatureFlagManager.IsEnabled(const FeatureName: string): Boolean;
+function TFeatureFlagManager.IsEnabled(const FeatureName: string): Boolean;  
 begin
   RefreshCache;
 
@@ -1561,13 +1561,13 @@ begin
     Result := False; // Par défaut désactivé
 end;
 
-procedure TFeatureFlagManager.Enable(const FeatureName: string);
+procedure TFeatureFlagManager.Enable(const FeatureName: string);  
 begin
   FRedisClient.SetValue('feature:' + FeatureName, 'true');
   RefreshCache;
 end;
 
-procedure TFeatureFlagManager.Disable(const FeatureName: string);
+procedure TFeatureFlagManager.Disable(const FeatureName: string);  
 begin
   FRedisClient.SetValue('feature:' + FeatureName, 'false');
   RefreshCache;

@@ -114,7 +114,7 @@ uses
   {$ENDIF}
   DateUtils;
 
-constructor TJSONLogger.Create(const AFileName, AAppName: string);
+constructor TJSONLogger.Create(const AFileName, AAppName: string);  
 begin
   FFileName := AFileName;
   FApplicationName := AAppName;
@@ -135,13 +135,13 @@ begin
     Rewrite(FLogFile);
 end;
 
-destructor TJSONLogger.Destroy;
+destructor TJSONLogger.Destroy;  
 begin
   CloseFile(FLogFile);
   inherited;
 end;
 
-procedure TJSONLogger.WriteLogEntry(ALevel: TLogLevel; AMessage: string; AData: TJSONObject);
+procedure TJSONLogger.WriteLogEntry(ALevel: TLogLevel; AMessage: string; AData: TJSONObject);  
 var
   LogEntry: TJSONObject;
   LogLevel: string;
@@ -177,27 +177,27 @@ begin
   end;
 end;
 
-procedure TJSONLogger.Debug(const AMessage: string; AData: TJSONObject);
+procedure TJSONLogger.Debug(const AMessage: string; AData: TJSONObject);  
 begin
   WriteLogEntry(llDebug, AMessage, AData);
 end;
 
-procedure TJSONLogger.Info(const AMessage: string; AData: TJSONObject);
+procedure TJSONLogger.Info(const AMessage: string; AData: TJSONObject);  
 begin
   WriteLogEntry(llInfo, AMessage, AData);
 end;
 
-procedure TJSONLogger.Warning(const AMessage: string; AData: TJSONObject);
+procedure TJSONLogger.Warning(const AMessage: string; AData: TJSONObject);  
 begin
   WriteLogEntry(llWarning, AMessage, AData);
 end;
 
-procedure TJSONLogger.Error(const AMessage: string; AData: TJSONObject);
+procedure TJSONLogger.Error(const AMessage: string; AData: TJSONObject);  
 begin
   WriteLogEntry(llError, AMessage, AData);
 end;
 
-procedure TJSONLogger.Critical(const AMessage: string; AData: TJSONObject);
+procedure TJSONLogger.Critical(const AMessage: string; AData: TJSONObject);  
 begin
   WriteLogEntry(llCritical, AMessage, AData);
 end;
@@ -268,11 +268,11 @@ wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add
 echo "deb https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
 
 # Installer Elasticsearch
-sudo apt update
+sudo apt update  
 sudo apt install elasticsearch
 
 # Démarrer le service
-sudo systemctl enable elasticsearch
+sudo systemctl enable elasticsearch  
 sudo systemctl start elasticsearch
 
 # Vérifier que ça fonctionne
@@ -306,7 +306,7 @@ network.host: localhost
 http.port: 9200
 
 # Chemin des données (modifiez selon vos besoins)
-path.data: /var/lib/elasticsearch
+path.data: /var/lib/elasticsearch  
 path.logs: /var/log/elasticsearch
 ```
 
@@ -396,7 +396,7 @@ output {
 
 **Ubuntu** :
 ```bash
-sudo systemctl enable logstash
+sudo systemctl enable logstash  
 sudo systemctl start logstash
 ```
 
@@ -458,8 +458,8 @@ output.logstash:
 #   index: "freepascal-logs-%{+yyyy.MM.dd}"
 
 # Logging de Filebeat lui-même
-logging.level: info
-logging.to_files: true
+logging.level: info  
+logging.to_files: true  
 logging.files:
   path: /var/log/filebeat
   name: filebeat
@@ -470,7 +470,7 @@ logging.files:
 
 **Ubuntu** :
 ```bash
-sudo systemctl enable filebeat
+sudo systemctl enable filebeat  
 sudo systemctl start filebeat
 
 # Vérifier le statut
@@ -495,7 +495,7 @@ Kibana est votre interface de visualisation.
 ```bash
 sudo apt install kibana
 
-sudo systemctl enable kibana
+sudo systemctl enable kibana  
 sudo systemctl start kibana
 ```
 
@@ -631,7 +631,7 @@ Pour éviter de remplir le disque :
 
 **Approche simple en FreePascal** :
 ```pascal
-procedure RotateLogFile(const BaseFileName: string; MaxSizeMB: Integer);
+procedure RotateLogFile(const BaseFileName: string; MaxSizeMB: Integer);  
 var
   SR: TSearchRec;
   SizeMB: Int64;
@@ -790,7 +790,7 @@ Configurez TLS entre les composants :
 
 ```yaml
 # elasticsearch.yml
-xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.enabled: true  
 xpack.security.http.ssl.enabled: true
 ```
 

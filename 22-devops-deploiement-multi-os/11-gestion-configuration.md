@@ -176,7 +176,7 @@ implementation
 
 { TAppConfig }
 
-constructor TAppConfig.Create(const ConfigFile: string);
+constructor TAppConfig.Create(const ConfigFile: string);  
 begin
   FConfig := TConfigMap.Create;
   FConfigFile := ConfigFile;
@@ -189,13 +189,13 @@ begin
   LoadFromCommandLine;
 end;
 
-destructor TAppConfig.Destroy;
+destructor TAppConfig.Destroy;  
 begin
   FConfig.Free;
   inherited;
 end;
 
-procedure TAppConfig.LoadDefaults;
+procedure TAppConfig.LoadDefaults;  
 var
   Val: TConfigValue;
 begin
@@ -216,7 +216,7 @@ begin
   FConfig.Add('logging.level', Val);
 end;
 
-procedure TAppConfig.LoadFromFile;
+procedure TAppConfig.LoadFromFile;  
 var
   IniFile: TIniFile;
   Sections: TStringList;
@@ -265,7 +265,7 @@ begin
   end;
 end;
 
-procedure TAppConfig.LoadFromEnvironment;
+procedure TAppConfig.LoadFromEnvironment;  
 var
   i: Integer;
   EnvVar, Key: string;
@@ -314,7 +314,7 @@ begin
   end;
 end;
 
-procedure TAppConfig.LoadFromCommandLine;
+procedure TAppConfig.LoadFromCommandLine;  
 var
   i: Integer;
   Param, Key, Value: string;
@@ -353,7 +353,7 @@ begin
   end;
 end;
 
-function TAppConfig.GetConfigValue(const Key: string): TConfigValue;
+function TAppConfig.GetConfigValue(const Key: string): TConfigValue;  
 var
   Index: Integer;
 begin
@@ -368,7 +368,7 @@ begin
   end;
 end;
 
-function TAppConfig.GetString(const Key: string; const DefaultValue: string): string;
+function TAppConfig.GetString(const Key: string; const DefaultValue: string): string;  
 var
   Val: TConfigValue;
 begin
@@ -379,7 +379,7 @@ begin
     Result := DefaultValue;
 end;
 
-function TAppConfig.GetInteger(const Key: string; const DefaultValue: Integer): Integer;
+function TAppConfig.GetInteger(const Key: string; const DefaultValue: Integer): Integer;  
 var
   Val: TConfigValue;
 begin
@@ -390,7 +390,7 @@ begin
     Result := DefaultValue;
 end;
 
-function TAppConfig.GetBoolean(const Key: string; const DefaultValue: Boolean): Boolean;
+function TAppConfig.GetBoolean(const Key: string; const DefaultValue: Boolean): Boolean;  
 var
   Val: TConfigValue;
   StrVal: string;
@@ -405,7 +405,7 @@ begin
     Result := DefaultValue;
 end;
 
-function TAppConfig.GetFloat(const Key: string; const DefaultValue: Double): Double;
+function TAppConfig.GetFloat(const Key: string; const DefaultValue: Double): Double;  
 var
   Val: TConfigValue;
   fs: TFormatSettings;
@@ -421,7 +421,7 @@ begin
     Result := DefaultValue;
 end;
 
-procedure TAppConfig.SetString(const Key, Value: string);
+procedure TAppConfig.SetString(const Key, Value: string);  
 var
   Val: TConfigValue;
 begin
@@ -436,12 +436,12 @@ begin
     FConfig.Add(Key, Val);
 end;
 
-procedure TAppConfig.SetInteger(const Key: string; Value: Integer);
+procedure TAppConfig.SetInteger(const Key: string; Value: Integer);  
 begin
   SetString(Key, IntToStr(Value));
 end;
 
-procedure TAppConfig.SetBoolean(const Key: string; Value: Boolean);
+procedure TAppConfig.SetBoolean(const Key: string; Value: Boolean);  
 begin
   if Value then
     SetString(Key, 'true')
@@ -449,7 +449,7 @@ begin
     SetString(Key, 'false');
 end;
 
-function TAppConfig.GetSecret(const Key: string): string;
+function TAppConfig.GetSecret(const Key: string): string;  
 var
   Val: TConfigValue;
 begin
@@ -458,12 +458,12 @@ begin
   Result := Val.Value;
 end;
 
-function TAppConfig.HasKey(const Key: string): Boolean;
+function TAppConfig.HasKey(const Key: string): Boolean;  
 begin
   Result := FConfig.IndexOf(Key) >= 0;
 end;
 
-function TAppConfig.GetSource(const Key: string): TConfigSource;
+function TAppConfig.GetSource(const Key: string): TConfigSource;  
 var
   Val: TConfigValue;
 begin
@@ -471,7 +471,7 @@ begin
   Result := Val.Source;
 end;
 
-procedure TAppConfig.Reload;
+procedure TAppConfig.Reload;  
 begin
   FConfig.Clear;
   LoadDefaults;
@@ -480,7 +480,7 @@ begin
   LoadFromCommandLine;
 end;
 
-procedure TAppConfig.SaveToFile;
+procedure TAppConfig.SaveToFile;  
 var
   IniFile: TIniFile;
   i: Integer;
@@ -516,7 +516,7 @@ begin
   end;
 end;
 
-function TAppConfig.ToJSON: string;
+function TAppConfig.ToJSON: string;  
 var
   JSON: TJSONObject;
   i: Integer;
@@ -600,39 +600,39 @@ end.
 ; config.ini - Configuration de l'application
 
 [app]
-name = MyFreePascalApp
-version = 1.0.0
-debug = false
+name = MyFreePascalApp  
+version = 1.0.0  
+debug = false  
 environment = production
 
 [server]
-host = 0.0.0.0
-port = 8080
-max_connections = 1000
+host = 0.0.0.0  
+port = 8080  
+max_connections = 1000  
 timeout = 30
 
 [database]
-host = localhost
-port = 5432
-name = myappdb
+host = localhost  
+port = 5432  
+name = myappdb  
 user = appuser
 ; Ne JAMAIS mettre le mot de passe ici ! Utiliser les variables d'environnement
 ; password =
 
 [redis]
-host = localhost
-port = 6379
+host = localhost  
+port = 6379  
 db = 0
 
 [logging]
-level = info
-file = /var/log/myapp/app.log
-max_size_mb = 100
+level = info  
+file = /var/log/myapp/app.log  
+max_size_mb = 100  
 max_files = 10
 
 [features]
-enable_caching = true
-enable_analytics = true
+enable_caching = true  
+enable_analytics = true  
 enable_debug_endpoints = false
 ```
 
@@ -651,7 +651,7 @@ config/
 **Chargement selon l'environnement** :
 
 ```pascal
-function GetConfigFileName: string;
+function GetConfigFileName: string;  
 var
   Environment: string;
 begin
@@ -691,23 +691,23 @@ $env:APP_DATABASE_PASSWORD = "secretpassword"
 
 **Windows (CMD)** :
 ```cmd
-REM Temporaire
-set APP_DATABASE_HOST=192.168.1.100
+REM Temporaire  
+set APP_DATABASE_HOST=192.168.1.100  
 set APP_DATABASE_PORT=5432
 
-REM Permanent via setx
+REM Permanent via setx  
 setx APP_DATABASE_HOST "192.168.1.100"
 ```
 
 **Ubuntu/Linux** :
 ```bash
 # Temporaire (session courante)
-export APP_DATABASE_HOST="192.168.1.100"
-export APP_DATABASE_PORT="5432"
+export APP_DATABASE_HOST="192.168.1.100"  
+export APP_DATABASE_PORT="5432"  
 export APP_DATABASE_PASSWORD="secretpassword"
 
 # Permanent (utilisateur) - ajouter dans ~/.bashrc ou ~/.profile
-echo 'export APP_DATABASE_HOST="192.168.1.100"' >> ~/.bashrc
+echo 'export APP_DATABASE_HOST="192.168.1.100"' >> ~/.bashrc  
 source ~/.bashrc
 
 # Permanent (système) - ajouter dans /etc/environment (nécessite sudo)
@@ -721,16 +721,16 @@ Créez un fichier `.env` à la racine du projet :
 ```bash
 # .env - NE PAS COMMIT DANS GIT !
 
-APP_ENVIRONMENT=development
+APP_ENVIRONMENT=development  
 APP_DEBUG=true
 
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
-DATABASE_NAME=myapp_dev
-DATABASE_USER=devuser
+DATABASE_HOST=localhost  
+DATABASE_PORT=5432  
+DATABASE_NAME=myapp_dev  
+DATABASE_USER=devuser  
 DATABASE_PASSWORD=devpassword123
 
-REDIS_HOST=localhost
+REDIS_HOST=localhost  
 REDIS_PORT=6379
 
 LOG_LEVEL=debug
@@ -741,7 +741,7 @@ LOG_LEVEL=debug
 # .gitignore
 .env
 .env.local
-config/*.local.ini
+config/*.local.ini  
 secrets/
 ```
 
@@ -769,7 +769,7 @@ uses
   Unix
   {$ENDIF};
 
-procedure LoadDotEnv(const FileName: string);
+procedure LoadDotEnv(const FileName: string);  
 var
   EnvFile: TStringList;
   i: Integer;
@@ -938,7 +938,7 @@ type
 
 implementation
 
-constructor TJSONConfig.Create(const FileName: string);
+constructor TJSONConfig.Create(const FileName: string);  
 var
   FileContent: string;
   Parser: TJSONParser;
@@ -965,13 +965,13 @@ begin
   end;
 end;
 
-destructor TJSONConfig.Destroy;
+destructor TJSONConfig.Destroy;  
 begin
   FJSON.Free;
   inherited;
 end;
 
-function TJSONConfig.NavigateToPath(const Path: string): TJSONData;
+function TJSONConfig.NavigateToPath(const Path: string): TJSONData;  
 var
   Parts: TStringList;
   i: Integer;
@@ -1001,7 +1001,7 @@ begin
   end;
 end;
 
-function TJSONConfig.GetString(const Path: string; const DefaultValue: string): string;
+function TJSONConfig.GetString(const Path: string; const DefaultValue: string): string;  
 var
   Data: TJSONData;
 begin
@@ -1012,7 +1012,7 @@ begin
     Result := DefaultValue;
 end;
 
-function TJSONConfig.GetInteger(const Path: string; const DefaultValue: Integer): Integer;
+function TJSONConfig.GetInteger(const Path: string; const DefaultValue: Integer): Integer;  
 var
   Data: TJSONData;
 begin
@@ -1023,7 +1023,7 @@ begin
     Result := DefaultValue;
 end;
 
-function TJSONConfig.GetBoolean(const Path: string; const DefaultValue: Boolean): Boolean;
+function TJSONConfig.GetBoolean(const Path: string; const DefaultValue: Boolean): Boolean;  
 var
   Data: TJSONData;
 begin
@@ -1034,7 +1034,7 @@ begin
     Result := DefaultValue;
 end;
 
-function TJSONConfig.GetFloat(const Path: string; const DefaultValue: Double): Double;
+function TJSONConfig.GetFloat(const Path: string; const DefaultValue: Double): Double;  
 var
   Data: TJSONData;
 begin
@@ -1045,7 +1045,7 @@ begin
     Result := DefaultValue;
 end;
 
-function TJSONConfig.GetArray(const Path: string): TJSONArray;
+function TJSONConfig.GetArray(const Path: string): TJSONArray;  
 var
   Data: TJSONData;
 begin
@@ -1056,7 +1056,7 @@ begin
     Result := nil;
 end;
 
-function TJSONConfig.GetObject(const Path: string): TJSONObject;
+function TJSONConfig.GetObject(const Path: string): TJSONObject;  
 var
   Data: TJSONData;
 begin
@@ -1067,7 +1067,7 @@ begin
     Result := nil;
 end;
 
-procedure TJSONConfig.Reload;
+procedure TJSONConfig.Reload;  
 var
   OldJSON: TJSONObject;
 begin
@@ -1162,7 +1162,7 @@ const
 
 ```bash
 # Variables d'environnement (jamais dans le code ou fichiers versionnés)
-export DATABASE_PASSWORD="MonMotDePasse123!"
+export DATABASE_PASSWORD="MonMotDePasse123!"  
 export API_KEY="sk_live_abc123xyz456"
 ```
 
@@ -1193,14 +1193,14 @@ project/
 password = MonMotDePasseSecret
 
 [api]
-key = sk_live_abc123xyz
+key = sk_live_abc123xyz  
 token = jwt_secret_token
 ```
 
 **.gitignore** :
 ```
 # Ne JAMAIS versionner les secrets
-secrets.ini
+secrets.ini  
 config/secrets.ini
 *.secret.*
 .env
@@ -1258,7 +1258,7 @@ type
 
 implementation
 
-constructor TSecretManager.Create(const MasterKey: string);
+constructor TSecretManager.Create(const MasterKey: string);  
 begin
   if MasterKey = '' then
     raise Exception.Create('Master key cannot be empty');
@@ -1267,7 +1267,7 @@ begin
   FMasterKey := MD5Print(MD5String(MasterKey));
 end;
 
-function TSecretManager.XOREncryptDecrypt(const Data, Key: string): string;
+function TSecretManager.XOREncryptDecrypt(const Data, Key: string): string;  
 var
   i: Integer;
   KeyLen: Integer;
@@ -1279,7 +1279,7 @@ begin
     Result[i] := Chr(Ord(Data[i]) xor Ord(Key[((i - 1) mod KeyLen) + 1]));
 end;
 
-function TSecretManager.Encrypt(const PlainText: string): string;
+function TSecretManager.Encrypt(const PlainText: string): string;  
 var
   Encrypted: string;
 begin
@@ -1287,7 +1287,7 @@ begin
   Result := EncodeStringBase64(Encrypted);
 end;
 
-function TSecretManager.Decrypt(const CipherText: string): string;
+function TSecretManager.Decrypt(const CipherText: string): string;  
 var
   Decoded: string;
 begin
@@ -1295,7 +1295,7 @@ begin
   Result := XOREncryptDecrypt(Decoded, FMasterKey);
 end;
 
-procedure TSecretManager.EncryptFile(const SourceFile, DestFile: string);
+procedure TSecretManager.EncryptFile(const SourceFile, DestFile: string);  
 var
   Source, Dest: TStringList;
   i: Integer;
@@ -1315,7 +1315,7 @@ begin
   end;
 end;
 
-procedure TSecretManager.DecryptFile(const SourceFile, DestFile: string);
+procedure TSecretManager.DecryptFile(const SourceFile, DestFile: string);  
 var
   Source, Dest: TStringList;
   i: Integer;
@@ -1392,12 +1392,12 @@ interface
 uses
   Windows, SysUtils;
 
-function ProtectData(const PlainText: string): string;
+function ProtectData(const PlainText: string): string;  
 function UnprotectData(const CipherText: string): string;
 
 implementation
 
-function ProtectData(const PlainText: string): string;
+function ProtectData(const PlainText: string): string;  
 var
   DataIn, DataOut: DATA_BLOB;
   Success: Boolean;
@@ -1422,7 +1422,7 @@ begin
     raise Exception.Create('Failed to protect data');
 end;
 
-function UnprotectData(const CipherText: string): string;
+function UnprotectData(const CipherText: string): string;  
 var
   DataIn, DataOut: DATA_BLOB;
   Decoded: string;
@@ -1465,12 +1465,12 @@ interface
 uses
   Classes, SysUtils, Process;
 
-function StoreSecret(const Key, Value: string): Boolean;
+function StoreSecret(const Key, Value: string): Boolean;  
 function RetrieveSecret(const Key: string): string;
 
 implementation
 
-function StoreSecret(const Key, Value: string): Boolean;
+function StoreSecret(const Key, Value: string): Boolean;  
 var
   AProcess: TProcess;
 begin
@@ -1495,7 +1495,7 @@ begin
   end;
 end;
 
-function RetrieveSecret(const Key: string): string;
+function RetrieveSecret(const Key: string): string;  
 var
   AProcess: TProcess;
   Output: TStringList;
@@ -1614,7 +1614,7 @@ begin
   RefreshCache;
 end;
 
-destructor TRedisConfig.Destroy;
+destructor TRedisConfig.Destroy;  
 begin
   FCacheLock.Free;
   FCache.Free;
@@ -1622,7 +1622,7 @@ begin
   inherited;
 end;
 
-procedure TRedisConfig.RefreshCache;
+procedure TRedisConfig.RefreshCache;  
 var
   Keys: TStringList;
   i: Integer;
@@ -1655,12 +1655,12 @@ begin
   end;
 end;
 
-function TRedisConfig.GetFromRedis(const Key: string): string;
+function TRedisConfig.GetFromRedis(const Key: string): string;  
 begin
   Result := FRedis.Get(FPrefix + Key);
 end;
 
-function TRedisConfig.GetString(const Key, DefaultValue: string): string;
+function TRedisConfig.GetString(const Key, DefaultValue: string): string;  
 begin
   RefreshCache;
 
@@ -1674,7 +1674,7 @@ begin
   end;
 end;
 
-function TRedisConfig.GetInteger(const Key: string; DefaultValue: Integer): Integer;
+function TRedisConfig.GetInteger(const Key: string; DefaultValue: Integer): Integer;  
 var
   StrValue: string;
 begin
@@ -1685,7 +1685,7 @@ begin
     Result := DefaultValue;
 end;
 
-function TRedisConfig.GetBoolean(const Key: string; DefaultValue: Boolean): Boolean;
+function TRedisConfig.GetBoolean(const Key: string; DefaultValue: Boolean): Boolean;  
 var
   StrValue: string;
 begin
@@ -1696,7 +1696,7 @@ begin
     Result := DefaultValue;
 end;
 
-procedure TRedisConfig.SetString(const Key, Value: string);
+procedure TRedisConfig.SetString(const Key, Value: string);  
 begin
   FRedis.SetValue(FPrefix + Key, Value);
 
@@ -1712,12 +1712,12 @@ begin
   FRedis.Publish(FPrefix + 'updates', Key);
 end;
 
-procedure TRedisConfig.SetInteger(const Key: string; Value: Integer);
+procedure TRedisConfig.SetInteger(const Key: string; Value: Integer);  
 begin
   SetString(Key, IntToStr(Value));
 end;
 
-procedure TRedisConfig.SetBoolean(const Key: string; Value: Boolean);
+procedure TRedisConfig.SetBoolean(const Key: string; Value: Boolean);  
 begin
   if Value then
     SetString(Key, 'true')
@@ -1725,13 +1725,13 @@ begin
     SetString(Key, 'false');
 end;
 
-procedure TRedisConfig.Subscribe(const Pattern: string);
+procedure TRedisConfig.Subscribe(const Pattern: string);  
 begin
   // S'abonner aux notifications de changement
   FRedis.Subscribe(FPrefix + Pattern);
 end;
 
-procedure TRedisConfig.Invalidate;
+procedure TRedisConfig.Invalidate;  
 begin
   FCacheLock.Enter;
   try
@@ -1793,8 +1793,8 @@ end.
 #!/bin/bash
 # config-manager.sh - Outil CLI pour gérer la configuration Redis
 
-REDIS_HOST="localhost"
-REDIS_PORT="6379"
+REDIS_HOST="localhost"  
+REDIS_PORT="6379"  
 CONFIG_PREFIX="myapp:config:"
 
 function config_get() {
@@ -1924,12 +1924,12 @@ implementation
 uses
   RegExpr;
 
-constructor TConfigValidator.Create;
+constructor TConfigValidator.Create;  
 begin
   SetLength(FRules, 0);
 end;
 
-destructor TConfigValidator.Destroy;
+destructor TConfigValidator.Destroy;  
 var
   i: Integer;
 begin
@@ -1957,7 +1957,7 @@ begin
   FRules[High(FRules)] := Rule;
 end;
 
-procedure TConfigValidator.AddRangeRule(const Key: string; MinValue, MaxValue: Integer);
+procedure TConfigValidator.AddRangeRule(const Key: string; MinValue, MaxValue: Integer);  
 var
   i: Integer;
 begin
@@ -1972,7 +1972,7 @@ begin
   end;
 end;
 
-procedure TConfigValidator.AddEnumRule(const Key: string; const AllowedValues: array of string);
+procedure TConfigValidator.AddEnumRule(const Key: string; const AllowedValues: array of string);  
 var
   i, j: Integer;
 begin
@@ -1988,7 +1988,7 @@ begin
   end;
 end;
 
-function TConfigValidator.ValidateString(const Value: string; const Rule: TConfigRule): Boolean;
+function TConfigValidator.ValidateString(const Value: string; const Rule: TConfigRule): Boolean;  
 begin
   Result := True;
 
@@ -1997,7 +1997,7 @@ begin
     Result := Rule.AllowedValues.IndexOf(Value) >= 0;
 end;
 
-function TConfigValidator.ValidateInteger(const Value: string; const Rule: TConfigRule): Boolean;
+function TConfigValidator.ValidateInteger(const Value: string; const Rule: TConfigRule): Boolean;  
 var
   IntValue: Integer;
 begin
@@ -2007,7 +2007,7 @@ begin
     Result := (IntValue >= Rule.MinValue) and (IntValue <= Rule.MaxValue);
 end;
 
-function TConfigValidator.ValidateBoolean(const Value: string): Boolean;
+function TConfigValidator.ValidateBoolean(const Value: string): Boolean;  
 var
   LowerValue: string;
 begin
@@ -2017,7 +2017,7 @@ begin
             (LowerValue = 'yes') or (LowerValue = 'no');
 end;
 
-function TConfigValidator.ValidateEmail(const Value: string): Boolean;
+function TConfigValidator.ValidateEmail(const Value: string): Boolean;  
 var
   Regex: TRegExpr;
 begin
@@ -2030,12 +2030,12 @@ begin
   end;
 end;
 
-function TConfigValidator.ValidateURL(const Value: string): Boolean;
+function TConfigValidator.ValidateURL(const Value: string): Boolean;  
 begin
   Result := (Pos('http://', Value) = 1) or (Pos('https://', Value) = 1);
 end;
 
-function TConfigValidator.ValidateIPAddress(const Value: string): Boolean;
+function TConfigValidator.ValidateIPAddress(const Value: string): Boolean;  
 var
   Parts: TStringList;
   i, PartValue: Integer;
@@ -2063,7 +2063,7 @@ begin
   end;
 end;
 
-function TConfigValidator.Validate(Config: TAppConfig; out Errors: TValidationErrors): Boolean;
+function TConfigValidator.Validate(Config: TAppConfig; out Errors: TValidationErrors): Boolean;  
 var
   i: Integer;
   Rule: TConfigRule;
@@ -2128,7 +2128,7 @@ begin
   Result := ErrorCount = 0;
 end;
 
-function TConfigValidator.ValidateAndRaise(Config: TAppConfig): Boolean;
+function TConfigValidator.ValidateAndRaise(Config: TAppConfig): Boolean;  
 var
   Errors: TValidationErrors;
   i: Integer;
@@ -2254,7 +2254,7 @@ begin
   FLastModified := GetFileModifiedTime(FFileName);
 end;
 
-function TConfigWatcher.GetFileModifiedTime(const FileName: string): TDateTime;
+function TConfigWatcher.GetFileModifiedTime(const FileName: string): TDateTime;  
 var
   FileAge: LongInt;
 begin
@@ -2265,7 +2265,7 @@ begin
     Result := 0;
 end;
 
-procedure TConfigWatcher.Execute;
+procedure TConfigWatcher.Execute;  
 var
   CurrentModified: TDateTime;
 begin
@@ -2304,7 +2304,7 @@ var
   Config: TAppConfig;
   Watcher: TConfigWatcher;
 
-procedure OnConfigChanged(Sender: TObject);
+procedure OnConfigChanged(Sender: TObject);  
 begin
   WriteLn('[', FormatDateTime('hh:nn:ss', Now), '] Configuration rechargée!');
   WriteLn('  Nouveau port: ', Config.GetInteger('server.port'));
@@ -2373,7 +2373,7 @@ uses
   {$ENDIF}
   FileUtil;
 
-function TPlatformConfig.GetPlatformSpecificPath(const Path: string): string;
+function TPlatformConfig.GetPlatformSpecificPath(const Path: string): string;  
 begin
   Result := Path;
 
@@ -2389,7 +2389,7 @@ begin
   Result := StringReplace(Result, '%APPDATA%', GetEnvironmentVariable('APPDATA'), [rfReplaceAll]);
 end;
 
-function TPlatformConfig.GetLogPath: string;
+function TPlatformConfig.GetLogPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetString('logging.path.windows', '%APPDATA%\MyApp\logs');
@@ -2404,7 +2404,7 @@ begin
     ForceDirectories(Result);
 end;
 
-function TPlatformConfig.GetDataPath: string;
+function TPlatformConfig.GetDataPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetString('data.path.windows', '%APPDATA%\MyApp\data');
@@ -2418,7 +2418,7 @@ begin
     ForceDirectories(Result);
 end;
 
-function TPlatformConfig.GetTempPath: string;
+function TPlatformConfig.GetTempPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('TEMP');
@@ -2432,7 +2432,7 @@ begin
     ForceDirectories(Result);
 end;
 
-function TPlatformConfig.GetConfigPath: string;
+function TPlatformConfig.GetConfigPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetString('config.path.windows', '%APPDATA%\MyApp');
@@ -2443,7 +2443,7 @@ begin
   Result := GetPlatformSpecificPath(Result);
 end;
 
-function TPlatformConfig.GetExecutablePath: string;
+function TPlatformConfig.GetExecutablePath: string;  
 begin
   Result := ExtractFilePath(ParamStr(0));
 end;
@@ -2457,41 +2457,41 @@ end.
 ; config.ini - Configuration multi-plateforme
 
 [app]
-name = MyApp
+name = MyApp  
 version = 1.0.0
 
 [database]
-host = localhost
-port = 5432
+host = localhost  
+port = 5432  
 name = myappdb
 
 [paths.windows]
-logs = %APPDATA%\MyApp\logs
-data = %APPDATA%\MyApp\data
+logs = %APPDATA%\MyApp\logs  
+data = %APPDATA%\MyApp\data  
 temp = %TEMP%\myapp
 
 [paths.linux]
-logs = /var/log/myapp
-data = ~/.local/share/myapp
+logs = /var/log/myapp  
+data = ~/.local/share/myapp  
 temp = /tmp/myapp
 
 [service.windows]
-name = MyAppService
-display_name = My Application Service
+name = MyAppService  
+display_name = My Application Service  
 description = Service for MyApp
 
 [service.linux]
-name = myapp
-description = My Application Daemon
-user = myapp
+name = myapp  
+description = My Application Daemon  
+user = myapp  
 group = myapp
 
 [executable.windows]
-binary = myapp.exe
+binary = myapp.exe  
 service_binary = myapp_service.exe
 
 [executable.linux]
-binary = myapp
+binary = myapp  
 daemon_binary = myappd
 ```
 
@@ -2513,17 +2513,17 @@ APIKey := Config.GetString('api.key');
 ✅ **Par environnement** : Dev, staging, production différents
 ```bash
 # Développement
-export APP_ENVIRONMENT=development
+export APP_ENVIRONMENT=development  
 export DATABASE_HOST=localhost
 
 # Production
-export APP_ENVIRONMENT=production
+export APP_ENVIRONMENT=production  
 export DATABASE_HOST=db-prod.example.com
 ```
 
 ✅ **Variables d'environnement** : Format standard
 ```bash
-export APP_DATABASE_HOST=localhost
+export APP_DATABASE_HOST=localhost  
 export APP_DATABASE_PORT=5432
 ```
 
@@ -2535,7 +2535,7 @@ export APP_DATABASE_PORT=5432
 .env
 .env.local
 .env.*.local
-config/*.secret.*
+config/*.secret.*  
 secrets/
 *.key
 *.pem
@@ -2550,22 +2550,22 @@ secrets/
 # .env.example - Template de configuration
 
 # Application
-APP_ENVIRONMENT=development
+APP_ENVIRONMENT=development  
 APP_DEBUG=true
 
 # Base de données
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
-DATABASE_NAME=myapp
-DATABASE_USER=user
+DATABASE_HOST=localhost  
+DATABASE_PORT=5432  
+DATABASE_NAME=myapp  
+DATABASE_USER=user  
 DATABASE_PASSWORD=changeme
 
 # Redis
-REDIS_HOST=localhost
+REDIS_HOST=localhost  
 REDIS_PORT=6379
 
 # API Keys (à remplacer par vos vraies clés)
-API_KEY=your_api_key_here
+API_KEY=your_api_key_here  
 SECRET_KEY=your_secret_key_here
 ```
 
@@ -2620,7 +2620,7 @@ end.
 ### 4. Logger les sources de configuration
 
 ```pascal
-procedure LogConfigSources(Config: TAppConfig);
+procedure LogConfigSources(Config: TAppConfig);  
 var
   Keys: TStringList;
   i: Integer;
@@ -2710,11 +2710,11 @@ Fichier principal de configuration. Ne doit PAS contenir de secrets.
 
 ```ini
 [app]
-name = MyApp
+name = MyApp  
 version = 1.0.0
 
 [database]
-host = localhost
+host = localhost  
 port = 5432
 ```
 
@@ -2735,17 +2735,17 @@ key = your_api_key
 ### Développement
 
 ```bash
-export APP_ENVIRONMENT=development
-export APP_DEBUG=true
+export APP_ENVIRONMENT=development  
+export APP_DEBUG=true  
 export DATABASE_HOST=localhost
 ```
 
 ### Production
 
 ```bash
-export APP_ENVIRONMENT=production
-export APP_DEBUG=false
-export DATABASE_HOST=db-prod.example.com
+export APP_ENVIRONMENT=production  
+export APP_DEBUG=false  
+export DATABASE_HOST=db-prod.example.com  
 export DATABASE_PASSWORD=strong_password
 ```
 
@@ -2767,10 +2767,10 @@ En cas d'erreur, l'application affiche un message clair et s'arrête.
 #!/bin/bash
 # setup-config.sh - Assistant de configuration interactive
 
-CONFIG_FILE="config.ini"
+CONFIG_FILE="config.ini"  
 ENV_FILE=".env"
 
-echo "=== Configuration de l'application ==="
+echo "=== Configuration de l'application ==="  
 echo
 
 # Fonction pour demander une valeur
@@ -2801,75 +2801,75 @@ ask() {
 }
 
 # Environnement
-echo "## Environnement"
-ask "Environnement (development/staging/production)" "development" "ENVIRONMENT"
-ask "Mode debug (true/false)" "false" "DEBUG"
+echo "## Environnement"  
+ask "Environnement (development/staging/production)" "development" "ENVIRONMENT"  
+ask "Mode debug (true/false)" "false" "DEBUG"  
 echo
 
 # Base de données
-echo "## Base de données"
-ask "Hôte" "localhost" "DB_HOST"
-ask "Port" "5432" "DB_PORT"
-ask "Nom de la base" "myapp" "DB_NAME"
-ask "Utilisateur" "postgres" "DB_USER"
-ask "Mot de passe" "" "DB_PASSWORD" "secret"
+echo "## Base de données"  
+ask "Hôte" "localhost" "DB_HOST"  
+ask "Port" "5432" "DB_PORT"  
+ask "Nom de la base" "myapp" "DB_NAME"  
+ask "Utilisateur" "postgres" "DB_USER"  
+ask "Mot de passe" "" "DB_PASSWORD" "secret"  
 echo
 
 # Serveur
-echo "## Serveur"
-ask "Port d'écoute" "8080" "SERVER_PORT"
+echo "## Serveur"  
+ask "Port d'écoute" "8080" "SERVER_PORT"  
 echo
 
 # Générer le fichier .env
-echo "# Génération du fichier $ENV_FILE..."
+echo "# Génération du fichier $ENV_FILE..."  
 cat > $ENV_FILE << EOF
 # Configuration générée le $(date)
 
 # Application
-APP_ENVIRONMENT=$ENVIRONMENT
+APP_ENVIRONMENT=$ENVIRONMENT  
 APP_DEBUG=$DEBUG
 
 # Base de données
-DATABASE_HOST=$DB_HOST
-DATABASE_PORT=$DB_PORT
-DATABASE_NAME=$DB_NAME
-DATABASE_USER=$DB_USER
+DATABASE_HOST=$DB_HOST  
+DATABASE_PORT=$DB_PORT  
+DATABASE_NAME=$DB_NAME  
+DATABASE_USER=$DB_USER  
 DATABASE_PASSWORD=$DB_PASSWORD
 
 # Serveur
-SERVER_PORT=$SERVER_PORT
+SERVER_PORT=$SERVER_PORT  
 EOF
 
-chmod 600 $ENV_FILE
-echo "✓ Fichier $ENV_FILE créé avec succès"
+chmod 600 $ENV_FILE  
+echo "✓ Fichier $ENV_FILE créé avec succès"  
 echo
 
 # Générer config.ini (sans secrets)
-echo "# Génération du fichier $CONFIG_FILE..."
+echo "# Génération du fichier $CONFIG_FILE..."  
 cat > $CONFIG_FILE << EOF
 ; Configuration générée le $(date)
 
 [app]
-name = MyApp
-environment = $ENVIRONMENT
+name = MyApp  
+environment = $ENVIRONMENT  
 debug = $DEBUG
 
 [database]
-host = $DB_HOST
-port = $DB_PORT
-name = $DB_NAME
+host = $DB_HOST  
+port = $DB_PORT  
+name = $DB_NAME  
 user = $DB_USER
 
 [server]
-port = $SERVER_PORT
+port = $SERVER_PORT  
 EOF
 
-echo "✓ Fichier $CONFIG_FILE créé avec succès"
-echo
-echo "Configuration terminée!"
-echo
-echo "Pour démarrer l'application:"
-echo "  1. Charger les variables: source $ENV_FILE"
+echo "✓ Fichier $CONFIG_FILE créé avec succès"  
+echo  
+echo "Configuration terminée!"  
+echo  
+echo "Pour démarrer l'application:"  
+echo "  1. Charger les variables: source $ENV_FILE"  
 echo "  2. Lancer: ./myapp"
 ```
 
@@ -2916,24 +2916,24 @@ check_port() {
     fi
 }
 
-echo "=== Vérification de la configuration ==="
+echo "=== Vérification de la configuration ==="  
 echo
 
-echo "## Variables d'environnement"
-check_env "APP_ENVIRONMENT" "Environnement"
-check_env "DATABASE_HOST" "Hôte de la base de données"
-check_env "DATABASE_PORT" "Port de la base de données"
-check_env "DATABASE_PASSWORD" "Mot de passe DB"
+echo "## Variables d'environnement"  
+check_env "APP_ENVIRONMENT" "Environnement"  
+check_env "DATABASE_HOST" "Hôte de la base de données"  
+check_env "DATABASE_PORT" "Port de la base de données"  
+check_env "DATABASE_PASSWORD" "Mot de passe DB"  
 echo
 
-echo "## Fichiers"
-check_file "config.ini"
-check_file ".env"
+echo "## Fichiers"  
+check_file "config.ini"  
+check_file ".env"  
 echo
 
-echo "## Validation des valeurs"
-check_port "$DATABASE_PORT" "DATABASE_PORT"
-check_port "$SERVER_PORT" "SERVER_PORT"
+echo "## Validation des valeurs"  
+check_port "$DATABASE_PORT" "DATABASE_PORT"  
+check_port "$SERVER_PORT" "SERVER_PORT"  
 echo
 
 if [ $ERRORS -eq 0 ]; then
@@ -2959,7 +2959,7 @@ RUN apt-get update && apt-get install -y fpc
 WORKDIR /app
 
 # Copier les fichiers
-COPY myapp /app/
+COPY myapp /app/  
 COPY config.ini /app/
 
 # Créer les répertoires nécessaires

@@ -37,7 +37,7 @@ L'utilisateur doit :
 
 **Avec packaging :**
 ```
-MonAppli-Setup.exe  (Windows)
+MonAppli-Setup.exe  (Windows)  
 monappli_1.0.0_amd64.deb  (Linux)
 ```
 
@@ -300,17 +300,17 @@ Fournissez des métadonnées riches pour votre application :
 
 **Exemple de métadonnées (format universel) :**
 ```yaml
-name: MonAppli
-version: 1.2.3
-publisher: Ma Société SARL
-summary: Application de gestion complète
+name: MonAppli  
+version: 1.2.3  
+publisher: Ma Société SARL  
+summary: Application de gestion complète  
 description: |
   MonAppli est une solution de gestion intégrée qui permet
   de gérer votre stock, votre facturation et vos clients
   de manière simple et efficace.
-category: Office;Finance;
-website: https://www.example.com
-license: GPL-3.0
+category: Office;Finance;  
+website: https://www.example.com  
+license: GPL-3.0  
 icon: monappli.png
 ```
 
@@ -347,7 +347,7 @@ Fournissez toujours des checksums pour vérifier l'intégrité des téléchargem
 
 **Exemple :**
 ```
-MonAppli-Setup.exe
+MonAppli-Setup.exe  
 MonAppli-Setup.exe.sha256
 
 # Contenu du .sha256 :
@@ -476,7 +476,7 @@ Un système de mises à jour efficace est crucial pour la maintenance de votre a
 
 **2. Notification dans l'application**
 ```pascal
-procedure CheckForUpdates;
+procedure CheckForUpdates;  
 var
   LatestVersion: String;
 begin
@@ -576,10 +576,10 @@ Comment mesurer le succès de votre packaging et distribution ?
 
 **Objectifs SMART pour votre packaging :**
 ```
-Spécifique    : Augmenter les téléchargements de 50%
-Mesurable     : Via analytics du site web
-Atteignable   : En améliorant la page de téléchargement
-Réaliste      : Sur base des tendances actuelles
+Spécifique    : Augmenter les téléchargements de 50%  
+Mesurable     : Via analytics du site web  
+Atteignable   : En améliorant la page de téléchargement  
+Réaliste      : Sur base des tendances actuelles  
 Temporel      : D'ici 3 mois
 ```
 

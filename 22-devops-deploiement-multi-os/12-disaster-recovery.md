@@ -115,8 +115,8 @@ Le disaster recovery, c'est exactement ça pour votre application FreePascal !
 
 **Exemple pour une application FreePascal** :
 ```
-Copie 1 : Base de données en production (serveur principal)
-Copie 2 : Backup quotidien sur disque externe dans le datacenter
+Copie 1 : Base de données en production (serveur principal)  
+Copie 2 : Backup quotidien sur disque externe dans le datacenter  
 Copie 3 : Backup dans le cloud (AWS S3, Azure Blob, autre datacenter)
 ```
 
@@ -165,13 +165,13 @@ Copie 3 : Backup dans le cloud (AWS S3, Azure Blob, autre datacenter)
 ### Schéma de sauvegarde complet
 
 ```
-Dimanche    : Full Backup         (100 GB)
-Lundi       : Incremental         (5 GB)   - depuis Dimanche
-Mardi       : Incremental         (3 GB)   - depuis Lundi
-Mercredi    : Incremental         (4 GB)   - depuis Mardi
-Jeudi       : Incremental         (6 GB)   - depuis Mercredi
-Vendredi    : Incremental         (8 GB)   - depuis Jeudi
-Samedi      : Incremental         (2 GB)   - depuis Vendredi
+Dimanche    : Full Backup         (100 GB)  
+Lundi       : Incremental         (5 GB)   - depuis Dimanche  
+Mardi       : Incremental         (3 GB)   - depuis Lundi  
+Mercredi    : Incremental         (4 GB)   - depuis Mardi  
+Jeudi       : Incremental         (6 GB)   - depuis Mercredi  
+Vendredi    : Incremental         (8 GB)   - depuis Jeudi  
+Samedi      : Incremental         (2 GB)   - depuis Vendredi  
 Dimanche    : Full Backup         (100 GB)
 ```
 
@@ -190,18 +190,18 @@ Dimanche    : Full Backup         (100 GB)
 # backup-postgres.sh - Sauvegarde PostgreSQL
 
 # Configuration
-DB_NAME="myappdb"
-DB_USER="postgres"
-BACKUP_DIR="/backups/postgres"
-RETENTION_DAYS=30
-DATE=$(date +%Y%m%d_%H%M%S)
+DB_NAME="myappdb"  
+DB_USER="postgres"  
+BACKUP_DIR="/backups/postgres"  
+RETENTION_DAYS=30  
+DATE=$(date +%Y%m%d_%H%M%S)  
 BACKUP_FILE="${BACKUP_DIR}/${DB_NAME}_${DATE}.sql.gz"
 
 # Créer le répertoire si nécessaire
 mkdir -p "$BACKUP_DIR"
 
 # Effectuer le backup avec compression
-echo "[$(date)] Début du backup de $DB_NAME..."
+echo "[$(date)] Début du backup de $DB_NAME..."  
 pg_dump -U "$DB_USER" -h localhost "$DB_NAME" | gzip > "$BACKUP_FILE"
 
 if [ $? -eq 0 ]; then
@@ -250,8 +250,8 @@ crontab -e
 #!/bin/bash
 # restore-postgres.sh - Restauration PostgreSQL
 
-DB_NAME="myappdb"
-DB_USER="postgres"
+DB_NAME="myappdb"  
+DB_USER="postgres"  
 BACKUP_FILE="$1"
 
 if [ -z "$BACKUP_FILE" ]; then
@@ -264,7 +264,7 @@ if [ ! -f "$BACKUP_FILE" ]; then
     exit 1
 fi
 
-echo "⚠️  ATTENTION: Cette opération va écraser la base de données $DB_NAME"
+echo "⚠️  ATTENTION: Cette opération va écraser la base de données $DB_NAME"  
 read -p "Continuer? (oui/non): " CONFIRM
 
 if [ "$CONFIRM" != "oui" ]; then
@@ -272,16 +272,16 @@ if [ "$CONFIRM" != "oui" ]; then
     exit 0
 fi
 
-echo "[$(date)] Arrêt des connexions..."
+echo "[$(date)] Arrêt des connexions..."  
 psql -U "$DB_USER" -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$DB_NAME';"
 
-echo "[$(date)] Suppression de l'ancienne base..."
+echo "[$(date)] Suppression de l'ancienne base..."  
 dropdb -U "$DB_USER" "$DB_NAME"
 
-echo "[$(date)] Création de la nouvelle base..."
+echo "[$(date)] Création de la nouvelle base..."  
 createdb -U "$DB_USER" "$DB_NAME"
 
-echo "[$(date)] Restauration depuis $BACKUP_FILE..."
+echo "[$(date)] Restauration depuis $BACKUP_FILE..."  
 gunzip -c "$BACKUP_FILE" | psql -U "$DB_USER" "$DB_NAME"
 
 if [ $? -eq 0 ]; then
@@ -300,11 +300,11 @@ fi
 #!/bin/bash
 # backup-mysql.sh
 
-DB_NAME="myappdb"
-DB_USER="root"
-DB_PASSWORD="password"
-BACKUP_DIR="/backups/mysql"
-DATE=$(date +%Y%m%d_%H%M%S)
+DB_NAME="myappdb"  
+DB_USER="root"  
+DB_PASSWORD="password"  
+BACKUP_DIR="/backups/mysql"  
+DATE=$(date +%Y%m%d_%H%M%S)  
 BACKUP_FILE="${BACKUP_DIR}/${DB_NAME}_${DATE}.sql.gz"
 
 mkdir -p "$BACKUP_DIR"
@@ -330,9 +330,9 @@ fi
 #!/bin/bash
 # restore-mysql.sh
 
-DB_NAME="myappdb"
-DB_USER="root"
-DB_PASSWORD="password"
+DB_NAME="myappdb"  
+DB_USER="root"  
+DB_PASSWORD="password"  
 BACKUP_FILE="$1"
 
 if [ -z "$BACKUP_FILE" ]; then
@@ -398,7 +398,7 @@ begin
     ForceDirectories(FBackupDir);
 end;
 
-function TSQLiteBackupManager.CreateBackup: string;
+function TSQLiteBackupManager.CreateBackup: string;  
 var
   SourceFile, BackupFile: string;
   Timestamp: string;
@@ -441,7 +441,7 @@ begin
   end;
 end;
 
-function TSQLiteBackupManager.RestoreBackup(const BackupFile: string): Boolean;
+function TSQLiteBackupManager.RestoreBackup(const BackupFile: string): Boolean;  
 var
   TargetFile: string;
 begin
@@ -495,7 +495,7 @@ begin
   end;
 end;
 
-procedure TSQLiteBackupManager.CleanOldBackups;
+procedure TSQLiteBackupManager.CleanOldBackups;  
 var
   SearchRec: TSearchRec;
   FilePath: string;
@@ -519,7 +519,7 @@ begin
   end;
 end;
 
-function TSQLiteBackupManager.VerifyBackup(const BackupFile: string): Boolean;
+function TSQLiteBackupManager.VerifyBackup(const BackupFile: string): Boolean;  
 var
   TestConnection: TSQLite3Connection;
   Query: TSQLQuery;
@@ -563,12 +563,12 @@ end.
 #!/bin/bash
 # backup-application.sh - Sauvegarde complète de l'application
 
-APP_NAME="myapp"
-APP_DIR="/opt/$APP_NAME"
-BACKUP_BASE="/backups"
-BACKUP_DIR="$BACKUP_BASE/$APP_NAME"
-DATE=$(date +%Y%m%d_%H%M%S)
-BACKUP_FILE="$BACKUP_DIR/${APP_NAME}_full_${DATE}.tar.gz"
+APP_NAME="myapp"  
+APP_DIR="/opt/$APP_NAME"  
+BACKUP_BASE="/backups"  
+BACKUP_DIR="$BACKUP_BASE/$APP_NAME"  
+DATE=$(date +%Y%m%d_%H%M%S)  
+BACKUP_FILE="$BACKUP_DIR/${APP_NAME}_full_${DATE}.tar.gz"  
 RETENTION_DAYS=30
 
 # Créer le répertoire
@@ -618,8 +618,8 @@ fi
 #!/bin/bash
 # restore-application.sh
 
-APP_NAME="myapp"
-APP_DIR="/opt/$APP_NAME"
+APP_NAME="myapp"  
+APP_DIR="/opt/$APP_NAME"  
 BACKUP_FILE="$1"
 
 if [ -z "$BACKUP_FILE" ]; then
@@ -644,7 +644,7 @@ if [ -f "${BACKUP_FILE}.md5" ]; then
     echo "✓ Checksum valide"
 fi
 
-echo "⚠️  ATTENTION: Cette opération va écraser $APP_DIR"
+echo "⚠️  ATTENTION: Cette opération va écraser $APP_DIR"  
 read -p "Continuer? (oui/non): " CONFIRM
 
 if [ "$CONFIRM" != "oui" ]; then
@@ -653,7 +653,7 @@ if [ "$CONFIRM" != "oui" ]; then
 fi
 
 # Arrêter l'application
-echo "Arrêt de l'application..."
+echo "Arrêt de l'application..."  
 systemctl stop $APP_NAME
 
 # Sauvegarder l'existant
@@ -663,7 +663,7 @@ if [ -d "$APP_DIR" ]; then
 fi
 
 # Extraire le backup
-echo "Extraction du backup..."
+echo "Extraction du backup..."  
 tar -xzf "$BACKUP_FILE" -C "$(dirname $APP_DIR)"
 
 if [ $? -eq 0 ]; then
@@ -701,9 +701,9 @@ Beaucoup d'entreprises découvrent que leurs backups sont inutilisables au momen
 #!/bin/bash
 # test-backup-restore.sh - Test automatique de backup/restauration
 
-APP_NAME="myapp"
-TEST_DIR="/tmp/backup_test_$$"
-BACKUP_FILE="$1"
+APP_NAME="myapp"  
+TEST_DIR="/tmp/backup_test_$$"  
+BACKUP_FILE="$1"  
 LOG_FILE="/var/log/backup_test.log"
 
 log() {
@@ -721,14 +721,14 @@ if [ -z "$BACKUP_FILE" ]; then
     exit 1
 fi
 
-log "=== Début du test de restauration ==="
+log "=== Début du test de restauration ==="  
 log "Backup: $BACKUP_FILE"
 
 # Créer l'environnement de test
 mkdir -p "$TEST_DIR"
 
 # Test 1: Vérifier l'intégrité de l'archive
-log "Test 1: Intégrité de l'archive"
+log "Test 1: Intégrité de l'archive"  
 if tar -tzf "$BACKUP_FILE" > /dev/null 2>&1; then
     log "✓ Archive intègre"
 else
@@ -737,8 +737,8 @@ else
 fi
 
 # Test 2: Extraire dans l'environnement de test
-log "Test 2: Extraction"
-tar -xzf "$BACKUP_FILE" -C "$TEST_DIR"
+log "Test 2: Extraction"  
+tar -xzf "$BACKUP_FILE" -C "$TEST_DIR"  
 if [ $? -eq 0 ]; then
     log "✓ Extraction réussie"
 else
@@ -747,7 +747,7 @@ else
 fi
 
 # Test 3: Vérifier les fichiers critiques
-log "Test 3: Fichiers critiques"
+log "Test 3: Fichiers critiques"  
 CRITICAL_FILES=(
     "myapp"
     "config.ini"
@@ -764,7 +764,7 @@ for file in "${CRITICAL_FILES[@]}"; do
 done
 
 # Test 4: Tester la base de données
-log "Test 4: Base de données"
+log "Test 4: Base de données"  
 if sqlite3 "$TEST_DIR/$APP_NAME/database.db" "PRAGMA integrity_check;" | grep -q "ok"; then
     log "✓ Base de données intègre"
 else
@@ -773,7 +773,7 @@ else
 fi
 
 # Test 5: Tester l'exécutable
-log "Test 5: Exécutable"
+log "Test 5: Exécutable"  
 if [ -x "$TEST_DIR/$APP_NAME/myapp" ]; then
     log "✓ Exécutable valide"
 
@@ -784,7 +784,7 @@ else
     exit 1
 fi
 
-log "=== ✓ Tous les tests réussis ==="
+log "=== ✓ Tous les tests réussis ==="  
 log "Le backup $BACKUP_FILE est restaurable"
 
 # Envoyer un rapport
@@ -1082,14 +1082,14 @@ implementation
 uses
   Process;
 
-constructor TBackupMonitor.Create(const BackupDir: string);
+constructor TBackupMonitor.Create(const BackupDir: string);  
 begin
   FBackupDir := BackupDir;
   FExpectedIntervalHours := 24; // 1 backup par jour attendu
   FMinimumSizeBytes := 1024 * 1024; // 1 MB minimum
 end;
 
-function TBackupMonitor.GetLatestBackupFile: string;
+function TBackupMonitor.GetLatestBackupFile: string;  
 var
   SearchRec: TSearchRec;
   LatestFile: string;
@@ -1118,7 +1118,7 @@ begin
     Result := IncludeTrailingPathDelimiter(FBackupDir) + LatestFile;
 end;
 
-function TBackupMonitor.GetFileAge(const FileName: string): TDateTime;
+function TBackupMonitor.GetFileAge(const FileName: string): TDateTime;  
 var
   Age: LongInt;
 begin
@@ -1129,7 +1129,7 @@ begin
     Result := 0;
 end;
 
-function TBackupMonitor.GetFileSize(const FileName: string): Int64;
+function TBackupMonitor.GetFileSize(const FileName: string): Int64;  
 var
   SearchRec: TSearchRec;
 begin
@@ -1141,7 +1141,7 @@ begin
   end;
 end;
 
-function TBackupMonitor.CheckHealth: TBackupHealth;
+function TBackupMonitor.CheckHealth: TBackupHealth;  
 var
   LatestBackup: string;
   HoursSinceBackup: Int64;
@@ -1185,7 +1185,7 @@ begin
   end;
 end;
 
-procedure TBackupMonitor.SendAlert(const Health: TBackupHealth);
+procedure TBackupMonitor.SendAlert(const Health: TBackupHealth);  
 var
   AProcess: TProcess;
   Subject, Body, StatusStr: string;
@@ -1237,10 +1237,10 @@ end.
 #!/bin/bash
 # monitor-backups.sh - Surveillance des backups
 
-BACKUP_DIR="/backups"
-MAX_AGE_HOURS=25  # Alerte si pas de backup depuis 25h
-MIN_SIZE_MB=10    # Taille minimum attendue
-EMAIL="admin@example.com"
+BACKUP_DIR="/backups"  
+MAX_AGE_HOURS=25  # Alerte si pas de backup depuis 25h  
+MIN_SIZE_MB=10    # Taille minimum attendue  
+EMAIL="admin@example.com"  
 SLACK_WEBHOOK="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
 
 check_backup() {
@@ -1300,8 +1300,8 @@ alert() {
 }
 
 # Vérifier différents types de backups
-check_backup "PostgreSQL" "myappdb_*.sql.gz" $MAX_AGE_HOURS
-check_backup "Application" "myapp_full_*.tar.gz" $MAX_AGE_HOURS
+check_backup "PostgreSQL" "myappdb_*.sql.gz" $MAX_AGE_HOURS  
+check_backup "Application" "myapp_full_*.tar.gz" $MAX_AGE_HOURS  
 check_backup "Configuration" "config_*.tar.gz" 168  # 1 semaine
 
 echo "Monitoring terminé"
@@ -1329,10 +1329,10 @@ sudo nano /etc/postgresql/15/main/postgresql.conf
 
 ```ini
 # postgresql.conf
-listen_addresses = '*'
-wal_level = replica
-max_wal_senders = 3
-wal_keep_size = 64
+listen_addresses = '*'  
+wal_level = replica  
+max_wal_senders = 3  
+wal_keep_size = 64  
 hot_standby = on
 ```
 
@@ -1413,23 +1413,23 @@ SELECT * FROM pg_stat_wal_receiver;
 #!/bin/bash
 # failover.sh - Bascule du slave en master
 
-SLAVE_HOST="192.168.1.101"
-MASTER_HOST="192.168.1.100"
+SLAVE_HOST="192.168.1.101"  
+MASTER_HOST="192.168.1.100"  
 APP_SERVERS=("app1.example.com" "app2.example.com")
 
-echo "=== Procédure de failover ==="
-echo "Master actuel: $MASTER_HOST"
-echo "Nouveau master: $SLAVE_HOST"
+echo "=== Procédure de failover ==="  
+echo "Master actuel: $MASTER_HOST"  
+echo "Nouveau master: $SLAVE_HOST"  
 echo
 
-read -p "Continuer? (oui/non): " CONFIRM
+read -p "Continuer? (oui/non): " CONFIRM  
 if [ "$CONFIRM" != "oui" ]; then
     echo "Annulé"
     exit 0
 fi
 
 # 1. Promouvoir le slave en master
-echo "1. Promotion du slave en master..."
+echo "1. Promotion du slave en master..."  
 ssh postgres@$SLAVE_HOST "pg_ctl promote -D /var/lib/postgresql/15/main"
 
 if [ $? -eq 0 ]; then
@@ -1440,7 +1440,7 @@ else
 fi
 
 # 2. Attendre que le nouveau master soit prêt
-echo "2. Attente de la disponibilité du nouveau master..."
+echo "2. Attente de la disponibilité du nouveau master..."  
 sleep 5
 
 for i in {1..30}; do
@@ -1452,7 +1452,7 @@ for i in {1..30}; do
 done
 
 # 3. Reconfigurer les serveurs applicatifs
-echo "3. Reconfiguration des serveurs applicatifs..."
+echo "3. Reconfiguration des serveurs applicatifs..."  
 for server in "${APP_SERVERS[@]}"; do
     echo "   Reconfiguration de $server..."
     ssh root@$server "sed -i 's/$MASTER_HOST/$SLAVE_HOST/g' /opt/myapp/config.ini"
@@ -1469,8 +1469,8 @@ done
 echo "4. Mise à jour DNS..."
 # Ajouter votre logique de mise à jour DNS ici
 
-echo "=== Failover terminé ==="
-echo "Nouveau master: $SLAVE_HOST"
+echo "=== Failover terminé ==="  
+echo "Nouveau master: $SLAVE_HOST"  
 echo "Ancien master: $MASTER_HOST (à reconfigurer en slave)"
 ```
 
@@ -1480,9 +1480,9 @@ echo "Ancien master: $MASTER_HOST (à reconfigurer en slave)"
 #!/bin/bash
 # db-healthcheck.sh - Vérification de santé de la base de données
 
-DB_HOST="localhost"
-DB_USER="postgres"
-DB_NAME="myappdb"
+DB_HOST="localhost"  
+DB_USER="postgres"  
+DB_NAME="myappdb"  
 TIMEOUT=5
 
 # Test de connexion
@@ -1513,7 +1513,7 @@ fi
 
 ```bash
 # Installer Bacula
-sudo apt update
+sudo apt update  
 sudo apt install bacula-server bacula-client bacula-console
 
 # Configurer
@@ -1587,11 +1587,11 @@ sudo apt install duplicity python3-boto3
 #!/bin/bash
 # duplicity-backup.sh
 
-export AWS_ACCESS_KEY_ID="your_access_key"
-export AWS_SECRET_ACCESS_KEY="your_secret_key"
+export AWS_ACCESS_KEY_ID="your_access_key"  
+export AWS_SECRET_ACCESS_KEY="your_secret_key"  
 export PASSPHRASE="encryption_passphrase"
 
-SOURCE="/opt/myapp"
+SOURCE="/opt/myapp"  
 DEST="s3://my-backups/myapp/"
 
 # Backup incrémental
@@ -1616,11 +1616,11 @@ unset PASSPHRASE
 #!/bin/bash
 # duplicity-restore.sh
 
-export AWS_ACCESS_KEY_ID="your_access_key"
-export AWS_SECRET_ACCESS_KEY="your_secret_key"
+export AWS_ACCESS_KEY_ID="your_access_key"  
+export AWS_SECRET_ACCESS_KEY="your_secret_key"  
 export PASSPHRASE="encryption_passphrase"
 
-SOURCE="s3://my-backups/myapp/"
+SOURCE="s3://my-backups/myapp/"  
 DEST="/restore/myapp"
 
 # Restaurer la version la plus récente
@@ -1640,8 +1640,8 @@ unset PASSPHRASE
 #!/bin/bash
 # rsync-mirror.sh - Miroir en temps quasi-réel
 
-SOURCE="/opt/myapp/"
-DEST="backup-server:/backups/myapp/"
+SOURCE="/opt/myapp/"  
+DEST="backup-server:/backups/myapp/"  
 LOG="/var/log/rsync-mirror.log"
 
 # Synchronisation continue
@@ -1673,8 +1673,8 @@ done
 #!/bin/bash
 # backup-to-s3.sh
 
-BACKUP_FILE="/backups/myapp/myapp_$(date +%Y%m%d).tar.gz"
-S3_BUCKET="s3://my-disaster-recovery-bucket"
+BACKUP_FILE="/backups/myapp/myapp_$(date +%Y%m%d).tar.gz"  
+S3_BUCKET="s3://my-disaster-recovery-bucket"  
 S3_REGION="eu-west-1"
 
 # Créer le backup
@@ -1724,8 +1724,8 @@ aws s3api put-bucket-lifecycle-configuration \
 #!/bin/bash
 # backup-cross-region.sh
 
-PRIMARY_REGION="eu-west-1"
-SECONDARY_REGION="us-east-1"
+PRIMARY_REGION="eu-west-1"  
+SECONDARY_REGION="us-east-1"  
 BUCKET_NAME="my-backups"
 
 # Upload vers la région primaire
