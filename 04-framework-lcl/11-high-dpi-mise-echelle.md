@@ -235,6 +235,7 @@ end;
 procedure MettreAEchelle(Control: TControl; DPIBase: Integer = 96);
 var
   Ratio: Double;
+  i: Integer;
 begin
   Ratio := Screen.PixelsPerInch / DPIBase;
 
@@ -246,7 +247,7 @@ begin
   // Si c'est un conteneur, traiter les enfants
   if Control is TWinControl then
   begin
-    for var i := 0 to TWinControl(Control).ControlCount - 1 do
+    for i := 0 to TWinControl(Control).ControlCount - 1 do
       MettreAEchelle(TWinControl(Control).Controls[i], DPIBase);
   end;
 end;
@@ -341,10 +342,8 @@ begin
   OldDPI := Screen.PixelsPerInch;
   ScaleFactor := NewDPI / OldDPI;
 
-  // Ajuster l'application
-  Screen.PixelsPerInch := NewDPI;
-
-  // Réajuster les contrôles si nécessaire
+  // Note : Screen.PixelsPerInch est en lecture seule dans Lazarus.
+  // La mise à l'échelle se fait via ScaleBy.
   ScaleBy(Round(ScaleFactor * 100), 100);
 end;
 ```
@@ -381,9 +380,14 @@ Les utilisateurs configurent le DPI dans les paramètres système :
 ```bash
 # Lancer l'application avec un DPI forcé
 GDK_SCALE=2 ./monapplication
+```
 
-# Ou dans le code
-SetEnvironmentVariable('GDK_SCALE', '2');
+Ou depuis le code Pascal (sous Linux, avec l'unité `unix`) :
+
+```pascal
+uses unix;
+// ...
+fpSetEnv('GDK_SCALE', '2', 1);
 ```
 
 ## Gestion multi-moniteur
@@ -399,7 +403,7 @@ begin
   for i := 0 to Screen.MonitorCount - 1 do
   begin
     Moniteur := Screen.Monitors[i];
-    Memo1.Lines.Add(Format('Moniteur %d : %s',
+    Memo1.Lines.Add(Format('Moniteur %d : %d',
       [i, Moniteur.MonitorNum]));
     // Note: Le DPI par moniteur nécessite des API spécifiques
   end;
@@ -527,10 +531,10 @@ end;
 procedure SimulerDPI(NouveauDPI: Integer);
 begin
   {$IFDEF DEBUG}
-  Screen.PixelsPerInch := NouveauDPI;
+  // Note : Screen.PixelsPerInch est en lecture seule dans Lazarus.
+  // On simule en appliquant le ratio directement via ScaleBy.
   ShowMessage(Format('DPI simulé : %d', [NouveauDPI]));
 
-  // Recharger le formulaire
   Application.ProcessMessages;
   Form1.ScaleBy(NouveauDPI, Screen.PixelsPerInch);
   {$ENDIF}

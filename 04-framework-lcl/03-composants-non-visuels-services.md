@@ -1108,17 +1108,33 @@ end;
 ### Observer pattern avec les événements
 
 ```pascal
+uses Classes;  // TMethodList est dans l'unité Classes
+
 type
   TDataManager = class(TComponent)
   private
     FOnDataChanged: TNotifyEvent;
-    FObservers: TList;
+    FObservers: TMethodList;  // TMethodList gère les method pointers
   public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
     procedure RegisterObserver(Observer: TNotifyEvent);
     procedure UnregisterObserver(Observer: TNotifyEvent);
     procedure NotifyObservers;
     property OnDataChanged: TNotifyEvent read FOnDataChanged write FOnDataChanged;
   end;
+
+constructor TDataManager.Create(AOwner: TComponent);
+begin
+  inherited;
+  FObservers := TMethodList.Create;
+end;
+
+destructor TDataManager.Destroy;
+begin
+  FObservers.Free;
+  inherited;
+end;
 
 procedure TDataManager.NotifyObservers;
 var
@@ -1129,6 +1145,7 @@ begin
     FOnDataChanged(Self);
 
   // Notifier tous les observateurs enregistrés
+  // TMethodList stocke des TMethod (method pointers à 2 champs)
   for i := 0 to FObservers.Count - 1 do
     TNotifyEvent(FObservers[i])(Self);
 end;
@@ -1357,34 +1374,22 @@ end;
 
 ### Portage depuis Delphi
 
-```pascal
-// Wrapper pour compatibilité Delphi/Lazarus
-{$IFDEF FPC}
-  // Code spécifique Lazarus
-  type
-    TRegistryLazarus = class(TRegistry)
-    public
-      function OpenKeyReadOnly(const Key: string): Boolean;
-    end;
-{$ELSE}
-  // Code Delphi standard
-{$ENDIF}
+La plupart des composants non-visuels de la LCL sont compatibles avec Delphi. `TRegistry.OpenKeyReadOnly` existe dans les deux environnements :
 
-// Utilisation unifiée
-function GetRegistryValue(const Key, Value: string): string;
+```pascal
+// Ce code fonctionne tel quel en Delphi et en FPC/Lazarus
+function GetRegistryValue(const Key, ValueName: string): string;
 var
   Reg: TRegistry;
 begin
+  Result := '';
   Reg := TRegistry.Create;
   try
     Reg.RootKey := HKEY_CURRENT_USER;
-    {$IFDEF FPC}
-    if Reg.OpenKeyReadOnly(Key) then
-    {$ELSE}
-    if Reg.OpenKey(Key, False) then
-    {$ENDIF}
+    if Reg.OpenKeyReadOnly(Key) then  // Existe en FPC et Delphi
     begin
-      Result := Reg.ReadString(Value);
+      if Reg.ValueExists(ValueName) then
+        Result := Reg.ReadString(ValueName);
       Reg.CloseKey;
     end;
   finally

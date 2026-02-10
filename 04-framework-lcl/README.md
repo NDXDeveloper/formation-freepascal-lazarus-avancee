@@ -63,7 +63,7 @@ L'un des défis majeurs du développement multi-plateforme est la gestion des di
 
 La LCL a été conçue avec la performance comme priorité :
 
-**Allocation mémoire optimisée** : La gestion mémoire de la LCL minimise les allocations dynamiques et utilise des pools d'objets quand c'est pertinent. Le garbage collector de FreePascal travaille en synergie avec la LCL pour maintenir une empreinte mémoire minimale.
+**Allocation mémoire optimisée** : La gestion mémoire de la LCL minimise les allocations dynamiques et utilise des pools d'objets quand c'est pertinent. Le comptage de références automatique (pour les interfaces et les chaînes) ainsi que les mécanismes de propriété (Owner/Parent) de la LCL contribuent à maintenir une empreinte mémoire minimale.
 
 **Invalidation intelligente** : Le système de rafraîchissement de la LCL ne redessine que ce qui est nécessaire. Les régions d'invalidation sont calculées précisément pour minimiser les opérations de rendu coûteuses.
 

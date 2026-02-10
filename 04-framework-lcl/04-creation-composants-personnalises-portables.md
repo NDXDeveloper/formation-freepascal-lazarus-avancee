@@ -831,10 +831,10 @@ begin
   else
   {$ENDIF}
   begin
-    // Style par défaut multi-plateforme
+    // Style par défaut multi-plateforme (utilise Frame3D de la LCL)
     Canvas.Brush.Color := clBtnFace;
     Canvas.FillRect(ClientRect);
-    DrawEdge(Canvas.Handle, ClientRect, EDGE_RAISED, BF_RECT);
+    Frame3D(Canvas, ClientRect, clBtnHighlight, clBtnShadow, 1);
   end;
 end;
 ```
@@ -1138,7 +1138,7 @@ begin
   AssertTrue('Hauteur titre Windows',
     FPanel.TitleHeight > 0);
   {$ELSE}
-  Skip('Test Windows uniquement');
+  Ignore('Test Windows uniquement');
   {$ENDIF}
 end;
 
@@ -1158,7 +1158,7 @@ begin
       end;
   end;
   {$ELSE}
-  Skip('Test Linux uniquement');
+  Ignore('Test Linux uniquement');
   {$ENDIF}
 end;
 
@@ -1168,7 +1168,7 @@ begin
   // Tests spécifiques macOS
   AssertTrue('Cocoa widgetset', WidgetSet.LCLPlatform = lpCocoa);
   {$ELSE}
-  Skip('Test macOS uniquement');
+  Ignore('Test macOS uniquement');
   {$ENDIF}
 end;
 

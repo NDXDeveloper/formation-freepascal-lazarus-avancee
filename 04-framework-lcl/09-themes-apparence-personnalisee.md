@@ -64,8 +64,8 @@ Button1.Font.Name := 'Segoe UI';
 Button1.Font.Size := 10;
 ```
 
-**Avantages** : Simple, portable, respecte les guidelines de chaque OS
-**Limites** : Contrôle limité sur certains aspects visuels
+**Avantages** : Simple, portable, respecte les guidelines de chaque OS  
+**Limites** : Contrôle limité sur certains aspects visuels  
 
 #### 2. Personnalisation par styles
 Utilisation de feuilles de style ou de thèmes prédéfinis :
@@ -76,8 +76,8 @@ Application.SetStyle('Dark');
 ThemeManager.LoadTheme('MonTheme.theme');
 ```
 
-**Avantages** : Changement global rapide, cohérence garantie
-**Limites** : Dépend du support du widgetset
+**Avantages** : Changement global rapide, cohérence garantie  
+**Limites** : Dépend du support du widgetset  
 
 #### 3. Personnalisation par surcharge
 Création de composants personnalisés avec leur propre rendu :
@@ -89,8 +89,8 @@ protected
 end;
 ```
 
-**Avantages** : Contrôle total, effets visuels avancés
-**Limites** : Plus complexe, peut perdre l'aspect natif
+**Avantages** : Contrôle total, effets visuels avancés  
+**Limites** : Plus complexe, peut perdre l'aspect natif  
 
 #### 4. Personnalisation par interception
 Modification du comportement de rendu au niveau système :
@@ -99,8 +99,8 @@ Modification du comportement de rendu au niveau système :
 ThemeServices.DrawElement(Canvas, Details, Rect);
 ```
 
-**Avantages** : Intégration avec le système de thèmes natif
-**Limites** : Spécifique à la plateforme
+**Avantages** : Intégration avec le système de thèmes natif  
+**Limites** : Spécifique à la plateforme  
 
 ## Les composants du système de thèmes
 

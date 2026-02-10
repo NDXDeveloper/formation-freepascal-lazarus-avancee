@@ -315,12 +315,12 @@ RadioButton2.Checked := True;  // Sélection par défaut
 
 // Pour des groupes séparés, utilisez des TGroupBox différents
 // Groupe 1 : Taille
-GroupSize.Controls.Add(RadioSmall);
-GroupSize.Controls.Add(RadioLarge);
+RadioSmall.Parent := GroupSize;
+RadioLarge.Parent := GroupSize;
 
-// Groupe 2 : Couleur (indépendant)
-GroupColor.Controls.Add(RadioRed);
-GroupColor.Controls.Add(RadioBlue);
+// Groupe 2 : Couleur (indépendant du groupe 1)
+RadioRed.Parent := GroupColor;
+RadioBlue.Parent := GroupColor;
 ```
 
 ## Les contrôles d'action

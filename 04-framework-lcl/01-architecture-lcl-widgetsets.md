@@ -215,11 +215,17 @@ lazbuild MonProjet.lpi --ws=gtk2
 lazbuild MonProjet.lpi --ws=qt5
 ```
 
-**Dans le code source** (moins recommandé) :
+**Dans le code source** (pour adapter le comportement, pas pour sélectionner le widgetset) :
 ```pascal
-{$IFDEF LINUX}
-  {$DEFINE UseCLX}  // Pour Qt
-{$ENDIF}
+uses InterfaceBase;
+
+// Le widgetset est choisi à la compilation (--ws=xxx),
+// mais vous pouvez adapter le comportement à l'exécution :
+case WidgetSet.LCLPlatform of
+  lpGtk2, lpGtk3: WriteLn('Interface GTK');
+  lpQT5:          WriteLn('Interface Qt5');
+  lpWin32:        WriteLn('Interface Windows');
+end;
 ```
 
 ## Gérer les différences entre widgetsets

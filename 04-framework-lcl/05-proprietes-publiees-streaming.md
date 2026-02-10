@@ -870,7 +870,7 @@ end;
 procedure TDebugComponent.WriteState(Writer: TWriter);
 begin
   {$IFDEF DEBUG}
-  WriteLn('WriteState: Début d'écriture');
+  WriteLn('WriteState: Début d''écriture');
   WriteLn('WriteState: Value = ', FValue);
   {$ENDIF}
 

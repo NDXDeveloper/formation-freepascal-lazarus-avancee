@@ -166,11 +166,11 @@ begin
   if Result and (edtPostalCode.Text <> '') then
   begin
     // Vérifier le format selon le pays
-    case cboCountry.Text of
-      'France': Result := Length(edtPostalCode.Text) = 5;
-      'Canada': Result := Length(edtPostalCode.Text) = 6;
-      // etc.
-    end;
+    if cboCountry.Text = 'France' then
+      Result := Length(edtPostalCode.Text) = 5
+    else if cboCountry.Text = 'Canada' then
+      Result := Length(edtPostalCode.Text) = 6;
+    // etc.
   end;
 end;
 
@@ -1499,8 +1499,12 @@ type
     FDataLock: TCriticalSection;
     FDataQueue: TStringList;
     FOnDataReceived: TDataUpdateEvent;
+    FPendingProgress: Integer;
+    FPendingStatus: string;
 
     procedure ProcessDataQueue;
+    procedure DoUpdateProgress;
+    procedure DoUpdateStatus;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -1543,8 +1547,8 @@ end;
 procedure TWorkerThread.UpdateUI;
 begin
   FFrame.AddData(FData);
-  FFrame.UpdateProgress(Position);
-  FFrame.UpdateStatus(Format('Traitement : %d%%', [Position]));
+  // Pas de variable Position ici : utiliser le pourcentage calculé
+  // La mise à jour du progrès se fait via AddData/ProcessDataQueue
 end;
 
 { TThreadSafeFrame }
@@ -1642,14 +1646,25 @@ begin
   end;
 end;
 
+procedure TThreadSafeFrame.DoUpdateProgress;
+begin
+  ProgressBar.Position := FPendingProgress;
+end;
+
+procedure TThreadSafeFrame.DoUpdateStatus;
+begin
+  StatusLabel.Caption := FPendingStatus;
+end;
+
 procedure TThreadSafeFrame.UpdateProgress(Position: Integer);
 begin
   if MainThreadID = GetCurrentThreadId then
     ProgressBar.Position := Position
   else
-    TThread.Queue(nil, procedure begin
-      ProgressBar.Position := Position;
-    end);
+  begin
+    FPendingProgress := Position;
+    TThread.Queue(nil, @DoUpdateProgress);
+  end;
 end;
 
 procedure TThreadSafeFrame.UpdateStatus(const Status: string);
@@ -1657,9 +1672,10 @@ begin
   if MainThreadID = GetCurrentThreadId then
     StatusLabel.Caption := Status
   else
-    TThread.Queue(nil, procedure begin
-      StatusLabel.Caption := Status;
-    end);
+  begin
+    FPendingStatus := Status;
+    TThread.Queue(nil, @DoUpdateStatus);
+  end;
 end;
 ```
 

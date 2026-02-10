@@ -306,13 +306,15 @@ begin
 end;
 
 function TSmartEdit.ValidateInput: Boolean;
+var
+  Dummy: Integer;
 begin
   // Validation de base - peut être surchargée
   Result := True;
 
   // Exemple : accepter uniquement les nombres
   if Tag = 1 then // Tag utilisé comme indicateur de validation numérique
-    Result := TryStrToInt(Text, Integer(Pointer(@Result)^));
+    Result := TryStrToInt(Text, Dummy);
 end;
 ```
 
@@ -501,11 +503,12 @@ end;
 unit AsyncEvents;
 
 {$mode objfpc}{$H+}
+{$modeswitch anonymousfunctions}
 
 interface
 
 uses
-  Classes, SysUtils, SyncObjs, Contnrs;
+  Classes, SysUtils, SyncObjs, Contnrs, Forms;
 
 type
   // Message pour événement asynchrone
@@ -664,19 +667,19 @@ end;
 procedure TAsyncEventManager.ProcessEvent(Event: TEventMessage);
 begin
   // Traiter l'événement selon son type
-  case Event.EventType of
-    'DATA_UPDATE':
-      begin
-        // Traitement des données
-      end;
-    'CALCULATION':
-      begin
-        // Calcul asynchrone
-      end;
-    'NOTIFICATION':
-      begin
-        // Notification
-      end;
+  // Note : case...of ne supporte que les types ordinaux en FPC,
+  // on utilise donc if...else if pour les chaînes
+  if Event.EventType = 'DATA_UPDATE' then
+  begin
+    // Traitement des données
+  end
+  else if Event.EventType = 'CALCULATION' then
+  begin
+    // Calcul asynchrone
+  end
+  else if Event.EventType = 'NOTIFICATION' then
+  begin
+    // Notification
   end;
 end;
 
@@ -2457,7 +2460,7 @@ unit OptimizedEventHandling;
 interface
 
 uses
-  Classes, SysUtils, Contnrs;
+  Classes, SysUtils, Contnrs, ExtCtrls;
 
 type
   // Pool d'objets événements pour éviter les allocations
@@ -2536,7 +2539,7 @@ type
 implementation
 
 uses
-  DateUtils, ExtCtrls;
+  DateUtils;
 
 { TEventPool }
 

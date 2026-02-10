@@ -56,9 +56,9 @@ MainMenu1.Parent := Form1;
 
 ### Icônes et barres d'outils
 
-**Windows** : Barres d'outils avec texte et icônes, style plat ou 3D
-**macOS** : Icônes minimalistes, souvent monochromes
-**Linux** : Variable, souvent suit le thème système
+**Windows** : Barres d'outils avec texte et icônes, style plat ou 3D  
+**macOS** : Icônes minimalistes, souvent monochromes  
+**Linux** : Variable, souvent suit le thème système  
 
 ## Détecter le système d'exploitation
 
@@ -97,7 +97,8 @@ uses
 function DetecterEnvironnement: string;
 begin
   {$IFDEF WINDOWS}
-    Result := 'Windows ' + TOSVersion.ToString;
+    // Note : TOSVersion n'existe pas en FPC (Delphi uniquement)
+    Result := 'Windows';
   {$ENDIF}
 
   {$IFDEF LINUX}
@@ -423,32 +424,33 @@ begin
   {$IFDEF WINDOWS}
     Result := 'Segoe UI'; // Windows 10/11
     // Fallback pour anciennes versions
-    if not Screen.Fonts.IndexOf(Result) >= 0 then
+    if Screen.Fonts.IndexOf(Result) < 0 then
       Result := 'Tahoma';
   {$ENDIF}
 
   {$IFDEF LINUX}
-    case DetecterEnvironnementLinux of
-      'GNOME': Result := 'Ubuntu';
-      'KDE': Result := 'Noto Sans';
-      else Result := 'Liberation Sans';
-    end;
+    // Note : case...of ne supporte que les types ordinaux en FPC
+    if DetecterEnvironnementLinux = 'GNOME' then
+      Result := 'Ubuntu'
+    else if DetecterEnvironnementLinux = 'KDE' then
+      Result := 'Noto Sans'
+    else
+      Result := 'Liberation Sans';
     // Fallback
-    if not Screen.Fonts.IndexOf(Result) >= 0 then
+    if Screen.Fonts.IndexOf(Result) < 0 then
       Result := 'Sans';
   {$ENDIF}
 
   {$IFDEF DARWIN}
     Result := 'San Francisco'; // ou 'Helvetica Neue'
-    if not Screen.Fonts.IndexOf(Result) >= 0 then
+    if Screen.Fonts.IndexOf(Result) < 0 then
       Result := 'Lucida Grande';
   {$ENDIF}
 end;
 
 procedure AppliquerPoliceSysteme(Control: TControl);
 begin
-  if Control is TFont then
-    TFont(Control).Name := GetPoliceSysteme;
+  Control.Font.Name := GetPoliceSysteme;
 end;
 ```
 
@@ -601,10 +603,10 @@ begin
 
   {$IFDEF LINUX}
     // Linux : utiliser les icônes du thème
-    case LowerCase(Extension) of
-      '.txt': Result.LoadFromFile('/usr/share/icons/hicolor/48x48/mimetypes/text-plain.png');
-      '.pdf': Result.LoadFromFile('/usr/share/icons/hicolor/48x48/mimetypes/application-pdf.png');
-    end;
+    if LowerCase(Extension) = '.txt' then
+      Result.LoadFromFile('/usr/share/icons/hicolor/48x48/mimetypes/text-plain.png')
+    else if LowerCase(Extension) = '.pdf' then
+      Result.LoadFromFile('/usr/share/icons/hicolor/48x48/mimetypes/application-pdf.png');
   {$ENDIF}
 end;
 ```
@@ -801,6 +803,10 @@ begin
 end;
 
 procedure TMainForm.ConfigurerMenus;
+{$IFDEF WINDOWS}
+var
+  HelpItem: TMenuItem;
+{$ENDIF}
 begin
   {$IFDEF DARWIN}
     // macOS : Certains menus sont automatiques
@@ -809,11 +815,9 @@ begin
 
   {$IFDEF WINDOWS}
     // Windows : Ajouter le menu Aide à droite
-    with TMenuItem.Create(MainMenu) do
-    begin
-      Caption := '&Aide';
-      MainMenu.Items.Add(Self);
-    end;
+    HelpItem := TMenuItem.Create(MainMenu);
+    HelpItem.Caption := '&Aide';
+    MainMenu.Items.Add(HelpItem);
   {$ENDIF}
 end;
 
