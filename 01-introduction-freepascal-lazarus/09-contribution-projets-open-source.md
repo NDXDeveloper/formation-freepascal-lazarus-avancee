@@ -134,9 +134,9 @@ Forum Lazarus : https://forum.lazarus.freepascal.org
 
 Message type de présentation :
 "Bonjour,
-Je suis [Nom], développeur Pascal depuis [X] ans.
-J'utilise Lazarus pour [type de projets].
-Intéressé par [domaines].
+Je suis [Nom], développeur Pascal depuis [X] ans.  
+J'utilise Lazarus pour [type de projets].  
+Intéressé par [domaines].  
 Heureux de rejoindre la communauté !"
 ```
 
@@ -208,7 +208,7 @@ Erreur : "Access Violation at address..."
 
 ## Code minimal de reproduction
 ```pascal
-program BugDemo;
+program BugDemo;  
 begin
   // Code minimal qui reproduit le bug
 end.
@@ -248,7 +248,7 @@ OnDrawCell only works when ScrollBars <> ssNone
 
 ## Minimal reproduction code
 ```pascal
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   StringGrid1.ScrollBars := ssNone;  // Bug trigger
   StringGrid1.OnDrawCell := @StringGrid1DrawCell;
@@ -279,7 +279,7 @@ Set ScrollBars := ssAutoVertical and hide scrollbar with Windows API
 
 ```bash
 # Créer structure de développement
-mkdir ~/fpc-dev
+mkdir ~/fpc-dev  
 cd ~/fpc-dev
 
 # Cloner FPC
@@ -299,12 +299,12 @@ git clone https://gitlab.com/freepascal.org/lazarus/lazarus.git lazarus
 
 ```bash
 # Compiler FPC
-cd ~/fpc-dev/fpc
-make clean all
+cd ~/fpc-dev/fpc  
+make clean all  
 sudo make install PREFIX=/usr/local
 
 # Compiler Lazarus
-cd ~/fpc-dev/lazarus
+cd ~/fpc-dev/lazarus  
 make clean all
 ./lazarus --pcp=~/.lazarus-dev  # Config séparée
 ```
@@ -345,19 +345,19 @@ type
 
 { TMyClass }
 
-constructor TMyClass.Create;
+constructor TMyClass.Create;  
 begin
   inherited Create;
   FValue := 0;
 end;
 
-destructor TMyClass.Destroy;
+destructor TMyClass.Destroy;  
 begin
   // Cleanup
   inherited Destroy;
 end;
 
-procedure TMyClass.SetValue(AValue: Integer);
+procedure TMyClass.SetValue(AValue: Integer);  
 begin
   if FValue <> AValue then
   begin
@@ -415,7 +415,7 @@ type
 
 implementation
 
-procedure TPanel.SetCornerRadius(AValue: Integer);
+procedure TPanel.SetCornerRadius(AValue: Integer);  
 begin
   if FCornerRadius <> AValue then
   begin
@@ -424,7 +424,7 @@ begin
   end;
 end;
 
-procedure TPanel.Paint;
+procedure TPanel.Paint;  
 begin
   if FCornerRadius > 0 then
     // Dessiner panel avec coins arrondis
@@ -438,7 +438,7 @@ end;
 
 ```bash
 # Tests unitaires
-cd ~/fpc-dev/fpc/tests
+cd ~/fpc-dev/fpc/tests  
 make full
 
 # Tests Lazarus
@@ -453,7 +453,7 @@ cd ~/fpc-dev/lazarus/test
 
 ```bash
 # Commiter localement
-git add -A
+git add -A  
 git commit -m "LCL: Add CornerRadius property to TPanel
 
 - Adds CornerRadius property to allow rounded corners
@@ -507,7 +507,7 @@ This MR adds a CornerRadius property to TPanel allowing rounded corners.
 - Maintains full backward compatibility
 
 ## Screenshots
-Before: [image]
+Before: [image]  
 After: [image with rounded corners]
 
 ## Test plan
@@ -585,7 +585,7 @@ Documentation FreePascal/Lazarus
 This example shows how to use the CornerRadius property:
 
 <syntaxhighlight lang="pascal">
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   Panel1.CornerRadius := 15;
   Panel1.Color := clSkyBlue;
@@ -619,13 +619,13 @@ end;
 ```po
 # lazarus.fr.po - Traduction française
 
-msgid "Corner Radius"
+msgid "Corner Radius"  
 msgstr "Rayon des coins"
 
-msgid "Specifies the radius for rounded corners"
+msgid "Specifies the radius for rounded corners"  
 msgstr "Spécifie le rayon pour les coins arrondis"
 
-msgid "The value must be positive"
+msgid "The value must be positive"  
 msgstr "La valeur doit être positive"
 ```
 
@@ -775,12 +775,12 @@ Corrigé dans le commit abc123. Renommé en `FCornerRadiusValue`.
 
 > Manque un test pour valeurs négatives
 
-Ajouté test dans commit def456. Vérifie que les valeurs < 0
+Ajouté test dans commit def456. Vérifie que les valeurs < 0  
 sont rejetées avec exception appropriée.
 
 > Performance concern avec Invalidate
 
-Bonne remarque. J'ai ajouté un flag pour éviter les Invalidate
+Bonne remarque. J'ai ajouté un flag pour éviter les Invalidate  
 multiples. Voir commit ghi789.
 ```
 

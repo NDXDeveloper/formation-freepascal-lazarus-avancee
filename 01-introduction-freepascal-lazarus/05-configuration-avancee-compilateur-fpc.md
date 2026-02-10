@@ -41,7 +41,7 @@ Le fichier `fpc.cfg` est le centre névralgique de la configuration :
 
 **Windows** :
 ```
-C:\FPC\3.2.2\bin\x86_64-win64\fpc.cfg
+C:\FPC\3.2.2\bin\x86_64-win64\fpc.cfg  
 C:\Users\%USERNAME%\fpc.cfg
 %LOCALAPPDATA%\FreePascal\fpc.cfg
 ```
@@ -246,7 +246,7 @@ fpc -O4 program.pas
 fpc -Os program.pas
 
 # Optimisation pour un CPU spécifique
-fpc -CpCOREAVX2 program.pas    # Intel Core avec AVX2
+fpc -CpCOREAVX2 program.pas    # Intel Core avec AVX2  
 fpc -CpARMV7 program.pas       # ARM v7
 
 # Inline des fonctions
@@ -265,15 +265,15 @@ fpc -OoLOOPUNROLL program.pas
 
 ```bash
 # Format de débogage
-fpc -g program.pas          # Format par défaut
-fpc -gw2 program.pas        # DWARF 2
-fpc -gw3 program.pas        # DWARF 3 (recommandé Linux)
+fpc -g program.pas          # Format par défaut  
+fpc -gw2 program.pas        # DWARF 2  
+fpc -gw3 program.pas        # DWARF 3 (recommandé Linux)  
 fpc -gs program.pas         # Stabs
 
 # Niveau de détail
-fpc -gl program.pas         # Numéros de ligne
-fpc -gc program.pas         # Génération de code pour gdb
-fpc -gh program.pas         # Heap trace (détection fuites)
+fpc -gl program.pas         # Numéros de ligne  
+fpc -gc program.pas         # Génération de code pour gdb  
+fpc -gh program.pas         # Heap trace (détection fuites)  
 fpc -gv program.pas         # Valgrind compatible
 
 # Combinaison typique débogage
@@ -574,9 +574,9 @@ FPC supporte plusieurs modes de syntaxe :
 fpc -T<OS> -P<CPU> program.pas
 
 # Exemples
-fpc -Tlinux -Px86_64 program.pas    # Linux 64-bit
-fpc -Twin64 -Px86_64 program.pas    # Windows 64-bit
-fpc -Tdarwin -Px86_64 program.pas   # macOS Intel
+fpc -Tlinux -Px86_64 program.pas    # Linux 64-bit  
+fpc -Twin64 -Px86_64 program.pas    # Windows 64-bit  
+fpc -Tdarwin -Px86_64 program.pas   # macOS Intel  
 fpc -Tdarwin -Paarch64 program.pas  # macOS ARM (M1/M2)
 ```
 
@@ -621,7 +621,7 @@ Créez `cross-compile.sh` :
 
 # Script de cross-compilation multi-cibles
 
-PROJECT="myproject.pas"
+PROJECT="myproject.pas"  
 BASE_DIR=$(pwd)
 
 # Fonction de compilation
@@ -647,11 +647,11 @@ compile_for() {
 }
 
 # Compiler pour différentes cibles
-compile_for linux x86_64
-compile_for linux i386
-compile_for win64 x86_64
-compile_for win32 i386
-compile_for darwin x86_64
+compile_for linux x86_64  
+compile_for linux i386  
+compile_for win64 x86_64  
+compile_for win32 i386  
+compile_for darwin x86_64  
 compile_for darwin aarch64
 
 echo "Compilation terminée!"
@@ -729,16 +729,16 @@ echo "Compilation terminée!"
 
 ```bash
 # Niveaux de messages
-fpc -v0 program.pas    # Silencieux
-fpc -ve program.pas    # Erreurs seulement
-fpc -vew program.pas   # Erreurs + Warnings
-fpc -vewn program.pas  # + Notes
-fpc -vewnh program.pas # + Hints
-fpc -vewnhi program.pas # + Info (verbose)
+fpc -v0 program.pas    # Silencieux  
+fpc -ve program.pas    # Erreurs seulement  
+fpc -vew program.pas   # Erreurs + Warnings  
+fpc -vewn program.pas  # + Notes  
+fpc -vewnh program.pas # + Hints  
+fpc -vewnhi program.pas # + Info (verbose)  
 fpc -va program.pas    # Tout (debug compilateur)
 
 # Messages spécifiques
-fpc -vm5024 program.pas  # Afficher message 5024
+fpc -vm5024 program.pas  # Afficher message 5024  
 fpc -vq5024 program.pas  # Masquer message 5024
 ```
 
@@ -813,11 +813,11 @@ Créez un `Makefile` :
 
 ```makefile
 # Variables
-FPC = fpc
-FPCFLAGS = -O3 -CX -XX -Xs
-DEBUGFLAGS = -g -gl -gh -Cr -Ct -Ci
-TARGET = myapp
-SOURCES = $(wildcard src/*.pas)
+FPC = fpc  
+FPCFLAGS = -O3 -CX -XX -Xs  
+DEBUGFLAGS = -g -gl -gh -Cr -Ct -Ci  
+TARGET = myapp  
+SOURCES = $(wildcard src/*.pas)  
 UNITS = $(wildcard src/units/*.pas)
 
 # Plateformes
@@ -869,10 +869,10 @@ Créez `build.sh` :
 #!/bin/bash
 
 # Profils de compilation
-declare -A PROFILES
-PROFILES[debug]="-g -gl -gh -Cr -Ct -Ci -Sa -O- -dDEBUG"
-PROFILES[release]="-O3 -CX -XX -Xs -dRELEASE"
-PROFILES[profile]="-g -gl -pg -O2 -dPROFILE"
+declare -A PROFILES  
+PROFILES[debug]="-g -gl -gh -Cr -Ct -Ci -Sa -O- -dDEBUG"  
+PROFILES[release]="-O3 -CX -XX -Xs -dRELEASE"  
+PROFILES[profile]="-g -gl -pg -O2 -dPROFILE"  
 PROFILES[small]="-Os -CX -XX -Xs -dSMALL"
 
 # Fonction de compilation
@@ -936,7 +936,7 @@ fpc -Fu/path/to/units program.pas
 fpc -vd program.pas   # Mode debug du linker
 
 # Solutions possibles
-fpc -Fl/usr/local/lib program.pas  # Ajouter chemin lib
+fpc -Fl/usr/local/lib program.pas  # Ajouter chemin lib  
 fpc -k-L/usr/local/lib program.pas # Option linker
 ```
 
@@ -953,9 +953,9 @@ fpc -k-L/usr/local/lib program.pas # Option linker
 
 ```bash
 # Voir la configuration active
-fpc -i            # Informations compilateur
-fpc -ic           # CPU supportés
-fpc -it           # OS supportés
+fpc -i            # Informations compilateur  
+fpc -ic           # CPU supportés  
+fpc -it           # OS supportés  
 fpc -io           # Optimisations disponibles
 
 # Tracer la compilation
@@ -1089,21 +1089,21 @@ FPC_PROFILE=release make build
 
 ```bash
 # Informations système
-fpc -i           # Info compilateur
-fpc -ic          # CPUs supportés
+fpc -i           # Info compilateur  
+fpc -ic          # CPUs supportés  
 fpc -it          # Targets supportées
 
 # Compilation basique
-fpc program.pas                    # Simple
-fpc -O2 -CX -XX program.pas       # Optimisé
+fpc program.pas                    # Simple  
+fpc -O2 -CX -XX program.pas       # Optimisé  
 fpc -g -gl -Cr program.pas        # Debug
 
 # Cross-compilation
-fpc -Tlinux -Px86_64 program.pas  # Linux 64-bit
+fpc -Tlinux -Px86_64 program.pas  # Linux 64-bit  
 fpc -Twin64 program.pas           # Windows 64-bit
 
 # Avec configuration
-fpc @myconfig.cfg program.pas     # Fichier config
+fpc @myconfig.cfg program.pas     # Fichier config  
 fpc -dDEBUG program.pas           # Define symbol
 ```
 
@@ -1180,8 +1180,8 @@ Avant de finaliser votre configuration :
 
 ```bash
 # Versionner les configs avec Git
-git add config/*.cfg
-git commit -m "Configuration FPC v1.0"
+git add config/*.cfg  
+git commit -m "Configuration FPC v1.0"  
 git tag -a config-v1.0 -m "Configuration stable"
 ```
 
@@ -1189,7 +1189,7 @@ git tag -a config-v1.0 -m "Configuration stable"
 
 ```bash
 # Tester avec nouvelle version
-fpc-3.2.2 @config/test.cfg src/project.pas
+fpc-3.2.2 @config/test.cfg src/project.pas  
 fpc-3.4.0 @config/test.cfg src/project.pas
 
 # Adapter si nécessaire
@@ -1202,15 +1202,15 @@ fpc-3.4.0 @config/test.cfg src/project.pas
 
 ```ini
 # .gitignore
-lib/
+lib/  
 bin/
 *.ppu
 *.o
 *.exe
 
 # À versionner
-config/*.cfg
-scripts/*.sh
+config/*.cfg  
+scripts/*.sh  
 Makefile
 ```
 

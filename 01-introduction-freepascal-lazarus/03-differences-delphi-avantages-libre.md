@@ -138,7 +138,7 @@ type
     procedure SayHello;
   end;
 
-procedure TPerson.SayHello;
+procedure TPerson.SayHello;  
 begin
   WriteLn('Hello, I am ' + Name);
 end;
@@ -328,7 +328,7 @@ La philosophie de la pérennité :
 ```pascal
 // Un bug dans la LCL ? Vous pouvez le corriger !
 // Fichier: lcl/forms.pp
-procedure TForm.Show;
+procedure TForm.Show;  
 begin
   // Votre correction ici
   Visible := True;
@@ -616,7 +616,7 @@ Pour un développeur ou une entreprise pragmatique :
 
 > "La liberté n'est pas l'absence de contraintes, c'est la possibilité de choisir ses contraintes."
 
-Avec Delphi, vous acceptez les contraintes d'Embarcadero.
+Avec Delphi, vous acceptez les contraintes d'Embarcadero.  
 Avec Lazarus, vous choisissez vos propres contraintes.
 
 **Cette liberté de choix est l'avantage ultime du libre.**

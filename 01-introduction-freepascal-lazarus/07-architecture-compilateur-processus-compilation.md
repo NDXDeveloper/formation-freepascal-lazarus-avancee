@@ -106,11 +106,11 @@ if X > 10 then
   WriteLn('Grand');
 
 // Tokens produits par le scanner
-IF          (mot-clé)
+IF          (mot-clé)  
 X           (identifiant)
 >           (opérateur)
 10          (nombre)
-THEN        (mot-clé)
+THEN        (mot-clé)  
 WRITELN     (identifiant)
 (           (parenthèse ouvrante)
 'Grand'     (chaîne)
@@ -132,7 +132,7 @@ WRITELN     (identifiant)
 ### Gestion des espaces et commentaires
 
 ```pascal
-program    Test;  // Espaces ignorés
+program    Test;  // Espaces ignorés  
 var
   X:    Integer;  { Commentaire multiligne
                     ignoré aussi }
@@ -172,10 +172,10 @@ X := A + B * 2;
 Le parser vérifie des règles comme :
 
 ```
-Programme ::= PROGRAM Identifiant ';' Bloc '.'
-Bloc ::= Declarations BEGIN Instructions END
-Declaration ::= VAR ListeVariables ':' Type ';'
-Instruction ::= Identifiant ':=' Expression
+Programme ::= PROGRAM Identifiant ';' Bloc '.'  
+Bloc ::= Declarations BEGIN Instructions END  
+Declaration ::= VAR ListeVariables ':' Type ';'  
+Instruction ::= Identifiant ':=' Expression  
 Expression ::= Terme (('+' | '-') Terme)*
 ```
 
@@ -241,7 +241,7 @@ program Scopes;
 var
   X: Integer;  // X global
 
-procedure Test;
+procedure Test;  
 var
   X: Integer;  // X local (masque le global)
 begin
@@ -308,13 +308,13 @@ FPC applique plusieurs optimisations automatiques :
 
 ```pascal
 // Avant optimisation
-X := 10;
-Y := X * 2;
+X := 10;  
+Y := X * 2;  
 Z := Y + 5;
 
 // Après optimisation
-X := 10;
-Y := 20;  // 10 * 2 calculé à la compilation
+X := 10;  
+Y := 20;  // 10 * 2 calculé à la compilation  
 Z := 25;  // 20 + 5 calculé à la compilation
 ```
 
@@ -325,14 +325,14 @@ Z := 25;  // 20 + 5 calculé à la compilation
 if False then
   WriteLn('Jamais exécuté');  // Code mort
 
-X := 10;
+X := 10;  
 if X > 5 then    // Toujours vrai
   Y := 1
 else
   Y := 2;        // Code mort
 
 // Après optimisation
-X := 10;
+X := 10;  
 Y := 1;
 ```
 
@@ -340,13 +340,13 @@ Y := 1;
 
 ```pascal
 // Avant optimisation
-X := Y * 1;      // Multiplication par 1
-Z := Y + 0;      // Addition de 0
+X := Y * 1;      // Multiplication par 1  
+Z := Y + 0;      // Addition de 0  
 A := Y div 1;    // Division par 1
 
 // Après optimisation
-X := Y;
-Z := Y;
+X := Y;  
+Z := Y;  
 A := Y;
 ```
 
@@ -360,9 +360,9 @@ for I := 1 to 4 do
   Sum := Sum + Array[I];
 
 // Après optimisation (déroulé)
-Sum := Sum + Array[1];
-Sum := Sum + Array[2];
-Sum := Sum + Array[3];
+Sum := Sum + Array[1];  
+Sum := Sum + Array[2];  
+Sum := Sum + Array[3];  
 Sum := Sum + Array[4];
 ```
 
@@ -374,7 +374,7 @@ for I := 1 to 100 do
   Result := Result + I * (X + Y);  // X + Y invariant
 
 // Après optimisation
-Temp := X + Y;  // Calculé une seule fois
+Temp := X + Y;  // Calculé une seule fois  
 for I := 1 to 100 do
   Result := Result + I * Temp;
 ```
@@ -401,8 +401,8 @@ Le générateur de code transforme la représentation intermédiaire en instruct
 X := A + B;
 
 // Code assembleur x86-64 généré
-mov  rax, [A]      ; Charger A dans RAX
-add  rax, [B]      ; Ajouter B
+mov  rax, [A]      ; Charger A dans RAX  
+add  rax, [B]      ; Ajouter B  
 mov  [X], rax      ; Stocker dans X
 ```
 
@@ -412,16 +412,16 @@ Le compilateur optimise l'utilisation des registres processeur :
 
 ```pascal
 // Code Pascal
-function Calculate(A, B, C: Integer): Integer;
+function Calculate(A, B, C: Integer): Integer;  
 begin
   Result := (A + B) * C;
 end;
 
 // Assembleur optimisé (pseudo-code)
 // A dans RDI, B dans RSI, C dans RDX (convention d'appel)
-add  rdi, rsi      ; A + B dans RDI
-imul rdi, rdx      ; Multiplier par C
-mov  rax, rdi      ; Résultat dans RAX (retour)
+add  rdi, rsi      ; A + B dans RDI  
+imul rdi, rdx      ; Multiplier par C  
+mov  rax, rdi      ; Résultat dans RAX (retour)  
 ret
 ```
 
@@ -437,13 +437,13 @@ X := X + 1;
 inc qword ptr [X]
 
 // ARM
-ldr  r0, [X]
-add  r0, r0, #1
+ldr  r0, [X]  
+add  r0, r0, #1  
 str  r0, [X]
 
 // PowerPC
-lwz  r3, X
-addi r3, r3, 1
+lwz  r3, X  
+addi r3, r3, 1  
 stw  r3, X
 ```
 
@@ -542,7 +542,7 @@ type
 
 implementation  // Partie privée (→ .o)
 
-procedure TMyClass.DoSomething;
+procedure TMyClass.DoSomething;  
 begin
   WriteLn('Working...');
 end;
@@ -626,7 +626,7 @@ Processus modifié :
 ### Compilation de bibliothèques
 
 ```bash
-fpc -CD library.pas  # DLL/SO dynamique
+fpc -CD library.pas  # DLL/SO dynamique  
 fpc -CS library.pas  # Bibliothèque statique
 ```
 
@@ -755,11 +755,11 @@ lazbuild --build-all monprojet.lpi
 
 ```bash
 # Placer les unités compilées sur un disque rapide (SSD ou RAM disk)
-mkdir -p /tmp/fpc-units
+mkdir -p /tmp/fpc-units  
 fpc -FU/tmp/fpc-units program.pas
 
 # Ou monter un tmpfs pour performance maximale
-sudo mount -t tmpfs -o size=1G tmpfs /tmp/fpc-units
+sudo mount -t tmpfs -o size=1G tmpfs /tmp/fpc-units  
 fpc -FU/tmp/fpc-units program.pas
 ```
 
@@ -770,24 +770,24 @@ fpc -FU/tmp/fpc-units program.pas
 #### "Can't find unit"
 
 ```
-Problème : Unité introuvable
-Diagnostic : fpc -vut program.pas
+Problème : Unité introuvable  
+Diagnostic : fpc -vut program.pas  
 Solution : Ajouter chemin avec -Fu
 ```
 
 #### "Error while linking"
 
 ```
-Problème : Édition de liens échouée
-Diagnostic : fpc -vd program.pas
+Problème : Édition de liens échouée  
+Diagnostic : fpc -vd program.pas  
 Solution : Vérifier bibliothèques avec -Fl
 ```
 
 #### Compilation lente
 
 ```
-Problème : Temps de compilation excessif
-Diagnostic : fpc -vt program.pas
+Problème : Temps de compilation excessif  
+Diagnostic : fpc -vt program.pas  
 Solutions :
 - Désactiver antivirus
 - Utiliser SSD

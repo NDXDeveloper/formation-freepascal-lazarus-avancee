@@ -76,7 +76,7 @@ Le mode Turbo Pascal reproduit le comportement de Turbo Pascal 7.0, le dernier d
 ```pascal
 {$MODE TP}
 
-program HelloTP;
+program HelloTP;  
 uses Crt, Dos;
 
 var
@@ -129,13 +129,13 @@ type
     procedure Show;
   end;
 
-procedure TMyObject.Init(AX, AY: Integer);
+procedure TMyObject.Init(AX, AY: Integer);  
 begin
   X := AX;
   Y := AY;
 end;
 
-procedure TMyObject.Show;
+procedure TMyObject.Show;  
 begin
   WriteLn('Position: ', X, ',', Y);
 end;
@@ -172,10 +172,10 @@ end.
 {$MODE TP}
 { Programme Turbo Pascal original - fonctionne sans modification }
 
-program DOSMenu;
+program DOSMenu;  
 uses Crt;
 
-procedure DrawBox(X1, Y1, X2, Y2: Byte);
+procedure DrawBox(X1, Y1, X2, Y2: Byte);  
 var
   I: Byte;
 begin
@@ -259,18 +259,18 @@ type
     property Value: Integer read FValue write FValue;
   end;
 
-constructor TMyClass.Create(AValue: Integer);
+constructor TMyClass.Create(AValue: Integer);  
 begin
   FValue := AValue;
 end;
 
 { Surcharge de fonctions }
-function Add(A, B: Integer): Integer; overload;
+function Add(A, B: Integer): Integer; overload;  
 begin
   Result := A + B;
 end;
 
-function Add(A, B: Double): Double; overload;
+function Add(A, B: Double): Double; overload;  
 begin
   Result := A + B;
 end;
@@ -309,13 +309,13 @@ type
     property Name: string read FName write FName;
   end;
 
-constructor TGreeter.Create(const AName: string);
+constructor TGreeter.Create(const AName: string);  
 begin
   inherited Create;  { Appel explicite du parent }
   FName := AName;
 end;
 
-procedure TGreeter.SayHello;
+procedure TGreeter.SayHello;  
 begin
   WriteLn('Hello, ', FName, '!');
 end;
@@ -379,12 +379,12 @@ type
   end;
 
 { Implémentation du helper }
-function TIntegerHelper.IsEven: Boolean;
+function TIntegerHelper.IsEven: Boolean;  
 begin
   Result := (Self mod 2) = 0;
 end;
 
-function TIntegerHelper.IsPrime: Boolean;
+function TIntegerHelper.IsPrime: Boolean;  
 var
   I: Integer;
 begin
@@ -394,20 +394,20 @@ begin
   Result := True;
 end;
 
-function TIntegerHelper.ToString: string;
+function TIntegerHelper.ToString: string;  
 begin
   Str(Self, Result);
 end;
 
 { Implémentation générique }
-procedure TList.Add(const Item: T);
+procedure TList.Add(const Item: T);  
 begin
   SetLength(FItems, FCount + 1);
   FItems[FCount] := Item;
   Inc(FCount);
 end;
 
-function TList.Get(Index: Integer): T;
+function TList.Get(Index: Integer): T;  
 begin
   if (Index >= 0) and (Index < FCount) then
     Result := FItems[Index]
@@ -454,19 +454,19 @@ type
   end;
 
 { En mode ObjFPC, les opérateurs sont des fonctions globales }
-operator +(const A, B: TVector): TVector;
+operator +(const A, B: TVector): TVector;  
 begin
   Result.X := A.X + B.X;
   Result.Y := A.Y + B.Y;
 end;
 
-operator *(const A: TVector; B: Double): TVector;
+operator *(const A: TVector; B: Double): TVector;  
 begin
   Result.X := A.X * B;
   Result.Y := A.Y * B;
 end;
 
-operator =(const A, B: TVector): Boolean;
+operator =(const A, B: TVector): Boolean;  
 begin
   Result := (A.X = B.X) and (A.Y = B.Y);
 end;
@@ -516,14 +516,14 @@ type
     property Info: string read GetInfo;
   end;
 
-constructor TCustomer.Create(const AName: string; AAge: Integer);
+constructor TCustomer.Create(const AName: string; AAge: Integer);  
 begin
   inherited Create;  { inherited peut être implicite en Delphi }
   FName := AName;
   FAge := AAge;
 end;
 
-function TCustomer.GetInfo: string;
+function TCustomer.GetInfo: string;  
 begin
   Result := Format('%s (%d years)', [FName, FAge]);
 end;
@@ -555,7 +555,7 @@ type
     procedure DoSomething;
   end;
 
-procedure TestPointers;
+procedure TestPointers;  
 var
   Obj: TMyClass;
   P: Pointer;
@@ -613,7 +613,7 @@ uses
   Registry;     { Registre Windows }
 
 { Code Delphi typique fonctionne sans modification }
-procedure DelphiStyleCode;
+procedure DelphiStyleCode;  
 var
   SL: TStringList;
   I: Integer;
@@ -665,7 +665,7 @@ type
 
 implementation
 
-constructor TPortableClass.Create;
+constructor TPortableClass.Create;  
 begin
   {$IFDEF FPC}
   inherited Create;  { Explicite pour FPC }
@@ -693,7 +693,7 @@ program MacPasExample;
 type
   Str255 = string[255];
 
-procedure MacStyleProc(var S: Str255);
+procedure MacStyleProc(var S: Str255);  
 begin
   S := 'Mac Pascal style';
 end;
@@ -778,13 +778,13 @@ end.
 
 ```pascal
 {$MODE FPC}
-program AtOperatorTP;
+program AtOperatorTP;  
 type
   TProc = procedure;
-procedure MyProc;
+procedure MyProc;  
 begin
   WriteLn('Called');
-end;
+end;  
 var
   P: Pointer;
 begin
@@ -796,13 +796,13 @@ end.
 
 ```pascal
 {$MODE OBJFPC}
-program AtOperatorObjFPC;
+program AtOperatorObjFPC;  
 type
   TProc = procedure;
-procedure MyProc;
+procedure MyProc;  
 begin
   WriteLn('Called');
-end;
+end;  
 var
   Proc: TProc;
 begin
@@ -815,13 +815,13 @@ end.
 
 ```pascal
 {$MODE DELPHI}
-program AtOperatorDelphi;
+program AtOperatorDelphi;  
 type
   TProc = procedure;
-procedure MyProc;
+procedure MyProc;  
 begin
   WriteLn('Called');
-end;
+end;  
 var
   P: Pointer;
   Proc: TProc;
@@ -964,7 +964,7 @@ type
 
 implementation
 
-constructor TMyClass.Create;
+constructor TMyClass.Create;  
 begin
   {$IFDEF MODE_OBJFPC}
   inherited Create;  { Explicite pour ObjFPC }

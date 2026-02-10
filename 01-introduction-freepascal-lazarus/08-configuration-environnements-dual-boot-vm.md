@@ -144,8 +144,8 @@ Partitions Linux (150 GB total) :
 sudo nano /etc/default/grub
 
 # Options importantes
-GRUB_DEFAULT=0              # OS par défaut (0=premier)
-GRUB_TIMEOUT=10            # Délai en secondes
+GRUB_DEFAULT=0              # OS par défaut (0=premier)  
+GRUB_TIMEOUT=10            # Délai en secondes  
 GRUB_DISABLE_OS_PROBER=false  # Détection Windows
 
 # Appliquer les changements
@@ -164,7 +164,7 @@ sudo os-prober
 # (accessible en lecture/écriture par Windows et Linux)
 
 # Sur Linux, monter automatiquement
-sudo blkid  # Trouver UUID de la partition
+sudo blkid  # Trouver UUID de la partition  
 sudo nano /etc/fstab
 
 # Ajouter ligne :
@@ -188,8 +188,8 @@ Script `sync-lazarus-config.sh` :
 #!/bin/bash
 # Synchroniser config Lazarus entre OS
 
-SHARED_DIR="/mnt/shared/LazarusConfig"
-LINUX_CONFIG="$HOME/.lazarus"
+SHARED_DIR="/mnt/shared/LazarusConfig"  
+LINUX_CONFIG="$HOME/.lazarus"  
 WIN_CONFIG="/mnt/windows/Users/$USER/AppData/Local/lazarus"
 
 # Fonction de synchronisation
@@ -207,9 +207,9 @@ sync_configs() {
 }
 
 # Menu
-echo "1. Sauvegarder config Linux"
-echo "2. Restaurer depuis Windows"
-echo "3. Synchronisation bidirectionnelle"
+echo "1. Sauvegarder config Linux"  
+echo "2. Restaurer depuis Windows"  
+echo "3. Synchronisation bidirectionnelle"  
 read -p "Choix : " choice
 
 case $choice in
@@ -298,7 +298,7 @@ choco install virtualbox-guest-additions-guest.install
 
 ```bash
 # Ubuntu/Debian
-sudo apt update
+sudo apt update  
 sudo apt install virtualbox virtualbox-ext-pack
 
 # Ajouter utilisateur au groupe vboxusers
@@ -328,10 +328,10 @@ VM Ubuntu pour Lazarus :
 #!/bin/bash
 # create-dev-vm.sh - Créer VM de développement
 
-VM_NAME="Ubuntu-Dev-Lazarus"
-VM_RAM=4096
-VM_VRAM=128
-VM_DISK=51200
+VM_NAME="Ubuntu-Dev-Lazarus"  
+VM_RAM=4096  
+VM_VRAM=128  
+VM_DISK=51200  
 VM_CPUS=2
 
 # Créer la VM
@@ -351,8 +351,8 @@ VBoxManage modifyvm "$VM_NAME" \
     --usbehci on
 
 # Créer et attacher disque
-VBoxManage createhd --filename "$VM_NAME.vdi" --size $VM_DISK
-VBoxManage storagectl "$VM_NAME" --name "SATA" --add sata --controller IntelAhci
+VBoxManage createhd --filename "$VM_NAME.vdi" --size $VM_DISK  
+VBoxManage storagectl "$VM_NAME" --name "SATA" --add sata --controller IntelAhci  
 VBoxManage storageattach "$VM_NAME" --storagectl "SATA" --port 0 --device 0 \
     --type hdd --medium "$VM_NAME.vdi"
 
@@ -361,12 +361,12 @@ VBoxManage storageattach "$VM_NAME" --storagectl "SATA" --port 1 --device 0 \
     --type dvddrive --medium ubuntu-22.04-desktop-amd64.iso
 
 # Configuration réseau
-VBoxManage modifyvm "$VM_NAME" --nic1 nat
+VBoxManage modifyvm "$VM_NAME" --nic1 nat  
 VBoxManage modifyvm "$VM_NAME" --nic2 hostonly --hostonlyadapter2 vboxnet0
 
 # Activer les fonctionnalités
-VBoxManage modifyvm "$VM_NAME" --clipboard bidirectional
-VBoxManage modifyvm "$VM_NAME" --draganddrop bidirectional
+VBoxManage modifyvm "$VM_NAME" --clipboard bidirectional  
+VBoxManage modifyvm "$VM_NAME" --draganddrop bidirectional  
 VBoxManage modifyvm "$VM_NAME" --accelerate3d on
 
 echo "VM $VM_NAME créée avec succès !"
@@ -390,7 +390,7 @@ systeminfo | findstr /i "virtualization"
 
 ```bash
 # Paravirtualisation
-VBoxManage modifyvm "VM-Name" --paravirtprovider kvm  # Pour Linux
+VBoxManage modifyvm "VM-Name" --paravirtprovider kvm  # Pour Linux  
 VBoxManage modifyvm "VM-Name" --paravirtprovider hyperv  # Pour Windows
 
 # Nested Paging (important !)
@@ -400,7 +400,7 @@ VBoxManage modifyvm "VM-Name" --nestedpaging on
 VBoxManage modifyvm "VM-Name" --largepages on
 
 # Compilation JIT
-VBoxManage modifyvm "VM-Name" --vtxvpid on
+VBoxManage modifyvm "VM-Name" --vtxvpid on  
 VBoxManage modifyvm "VM-Name" --vtxux on
 ```
 
@@ -428,11 +428,11 @@ sudo mount -t vboxsf Projects /home/user/SharedProjects
 
 ```bash
 # Dans la VM, installer Guest Additions
-sudo apt update
+sudo apt update  
 sudo apt install build-essential dkms linux-headers-$(uname -r)
 
 # Menu VirtualBox : Périphériques → Insérer l'image CD des Additions invité
-sudo mount /dev/cdrom /mnt
+sudo mount /dev/cdrom /mnt  
 sudo /mnt/VBoxLinuxAdditions.run
 
 # Redémarrer
@@ -464,7 +464,7 @@ Windows 11
 # PowerShell en administrateur
 
 # Activer WSL et VM Platform
-dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart  
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 
 # Redémarrer
@@ -488,7 +488,7 @@ wsl --list --verbose
 
 ```bash
 # Dans WSL Ubuntu
-sudo apt update
+sudo apt update  
 sudo apt upgrade
 
 # Installer Lazarus et dépendances GUI
@@ -500,7 +500,7 @@ sudo apt install lazarus
 # - WSLg (Windows 11 natif)
 
 # Configuration pour VcXsrv
-echo 'export DISPLAY=:0.0' >> ~/.bashrc
+echo 'export DISPLAY=:0.0' >> ~/.bashrc  
 source ~/.bashrc
 
 # Tester
@@ -521,7 +521,7 @@ ln -s /mnt/c/Users/YourName/Documents/LazarusProjects ~/WinProjects
 sudo nano /etc/wsl.conf
 
 [automount]
-enabled = true
+enabled = true  
 options = "metadata,umask=22,fmask=11"
 ```
 
@@ -557,7 +557,7 @@ Docker permet des environnements de développement **reproductibles** :
 FROM ubuntu:22.04
 
 # Variables d'environnement
-ENV DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=noninteractive  
 ENV TZ=Europe/Paris
 
 # Installation des dépendances
@@ -573,15 +573,15 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean
 
 # Utilisateur non-root
-RUN useradd -m -s /bin/bash developer
-USER developer
+RUN useradd -m -s /bin/bash developer  
+USER developer  
 WORKDIR /home/developer
 
 # Port VNC pour accès GUI
 EXPOSE 5900
 
 # Script de démarrage
-COPY start.sh /home/developer/
+COPY start.sh /home/developer/  
 CMD ["/home/developer/start.sh"]
 ```
 
@@ -711,8 +711,8 @@ MyProject/
 *.o
 *.ppu
 *.compiled
-lib/
-backup/
+lib/  
+backup/  
 build/*/
 ```
 
@@ -838,9 +838,9 @@ end
 
 ```bash
 # Utilisation
-vagrant up        # Créer et démarrer VM
-vagrant ssh       # Se connecter
-vagrant halt      # Arrêter
+vagrant up        # Créer et démarrer VM  
+vagrant ssh       # Se connecter  
+vagrant halt      # Arrêter  
 vagrant destroy   # Supprimer
 ```
 
