@@ -1662,10 +1662,10 @@ PIÈGES À ÉVITER :
 
 L'optimisation est un domaine vaste et puissant. Avec FreePascal, vous disposez de :
 
-✓ **Algorithmes classiques** : Gradient, Newton, quasi-Newton
-✓ **Métaheuristiques** : Recuit simulé, génétique, essaims
-✓ **Gestion des contraintes** : Pénalités, barrières
-✓ **Performance** : Code compilé natif
+✓ **Algorithmes classiques** : Gradient, Newton, quasi-Newton  
+✓ **Métaheuristiques** : Recuit simulé, génétique, essaims  
+✓ **Gestion des contraintes** : Pénalités, barrières  
+✓ **Performance** : Code compilé natif  
 ✓ **Portabilité** : Même code sur toutes plateformes
 
 ### Points clés à retenir

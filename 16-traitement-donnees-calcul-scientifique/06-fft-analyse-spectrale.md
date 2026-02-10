@@ -2256,11 +2256,11 @@ PIÈGES À ÉVITER :
 
 La FFT et l'analyse spectrale sont des outils puissants pour :
 
-✓ **Comprendre les signaux** : Identifier les fréquences composantes
-✓ **Filtrer** : Éliminer les fréquences indésirables
-✓ **Analyser** : Détecter des patterns, fréquences dominantes
-✓ **Modifier** : Effets audio, compression, amélioration
-✓ **Compresser** : Réduire la taille des données
+✓ **Comprendre les signaux** : Identifier les fréquences composantes  
+✓ **Filtrer** : Éliminer les fréquences indésirables  
+✓ **Analyser** : Détecter des patterns, fréquences dominantes  
+✓ **Modifier** : Effets audio, compression, amélioration  
+✓ **Compresser** : Réduire la taille des données  
 ✓ **Détecter** : Reconnaissance de hauteur, identification
 
 ### Points clés à retenir

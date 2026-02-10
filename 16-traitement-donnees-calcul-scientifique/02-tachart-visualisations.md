@@ -1433,12 +1433,12 @@ while LineSeries1.Count > 1000 do
 
 TAChart est un outil puissant et flexible pour créer des visualisations de données en FreePascal/Lazarus. Ses points forts :
 
-✓ **Facile à utiliser** : Interface intuitive et bien documentée
-✓ **Complet** : Tous les types de graphiques courants
-✓ **Performant** : Gère efficacement des milliers de points
-✓ **Personnalisable** : Contrôle total sur l'apparence
-✓ **Interactif** : Zoom, pan, sélection, info-bulles
-✓ **Multi-plateforme** : Fonctionne identiquement sur Windows, Ubuntu, macOS
+✓ **Facile à utiliser** : Interface intuitive et bien documentée  
+✓ **Complet** : Tous les types de graphiques courants  
+✓ **Performant** : Gère efficacement des milliers de points  
+✓ **Personnalisable** : Contrôle total sur l'apparence  
+✓ **Interactif** : Zoom, pan, sélection, info-bulles  
+✓ **Multi-plateforme** : Fonctionne identiquement sur Windows, Ubuntu, macOS  
 ✓ **Gratuit** : Open source, aucune limitation
 
 ### Pour aller plus loin

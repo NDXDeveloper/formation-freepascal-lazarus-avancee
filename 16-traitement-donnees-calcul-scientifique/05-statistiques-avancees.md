@@ -2373,11 +2373,11 @@ end;
 
 Les statistiques avancées sont essentielles pour l'analyse de données scientifiques. Avec FreePascal, vous disposez de :
 
-✓ **Outils complets** : Statistiques descriptives, inférentielles, tests d'hypothèses
-✓ **Performance** : Code compilé natif, calculs rapides
-✓ **Visualisations** : Integration avec TAChart
-✓ **Portabilité** : Même code sur Windows et Ubuntu
-✓ **Flexibilité** : Du simple calcul aux analyses multivariées complexes
+✓ **Outils complets** : Statistiques descriptives, inférentielles, tests d'hypothèses  
+✓ **Performance** : Code compilé natif, calculs rapides  
+✓ **Visualisations** : Integration avec TAChart  
+✓ **Portabilité** : Même code sur Windows et Ubuntu  
+✓ **Flexibilité** : Du simple calcul aux analyses multivariées complexes  
 ✓ **Reproductibilité** : Code source clair et maintenable
 
 ### Points clés à retenir

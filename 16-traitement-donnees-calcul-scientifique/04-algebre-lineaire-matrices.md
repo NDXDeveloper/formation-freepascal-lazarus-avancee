@@ -2384,10 +2384,10 @@ end;
 
 L'algèbre linéaire est un outil puissant et polyvalent pour le calcul scientifique. Avec FreePascal, vous disposez de :
 
-✓ **Performance native** : Code compilé efficace
-✓ **Contrôle précis** : Gestion fine de la mémoire et des calculs
-✓ **Portabilité** : Code identique sur Windows/Ubuntu
-✓ **Facilité d'utilisation** : Syntaxe claire et lisible
+✓ **Performance native** : Code compilé efficace  
+✓ **Contrôle précis** : Gestion fine de la mémoire et des calculs  
+✓ **Portabilité** : Code identique sur Windows/Ubuntu  
+✓ **Facilité d'utilisation** : Syntaxe claire et lisible  
 ✓ **Interopérabilité** : Intégration avec bibliothèques optimisées
 
 ### Points clés à retenir

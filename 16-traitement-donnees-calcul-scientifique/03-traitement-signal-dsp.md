@@ -3304,12 +3304,12 @@ end;
 
 ### Points clés du traitement du signal
 
-✓ **Comprendre les bases** : Fréquence d'échantillonnage, théorème de Nyquist
-✓ **Maîtriser la FFT** : Transformation temps-fréquence
-✓ **Utiliser les filtres** : Passe-bas, passe-haut, passe-bande
-✓ **Gérer les effets** : Écho, réverbération, distorsion
-✓ **Optimiser** : SIMD, traitement par blocs, FFT optimisée
-✓ **Tester** : Validation avec signaux de test
+✓ **Comprendre les bases** : Fréquence d'échantillonnage, théorème de Nyquist  
+✓ **Maîtriser la FFT** : Transformation temps-fréquence  
+✓ **Utiliser les filtres** : Passe-bas, passe-haut, passe-bande  
+✓ **Gérer les effets** : Écho, réverbération, distorsion  
+✓ **Optimiser** : SIMD, traitement par blocs, FFT optimisée  
+✓ **Tester** : Validation avec signaux de test  
 ✓ **Multi-plateforme** : Code portable Windows/Ubuntu
 
 ### Applications avancées

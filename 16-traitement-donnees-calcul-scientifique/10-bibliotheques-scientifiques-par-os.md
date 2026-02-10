@@ -2277,7 +2277,7 @@ MonProjetScientifique/
 
 ### 8.3 Exemple de README.md
 
-```markdown
+````markdown
 # Projet Scientifique FreePascal
 
 Application de calcul scientifique multi-plateforme (Windows/Ubuntu).
@@ -2317,7 +2317,7 @@ sont correctement installées.
 
 - [Installation Windows](docs/INSTALL_WINDOWS.md)
 - [Installation Ubuntu](docs/INSTALL_UBUNTU.md)
-```
+````
 
 ---
 

@@ -501,9 +501,9 @@ NumLib est utilisée dans de nombreux domaines :
 
 NumLib est un outil puissant pour le calcul numérique en FreePascal. Elle offre :
 
-✓ Une interface claire et intuitive
-✓ Des algorithmes éprouvés et fiables
-✓ Une compatibilité multi-plateforme
+✓ Une interface claire et intuitive  
+✓ Des algorithmes éprouvés et fiables  
+✓ Une compatibilité multi-plateforme  
 ✓ Des performances satisfaisantes pour la plupart des applications
 
 Pour approfondir vos connaissances, n'hésitez pas à explorer les autres chapitres de cette formation, notamment :

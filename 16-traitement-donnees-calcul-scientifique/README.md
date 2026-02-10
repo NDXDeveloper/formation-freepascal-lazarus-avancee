@@ -355,22 +355,25 @@ procedure ChargerDonneesCSV(nomFichier: String; out donnees: TMatrix);
 var
   fichier: TextFile;
   ligne: String;
-  valeurs: TStringArray;
+  valeurs: TStringList;
   i, j: Integer;
 begin
   AssignFile(fichier, nomFichier);
   Reset(fichier);
+  valeurs := TStringList.Create;
   try
+    valeurs.Delimiter := ',';
+    valeurs.StrictDelimiter := True;
     i := 0;
     while not EOF(fichier) do
     begin
       ReadLn(fichier, ligne);
-      valeurs := ligne.Split(',');
+      valeurs.DelimitedText := ligne;
 
       if i = 0 then
-        SetLength(donnees, 100, Length(valeurs));
+        SetLength(donnees, 100, valeurs.Count);
 
-      for j := 0 to High(valeurs) do
+      for j := 0 to valeurs.Count - 1 do
         donnees[i, j] := StrToFloat(valeurs[j]);
 
       Inc(i);
@@ -379,6 +382,7 @@ begin
     // Ajuster la taille finale
     SetLength(donnees, i, Length(donnees[0]));
   finally
+    valeurs.Free;
     CloseFile(fichier);
   end;
 end;
@@ -554,7 +558,7 @@ end.
 program RegressionLineaire;
 
 uses
-  Math;
+  SysUtils, Math;
 
 type
   TPoint = record
