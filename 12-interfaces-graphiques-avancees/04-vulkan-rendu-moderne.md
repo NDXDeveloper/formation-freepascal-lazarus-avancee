@@ -746,21 +746,21 @@ Pour un développeur avec expérience OpenGL :
 
 ### Avantages de Vulkan
 
-✅ **Performance maximale** : Overhead CPU minimal
-✅ **Multi-threading natif** : Exploite tous les cœurs CPU
-✅ **Contrôle total** : Aucune surprise cachée
-✅ **Portabilité** : Fonctionne partout
-✅ **Moderne** : Conçu pour le matériel actuel et futur
-✅ **Compute shaders** : Excellent pour GPGPU
+✅ **Performance maximale** : Overhead CPU minimal  
+✅ **Multi-threading natif** : Exploite tous les cœurs CPU  
+✅ **Contrôle total** : Aucune surprise cachée  
+✅ **Portabilité** : Fonctionne partout  
+✅ **Moderne** : Conçu pour le matériel actuel et futur  
+✅ **Compute shaders** : Excellent pour GPGPU  
 ✅ **Mobile** : Support Android natif
 
 ### Inconvénients de Vulkan
 
-❌ **Complexité élevée** : Courbe d'apprentissage raide
-❌ **Code volumineux** : 10-20× plus de code qu'OpenGL
-❌ **Debugging difficile** : Moins de messages d'erreur explicites
-❌ **Temps de développement** : Beaucoup plus long
-❌ **Bindings Pascal** : Moins matures que C/C++
+❌ **Complexité élevée** : Courbe d'apprentissage raide  
+❌ **Code volumineux** : 10-20× plus de code qu'OpenGL  
+❌ **Debugging difficile** : Moins de messages d'erreur explicites  
+❌ **Temps de développement** : Beaucoup plus long  
+❌ **Bindings Pascal** : Moins matures que C/C++  
 ❌ **Support ancien matériel** : Nécessite GPU récent (2016+)
 
 ---

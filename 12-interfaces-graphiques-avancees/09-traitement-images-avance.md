@@ -448,6 +448,9 @@ type
     property Height: Integer read FHeight;
   end;
 
+type
+  TEffectProcedure = procedure(ABitmap: TBGRABitmap);
+
 procedure ApplyMaskEffect(Bitmap: TBGRABitmap; Mask: TMask;
   EffectProc: TEffectProcedure);
 var
@@ -575,6 +578,10 @@ Pour les images volumineuses, le multi-threading accélère considérablement le
 uses
   MTProcs; // Multi-Threading Procedures
 
+{ Note : la procédure anonyme ci-dessous nécessite
+  {$modeswitch anonymousfunctions} en mode ObjFPC (FPC 3.3.1+),
+  ou {$mode delphi}. }
+
 procedure ParallelProcessImage(Bitmap: TBGRABitmap;
   ProcessLine: TProcessLineProc);
 begin
@@ -695,10 +702,12 @@ end;
 ```pascal
 unit ImageEditor;
 
+{$mode objfpc}{$H+}
+
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, ExtCtrls, StdCtrls,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
   BGRABitmap, BGRABitmapTypes;
 
 type

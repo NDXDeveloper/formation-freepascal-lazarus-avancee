@@ -1444,6 +1444,7 @@ type
     procedure OnColumnCheck(Sender: TObject);
     procedure OnQueryTypeChange(Sender: TObject);
     procedure OnAddWhereCondition(Sender: TObject);
+    procedure OnDeleteWhereCondition(Sender: TObject);
     procedure OnGenerateSQL(Sender: TObject);
 
     function BuildSelectQuery: string;
@@ -1785,12 +1786,14 @@ begin
   BtnDelete.Height := 25;
   BtnDelete.Caption := 'Suppr.';
   BtnDelete.Tag := PtrInt(Panel);
-  BtnDelete.OnClick := procedure(Sender: TObject)
-    begin
-      TPanel(TButton(Sender).Tag).Free;
-    end;
+  BtnDelete.OnClick := @OnDeleteWhereCondition;
 
   FWhereConditions.Add('condition');
+end;
+
+procedure TfrmSQLQueryBuilder.OnDeleteWhereCondition(Sender: TObject);
+begin
+  TPanel(TButton(Sender).Tag).Free;
 end;
 
 procedure TfrmSQLQueryBuilder.OnGenerateSQL(Sender: TObject);
@@ -2205,6 +2208,7 @@ procedure TfrmDiagramEditor.OnCanvasMouseDown(Sender: TObject;
 var
   NodeType: TNodeType;
   HitNode: TDiagramNode;
+  i: Integer;
 begin
   if Button = mbLeft then
   begin
@@ -2250,7 +2254,7 @@ begin
         FDragStart := Point(X, Y);
 
         // Désélectionner tous les autres
-        for var i := 0 to FNodes.Count - 1 do
+        for i := 0 to FNodes.Count - 1 do
           TDiagramNode(FNodes[i]).Selected := False;
 
         HitNode.Selected := True;
@@ -2296,6 +2300,8 @@ begin
   for i := 0 to FNodes.Count - 1 do
     DrawNode(FCanvas.Canvas, TDiagramNode(FNodes[i]));
 end;
+
+procedure DrawArrow(ACanvas: TCanvas; X, Y, FromX, FromY: Integer); forward;
 
 procedure TfrmDiagramEditor.DrawNode(ACanvas: TCanvas; ANode: TDiagramNode);
 var
@@ -2632,6 +2638,7 @@ var
   Bitmap: TBitmap;
   IntfImg: TLazIntfImage;
   Writer: TFPWriterPNG;
+  i: Integer;
 begin
   // Créer un bitmap de la taille du canvas
   Bitmap := TBitmap.Create;
@@ -2643,11 +2650,11 @@ begin
     Bitmap.Canvas.FillRect(0, 0, Bitmap.Width, Bitmap.Height);
 
     // Dessiner les connexions
-    for var i := 0 to FConnections.Count - 1 do
+    for i := 0 to FConnections.Count - 1 do
       DrawConnection(Bitmap.Canvas, TDiagramConnection(FConnections[i]));
 
     // Dessiner les nœuds
-    for var i := 0 to FNodes.Count - 1 do
+    for i := 0 to FNodes.Count - 1 do
       DrawNode(Bitmap.Canvas, TDiagramNode(FNodes[i]));
 
     // Convertir en PNG
@@ -2710,6 +2717,8 @@ type
     procedure CreateColorGrid;
     procedure CreateColorControls;
 
+    procedure OnNewPalette(Sender: TObject);
+    procedure OnAddColorClick(Sender: TObject);
     procedure OnPaletteSelect(Sender: TObject);
     procedure OnColorGridDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
@@ -2803,13 +2812,7 @@ begin
   BtnAdd.Left := 10;
   BtnAdd.Top := 5;
   BtnAdd.Width := 85;
-  BtnAdd.OnClick := procedure(Sender: TObject)
-    var PaletteName: string;
-    begin
-      PaletteName := InputBox('Nouvelle palette', 'Nom de la palette:', '');
-      if PaletteName <> '' then
-        AddPalette(PaletteName);
-    end;
+  BtnAdd.OnClick := @OnNewPalette;
 
   BtnDelete := TButton.Create(Panel);
   BtnDelete.Parent := Panel;
@@ -3001,12 +3004,23 @@ begin
     Width := 230;
     Height := 35;
     Caption := 'Ajouter à la palette';
-    OnClick := procedure(Sender: TObject)
-      begin
-        if Assigned(FCurrentPalette) then
-          AddColorToPalette(FColorPreview.Color);
-      end;
+    OnClick := @OnAddColorClick;
   end;
+end;
+
+procedure TfrmColorPaletteEditor.OnNewPalette(Sender: TObject);
+var
+  PaletteName: string;
+begin
+  PaletteName := InputBox('Nouvelle palette', 'Nom de la palette:', '');
+  if PaletteName <> '' then
+    AddPalette(PaletteName);
+end;
+
+procedure TfrmColorPaletteEditor.OnAddColorClick(Sender: TObject);
+begin
+  if Assigned(FCurrentPalette) then
+    AddColorToPalette(FColorPreview.Color);
 end;
 
 procedure TfrmColorPaletteEditor.OnPaletteSelect(Sender: TObject);
@@ -3616,6 +3630,7 @@ type
     procedure CreateVariablePanel;
     procedure CreatePreview;
 
+    procedure OnNewTemplate(Sender: TObject);
     procedure OnTemplateSelect(Sender: TObject);
     procedure OnEditorChange(Sender: TObject);
     procedure OnInsertVariable(Sender: TObject);
@@ -3710,13 +3725,7 @@ begin
   BtnNew.Left := 10;
   BtnNew.Top := 5;
   BtnNew.Width := 230;
-  BtnNew.OnClick := procedure(Sender: TObject)
-    var TemplateName: string;
-    begin
-      TemplateName := InputBox('Nouveau modèle', 'Nom du modèle:', '');
-      if TemplateName <> '' then
-        AddTemplate(TemplateName, 'Général');
-    end;
+  BtnNew.OnClick := @OnNewTemplate;
 end;
 
 procedure TfrmTemplateEditor.CreateEditor;
@@ -3829,6 +3838,15 @@ begin
   BtnGenerate.Top := 5;
   BtnGenerate.Width := 150;
   BtnGenerate.OnClick := @OnGeneratePreview;
+end;
+
+procedure TfrmTemplateEditor.OnNewTemplate(Sender: TObject);
+var
+  TemplateName: string;
+begin
+  TemplateName := InputBox('Nouveau modèle', 'Nom du modèle:', '');
+  if TemplateName <> '' then
+    AddTemplate(TemplateName, 'Général');
 end;
 
 procedure TfrmTemplateEditor.OnTemplateSelect(Sender: TObject);
@@ -4371,7 +4389,7 @@ unit RegexEditor;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  Classes, SysUtils, StrUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, ComCtrls, RegExpr;
 
 type
@@ -4867,6 +4885,7 @@ type
     procedure OnCalculate(Sender: TObject);
     procedure OnInsertFunction(Sender: TObject);
     procedure OnInsertOperator(Sender: TObject);
+    procedure OnVariableChange(Sender: TObject);
 
     function EvaluateFormula(const AFormula: string): Double;
     function ValidateFormula(const AFormula: string): Boolean;
@@ -5076,10 +5095,7 @@ begin
     VarEdit.Width := 130;
     VarEdit.Text := FVariables.ValueFromIndex[i];
     VarEdit.Name := 'Var_' + FVariables.Names[i];
-    VarEdit.OnChange := procedure(Sender: TObject)
-      begin
-        FVariables.Values[Copy(TEdit(Sender).Name, 5, 100)] := TEdit(Sender).Text;
-      end;
+    VarEdit.OnChange := @OnVariableChange;
 
     Inc(Y, 30);
   end;
@@ -5108,6 +5124,11 @@ begin
   FHistoryMemo.ScrollBars := ssBoth;
   FHistoryMemo.ReadOnly := True;
   FHistoryMemo.Font.Name := 'Courier New';
+end;
+
+procedure TfrmMathFormulaEditor.OnVariableChange(Sender: TObject);
+begin
+  FVariables.Values[Copy(TEdit(Sender).Name, 5, 100)] := TEdit(Sender).Text;
 end;
 
 procedure TfrmMathFormulaEditor.OnFormulaChange(Sender: TObject);
@@ -5150,19 +5171,19 @@ end;
 
 procedure TfrmMathFormulaEditor.OnInsertOperator(Sender: TObject);
 var
-  Operator: string;
+  OperatorStr: string;
 begin
   case (Sender as TSpeedButton).Tag of
-    1: Operator := '+';
-    2: Operator := '-';
-    3: Operator := '*';
-    4: Operator := '/';
-    5: Operator := '^';
-    6: Operator := '(';
-    7: Operator := ')';
+    1: OperatorStr := '+';
+    2: OperatorStr := '-';
+    3: OperatorStr := '*';
+    4: OperatorStr := '/';
+    5: OperatorStr := '^';
+    6: OperatorStr := '(';
+    7: OperatorStr := ')';
   end;
 
-  FFormulaEdit.SelText := Operator;
+  FFormulaEdit.SelText := OperatorStr;
   FFormulaEdit.SetFocus;
 end;
 
@@ -5212,6 +5233,8 @@ begin
 
   Result := (OpenParen = CloseParen);
 end;
+
+function EvaluateSimpleExpression(const AExpr: string): Double; forward;
 
 function TfrmMathFormulaEditor.EvaluateFormula(const AFormula: string): Double;
 var
@@ -5451,6 +5474,8 @@ end;
 
 ```pascal
 type
+  TRenderProc = procedure;
+
   TRenderCache = class
   private
     FCachedBitmap: TBitmap;
@@ -5459,10 +5484,10 @@ type
   public
     procedure Invalidate;
     function GetCachedBitmap: TBitmap;
-    procedure UpdateCache(AContent: string; ARenderFunc: TProc);
+    procedure UpdateCache(AContent: string; ARenderFunc: TRenderProc);
   end;
 
-procedure TRenderCache.UpdateCache(AContent: string; ARenderFunc: TProc);
+procedure TRenderCache.UpdateCache(AContent: string; ARenderFunc: TRenderProc);
 begin
   if not FCacheValid or (AContent <> FLastContent) then
   begin

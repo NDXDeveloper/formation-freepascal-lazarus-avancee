@@ -1967,7 +1967,7 @@ var
   i, j: Integer;
   img: TMat;
   sample: array of Single;
-  label: Integer;
+  classLabel: Integer;  { label est un mot réservé en Pascal }
 begin
   classifier := TSVMClassifier.Create;
   try
@@ -1991,8 +1991,8 @@ begin
       Move(sample[0], trainData.data[i * 784], 784 * SizeOf(Single));
 
       // Label (0-9)
-      label := i mod 10;
-      PInteger(labels.data)[i] := label;
+      classLabel := i mod 10;
+      PInteger(labels.data)[i] := classLabel;
 
       img.release;
     end;
@@ -2123,7 +2123,7 @@ end;
 procedure SegmentImageByColor(const imagePath: string; numColors: Integer);
 var
   img, reshaped, labels, centers: TMat;
-  i, j, label: Integer;
+  i, j, classLabel: Integer;  { label est un mot réservé en Pascal }
   color: TVec3b;
   result: TMat;
 begin
@@ -2143,9 +2143,11 @@ begin
     begin
       for j := 0 to img.cols - 1 do
       begin
-        label := PInteger(labels.data)[i * img.cols + j];
-        color := TVec3b(centers.at<TVec3f>(label));
-        result.at<TVec3b>(i, j) := color;
+        classLabel := PInteger(labels.data)[i * img.cols + j];
+        { Note : la syntaxe .at<T> est C++; en Pascal, utiliser
+          un cast de pointeur ou une méthode du binding }
+        color := TVec3b(centers.at(classLabel));
+        result.at(i, j, color);
       end;
     end;
 
@@ -2848,7 +2850,7 @@ var
   timestamp: string;
 begin
   timestamp := FormatDateTime('yyyymmdd_hhnnss', Now);
-  filename := Format('%s\snapshot_%s_%s.jpg', [FSnapshotDir, timestamp, reason]);
+  filename := Format('%s%ssnapshot_%s_%s.jpg', [FSnapshotDir, PathDelim, timestamp, reason]);
 
   imwrite(PAnsiChar(AnsiString(filename)), frame);
   LogEvent(Format('Snapshot sauvegardé : %s', [filename]));
@@ -2864,7 +2866,7 @@ begin
   if FRecording then Exit;
 
   timestamp := FormatDateTime('yyyymmdd_hhnnss', Now);
-  filename := Format('%s\video_%s.avi', [FVideoDir, timestamp]);
+  filename := Format('%s%svideo_%s.avi', [FVideoDir, PathDelim, timestamp]);
 
   fps := FCapture.GetProperty(CAP_PROP_FPS);
   if fps = 0 then fps := 30.0;
@@ -3088,6 +3090,8 @@ end.
 
 ```pascal
 unit LicensePlateRecognition;
+
+{$mode objfpc}{$H+}
 
 interface
 

@@ -109,6 +109,7 @@ type
 
     procedure SetupInterface;
     procedure OnPaintBoxPaint(Sender: TObject);
+    procedure OnOpenSVGClick(Sender: TObject);
 
   public
     procedure LoadSVGFile(const AFileName: string);
@@ -143,7 +144,7 @@ end;
 procedure TfrmSVGViewer.SetupInterface;
 var
   MainMenu: TMainMenu;
-  MenuItem: TMenuItem;
+  MenuItem, SubItem: TMenuItem;
 begin
   // Menu
   MainMenu := TMainMenu.Create(Self);
@@ -153,23 +154,10 @@ begin
   MenuItem.Caption := '&Fichier';
   MainMenu.Items.Add(MenuItem);
 
-  with TMenuItem.Create(MenuItem) do
-  begin
-    Caption := '&Ouvrir SVG...';
-    OnClick := procedure(Sender: TObject)
-      var OpenDialog: TOpenDialog;
-      begin
-        OpenDialog := TOpenDialog.Create(nil);
-        try
-          OpenDialog.Filter := 'Fichiers SVG (*.svg)|*.svg|Tous les fichiers (*.*)|*.*';
-          if OpenDialog.Execute then
-            LoadSVGFile(OpenDialog.FileName);
-        finally
-          OpenDialog.Free;
-        end;
-      end;
-    MenuItem.Add(Self);
-  end;
+  SubItem := TMenuItem.Create(MenuItem);
+  SubItem.Caption := '&Ouvrir SVG...';
+  SubItem.OnClick := @OnOpenSVGClick;
+  MenuItem.Add(SubItem);
 
   // Panel pour l'affichage
   FImagePanel := TPanel.Create(Self);
@@ -183,6 +171,20 @@ begin
   FPaintBox.Parent := FImagePanel;
   FPaintBox.Align := alClient;
   FPaintBox.OnPaint := @OnPaintBoxPaint;
+end;
+
+procedure TfrmSVGViewer.OnOpenSVGClick(Sender: TObject);
+var
+  OpenDialog: TOpenDialog;
+begin
+  OpenDialog := TOpenDialog.Create(nil);
+  try
+    OpenDialog.Filter := 'Fichiers SVG (*.svg)|*.svg|Tous les fichiers (*.*)|*.*';
+    if OpenDialog.Execute then
+      LoadSVGFile(OpenDialog.FileName);
+  finally
+    OpenDialog.Free;
+  end;
 end;
 
 procedure TfrmSVGViewer.LoadSVGFile(const AFileName: string);
@@ -911,6 +913,9 @@ type
 
     procedure OnToolSelect(Sender: TObject);
     procedure OnColorChange(Sender: TObject);
+    procedure OnExportSVGClick(Sender: TObject);
+    procedure OnClearAllClick(Sender: TObject);
+    procedure OnWidthSpinChange(Sender: TObject);
 
     procedure DrawShape(ACanvas: TCanvas; AShape: TSVGShape);
     procedure ExportToSVG(const AFileName: string);
@@ -997,31 +1002,14 @@ begin
   Btn.Parent := Toolbar;
   Btn.Caption := 'Exporter SVG';
   Btn.Style := tbsButton;
-  Btn.OnClick := procedure(Sender: TObject)
-    var SaveDialog: TSaveDialog;
-    begin
-      SaveDialog := TSaveDialog.Create(nil);
-      try
-        SaveDialog.Filter := 'Fichiers SVG (*.svg)|*.svg';
-        SaveDialog.DefaultExt := 'svg';
-        if SaveDialog.Execute then
-          ExportToSVG(SaveDialog.FileName);
-      finally
-        SaveDialog.Free;
-      end;
-    end;
+  Btn.OnClick := @OnExportSVGClick;
 
   // Bouton Effacer
   Btn := TToolButton.Create(Toolbar);
   Btn.Parent := Toolbar;
   Btn.Caption := 'Effacer tout';
   Btn.Style := tbsButton;
-  Btn.OnClick := procedure(Sender: TObject)
-    begin
-      if MessageDlg('Confirmation', 'Effacer tout ?',
-         mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-        ClearCanvas;
-    end;
+  Btn.OnClick := @OnClearAllClick;
 end;
 
 procedure TfrmSVGEditor.CreateCanvas;
@@ -1120,10 +1108,34 @@ begin
   WidthSpin.MinValue := 1;
   WidthSpin.MaxValue := 20;
   WidthSpin.Value := FStrokeWidth;
-  WidthSpin.OnChange := procedure(Sender: TObject)
-    begin
-      FStrokeWidth := TSpinEdit(Sender).Value;
-    end;
+  WidthSpin.OnChange := @OnWidthSpinChange;
+end;
+
+procedure TfrmSVGEditor.OnExportSVGClick(Sender: TObject);
+var
+  SaveDialog: TSaveDialog;
+begin
+  SaveDialog := TSaveDialog.Create(nil);
+  try
+    SaveDialog.Filter := 'Fichiers SVG (*.svg)|*.svg';
+    SaveDialog.DefaultExt := 'svg';
+    if SaveDialog.Execute then
+      ExportToSVG(SaveDialog.FileName);
+  finally
+    SaveDialog.Free;
+  end;
+end;
+
+procedure TfrmSVGEditor.OnClearAllClick(Sender: TObject);
+begin
+  if MessageDlg('Confirmation', 'Effacer tout ?',
+     mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    ClearCanvas;
+end;
+
+procedure TfrmSVGEditor.OnWidthSpinChange(Sender: TObject);
+begin
+  FStrokeWidth := TSpinEdit(Sender).Value;
 end;
 
 procedure TfrmSVGEditor.OnToolSelect(Sender: TObject);
@@ -1766,12 +1778,18 @@ uses
   Classes, SysUtils, Graphics;
 
 type
+  TSVGExportSettings = record
+    FontName: string;
+    FontPath: string;
+    EmbedFonts: Boolean;
+  end;
+
   TSVGPlatformHelper = class
   public
     class function GetDefaultFont: string;
     class function GetFontPath(const AFontName: string): string;
     class function NormalizePath(const APath: string): string;
-    class procedure ConfigureSVGExport(var ASettings: record end);
+    class procedure ConfigureSVGExport(var ASettings: TSVGExportSettings);
   end;
 
 implementation
@@ -1806,15 +1824,18 @@ begin
   Result := StringReplace(APath, '\', '/', [rfReplaceAll]);
 end;
 
-class procedure TSVGPlatformHelper.ConfigureSVGExport(var ASettings: record end);
+class procedure TSVGPlatformHelper.ConfigureSVGExport(var ASettings: TSVGExportSettings);
 begin
   // Configuration spécifique à la plateforme
+  ASettings.FontName := GetDefaultFont;
+  ASettings.FontPath := GetFontPath(ASettings.FontName);
+
   {$IFDEF WINDOWS}
-  // Windows: utiliser les polices système
+  ASettings.EmbedFonts := True;
   {$ENDIF}
 
   {$IFDEF UNIX}
-  // Linux: vérifier la disponibilité de fontconfig
+  ASettings.EmbedFonts := False; // fontconfig gère les polices
   {$ENDIF}
 end;
 
@@ -2089,7 +2110,6 @@ end.
 procedure CreateDashboard;
 var
   SVG: TSVGGenerator;
-  ShapeLib: TSVGShapeLibrary;
 begin
   SVG := TSVGGenerator.Create(800, 600);
   try
@@ -2100,15 +2120,15 @@ begin
     SVG.AddText(300, 40, 'Tableau de Bord', 28, clNavy);
 
     // Indicateurs avec étoiles
-    ShapeLib.AddStar(SVG, 150, 150, 40, 20, 5, clYellow, clOrange);
+    TSVGShapeLibrary.AddStar(SVG, 150, 150, 40, 20, 5, clYellow, clOrange);
     SVG.AddText(130, 210, 'Performance', 14, clBlack);
 
     // Engrenage pour paramètres
-    ShapeLib.AddGear(SVG, 400, 150, 50, 30, 12, clGray);
+    TSVGShapeLibrary.AddGear(SVG, 400, 150, 50, 30, 12, clGray);
     SVG.AddText(375, 210, 'Paramètres', 14, clBlack);
 
     // Cœur pour favoris
-    ShapeLib.AddHeart(SVG, 650, 150, 40, clRed);
+    TSVGShapeLibrary.AddHeart(SVG, 650, 150, 40, clRed);
     SVG.AddText(630, 210, 'Favoris', 14, clBlack);
 
     // Graphique en barres simplifié
@@ -2124,11 +2144,11 @@ begin
     SVG.AddText(265, 420, 'Avr', 12, clBlack);
 
     // Flèches d'indication
-    ShapeLib.AddArrow(SVG, 400, 350, 500, 350, 15, clBlack);
+    TSVGShapeLibrary.AddArrow(SVG, 400, 350, 500, 350, 15, clBlack);
     SVG.AddText(420, 340, 'Tendance', 12, clBlack);
 
     // Polygone pour statistiques
-    ShapeLib.AddPolygon(SVG, 600, 380, 80, 6, clSkyBlue, clBlue);
+    TSVGShapeLibrary.AddPolygon(SVG, 600, 380, 80, 6, clSkyBlue, clBlue);
     SVG.AddText(575, 480, 'Statistiques', 12, clBlack);
 
     SVG.SaveToFile('dashboard.svg');
@@ -2144,7 +2164,6 @@ end;
 procedure CreateMindMap;
 var
   SVG: TSVGGenerator;
-  ShapeLib: TSVGShapeLibrary;
 begin
   SVG := TSVGGenerator.Create(1000, 700);
   try
@@ -2152,42 +2171,42 @@ begin
     SVG.AddRectangle(0, 0, 1000, 700, clWhite, clNone);
 
     // Nœud central
-    ShapeLib.AddRoundedRect(SVG, 400, 300, 200, 80, 20,
+    TSVGShapeLibrary.AddRoundedRect(SVG, 400, 300, 200, 80, 20,
                             RGB(255, 200, 100), clOrange);
     SVG.AddText(445, 345, 'Idée Centrale', 16, clBlack);
 
     // Branches principales
 
     // Branche 1 (haut gauche)
-    ShapeLib.AddArrow(SVG, 450, 300, 350, 200, 12, clBlue);
-    ShapeLib.AddRoundedRect(SVG, 250, 170, 150, 60, 15,
+    TSVGShapeLibrary.AddArrow(SVG, 450, 300, 350, 200, 12, clBlue);
+    TSVGShapeLibrary.AddRoundedRect(SVG, 250, 170, 150, 60, 15,
                             clLightBlue, clBlue);
     SVG.AddText(295, 205, 'Concept 1', 14, clBlack);
 
     // Branche 2 (haut droite)
-    ShapeLib.AddArrow(SVG, 550, 300, 650, 200, 12, clGreen);
-    ShapeLib.AddRoundedRect(SVG, 600, 170, 150, 60, 15,
+    TSVGShapeLibrary.AddArrow(SVG, 550, 300, 650, 200, 12, clGreen);
+    TSVGShapeLibrary.AddRoundedRect(SVG, 600, 170, 150, 60, 15,
                             clLightGreen, clGreen);
     SVG.AddText(645, 205, 'Concept 2', 14, clBlack);
 
     // Branche 3 (bas gauche)
-    ShapeLib.AddArrow(SVG, 450, 380, 350, 500, 12, clRed);
-    ShapeLib.AddRoundedRect(SVG, 250, 470, 150, 60, 15,
+    TSVGShapeLibrary.AddArrow(SVG, 450, 380, 350, 500, 12, clRed);
+    TSVGShapeLibrary.AddRoundedRect(SVG, 250, 470, 150, 60, 15,
                             RGB(255, 200, 200), clRed);
     SVG.AddText(295, 505, 'Concept 3', 14, clBlack);
 
     // Branche 4 (bas droite)
-    ShapeLib.AddArrow(SVG, 550, 380, 650, 500, 12, clPurple);
-    ShapeLib.AddRoundedRect(SVG, 600, 470, 150, 60, 15,
+    TSVGShapeLibrary.AddArrow(SVG, 550, 380, 650, 500, 12, clPurple);
+    TSVGShapeLibrary.AddRoundedRect(SVG, 600, 470, 150, 60, 15,
                             clLavender, clPurple);
     SVG.AddText(645, 505, 'Concept 4', 14, clBlack);
 
     // Sous-branches
-    ShapeLib.AddArrow(SVG, 250, 200, 150, 150, 10, clBlue);
+    TSVGShapeLibrary.AddArrow(SVG, 250, 200, 150, 150, 10, clBlue);
     SVG.AddCircle(150, 150, 30, clLightBlue, clBlue, 2);
     SVG.AddText(135, 155, 'A', 12, clBlack);
 
-    ShapeLib.AddArrow(SVG, 250, 200, 150, 250, 10, clBlue);
+    TSVGShapeLibrary.AddArrow(SVG, 250, 200, 150, 250, 10, clBlue);
     SVG.AddCircle(150, 250, 30, clLightBlue, clBlue, 2);
     SVG.AddText(135, 255, 'B', 12, clBlack);
 
@@ -2354,7 +2373,6 @@ uses
 procedure CreateCompleteSVG;
 var
   SVG: TSVGGenerator;
-  ShapeLib: TSVGShapeLibrary;
 begin
   SVG := TSVGGenerator.Create(800, 600);
   try
@@ -2366,10 +2384,10 @@ begin
 
     // Formes géométriques
     SVG.BeginGroup('shapes');
-    ShapeLib.AddStar(SVG, 100, 150, 40, 20, 5, clYellow, clOrange);
-    ShapeLib.AddPolygon(SVG, 200, 150, 40, 6, clLightBlue, clBlue);
-    ShapeLib.AddHeart(SVG, 300, 150, 30, clRed);
-    ShapeLib.AddGear(SVG, 400, 150, 40, 25, 10, clGray);
+    TSVGShapeLibrary.AddStar(SVG, 100, 150, 40, 20, 5, clYellow, clOrange);
+    TSVGShapeLibrary.AddPolygon(SVG, 200, 150, 40, 6, clLightBlue, clBlue);
+    TSVGShapeLibrary.AddHeart(SVG, 300, 150, 30, clRed);
+    TSVGShapeLibrary.AddGear(SVG, 400, 150, 40, 25, 10, clGray);
     SVG.EndGroup;
 
     // Graphique
@@ -2381,11 +2399,11 @@ begin
     SVG.EndGroup;
 
     // Flèches et annotations
-    ShapeLib.AddArrow(SVG, 400, 400, 550, 350, 15, clBlack);
+    TSVGShapeLibrary.AddArrow(SVG, 400, 400, 550, 350, 15, clBlack);
     SVG.AddText(450, 390, 'Tendance', 12, clBlack);
 
     // Rectangle arrondi avec texte
-    ShapeLib.AddRoundedRect(SVG, 500, 450, 250, 100, 15,
+    TSVGShapeLibrary.AddRoundedRect(SVG, 500, 450, 250, 100, 15,
                             RGB(255, 255, 200), clOrange);
     SVG.AddText(520, 490, 'Créé avec FreePascal', 16, clBlack);
     SVG.AddText(520, 515, 'et Lazarus', 16, clBlack);
@@ -2798,12 +2816,15 @@ type
     Attributes: TStringList;
     Methods: TStringList;
     X, Y: Integer;
+    destructor Destroy; override;
   end;
+
+  TRelationType = (rtAssociation, rtInheritance, rtComposition);
 
   TUMLRelation = record
     FromClass: TUMLClass;
     ToClass: TUMLClass;
-    RelationType: (rtAssociation, rtInheritance, rtComposition);
+    RelationType: TRelationType;
   end;
 
   TUMLDiagramGenerator = class
@@ -2825,6 +2846,13 @@ type
   end;
 
 implementation
+
+destructor TUMLClass.Destroy;
+begin
+  Attributes.Free;
+  Methods.Free;
+  inherited Destroy;
+end;
 
 constructor TUMLDiagramGenerator.Create;
 begin
@@ -2874,7 +2902,6 @@ procedure TUMLDiagramGenerator.DrawClass(ASVG: TSVGGenerator;
 var
   Width, Height: Integer;
   Y, i: Integer;
-  ShapeLib: TSVGShapeLibrary;
 begin
   Width := 200;
   Height := 80 + (AClass.Attributes.Count + AClass.Methods.Count) * 20;
@@ -2917,7 +2944,6 @@ procedure TUMLDiagramGenerator.DrawRelation(ASVG: TSVGGenerator;
   const ARelation: TUMLRelation);
 var
   X1, Y1, X2, Y2: Integer;
-  ShapeLib: TSVGShapeLibrary;
 begin
   // Points de connexion (centres des classes)
   X1 := ARelation.FromClass.X + 100;
@@ -2935,7 +2961,7 @@ begin
       begin
         ASVG.AddLine(X1, Y1, X2, Y2, clBlack, 2);
         // Triangle pour l'héritage
-        ShapeLib.AddArrow(ASVG, X1, Y1, X2, Y2, 15, clBlack);
+        TSVGShapeLibrary.AddArrow(ASVG, X1, Y1, X2, Y2, 15, clBlack);
       end;
 
     rtComposition:

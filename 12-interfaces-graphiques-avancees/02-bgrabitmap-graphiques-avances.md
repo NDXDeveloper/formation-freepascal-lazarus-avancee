@@ -914,11 +914,6 @@ begin
   end;
 end;
 
-# 12.2 BGRABitmap - Suite de l'exemple et concepts avancés
-
-## Exemple complet : Éditeur d'image simple (suite)
-
-```pascal
 procedure TForm1.SaveButtonClick(Sender: TObject);
 begin
   if SaveDialog1.Execute then
@@ -1369,20 +1364,19 @@ begin
   FCount := 0;
 end;
 
-procedure TParticleSystem.AddParticle(X, Y: Single; Color: TBGRAPixel);
+procedure TParticleSystem.AddParticle(AX, AY: Single; AColor: TBGRAPixel);
 begin
   if FCount >= Length(FParticles) then Exit;
 
-  with FParticles[FCount] do
-  begin
-    X := X;
-    Y := Y;
-    VX := (Random - 0.5) * 100;  // Vélocité aléatoire
-    VY := (Random - 0.5) * 100;
-    Life := 1.0;
-    Color := Color;
-    Size := 3 + Random * 3;
-  end;
+  { Note : ne pas utiliser with ici car les champs X, Y, Color
+    masqueraient les paramètres de même nom (bug classique). }
+  FParticles[FCount].X := AX;
+  FParticles[FCount].Y := AY;
+  FParticles[FCount].VX := (Random - 0.5) * 100;  // Vélocité aléatoire
+  FParticles[FCount].VY := (Random - 0.5) * 100;
+  FParticles[FCount].Life := 1.0;
+  FParticles[FCount].Color := AColor;
+  FParticles[FCount].Size := 3 + Random * 3;
 
   Inc(FCount);
 end;
@@ -1928,6 +1922,7 @@ end;
 function TThumbnailMaker.CreateThumbnailWithStyle(ASource: TBGRABitmap): TBGRABitmap;
 var
   Shadow: TBGRABitmap;
+  Mask, Rounded: TBGRABitmap;
   X, Y: Integer;
 begin
   Result := TBGRABitmap.Create(FWidth, FHeight);
@@ -1967,11 +1962,7 @@ begin
     tsRounded:
       begin
         // Coins arrondis avec masque
-        var
-          Mask: TBGRABitmap;
-          Rounded: TBGRABitmap;
-        begin
-          Rounded := ASource.Duplicate;
+        Rounded := ASource.Duplicate;
           Mask := TBGRABitmap.Create(ASource.Width, ASource.Height);
           try
             Mask.Fill(BGRAPixelTransparent);
@@ -1984,7 +1975,6 @@ begin
             Mask.Free;
             Rounded.Free;
           end;
-        end;
       end;
   end;
 end;
@@ -2043,7 +2033,7 @@ uses
 
 type
   TChartData = record
-    Label: string;
+    Caption: string;  // Note : Label est un mot réservé en Pascal
     Value: Double;
     Color: TBGRAPixel;
   end;
@@ -2139,9 +2129,9 @@ begin
       BGRABlack);
 
     // Label
-    TextSize := Result.TextSize(AData[i].Label);
+    TextSize := Result.TextSize(AData[i].Caption);
     Result.TextOut(X + (BarWidth - TextSize.cx) div 2,
-      FHeight - FMargin + 5, AData[i].Label, BGRABlack);
+      FHeight - FMargin + 5, AData[i].Caption, BGRABlack);
   end;
 
   // Axes
@@ -2171,12 +2161,18 @@ type
 
 function TPieChart.Generate(const AData: TChartDataArray): TBGRABitmap;
 var
-  i: Integer;
+  i, j: Integer;
   Total, CurrentAngle, SliceAngle: Double;
   CenterX, CenterY, Radius: Integer;
   StartAngle, EndAngle: Double;
   LegendX, LegendY: Integer;
   TextSize: TSize;
+  Points: array of TPointF;
+  Angle: Double;
+  Steps: Integer;
+  LabelAngle: Double;
+  LabelX, LabelY: Integer;
+  Percentage: string;
 begin
   Result := TBGRABitmap.Create(FWidth, FHeight);
   Result.Fill(BGRAWhite);
@@ -2211,13 +2207,7 @@ begin
     EndAngle := CurrentAngle + SliceAngle;
 
     // Dessiner la tranche avec dégradé
-    var
-      Points: array of TPointF;
-      j: Integer;
-      Angle: Double;
-      Steps: Integer;
-    begin
-      Steps := Max(3, Round(Abs(SliceAngle) * 20));
+    Steps := Max(3, Round(Abs(SliceAngle) * 20));
       SetLength(Points, Steps + 2);
 
       Points[0] := PointF(CenterX, CenterY);
@@ -2233,15 +2223,9 @@ begin
 
       Result.FillPolyAntialias(Points, AData[i].Color);
       Result.DrawPolygonAntialias(Points, BGRA(100, 100, 100), 2);
-    end;
 
     // Pourcentage dans la tranche
-    var
-      LabelAngle: Double;
-      LabelX, LabelY: Integer;
-      Percentage: string;
-    begin
-      LabelAngle := CurrentAngle + SliceAngle / 2;
+    LabelAngle := CurrentAngle + SliceAngle / 2;
       LabelX := Round(CenterX + Cos(LabelAngle) * Radius * 0.7);
       LabelY := Round(CenterY + Sin(LabelAngle) * Radius * 0.7);
 
@@ -2249,7 +2233,6 @@ begin
       TextSize := Result.TextSize(Percentage);
       Result.TextOut(LabelX - TextSize.cx div 2, LabelY - TextSize.cy div 2,
         Percentage, BGRAWhite);
-    end;
 
     CurrentAngle := EndAngle;
   end;
@@ -2268,7 +2251,7 @@ begin
 
     // Label et valeur
     Result.TextOut(LegendX + 30, LegendY + 3,
-      Format('%s: %.1f', [AData[i].Label, AData[i].Value]), BGRABlack);
+      Format('%s: %.1f', [AData[i].Caption, AData[i].Value]), BGRABlack);
 
     LegendY := LegendY + 30;
   end;
@@ -2286,11 +2269,11 @@ var
 begin
   // Préparer les données
   SetLength(Data, 5);
-  Data[0].Label := 'Jan'; Data[0].Value := 120; Data[0].Color := BGRA(255, 100, 100);
-  Data[1].Label := 'Fév'; Data[1].Value := 180; Data[1].Color := BGRA(100, 255, 100);
-  Data[2].Label := 'Mar'; Data[2].Value := 150; Data[2].Color := BGRA(100, 100, 255);
-  Data[3].Label := 'Avr'; Data[3].Value := 220; Data[3].Color := BGRA(255, 255, 100);
-  Data[4].Label := 'Mai'; Data[4].Value := 190; Data[4].Color := BGRA(255, 100, 255);
+  Data[0].Caption := 'Jan'; Data[0].Value := 120; Data[0].Color := BGRA(255, 100, 100);
+  Data[1].Caption := 'Fév'; Data[1].Value := 180; Data[1].Color := BGRA(100, 255, 100);
+  Data[2].Caption := 'Mar'; Data[2].Value := 150; Data[2].Color := BGRA(100, 100, 255);
+  Data[3].Caption := 'Avr'; Data[3].Value := 220; Data[3].Color := BGRA(255, 255, 100);
+  Data[4].Caption := 'Mai'; Data[4].Value := 190; Data[4].Color := BGRA(255, 100, 255);
 
   // Graphique en barres
   BarChart := TBarChart.Create(800, 600);
@@ -2440,6 +2423,8 @@ var
   X, Y: Integer;
   ScaledWatermark: TBGRABitmap;
   MaxSize: Integer;
+  Ratio: Double;
+  NewWidth, NewHeight: Integer;
 begin
   Watermark := TBGRABitmap.Create(AWatermarkFile);
   try
@@ -2448,25 +2433,20 @@ begin
 
     if (Watermark.Width > MaxSize) or (Watermark.Height > MaxSize) then
     begin
-      var
-        Ratio: Double;
-        NewWidth, NewHeight: Integer;
+      Ratio := Watermark.Width / Watermark.Height;
+
+      if Watermark.Width > Watermark.Height then
       begin
-        Ratio := Watermark.Width / Watermark.Height;
-
-        if Watermark.Width > Watermark.Height then
-        begin
-          NewWidth := MaxSize;
-          NewHeight := Round(MaxSize / Ratio);
-        end
-        else
-        begin
-          NewHeight := MaxSize;
-          NewWidth := Round(MaxSize * Ratio);
-        end;
-
-        ScaledWatermark := Watermark.Resample(NewWidth, NewHeight, rmFineResample);
+        NewWidth := MaxSize;
+        NewHeight := Round(MaxSize / Ratio);
+      end
+      else
+      begin
+        NewHeight := MaxSize;
+        NewWidth := Round(MaxSize * Ratio);
       end;
+
+      ScaledWatermark := Watermark.Resample(NewWidth, NewHeight, rmFineResample);
     end
     else
       ScaledWatermark := Watermark.Duplicate;
@@ -2603,7 +2583,7 @@ unit ButtonGenerator;
 interface
 
 uses
-  Classes, SysUtils, BGRABitmap, BGRABitmapTypes, BGRAGradients;
+  Classes, SysUtils, Math, BGRABitmap, BGRABitmapTypes, BGRAGradients;
 
 type
   TButtonStyle = (bsFlat, bsGradient, bsGlass, bs3D, bsRounded);
@@ -2640,6 +2620,7 @@ var
   Color1, Color2: TBGRAPixel;
   TextSize: TSize;
   TextX, TextY: Integer;
+  Mask: TBGRABitmap;
 begin
   Result := TBGRABitmap.Create(FWidth, FHeight);
   Result.FillTransparent;
@@ -2722,10 +2703,7 @@ begin
           FHeight div 2, Color1, 1, Color1);
 
         // Dégradé
-        var
-          Mask: TBGRABitmap;
-        begin
-          Mask := TBGRABitmap.Create(FWidth, FHeight);
+        Mask := TBGRABitmap.Create(FWidth, FHeight);
           try
             Mask.RoundRectAntialias(0, 0, FWidth, FHeight, FHeight div 2,
               FHeight div 2, BGRAWhite, 1, BGRAWhite);
@@ -2736,7 +2714,6 @@ begin
           finally
             Mask.Free;
           end;
-        end;
       end;
   end;
 
@@ -2895,6 +2872,8 @@ end;
 procedure TMainForm.LoadImage(const AFileName: string);
 var
   Loaded: TBGRABitmap;
+  Ratio: Double;
+  NewWidth, NewHeight: Integer;
 begin
   Loaded := TBGRABitmap.Create(AFileName);
   try
@@ -2904,25 +2883,20 @@ begin
     // Redimensionner pour tenir dans le PaintBox
     if (Loaded.Width > PaintBox1.Width) or (Loaded.Height > PaintBox1.Height) then
     begin
-      var
-        Ratio: Double;
-        NewWidth, NewHeight: Integer;
+      Ratio := Loaded.Width / Loaded.Height;
+
+      if (Loaded.Width / PaintBox1.Width) > (Loaded.Height / PaintBox1.Height) then
       begin
-        Ratio := Loaded.Width / Loaded.Height;
-
-        if (Loaded.Width / PaintBox1.Width) > (Loaded.Height / PaintBox1.Height) then
-        begin
-          NewWidth := PaintBox1.Width;
-          NewHeight := Round(PaintBox1.Width / Ratio);
-        end
-        else
-        begin
-          NewHeight := PaintBox1.Height;
-          NewWidth := Round(PaintBox1.Height * Ratio);
-        end;
-
-        FOriginalImage := Loaded.Resample(NewWidth, NewHeight, rmFineResample);
+        NewWidth := PaintBox1.Width;
+        NewHeight := Round(PaintBox1.Width / Ratio);
+      end
+      else
+      begin
+        NewHeight := PaintBox1.Height;
+        NewWidth := Round(PaintBox1.Height * Ratio);
       end;
+
+      FOriginalImage := Loaded.Resample(NewWidth, NewHeight, rmFineResample);
     end
     else
       FOriginalImage := Loaded.Duplicate;
@@ -2954,6 +2928,9 @@ begin
 end;
 
 procedure TMainForm.ApplyEffect(const AEffectName: string);
+var
+  p: PBGRAPixel;
+  n: Integer;
 begin
   if not Assigned(FOriginalImage) then Exit;
 
@@ -2971,22 +2948,17 @@ begin
   else if AEffectName = 'Sépia' then
   begin
     BGRAReplace(FModifiedImage, FModifiedImage.FilterGrayscale);
-    var
-      p: PBGRAPixel;
-      n: Integer;
+    p := FModifiedImage.Data;
+    n := FModifiedImage.NbPixels;
+    while n > 0 do
     begin
-      p := FModifiedImage.Data;
-      n := FModifiedImage.NbPixels;
-      while n > 0 do
-      begin
-        p^.red := Min(255, Round(p^.red * 1.2));
-        p^.green := Min(255, Round(p^.green * 1.0));
-        p^.blue := Min(255, Round(p^.blue * 0.8));
-        Inc(p);
-        Dec(n);
-      end;
-      FModifiedImage.InvalidateBitmap;
+      p^.red := Min(255, Round(p^.red * 1.2));
+      p^.green := Min(255, Round(p^.green * 1.0));
+      p^.blue := Min(255, Round(p^.blue * 0.8));
+      Inc(p);
+      Dec(n);
     end;
+    FModifiedImage.InvalidateBitmap;
   end
   else if AEffectName = 'Négatif' then
     FModifiedImage.LinearNegative
@@ -3277,7 +3249,6 @@ function DetectSkinTones(AImage: TBGRABitmap): TBGRABitmap;
 var
   x, y: Integer;
   p: TBGRAPixel;
-  Result: TBGRABitmap;
 begin
   Result := TBGRABitmap.Create(AImage.Width, AImage.Height);
   Result.FillTransparent;
@@ -3399,11 +3370,11 @@ end;
 
 Ces projets démontrent la puissance et la flexibilité de BGRABitmap pour :
 
-✅ **Traitement d'images en batch** (miniatures, filigranes)
-✅ **Génération de graphiques** (barres, camemberts)
-✅ **Création d'éléments d'interface** (boutons stylisés)
-✅ **Applications interactives** (visionneuse avec effets)
-✅ **Optimisation des performances** (cache, threads)
+✅ **Traitement d'images en batch** (miniatures, filigranes)  
+✅ **Génération de graphiques** (barres, camemberts)  
+✅ **Création d'éléments d'interface** (boutons stylisés)  
+✅ **Applications interactives** (visionneuse avec effets)  
+✅ **Optimisation des performances** (cache, threads)  
 ✅ **Intégration système** (web, base de données)
 
 ### Points clés à retenir

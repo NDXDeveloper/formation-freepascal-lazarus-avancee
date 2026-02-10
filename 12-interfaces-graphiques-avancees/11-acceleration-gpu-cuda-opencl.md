@@ -118,7 +118,7 @@ end;
 
 ```pascal
 uses
-  Process, Classes, SysUtils;
+  Process, Classes, SysUtils, Math;
 
 procedure DetectGPULinux;
 var
@@ -1418,7 +1418,7 @@ const OPTIMIZED_KERNEL =
 program VideoProcessingGPU;
 
 uses
-  SysUtils, ocv.core, ocv.videoio, ocv.imgproc, ocv.highgui;
+  SysUtils, StrUtils, ocv.core, ocv.videoio, ocv.imgproc, ocv.highgui;
 
 type
   TGPUVideoProcessor = class
@@ -1777,7 +1777,7 @@ end.
 program BatchImageProcessingGPU;
 
 uses
-  SysUtils, Classes, ocv.core, ocv.imgproc, ocv.highgui;
+  SysUtils, Classes, StrUtils, ocv.core, ocv.imgproc, ocv.highgui;
 
 type
   TBatchProcessor = class
@@ -2237,7 +2237,7 @@ end;
 type
   TGPUResourceManager = class
   private
-    FAllocatedBuffers: TList<cl_mem>;
+    FAllocatedBuffers: TFPList;  // cl_mem = Pointer, TFPList suffit
     FContext: TOpenCLContext;
   public
     constructor Create(ctx: TOpenCLContext);
@@ -2250,7 +2250,7 @@ constructor TGPUResourceManager.Create(ctx: TOpenCLContext);
 begin
   inherited Create;
   FContext := ctx;
-  FAllocatedBuffers := TList<cl_mem>.Create;
+  FAllocatedBuffers := TFPList.Create;
 end;
 
 destructor TGPUResourceManager.Destroy;
@@ -2305,14 +2305,16 @@ end;
 
 ```pascal
 type
+  TSingleArray = array of Single;  // TArray<Single> n'existe pas en ObjFPC
+
   TComputeEngine = class
   private
     FGPUAvailable: Boolean;
-    procedure ComputeCPU(const input: TArray<Single>; var output: TArray<Single>);
-    procedure ComputeGPU(const input: TArray<Single>; var output: TArray<Single>);
+    procedure ComputeCPU(const input: TSingleArray; var output: TSingleArray);
+    procedure ComputeGPU(const input: TSingleArray; var output: TSingleArray);
   public
     constructor Create;
-    procedure Compute(const input: TArray<Single>; var output: TArray<Single>);
+    procedure Compute(const input: TSingleArray; var output: TSingleArray);
   end;
 
 constructor TComputeEngine.Create;
@@ -2327,8 +2329,8 @@ begin
     WriteLn('Mode : CPU (fallback)');
 end;
 
-procedure TComputeEngine.Compute(const input: TArray<Single>;
-  var output: TArray<Single>);
+procedure TComputeEngine.Compute(const input: TSingleArray;
+  var output: TSingleArray);
 begin
   if FGPUAvailable then
   begin
@@ -2692,7 +2694,7 @@ uses
   {$IFDEF UNIX}
   cthreads,
   {$ENDIF}
-  Classes, SysUtils, DateUtils;
+  Classes, SysUtils, StrUtils, DateUtils;
 
 type
   TBenchmarkResult = record

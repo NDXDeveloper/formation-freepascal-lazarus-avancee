@@ -227,11 +227,15 @@ end;
 Relatives au composant (formulaire, panel, etc.), pas à l'écran entier.
 
 ```pascal
-// Position écran
-var ScreenPos: TPoint := Mouse.CursorPos;
+var
+  ScreenPos, ClientPos: TPoint;
+begin
+  // Position écran
+  ScreenPos := Mouse.CursorPos;
 
-// Conversion vers coordonnées client
-var ClientPos: TPoint := ScreenToClient(ScreenPos);
+  // Conversion vers coordonnées client
+  ClientPos := ScreenToClient(ScreenPos);
+end;
 ```
 
 ---
@@ -245,21 +249,26 @@ Dessiner directement à chaque frame :
 ```pascal
 procedure TForm1.PaintBox1Paint(Sender: TObject);
 begin
-  Canvas.Clear;
+  // Effacer le fond (TCanvas n'a pas de méthode Clear)
+  Canvas.Brush.Color := clWhite;
+  Canvas.FillRect(Canvas.ClipRect);
   // Redessiner tout à chaque fois
   Canvas.Ellipse(10, 10, 100, 100);
   Canvas.Rectangle(120, 10, 210, 100);
 end;
 ```
 
-**Avantages** : Simple, flexible
-**Inconvénients** : Peut être lent si beaucoup d'objets
+**Avantages** : Simple, flexible  
+**Inconvénients** : Peut être lent si beaucoup d'objets  
 
 ### 2. Rendu retenu (Retained Mode)
 
 Maintenir une structure de données des objets graphiques :
 
 ```pascal
+{ Note : TObjectList<T> nécessite Generics.Collections et {$mode delphi}
+  ou bien specialize TObjectList<TGraphicObject> en {$mode objfpc}. }
+
 type
   TGraphicObject = class
     procedure Draw(ACanvas: TCanvas); virtual; abstract;
@@ -277,8 +286,8 @@ begin
 end;
 ```
 
-**Avantages** : Organisé, optimisable
-**Inconvénients** : Plus complexe
+**Avantages** : Organisé, optimisable  
+**Inconvénients** : Plus complexe  
 
 ### 3. Double Buffering
 
@@ -305,8 +314,8 @@ begin
 end;
 ```
 
-**Avantages** : Pas de scintillement
-**Inconvénients** : Utilise plus de mémoire
+**Avantages** : Pas de scintillement  
+**Inconvénients** : Utilise plus de mémoire  
 
 ---
 
@@ -491,6 +500,7 @@ var
   ScaleFactor: Integer;
   FileName: string;
 begin
+  Result := TPicture.Create;
   ScaleFactor := Round(Screen.PixelsPerInch / 96);
   FileName := Format('%s@%dx.png', [ABaseName, ScaleFactor]);
 
@@ -550,11 +560,13 @@ end;
 ```pascal
 // Model : Données
 type
+  TDoubleArray = array of Double;
+
   TDataModel = class
   private
-    FData: array of Double;
+    FData: TDoubleArray;
   public
-    property Data: array of Double read FData;
+    property Data: TDoubleArray read FData;
   end;
 
 // View : Affichage
@@ -686,10 +698,10 @@ end;
 
 Avant de commencer, assurez-vous de maîtriser :
 
-✅ **Bases de Lazarus** : Création de formulaires, composants standard
-✅ **Object Pascal** : Classes, héritage, événements
-✅ **Programmation événementielle** : Gestion des événements souris/clavier
-✅ **Bases du dessin** : Comprendre les pixels, couleurs, coordonnées
+✅ **Bases de Lazarus** : Création de formulaires, composants standard  
+✅ **Object Pascal** : Classes, héritage, événements  
+✅ **Programmation événementielle** : Gestion des événements souris/clavier  
+✅ **Bases du dessin** : Comprendre les pixels, couleurs, coordonnées  
 ✅ **Multi-plateforme** : Compilation conditionnelle, différences OS
 
 ---
@@ -725,9 +737,9 @@ Pour tirer le meilleur parti de ce chapitre, suivez cet ordre :
 5. Autres sections             ← Selon vos besoins
 ```
 
-**Débutants** : Commencez par 12.1 et 12.2, puis explorez selon vos projets
-**Intermédiaires** : Concentrez-vous sur 12.2, 12.5 et 12.6
-**Avancés** : OpenGL (12.3), Vulkan (12.4), OpenCV (12.10)
+**Débutants** : Commencez par 12.1 et 12.2, puis explorez selon vos projets  
+**Intermédiaires** : Concentrez-vous sur 12.2, 12.5 et 12.6  
+**Avancés** : OpenGL (12.3), Vulkan (12.4), OpenCV (12.10)  
 
 ---
 
@@ -735,14 +747,14 @@ Pour tirer le meilleur parti de ce chapitre, suivez cet ordre :
 
 À la fin de ce chapitre, vous serez capable de :
 
-✅ Créer des interfaces graphiques personnalisées et professionnelles
-✅ Implémenter des visualisations de données complexes
-✅ Optimiser les performances graphiques de vos applications
-✅ Développer des applications portables Windows/Linux avec rendu identique
-✅ Intégrer des bibliothèques graphiques tierces (BGRABitmap, OpenGL)
-✅ Créer des animations fluides et des transitions élégantes
-✅ Construire des éditeurs et designers intégrés
-✅ Manipuler des images et appliquer des effets avancés
+✅ Créer des interfaces graphiques personnalisées et professionnelles  
+✅ Implémenter des visualisations de données complexes  
+✅ Optimiser les performances graphiques de vos applications  
+✅ Développer des applications portables Windows/Linux avec rendu identique  
+✅ Intégrer des bibliothèques graphiques tierces (BGRABitmap, OpenGL)  
+✅ Créer des animations fluides et des transitions élégantes  
+✅ Construire des éditeurs et designers intégrés  
+✅ Manipuler des images et appliquer des effets avancés  
 ✅ Tirer parti de l'accélération GPU pour les performances maximales
 
 ---

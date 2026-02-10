@@ -783,9 +783,9 @@ Ce chapitre 12.3 est organisé comme suit :
 
 Avant de continuer, assurez-vous de maîtriser :
 
-✅ **Lazarus de base** : Création de formulaires et composants
-✅ **FreePascal** : Syntaxe, types, procédures
-✅ **Mathématiques 3D** : Vecteurs, matrices (niveau lycée)
+✅ **Lazarus de base** : Création de formulaires et composants  
+✅ **FreePascal** : Syntaxe, types, procédures  
+✅ **Mathématiques 3D** : Vecteurs, matrices (niveau lycée)  
 ✅ **Concepts graphiques** : Pixels, couleurs, coordonnées
 
 **Mathématiques nécessaires** :
@@ -799,15 +799,15 @@ Avant de continuer, assurez-vous de maîtriser :
 
 À la fin de cette section 12.3, vous serez capable de :
 
-✅ Configurer OpenGL sur Windows et Ubuntu/Linux
-✅ Créer un contexte OpenGL avec TOpenGLControl
-✅ Comprendre le pipeline de rendu OpenGL
-✅ Dessiner des formes 2D et 3D simples
-✅ Appliquer des transformations (translation, rotation, échelle)
-✅ Gérer les textures et matériaux
-✅ Utiliser les shaders GLSL basiques
-✅ Optimiser les performances OpenGL
-✅ Créer des applications OpenGL portables Windows/Linux
+✅ Configurer OpenGL sur Windows et Ubuntu/Linux  
+✅ Créer un contexte OpenGL avec TOpenGLControl  
+✅ Comprendre le pipeline de rendu OpenGL  
+✅ Dessiner des formes 2D et 3D simples  
+✅ Appliquer des transformations (translation, rotation, échelle)  
+✅ Gérer les textures et matériaux  
+✅ Utiliser les shaders GLSL basiques  
+✅ Optimiser les performances OpenGL  
+✅ Créer des applications OpenGL portables Windows/Linux  
 ✅ Débugger et profiler des applications OpenGL
 
 ---
@@ -834,10 +834,10 @@ Avant de continuer, assurez-vous de maîtriser :
 
 ## Avertissements
 
-⚠️ **Pilotes GPU** : OpenGL nécessite des pilotes graphiques à jour
-⚠️ **Compatibilité** : Certaines fonctions avancées peuvent ne pas être supportées sur vieux matériel
-⚠️ **Thread-safety** : OpenGL n'est PAS thread-safe par défaut
-⚠️ **Mémoire GPU** : Les textures et buffers consomment de la VRAM
+⚠️ **Pilotes GPU** : OpenGL nécessite des pilotes graphiques à jour  
+⚠️ **Compatibilité** : Certaines fonctions avancées peuvent ne pas être supportées sur vieux matériel  
+⚠️ **Thread-safety** : OpenGL n'est PAS thread-safe par défaut  
+⚠️ **Mémoire GPU** : Les textures et buffers consomment de la VRAM  
 ⚠️ **Debug** : Les erreurs OpenGL sont silencieuses (utilisez glGetError)
 
 ---

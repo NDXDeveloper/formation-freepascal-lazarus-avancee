@@ -571,6 +571,8 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure PaintBox1MouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure PaintBox1MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure PaintBox1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure PaintBox1Paint(Sender: TObject);
     procedure ClearButtonClick(Sender: TObject);
@@ -597,7 +599,8 @@ begin
   FBuffer.Canvas.Brush.Color := clWhite;
   FBuffer.Canvas.FillRect(Rect(0, 0, FBuffer.Width, FBuffer.Height));
 
-  PaintBox1.DoubleBuffered := True;
+  // Note : TPaintBox est un TGraphicControl (pas de handle de fenêtre),
+  // DoubleBuffered n'a pas d'effet. On utilise FBuffer à la place.
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -613,6 +616,13 @@ begin
     FDrawing := True;
     FLastPoint := Point(X, Y);
   end;
+end;
+
+procedure TForm1.PaintBox1MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if Button = mbLeft then
+    FDrawing := False;
 end;
 
 procedure TForm1.PaintBox1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);

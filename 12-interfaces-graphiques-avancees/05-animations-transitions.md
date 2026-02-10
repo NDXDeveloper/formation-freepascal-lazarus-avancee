@@ -774,7 +774,7 @@ type
     FGravity: Double;
   public
     constructor Create(AMaxParticles: Integer);
-    procedure Emit(X, Y: Double; ACount: Integer);
+    procedure Emit(AX, AY: Double; ACount: Integer);
     procedure Update(ADeltaTime: Double);
     procedure Draw(ABitmap: TBGRABitmap);
 
@@ -789,7 +789,7 @@ begin
   FGravity := 98.0;  // Pixels par seconde²
 end;
 
-procedure TParticleSystem.Emit(X, Y: Double; ACount: Integer);
+procedure TParticleSystem.Emit(AX, AY: Double; ACount: Integer);
 var
   i: Integer;
   Angle, Speed: Double;
@@ -803,22 +803,19 @@ begin
     Angle := Random * 2 * Pi;
     Speed := 50 + Random * 100;
 
-    with FParticles[FCount] do
-    begin
-      X := X;
-      Y := Y;
-      VX := Cos(Angle) * Speed;
-      VY := Sin(Angle) * Speed;
-      Life := 1.0 + Random;  // 1-2 secondes
-      MaxLife := Life;
-      Size := 2 + Random * 3;
-      Color := BGRA(
-        200 + Random(56),
-        100 + Random(100),
-        0,
-        255
-      );
-    end;
+    FParticles[FCount].X := AX;
+    FParticles[FCount].Y := AY;
+    FParticles[FCount].VX := Cos(Angle) * Speed;
+    FParticles[FCount].VY := Sin(Angle) * Speed;
+    FParticles[FCount].Life := 1.0 + Random;  // 1-2 secondes
+    FParticles[FCount].MaxLife := FParticles[FCount].Life;
+    FParticles[FCount].Size := 2 + Random * 3;
+    FParticles[FCount].Color := BGRA(
+      200 + Random(56),
+      100 + Random(100),
+      0,
+      255
+    );
 
     Inc(FCount);
   end;
@@ -2003,7 +2000,7 @@ type
     procedure DrawParticles;
     procedure DrawRotation;
     procedure DrawDebugInfo;
-    procedure EmitParticles(X, Y: Integer; Count: Integer);
+    procedure EmitParticles(AX, AY: Integer; Count: Integer);
   end;
 
 var
@@ -2304,7 +2301,7 @@ begin
     BGRAWhite);
 end;
 
-procedure TMainForm.EmitParticles(X, Y: Integer; Count: Integer);
+procedure TMainForm.EmitParticles(AX, AY: Integer; Count: Integer);
 var
   i: Integer;
   Angle, Speed: Double;
@@ -2317,21 +2314,18 @@ begin
     Angle := Random * 2 * Pi;
     Speed := 100 + Random * 200;
 
-    with FParticles[FParticleCount] do
-    begin
-      X := X;
-      Y := Y;
-      VX := Cos(Angle) * Speed;
-      VY := Sin(Angle) * Speed - 200;  // Vers le haut
-      Life := 1.0 + Random;
-      Size := 3 + Random * 4;
-      Color := BGRA(
-        150 + Random(106),
-        50 + Random(100),
-        Random(100),
-        255
-      );
-    end;
+    FParticles[FParticleCount].X := AX;
+    FParticles[FParticleCount].Y := AY;
+    FParticles[FParticleCount].VX := Cos(Angle) * Speed;
+    FParticles[FParticleCount].VY := Sin(Angle) * Speed - 200;  // Vers le haut
+    FParticles[FParticleCount].Life := 1.0 + Random;
+    FParticles[FParticleCount].Size := 3 + Random * 4;
+    FParticles[FParticleCount].Color := BGRA(
+      150 + Random(106),
+      50 + Random(100),
+      Random(100),
+      255
+    );
 
     Inc(FParticleCount);
   end;
@@ -2541,12 +2535,12 @@ end
 
 Les animations et transitions sont essentielles pour créer des interfaces modernes et engageantes. Points clés à retenir :
 
-✅ **Delta time** : Essentiel pour la cohérence
-✅ **Easing functions** : Rendent les animations naturelles
-✅ **BGRABitmap** : Parfait pour les animations 2D avancées
-✅ **Optimisation** : Dirty rectangles, pooling, LOD
-✅ **Gestionnaire centralisé** : Pour gérer plusieurs animations
-✅ **Debugging** : Compteur FPS et mode debug visuel
+✅ **Delta time** : Essentiel pour la cohérence  
+✅ **Easing functions** : Rendent les animations naturelles  
+✅ **BGRABitmap** : Parfait pour les animations 2D avancées  
+✅ **Optimisation** : Dirty rectangles, pooling, LOD  
+✅ **Gestionnaire centralisé** : Pour gérer plusieurs animations  
+✅ **Debugging** : Compteur FPS et mode debug visuel  
 ✅ **Architecture propre** : Séparer update et draw
 
 ### Ce que vous avez appris
