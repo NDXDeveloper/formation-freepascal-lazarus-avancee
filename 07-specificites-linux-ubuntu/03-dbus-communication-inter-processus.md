@@ -43,8 +43,8 @@ D-Bus fonctionne avec trois composants principaux :
 Chaque application sur D-Bus possède une adresse unique, comme une adresse email :
 
 ```
-org.freedesktop.Notifications    # Service de notifications
-org.mozilla.Firefox              # Firefox
+org.freedesktop.Notifications    # Service de notifications  
+org.mozilla.Firefox              # Firefox  
 com.example.MonApplication       # Votre application
 ```
 
@@ -62,7 +62,7 @@ Les services exposent des objets via des chemins, similaires aux chemins de fich
 Les interfaces définissent les méthodes et signaux disponibles :
 
 ```
-org.freedesktop.Notifications.Notify     # Méthode pour afficher une notification
+org.freedesktop.Notifications.Notify     # Méthode pour afficher une notification  
 org.example.MonApp.DoSomething          # Votre propre méthode
 ```
 
@@ -86,7 +86,7 @@ D-Bus est généralement préinstallé sur Ubuntu. Vérifiez avec :
 systemctl status dbus
 
 # Installer les outils de développement
-sudo apt-get install libdbus-1-dev
+sudo apt-get install libdbus-1-dev  
 sudo apt-get install d-feet  # Outil graphique pour explorer D-Bus
 ```
 
@@ -237,21 +237,21 @@ type
 
 implementation
 
-constructor TSimpleDBusClient.Create;
+constructor TSimpleDBusClient.Create;  
 begin
   inherited Create;
   FConnected := False;
   dbus_error_init(@FError);
 end;
 
-destructor TSimpleDBusClient.Destroy;
+destructor TSimpleDBusClient.Destroy;  
 begin
   if FConnected then
     Disconnect;
   inherited Destroy;
 end;
 
-function TSimpleDBusClient.Connect: Boolean;
+function TSimpleDBusClient.Connect: Boolean;  
 begin
   Result := False;
 
@@ -269,7 +269,7 @@ begin
   Result := True;
 end;
 
-procedure TSimpleDBusClient.Disconnect;
+procedure TSimpleDBusClient.Disconnect;  
 begin
   if FConnected and (FConnection <> nil) then
   begin
@@ -279,7 +279,7 @@ begin
   end;
 end;
 
-function TSimpleDBusClient.SendNotification(const ATitle, ABody: string): Boolean;
+function TSimpleDBusClient.SendNotification(const ATitle, ABody: string): Boolean;  
 var
   Message, Reply: PDBusMessage;
   Args: DBusMessageIter;
@@ -412,21 +412,21 @@ const
 
 implementation
 
-constructor TMyDBusService.Create;
+constructor TMyDBusService.Create;  
 begin
   inherited Create;
   dbus_error_init(@FError);
   FRunning := False;
 end;
 
-destructor TMyDBusService.Destroy;
+destructor TMyDBusService.Destroy;  
 begin
   if FRunning then
     Stop;
   inherited Destroy;
 end;
 
-function TMyDBusService.Start: Boolean;
+function TMyDBusService.Start: Boolean;  
 var
   Ret: Integer;
 begin
@@ -456,7 +456,7 @@ begin
   Result := True;
 end;
 
-procedure TMyDBusService.Stop;
+procedure TMyDBusService.Stop;  
 begin
   if FRunning and (FConnection <> nil) then
   begin
@@ -466,7 +466,7 @@ begin
   end;
 end;
 
-procedure TMyDBusService.ProcessMessages;
+procedure TMyDBusService.ProcessMessages;  
 var
   Message: PDBusMessage;
   Reply: PDBusMessage;
@@ -565,7 +565,7 @@ program DBusClient;
 uses
   SysUtils, dbus;
 
-function CallEchoMethod(const AMessage: string): string;
+function CallEchoMethod(const AMessage: string): string;  
 var
   Connection: PDBusConnection;
   Error: DBusError;
@@ -624,7 +624,7 @@ Les signaux permettent la diffusion d'événements à plusieurs applications :
 ### Émission d'un Signal
 
 ```pascal
-procedure EmitSignal(Connection: PDBusConnection; const ASignalName, AData: string);
+procedure EmitSignal(Connection: PDBusConnection; const ASignalName, AData: string);  
 var
   Signal: PDBusMessage;
   Args: DBusMessageIter;
@@ -654,7 +654,7 @@ end;
 ### Réception de Signaux
 
 ```pascal
-procedure ListenForSignals(Connection: PDBusConnection);
+procedure ListenForSignals(Connection: PDBusConnection);  
 var
   Rule: string;
   Error: DBusError;
@@ -734,7 +734,7 @@ Utilisez la convention de nommage inversée des domaines :
 Toujours vérifier les erreurs D-Bus :
 
 ```pascal
-if dbus_error_is_set(@Error) then
+if dbus_error_is_set(@Error) then  
 begin
   // Traiter l'erreur
   WriteLn('Erreur: ', Error.message);
@@ -823,7 +823,7 @@ CallMethod('org.mpris.MediaPlayer2.vlc',
 
 **Solution** : Vérifiez que D-Bus est en cours d'exécution :
 ```bash
-systemctl status dbus
+systemctl status dbus  
 ps aux | grep dbus-daemon
 ```
 

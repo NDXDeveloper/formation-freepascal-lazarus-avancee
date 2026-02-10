@@ -123,7 +123,7 @@ systemctl status mon-service
 #### 1. Serveur Web ou API REST
 ```pascal
 // Votre serveur HTTP FreePascal
-program MonServeurWeb;
+program MonServeurWeb;  
 uses
   fpHTTPApp;
 begin
@@ -136,7 +136,7 @@ Transformé en service, il démarre avec le système et sert vos pages 24/7.
 #### 2. Service de monitoring
 ```pascal
 // Application qui surveille des ressources
-program SystemMonitor;
+program SystemMonitor;  
 begin
   repeat
     CheckSystemResources;
@@ -150,7 +150,7 @@ En service systemd, il tourne en permanence sans session utilisateur.
 #### 3. Worker de traitement de queue
 ```pascal
 // Traitement de tâches en arrière-plan
-program QueueWorker;
+program QueueWorker;  
 begin
   while True do
   begin
@@ -191,7 +191,7 @@ var
   Terminated: Boolean = False;
 
 // Gestionnaire de signal pour arrêt propre
-procedure SignalHandler(sig: longint); cdecl;
+procedure SignalHandler(sig: longint); cdecl;  
 begin
   if sig in [SIGTERM, SIGINT] then
   begin
@@ -271,12 +271,12 @@ Voici à quoi ressemble un fichier service basique :
 
 ```ini
 [Unit]
-Description=Mon Application FreePascal
+Description=Mon Application FreePascal  
 After=network.target
 
 [Service]
-Type=simple
-ExecStart=/usr/local/bin/mon-app
+Type=simple  
+ExecStart=/usr/local/bin/mon-app  
 Restart=on-failure
 
 [Install]
@@ -294,18 +294,18 @@ Chaque section a un rôle :
 
 ```bash
 # Gestion du service
-systemctl start mon-service      # Démarrer
-systemctl stop mon-service       # Arrêter
-systemctl restart mon-service    # Redémarrer
+systemctl start mon-service      # Démarrer  
+systemctl stop mon-service       # Arrêter  
+systemctl restart mon-service    # Redémarrer  
 systemctl reload mon-service     # Recharger la config (si supporté)
 
 # État et informations
-systemctl status mon-service     # État détaillé
-systemctl is-active mon-service  # Actif ou non ?
+systemctl status mon-service     # État détaillé  
+systemctl is-active mon-service  # Actif ou non ?  
 systemctl is-enabled mon-service # Activé au boot ?
 
 # Activation au démarrage
-systemctl enable mon-service     # Activer au boot
+systemctl enable mon-service     # Activer au boot  
 systemctl disable mon-service    # Désactiver au boot
 
 # Après modification d'un fichier .service
@@ -316,20 +316,20 @@ systemctl daemon-reload          # Recharger la configuration systemd
 
 ```bash
 # Voir les logs du service
-journalctl -u mon-service        # Tous les logs
-journalctl -u mon-service -f     # Logs en temps réel (follow)
-journalctl -u mon-service -n 50  # Les 50 dernières lignes
+journalctl -u mon-service        # Tous les logs  
+journalctl -u mon-service -f     # Logs en temps réel (follow)  
+journalctl -u mon-service -n 50  # Les 50 dernières lignes  
 journalctl -u mon-service --since "2024-01-01"  # Depuis une date
 
 # Analyser les dépendances
 systemctl list-dependencies mon-service
 
 # Voir tous les services
-systemctl list-units --type=service
+systemctl list-units --type=service  
 systemctl list-units --type=service --state=running
 
 # Analyser le temps de boot
-systemd-analyze blame
+systemd-analyze blame  
 systemd-analyze critical-chain
 ```
 
@@ -341,7 +341,7 @@ Le type le plus courant. systemd considère le service démarré dès que le pro
 
 ```ini
 [Service]
-Type=simple
+Type=simple  
 ExecStart=/usr/bin/mon-app
 ```
 
@@ -353,8 +353,8 @@ Pour les applications qui se "détachent" (fork) pour tourner en arrière-plan.
 
 ```ini
 [Service]
-Type=forking
-ExecStart=/usr/bin/mon-app --daemon
+Type=forking  
+ExecStart=/usr/bin/mon-app --daemon  
 PIDFile=/var/run/mon-app.pid
 ```
 
@@ -366,8 +366,8 @@ Pour les scripts ou programmes qui s'exécutent une fois puis se terminent.
 
 ```ini
 [Service]
-Type=oneshot
-ExecStart=/usr/bin/mon-script-init
+Type=oneshot  
+ExecStart=/usr/bin/mon-script-init  
 RemainAfterExit=yes
 ```
 
@@ -379,7 +379,7 @@ Le service notifie systemd quand il est prêt.
 
 ```ini
 [Service]
-Type=notify
+Type=notify  
 ExecStart=/usr/bin/mon-app
 ```
 
@@ -391,8 +391,8 @@ Le service est considéré prêt quand il acquiert un nom sur D-Bus.
 
 ```ini
 [Service]
-Type=dbus
-BusName=org.monapp.Service
+Type=dbus  
+BusName=org.monapp.Service  
 ExecStart=/usr/bin/mon-app
 ```
 
@@ -438,7 +438,7 @@ Ne jamais faire tourner un service en root si possible :
 
 ```ini
 [Service]
-User=monapp
+User=monapp  
 Group=monapp
 ```
 
@@ -454,7 +454,7 @@ systemd permet de limiter les ressources :
 ```ini
 [Service]
 # Limites mémoire
-MemoryMax=512M
+MemoryMax=512M  
 MemorySwapMax=0
 
 # Limites CPU
@@ -469,13 +469,13 @@ LimitNOFILE=1024
 ```ini
 [Service]
 # Protection du système
-ProtectSystem=strict
-ProtectHome=true
-PrivateTmp=true
+ProtectSystem=strict  
+ProtectHome=true  
+PrivateTmp=true  
 NoNewPrivileges=true
 
 # Répertoire de travail isolé
-WorkingDirectory=/var/lib/monapp
+WorkingDirectory=/var/lib/monapp  
 StateDirectory=monapp
 ```
 
@@ -487,7 +487,7 @@ Tout ce que votre application écrit sur stdout/stderr est capturé par journald
 
 ```pascal
 // Dans votre code FreePascal
-WriteLn('Info: Service démarré');        // → journal niveau info
+WriteLn('Info: Service démarré');        // → journal niveau info  
 WriteLn(StdErr, 'Erreur: Connexion DB'); // → journal niveau error
 ```
 
@@ -498,16 +498,16 @@ WriteLn(StdErr, 'Erreur: Connexion DB'); // → journal niveau error
 journalctl -u mon-service
 
 # Filtres temporels
-journalctl -u mon-service --since yesterday
-journalctl -u mon-service --since "2024-01-01 09:00"
+journalctl -u mon-service --since yesterday  
+journalctl -u mon-service --since "2024-01-01 09:00"  
 journalctl -u mon-service -S -1h  # Dernière heure
 
 # Filtres par priorité
-journalctl -u mon-service -p err   # Erreurs seulement
+journalctl -u mon-service -p err   # Erreurs seulement  
 journalctl -u mon-service -p info  # Info et plus grave
 
 # Export des logs
-journalctl -u mon-service -o json > logs.json
+journalctl -u mon-service -o json > logs.json  
 journalctl -u mon-service > logs.txt
 ```
 
@@ -516,17 +516,17 @@ journalctl -u mon-service > logs.txt
 Pour des logs plus riches, utilisez des préfixes :
 
 ```pascal
-procedure LogInfo(const Msg: string);
+procedure LogInfo(const Msg: string);  
 begin
   WriteLn('[INFO] ', FormatDateTime('yyyy-mm-dd hh:nn:ss', Now), ' - ', Msg);
 end;
 
-procedure LogError(const Msg: string);
+procedure LogError(const Msg: string);  
 begin
   WriteLn(StdErr, '[ERROR] ', FormatDateTime('yyyy-mm-dd hh:nn:ss', Now), ' - ', Msg);
 end;
 
-procedure LogDebug(const Msg: string);
+procedure LogDebug(const Msg: string);  
 begin
   {$IFDEF DEBUG}
   WriteLn('[DEBUG] ', FormatDateTime('yyyy-mm-dd hh:nn:ss', Now), ' - ', Msg);
@@ -546,7 +546,7 @@ Les timers systemd remplacent avantageusement cron pour les tâches planifiées 
 Description=Backup quotidien
 
 [Timer]
-OnCalendar=daily
+OnCalendar=daily  
 Persistent=true
 
 [Install]
@@ -598,7 +598,7 @@ var
   Terminated: Boolean = False;
   Config: TIniFile;
 
-procedure LoadConfiguration;
+procedure LoadConfiguration;  
 begin
   Config := TIniFile.Create('/etc/monapp/config.ini');
   try
@@ -608,7 +608,7 @@ begin
   end;
 end;
 
-procedure SignalHandler(sig: longint); cdecl;
+procedure SignalHandler(sig: longint); cdecl;  
 begin
   case sig of
     SIGTERM, SIGINT:
@@ -624,7 +624,7 @@ begin
   end;
 end;
 
-procedure Initialize;
+procedure Initialize;  
 begin
   // Configuration des signaux
   FpSignal(SIGTERM, @SignalHandler);
@@ -637,13 +637,13 @@ begin
   WriteLn('Service initialisé - PID: ', GetProcessID);
 end;
 
-procedure Cleanup;
+procedure Cleanup;  
 begin
   WriteLn('Nettoyage...');
   // Libérer les ressources
 end;
 
-procedure MainLoop;
+procedure MainLoop;  
 begin
   while not Terminated do
   begin

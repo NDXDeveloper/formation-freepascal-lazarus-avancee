@@ -73,9 +73,9 @@ mkdir -p monappli-1.0.0
 mkdir -p monappli-1.0.0/DEBIAN
 
 # Créer les dossiers pour l'application
-mkdir -p monappli-1.0.0/usr/bin
-mkdir -p monappli-1.0.0/usr/share/applications
-mkdir -p monappli-1.0.0/usr/share/icons/hicolor/48x48/apps
+mkdir -p monappli-1.0.0/usr/bin  
+mkdir -p monappli-1.0.0/usr/share/applications  
+mkdir -p monappli-1.0.0/usr/share/icons/hicolor/48x48/apps  
 mkdir -p monappli-1.0.0/usr/share/doc/monappli
 ```
 
@@ -84,13 +84,13 @@ mkdir -p monappli-1.0.0/usr/share/doc/monappli
 Le fichier `DEBIAN/control` est le cœur du paquet. Créez-le avec ce contenu :
 
 ```
-Package: monappli
-Version: 1.0.0
-Section: utils
-Priority: optional
-Architecture: amd64
-Depends: libgtk2.0-0, libglib2.0-0, libcairo2
-Maintainer: Votre Nom <votre.email@example.com>
+Package: monappli  
+Version: 1.0.0  
+Section: utils  
+Priority: optional  
+Architecture: amd64  
+Depends: libgtk2.0-0, libglib2.0-0, libcairo2  
+Maintainer: Votre Nom <votre.email@example.com>  
 Description: Ma super application FreePascal/Lazarus
  Une description plus longue de votre application.
  Elle peut être sur plusieurs lignes.
@@ -131,14 +131,14 @@ Le fichier `.desktop` permet d'ajouter votre application au menu. Créez `usr/sh
 
 ```desktop
 [Desktop Entry]
-Version=1.0
-Type=Application
-Name=Mon Appli
-Comment=Ma super application FreePascal/Lazarus
-Exec=/usr/bin/monappli
-Icon=monappli
-Categories=Utility;Development;
-Terminal=false
+Version=1.0  
+Type=Application  
+Name=Mon Appli  
+Comment=Ma super application FreePascal/Lazarus  
+Exec=/usr/bin/monappli  
+Icon=monappli  
+Categories=Utility;Development;  
+Terminal=false  
 StartupNotify=true
 ```
 
@@ -152,7 +152,7 @@ cp monappli monappli-1.0.0/usr/bin/
 cp monappli.png monappli-1.0.0/usr/share/icons/hicolor/48x48/apps/
 
 # Créer le fichier copyright
-echo "Copyright 2024 Votre Nom
+echo "Copyright 2024 Votre Nom  
 License: GPL-3.0+" > monappli-1.0.0/usr/share/doc/monappli/copyright
 ```
 
@@ -163,8 +163,8 @@ License: GPL-3.0+" > monappli-1.0.0/usr/share/doc/monappli/copyright
 chmod 755 monappli-1.0.0/usr/bin/monappli
 
 # Les dossiers doivent avoir les bonnes permissions
-find monappli-1.0.0 -type d -exec chmod 755 {} \;
-find monappli-1.0.0 -type f -exec chmod 644 {} \;
+find monappli-1.0.0 -type d -exec chmod 755 {} \;  
+find monappli-1.0.0 -type f -exec chmod 644 {} \;  
 chmod 755 monappli-1.0.0/usr/bin/monappli
 ```
 
@@ -187,7 +187,7 @@ dpkg-deb --contents monappli-1.0.0.deb
 dpkg-deb --info monappli-1.0.0.deb
 
 # Tester avec lintian (outil de vérification)
-sudo apt install lintian
+sudo apt install lintian  
 lintian monappli-1.0.0.deb
 ```
 
@@ -198,33 +198,33 @@ Pour simplifier le processus, créez un script `build-deb.sh` :
 ```bash
 #!/bin/bash
 
-APP_NAME="monappli"
-VERSION="1.0.0"
+APP_NAME="monappli"  
+VERSION="1.0.0"  
 ARCH="amd64"
 
 # Nettoyer
-rm -rf ${APP_NAME}_${VERSION}_${ARCH}
+rm -rf ${APP_NAME}_${VERSION}_${ARCH}  
 rm -f ${APP_NAME}_${VERSION}_${ARCH}.deb
 
 # Créer la structure
-mkdir -p ${APP_NAME}_${VERSION}_${ARCH}/{DEBIAN,usr/bin,usr/share/applications}
-mkdir -p ${APP_NAME}_${VERSION}_${ARCH}/usr/share/icons/hicolor/48x48/apps
+mkdir -p ${APP_NAME}_${VERSION}_${ARCH}/{DEBIAN,usr/bin,usr/share/applications}  
+mkdir -p ${APP_NAME}_${VERSION}_${ARCH}/usr/share/icons/hicolor/48x48/apps  
 mkdir -p ${APP_NAME}_${VERSION}_${ARCH}/usr/share/doc/${APP_NAME}
 
 # Copier les fichiers
-cp ${APP_NAME} ${APP_NAME}_${VERSION}_${ARCH}/usr/bin/
-cp ${APP_NAME}.desktop ${APP_NAME}_${VERSION}_${ARCH}/usr/share/applications/
+cp ${APP_NAME} ${APP_NAME}_${VERSION}_${ARCH}/usr/bin/  
+cp ${APP_NAME}.desktop ${APP_NAME}_${VERSION}_${ARCH}/usr/share/applications/  
 cp ${APP_NAME}.png ${APP_NAME}_${VERSION}_${ARCH}/usr/share/icons/hicolor/48x48/apps/
 
 # Créer le fichier control
-cat > ${APP_NAME}_${VERSION}_${ARCH}/DEBIAN/control << EOF
-Package: ${APP_NAME}
-Version: ${VERSION}
-Section: utils
-Priority: optional
-Architecture: ${ARCH}
-Depends: libgtk2.0-0, libglib2.0-0
-Maintainer: Votre Nom <email@example.com>
+cat > ${APP_NAME}_${VERSION}_${ARCH}/DEBIAN/control << EOF  
+Package: ${APP_NAME}  
+Version: ${VERSION}  
+Section: utils  
+Priority: optional  
+Architecture: ${ARCH}  
+Depends: libgtk2.0-0, libglib2.0-0  
+Maintainer: Votre Nom <email@example.com>  
 Description: Description courte
  Description longue
 EOF
@@ -383,11 +383,11 @@ debuild -S -sa
 
 ```bash
 # Configurer dput (une seule fois)
-echo "[monappli-ppa]
-fqdn = ppa.launchpad.net
-method = ftp
-incoming = ~votre-username/ubuntu/monappli-stable/
-login = anonymous
+echo "[monappli-ppa]  
+fqdn = ppa.launchpad.net  
+method = ftp  
+incoming = ~votre-username/ubuntu/monappli-stable/  
+login = anonymous  
 allow_unsigned_uploads = 0" > ~/.dput.cf
 
 # Uploader
@@ -400,7 +400,7 @@ Une fois le paquet compilé sur Launchpad (environ 30 minutes), vos utilisateurs
 
 ```bash
 # Ajouter le PPA
-sudo add-apt-repository ppa:votre-username/monappli-stable
+sudo add-apt-repository ppa:votre-username/monappli-stable  
 sudo apt update
 
 # Installer l'application
@@ -468,7 +468,7 @@ sudo checkinstall --pkgname=monappli --pkgversion=1.0.0
 Interface graphique pour créer des paquets DEB :
 
 ```bash
-sudo apt install debreate
+sudo apt install debreate  
 debreate
 ```
 

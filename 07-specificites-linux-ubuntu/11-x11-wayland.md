@@ -59,7 +59,7 @@ uses
 var
   Output: string;
 
-procedure VerifierVariable(const NomVar: string);
+procedure VerifierVariable(const NomVar: string);  
 var
   Valeur: string;
 begin
@@ -200,7 +200,7 @@ type
 var
   MainForm: TMainForm;
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   Caption := 'Informations X11/Wayland';
   Width := 500;
@@ -223,7 +223,7 @@ begin
   Button1.OnClick := @Button1Click;
 end;
 
-procedure TMainForm.Button1Click(Sender: TObject);
+procedure TMainForm.Button1Click(Sender: TObject);  
 begin
   AfficherInfosX11;
 end;
@@ -331,12 +331,12 @@ program DetecterXWayland;
 uses
   SysUtils, Process, Classes;
 
-function EstSousWayland: Boolean;
+function EstSousWayland: Boolean;  
 begin
   Result := GetEnvironmentVariable('WAYLAND_DISPLAY') <> '';
 end;
 
-function EstXWayland: Boolean;
+function EstXWayland: Boolean;  
 var
   Output: string;
 begin
@@ -351,7 +351,7 @@ begin
   end;
 end;
 
-procedure AfficherInfosSysteme;
+procedure AfficherInfosSysteme;  
 var
   SessionType: string;
 begin
@@ -491,7 +491,7 @@ type
 var
   TransparentForm: TTransparentForm;
 
-procedure TTransparentForm.FormCreate(Sender: TObject);
+procedure TTransparentForm.FormCreate(Sender: TObject);  
 begin
   Caption := 'Fenêtre avec transparence';
   Width := 400;
@@ -510,13 +510,13 @@ begin
   Color := clSkyBlue;
 end;
 
-procedure TTransparentForm.FormPaint(Sender: TObject);
+procedure TTransparentForm.FormPaint(Sender: TObject);  
 begin
   Canvas.Font.Size := 20;
   Canvas.TextOut(50, 100, 'Transparence animée !');
 end;
 
-procedure TTransparentForm.Timer1Timer(Sender: TObject);
+procedure TTransparentForm.Timer1Timer(Sender: TObject);  
 begin
   FOpacity := FOpacity + FDirection;
 
@@ -579,7 +579,7 @@ type
 var
   MultiScreenForm: TMultiScreenForm;
 
-procedure TMultiScreenForm.FormCreate(Sender: TObject);
+procedure TMultiScreenForm.FormCreate(Sender: TObject);  
 begin
   Caption := 'Informations Multi-écrans';
   Width := 600;
@@ -605,7 +605,7 @@ begin
   AfficherInfosEcrans;
 end;
 
-procedure TMultiScreenForm.AfficherInfosEcrans;
+procedure TMultiScreenForm.AfficherInfosEcrans;  
 var
   i: Integer;
   {$IFDEF UNIX}
@@ -675,7 +675,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TMultiScreenForm.ButtonMoveClick(Sender: TObject);
+procedure TMultiScreenForm.ButtonMoveClick(Sender: TObject);  
 var
   CurrentMonitor, NextMonitor: Integer;
   i: Integer;
@@ -733,7 +733,7 @@ uses
   {$ENDIF}
   Forms;
 
-function CaptureDesktop: TBitmap;
+function CaptureDesktop: TBitmap;  
 var
   {$IFDEF UNIX}
   RootWindow: PGdkWindow;
@@ -861,7 +861,7 @@ type
 var
   ClipboardForm: TClipboardForm;
 
-procedure TClipboardForm.FormCreate(Sender: TObject);
+procedure TClipboardForm.FormCreate(Sender: TObject);  
 begin
   Caption := 'Gestion du presse-papiers X11/Wayland';
   Width := 600;
@@ -910,14 +910,14 @@ begin
   UpdateClipboardInfo;
 end;
 
-procedure TClipboardForm.ButtonCopyClick(Sender: TObject);
+procedure TClipboardForm.ButtonCopyClick(Sender: TObject);  
 begin
   Clipboard.AsText := MemoContent.Text;
   UpdateClipboardInfo;
   ShowMessage('Texte copié dans le presse-papiers');
 end;
 
-procedure TClipboardForm.ButtonPasteClick(Sender: TObject);
+procedure TClipboardForm.ButtonPasteClick(Sender: TObject);  
 begin
   if Clipboard.HasFormat(CF_TEXT) then
   begin
@@ -928,7 +928,7 @@ begin
     ShowMessage('Le presse-papiers ne contient pas de texte');
 end;
 
-procedure TClipboardForm.ButtonMonitorClick(Sender: TObject);
+procedure TClipboardForm.ButtonMonitorClick(Sender: TObject);  
 var
   Info: TStringList;
   i: Integer;
@@ -977,7 +977,7 @@ begin
   end;
 end;
 
-procedure TClipboardForm.UpdateClipboardInfo;
+procedure TClipboardForm.UpdateClipboardInfo;  
 var
   Status: string;
 begin
@@ -1017,7 +1017,7 @@ uses
   BaseUnix, SysUtils;
 
 {$IFDEF UNIX}
-procedure DemontrerSelections;
+procedure DemontrerSelections;  
 var
   Display: PDisplay;
   PrimaryAtom, ClipboardAtom, SecondaryAtom: TAtom;
@@ -1134,7 +1134,7 @@ type
 var
   EventMonitorForm: TEventMonitorForm;
 
-procedure TEventMonitorForm.FormCreate(Sender: TObject);
+procedure TEventMonitorForm.FormCreate(Sender: TObject);  
 begin
   Caption := 'Moniteur d''événements X11/Wayland';
   Width := 700;
@@ -1204,19 +1204,19 @@ begin
   {$ENDIF}
 end;
 
-procedure TEventMonitorForm.FormDestroy(Sender: TObject);
+procedure TEventMonitorForm.FormDestroy(Sender: TObject);  
 begin
   Timer1.Enabled := False;
 end;
 
-procedure TEventMonitorForm.ButtonClearClick(Sender: TObject);
+procedure TEventMonitorForm.ButtonClearClick(Sender: TObject);  
 begin
   ListEvents.Clear;
   FEventCount := 0;
   LogEvent('Action', 'Liste effacée');
 end;
 
-procedure TEventMonitorForm.Timer1Timer(Sender: TObject);
+procedure TEventMonitorForm.Timer1Timer(Sender: TObject);  
 begin
   LabelStats.Caption := Format('Événements : %d', [FEventCount]);
 
@@ -1225,7 +1225,7 @@ begin
     ListEvents.Items.Delete(0);
 end;
 
-procedure TEventMonitorForm.WndProc(var Message: TLMessage);
+procedure TEventMonitorForm.WndProc(var Message: TLMessage);  
 var
   EventName: string;
   ShouldLog: Boolean;
@@ -1302,7 +1302,7 @@ begin
   inherited WndProc(Message);
 end;
 
-procedure TEventMonitorForm.LogEvent(const EventName, Details: string);
+procedure TEventMonitorForm.LogEvent(const EventName, Details: string);  
 var
   TimeStr: string;
 begin
@@ -1362,7 +1362,7 @@ type
 var
   WindowManagerForm: TWindowManagerForm;
 
-procedure TWindowManagerForm.FormCreate(Sender: TObject);
+procedure TWindowManagerForm.FormCreate(Sender: TObject);  
 begin
   Caption := 'Contrôle du gestionnaire de fenêtres';
   Width := 600;
@@ -1534,23 +1534,23 @@ begin
   {$ENDIF}
 end;
 
-procedure TWindowManagerForm.ButtonFullscreenClick(Sender: TObject);
+procedure TWindowManagerForm.ButtonFullscreenClick(Sender: TObject);  
 begin
   SetFullscreen(not FIsFullscreen);
 end;
 
-procedure TWindowManagerForm.ButtonAlwaysOnTopClick(Sender: TObject);
+procedure TWindowManagerForm.ButtonAlwaysOnTopClick(Sender: TObject);  
 begin
   SetAlwaysOnTop(not FIsAlwaysOnTop);
 end;
 
-procedure TWindowManagerForm.ButtonMinimizeClick(Sender: TObject);
+procedure TWindowManagerForm.ButtonMinimizeClick(Sender: TObject);  
 begin
   WindowState := wsMinimized;
   LogInfo('Fenêtre minimisée');
 end;
 
-procedure TWindowManagerForm.ButtonMaximizeClick(Sender: TObject);
+procedure TWindowManagerForm.ButtonMaximizeClick(Sender: TObject);  
 begin
   if WindowState = wsMaximized then
   begin
@@ -1564,13 +1564,13 @@ begin
   end;
 end;
 
-procedure TWindowManagerForm.ButtonCenterClick(Sender: TObject);
+procedure TWindowManagerForm.ButtonCenterClick(Sender: TObject);  
 begin
   Position := poScreenCenter;
   LogInfo(Format('Fenêtre centrée à %d,%d', [Left, Top]));
 end;
 
-procedure TWindowManagerForm.LogInfo(const Msg: string);
+procedure TWindowManagerForm.LogInfo(const Msg: string);  
 begin
   Memo1.Lines.Add(FormatDateTime('[hh:nn:ss] ', Now) + Msg);
 end;
@@ -1613,7 +1613,7 @@ type
 var
   OptimizedForm: TOptimizedForm;
 
-procedure TOptimizedForm.FormCreate(Sender: TObject);
+procedure TOptimizedForm.FormCreate(Sender: TObject);  
 begin
   Caption := 'Optimisation X11/Wayland - Double Buffering';
   Width := 800;
@@ -1637,7 +1637,7 @@ begin
   Timer1.Enabled := True;
 end;
 
-procedure TOptimizedForm.DrawAnimation(ACanvas: TCanvas);
+procedure TOptimizedForm.DrawAnimation(ACanvas: TCanvas);  
 var
   CenterX, CenterY: Integer;
   Radius: Integer;
@@ -1682,7 +1682,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TOptimizedForm.FormPaint(Sender: TObject);
+procedure TOptimizedForm.FormPaint(Sender: TObject);  
 var
   Buffer: TBitmap;
 begin
@@ -1710,7 +1710,7 @@ begin
   end;
 end;
 
-procedure TOptimizedForm.Timer1Timer(Sender: TObject);
+procedure TOptimizedForm.Timer1Timer(Sender: TObject);  
 begin
   // Mettre à jour l'angle de rotation
   FAngle := FAngle + 0.05;
@@ -1763,7 +1763,7 @@ type
 var
   HighDPIForm: THighDPIForm;
 
-procedure THighDPIForm.FormCreate(Sender: TObject);
+procedure THighDPIForm.FormCreate(Sender: TObject);  
 begin
   Caption := 'Gestion High-DPI X11/Wayland';
   Position := poScreenCenter;
@@ -1835,7 +1835,7 @@ begin
   DetectDPISettings;
 end;
 
-procedure THighDPIForm.DetectDPISettings;
+procedure THighDPIForm.DetectDPISettings;  
 var
   Info: TStringList;
   ScaleFactor: Double;
@@ -1957,7 +1957,7 @@ begin
   end;
 end;
 
-procedure THighDPIForm.ApplyDPIScale(Scale: Double);
+procedure THighDPIForm.ApplyDPIScale(Scale: Double);  
 var
   i: Integer;
 begin
@@ -1981,12 +1981,12 @@ begin
   MemoInfo.Lines.Add(Format('Échelle appliquée : %.0f%%', [Scale * 100]));
 end;
 
-procedure THighDPIForm.ButtonDetectClick(Sender: TObject);
+procedure THighDPIForm.ButtonDetectClick(Sender: TObject);  
 begin
   DetectDPISettings;
 end;
 
-procedure THighDPIForm.ButtonApplyScaleClick(Sender: TObject);
+procedure THighDPIForm.ButtonApplyScaleClick(Sender: TObject);  
 var
   Scale: Double;
 begin
@@ -2044,7 +2044,7 @@ type
 var
   DesktopIntegrationForm: TDesktopIntegrationForm;
 
-procedure TDesktopIntegrationForm.FormCreate(Sender: TObject);
+procedure TDesktopIntegrationForm.FormCreate(Sender: TObject);  
 begin
   Caption := 'Intégration avec l''environnement de bureau';
   Width := 700;
@@ -2087,7 +2087,7 @@ begin
   DetectDesktopEnvironment;
 end;
 
-procedure TDesktopIntegrationForm.DetectDesktopEnvironment;
+procedure TDesktopIntegrationForm.DetectDesktopEnvironment;  
 var
   Info: TStringList;
   DesktopEnv, SessionType: string;
@@ -2217,7 +2217,7 @@ begin
   end;
 end;
 
-procedure TDesktopIntegrationForm.ShowNotification(const Title, Message: string);
+procedure TDesktopIntegrationForm.ShowNotification(const Title, Message: string);  
 var
   Process: TProcess;
   Desktop: string;
@@ -2311,17 +2311,17 @@ begin
   {$ENDIF}
 end;
 
-procedure TDesktopIntegrationForm.ButtonDetectClick(Sender: TObject);
+procedure TDesktopIntegrationForm.ButtonDetectClick(Sender: TObject);  
 begin
   DetectDesktopEnvironment;
 end;
 
-procedure TDesktopIntegrationForm.ButtonThemeClick(Sender: TObject);
+procedure TDesktopIntegrationForm.ButtonThemeClick(Sender: TObject);  
 begin
   ApplySystemTheme;
 end;
 
-procedure TDesktopIntegrationForm.ButtonNotifyClick(Sender: TObject);
+procedure TDesktopIntegrationForm.ButtonNotifyClick(Sender: TObject);  
 begin
   ShowNotification('FreePascal/Lazarus',
                   'Notification depuis votre application !');
@@ -2402,7 +2402,7 @@ Application.Scaled := True;
 
 // Ou dans le manifest Linux
 [Desktop Entry]
-StartupWMClass=votre-application
+StartupWMClass=votre-application  
 X-GNOME-SingleWindow=true
 ```
 
@@ -2412,7 +2412,7 @@ X-GNOME-SingleWindow=true
 Wayland ne permet pas le positionnement absolu. Utilisez les positions relatives :
 ```pascal
 // Au lieu de
-Left := 100;
+Left := 100;  
 Top := 100;
 
 // Utilisez

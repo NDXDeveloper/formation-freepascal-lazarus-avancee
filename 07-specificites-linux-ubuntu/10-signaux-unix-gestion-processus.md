@@ -51,7 +51,7 @@ var
   TerminationRequested: Boolean = False;
 
 // Procédure qui sera appelée quand un signal est reçu
-procedure SignalHandler(sig: cint); cdecl;
+procedure SignalHandler(sig: cint); cdecl;  
 begin
   case sig of
     SIGTERM, SIGINT: begin
@@ -268,26 +268,26 @@ var
   Running: Boolean = True;
   i: Integer;
 
-procedure ActionTerminate;
+procedure ActionTerminate;  
 begin
   WriteLn('Arrêt demandé - sauvegarde en cours...');
   Running := False;
 end;
 
-procedure ActionReload;
+procedure ActionReload;  
 begin
   WriteLn('Rechargement de la configuration...');
   // Code de rechargement ici
 end;
 
-procedure ActionInfo;
+procedure ActionInfo;  
 begin
   WriteLn('État du système :');
   WriteLn('- Mémoire utilisée : ...'); // À implémenter
   WriteLn('- Temps d''exécution : ...'); // À implémenter
 end;
 
-procedure SignalHandler(sig: cint); cdecl;
+procedure SignalHandler(sig: cint); cdecl;  
 var
   i: Integer;
 begin
@@ -306,7 +306,7 @@ begin
   end;
 end;
 
-procedure InitializeSignals;
+procedure InitializeSignals;  
 var
   i: Integer;
 begin
@@ -386,13 +386,13 @@ var
   LogFile: TextFile;
   Running: Boolean = True;
 
-procedure WriteLog(const Msg: string);
+procedure WriteLog(const Msg: string);  
 begin
   WriteLn(LogFile, FormatDateTime('yyyy-mm-dd hh:nn:ss', Now), ' - ', Msg);
   Flush(LogFile);
 end;
 
-procedure SignalHandler(sig: cint); cdecl;
+procedure SignalHandler(sig: cint); cdecl;  
 begin
   case sig of
     SIGTERM, SIGINT: begin
@@ -405,7 +405,7 @@ begin
   end;
 end;
 
-procedure Daemonize;
+procedure Daemonize;  
 var
   pid: TPid;
 begin
@@ -472,14 +472,14 @@ Utilisez plutôt des variables globales simples comme flags :
 var
   ReloadConfig: Boolean = False;
 
-procedure SignalHandler(sig: cint); cdecl;
+procedure SignalHandler(sig: cint); cdecl;  
 begin
   if sig = SIGHUP then
     ReloadConfig := True; // Simple affectation
 end;
 
 // Dans la boucle principale
-if ReloadConfig then
+if ReloadConfig then  
 begin
   ReloadConfig := False;
   // Faire le rechargement complexe ici, pas dans le handler
@@ -492,7 +492,7 @@ end;
 Un processus zombie est un processus enfant terminé dont le parent n'a pas encore lu le code de sortie. Pour les éviter :
 
 ```pascal
-procedure ReaperHandler(sig: cint); cdecl;
+procedure ReaperHandler(sig: cint); cdecl;  
 var
   status: cint;
 begin

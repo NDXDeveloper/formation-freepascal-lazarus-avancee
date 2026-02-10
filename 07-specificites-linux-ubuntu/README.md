@@ -68,7 +68,7 @@ Sous Linux, le terminal (console) n'est pas une relique du passé mais un outil 
 
 ```bash
 # Installer FreePascal et Lazarus
-sudo apt update
+sudo apt update  
 sudo apt install fpc lazarus
 
 # Compiler en ligne de commande
@@ -94,8 +94,8 @@ Cette approche uniforme simplifie beaucoup de tâches de programmation.
 
 ```pascal
 // Sous Windows, ces trois lignes référencent le même fichier :
-LoadFromFile('Config.ini');
-LoadFromFile('config.ini');
+LoadFromFile('Config.ini');  
+LoadFromFile('config.ini');  
 LoadFromFile('CONFIG.INI');
 
 // Sous Linux, ce sont trois fichiers différents !
@@ -159,7 +159,7 @@ sudo apt install build-essential git
 sudo apt install fpc lazarus
 
 # Outils supplémentaires utiles
-sudo apt install gdb valgrind  # Débogage et profiling
+sudo apt install gdb valgrind  # Débogage et profiling  
 sudo apt install sqlite3 postgresql-client  # Bases de données
 ```
 
@@ -238,7 +238,7 @@ Windows utilise CRLF (`\r\n`), Linux utilise LF (`\n`) :
 
 ```pascal
 // Gérer les deux formats
-Text := StringReplace(Text, #13#10, #10, [rfReplaceAll]); // CRLF → LF
+Text := StringReplace(Text, #13#10, #10, [rfReplaceAll]); // CRLF → LF  
 Text := StringReplace(Text, #13, #10, [rfReplaceAll]);    // CR → LF
 ```
 
@@ -273,7 +273,7 @@ Linux permet une communication inter-processus élégante :
 uses
   BaseUnix;
 
-procedure SignalHandler(sig: longint); cdecl;
+procedure SignalHandler(sig: longint); cdecl;  
 begin
   case sig of
     SIGTERM: // Demande d'arrêt propre
@@ -287,7 +287,7 @@ begin
 end;
 
 // Installation du gestionnaire
-FpSignal(SIGTERM, @SignalHandler);
+FpSignal(SIGTERM, @SignalHandler);  
 FpSignal(SIGHUP, @SignalHandler);
 ```
 

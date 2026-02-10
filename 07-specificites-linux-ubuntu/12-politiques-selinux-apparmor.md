@@ -41,7 +41,7 @@ program VerifierSecurite;
 uses
   SysUtils, Process, Classes;
 
-function ExecuterCommande(const Cmd: string; const Args: array of string): string;
+function ExecuterCommande(const Cmd: string; const Args: array of string): string;  
 var
   Proc: TProcess;
   Output: TStringList;
@@ -68,7 +68,7 @@ begin
   end;
 end;
 
-procedure VerifierSELinux;
+procedure VerifierSELinux;  
 var
   Status: string;
 begin
@@ -103,7 +103,7 @@ begin
   WriteLn;
 end;
 
-procedure VerifierAppArmor;
+procedure VerifierAppArmor;  
 var
   Status: string;
   ProfileCount: Integer;
@@ -184,7 +184,7 @@ program CreerProfilAppArmor;
 uses
   SysUtils, Classes;
 
-procedure CreerProfilExemple(const NomApp: string; const CheminApp: string);
+procedure CreerProfilExemple(const NomApp: string; const CheminApp: string);  
 var
   Profil: TStringList;
   NomFichier: string;
@@ -297,7 +297,7 @@ type
 var
   TestResults: array of TTestResult;
 
-procedure AjouterResultat(const Nom: string; Succes: Boolean; const Erreur: string = '');
+procedure AjouterResultat(const Nom: string; Succes: Boolean; const Erreur: string = '');  
 begin
   SetLength(TestResults, Length(TestResults) + 1);
   with TestResults[High(TestResults)] do
@@ -308,7 +308,7 @@ begin
   end;
 end;
 
-procedure TesterLecture(const Fichier: string);
+procedure TesterLecture(const Fichier: string);  
 var
   F: TextFile;
   Ligne: string;
@@ -325,7 +325,7 @@ begin
   end;
 end;
 
-procedure TesterEcriture(const Fichier: string);
+procedure TesterEcriture(const Fichier: string);  
 var
   F: TextFile;
 begin
@@ -342,7 +342,7 @@ begin
   end;
 end;
 
-procedure TesterReseau;
+procedure TesterReseau;  
 var
   Reussi: Boolean;
 begin
@@ -357,7 +357,7 @@ begin
   end;
 end;
 
-procedure AfficherRapport;
+procedure AfficherRapport;  
 var
   i: Integer;
   NbSucces, NbEchecs: Integer;
@@ -441,7 +441,7 @@ program ComprendreSELinux;
 uses
   SysUtils, Process, Classes;
 
-function ExecuterCommande(const Cmd: string; const Args: array of string): string;
+function ExecuterCommande(const Cmd: string; const Args: array of string): string;  
 var
   Proc: TProcess;
   Output: TStringList;
@@ -467,7 +467,7 @@ begin
   end;
 end;
 
-procedure AfficherContexte(const Chemin: string);
+procedure AfficherContexte(const Chemin: string);  
 var
   Contexte: string;
 begin
@@ -483,7 +483,7 @@ begin
   WriteLn(Contexte);
 end;
 
-procedure ExpliquContexte;
+procedure ExpliquContexte;  
 begin
   WriteLn('=== Structure d''un contexte SELinux ===');
   WriteLn;
@@ -497,7 +497,7 @@ begin
   WriteLn;
 end;
 
-procedure VerifierContexteProcessus;
+procedure VerifierContexteProcessus;  
 var
   Contexte: string;
   F: TextFile;
@@ -573,7 +573,7 @@ program CreerPolitiqueSELinux;
 uses
   SysUtils, Classes;
 
-procedure CreerModuleSELinux(const NomApp: string);
+procedure CreerModuleSELinux(const NomApp: string);  
 var
   TeFile, FcFile, IfFile: TStringList;
 begin
@@ -718,7 +718,7 @@ type
 var
   Violations: array of TViolation;
 
-procedure AnalyserLogs;
+procedure AnalyserLogs;  
 var
   Proc: TProcess;
   Output: TStringList;
@@ -773,7 +773,7 @@ begin
   end;
 end;
 
-procedure AfficherRapport;
+procedure AfficherRapport;  
 var
   i: Integer;
   Start: Integer;
@@ -824,7 +824,7 @@ begin
   end;
 end;
 
-procedure GenererSuggestions;
+procedure GenererSuggestions;  
 var
   i: Integer;
   Perms: string;
@@ -915,7 +915,7 @@ type
 var
   AVCMessages: array of TAVCMessage;
 
-procedure LireAuditLog;
+procedure LireAuditLog;  
 var
   Proc: TProcess;
   Output: TStringList;
@@ -1002,7 +1002,7 @@ begin
   end;
 end;
 
-procedure GenererPolitique;
+procedure GenererPolitique;  
 var
   i: Integer;
   Commandes: TStringList;
@@ -1124,7 +1124,7 @@ type
 var
   SecurityAwareForm: TSecurityAwareForm;
 
-procedure TSecurityAwareForm.FormCreate(Sender: TObject);
+procedure TSecurityAwareForm.FormCreate(Sender: TObject);  
 begin
   Caption := 'Application consciente de la sécurité';
   Width := 600;
@@ -1166,7 +1166,7 @@ begin
   DetectSecuritySystem;
 end;
 
-procedure TSecurityAwareForm.DetectSecuritySystem;
+procedure TSecurityAwareForm.DetectSecuritySystem;  
 var
   F: TextFile;
   Profile: string;
@@ -1244,7 +1244,7 @@ begin
     LabelStatus.Caption := LabelStatus.Caption + ' (non restreint)';
 end;
 
-procedure TSecurityAwareForm.AdaptApplicationBehavior;
+procedure TSecurityAwareForm.AdaptApplicationBehavior;  
 var
   ConfigPath, LogPath, TempPath: string;
 begin
@@ -1324,7 +1324,7 @@ begin
   LogMessage('Adaptation terminée');
 end;
 
-function TSecurityAwareForm.TryWriteFile(const Path: string): Boolean;
+function TSecurityAwareForm.TryWriteFile(const Path: string): Boolean;  
 var
   F: TextFile;
 begin
@@ -1349,17 +1349,17 @@ begin
   end;
 end;
 
-procedure TSecurityAwareForm.LogMessage(const Msg: string);
+procedure TSecurityAwareForm.LogMessage(const Msg: string);  
 begin
   MemoLog.Lines.Add(FormatDateTime('[hh:nn:ss] ', Now) + Msg);
 end;
 
-procedure TSecurityAwareForm.ButtonCheckSecurityClick(Sender: TObject);
+procedure TSecurityAwareForm.ButtonCheckSecurityClick(Sender: TObject);  
 begin
   DetectSecuritySystem;
 end;
 
-procedure TSecurityAwareForm.ButtonAdaptBehaviorClick(Sender: TObject);
+procedure TSecurityAwareForm.ButtonAdaptBehaviorClick(Sender: TObject);  
 begin
   AdaptApplicationBehavior;
 end;
@@ -1383,7 +1383,7 @@ program CreerInstallateur;
 uses
   SysUtils, Classes;
 
-procedure CreerScriptInstallation(const NomApp: string);
+procedure CreerScriptInstallation(const NomApp: string);  
 var
   Script: TStringList;
 begin
@@ -1483,7 +1483,7 @@ begin
   end;
 end;
 
-procedure CreerScriptDesinstallation(const NomApp: string);
+procedure CreerScriptDesinstallation(const NomApp: string);  
 var
   Script: TStringList;
 begin
@@ -1605,14 +1605,14 @@ type
     property LastError: string read FLastError;
   end;
 
-constructor TSecureFileHandler.Create(const PrimaryPath, FallbackPath: string);
+constructor TSecureFileHandler.Create(const PrimaryPath, FallbackPath: string);  
 begin
   FPrimaryPath := PrimaryPath;
   FFallbackPath := FallbackPath;
   FLastError := '';
 end;
 
-function TSecureFileHandler.TryPath(const Path: string): Boolean;
+function TSecureFileHandler.TryPath(const Path: string): Boolean;  
 begin
   Result := False;
   try
@@ -1624,7 +1624,7 @@ begin
   end;
 end;
 
-function TSecureFileHandler.SaveData(const Data: string): Boolean;
+function TSecureFileHandler.SaveData(const Data: string): Boolean;  
 var
   Path: string;
   F: TextFile;
@@ -1668,7 +1668,7 @@ begin
   end;
 end;
 
-function TSecureFileHandler.LoadData: string;
+function TSecureFileHandler.LoadData: string;  
 var
   Path: string;
   F: TextFile;
@@ -1753,7 +1753,7 @@ program GenererDocSecurite;
 uses
   SysUtils, Classes;
 
-procedure GenererREADMESecurite(const NomApp: string);
+procedure GenererREADMESecurite(const NomApp: string);  
 var
   Doc: TStringList;
 begin
@@ -1912,7 +1912,7 @@ type
     procedure SaveReport(const FileName: string);
   end;
 
-constructor TTestSuite.Create(const AppName, AppPath: string);
+constructor TTestSuite.Create(const AppName, AppPath: string);  
 begin
   FAppName := AppName;
   FAppPath := AppPath;
@@ -1922,7 +1922,7 @@ begin
   FResults.Add('');
 end;
 
-destructor TTestSuite.Destroy;
+destructor TTestSuite.Destroy;  
 begin
   FResults.Free;
   inherited;
@@ -1964,7 +1964,7 @@ begin
   end;
 end;
 
-procedure TTestSuite.TestFileAccess;
+procedure TTestSuite.TestFileAccess;  
 begin
   FResults.Add('');
   FResults.Add('=== Tests d''accès aux fichiers ===');
@@ -1979,7 +1979,7 @@ begin
   RunTest('Écriture dans /etc (doit échouer)', 'touch', ['/etc/test_' + FAppName]);
 end;
 
-procedure TTestSuite.TestNetworkAccess;
+procedure TTestSuite.TestNetworkAccess;  
 begin
   FResults.Add('');
   FResults.Add('=== Tests d''accès réseau ===');
@@ -1991,7 +1991,7 @@ begin
   RunTest('Connexion HTTP', 'curl', ['-I', 'http://example.com']);
 end;
 
-procedure TTestSuite.TestProcessCreation;
+procedure TTestSuite.TestProcessCreation;  
 begin
   FResults.Add('');
   FResults.Add('=== Tests de création de processus ===');
@@ -2003,7 +2003,7 @@ begin
   RunTest('Pipe command', 'sh', ['-c', 'echo test | wc -l']);
 end;
 
-procedure TTestSuite.RunAllTests;
+procedure TTestSuite.RunAllTests;  
 begin
   FResults.Add('Début des tests...');
   FResults.Add('');
@@ -2016,7 +2016,7 @@ begin
   FResults.Add('Tests terminés');
 end;
 
-procedure TTestSuite.SaveReport(const FileName: string);
+procedure TTestSuite.SaveReport(const FileName: string);  
 begin
   FResults.SaveToFile(FileName);
   WriteLn('Rapport sauvegardé dans : ', FileName);
@@ -2082,11 +2082,11 @@ sudo systemctl reload apparmor
 #### Pour SELinux :
 ```bash
 # Status général
-getenforce
+getenforce  
 sestatus
 
 # Changer le mode temporairement
-sudo setenforce 0  # Permissive
+sudo setenforce 0  # Permissive  
 sudo setenforce 1  # Enforcing
 
 # Voir le contexte d'un fichier
@@ -2170,13 +2170,13 @@ type
     procedure Run;
   end;
 
-constructor TSecureApp.Create;
+constructor TSecureApp.Create;  
 begin
   DetectSecurity;
   InitializePaths;
 end;
 
-procedure TSecureApp.DetectSecurity;
+procedure TSecureApp.DetectSecurity;  
 begin
   if DirectoryExists('/etc/apparmor.d') and
      FileExists('/sys/kernel/security/apparmor/profiles') then
@@ -2189,7 +2189,7 @@ begin
   WriteLn('Système de sécurité détecté : ', FSecuritySystem);
 end;
 
-procedure TSecureApp.InitializePaths;
+procedure TSecureApp.InitializePaths;  
 begin
   // Adapter les chemins selon le système de sécurité
   if (FSecuritySystem = 'AppArmor') or (FSecuritySystem = 'SELinux') then
@@ -2209,7 +2209,7 @@ begin
   WriteLn('Chemin des logs : ', FLogPath);
 end;
 
-procedure TSecureApp.Run;
+procedure TSecureApp.Run;  
 begin
   WriteLn('Application démarrée avec support ', FSecuritySystem);
 

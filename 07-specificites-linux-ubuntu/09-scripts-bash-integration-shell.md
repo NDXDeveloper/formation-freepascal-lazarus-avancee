@@ -22,7 +22,7 @@ Sous Linux/Ubuntu, le shell (ligne de commande) est au cœur du système. Intég
 # Ceci est un commentaire
 
 # Variables
-NOM_APP="MonAppli"
+NOM_APP="MonAppli"  
 VERSION="1.0.0"
 
 # Afficher un message
@@ -72,15 +72,15 @@ Créez `install.sh` :
 #!/usr/bin/env bash
 
 # Configuration
-APP_NAME="monappli"
-APP_VERSION="1.0.0"
-INSTALL_PREFIX="/usr/local"
+APP_NAME="monappli"  
+APP_VERSION="1.0.0"  
+INSTALL_PREFIX="/usr/local"  
 CONFIG_DIR="$HOME/.config/$APP_NAME"
 
 # Couleurs pour l'affichage
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
+RED='\033[0;31m'  
+GREEN='\033[0;32m'  
+YELLOW='\033[1;33m'  
 NC='\033[0m' # No Color
 
 # Fonction pour afficher les messages
@@ -161,14 +161,14 @@ install_app() {
     # Créer le fichier .desktop
     cat > "$INSTALL_PREFIX/share/applications/$APP_NAME.desktop" << EOF
 [Desktop Entry]
-Version=1.0
-Type=Application
-Name=Mon Application
-Comment=Application créée avec Lazarus
-Exec=$INSTALL_PREFIX/bin/$APP_NAME
-Icon=$APP_NAME
-Categories=Utility;
-Terminal=false
+Version=1.0  
+Type=Application  
+Name=Mon Application  
+Comment=Application créée avec Lazarus  
+Exec=$INSTALL_PREFIX/bin/$APP_NAME  
+Icon=$APP_NAME  
+Categories=Utility;  
+Terminal=false  
 EOF
 
     # Copier la documentation
@@ -194,16 +194,16 @@ setup_user_config() {
     if [ ! -f "$REAL_HOME/.config/$APP_NAME/config.ini" ]; then
         sudo -u $REAL_USER cat > "$REAL_HOME/.config/$APP_NAME/config.ini" << EOF
 [General]
-Version=$APP_VERSION
+Version=$APP_VERSION  
 FirstRun=true
 
 [Display]
-Theme=default
+Theme=default  
 Language=fr
 
 [Paths]
-DataDir=$REAL_HOME/.local/share/$APP_NAME
-CacheDir=$REAL_HOME/.cache/$APP_NAME
+DataDir=$REAL_HOME/.local/share/$APP_NAME  
+CacheDir=$REAL_HOME/.cache/$APP_NAME  
 EOF
         print_info "Fichier de configuration créé"
     fi
@@ -238,12 +238,12 @@ Créez `uninstall.sh` :
 ```bash
 #!/usr/bin/env bash
 
-APP_NAME="monappli"
+APP_NAME="monappli"  
 INSTALL_PREFIX="/usr/local"
 
 # Couleurs
-RED='\033[0;31m'
-GREEN='\033[0;32m'
+RED='\033[0;31m'  
+GREEN='\033[0;32m'  
 NC='\033[0m'
 
 print_info() {
@@ -263,22 +263,22 @@ fi
 echo "Désinstallation de $APP_NAME..."
 
 # Confirmation
-read -p "Êtes-vous sûr de vouloir désinstaller $APP_NAME ? (o/n) " -n 1 -r
-echo
+read -p "Êtes-vous sûr de vouloir désinstaller $APP_NAME ? (o/n) " -n 1 -r  
+echo  
 if [[ ! $REPLY =~ ^[Oo]$ ]]; then
     echo "Désinstallation annulée"
     exit 0
 fi
 
 # Supprimer les fichiers
-rm -f "$INSTALL_PREFIX/bin/$APP_NAME"
-rm -f "$INSTALL_PREFIX/share/applications/$APP_NAME.desktop"
-rm -f "$INSTALL_PREFIX/share/icons/hicolor/48x48/apps/$APP_NAME.png"
+rm -f "$INSTALL_PREFIX/bin/$APP_NAME"  
+rm -f "$INSTALL_PREFIX/share/applications/$APP_NAME.desktop"  
+rm -f "$INSTALL_PREFIX/share/icons/hicolor/48x48/apps/$APP_NAME.png"  
 rm -rf "$INSTALL_PREFIX/share/doc/$APP_NAME"
 
 # Proposer de supprimer la configuration utilisateur
-read -p "Supprimer aussi la configuration utilisateur ? (o/n) " -n 1 -r
-echo
+read -p "Supprimer aussi la configuration utilisateur ? (o/n) " -n 1 -r  
+echo  
 if [[ $REPLY =~ ^[Oo]$ ]]; then
     REAL_USER=${SUDO_USER:-$USER}
     REAL_HOME=$(getent passwd $REAL_USER | cut -d: -f6)
@@ -299,7 +299,7 @@ uses
   Process, SysUtils;
 
 // Méthode 1 : Exécution simple
-procedure ExecuteShellCommand(const Command: string);
+procedure ExecuteShellCommand(const Command: string);  
 var
   Process: TProcess;
 begin
@@ -314,7 +314,7 @@ begin
 end;
 
 // Méthode 2 : Avec récupération de la sortie
-function ExecuteShellCommandWithOutput(const Command: string): string;
+function ExecuteShellCommandWithOutput(const Command: string): string;  
 var
   Process: TProcess;
   OutputStream: TStringStream;
@@ -353,7 +353,7 @@ begin
 end;
 
 // Utilisation
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 var
   Output: string;
 begin
@@ -373,7 +373,7 @@ end;
 uses
   SysUtils;
 
-procedure ReadEnvironmentVariables;
+procedure ReadEnvironmentVariables;  
 var
   HomeDir, UserName, Path: string;
 begin
@@ -392,7 +392,7 @@ begin
 end;
 
 // Définir une variable d'environnement (Linux)
-procedure SetEnvironmentVar(const Name, Value: string);
+procedure SetEnvironmentVar(const Name, Value: string);  
 begin
   {$IFDEF UNIX}
   fpSetEnv(PChar(Name), PChar(Value), 1); // unité unix
@@ -410,7 +410,7 @@ Créez `monappli-launcher.sh` :
 #!/usr/bin/env bash
 
 # Détection de l'emplacement du script
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  
 APP_NAME="monappli"
 
 # Configuration selon l'environnement
@@ -602,7 +602,7 @@ Ajoutez dans `~/.bashrc` ou créez `/etc/profile.d/monappli.sh` :
 alias monappli='/usr/local/bin/monappli'
 
 # Alias avec options courantes
-alias monappli-debug='monappli --debug --verbose'
+alias monappli-debug='monappli --debug --verbose'  
 alias monappli-config='monappli --config ~/.config/monappli/custom.ini'
 
 # Fonction pour ouvrir un fichier avec l'application
@@ -659,8 +659,8 @@ Créez `update.sh` :
 ```bash
 #!/usr/bin/env bash
 
-APP_NAME="monappli"
-UPDATE_URL="https://example.com/releases/latest"
+APP_NAME="monappli"  
+UPDATE_URL="https://example.com/releases/latest"  
 CURRENT_VERSION_FILE="/usr/local/share/$APP_NAME/version"
 
 # Obtenir la version actuelle
@@ -773,7 +773,7 @@ Créez `diagnostic.sh` :
 ```bash
 #!/usr/bin/env bash
 
-APP_NAME="monappli"
+APP_NAME="monappli"  
 REPORT_FILE="diagnostic_$(date +%Y%m%d_%H%M%S).txt"
 
 echo "Génération du rapport de diagnostic..." | tee $REPORT_FILE
@@ -838,7 +838,7 @@ echo "Génération du rapport de diagnostic..." | tee $REPORT_FILE
 
 } >> $REPORT_FILE 2>&1
 
-echo "Rapport généré: $REPORT_FILE"
+echo "Rapport généré: $REPORT_FILE"  
 echo "Envoyez ce fichier au support technique si nécessaire."
 ```
 
@@ -868,7 +868,7 @@ generate_data | monappli --process-stdin
 Code FreePascal pour lire depuis stdin :
 
 ```pascal
-procedure ProcessStdinData;
+procedure ProcessStdinData;  
 var
   Line: string;
 begin
@@ -895,7 +895,7 @@ if [ ! -p "$FIFO_PATH" ]; then
 fi
 
 # Envoyer des commandes
-echo "COMMAND:REFRESH" > "$FIFO_PATH"
+echo "COMMAND:REFRESH" > "$FIFO_PATH"  
 echo "DATA:Hello from Bash" > "$FIFO_PATH"
 ```
 
@@ -905,7 +905,7 @@ Code FreePascal pour lire le FIFO :
 uses
   BaseUnix, SysUtils;
 
-procedure ReadFromFIFO;
+procedure ReadFromFIFO;  
 var
   FIFOFile: TextFile;
   Line: string;
@@ -941,10 +941,10 @@ Créez `backup.sh` :
 ```bash
 #!/usr/bin/env bash
 
-APP_NAME="monappli"
-BACKUP_DIR="/var/backups/$APP_NAME"
-CONFIG_DIR="$HOME/.config/$APP_NAME"
-DATA_DIR="$HOME/.local/share/$APP_NAME"
+APP_NAME="monappli"  
+BACKUP_DIR="/var/backups/$APP_NAME"  
+CONFIG_DIR="$HOME/.config/$APP_NAME"  
+DATA_DIR="$HOME/.local/share/$APP_NAME"  
 RETENTION_DAYS=30
 
 # Créer le répertoire de backup
@@ -973,7 +973,7 @@ else
 fi
 
 # Vérifier l'intégrité
-tar -tzf "$BACKUP_FILE" > /dev/null 2>&1
+tar -tzf "$BACKUP_FILE" > /dev/null 2>&1  
 if [ $? -eq 0 ]; then
     echo "Backup vérifié avec succès"
 
@@ -985,9 +985,9 @@ else
 fi
 
 # Afficher les statistiques
-SIZE=$(du -h "$BACKUP_FILE" | cut -f1)
-echo "Taille du backup: $SIZE"
-echo "Backups existants:"
+SIZE=$(du -h "$BACKUP_FILE" | cut -f1)  
+echo "Taille du backup: $SIZE"  
+echo "Backups existants:"  
 ls -lh "$BACKUP_DIR"/*.tar.gz | tail -5
 ```
 
@@ -998,17 +998,17 @@ Créez `restore.sh` :
 ```bash
 #!/usr/bin/env bash
 
-APP_NAME="monappli"
+APP_NAME="monappli"  
 BACKUP_DIR="/var/backups/$APP_NAME"
 
 # Couleurs
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
+RED='\033[0;31m'  
+GREEN='\033[0;32m'  
+YELLOW='\033[1;33m'  
 NC='\033[0m'
 
-print_info() { echo -e "${GREEN}[INFO]${NC} $1"; }
-print_error() { echo -e "${RED}[ERREUR]${NC} $1"; }
+print_info() { echo -e "${GREEN}[INFO]${NC} $1"; }  
+print_error() { echo -e "${RED}[ERREUR]${NC} $1"; }  
 print_warning() { echo -e "${YELLOW}[ATTENTION]${NC} $1"; }
 
 # Lister les backups disponibles
@@ -1128,11 +1128,11 @@ Créez `monitor.sh` :
 ```bash
 #!/usr/bin/env bash
 
-APP_NAME="monappli"
-LOG_FILE="$HOME/.local/share/$APP_NAME/monitor.log"
-PID_FILE="/var/run/$APP_NAME.pid"
-CHECK_INTERVAL=60  # secondes
-MAX_MEMORY_MB=500
+APP_NAME="monappli"  
+LOG_FILE="$HOME/.local/share/$APP_NAME/monitor.log"  
+PID_FILE="/var/run/$APP_NAME.pid"  
+CHECK_INTERVAL=60  # secondes  
+MAX_MEMORY_MB=500  
 MAX_CPU_PERCENT=80
 
 # Créer le répertoire de log si nécessaire
@@ -1406,18 +1406,18 @@ Pour que votre application démarre automatiquement, créez `/etc/systemd/system
 
 ```ini
 [Unit]
-Description=Mon Application FreePascal/Lazarus
-Documentation=https://example.com/docs
+Description=Mon Application FreePascal/Lazarus  
+Documentation=https://example.com/docs  
 After=network.target
 
 [Service]
-Type=simple
-User=monappli
-Group=monappli
+Type=simple  
+User=monappli  
+Group=monappli  
 WorkingDirectory=/usr/local/share/monappli
 
 # Variables d'environnement
-Environment="DISPLAY=:0"
+Environment="DISPLAY=:0"  
 Environment="HOME=/var/lib/monappli"
 
 # Commande de démarrage
@@ -1427,22 +1427,22 @@ ExecStart=/usr/local/bin/monappli --daemon
 ExecStop=/bin/kill -TERM $MAINPID
 
 # Redémarrage automatique
-Restart=on-failure
+Restart=on-failure  
 RestartSec=10
 
 # Limites
-LimitNOFILE=1024
+LimitNOFILE=1024  
 LimitNPROC=512
 
 # Logs
-StandardOutput=journal
+StandardOutput=journal  
 StandardError=journal
 
 # Sécurité
-PrivateTmp=true
-NoNewPrivileges=true
-ProtectSystem=strict
-ProtectHome=true
+PrivateTmp=true  
+NoNewPrivileges=true  
+ProtectSystem=strict  
+ProtectHome=true  
 ReadWritePaths=/var/lib/monappli /var/log/monappli
 
 [Install]
@@ -1456,16 +1456,16 @@ Créez `install-service.sh` :
 ```bash
 #!/usr/bin/env bash
 
-APP_NAME="monappli"
-SERVICE_FILE="/etc/systemd/system/${APP_NAME}.service"
+APP_NAME="monappli"  
+SERVICE_FILE="/etc/systemd/system/${APP_NAME}.service"  
 APP_USER="monappli"
 
 # Couleurs
-GREEN='\033[0;32m'
-RED='\033[0;31m'
+GREEN='\033[0;32m'  
+RED='\033[0;31m'  
 NC='\033[0m'
 
-print_info() { echo -e "${GREEN}[INFO]${NC} $1"; }
+print_info() { echo -e "${GREEN}[INFO]${NC} $1"; }  
 print_error() { echo -e "${RED}[ERREUR]${NC} $1"; }
 
 # Vérifier les droits root
@@ -1522,7 +1522,7 @@ configure_logging() {
 MaxRetentionSec=30d
 
 # Taille maximale des logs
-SystemMaxUse=100M
+SystemMaxUse=100M  
 EOF
 
     # Redémarrer journald
@@ -1592,7 +1592,7 @@ Créez `setup-cron.sh` :
 ```bash
 #!/usr/bin/env bash
 
-APP_NAME="monappli"
+APP_NAME="monappli"  
 CRON_USER="$USER"
 
 # Ajouter des tâches cron
@@ -1657,7 +1657,7 @@ create_cleanup_script() {
     cat > /usr/local/bin/${APP_NAME}-cleanup.sh << 'EOF'
 #!/bin/bash
 
-APP_NAME="monappli"
+APP_NAME="monappli"  
 TEMP_DIRS=(
     "/tmp/${APP_NAME}_*"
     "/var/tmp/${APP_NAME}_*"
@@ -1687,8 +1687,8 @@ done
 # Nettoyer les logs anciens
 find /var/log/$APP_NAME -name "*.log" -mtime +30 -delete
 
-echo "Espace libéré: $(numfmt --to=iec-i --suffix=B $total_freed)"
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Fin du nettoyage"
+echo "Espace libéré: $(numfmt --to=iec-i --suffix=B $total_freed)"  
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Fin du nettoyage"  
 EOF
 
     chmod +x /usr/local/bin/${APP_NAME}-cleanup.sh
@@ -1699,8 +1699,8 @@ create_stats_script() {
     cat > /usr/local/bin/${APP_NAME}-stats.sh << 'EOF'
 #!/bin/bash
 
-APP_NAME="monappli"
-STATS_DIR="/var/lib/$APP_NAME/stats"
+APP_NAME="monappli"  
+STATS_DIR="/var/lib/$APP_NAME/stats"  
 DB_PATH="$HOME/.local/share/$APP_NAME/database.db"
 
 mkdir -p "$STATS_DIR"
@@ -1771,7 +1771,7 @@ case "${1:-daily}" in
         echo "Usage: $0 [--daily|--weekly|--monthly]"
         exit 1
         ;;
-esac
+esac  
 EOF
 
     chmod +x /usr/local/bin/${APP_NAME}-stats.sh
@@ -1806,16 +1806,16 @@ Ajoutez dans `/usr/local/bin/monappli-cli` :
 ```bash
 #!/usr/bin/env bash
 
-APP_NAME="monappli"
-VERSION="1.0.0"
+APP_NAME="monappli"  
+VERSION="1.0.0"  
 CONFIG_FILE="$HOME/.config/$APP_NAME/config.ini"
 
 # Couleurs pour le terminal
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-BOLD='\033[1m'
+RED='\033[0;31m'  
+GREEN='\033[0;32m'  
+BLUE='\033[0;34m'  
+YELLOW='\033[1;33m'  
+BOLD='\033[1m'  
 NC='\033[0m'
 
 # Fonction d'aide
@@ -2237,11 +2237,11 @@ _monappli_cli() {
 }
 
 # Enregistrer la fonction de complétion
-complete -F _monappli_cli monappli-cli
+complete -F _monappli_cli monappli-cli  
 complete -F _monappli_cli monappli
 
 # Alias utiles
-alias mac='monappli-cli'
+alias mac='monappli-cli'  
 alias ma='monappli-cli'
 ```
 
@@ -2254,7 +2254,7 @@ Créez `monappli-notify.sh` :
 ```bash
 #!/usr/bin/env bash
 
-APP_NAME="monappli"
+APP_NAME="monappli"  
 ICON_PATH="/usr/share/icons/hicolor/48x48/apps/monappli.png"
 
 # Détection du système de notification
@@ -2375,9 +2375,9 @@ Créez `monappli-watch.sh` :
 ```bash
 #!/usr/bin/env bash
 
-APP_NAME="monappli"
-WATCH_DIR="$HOME/Documents/MonAppli"
-PROCESSED_DIR="$WATCH_DIR/processed"
+APP_NAME="monappli"  
+WATCH_DIR="$HOME/Documents/MonAppli"  
+PROCESSED_DIR="$WATCH_DIR/processed"  
 ERROR_DIR="$WATCH_DIR/errors"
 
 # Vérifier les dépendances
@@ -2503,7 +2503,7 @@ sync_with_remote() {
 }
 
 # Programme principal
-check_dependencies
+check_dependencies  
 init_directories
 
 case "${1:-watch}" in
@@ -2543,7 +2543,7 @@ Créez `setup-shortcuts.sh` :
 ```bash
 #!/usr/bin/env bash
 
-APP_NAME="monappli"
+APP_NAME="monappli"  
 INSTALL_PREFIX="/usr/local"
 
 # Créer les liens symboliques
@@ -2573,25 +2573,25 @@ create_desktop_entry() {
 
     cat > "/usr/share/applications/${APP_NAME}.desktop" << EOF
 [Desktop Entry]
-Version=1.0
-Type=Application
-Name=Mon Application
-GenericName=Application FreePascal/Lazarus
-Comment=Ma super application
-Exec=${INSTALL_PREFIX}/bin/${APP_NAME} %F
-Icon=${APP_NAME}
-Terminal=false
-Categories=Utility;Development;
-MimeType=application/x-monappli;
+Version=1.0  
+Type=Application  
+Name=Mon Application  
+GenericName=Application FreePascal/Lazarus  
+Comment=Ma super application  
+Exec=${INSTALL_PREFIX}/bin/${APP_NAME} %F  
+Icon=${APP_NAME}  
+Terminal=false  
+Categories=Utility;Development;  
+MimeType=application/x-monappli;  
 Actions=Debug;Config;
 
 [Desktop Action Debug]
-Name=Lancer en mode Debug
+Name=Lancer en mode Debug  
 Exec=${INSTALL_PREFIX}/bin/${APP_NAME} --debug
 
 [Desktop Action Config]
-Name=Ouvrir la configuration
-Exec=${INSTALL_PREFIX}/bin/${APP_NAME}-cli config
+Name=Ouvrir la configuration  
+Exec=${INSTALL_PREFIX}/bin/${APP_NAME}-cli config  
 EOF
 
     # Mettre à jour la base de données desktop
@@ -2638,7 +2638,7 @@ monappli \- Application FreePascal/Lazarus
 .B monappli
 [\fIOPTIONS\fR] [\fIFICHIER\fR]
 .SH DESCRIPTION
-MonAppli est une application développée avec FreePascal/Lazarus
+MonAppli est une application développée avec FreePascal/Lazarus  
 qui fait des choses extraordinaires.
 .SH OPTIONS
 .TP
@@ -2713,7 +2713,7 @@ Rapporter les bogues à https://github.com/username/monappli/issues
 .BR monappli-cli (1),
 .BR monappli.conf (5)
 .SH COPYRIGHT
-Copyright © 2024 Votre Nom. License GPL version 3 ou ultérieure.
+Copyright © 2024 Votre Nom. License GPL version 3 ou ultérieure.  
 EOF
 
     # Compresser le man page
@@ -2760,7 +2760,7 @@ Script Bash serveur (`monappli-socket-server.sh`) :
 ```bash
 #!/usr/bin/env bash
 
-SOCKET_PATH="/tmp/monappli.sock"
+SOCKET_PATH="/tmp/monappli.sock"  
 LOG_FILE="/var/log/monappli/socket.log"
 
 # Nettoyer le socket existant
@@ -2848,13 +2848,13 @@ type
     procedure Disconnect;
   end;
 
-constructor TSocketClient.Create(const SocketPath: string);
+constructor TSocketClient.Create(const SocketPath: string);  
 begin
   FSocketPath := SocketPath;
   FSocket := fpSocket(AF_UNIX, SOCK_STREAM, 0);
 end;
 
-function TSocketClient.Connect: Boolean;
+function TSocketClient.Connect: Boolean;  
 var
   Addr: TUnixSockAddr;
 begin
@@ -2870,7 +2870,7 @@ begin
   Result := fpConnect(FSocket, @Addr, SizeOf(Addr)) = 0;
 end;
 
-function TSocketClient.SendCommand(const Command: string): string;
+function TSocketClient.SendCommand(const Command: string): string;  
 var
   Buffer: array[0..1023] of Char;
   BytesSent, BytesReceived: Integer;
@@ -2892,7 +2892,7 @@ begin
   end;
 end;
 
-procedure TSocketClient.Disconnect;
+procedure TSocketClient.Disconnect;  
 begin
   if FSocket >= 0 then
   begin
@@ -2902,7 +2902,7 @@ begin
 end;
 
 // Utilisation
-procedure TForm1.CheckApplicationStatus;
+procedure TForm1.CheckApplicationStatus;  
 var
   Client: TSocketClient;
   Status: string;
@@ -2933,9 +2933,9 @@ Script Bash pour envoyer des messages D-Bus :
 ```bash
 #!/usr/bin/env bash
 
-APP_NAME="monappli"
-DBUS_NAME="com.example.MonAppli"
-DBUS_PATH="/com/example/MonAppli"
+APP_NAME="monappli"  
+DBUS_NAME="com.example.MonAppli"  
+DBUS_PATH="/com/example/MonAppli"  
 DBUS_INTERFACE="com.example.MonAppli"
 
 # Envoyer une commande via D-Bus
@@ -3004,19 +3004,19 @@ Créez `test-suite.sh` :
 ```bash
 #!/usr/bin/env bash
 
-APP_NAME="monappli"
-TEST_DIR="/tmp/monappli-tests"
+APP_NAME="monappli"  
+TEST_DIR="/tmp/monappli-tests"  
 RESULTS_FILE="test-results-$(date +%Y%m%d_%H%M%S).txt"
 
 # Couleurs
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
+RED='\033[0;31m'  
+GREEN='\033[0;32m'  
+YELLOW='\033[1;33m'  
 NC='\033[0m'
 
 # Compteurs
-TESTS_TOTAL=0
-TESTS_PASSED=0
+TESTS_TOTAL=0  
+TESTS_PASSED=0  
 TESTS_FAILED=0
 
 # Préparer l'environnement de test
@@ -3312,19 +3312,19 @@ Créez `template.sh` comme modèle pour nouveaux scripts :
 #############################################################################
 
 # Options de sécurité
-set -euo pipefail  # Arrêt sur erreur, variables non définies, pipe failures
+set -euo pipefail  # Arrêt sur erreur, variables non définies, pipe failures  
 IFS=$'\n\t'       # Séparateur de champs sûr
 
 # Mode debug (décommenter si nécessaire)
 # set -x
 
 # Constants
-readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-readonly SCRIPT_NAME="$(basename "$0")"
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  
+readonly SCRIPT_NAME="$(basename "$0")"  
 readonly VERSION="1.0.0"
 
 # Configuration
-readonly CONFIG_FILE="${CONFIG_FILE:-$HOME/.config/app/config.ini}"
+readonly CONFIG_FILE="${CONFIG_FILE:-$HOME/.config/app/config.ini}"  
 readonly LOG_FILE="${LOG_FILE:-/var/log/app.log}"
 
 # Couleurs (désactiver si pas de TTY)
@@ -3347,8 +3347,8 @@ log() {
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] [$level] $*" | tee -a "$LOG_FILE"
 }
 
-log_info() { log "INFO" "$@"; }
-log_error() { log "ERROR" "$@"; }
+log_info() { log "INFO" "$@"; }  
+log_error() { log "ERROR" "$@"; }  
 log_warning() { log "WARNING" "$@"; }
 
 # Gestion des erreurs

@@ -134,7 +134,7 @@ On additionne pour chaque catégorie :
 uses
   BaseUnix, SysUtils;
 
-function GetFilePermissions(const FileName: string): string;
+function GetFilePermissions(const FileName: string): string;  
 var
   Info: Stat;
   Mode: Integer;
@@ -170,7 +170,7 @@ end;
 uses
   BaseUnix, SysUtils;
 
-function SetFilePermissions(const FileName: string; Permissions: Integer): Boolean;
+function SetFilePermissions(const FileName: string; Permissions: Integer): Boolean;  
 begin
   {$IFDEF UNIX}
     Result := FpChmod(FileName, Permissions) = 0;
@@ -199,7 +199,7 @@ end;
 uses
   SysUtils;
 
-procedure SafeWriteToFile(const FileName, Content: string);
+procedure SafeWriteToFile(const FileName, Content: string);  
 var
   F: TextFile;
 begin
@@ -240,7 +240,7 @@ end;
 uses
   BaseUnix, Users, Grp;
 
-procedure GetFileOwnership(const FileName: string);
+procedure GetFileOwnership(const FileName: string);  
 var
   Info: Stat;
   UserInfo: PPasswd;
@@ -267,7 +267,7 @@ end;
 uses
   BaseUnix;
 
-function ChangeOwner(const FileName: string; UID, GID: Integer): Boolean;
+function ChangeOwner(const FileName: string; UID, GID: Integer): Boolean;  
 begin
   {$IFDEF UNIX}
     Result := FpChown(FileName, UID, GID) = 0;
@@ -290,7 +290,7 @@ SetFilePermissions('/usr/bin/monprogramme', &4755); // 4755 = setuid + rwxr-xr-x
 
 ### Le bit setgid (2000)
 
-Pour les fichiers : exécution avec les droits du groupe
+Pour les fichiers : exécution avec les droits du groupe  
 Pour les dossiers : nouveaux fichiers héritent du groupe
 
 ```pascal
@@ -312,7 +312,7 @@ SetFilePermissions('/var/tmp/partage', &1777); // 1777 = sticky + rwxrwxrwx
 ### 1. Répertoires de configuration
 
 ```pascal
-function GetAppConfigDir: string;
+function GetAppConfigDir: string;  
 begin
   {$IFDEF UNIX}
     // Respecter les standards XDG
@@ -330,7 +330,7 @@ end;
 ### 2. Répertoires de données
 
 ```pascal
-function GetAppDataDir: string;
+function GetAppDataDir: string;  
 begin
   {$IFDEF UNIX}
     Result := GetEnvironmentVariable('XDG_DATA_HOME');
@@ -347,7 +347,7 @@ end;
 ### 3. Fichiers temporaires
 
 ```pascal
-function CreateTempFile: string;
+function CreateTempFile: string;  
 begin
   {$IFDEF UNIX}
     Result := GetTempDir + 'monapp_' + IntToStr(GetProcessID) + '.tmp';
@@ -360,7 +360,7 @@ end;
 ### 4. Gestion sécurisée des permissions
 
 ```pascal
-procedure CreateSecureConfigFile(const FileName, Content: string);
+procedure CreateSecureConfigFile(const FileName, Content: string);  
 var
   F: TextFile;
 begin
@@ -381,7 +381,7 @@ end;
 ### Installation d'une application
 
 ```pascal
-procedure InstallApplication;
+procedure InstallApplication;  
 begin
   {$IFDEF UNIX}
     // Binaire exécutable
@@ -402,7 +402,7 @@ end;
 ### Création de logs
 
 ```pascal
-procedure WriteLog(const Message: string);
+procedure WriteLog(const Message: string);  
 var
   LogFile: string;
   F: TextFile;

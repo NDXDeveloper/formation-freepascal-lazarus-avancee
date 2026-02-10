@@ -33,11 +33,11 @@ Avant cette standardisation, chaque application stockait ses fichiers où elle v
 Le système définit plusieurs variables d'environnement qui indiquent où stocker les fichiers :
 
 ```pascal
-program ShowXDGDirectories;
+program ShowXDGDirectories;  
 uses
   SysUtils;
 
-procedure ShowXDGPaths;
+procedure ShowXDGPaths;  
 var
   ConfigHome, DataHome, CacheHome, RuntimeDir: string;
 begin
@@ -103,35 +103,35 @@ type
 
 implementation
 
-constructor TXDGManager.Create(const AppName: string);
+constructor TXDGManager.Create(const AppName: string);  
 begin
   FAppName := AppName;
   EnsureDirectoriesExist;
 end;
 
-function TXDGManager.GetBaseDir(const EnvVar, DefaultPath: string): string;
+function TXDGManager.GetBaseDir(const EnvVar, DefaultPath: string): string;  
 begin
   Result := GetEnvironmentVariable(EnvVar);
   if Result = '' then
     Result := GetEnvironmentVariable('HOME') + '/' + DefaultPath;
 end;
 
-function TXDGManager.GetConfigDir: string;
+function TXDGManager.GetConfigDir: string;  
 begin
   Result := GetBaseDir('XDG_CONFIG_HOME', '.config') + '/' + FAppName;
 end;
 
-function TXDGManager.GetDataDir: string;
+function TXDGManager.GetDataDir: string;  
 begin
   Result := GetBaseDir('XDG_DATA_HOME', '.local/share') + '/' + FAppName;
 end;
 
-function TXDGManager.GetCacheDir: string;
+function TXDGManager.GetCacheDir: string;  
 begin
   Result := GetBaseDir('XDG_CACHE_HOME', '.cache') + '/' + FAppName;
 end;
 
-function TXDGManager.GetRuntimeDir: string;
+function TXDGManager.GetRuntimeDir: string;  
 var
   RuntimeBase: string;
 begin
@@ -142,17 +142,17 @@ begin
     Result := '/tmp/' + FAppName + '-' + GetEnvironmentVariable('USER');
 end;
 
-function TXDGManager.GetConfigFile(const FileName: string): string;
+function TXDGManager.GetConfigFile(const FileName: string): string;  
 begin
   Result := GetConfigDir + '/' + FileName;
 end;
 
-function TXDGManager.GetDataFile(const FileName: string): string;
+function TXDGManager.GetDataFile(const FileName: string): string;  
 begin
   Result := GetDataDir + '/' + FileName;
 end;
 
-procedure TXDGManager.EnsureDirectoriesExist;
+procedure TXDGManager.EnsureDirectoriesExist;  
 begin
   ForceDirectories(GetConfigDir);
   ForceDirectories(GetDataDir);
@@ -195,7 +195,7 @@ end.
 ### Exemple d'utilisation complète
 
 ```pascal
-program MyApplication;
+program MyApplication;  
 uses
   XDGDirectories, IniFiles;
 
@@ -203,7 +203,7 @@ var
   XDG: TXDGManager;
   Config: TIniFile;
 
-procedure LoadSettings;
+procedure LoadSettings;  
 begin
   Config := TIniFile.Create(XDG.GetConfigFile('settings.ini'));
   try
@@ -216,7 +216,7 @@ begin
   end;
 end;
 
-procedure SaveSettings;
+procedure SaveSettings;  
 begin
   Config := TIniFile.Create(XDG.GetConfigFile('settings.ini'));
   try
@@ -257,13 +257,13 @@ Version=1.0
 Type=Application
 
 # Nom de l'application
-Name=Mon Application
-Name[fr]=Mon Application
+Name=Mon Application  
+Name[fr]=Mon Application  
 Name[es]=Mi Aplicación
 
 # Description courte
-Comment=Une application créée avec Lazarus
-Comment[fr]=Une application créée avec Lazarus
+Comment=Une application créée avec Lazarus  
+Comment[fr]=Une application créée avec Lazarus  
 Comment[es]=Una aplicación creada con Lazarus
 
 # Commande pour lancer l'application
@@ -282,7 +282,7 @@ Categories=Office;Utility;
 MimeType=application/x-monapplication;text/plain;
 
 # Mots-clés pour la recherche
-Keywords=office;document;text;
+Keywords=office;document;text;  
 Keywords[fr]=bureau;document;texte;
 ```
 
@@ -344,7 +344,7 @@ type
 
 implementation
 
-constructor TDesktopEntry.Create;
+constructor TDesktopEntry.Create;  
 begin
   FEntries := TStringList.Create;
   FEntries.Add('[Desktop Entry]');
@@ -353,23 +353,23 @@ begin
   AddEntry('Terminal', 'false');
 end;
 
-destructor TDesktopEntry.Destroy;
+destructor TDesktopEntry.Destroy;  
 begin
   FEntries.Free;
   inherited;
 end;
 
-procedure TDesktopEntry.AddEntry(const Key, Value: string);
+procedure TDesktopEntry.AddEntry(const Key, Value: string);  
 begin
   FEntries.Add(Key + '=' + Value);
 end;
 
-procedure TDesktopEntry.AddLocalizedEntry(const Key, Value, Lang: string);
+procedure TDesktopEntry.AddLocalizedEntry(const Key, Value, Lang: string);  
 begin
   FEntries.Add(Key + '[' + Lang + ']=' + Value);
 end;
 
-procedure TDesktopEntry.SetBasicInfo(const Name, Comment, Exec, Icon: string);
+procedure TDesktopEntry.SetBasicInfo(const Name, Comment, Exec, Icon: string);  
 begin
   AddEntry('Name', Name);
   AddEntry('Comment', Comment);
@@ -377,17 +377,17 @@ begin
   AddEntry('Icon', Icon);
 end;
 
-procedure TDesktopEntry.AddName(const Lang, Value: string);
+procedure TDesktopEntry.AddName(const Lang, Value: string);  
 begin
   AddLocalizedEntry('Name', Value, Lang);
 end;
 
-procedure TDesktopEntry.AddComment(const Lang, Value: string);
+procedure TDesktopEntry.AddComment(const Lang, Value: string);  
 begin
   AddLocalizedEntry('Comment', Value, Lang);
 end;
 
-procedure TDesktopEntry.AddCategory(const Category: string);
+procedure TDesktopEntry.AddCategory(const Category: string);  
 var
   Index: Integer;
   CurrentCategories: string;
@@ -411,7 +411,7 @@ begin
   AddEntry('Categories', Category + ';');
 end;
 
-procedure TDesktopEntry.AddMimeType(const MimeType: string);
+procedure TDesktopEntry.AddMimeType(const MimeType: string);  
 var
   Index: Integer;
   CurrentMimeTypes: string;
@@ -433,7 +433,7 @@ begin
   AddEntry('MimeType', MimeType + ';');
 end;
 
-procedure TDesktopEntry.AddKeyword(const Keyword: string);
+procedure TDesktopEntry.AddKeyword(const Keyword: string);  
 var
   Index: Integer;
   CurrentKeywords: string;
@@ -450,17 +450,17 @@ begin
   AddEntry('Keywords', Keyword + ';');
 end;
 
-procedure TDesktopEntry.AddKeywordLocalized(const Lang, Keyword: string);
+procedure TDesktopEntry.AddKeywordLocalized(const Lang, Keyword: string);  
 begin
   AddLocalizedEntry('Keywords', Keyword + ';', Lang);
 end;
 
-procedure TDesktopEntry.SaveToFile(const FileName: string);
+procedure TDesktopEntry.SaveToFile(const FileName: string);  
 begin
   FEntries.SaveToFile(FileName);
 end;
 
-function TDesktopEntry.GenerateContent: string;
+function TDesktopEntry.GenerateContent: string;  
 begin
   Result := FEntries.Text;
 end;
@@ -471,7 +471,7 @@ end.
 ### Installation du fichier .desktop
 
 ```pascal
-procedure InstallDesktopFile;
+procedure InstallDesktopFile;  
 var
   Desktop: TDesktopEntry;
   InstallPath: string;
@@ -589,7 +589,7 @@ implementation
 uses
   Process;
 
-constructor TMimeTypeManager.Create(const MimeType: string);
+constructor TMimeTypeManager.Create(const MimeType: string);  
 begin
   FMimeType := MimeType;
   FExtensions := TStringList.Create;
@@ -597,7 +597,7 @@ begin
   FMagicRules := TStringList.Create;
 end;
 
-destructor TMimeTypeManager.Destroy;
+destructor TMimeTypeManager.Destroy;  
 begin
   FExtensions.Free;
   FLocalizedComments.Free;
@@ -605,7 +605,7 @@ begin
   inherited;
 end;
 
-procedure TMimeTypeManager.SetComment(const Comment: string; const Lang: string = '');
+procedure TMimeTypeManager.SetComment(const Comment: string; const Lang: string = '');  
 begin
   if Lang = '' then
     FComment := Comment
@@ -613,17 +613,17 @@ begin
     FLocalizedComments.Add(Lang + '=' + Comment);
 end;
 
-procedure TMimeTypeManager.AddExtension(const Extension: string; Weight: Integer = 50);
+procedure TMimeTypeManager.AddExtension(const Extension: string; Weight: Integer = 50);  
 begin
   FExtensions.Add(Format('%s=%d', [Extension, Weight]));
 end;
 
-procedure TMimeTypeManager.AddMagic(const Offset: Integer; const Value: string);
+procedure TMimeTypeManager.AddMagic(const Offset: Integer; const Value: string);  
 begin
   FMagicRules.Add(Format('%d=%s', [Offset, Value]));
 end;
 
-function TMimeTypeManager.GenerateXML: string;
+function TMimeTypeManager.GenerateXML: string;  
 var
   XML: TStringList;
   i: Integer;
@@ -693,7 +693,7 @@ begin
   end;
 end;
 
-procedure TMimeTypeManager.SaveToFile(const FileName: string);
+procedure TMimeTypeManager.SaveToFile(const FileName: string);  
 var
   Content: TStringList;
 begin
@@ -706,7 +706,7 @@ begin
   end;
 end;
 
-procedure TMimeTypeManager.Install;
+procedure TMimeTypeManager.Install;  
 var
   Process: TProcess;
   TempFile: string;
@@ -805,19 +805,19 @@ implementation
 uses
   Process, GraphType, IntfGraphics, FPCanvas;
 
-constructor TIconManager.Create(const AppName: string);
+constructor TIconManager.Create(const AppName: string);  
 begin
   FAppName := AppName;
   FSourceIcon := TPicture.Create;
 end;
 
-destructor TIconManager.Destroy;
+destructor TIconManager.Destroy;  
 begin
   FSourceIcon.Free;
   inherited;
 end;
 
-function TIconManager.GetIconPath(Size: Integer; IsScalable: Boolean = False): string;
+function TIconManager.GetIconPath(Size: Integer; IsScalable: Boolean = False): string;  
 var
   BaseDir, SizeDir: string;
 begin
@@ -835,12 +835,12 @@ begin
     Result := StringReplace(Result, '.png', '.svg', []);
 end;
 
-procedure TIconManager.LoadSourceIcon(const FileName: string);
+procedure TIconManager.LoadSourceIcon(const FileName: string);  
 begin
   FSourceIcon.LoadFromFile(FileName);
 end;
 
-procedure TIconManager.GenerateIconSizes;
+procedure TIconManager.GenerateIconSizes;  
 const
   IconSizes: array[0..7] of Integer = (16, 22, 24, 32, 48, 64, 128, 256);
 var
@@ -867,7 +867,7 @@ begin
   end;
 end;
 
-procedure TIconManager.InstallIcon(Size: Integer);
+procedure TIconManager.InstallIcon(Size: Integer);  
 var
   SourceFile, DestFile: string;
 begin
@@ -880,7 +880,7 @@ begin
     CopyFile(SourceFile, DestFile);
 end;
 
-procedure TIconManager.InstallAllIcons;
+procedure TIconManager.InstallAllIcons;  
 const
   StandardSizes: array[0..7] of Integer = (16, 22, 24, 32, 48, 64, 128, 256);
 var
@@ -892,7 +892,7 @@ begin
   UpdateIconCache;
 end;
 
-procedure TIconManager.UpdateIconCache;
+procedure TIconManager.UpdateIconCache;  
 var
   Process: TProcess;
 begin
@@ -950,19 +950,19 @@ type
 
 implementation
 
-constructor TAutostartManager.Create(const AppName: string);
+constructor TAutostartManager.Create(const AppName: string);  
 begin
   FAppName := AppName;
   FDesktopEntry := TStringList.Create;
 end;
 
-destructor TAutostartManager.Destroy;
+destructor TAutostartManager.Destroy;  
 begin
   FDesktopEntry.Free;
   inherited;
 end;
 
-function TAutostartManager.GetAutostartPath: string;
+function TAutostartManager.GetAutostartPath: string;  
 begin
   // Le chemin standard pour les applications autostart de l'utilisateur
   Result := GetEnvironmentVariable('HOME') + '/.config/autostart/';
@@ -970,7 +970,7 @@ begin
   Result := Result + FAppName + '.desktop';
 end;
 
-procedure TAutostartManager.EnableAutostart(const ExecPath, Name, Comment: string);
+procedure TAutostartManager.EnableAutostart(const ExecPath, Name, Comment: string);  
 begin
   FDesktopEntry.Clear;
   FDesktopEntry.Add('[Desktop Entry]');
@@ -987,7 +987,7 @@ begin
   FDesktopEntry.SaveToFile(GetAutostartPath);
 end;
 
-procedure TAutostartManager.DisableAutostart;
+procedure TAutostartManager.DisableAutostart;  
 var
   FilePath: string;
 begin
@@ -1008,7 +1008,7 @@ begin
   end;
 end;
 
-function TAutostartManager.IsAutostartEnabled: Boolean;
+function TAutostartManager.IsAutostartEnabled: Boolean;  
 var
   FilePath: string;
 begin
@@ -1023,7 +1023,7 @@ begin
   end;
 end;
 
-procedure TAutostartManager.SetAutostartDelay(Seconds: Integer);
+procedure TAutostartManager.SetAutostartDelay(Seconds: Integer);  
 var
   FilePath: string;
 begin
@@ -1036,7 +1036,7 @@ begin
   end;
 end;
 
-procedure TAutostartManager.SetAutostartCondition(const Condition: string);
+procedure TAutostartManager.SetAutostartCondition(const Condition: string);  
 var
   FilePath: string;
 begin
@@ -1060,7 +1060,7 @@ end.
 ### Utilisation pratique de l'autostart
 
 ```pascal
-program ConfigureAutostart;
+program ConfigureAutostart;  
 uses
   AutostartManager, SysUtils;
 
@@ -1141,7 +1141,7 @@ implementation
 const
   UnixStartDate: TDateTime = 25569.0; // 01/01/1970
 
-constructor TRecentFilesManager.Create(const AppName: string);
+constructor TRecentFilesManager.Create(const AppName: string);  
 begin
   FAppName := AppName;
   FRecentFiles := TList.Create;
@@ -1149,29 +1149,29 @@ begin
   LoadRecentFiles;
 end;
 
-destructor TRecentFilesManager.Destroy;
+destructor TRecentFilesManager.Destroy;  
 begin
   ClearRecentFiles;
   FRecentFiles.Free;
   inherited;
 end;
 
-function TRecentFilesManager.GetRecentFilesPath: string;
+function TRecentFilesManager.GetRecentFilesPath: string;  
 begin
   Result := GetEnvironmentVariable('HOME') + '/.local/share/recently-used.xbel';
 end;
 
-function TRecentFilesManager.DateTimeToUnixTime(DateTime: TDateTime): Int64;
+function TRecentFilesManager.DateTimeToUnixTime(DateTime: TDateTime): Int64;  
 begin
   Result := Round((DateTime - UnixStartDate) * 86400);
 end;
 
-function TRecentFilesManager.UnixTimeToDateTime(UnixTime: Int64): TDateTime;
+function TRecentFilesManager.UnixTimeToDateTime(UnixTime: Int64): TDateTime;  
 begin
   Result := UnixStartDate + (UnixTime / 86400);
 end;
 
-procedure TRecentFilesManager.AddRecentFile(const FileName, MimeType: string);
+procedure TRecentFilesManager.AddRecentFile(const FileName, MimeType: string);  
 var
   RecentFile: ^TRecentFile;
   URI: string;
@@ -1203,7 +1203,7 @@ begin
   SaveRecentFiles;
 end;
 
-procedure TRecentFilesManager.LoadRecentFiles;
+procedure TRecentFilesManager.LoadRecentFiles;  
 var
   XMLDoc: TXMLDocument;
   RootNode, BookmarkNode, InfoNode, MetadataNode: TDOMNode;
@@ -1286,7 +1286,7 @@ begin
   end;
 end;
 
-procedure TRecentFilesManager.SaveRecentFiles;
+procedure TRecentFilesManager.SaveRecentFiles;  
 var
   XMLDoc: TXMLDocument;
   RootNode, BookmarkNode, InfoNode, MetadataNode: TDOMElement;
@@ -1345,7 +1345,7 @@ begin
   end;
 end;
 
-function TRecentFilesManager.GetRecentFiles(Count: Integer = 10): TStringList;
+function TRecentFilesManager.GetRecentFiles(Count: Integer = 10): TStringList;  
 var
   i: Integer;
   RecentFile: ^TRecentFile;
@@ -1364,7 +1364,7 @@ begin
   end;
 end;
 
-procedure TRecentFilesManager.RemoveRecentFile(const FileName: string);
+procedure TRecentFilesManager.RemoveRecentFile(const FileName: string);  
 var
   i: Integer;
   RecentFile: ^TRecentFile;
@@ -1386,7 +1386,7 @@ begin
   SaveRecentFiles;
 end;
 
-procedure TRecentFilesManager.ClearRecentFiles;
+procedure TRecentFilesManager.ClearRecentFiles;  
 var
   i: Integer;
   RecentFile: ^TRecentFile;
@@ -1443,12 +1443,12 @@ implementation
 uses
   FileUtil, DateUtils;
 
-constructor TThumbnailManager.Create(const AppName: string);
+constructor TThumbnailManager.Create(const AppName: string);  
 begin
   FAppName := AppName;
 end;
 
-function TThumbnailManager.GetThumbnailDir(Size: TThumbnailSize): string;
+function TThumbnailManager.GetThumbnailDir(Size: TThumbnailSize): string;  
 var
   BaseDir: string;
 begin
@@ -1463,12 +1463,12 @@ begin
   ForceDirectories(Result);
 end;
 
-function TThumbnailManager.GetFileURI(const FileName: string): string;
+function TThumbnailManager.GetFileURI(const FileName: string): string;  
 begin
   Result := 'file://' + ExpandFileName(FileName);
 end;
 
-function TThumbnailManager.GetFileMD5(const URI: string): string;
+function TThumbnailManager.GetFileMD5(const URI: string): string;  
 begin
   Result := MD5Print(MD5String(URI));
 end;
@@ -1614,7 +1614,7 @@ begin
   Result := FileAge > ThumbAge;
 end;
 
-procedure TThumbnailManager.CleanOldThumbnails(DaysOld: Integer = 30);
+procedure TThumbnailManager.CleanOldThumbnails(DaysOld: Integer = 30);  
 var
   SearchRec: TSearchRec;
   ThumbDir: string;
@@ -1687,14 +1687,14 @@ implementation
 uses
   FileUtil, DateUtils;
 
-constructor TTrashManager.Create;
+constructor TTrashManager.Create;  
 begin
   // Assurer que les répertoires de la corbeille existent
   ForceDirectories(GetTrashFilesDir);
   ForceDirectories(GetTrashInfoDir);
 end;
 
-function TTrashManager.GetTrashDir: string;
+function TTrashManager.GetTrashDir: string;  
 begin
   Result := GetEnvironmentVariable('XDG_DATA_HOME');
   if Result = '' then
@@ -1702,17 +1702,17 @@ begin
   Result := Result + '/Trash/';
 end;
 
-function TTrashManager.GetTrashInfoDir: string;
+function TTrashManager.GetTrashInfoDir: string;  
 begin
   Result := GetTrashDir + 'info/';
 end;
 
-function TTrashManager.GetTrashFilesDir: string;
+function TTrashManager.GetTrashFilesDir: string;  
 begin
   Result := GetTrashDir + 'files/';
 end;
 
-function TTrashManager.GenerateUniqueTrashName(const OriginalName: string): string;
+function TTrashManager.GenerateUniqueTrashName(const OriginalName: string): string;  
 var
   BaseName, Extension: string;
   Counter: Integer;
@@ -1732,7 +1732,7 @@ begin
   end;
 end;
 
-function TTrashManager.MoveToTrash(const FileName: string): Boolean;
+function TTrashManager.MoveToTrash(const FileName: string): Boolean;  
 var
   TrashName: string;
   InfoFile: TStringList;
@@ -1788,7 +1788,7 @@ begin
     DeleteFile(InfoFileName);
 end;
 
-function TTrashManager.RestoreFromTrash(const TrashName: string): Boolean;
+function TTrashManager.RestoreFromTrash(const TrashName: string): Boolean;  
 var
   InfoFile: TStringList;
   InfoFileName: string;
@@ -1831,7 +1831,7 @@ begin
   end;
 end;
 
-function TTrashManager.EmptyTrash: Boolean;
+function TTrashManager.EmptyTrash: Boolean;  
 var
   SearchRec: TSearchRec;
 begin
@@ -1862,7 +1862,7 @@ begin
   end;
 end;
 
-function TTrashManager.GetTrashedFiles: TStringList;
+function TTrashManager.GetTrashedFiles: TStringList;  
 var
   SearchRec: TSearchRec;
   InfoFile: TStringList;
@@ -1902,7 +1902,7 @@ begin
   end;
 end;
 
-function TTrashManager.GetOriginalPath(const TrashName: string): string;
+function TTrashManager.GetOriginalPath(const TrashName: string): string;  
 var
   InfoFile: TStringList;
   InfoFileName: string;
@@ -1935,7 +1935,7 @@ end;
 ### Utilisation pratique de la corbeille
 
 ```pascal
-program TrashExample;
+program TrashExample;  
 uses
   TrashManager, SysUtils;
 
@@ -2028,7 +2028,7 @@ implementation
 uses
   Process;
 
-constructor TNotificationManager.Create(const AppName: string);
+constructor TNotificationManager.Create(const AppName: string);  
 var
   Capabilities: TStringList;
 begin
@@ -2046,7 +2046,7 @@ begin
   end;
 end;
 
-function TNotificationManager.GetCapabilities: TStringList;
+function TNotificationManager.GetCapabilities: TStringList;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -2146,7 +2146,7 @@ begin
   end;
 end;
 
-procedure TNotificationManager.CloseNotification(NotificationID: Cardinal);
+procedure TNotificationManager.CloseNotification(NotificationID: Cardinal);  
 var
   Process: TProcess;
 begin
@@ -2165,7 +2165,7 @@ begin
   end;
 end;
 
-function TNotificationManager.IsNotificationServerAvailable: Boolean;
+function TNotificationManager.IsNotificationServerAvailable: Boolean;  
 var
   Process: TProcess;
 begin
@@ -2186,7 +2186,7 @@ end;
 ### Exemple d'utilisation des notifications
 
 ```pascal
-program NotificationExample;
+program NotificationExample;  
 uses
   NotificationManager, SysUtils;
 
@@ -2296,12 +2296,12 @@ implementation
 uses
   LCLIntf, LCLType;
 
-constructor TClipboardManager.Create(const AppName: string);
+constructor TClipboardManager.Create(const AppName: string);  
 begin
   FAppName := AppName;
 end;
 
-function TClipboardManager.GetMimeType(Format: TClipboardFormat): string;
+function TClipboardManager.GetMimeType(Format: TClipboardFormat): string;  
 begin
   case Format of
     cfText: Result := 'text/plain';
@@ -2312,12 +2312,12 @@ begin
   end;
 end;
 
-procedure TClipboardManager.SetText(const Text: string);
+procedure TClipboardManager.SetText(const Text: string);  
 begin
   Clipboard.AsText := Text;
 end;
 
-function TClipboardManager.GetText: string;
+function TClipboardManager.GetText: string;  
 begin
   if Clipboard.HasFormat(CF_TEXT) then
     Result := Clipboard.AsText
@@ -2325,7 +2325,7 @@ begin
     Result := '';
 end;
 
-procedure TClipboardManager.SetHTML(const HTML: string);
+procedure TClipboardManager.SetHTML(const HTML: string);  
 var
   HTMLFormat: TClipboardFormat;
   Stream: TMemoryStream;
@@ -2370,7 +2370,7 @@ begin
   SetText(HTML);
 end;
 
-function TClipboardManager.GetHTML: string;
+function TClipboardManager.GetHTML: string;  
 var
   HTMLFormat: TClipboardFormat;
   Stream: TMemoryStream;
@@ -2403,7 +2403,7 @@ begin
   end;
 end;
 
-procedure TClipboardManager.SetFiles(const Files: TStringList);
+procedure TClipboardManager.SetFiles(const Files: TStringList);  
 var
   URIList: string;
   i: Integer;
@@ -2422,7 +2422,7 @@ begin
   Clipboard.AddFormat(RegisterClipboardFormat('text/uri-list'), URIList);
 end;
 
-function TClipboardManager.GetFiles: TStringList;
+function TClipboardManager.GetFiles: TStringList;  
 var
   URIList: string;
   Lines: TStringList;
@@ -2465,7 +2465,7 @@ begin
   Clipboard.AddFormat(ClipFormat, Data);
 end;
 
-function TClipboardManager.GetData(Format: TClipboardFormat): TStream;
+function TClipboardManager.GetData(Format: TClipboardFormat): TStream;  
 var
   ClipFormat: TClipboardFormat;
 begin
@@ -2478,7 +2478,7 @@ begin
   Result.Position := 0;
 end;
 
-function TClipboardManager.HasFormat(Format: TClipboardFormat): Boolean;
+function TClipboardManager.HasFormat(Format: TClipboardFormat): Boolean;  
 var
   ClipFormat: TClipboardFormat;
 begin
@@ -2486,7 +2486,7 @@ begin
   Result := Clipboard.HasFormat(ClipFormat);
 end;
 
-procedure TClipboardManager.Clear;
+procedure TClipboardManager.Clear;  
 begin
   Clipboard.Clear;
 end;
@@ -2511,14 +2511,14 @@ begin
   end;
 end;
 
-procedure TClipboardManager.StartMonitoring(OnChange: TNotifyEvent);
+procedure TClipboardManager.StartMonitoring(OnChange: TNotifyEvent);  
 begin
   // Note : L'implémentation complète nécessiterait un timer ou
   // l'enregistrement d'un viewer de presse-papiers
   // Ceci est une version simplifiée
 end;
 
-procedure TClipboardManager.StopMonitoring;
+procedure TClipboardManager.StopMonitoring;  
 begin
   // Arrêter la surveillance
 end;
@@ -2566,14 +2566,14 @@ implementation
 uses
   FileUtil, Process;
 
-constructor TAppBundleManager.Create(const AppName, Version: string);
+constructor TAppBundleManager.Create(const AppName, Version: string);  
 begin
   FAppName := AppName;
   FVersion := Version;
   FBundlePath := '/tmp/' + FAppName + '-bundle/';
 end;
 
-procedure TAppBundleManager.CreateDirectoryStructure;
+procedure TAppBundleManager.CreateDirectoryStructure;  
 begin
   // Structure standard d'un bundle
   ForceDirectories(FBundlePath + 'bin/');
@@ -2583,7 +2583,7 @@ begin
   ForceDirectories(FBundlePath + 'share/metainfo/');
 end;
 
-procedure TAppBundleManager.CreateLauncher;
+procedure TAppBundleManager.CreateLauncher;  
 var
   Launcher: TStringList;
   LauncherPath: string;
@@ -2612,7 +2612,7 @@ begin
   end;
 end;
 
-procedure TAppBundleManager.CreateAppImage;
+procedure TAppBundleManager.CreateAppImage;  
 var
   Process: TProcess;
   AppDirPath: string;
@@ -2744,7 +2744,7 @@ type
 
 implementation
 
-constructor TFreedesktopApp.Create(const AppName, AppVersion: string);
+constructor TFreedesktopApp.Create(const AppName, AppVersion: string);  
 begin
   FAppName := AppName;
   FAppVersion := AppVersion;
@@ -2753,13 +2753,13 @@ begin
   InitializeManagers;
 end;
 
-destructor TFreedesktopApp.Destroy;
+destructor TFreedesktopApp.Destroy;  
 begin
   CleanupManagers;
   inherited;
 end;
 
-procedure TFreedesktopApp.InitializeManagers;
+procedure TFreedesktopApp.InitializeManagers;  
 begin
   FXDG := TXDGManager.Create(FAppName);
   FDesktop := TDesktopEntry.Create;
@@ -2774,7 +2774,7 @@ begin
   FBundle := TAppBundleManager.Create(FAppName, FAppVersion);
 end;
 
-procedure TFreedesktopApp.CleanupManagers;
+procedure TFreedesktopApp.CleanupManagers;  
 begin
   FBundle.Free;
   FClipboard.Free;
@@ -2789,7 +2789,7 @@ begin
   FXDG.Free;
 end;
 
-procedure TFreedesktopApp.InstallApplication;
+procedure TFreedesktopApp.InstallApplication;  
 var
   DesktopFilePath: string;
 begin
@@ -2821,7 +2821,7 @@ begin
     FAppName + ' a été installé avec succès');
 end;
 
-procedure TFreedesktopApp.UninstallApplication;
+procedure TFreedesktopApp.UninstallApplication;  
 var
   DesktopFilePath: string;
 begin
@@ -2842,7 +2842,7 @@ begin
     FAppName + ' a été désinstallé');
 end;
 
-procedure TFreedesktopApp.RegisterFileTypes;
+procedure TFreedesktopApp.RegisterFileTypes;  
 begin
   // Enregistrer un type de fichier personnalisé
   FMimeType.SetComment('Document ' + FAppName);
@@ -2854,7 +2854,7 @@ begin
   FDesktop.AddMimeType('application/x-' + LowerCase(FAppName));
 end;
 
-procedure TFreedesktopApp.ConfigureAutostart(Enable: Boolean);
+procedure TFreedesktopApp.ConfigureAutostart(Enable: Boolean);  
 begin
   if Enable then
     FAutostart.EnableAutostart(
@@ -2866,7 +2866,7 @@ begin
     FAutostart.DisableAutostart;
 end;
 
-procedure TFreedesktopApp.SaveConfiguration(const Config: TStringList);
+procedure TFreedesktopApp.SaveConfiguration(const Config: TStringList);  
 var
   ConfigPath: string;
 begin
@@ -2874,7 +2874,7 @@ begin
   Config.SaveToFile(ConfigPath);
 end;
 
-function TFreedesktopApp.LoadConfiguration: TStringList;
+function TFreedesktopApp.LoadConfiguration: TStringList;  
 var
   ConfigPath: string;
 begin
@@ -2884,18 +2884,18 @@ begin
     Result.LoadFromFile(ConfigPath);
 end;
 
-procedure TFreedesktopApp.AddToRecentFiles(const FileName: string);
+procedure TFreedesktopApp.AddToRecentFiles(const FileName: string);  
 begin
   FRecentFiles.AddRecentFile(FileName,
     'application/x-' + LowerCase(FAppName));
 end;
 
-procedure TFreedesktopApp.ShowNotification(const Title, Message: string);
+procedure TFreedesktopApp.ShowNotification(const Title, Message: string);  
 begin
   FNotifications.ShowNotification(Title, Message, FAppName);
 end;
 
-function TFreedesktopApp.MoveFileToTrash(const FileName: string): Boolean;
+function TFreedesktopApp.MoveFileToTrash(const FileName: string): Boolean;  
 begin
   Result := FTrash.MoveToTrash(FileName);
   if Result then
@@ -2966,7 +2966,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   // Initialiser l'application conforme Freedesktop
   FApp := TFreedesktopApp.Create('MonApplication', '1.0.0');
@@ -2991,14 +2991,14 @@ begin
     FApp.AppName + ' est prêt à l'emploi');
 end;
 
-procedure TFormMain.FormDestroy(Sender: TObject);
+procedure TFormMain.FormDestroy(Sender: TObject);  
 begin
   SaveSettings;
   FSettings.Free;
   FApp.Free;
 end;
 
-procedure TFormMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+procedure TFormMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);  
 var
   Response: Integer;
 begin
@@ -3025,7 +3025,7 @@ begin
     CanClose := True;
 end;
 
-procedure TFormMain.LoadSettings;
+procedure TFormMain.LoadSettings;  
 begin
   FSettings := FApp.LoadConfiguration;
 
@@ -3045,7 +3045,7 @@ begin
     FApp.ConfigureAutostart(True);
 end;
 
-procedure TFormMain.SaveSettings;
+procedure TFormMain.SaveSettings;  
 begin
   // Sauvegarder l'état de la fenêtre
   if WindowState = wsMaximized then
@@ -3062,7 +3062,7 @@ begin
   FApp.SaveConfiguration(FSettings);
 end;
 
-procedure TFormMain.SetupFileDialogs;
+procedure TFormMain.SetupFileDialogs;  
 begin
   // Configurer les dialogues avec le type MIME personnalisé
   OpenDialog.Filter := FApp.AppName + ' Files|*.' +
@@ -3071,7 +3071,7 @@ begin
   SaveDialog.DefaultExt := LowerCase(Copy(FApp.AppName, 1, 3)) + 'doc';
 end;
 
-procedure TFormMain.MenuFileOpenClick(Sender: TObject);
+procedure TFormMain.MenuFileOpenClick(Sender: TObject);  
 begin
   if OpenDialog.Execute then
   begin
@@ -3089,7 +3089,7 @@ begin
   end;
 end;
 
-procedure TFormMain.MenuFileSaveClick(Sender: TObject);
+procedure TFormMain.MenuFileSaveClick(Sender: TObject);  
 begin
   if FCurrentFile = '' then
   begin
@@ -3111,12 +3111,12 @@ begin
   UpdateRecentFilesMenu;
 end;
 
-procedure TFormMain.MenuFileExitClick(Sender: TObject);
+procedure TFormMain.MenuFileExitClick(Sender: TObject);  
 begin
   Close;
 end;
 
-procedure TFormMain.MenuEditCopyClick(Sender: TObject);
+procedure TFormMain.MenuEditCopyClick(Sender: TObject);  
 var
   ClipMgr: TClipboardManager;
 begin
@@ -3136,7 +3136,7 @@ begin
   end;
 end;
 
-procedure TFormMain.MenuEditPasteClick(Sender: TObject);
+procedure TFormMain.MenuEditPasteClick(Sender: TObject);  
 var
   ClipMgr: TClipboardManager;
   PastedText: string;
@@ -3154,7 +3154,7 @@ begin
   end;
 end;
 
-procedure TFormMain.UpdateRecentFilesMenu;
+procedure TFormMain.UpdateRecentFilesMenu;  
 var
   RecentMgr: TRecentFilesManager;
   RecentFiles: TStringList;
@@ -3183,7 +3183,7 @@ begin
   end;
 end;
 
-procedure TFormMain.OpenRecentFile(Sender: TObject);
+procedure TFormMain.OpenRecentFile(Sender: TObject);  
 var
   RecentMgr: TRecentFilesManager;
   RecentFiles: TStringList;
@@ -3215,7 +3215,7 @@ begin
   end;
 end;
 
-procedure TFormMain.TrayIconClick(Sender: TObject);
+procedure TFormMain.TrayIconClick(Sender: TObject);  
 begin
   // Afficher/masquer la fenêtre principale
   if Visible then
@@ -3231,7 +3231,7 @@ begin
   end;
 end;
 
-procedure TFormMain.HandleDroppedFiles(const Files: array of string);
+procedure TFormMain.HandleDroppedFiles(const Files: array of string);  
 var
   i: Integer;
 begin
@@ -3250,7 +3250,7 @@ begin
   UpdateRecentFilesMenu;
 end;
 
-procedure TFormMain.ProcessCommandLine;
+procedure TFormMain.ProcessCommandLine;  
 var
   i: Integer;
 begin
@@ -3299,39 +3299,39 @@ end;
 #!/bin/bash
 # install.sh - Script d'installation pour MonApplication
 
-APP_NAME="monapplication"
-APP_VERSION="1.0.0"
+APP_NAME="monapplication"  
+APP_VERSION="1.0.0"  
 INSTALL_PREFIX="${HOME}/.local"
 
 echo "Installation de $APP_NAME v$APP_VERSION..."
 
 # Créer les répertoires nécessaires
-mkdir -p "$INSTALL_PREFIX/bin"
-mkdir -p "$INSTALL_PREFIX/share/applications"
-mkdir -p "$INSTALL_PREFIX/share/icons/hicolor/48x48/apps"
-mkdir -p "$INSTALL_PREFIX/share/icons/hicolor/scalable/apps"
+mkdir -p "$INSTALL_PREFIX/bin"  
+mkdir -p "$INSTALL_PREFIX/share/applications"  
+mkdir -p "$INSTALL_PREFIX/share/icons/hicolor/48x48/apps"  
+mkdir -p "$INSTALL_PREFIX/share/icons/hicolor/scalable/apps"  
 mkdir -p "$INSTALL_PREFIX/share/metainfo"
 
 # Copier l'exécutable
-cp "$APP_NAME" "$INSTALL_PREFIX/bin/"
+cp "$APP_NAME" "$INSTALL_PREFIX/bin/"  
 chmod +x "$INSTALL_PREFIX/bin/$APP_NAME"
 
 # Copier les icônes
-cp "icons/48x48/$APP_NAME.png" "$INSTALL_PREFIX/share/icons/hicolor/48x48/apps/"
+cp "icons/48x48/$APP_NAME.png" "$INSTALL_PREFIX/share/icons/hicolor/48x48/apps/"  
 cp "icons/scalable/$APP_NAME.svg" "$INSTALL_PREFIX/share/icons/hicolor/scalable/apps/"
 
 # Créer le fichier .desktop
 cat > "$INSTALL_PREFIX/share/applications/$APP_NAME.desktop" << EOF
 [Desktop Entry]
-Version=1.0
-Type=Application
-Name=Mon Application
-Comment=Application créée avec FreePascal/Lazarus
-Exec=$INSTALL_PREFIX/bin/$APP_NAME %f
-Icon=$APP_NAME
-Terminal=false
-Categories=Utility;Application;
-MimeType=application/x-monapplication;
+Version=1.0  
+Type=Application  
+Name=Mon Application  
+Comment=Application créée avec FreePascal/Lazarus  
+Exec=$INSTALL_PREFIX/bin/$APP_NAME %f  
+Icon=$APP_NAME  
+Terminal=false  
+Categories=Utility;Application;  
+MimeType=application/x-monapplication;  
 EOF
 
 # Installer le type MIME
@@ -3347,14 +3347,14 @@ cat > "$INSTALL_PREFIX/share/mime/packages/$APP_NAME.xml" << EOF
 EOF
 
 # Mettre à jour les bases de données
-update-desktop-database "$INSTALL_PREFIX/share/applications" 2>/dev/null
-update-mime-database "$INSTALL_PREFIX/share/mime" 2>/dev/null
+update-desktop-database "$INSTALL_PREFIX/share/applications" 2>/dev/null  
+update-mime-database "$INSTALL_PREFIX/share/mime" 2>/dev/null  
 gtk-update-icon-cache -f -t "$INSTALL_PREFIX/share/icons/hicolor" 2>/dev/null
 
 # Lancer l'installation depuis l'application elle-même
 "$INSTALL_PREFIX/bin/$APP_NAME" --install
 
-echo "Installation terminée !"
+echo "Installation terminée !"  
 echo "Vous pouvez lancer l'application avec : $APP_NAME"
 ```
 

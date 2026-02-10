@@ -41,22 +41,22 @@ Le format INI est familier pour ceux venant de Windows :
 ; Ou commentaire avec point-virgule
 
 [General]
-AppName=Mon Application
-Version=1.0.0
+AppName=Mon Application  
+Version=1.0.0  
 Language=fr
 
 [Database]
-Host=localhost
-Port=5432
-Database=myapp_db
+Host=localhost  
+Port=5432  
+Database=myapp_db  
 Username=myuser
 # Ne jamais stocker les mots de passe en clair !
 PasswordFile=/home/user/.config/myapp/db.key
 
 [Display]
-Theme=dark
-FontSize=12
-ShowToolbar=true
+Theme=dark  
+FontSize=12  
+ShowToolbar=true  
 WindowState=maximized
 ```
 
@@ -66,10 +66,10 @@ Format minimaliste utilisé par beaucoup d'applications Unix :
 
 ```bash
 # Configuration simple
-APP_NAME="Mon Application"
-DEBUG_MODE=false
-LOG_LEVEL=info
-MAX_CONNECTIONS=100
+APP_NAME="Mon Application"  
+DEBUG_MODE=false  
+LOG_LEVEL=info  
+MAX_CONNECTIONS=100  
 TEMP_DIR=/tmp/myapp
 ```
 
@@ -189,7 +189,7 @@ type
 
 implementation
 
-constructor TAppConfig.Create;
+constructor TAppConfig.Create;  
 begin
   inherited Create;
 
@@ -217,13 +217,13 @@ begin
   end;
 end;
 
-destructor TAppConfig.Destroy;
+destructor TAppConfig.Destroy;  
 begin
   SaveConfig; // Sauvegarder avant de fermer
   inherited Destroy;
 end;
 
-procedure TAppConfig.SetDefaults;
+procedure TAppConfig.SetDefaults;  
 begin
   FAppName := 'Mon Application';
   FVersion := '1.0.0';
@@ -235,7 +235,7 @@ begin
   FShowToolbar := True;
 end;
 
-procedure TAppConfig.LoadConfig;
+procedure TAppConfig.LoadConfig;  
 begin
   FIniFile := TIniFile.Create(FConfigPath);
   try
@@ -257,7 +257,7 @@ begin
   end;
 end;
 
-procedure TAppConfig.SaveConfig;
+procedure TAppConfig.SaveConfig;  
 begin
   FIniFile := TIniFile.Create(FConfigPath);
   try
@@ -356,7 +356,7 @@ type
 
 implementation
 
-constructor TSimpleConfig.Create(const AFilePath: string);
+constructor TSimpleConfig.Create(const AFilePath: string);  
 begin
   inherited Create;
   FConfig := TConfigDictionary.Create;
@@ -366,14 +366,14 @@ begin
     Load;
 end;
 
-destructor TSimpleConfig.Destroy;
+destructor TSimpleConfig.Destroy;  
 begin
   Save;
   FConfig.Free;
   inherited Destroy;
 end;
 
-function TSimpleConfig.StripComments(const ALine: string): string;
+function TSimpleConfig.StripComments(const ALine: string): string;  
 var
   CommentPos: Integer;
 begin
@@ -391,7 +391,7 @@ begin
   Result := Trim(Result);
 end;
 
-function TSimpleConfig.ParseLine(const ALine: string; out AKey, AValue: string): Boolean;
+function TSimpleConfig.ParseLine(const ALine: string; out AKey, AValue: string): Boolean;  
 var
   EqualPos: Integer;
   CleanLine: string;
@@ -420,7 +420,7 @@ begin
   end;
 end;
 
-procedure TSimpleConfig.Load;
+procedure TSimpleConfig.Load;  
 var
   FileLines: TStringList;
   i: Integer;
@@ -444,7 +444,7 @@ begin
   end;
 end;
 
-procedure TSimpleConfig.Save;
+procedure TSimpleConfig.Save;  
 var
   FileLines: TStringList;
   i: Integer;
@@ -472,7 +472,7 @@ begin
   end;
 end;
 
-function TSimpleConfig.GetValue(const AKey: string; const ADefault: string): string;
+function TSimpleConfig.GetValue(const AKey: string; const ADefault: string): string;  
 var
   Index: Integer;
 begin
@@ -483,12 +483,12 @@ begin
     Result := ADefault;
 end;
 
-procedure TSimpleConfig.SetValue(const AKey, AValue: string);
+procedure TSimpleConfig.SetValue(const AKey, AValue: string);  
 begin
   FConfig[AKey] := AValue;
 end;
 
-function TSimpleConfig.GetBool(const AKey: string; ADefault: Boolean): Boolean;
+function TSimpleConfig.GetBool(const AKey: string; ADefault: Boolean): Boolean;  
 var
   Value: string;
 begin
@@ -500,7 +500,7 @@ begin
               (Value = 'yes') or (Value = 'on');
 end;
 
-procedure TSimpleConfig.SetBool(const AKey: string; AValue: Boolean);
+procedure TSimpleConfig.SetBool(const AKey: string; AValue: Boolean);  
 begin
   if AValue then
     SetValue(AKey, 'true')
@@ -508,7 +508,7 @@ begin
     SetValue(AKey, 'false');
 end;
 
-function TSimpleConfig.GetInt(const AKey: string; ADefault: Integer): Integer;
+function TSimpleConfig.GetInt(const AKey: string; ADefault: Integer): Integer;  
 var
   Value: string;
 begin
@@ -517,7 +517,7 @@ begin
     Result := ADefault;
 end;
 
-procedure TSimpleConfig.SetInt(const AKey: string; AValue: Integer);
+procedure TSimpleConfig.SetInt(const AKey: string; AValue: Integer);  
 begin
   SetValue(AKey, IntToStr(AValue));
 end;
@@ -573,7 +573,7 @@ type
 
 implementation
 
-constructor TJsonConfig.Create(const AFilePath: string);
+constructor TJsonConfig.Create(const AFilePath: string);  
 begin
   inherited Create;
   FFilePath := AFilePath;
@@ -584,14 +584,14 @@ begin
     FJsonObject := TJSONObject.Create;
 end;
 
-destructor TJsonConfig.Destroy;
+destructor TJsonConfig.Destroy;  
 begin
   Save;
   FJsonObject.Free;
   inherited Destroy;
 end;
 
-procedure TJsonConfig.Load;
+procedure TJsonConfig.Load;  
 var
   FileStream: TFileStream;
   Parser: TJSONParser;
@@ -615,7 +615,7 @@ begin
   end;
 end;
 
-procedure TJsonConfig.Save;
+procedure TJsonConfig.Save;  
 var
   FileStream: TFileStream;
   JsonString: string;
@@ -634,7 +634,7 @@ begin
   end;
 end;
 
-function TJsonConfig.GetJsonPath(const APath: string): TJSONData;
+function TJsonConfig.GetJsonPath(const APath: string): TJSONData;  
 var
   PathParts: TStringArray;
   Current: TJSONData;
@@ -661,7 +661,7 @@ begin
   Result := Current;
 end;
 
-procedure TJsonConfig.SetJsonPath(const APath: string; AValue: TJSONData);
+procedure TJsonConfig.SetJsonPath(const APath: string; AValue: TJSONData);  
 var
   PathParts: TStringArray;
   Current, Parent: TJSONObject;
@@ -687,7 +687,7 @@ begin
   Current.Add(Key, AValue);
 end;
 
-function TJsonConfig.GetString(const APath: string; const ADefault: string): string;
+function TJsonConfig.GetString(const APath: string; const ADefault: string): string;  
 var
   Data: TJSONData;
 begin
@@ -698,7 +698,7 @@ begin
     Result := ADefault;
 end;
 
-function TJsonConfig.GetInt(const APath: string; ADefault: Integer): Integer;
+function TJsonConfig.GetInt(const APath: string; ADefault: Integer): Integer;  
 var
   Data: TJSONData;
 begin
@@ -709,7 +709,7 @@ begin
     Result := ADefault;
 end;
 
-function TJsonConfig.GetBool(const APath: string; ADefault: Boolean): Boolean;
+function TJsonConfig.GetBool(const APath: string; ADefault: Boolean): Boolean;  
 var
   Data: TJSONData;
 begin
@@ -720,7 +720,7 @@ begin
     Result := ADefault;
 end;
 
-function TJsonConfig.GetFloat(const APath: string; ADefault: Double): Double;
+function TJsonConfig.GetFloat(const APath: string; ADefault: Double): Double;  
 var
   Data: TJSONData;
 begin
@@ -731,27 +731,27 @@ begin
     Result := ADefault;
 end;
 
-procedure TJsonConfig.SetString(const APath, AValue: string);
+procedure TJsonConfig.SetString(const APath, AValue: string);  
 begin
   SetJsonPath(APath, TJSONString.Create(AValue));
 end;
 
-procedure TJsonConfig.SetInt(const APath: string; AValue: Integer);
+procedure TJsonConfig.SetInt(const APath: string; AValue: Integer);  
 begin
   SetJsonPath(APath, TJSONIntegerNumber.Create(AValue));
 end;
 
-procedure TJsonConfig.SetBool(const APath: string; AValue: Boolean);
+procedure TJsonConfig.SetBool(const APath: string; AValue: Boolean);  
 begin
   SetJsonPath(APath, TJSONBoolean.Create(AValue));
 end;
 
-procedure TJsonConfig.SetFloat(const APath: string; AValue: Double);
+procedure TJsonConfig.SetFloat(const APath: string; AValue: Double);  
 begin
   SetJsonPath(APath, TJSONFloatNumber.Create(AValue));
 end;
 
-function TJsonConfig.GetArray(const APath: string): TJSONArray;
+function TJsonConfig.GetArray(const APath: string): TJSONArray;  
 var
   Data: TJSONData;
 begin
@@ -762,7 +762,7 @@ begin
     Result := nil;
 end;
 
-procedure TJsonConfig.AddToArray(const APath, AValue: string);
+procedure TJsonConfig.AddToArray(const APath, AValue: string);  
 var
   Data: TJSONData;
   Arr: TJSONArray;
@@ -875,24 +875,24 @@ const
 
 implementation
 
-class function TFilePermissions.SetPermissions(const AFilePath: string; AMode: Integer): Boolean;
+class function TFilePermissions.SetPermissions(const AFilePath: string; AMode: Integer): Boolean;  
 begin
   Result := FpChmod(PChar(AFilePath), AMode) = 0;
 end;
 
-class function TFilePermissions.SetReadOnly(const AFilePath: string): Boolean;
+class function TFilePermissions.SetReadOnly(const AFilePath: string): Boolean;  
 begin
   // 444 : lecture seule pour tous
   Result := SetPermissions(AFilePath, S_IRUSR or S_IRGRP or S_IROTH);
 end;
 
-class function TFilePermissions.SetUserOnly(const AFilePath: string): Boolean;
+class function TFilePermissions.SetUserOnly(const AFilePath: string): Boolean;  
 begin
   // 600 : lecture/écriture pour le propriétaire seulement
   Result := SetPermissions(AFilePath, S_IRUSR or S_IWUSR);
 end;
 
-class function TFilePermissions.SetExecutable(const AFilePath: string): Boolean;
+class function TFilePermissions.SetExecutable(const AFilePath: string): Boolean;  
 begin
   // 755 : rwxr-xr-x
   Result := SetPermissions(AFilePath,
@@ -901,17 +901,17 @@ begin
     S_IROTH or S_IXOTH);               // r-x pour autres
 end;
 
-class function TFilePermissions.IsReadable(const AFilePath: string): Boolean;
+class function TFilePermissions.IsReadable(const AFilePath: string): Boolean;  
 begin
   Result := FpAccess(PChar(AFilePath), R_OK) = 0;
 end;
 
-class function TFilePermissions.IsWritable(const AFilePath: string): Boolean;
+class function TFilePermissions.IsWritable(const AFilePath: string): Boolean;  
 begin
   Result := FpAccess(PChar(AFilePath), W_OK) = 0;
 end;
 
-class function TFilePermissions.IsExecutable(const AFilePath: string): Boolean;
+class function TFilePermissions.IsExecutable(const AFilePath: string): Boolean;  
 begin
   Result := FpAccess(PChar(AFilePath), X_OK) = 0;
 end;
@@ -971,7 +971,7 @@ type
 
 implementation
 
-constructor TSecureConfig.Create(const AAppName: string);
+constructor TSecureConfig.Create(const AAppName: string);  
 begin
   inherited Create;
 
@@ -996,7 +996,7 @@ begin
   end;
 end;
 
-destructor TSecureConfig.Destroy;
+destructor TSecureConfig.Destroy;  
 begin
   if Assigned(FConfig) then
   begin
@@ -1006,7 +1006,7 @@ begin
   inherited Destroy;
 end;
 
-function TSecureConfig.GetSecureConfigPath: string;
+function TSecureConfig.GetSecureConfigPath: string;  
 begin
   // Utiliser le répertoire standard XDG_CONFIG_HOME
   Result := GetEnvironmentVariable('XDG_CONFIG_HOME');
@@ -1014,7 +1014,7 @@ begin
     Result := GetEnvironmentVariable('HOME') + '/.config';
 end;
 
-function TSecureConfig.ValidateChecksum: Boolean;
+function TSecureConfig.ValidateChecksum: Boolean;  
 var
   StoredChecksum, CurrentChecksum: string;
   FileContent: TStringList;
@@ -1047,7 +1047,7 @@ begin
   end;
 end;
 
-procedure TSecureConfig.UpdateChecksum;
+procedure TSecureConfig.UpdateChecksum;  
 var
   FileContent: TStringList;
   Checksum: string;
@@ -1070,7 +1070,7 @@ begin
   end;
 end;
 
-procedure TSecureConfig.SaveSecureString(const ASection, AKey, AValue: string);
+procedure TSecureConfig.SaveSecureString(const ASection, AKey, AValue: string);  
 begin
   if not Assigned(FConfig) then
     FConfig := TIniFile.Create(FConfigPath);
@@ -1098,7 +1098,7 @@ begin
     Result := ADefault;
 end;
 
-procedure TSecureConfig.SavePasswordHash(const ASection, AKey, APassword: string);
+procedure TSecureConfig.SavePasswordHash(const ASection, AKey, APassword: string);  
 var
   Hash: string;
   Salt: string;
@@ -1120,7 +1120,7 @@ begin
   TFilePermissions.SetUserOnly(FConfigPath);
 end;
 
-function TSecureConfig.VerifyPassword(const ASection, AKey, APassword: string): Boolean;
+function TSecureConfig.VerifyPassword(const ASection, AKey, APassword: string): Boolean;  
 var
   StoredHash, StoredSalt, TestHash: string;
 begin
@@ -1202,12 +1202,12 @@ type
   Pinotify_event = ^inotify_event;
 
 // Déclarations des fonctions inotify
-function inotify_init: Integer; cdecl; external 'c';
+function inotify_init: Integer; cdecl; external 'c';  
 function inotify_add_watch(fd: Integer; pathname: PChar; mask: Cardinal): Integer;
   cdecl; external 'c';
 function inotify_rm_watch(fd: Integer; wd: Integer): Integer; cdecl; external 'c';
 
-constructor TConfigWatcher.Create(const APath: string);
+constructor TConfigWatcher.Create(const APath: string);  
 begin
   inherited Create(True); // Créé suspendu
   FWatchPath := APath;
@@ -1215,13 +1215,13 @@ begin
   FreeOnTerminate := False;
 end;
 
-destructor TConfigWatcher.Destroy;
+destructor TConfigWatcher.Destroy;  
 begin
   StopWatching;
   inherited Destroy;
 end;
 
-procedure TConfigWatcher.StartWatching;
+procedure TConfigWatcher.StartWatching;  
 begin
   if FRunning then
     Exit;
@@ -1245,7 +1245,7 @@ begin
   Start; // Démarrer le thread
 end;
 
-procedure TConfigWatcher.StopWatching;
+procedure TConfigWatcher.StopWatching;  
 begin
   if not FRunning then
     Exit;
@@ -1263,13 +1263,13 @@ begin
   WaitFor;
 end;
 
-procedure TConfigWatcher.NotifyChange(const AFileName: string);
+procedure TConfigWatcher.NotifyChange(const AFileName: string);  
 begin
   if Assigned(FOnChange) then
     FOnChange(Self, AFileName);
 end;
 
-procedure TConfigWatcher.Execute;
+procedure TConfigWatcher.Execute;  
 var
   Buffer: array[0..4095] of Byte;
   BytesRead: Integer;
@@ -1326,7 +1326,7 @@ type
     procedure OnConfigChange(Sender: TObject; const AFileName: string);
   end;
 
-procedure TConfigMonitor.OnConfigChange(Sender: TObject; const AFileName: string);
+procedure TConfigMonitor.OnConfigChange(Sender: TObject; const AFileName: string);  
 begin
   WriteLn('Configuration modifiée: ', AFileName);
   WriteLn('Rechargement de la configuration...');
@@ -1397,7 +1397,7 @@ const
 
 implementation
 
-constructor TConfigMigrator.Create(const AConfigPath: string);
+constructor TConfigMigrator.Create(const AConfigPath: string);  
 begin
   inherited Create;
   FConfigPath := AConfigPath;
@@ -1407,7 +1407,7 @@ begin
     ForceDirectories(FBackupPath);
 end;
 
-function TConfigMigrator.GetConfigVersion: Integer;
+function TConfigMigrator.GetConfigVersion: Integer;  
 var
   Ini: TIniFile;
   Json: TJSONObject;
@@ -1450,7 +1450,7 @@ begin
   end;
 end;
 
-procedure TConfigMigrator.SetConfigVersion(AVersion: Integer);
+procedure TConfigMigrator.SetConfigVersion(AVersion: Integer);  
 var
   Ini: TIniFile;
 begin
@@ -1468,7 +1468,7 @@ begin
   // Pour JSON, la version est mise à jour pendant la migration
 end;
 
-procedure TConfigMigrator.BackupConfig;
+procedure TConfigMigrator.BackupConfig;  
 var
   BackupFile: string;
 begin
@@ -1483,7 +1483,7 @@ begin
   WriteLn('Sauvegarde créée: ', BackupFile);
 end;
 
-procedure TConfigMigrator.MigrateV1ToV2;
+procedure TConfigMigrator.MigrateV1ToV2;  
 var
   Ini: TIniFile;
   OldValue: string;
@@ -1521,7 +1521,7 @@ begin
   SetConfigVersion(2);
 end;
 
-procedure TConfigMigrator.MigrateV2ToV3;
+procedure TConfigMigrator.MigrateV2ToV3;  
 begin
   WriteLn('Migration V2 → V3...');
 
@@ -1532,7 +1532,7 @@ begin
   FConfigPath := ChangeFileExt(FConfigPath, '.json');
 end;
 
-procedure TConfigMigrator.MigrateIniToJson;
+procedure TConfigMigrator.MigrateIniToJson;  
 var
   Ini: TIniFile;
   Json: TJSONObject;
@@ -1606,12 +1606,12 @@ begin
   end;
 end;
 
-function TConfigMigrator.NeedsMigration: Boolean;
+function TConfigMigrator.NeedsMigration: Boolean;  
 begin
   Result := GetConfigVersion < CURRENT_CONFIG_VERSION;
 end;
 
-procedure TConfigMigrator.Migrate;
+procedure TConfigMigrator.Migrate;  
 var
   CurrentVersion: Integer;
 begin
@@ -1642,7 +1642,7 @@ begin
   WriteLn('Migration terminée avec succès');
 end;
 
-procedure TConfigMigrator.RollbackMigration;
+procedure TConfigMigrator.RollbackMigration;  
 var
   BackupFiles: TStringList;
   LatestBackup: string;
@@ -1714,7 +1714,7 @@ type
 
 implementation
 
-constructor TEnvironmentConfig.Create;
+constructor TEnvironmentConfig.Create;  
 var
   EnvVar: string;
 begin
@@ -1740,14 +1740,14 @@ begin
   LoadEnvironmentConfig;
 end;
 
-destructor TEnvironmentConfig.Destroy;
+destructor TEnvironmentConfig.Destroy;  
 begin
   if Assigned(FConfig) then
     FConfig.Free;
   inherited Destroy;
 end;
 
-function TEnvironmentConfig.GetEnvironmentName: string;
+function TEnvironmentConfig.GetEnvironmentName: string;  
 begin
   case FEnvironment of
     envDevelopment: Result := 'development';
@@ -1757,12 +1757,12 @@ begin
   end;
 end;
 
-function TEnvironmentConfig.GetConfigFileName: string;
+function TEnvironmentConfig.GetConfigFileName: string;  
 begin
   Result := FBaseConfigPath + 'config.' + GetEnvironmentName + '.ini';
 end;
 
-procedure TEnvironmentConfig.LoadDefaultConfig;
+procedure TEnvironmentConfig.LoadDefaultConfig;  
 var
   DefaultConfig: TIniFile;
   DefaultPath: string;
@@ -1798,7 +1798,7 @@ begin
   FConfig := TIniFile.Create(DefaultPath);
 end;
 
-procedure TEnvironmentConfig.MergeConfigs(ABase, AOverride: TIniFile);
+procedure TEnvironmentConfig.MergeConfigs(ABase, AOverride: TIniFile);  
 var
   Sections, Keys: TStringList;
   i, j: Integer;
@@ -1826,7 +1826,7 @@ begin
   end;
 end;
 
-procedure TEnvironmentConfig.LoadEnvironmentConfig;
+procedure TEnvironmentConfig.LoadEnvironmentConfig;  
 var
   EnvConfig: TIniFile;
   ConfigFile: string;
@@ -1892,7 +1892,7 @@ begin
   WriteLn('Configuration chargée pour l''environnement: ', GetEnvironmentName);
 end;
 
-function TEnvironmentConfig.GetValue(const ASection, AKey, ADefault: string): string;
+function TEnvironmentConfig.GetValue(const ASection, AKey, ADefault: string): string;  
 begin
   if Assigned(FConfig) then
     Result := FConfig.ReadString(ASection, AKey, ADefault)
@@ -1900,7 +1900,7 @@ begin
     Result := ADefault;
 end;
 
-function TEnvironmentConfig.GetDatabaseUrl: string;
+function TEnvironmentConfig.GetDatabaseUrl: string;  
 var
   Host, Port, Name, User, Password: string;
 begin
@@ -1915,12 +1915,12 @@ begin
                    [User, Password, Host, Port, Name]);
 end;
 
-function TEnvironmentConfig.GetApiEndpoint: string;
+function TEnvironmentConfig.GetApiEndpoint: string;  
 begin
   Result := GetValue('API', 'BaseUrl', 'http://localhost:8080');
 end;
 
-function TEnvironmentConfig.IsDebugMode: Boolean;
+function TEnvironmentConfig.IsDebugMode: Boolean;  
 var
   DebugStr: string;
 begin
@@ -2010,7 +2010,7 @@ type
 
 implementation
 
-constructor TDotEnvConfig.Create(const AEnvFile: string);
+constructor TDotEnvConfig.Create(const AEnvFile: string);  
 begin
   inherited Create;
   FVariables := TEnvVars.Create;
@@ -2034,13 +2034,13 @@ begin
   FLoaded := False;
 end;
 
-destructor TDotEnvConfig.Destroy;
+destructor TDotEnvConfig.Destroy;  
 begin
   FVariables.Free;
   inherited Destroy;
 end;
 
-procedure TDotEnvConfig.ParseEnvLine(const ALine: string);
+procedure TDotEnvConfig.ParseEnvLine(const ALine: string);  
 var
   TrimmedLine: string;
   EqualPos: Integer;
@@ -2076,7 +2076,7 @@ begin
   end;
 end;
 
-function TDotEnvConfig.ExpandVariables(const AValue: string): string;
+function TDotEnvConfig.ExpandVariables(const AValue: string): string;  
 var
   StartPos, EndPos: Integer;
   VarName, VarValue: string;
@@ -2127,7 +2127,7 @@ begin
   end;
 end;
 
-procedure TDotEnvConfig.Load;
+procedure TDotEnvConfig.Load;  
 var
   EnvFile: TStringList;
   i: Integer;
@@ -2149,7 +2149,7 @@ begin
   end;
 end;
 
-procedure TDotEnvConfig.LoadIfExists;
+procedure TDotEnvConfig.LoadIfExists;  
 begin
   if FileExists(FEnvFile) then
     Load
@@ -2157,7 +2157,7 @@ begin
     WriteLn('Fichier .env non trouvé, utilisation des variables système');
 end;
 
-function TDotEnvConfig.GetValue(const AKey: string; const ADefault: string): string;
+function TDotEnvConfig.GetValue(const AKey: string; const ADefault: string): string;  
 var
   Index: Integer;
 begin
@@ -2173,7 +2173,7 @@ begin
   end;
 end;
 
-procedure TDotEnvConfig.SetSystemEnvironment;
+procedure TDotEnvConfig.SetSystemEnvironment;  
 var
   i: Integer;
 begin
@@ -2194,37 +2194,37 @@ end.
 # Configuration de développement local
 
 # Application
-APP_NAME="Mon Application"
-APP_ENV=development
-APP_DEBUG=true
+APP_NAME="Mon Application"  
+APP_ENV=development  
+APP_DEBUG=true  
 APP_PORT=8080
 
 # Base de données
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=myapp_dev
-DB_USER=postgres
-DB_PASSWORD=secret123
+DB_HOST=localhost  
+DB_PORT=5432  
+DB_NAME=myapp_dev  
+DB_USER=postgres  
+DB_PASSWORD=secret123  
 DB_URL="postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}"
 
 # API Keys (SECRETS - Ne jamais partager !)
-API_KEY=sk_test_abcdef123456789
-JWT_SECRET=mon-secret-jwt-super-secure
+API_KEY=sk_test_abcdef123456789  
+JWT_SECRET=mon-secret-jwt-super-secure  
 ENCRYPTION_KEY=0123456789abcdef0123456789abcdef
 
 # Services externes
-SMTP_HOST=smtp.mailtrap.io
-SMTP_PORT=2525
-SMTP_USER=user@example.com
+SMTP_HOST=smtp.mailtrap.io  
+SMTP_PORT=2525  
+SMTP_USER=user@example.com  
 SMTP_PASSWORD=mailpassword
 
 # Chemins
-LOG_PATH=/var/log/myapp/
-UPLOAD_PATH=${HOME}/uploads/
+LOG_PATH=/var/log/myapp/  
+UPLOAD_PATH=${HOME}/uploads/  
 TEMP_PATH=/tmp/myapp/
 
 # Features flags
-FEATURE_NEW_UI=true
+FEATURE_NEW_UI=true  
 FEATURE_BETA_API=false
 ```
 
@@ -2266,7 +2266,7 @@ type
 
 implementation
 
-constructor TSecretManager.Create;
+constructor TSecretManager.Create;  
 begin
   inherited Create;
 
@@ -2276,7 +2276,7 @@ begin
   FMasterKey := GetMasterKey;
 end;
 
-destructor TSecretManager.Destroy;
+destructor TSecretManager.Destroy;  
 begin
   // Effacer les secrets de la mémoire
   FMasterKey := StringOfChar(#0, Length(FMasterKey));
@@ -2285,7 +2285,7 @@ begin
   inherited Destroy;
 end;
 
-function TSecretManager.GetMasterKey: string;
+function TSecretManager.GetMasterKey: string;  
 var
   KeyFile: string;
   KeyData: TStringList;
@@ -2325,7 +2325,7 @@ begin
   end;
 end;
 
-function TSecretManager.EncryptString(const AValue: string): string;
+function TSecretManager.EncryptString(const AValue: string): string;  
 var
   Cipher: TBlowFishEncryptStream;
   InStream, OutStream: TStringStream;
@@ -2347,7 +2347,7 @@ begin
   end;
 end;
 
-function TSecretManager.DecryptString(const AValue: string): string;
+function TSecretManager.DecryptString(const AValue: string): string;  
 var
   Cipher: TBlowFishDecryptStream;
   InStream, OutStream: TStringStream;
@@ -2371,7 +2371,7 @@ begin
   end;
 end;
 
-function TSecretManager.GetSecret(const AKey: string; const ADefault: string): string;
+function TSecretManager.GetSecret(const AKey: string; const ADefault: string): string;  
 begin
   Result := FDotEnv.GetValue(AKey, ADefault);
 
@@ -2380,7 +2380,7 @@ begin
     WriteLn('⚠️  Attention: Secret vide pour ', AKey);
 end;
 
-function TSecretManager.GetDatabasePassword: string;
+function TSecretManager.GetDatabasePassword: string;  
 begin
   Result := GetSecret('DB_PASSWORD', '');
 
@@ -2395,7 +2395,7 @@ begin
   end;
 end;
 
-function TSecretManager.GetApiKey: string;
+function TSecretManager.GetApiKey: string;  
 begin
   Result := GetSecret('API_KEY', '');
 
@@ -2404,7 +2404,7 @@ begin
     WriteLn('⚠️  Clé API semble invalide (trop courte)');
 end;
 
-function TSecretManager.GetJwtSecret: string;
+function TSecretManager.GetJwtSecret: string;  
 begin
   Result := GetSecret('JWT_SECRET', '');
 
@@ -2413,7 +2413,7 @@ begin
     raise Exception.Create('JWT secret trop faible (minimum 32 caractères)');
 end;
 
-function TSecretManager.ValidateSecrets: Boolean;
+function TSecretManager.ValidateSecrets: Boolean;  
 var
   Errors: TStringList;
 begin
@@ -2458,7 +2458,7 @@ begin
   end;
 end;
 
-procedure TSecretManager.CheckRequiredSecrets;
+procedure TSecretManager.CheckRequiredSecrets;  
 begin
   if not ValidateSecrets then
     raise Exception.Create('Configuration des secrets invalide');
@@ -2501,7 +2501,7 @@ type
 
 implementation
 
-constructor TConfigTemplate.Create(const ATemplatePath, AOutputPath: string);
+constructor TConfigTemplate.Create(const ATemplatePath, AOutputPath: string);  
 begin
   inherited Create;
   FTemplatePath := ATemplatePath;
@@ -2509,18 +2509,18 @@ begin
   FVariables := TStringList.Create;
 end;
 
-destructor TConfigTemplate.Destroy;
+destructor TConfigTemplate.Destroy;  
 begin
   FVariables.Free;
   inherited Destroy;
 end;
 
-procedure TConfigTemplate.AddVariable(const AName, AValue: string);
+procedure TConfigTemplate.AddVariable(const AName, AValue: string);  
 begin
   FVariables.Values[AName] := AValue;
 end;
 
-function TConfigTemplate.ProcessTemplate(const AContent: string): string;
+function TConfigTemplate.ProcessTemplate(const AContent: string): string;  
 var
   i: Integer;
   VarName, VarValue: string;
@@ -2536,13 +2536,13 @@ begin
   end;
 end;
 
-function TConfigTemplate.PromptForValue(const AVariable, ADescription: string): string;
+function TConfigTemplate.PromptForValue(const AVariable, ADescription: string): string;  
 begin
   Write(ADescription, ' [', AVariable, ']: ');
   ReadLn(Result);
 end;
 
-procedure TConfigTemplate.Generate;
+procedure TConfigTemplate.Generate;  
 var
   Template, Output: TStringList;
   ProcessedContent: string;
@@ -2566,7 +2566,7 @@ begin
   end;
 end;
 
-procedure TConfigTemplate.GenerateInteractive;
+procedure TConfigTemplate.GenerateInteractive;  
 var
   Template: TStringList;
   i: Integer;
@@ -2625,32 +2625,32 @@ end.
 # Généré le {{GENERATION_DATE}}
 
 [Application]
-Name={{APP_NAME}}  # {{APP_NAME}}: Nom de l'application
-Version={{VERSION}}  # {{VERSION}}: Version (ex: 1.0.0)
-Environment={{ENVIRONMENT}}  # {{ENVIRONMENT}}: development/staging/production
+Name={{APP_NAME}}  # {{APP_NAME}}: Nom de l'application  
+Version={{VERSION}}  # {{VERSION}}: Version (ex: 1.0.0)  
+Environment={{ENVIRONMENT}}  # {{ENVIRONMENT}}: development/staging/production  
 Debug={{DEBUG_MODE}}  # {{DEBUG_MODE}}: true/false
 
 [Database]
-Host={{DB_HOST}}  # {{DB_HOST}}: Serveur de base de données
-Port={{DB_PORT}}  # {{DB_PORT}}: Port (défaut: 5432)
-Database={{DB_NAME}}  # {{DB_NAME}}: Nom de la base
+Host={{DB_HOST}}  # {{DB_HOST}}: Serveur de base de données  
+Port={{DB_PORT}}  # {{DB_PORT}}: Port (défaut: 5432)  
+Database={{DB_NAME}}  # {{DB_NAME}}: Nom de la base  
 Username={{DB_USER}}  # {{DB_USER}}: Utilisateur PostgreSQL
 # Le mot de passe doit être configuré séparément pour la sécurité
 
 [API]
-BaseUrl={{API_URL}}  # {{API_URL}}: URL de base de l'API
-Timeout={{API_TIMEOUT}}  # {{API_TIMEOUT}}: Timeout en ms (défaut: 30000)
+BaseUrl={{API_URL}}  # {{API_URL}}: URL de base de l'API  
+Timeout={{API_TIMEOUT}}  # {{API_TIMEOUT}}: Timeout en ms (défaut: 30000)  
 MaxRetries={{API_RETRIES}}  # {{API_RETRIES}}: Nombre de tentatives (défaut: 3)
 
 [Logging]
-Level={{LOG_LEVEL}}  # {{LOG_LEVEL}}: debug/info/warning/error
-Path={{LOG_PATH}}  # {{LOG_PATH}}: Chemin des logs
-MaxSize={{LOG_MAX_SIZE}}  # {{LOG_MAX_SIZE}}: Taille max en MB
+Level={{LOG_LEVEL}}  # {{LOG_LEVEL}}: debug/info/warning/error  
+Path={{LOG_PATH}}  # {{LOG_PATH}}: Chemin des logs  
+MaxSize={{LOG_MAX_SIZE}}  # {{LOG_MAX_SIZE}}: Taille max en MB  
 RotationDays={{LOG_ROTATION}}  # {{LOG_ROTATION}}: Rotation en jours
 
 [Email]
-SMTPHost={{SMTP_HOST}}  # {{SMTP_HOST}}: Serveur SMTP
-SMTPPort={{SMTP_PORT}}  # {{SMTP_PORT}}: Port SMTP (25/465/587)
+SMTPHost={{SMTP_HOST}}  # {{SMTP_HOST}}: Serveur SMTP  
+SMTPPort={{SMTP_PORT}}  # {{SMTP_PORT}}: Port SMTP (25/465/587)  
 FromAddress={{EMAIL_FROM}}  # {{EMAIL_FROM}}: Adresse d'envoi
 ```
 
@@ -2682,7 +2682,7 @@ FromAddress={{EMAIL_FROM}}  # {{EMAIL_FROM}}: Adresse d'envoi
 #!/bin/bash
 # deploy-config.sh - Script de déploiement de configuration
 
-APP_NAME="myapp"
+APP_NAME="myapp"  
 CONFIG_DIR="$HOME/.config/$APP_NAME"
 
 # Créer la structure de répertoires
@@ -2732,7 +2732,7 @@ type
 
 implementation
 
-class function TSecurityChecker.CheckConfigSecurity(const AConfigPath: string): Boolean;
+class function TSecurityChecker.CheckConfigSecurity(const AConfigPath: string): Boolean;  
 var
   Issues: TStringList;
 begin
@@ -2764,7 +2764,7 @@ begin
   end;
 end;
 
-class procedure TSecurityChecker.GenerateSecurityReport(const AConfigPath: string);
+class procedure TSecurityChecker.GenerateSecurityReport(const AConfigPath: string);  
 begin
   WriteLn('=== Rapport de Sécurité ===');
   WriteLn('Fichier: ', AConfigPath);
@@ -2882,7 +2882,7 @@ type
 
 implementation
 
-constructor TCompleteConfigManager.Create(const AConfigPath: string);
+constructor TCompleteConfigManager.Create(const AConfigPath: string);  
 begin
   inherited Create;
 
@@ -2902,7 +2902,7 @@ begin
   Load;
 end;
 
-destructor TCompleteConfigManager.Destroy;
+destructor TCompleteConfigManager.Destroy;  
 begin
   DisableWatching;
 
@@ -2916,7 +2916,7 @@ begin
   inherited Destroy;
 end;
 
-function TCompleteConfigManager.DetectFormat: TConfigFormat;
+function TCompleteConfigManager.DetectFormat: TConfigFormat;  
 var
   Ext: string;
 begin
@@ -2937,7 +2937,7 @@ begin
     Result := cfIni; // Par défaut
 end;
 
-procedure TCompleteConfigManager.Load;
+procedure TCompleteConfigManager.Load;  
 begin
   if not FileExists(FConfigPath) then
   begin
@@ -2960,7 +2960,7 @@ begin
   WriteLn('Configuration chargée: ', FConfigPath);
 end;
 
-procedure TCompleteConfigManager.LoadFromIni;
+procedure TCompleteConfigManager.LoadFromIni;  
 var
   Ini: TIniFile;
   Sections: TStringList;
@@ -2990,7 +2990,7 @@ begin
   end;
 end;
 
-procedure TCompleteConfigManager.LoadFromJson;
+procedure TCompleteConfigManager.LoadFromJson;  
 var
   FileStream: TFileStream;
   Parser: TJSONParser;
@@ -3039,7 +3039,7 @@ begin
   end;
 end;
 
-procedure TCompleteConfigManager.LoadFromEnv;
+procedure TCompleteConfigManager.LoadFromEnv;  
 var
   EnvFile: TStringList;
   i: Integer;
@@ -3080,7 +3080,7 @@ begin
   end;
 end;
 
-procedure TCompleteConfigManager.Save;
+procedure TCompleteConfigManager.Save;  
 begin
   case FFormat of
     cfIni: SaveToIni;
@@ -3095,7 +3095,7 @@ begin
   FLastModified := Now;
 end;
 
-procedure TCompleteConfigManager.SaveToIni;
+procedure TCompleteConfigManager.SaveToIni;  
 var
   Ini: TIniFile;
   i: Integer;
@@ -3129,7 +3129,7 @@ begin
   end;
 end;
 
-procedure TCompleteConfigManager.SaveToJson;
+procedure TCompleteConfigManager.SaveToJson;  
 var
   Json: TJSONObject;
   i: Integer;
@@ -3172,13 +3172,13 @@ begin
   end;
 end;
 
-procedure TCompleteConfigManager.UpdateCache;
+procedure TCompleteConfigManager.UpdateCache;  
 begin
   // Le cache est mis à jour lors du chargement
   // Cette méthode peut être étendue pour d'autres besoins
 end;
 
-function TCompleteConfigManager.IsCacheValid: Boolean;
+function TCompleteConfigManager.IsCacheValid: Boolean;  
 begin
   // Vérifier si le fichier a été modifié depuis le dernier chargement
   if FileExists(FConfigPath) then
@@ -3187,7 +3187,7 @@ begin
     Result := False;
 end;
 
-procedure TCompleteConfigManager.Reload;
+procedure TCompleteConfigManager.Reload;  
 begin
   WriteLn('Rechargement de la configuration...');
   Load;
@@ -3240,17 +3240,17 @@ begin
     Result := ADefault;
 end;
 
-procedure TCompleteConfigManager.SetString(const AKey, AValue: string);
+procedure TCompleteConfigManager.SetString(const AKey, AValue: string);  
 begin
   FCache.Values[AKey] := AValue;
 end;
 
-procedure TCompleteConfigManager.SetInt(const AKey: string; AValue: Integer);
+procedure TCompleteConfigManager.SetInt(const AKey: string; AValue: Integer);  
 begin
   SetString(AKey, IntToStr(AValue));
 end;
 
-procedure TCompleteConfigManager.SetBool(const AKey: string; AValue: Boolean);
+procedure TCompleteConfigManager.SetBool(const AKey: string; AValue: Boolean);  
 begin
   if AValue then
     SetString(AKey, 'true')
@@ -3258,7 +3258,7 @@ begin
     SetString(AKey, 'false');
 end;
 
-procedure TCompleteConfigManager.SetFloat(const AKey: string; AValue: Double);
+procedure TCompleteConfigManager.SetFloat(const AKey: string; AValue: Double);  
 begin
   SetString(AKey, FloatToStr(AValue));
 end;
@@ -3269,22 +3269,22 @@ begin
   Result := GetString(ASection + '.' + AKey, ADefault);
 end;
 
-procedure TCompleteConfigManager.SetSectionString(const ASection, AKey, AValue: string);
+procedure TCompleteConfigManager.SetSectionString(const ASection, AKey, AValue: string);  
 begin
   SetString(ASection + '.' + AKey, AValue);
 end;
 
-function TCompleteConfigManager.GetSecret(const AKey: string): string;
+function TCompleteConfigManager.GetSecret(const AKey: string): string;  
 begin
   Result := FSecretManager.GetSecret(AKey);
 end;
 
-procedure TCompleteConfigManager.ValidateSecrets;
+procedure TCompleteConfigManager.ValidateSecrets;  
 begin
   FSecretManager.CheckRequiredSecrets;
 end;
 
-procedure TCompleteConfigManager.ImportFrom(const ASourceFile: string);
+procedure TCompleteConfigManager.ImportFrom(const ASourceFile: string);  
 var
   TempManager: TCompleteConfigManager;
   i: Integer;
@@ -3327,7 +3327,7 @@ begin
   end;
 end;
 
-function TCompleteConfigManager.Validate: Boolean;
+function TCompleteConfigManager.Validate: Boolean;  
 var
   Errors: TStringList;
 begin
@@ -3364,14 +3364,14 @@ begin
   end;
 end;
 
-procedure TCompleteConfigManager.ValidateSchema(const ASchemaFile: string);
+procedure TCompleteConfigManager.ValidateSchema(const ASchemaFile: string);  
 begin
   // Implémenter la validation contre un schéma JSON Schema
   WriteLn('Validation contre le schéma: ', ASchemaFile);
   // À implémenter selon le format
 end;
 
-procedure TCompleteConfigManager.EnableWatching;
+procedure TCompleteConfigManager.EnableWatching;  
 begin
   if Assigned(FWatcher) then
     Exit;
@@ -3383,7 +3383,7 @@ begin
   WriteLn('Surveillance activée pour: ', FConfigPath);
 end;
 
-procedure TCompleteConfigManager.DisableWatching;
+procedure TCompleteConfigManager.DisableWatching;  
 begin
   if not Assigned(FWatcher) then
     Exit;
@@ -3401,7 +3401,7 @@ begin
   Reload;
 end;
 
-procedure TCompleteConfigManager.Backup;
+procedure TCompleteConfigManager.Backup;  
 var
   BackupDir, BackupFile: string;
 begin
@@ -3417,7 +3417,7 @@ begin
   WriteLn('Sauvegarde créée: ', BackupFile);
 end;
 
-procedure TCompleteConfigManager.Restore(const ABackupFile: string);
+procedure TCompleteConfigManager.Restore(const ABackupFile: string);  
 begin
   if not FileExists(ABackupFile) then
     raise Exception.Create('Fichier de sauvegarde introuvable: ' + ABackupFile);
@@ -3428,7 +3428,7 @@ begin
   WriteLn('Configuration restaurée depuis: ', ABackupFile);
 end;
 
-procedure TCompleteConfigManager.PrintConfig;
+procedure TCompleteConfigManager.PrintConfig;  
 var
   i: Integer;
 begin
@@ -3448,7 +3448,7 @@ begin
   WriteLn('==============================');
 end;
 
-function TCompleteConfigManager.ToJSON: TJSONObject;
+function TCompleteConfigManager.ToJSON: TJSONObject;  
 var
   i: Integer;
   Key: string;
@@ -3588,7 +3588,7 @@ end.
 .env
 .env.local
 *.env
-config.local.ini
+config.local.ini  
 config.production.ini
 
 # Secrets et clés
@@ -3624,27 +3624,27 @@ config.generated.ini
 
 set -e  # Arrêt sur erreur
 
-APP_NAME="myapp"
+APP_NAME="myapp"  
 CONFIG_DIR="$HOME/.config/$APP_NAME"
 
 echo "=== Installation de la Configuration ==="
 
 # 1. Créer la structure
-echo "• Création des répertoires..."
+echo "• Création des répertoires..."  
 mkdir -p "$CONFIG_DIR"/{config.d,environments,backups,secrets}
 
 # 2. Définir les permissions
-echo "• Configuration des permissions..."
-chmod 700 "$CONFIG_DIR"
+echo "• Configuration des permissions..."  
+chmod 700 "$CONFIG_DIR"  
 chmod 700 "$CONFIG_DIR/secrets"
 
 # 3. Copier les templates
-echo "• Installation des templates..."
-cp templates/config.template.ini "$CONFIG_DIR/"
+echo "• Installation des templates..."  
+cp templates/config.template.ini "$CONFIG_DIR/"  
 cp templates/.env.example "$CONFIG_DIR/.env.example"
 
 # 4. Générer la configuration initiale
-echo "• Génération de la configuration..."
+echo "• Génération de la configuration..."  
 if [ ! -f "$CONFIG_DIR/config.ini" ]; then
     cp "$CONFIG_DIR/config.template.ini" "$CONFIG_DIR/config.ini"
     echo "  Configuration créée: $CONFIG_DIR/config.ini"
@@ -3661,8 +3661,8 @@ if [ ! -f "$CONFIG_DIR/.env" ]; then
 fi
 
 # 6. Vérification
-echo ""
-echo "=== Vérification ==="
+echo ""  
+echo "=== Vérification ==="  
 if [ -f "$CONFIG_DIR/config.ini" ] && [ -f "$CONFIG_DIR/.env" ]; then
     echo "✅ Installation réussie"
     echo ""

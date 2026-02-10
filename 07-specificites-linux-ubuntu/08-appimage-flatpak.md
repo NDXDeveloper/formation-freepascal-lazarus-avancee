@@ -53,8 +53,8 @@ Quand l'utilisateur lance l'AppImage, il monte temporairement ce système de fic
 lazbuild --build-mode=Release monprojet.lpi
 
 # Créer un dossier de travail
-mkdir -p AppDir/usr/bin
-mkdir -p AppDir/usr/share/applications
+mkdir -p AppDir/usr/bin  
+mkdir -p AppDir/usr/share/applications  
 mkdir -p AppDir/usr/share/icons/hicolor/256x256/apps
 
 # Copier l'exécutable
@@ -67,12 +67,12 @@ Créez `AppDir/usr/share/applications/monappli.desktop` :
 
 ```desktop
 [Desktop Entry]
-Type=Application
-Name=Mon Appli
-Comment=Ma super application FreePascal/Lazarus
-Exec=monappli
-Icon=monappli
-Categories=Utility;
+Type=Application  
+Name=Mon Appli  
+Comment=Ma super application FreePascal/Lazarus  
+Exec=monappli  
+Icon=monappli  
+Categories=Utility;  
 Terminal=false
 ```
 
@@ -87,11 +87,11 @@ cp monappli.png AppDir/usr/share/icons/hicolor/256x256/apps/
 
 ```bash
 # Télécharger linuxdeploy
-wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage  
 chmod +x linuxdeploy-x86_64.AppImage
 
 # Télécharger le plugin GTK (si votre app utilise GTK)
-wget https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh
+wget https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh  
 chmod +x linuxdeploy-plugin-gtk.sh
 ```
 
@@ -119,22 +119,22 @@ export DEPLOY_GTK_VERSION=2  # ou 3 selon votre app
 
 ```bash
 # Structure complète
-mkdir -p AppDir
+mkdir -p AppDir  
 cd AppDir
 
 # Créer le script AppRun
 cat > AppRun << 'EOF'
 #!/bin/bash
-HERE="$(dirname "$(readlink -f "${0}")")"
-export LD_LIBRARY_PATH="${HERE}/usr/lib:${LD_LIBRARY_PATH}"
-export PATH="${HERE}/usr/bin:${PATH}"
-exec "${HERE}/usr/bin/monappli" "$@"
+HERE="$(dirname "$(readlink -f "${0}")")"  
+export LD_LIBRARY_PATH="${HERE}/usr/lib:${LD_LIBRARY_PATH}"  
+export PATH="${HERE}/usr/bin:${PATH}"  
+exec "${HERE}/usr/bin/monappli" "$@"  
 EOF
 
 chmod +x AppRun
 
 # Copier l'application et les bibliothèques
-mkdir -p usr/bin usr/lib
+mkdir -p usr/bin usr/lib  
 cp ../monappli usr/bin/
 
 # Copier les bibliothèques nécessaires
@@ -184,7 +184,7 @@ rm -f usr/lib/libc.so.* usr/lib/libdl.so.* usr/lib/libpthread.so.*
 
 ```bash
 # Télécharger appimagetool
-wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage  
 chmod +x appimagetool-x86_64.AppImage
 
 # Créer l'AppImage
@@ -199,24 +199,24 @@ Créez `build-appimage.sh` :
 ```bash
 #!/bin/bash
 
-APP_NAME="monappli"
-APP_VERSION="1.0.0"
+APP_NAME="monappli"  
+APP_VERSION="1.0.0"  
 ARCH="x86_64"
 
 # Nettoyer
-rm -rf AppDir
+rm -rf AppDir  
 rm -f ${APP_NAME}-${ARCH}.AppImage
 
 # Compiler l'application
 lazbuild --build-mode=Release src/${APP_NAME}.lpi || exit 1
 
 # Créer la structure
-mkdir -p AppDir/usr/{bin,lib}
+mkdir -p AppDir/usr/{bin,lib}  
 mkdir -p AppDir/usr/share/{applications,icons/hicolor/256x256/apps}
 
 # Copier les fichiers
-cp src/${APP_NAME} AppDir/usr/bin/
-cp resources/${APP_NAME}.png AppDir/usr/share/icons/hicolor/256x256/apps/
+cp src/${APP_NAME} AppDir/usr/bin/  
+cp resources/${APP_NAME}.png AppDir/usr/share/icons/hicolor/256x256/apps/  
 cp resources/${APP_NAME}.desktop AppDir/usr/share/applications/
 
 # Télécharger linuxdeploy si nécessaire
@@ -264,7 +264,7 @@ zsyncmake MonAppli-x86_64.AppImage
 
 ```bash
 # Télécharger AppImageUpdate
-wget https://github.com/AppImage/AppImageUpdate/releases/download/continuous/AppImageUpdate-x86_64.AppImage
+wget https://github.com/AppImage/AppImageUpdate/releases/download/continuous/AppImageUpdate-x86_64.AppImage  
 chmod +x AppImageUpdate-x86_64.AppImage
 
 # Mettre à jour
@@ -306,7 +306,7 @@ sudo apt install flatpak flatpak-builder
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
 # Installer le SDK FreePascal
-flatpak install flathub org.freedesktop.Platform//23.08
+flatpak install flathub org.freedesktop.Platform//23.08  
 flatpak install flathub org.freedesktop.Sdk//23.08
 ```
 
@@ -315,10 +315,10 @@ flatpak install flathub org.freedesktop.Sdk//23.08
 Créez `com.example.MonAppli.yml` :
 
 ```yaml
-app-id: com.example.MonAppli
-runtime: org.freedesktop.Platform
-runtime-version: '23.08'
-sdk: org.freedesktop.Sdk
+app-id: com.example.MonAppli  
+runtime: org.freedesktop.Platform  
+runtime-version: '23.08'  
+sdk: org.freedesktop.Sdk  
 command: monappli
 
 finish-args:
@@ -443,13 +443,13 @@ Modifiez votre `monappli.desktop` pour Flatpak :
 
 ```desktop
 [Desktop Entry]
-Type=Application
-Name=Mon Appli
-Comment=Ma super application FreePascal/Lazarus
-Exec=monappli
-Icon=com.example.MonAppli
-Categories=Utility;Development;
-Terminal=false
+Type=Application  
+Name=Mon Appli  
+Comment=Ma super application FreePascal/Lazarus  
+Exec=monappli  
+Icon=com.example.MonAppli  
+Categories=Utility;Development;  
+Terminal=false  
 StartupNotify=true
 ```
 
@@ -460,7 +460,7 @@ StartupNotify=true
 flatpak-builder --force-clean build-dir com.example.MonAppli.yml
 
 # Tester localement
-flatpak-builder --user --install --force-clean build-dir com.example.MonAppli.yml
+flatpak-builder --user --install --force-clean build-dir com.example.MonAppli.yml  
 flatpak run com.example.MonAppli
 
 # Créer un dépôt local
@@ -512,7 +512,7 @@ Créez `build-flatpak.sh` :
 ```bash
 #!/bin/bash
 
-APP_ID="com.example.MonAppli"
+APP_ID="com.example.MonAppli"  
 MANIFEST="${APP_ID}.yml"
 
 # Nettoyer
@@ -605,14 +605,14 @@ ostree init --repo=monappli-repo --mode=archive
 flatpak-builder --repo=monappli-repo --force-clean build-dir com.example.MonAppli.yml
 
 # Servir le dépôt (exemple avec Python)
-cd monappli-repo
+cd monappli-repo  
 python3 -m http.server 8080
 ```
 
 Les utilisateurs peuvent ajouter votre dépôt :
 
 ```bash
-flatpak remote-add --user monappli-repo http://votre-serveur.com:8080/monappli-repo
+flatpak remote-add --user monappli-repo http://votre-serveur.com:8080/monappli-repo  
 flatpak install --user monappli-repo com.example.MonAppli
 ```
 
@@ -684,7 +684,7 @@ flatpak install --user monappli-repo com.example.MonAppli
 
 ```bash
 # Stripper les binaires pour réduire la taille
-strip AppDir/usr/bin/monappli
+strip AppDir/usr/bin/monappli  
 strip AppDir/usr/lib/*.so*
 
 # Utiliser UPX pour compression (optionnel, peut causer des problèmes)
@@ -758,16 +758,16 @@ Créez `install-appimage.sh` pour vos utilisateurs :
 ```bash
 #!/bin/bash
 
-APPIMAGE_URL="https://github.com/user/repo/releases/latest/download/MonAppli.AppImage"
-INSTALL_DIR="$HOME/.local/bin"
+APPIMAGE_URL="https://github.com/user/repo/releases/latest/download/MonAppli.AppImage"  
+INSTALL_DIR="$HOME/.local/bin"  
 DESKTOP_DIR="$HOME/.local/share/applications"
 
 # Créer les dossiers
 mkdir -p "$INSTALL_DIR" "$DESKTOP_DIR"
 
 # Télécharger
-echo "Téléchargement de MonAppli..."
-wget -O "$INSTALL_DIR/MonAppli.AppImage" "$APPIMAGE_URL"
+echo "Téléchargement de MonAppli..."  
+wget -O "$INSTALL_DIR/MonAppli.AppImage" "$APPIMAGE_URL"  
 chmod +x "$INSTALL_DIR/MonAppli.AppImage"
 
 # Extraire l'icône et le .desktop
@@ -775,13 +775,13 @@ cd /tmp
 "$INSTALL_DIR/MonAppli.AppImage" --appimage-extract *.desktop *.png
 
 # Installer le .desktop
-cp squashfs-root/*.desktop "$DESKTOP_DIR/"
+cp squashfs-root/*.desktop "$DESKTOP_DIR/"  
 sed -i "s|Exec=.*|Exec=$INSTALL_DIR/MonAppli.AppImage|" "$DESKTOP_DIR"/*.desktop
 
 # Nettoyer
 rm -rf squashfs-root
 
-echo "Installation terminée !"
+echo "Installation terminée !"  
 echo "Vous pouvez lancer MonAppli depuis votre menu d'applications"
 ```
 
@@ -793,7 +793,7 @@ echo "Vous pouvez lancer MonAppli depuis votre menu d'applications"
 echo "=== Vérification compatibilité AppImage/Flatpak ==="
 
 # AppImage
-echo -n "FUSE pour AppImage : "
+echo -n "FUSE pour AppImage : "  
 if command -v fusermount &> /dev/null; then
     echo "✓ Installé"
 else
@@ -801,7 +801,7 @@ else
 fi
 
 # Flatpak
-echo -n "Flatpak : "
+echo -n "Flatpak : "  
 if command -v flatpak &> /dev/null; then
     version=$(flatpak --version)
     echo "✓ Installé ($version)"

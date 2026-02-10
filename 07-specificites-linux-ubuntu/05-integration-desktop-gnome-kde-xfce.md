@@ -36,15 +36,15 @@ Le fichier `.desktop` est la clé de l'intégration de votre application dans le
 
 ```ini
 [Desktop Entry]
-Version=1.0
-Type=Application
-Name=Mon Application
-Name[fr]=Mon Application
-Comment=Une application créée avec Lazarus
-Comment[fr]=Une application créée avec Lazarus
-Exec=/usr/bin/monapplication
-Icon=monapplication
-Terminal=false
+Version=1.0  
+Type=Application  
+Name=Mon Application  
+Name[fr]=Mon Application  
+Comment=Une application créée avec Lazarus  
+Comment[fr]=Une application créée avec Lazarus  
+Exec=/usr/bin/monapplication  
+Icon=monapplication  
+Terminal=false  
 Categories=Office;Utility;
 ```
 
@@ -60,7 +60,7 @@ Le standard XDG Base Directory définit où stocker les différents types de fic
 uses
   SysUtils;
 
-function GetConfigDir: string;
+function GetConfigDir: string;  
 begin
   // Récupère le dossier de configuration
   Result := GetEnvironmentVariable('XDG_CONFIG_HOME');
@@ -69,7 +69,7 @@ begin
   Result := Result + '/monapplication/';
 end;
 
-function GetDataDir: string;
+function GetDataDir: string;  
 begin
   // Récupère le dossier de données
   Result := GetEnvironmentVariable('XDG_DATA_HOME');
@@ -78,7 +78,7 @@ begin
   Result := Result + '/monapplication/';
 end;
 
-function GetCacheDir: string;
+function GetCacheDir: string;  
 begin
   // Récupère le dossier de cache
   Result := GetEnvironmentVariable('XDG_CACHE_HOME');
@@ -98,7 +98,7 @@ Lazarus fournit le composant `TTrayIcon` qui fonctionne avec tous les environnem
 uses
   ExtCtrls, Menus;
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 var
   TrayIcon: TTrayIcon;
   PopupMenu: TPopupMenu;
@@ -136,7 +136,7 @@ Pour afficher des notifications système, vous pouvez utiliser la bibliothèque 
 uses
   Process;
 
-procedure ShowNotification(const Title, Message: string);
+procedure ShowNotification(const Title, Message: string);  
 var
   Process: TProcess;
 begin
@@ -159,7 +159,7 @@ end;
 ### Détection de l'environnement actuel
 
 ```pascal
-function GetDesktopEnvironment: string;
+function GetDesktopEnvironment: string;  
 begin
   Result := GetEnvironmentVariable('XDG_CURRENT_DESKTOP');
   if Result = '' then
@@ -183,7 +183,7 @@ end;
 De plus en plus d'utilisateurs utilisent des thèmes sombres. Votre application peut détecter et s'adapter :
 
 ```pascal
-function IsDarkTheme: Boolean;
+function IsDarkTheme: Boolean;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -220,7 +220,7 @@ Bien que vous ne puissiez pas créer d'extensions GNOME Shell directement avec F
 
 ```pascal
 // Ajout aux favoris GNOME
-procedure AddToGnomeFavorites;
+procedure AddToGnomeFavorites;  
 var
   Process: TProcess;
 begin
@@ -243,7 +243,7 @@ end;
 Votre application peut respecter les paramètres système GNOME :
 
 ```pascal
-function GetGnomeAccentColor: TColor;
+function GetGnomeAccentColor: TColor;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -277,7 +277,7 @@ KDE permet l'enregistrement de raccourcis globaux via D-Bus :
 uses
   dbus;
 
-procedure RegisterKDEGlobalShortcut(const Action, Shortcut: string);
+procedure RegisterKDEGlobalShortcut(const Action, Shortcut: string);  
 var
   Connection: PDBusConnection;
   Message: PDBusMessage;
@@ -309,7 +309,7 @@ end;
 KDE permet de gérer des "activités" (contextes de travail). Votre application peut s'y intégrer :
 
 ```pascal
-function GetCurrentKDEActivity: string;
+function GetCurrentKDEActivity: string;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -356,7 +356,7 @@ type
 XFCE utilise xfconf pour ses paramètres :
 
 ```pascal
-function GetXfceSettings(const Channel, Property: string): string;
+function GetXfceSettings(const Channel, Property: string): string;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -408,7 +408,7 @@ MimeType=application/x-monapplication;
 ### Enregistrement de l'association
 
 ```pascal
-procedure RegisterMimeType;
+procedure RegisterMimeType;  
 var
   Process: TProcess;
 begin
@@ -440,7 +440,7 @@ end;
 L'accessibilité est importante pour tous les environnements de bureau :
 
 ```pascal
-procedure SetAccessibleDescription(Component: TControl; const Description: string);
+procedure SetAccessibleDescription(Component: TControl; const Description: string);  
 begin
   // Utilisation de ATK (Accessibility Toolkit) pour GTK
   if Component.HandleAllocated then
@@ -459,7 +459,7 @@ end;
 Pour les distributions utilisant des menus globaux (comme Ubuntu avec Unity ou certaines configurations KDE) :
 
 ```pascal
-procedure EnableGlobalMenu(Form: TForm);
+procedure EnableGlobalMenu(Form: TForm);  
 begin
   // Le support des menus globaux est généralement automatique
   // avec les bonnes bibliothèques GTK installées
@@ -479,7 +479,7 @@ end;
 Votre application doit toujours respecter les choix de l'utilisateur :
 
 ```pascal
-procedure ApplyUserPreferences;
+procedure ApplyUserPreferences;  
 begin
   // Police système
   Application.DefaultFont.Name := GetSystemFontName;
@@ -513,12 +513,12 @@ type
 
 implementation
 
-constructor TDesktopIntegration.Create;
+constructor TDesktopIntegration.Create;  
 begin
   FEnvironment := GetDesktopEnvironment;
 end;
 
-function TDesktopIntegration.GetConfigPath: string;
+function TDesktopIntegration.GetConfigPath: string;  
 begin
   Result := GetEnvironmentVariable('XDG_CONFIG_HOME');
   if Result = '' then
