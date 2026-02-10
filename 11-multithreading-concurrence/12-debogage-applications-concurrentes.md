@@ -59,7 +59,7 @@ type
     procedure Execute; override;
   end;
 
-procedure TCounterThread.Execute;
+procedure TCounterThread.Execute;  
 var
   i: Integer;
 begin
@@ -122,7 +122,7 @@ type
     procedure Execute; override;
   end;
 
-procedure TThread1.Execute;
+procedure TThread1.Execute;  
 begin
   WriteLn('Thread1: Tentative de verrouillage Lock1...');
   Lock1.Enter;
@@ -142,7 +142,7 @@ begin
   end;
 end;
 
-procedure TThread2.Execute;
+procedure TThread2.Execute;  
 begin
   WriteLn('Thread2: Tentative de verrouillage Lock2...');
   Lock2.Enter;
@@ -219,7 +219,7 @@ type
     procedure Execute; override;
   end;
 
-procedure THighPriorityThread.Execute;
+procedure THighPriorityThread.Execute;  
 begin
   while not StopThreads do
   begin
@@ -234,7 +234,7 @@ begin
   end;
 end;
 
-procedure TLowPriorityThread.Execute;
+procedure TLowPriorityThread.Execute;  
 var
   Attempts: Integer = 0;
 begin
@@ -313,7 +313,7 @@ end.
 Les points d'arrêt conditionnels sont essentiels pour déboguer des threads spécifiques.
 
 ```pascal
-procedure TMyThread.Execute;
+procedure TMyThread.Execute;  
 var
   i: Integer;
 begin
@@ -349,7 +349,7 @@ var
 // Et se désenregistre à la fin :
 //   GlobalThreadList.Remove(Self);
 
-procedure ShowActiveThreads;
+procedure ShowActiveThreads;  
 var
   i: Integer;
   List: TList;
@@ -402,7 +402,7 @@ var
 
 implementation
 
-constructor TThreadSafeLogger.Create(const AFileName: string);
+constructor TThreadSafeLogger.Create(const AFileName: string);  
 begin
   inherited Create;
   FFileName := AFileName;
@@ -411,14 +411,14 @@ begin
   Rewrite(FLogFile);
 end;
 
-destructor TThreadSafeLogger.Destroy;
+destructor TThreadSafeLogger.Destroy;  
 begin
   CloseFile(FLogFile);
   FLock.Free;
   inherited;
 end;
 
-procedure TThreadSafeLogger.Log(const AMessage: string);
+procedure TThreadSafeLogger.Log(const AMessage: string);  
 var
   TimeStamp: string;
 begin
@@ -432,7 +432,7 @@ begin
   end;
 end;
 
-procedure TThreadSafeLogger.LogThread(const AMessage: string);
+procedure TThreadSafeLogger.LogThread(const AMessage: string);  
 begin
   Log(Format('[Thread %d] %s', [GetCurrentThreadId, AMessage]));
 end;
@@ -451,7 +451,7 @@ end.
 ```pascal
 uses ThreadSafeLogging;
 
-procedure TMyThread.Execute;
+procedure TMyThread.Execute;  
 begin
   Logger.LogThread('Thread démarré');
 
@@ -479,13 +479,13 @@ var
   SharedData: Integer;
   LockOwnerThread: TThreadID = 0;
 
-procedure EnterDataLock;
+procedure EnterDataLock;  
 begin
   DataLock.Enter;
   LockOwnerThread := GetCurrentThreadId;
 end;
 
-procedure LeaveDataLock;
+procedure LeaveDataLock;  
 begin
   Assert(LockOwnerThread = GetCurrentThreadId,
     'Thread qui libère le verrou n''est pas celui qui l''a acquis !');
@@ -493,7 +493,7 @@ begin
   DataLock.Leave;
 end;
 
-procedure ModifySharedData(NewValue: Integer);
+procedure ModifySharedData(NewValue: Integer);  
 begin
   // Assertion : vérifier que nous détenons le verrou
   Assert(LockOwnerThread = GetCurrentThreadId,
@@ -503,7 +503,7 @@ begin
 end;
 
 // Utilisation
-procedure SafeUpdate;
+procedure SafeUpdate;  
 begin
   EnterDataLock;
   try
@@ -513,7 +513,7 @@ begin
   end;
 end;
 
-procedure UnsafeUpdate;
+procedure UnsafeUpdate;  
 begin
   ModifySharedData(42);  // ASSERTION FAILURE !
 end;
@@ -547,7 +547,7 @@ type
 
 implementation
 
-constructor TDeadlockDetector.Create(const AName: string; ATimeoutMs: Integer);
+constructor TDeadlockDetector.Create(const AName: string; ATimeoutMs: Integer);  
 begin
   inherited Create;
   FName := AName;
@@ -555,18 +555,18 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TDeadlockDetector.Destroy;
+destructor TDeadlockDetector.Destroy;  
 begin
   FLock.Free;
   inherited;
 end;
 
-function TDeadlockDetector.TryEnter: Boolean;
+function TDeadlockDetector.TryEnter: Boolean;  
 begin
   Result := FLock.TryEnter;
 end;
 
-procedure TDeadlockDetector.Enter;
+procedure TDeadlockDetector.Enter;  
 var
   StartTime: TDateTime;
   Elapsed: Integer;
@@ -587,7 +587,7 @@ begin
   end;
 end;
 
-procedure TDeadlockDetector.Leave;
+procedure TDeadlockDetector.Leave;  
 begin
   FLock.Leave;
 end;
@@ -601,7 +601,7 @@ end.
 var
   SafeLock1, SafeLock2: TDeadlockDetector;
 
-procedure SafeOperation;
+procedure SafeOperation;  
 begin
   SafeLock1 := TDeadlockDetector.Create('Lock1', 3000);
   SafeLock2 := TDeadlockDetector.Create('Lock2', 3000);
@@ -766,7 +766,7 @@ ThreadSanitizer est un outil de détection de race conditions intégré à GCC/C
 **Compilation avec TSan :**
 ```bash
 # Nécessite un compilateur récent (GCC 8+)
-fpc -O0 -g monprogramme.pas
+fpc -O0 -g monprogramme.pas  
 gcc -fsanitize=thread -g monprogramme.o -o monprogramme_tsan
 ```
 
@@ -800,7 +800,7 @@ Les bugs de concurrence sont non-déterministes. Les exécuter plusieurs fois ai
 #!/bin/bash
 # Script Linux pour détecter les bugs intermittents
 
-for i in {1..100}
+for i in {1..100}  
 do
   echo "Exécution #$i"
   ./monprogramme
@@ -829,7 +829,7 @@ for ($i=1; $i -le 100; $i++) {
 Augmenter la probabilité de manifester une race condition :
 
 ```pascal
-procedure TMyThread.Execute;
+procedure TMyThread.Execute;  
 begin
   Lock1.Enter;
   try
@@ -855,7 +855,7 @@ Réduire le code au minimum pour reproduire le bug :
 
 ```pascal
 // Version complète (difficile à déboguer)
-procedure ComplexThreadOperation;
+procedure ComplexThreadOperation;  
 begin
   InitializeComponents;
   LoadConfiguration;
@@ -866,7 +866,7 @@ begin
 end;
 
 // Version minimale (plus facile à déboguer)
-procedure MinimalReproduction;
+procedure MinimalReproduction;  
 begin
   // Garder seulement le code qui manifeste le bug
   Lock1.Enter;
@@ -879,7 +879,7 @@ end;
 ### 4. Tester avec différents nombres de threads
 
 ```pascal
-procedure TestWithThreadCount(Count: Integer);
+procedure TestWithThreadCount(Count: Integer);  
 var
   Threads: array of TMyThread;
   i: Integer;
@@ -911,7 +911,7 @@ end.
 
 ```pascal
 // ✅ BON : Ordre cohérent
-procedure Thread1Operation;
+procedure Thread1Operation;  
 begin
   Lock1.Enter;
   try
@@ -926,7 +926,7 @@ begin
   end;
 end;
 
-procedure Thread2Operation;
+procedure Thread2Operation;  
 begin
   Lock1.Enter;  // Même ordre que Thread1
   try
@@ -942,7 +942,7 @@ begin
 end;
 
 // ❌ MAUVAIS : Ordre différent
-procedure Thread3Operation;
+procedure Thread3Operation;  
 begin
   Lock2.Enter;  // Ordre inversé → risque de deadlock
   try
@@ -962,7 +962,7 @@ end;
 
 ```pascal
 // ❌ MAUVAIS : Verrou trop large
-procedure BadExample;
+procedure BadExample;  
 begin
   Lock.Enter;
   try
@@ -975,7 +975,7 @@ begin
 end;
 
 // ✅ BON : Verrou minimal
-procedure GoodExample;
+procedure GoodExample;  
 var
   LocalData: TData;
 begin
@@ -1022,21 +1022,21 @@ type
     function Count: Integer;
   end;
 
-constructor TThreadSafeList<T>.Create;
+constructor TThreadSafeList<T>.Create;  
 begin
   inherited;
   FList := TList<T>.Create;
   FLock := TCriticalSection.Create;
 end;
 
-destructor TThreadSafeList<T>.Destroy;
+destructor TThreadSafeList<T>.Destroy;  
 begin
   FLock.Free;
   FList.Free;
   inherited;
 end;
 
-procedure TThreadSafeList<T>.Add(const Item: T);
+procedure TThreadSafeList<T>.Add(const Item: T);  
 begin
   FLock.Enter;
   try
@@ -1071,7 +1071,7 @@ implementation
 uses
   MyThreadUnit;
 
-procedure TConcurrencyTest.TestNoRaceCondition;
+procedure TConcurrencyTest.TestNoRaceCondition;  
 const
   THREAD_COUNT = 100;
   ITERATIONS = 10000;
@@ -1094,7 +1094,7 @@ begin
     EXPECTED_VALUE, GetSharedCounter);
 end;
 
-procedure TConcurrencyTest.TestNoDeadlock;
+procedure TConcurrencyTest.TestNoDeadlock;  
 var
   Thread1, Thread2: TMyThread;
   StartTime: TDateTime;
@@ -1166,7 +1166,7 @@ drmemory.exe -- monprogramme.exe
 
 **Installation Linux :**
 ```bash
-sudo apt-get install drmemory
+sudo apt-get install drmemory  
 drmemory -- ./monprogramme
 ```
 
@@ -1219,7 +1219,7 @@ uses
 
 function GetStackTrace: string; forward;
 
-constructor TSyncValidator.Create;
+constructor TSyncValidator.Create;  
 begin
   inherited Create;
   FLocks := specialize TDictionary<string, TLockInfo>.Create;
@@ -1227,14 +1227,14 @@ begin
   FDetectDeadlocks := True;
 end;
 
-destructor TSyncValidator.Destroy;
+destructor TSyncValidator.Destroy;  
 begin
   FLocks.Free;
   FValidatorLock.Free;
   inherited;
 end;
 
-procedure TSyncValidator.RegisterLockAcquire(const LockName: string);
+procedure TSyncValidator.RegisterLockAcquire(const LockName: string);  
 var
   Info: TLockInfo;
 begin
@@ -1261,7 +1261,7 @@ begin
   end;
 end;
 
-procedure TSyncValidator.RegisterLockRelease(const LockName: string);
+procedure TSyncValidator.RegisterLockRelease(const LockName: string);  
 var
   Info: TLockInfo;
   HoldTime: Int64;
@@ -1294,7 +1294,7 @@ begin
   end;
 end;
 
-procedure TSyncValidator.CheckForDeadlocks;
+procedure TSyncValidator.CheckForDeadlocks;  
 var
   Pair: specialize TPair<string, TLockInfo>;
   WaitTime: Int64;
@@ -1311,7 +1311,7 @@ begin
   end;
 end;
 
-procedure TSyncValidator.GenerateReport(const FileName: string);
+procedure TSyncValidator.GenerateReport(const FileName: string);  
 var
   F: TextFile;
   Pair: specialize TPair<string, TLockInfo>;
@@ -1344,7 +1344,7 @@ begin
   end;
 end;
 
-function GetStackTrace: string;
+function GetStackTrace: string;  
 begin
   // Implémentation simplifiée
   // Dans un vrai projet, utiliser des unités comme lineinfo
@@ -1369,7 +1369,7 @@ uses SyncValidator;
 var
   MyLock: TCriticalSection;
 
-procedure ThreadSafeOperation;
+procedure ThreadSafeOperation;  
 begin
   GlobalSyncValidator.RegisterLockAcquire('MyLock');
   MyLock.Enter;
@@ -1415,7 +1415,7 @@ type
 
 implementation
 
-constructor TRendezvousPoint.Create(ExpectedThreads: Integer);
+constructor TRendezvousPoint.Create(ExpectedThreads: Integer);  
 begin
   inherited Create;
   FExpectedThreads := ExpectedThreads;
@@ -1424,14 +1424,14 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TRendezvousPoint.Destroy;
+destructor TRendezvousPoint.Destroy;  
 begin
   FBarrier.Free;
   FLock.Free;
   inherited;
 end;
 
-procedure TRendezvousPoint.Arrive;
+procedure TRendezvousPoint.Arrive;  
 var
   AllArrived: Boolean;
 begin
@@ -1453,7 +1453,7 @@ begin
   FBarrier.WaitFor(INFINITE);
 end;
 
-procedure TRendezvousPoint.Reset;
+procedure TRendezvousPoint.Reset;  
 begin
   FLock.Enter;
   try
@@ -1481,7 +1481,7 @@ type
     procedure Execute; override;
   end;
 
-procedure TDebugThread.Execute;
+procedure TDebugThread.Execute;  
 begin
   WriteLn(Format('Thread %d: Phase 1', [ThreadID]));
   Phase1Processing;
@@ -1564,7 +1564,7 @@ implementation
 uses
   DateUtils;
 
-constructor TThreadSnapshot.Create(AThreadRegistry: TThreadList);
+constructor TThreadSnapshot.Create(AThreadRegistry: TThreadList);  
 begin
   inherited Create;
   FThreadRegistry := AThreadRegistry;
@@ -1572,14 +1572,14 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TThreadSnapshot.Destroy;
+destructor TThreadSnapshot.Destroy;  
 begin
   FStates.Free;
   FLock.Free;
   inherited;
 end;
 
-procedure TThreadSnapshot.CaptureSnapshot;
+procedure TThreadSnapshot.CaptureSnapshot;  
 var
   List: TList;
   i: Integer;
@@ -1624,7 +1624,7 @@ begin
   end;
 end;
 
-procedure TThreadSnapshot.SaveToFile(const FileName: string);
+procedure TThreadSnapshot.SaveToFile(const FileName: string);  
 var
   F: TextFile;
   i: Integer;
@@ -1661,7 +1661,7 @@ begin
   end;
 end;
 
-procedure TThreadSnapshot.Clear;
+procedure TThreadSnapshot.Clear;  
 var
   i: Integer;
 begin
@@ -1683,7 +1683,7 @@ var
   Snapshot: TThreadSnapshot;
 
 // Dans votre code de débogage
-procedure CaptureSystemState;
+procedure CaptureSystemState;  
 begin
   Snapshot := TThreadSnapshot.Create(ThreadRegistry);
   try
@@ -1730,7 +1730,7 @@ type
     constructor Create(Iterations, Delay: Integer);
   end;
 
-constructor TStressThread.Create(Iterations, Delay: Integer);
+constructor TStressThread.Create(Iterations, Delay: Integer);  
 begin
   inherited Create(True);
   FIterations := Iterations;
@@ -1738,7 +1738,7 @@ begin
   FreeOnTerminate := False;
 end;
 
-procedure TStressThread.Execute;
+procedure TStressThread.Execute;  
 var
   i: Integer;
 begin
@@ -1752,7 +1752,7 @@ begin
   end;
 end;
 
-procedure RunStressTest(ThreadCount, Iterations, MaxDelay: Integer);
+procedure RunStressTest(ThreadCount, Iterations, MaxDelay: Integer);  
 var
   Threads: array of TStressThread;
   i: Integer;
@@ -1838,25 +1838,25 @@ var
 
 implementation
 
-constructor TFaultInjector.Create(FailureRate: Double);
+constructor TFaultInjector.Create(FailureRate: Double);  
 begin
   inherited Create;
   FFailureRate := FailureRate;
   FEnabled := True;
 end;
 
-function TFaultInjector.ShouldFail: Boolean;
+function TFaultInjector.ShouldFail: Boolean;  
 begin
   Result := FEnabled and (Random < FFailureRate);
 end;
 
-procedure TFaultInjector.MaybeThrowException(const Context: string);
+procedure TFaultInjector.MaybeThrowException(const Context: string);  
 begin
   if ShouldFail then
     raise Exception.CreateFmt('Panne injectée dans: %s', [Context]);
 end;
 
-procedure TFaultInjector.MaybeDelay(MaxDelayMs: Integer);
+procedure TFaultInjector.MaybeDelay(MaxDelayMs: Integer);  
 begin
   if ShouldFail then
   begin
@@ -1881,7 +1881,7 @@ end.
 ```pascal
 uses FaultInjection;
 
-procedure CriticalOperation;
+procedure CriticalOperation;  
 begin
   // Injecter potentiellement un délai
   GlobalFaultInjector.MaybeDelay(1000);

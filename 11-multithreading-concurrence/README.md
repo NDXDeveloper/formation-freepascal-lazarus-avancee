@@ -46,14 +46,14 @@ Le **multithreading** permet à votre programme d'exécuter plusieurs tâches en
 - **Programme multi-threadé** = Plusieurs cuisiniers qui travaillent simultanément
 
 ```
-Séquentiel (1 thread) :
-Tâche A ████████ → Tâche B ████████ → Tâche C ████████
+Séquentiel (1 thread) :  
+Tâche A ████████ → Tâche B ████████ → Tâche C ████████  
 Temps total : 24 secondes
 
-Multi-threadé (3 threads) :
-Tâche A ████████
-Tâche B ████████
-Tâche C ████████
+Multi-threadé (3 threads) :  
+Tâche A ████████  
+Tâche B ████████  
+Tâche C ████████  
 Temps total : 8 secondes
 ```
 
@@ -63,15 +63,15 @@ Il est important de distinguer ces deux concepts :
 
 **Concurrence** : Gérer plusieurs tâches en même temps (pas forcément simultanément)
 ```
-Thread 1 : ████░░░░████░░░░████
-Thread 2 : ░░░░████░░░░████░░░░
+Thread 1 : ████░░░░████░░░░████  
+Thread 2 : ░░░░████░░░░████░░░░  
 Un seul cœur, les threads se partagent le temps
 ```
 
 **Parallélisme** : Exécuter plusieurs tâches réellement en même temps
 ```
-Cœur 1 : ████████████████████
-Cœur 2 : ████████████████████
+Cœur 1 : ████████████████████  
+Cœur 2 : ████████████████████  
 Deux cœurs, exécution vraiment simultanée
 ```
 
@@ -256,8 +256,8 @@ Semaine 5-6 : Chapitres 11.7-11.10 (Maîtrise)
 
 #### Pour les développeurs expérimentés
 ```
-Jour 1-3 : Parcours rapide 11.1-11.3 (révision)
-Jour 4-7 : Focus sur 11.4-11.6 (nouveaux patterns)
+Jour 1-3 : Parcours rapide 11.1-11.3 (révision)  
+Jour 4-7 : Focus sur 11.4-11.6 (nouveaux patterns)  
 Jour 8-10 : Maîtrise 11.7-11.10 (optimisation)
 ```
 

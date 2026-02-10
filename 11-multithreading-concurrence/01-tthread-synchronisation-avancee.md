@@ -47,7 +47,7 @@ type
 
 implementation
 
-procedure TMonThread.Execute;
+procedure TMonThread.Execute;  
 begin
   // Code qui s'exécute dans le thread
   // ATTENTION : Ne pas accéder directement à l'interface graphique ici !
@@ -87,7 +87,7 @@ Les composants visuels de Lazarus (LCL) ne sont **pas thread-safe**. Cela signif
 
 ```pascal
 // ❌ INCORRECT - Ne faites JAMAIS cela !
-procedure TMonThread.Execute;
+procedure TMonThread.Execute;  
 begin
   Label1.Caption := 'Ceci va planter !'; // DANGER !
 end;
@@ -107,14 +107,14 @@ type
     procedure Execute; override;
   end;
 
-procedure TMonThread.MettreAJourInterface;
+procedure TMonThread.MettreAJourInterface;  
 begin
   // Ce code s'exécute dans le thread principal
   // On peut modifier l'interface en toute sécurité
   Form1.Label1.Caption := FMessage;
 end;
 
-procedure TMonThread.Execute;
+procedure TMonThread.Execute;  
 begin
   while not Terminated do
   begin
@@ -134,7 +134,7 @@ end;
 Contrairement à `Synchronize` qui attend que le thread principal exécute le code, `Queue` place la demande dans une file d'attente et continue immédiatement.
 
 ```pascal
-procedure TMonThread.Execute;
+procedure TMonThread.Execute;  
 begin
   // Queue ne bloque pas le thread
   Queue(@MettreAJourInterface);
@@ -159,7 +159,7 @@ var
   Compteur: Integer = 0; // Variable partagée
 
 // Thread 1 et Thread 2 incrémentent le compteur
-procedure TMonThread.Execute;
+procedure TMonThread.Execute;  
 begin
   Inc(Compteur); // ❌ Pas thread-safe !
 end;
@@ -177,7 +177,7 @@ var
   Compteur: Integer = 0;
   CS: TCriticalSection;
 
-procedure TMonThread.Execute;
+procedure TMonThread.Execute;  
 begin
   CS.Enter; // Verrouiller
   try
@@ -272,7 +272,7 @@ var
   Event: TEvent;
 
 // Thread producteur
-procedure TProducteur.Execute;
+procedure TProducteur.Execute;  
 begin
   // Faire un traitement long
   Sleep(5000);
@@ -282,7 +282,7 @@ begin
 end;
 
 // Thread consommateur
-procedure TConsommateur.Execute;
+procedure TConsommateur.Execute;  
 begin
   // Attendre le signal
   Event.WaitFor(INFINITE);
@@ -340,7 +340,7 @@ type
 
 implementation
 
-constructor TDownloadThread.Create(const AURL, ADestination: string);
+constructor TDownloadThread.Create(const AURL, ADestination: string);  
 begin
   inherited Create(True); // Créer suspendu
 
@@ -353,25 +353,25 @@ begin
   FreeOnTerminate := True;
 end;
 
-destructor TDownloadThread.Destroy;
+destructor TDownloadThread.Destroy;  
 begin
   FCS.Free;
   inherited;
 end;
 
-procedure TDownloadThread.UpdateProgress;
+procedure TDownloadThread.UpdateProgress;  
 begin
   // Mise à jour de l'interface (dans le thread principal)
   Form1.ProgressBar1.Position := FProgress;
 end;
 
-procedure TDownloadThread.UpdateStatus;
+procedure TDownloadThread.UpdateStatus;  
 begin
   // Mise à jour de l'interface (dans le thread principal)
   Form1.LabelStatus.Caption := FStatus;
 end;
 
-procedure TDownloadThread.Execute;
+procedure TDownloadThread.Execute;  
 var
   Client: TFPHTTPClient;
   Stream: TFileStream;
@@ -416,7 +416,7 @@ begin
   end;
 end;
 
-function TDownloadThread.GetProgress: Integer;
+function TDownloadThread.GetProgress: Integer;  
 begin
   FCS.Enter;
   try
@@ -426,7 +426,7 @@ begin
   end;
 end;
 
-function TDownloadThread.GetStatus: string;
+function TDownloadThread.GetStatus: string;  
 begin
   FCS.Enter;
   try
@@ -445,7 +445,7 @@ end.
 var
   DownloadThread: TDownloadThread;
 
-procedure TForm1.ButtonStartClick(Sender: TObject);
+procedure TForm1.ButtonStartClick(Sender: TObject);  
 begin
   DownloadThread := TDownloadThread.Create(
     'http://example.com/fichier.zip',
@@ -454,7 +454,7 @@ begin
   DownloadThread.Start;
 end;
 
-procedure TForm1.ButtonCancelClick(Sender: TObject);
+procedure TForm1.ButtonCancelClick(Sender: TObject);  
 begin
   if Assigned(DownloadThread) then
     DownloadThread.Terminate;
@@ -466,7 +466,7 @@ end;
 ### 1. Toujours gérer la terminaison proprement
 
 ```pascal
-procedure TMonThread.Execute;
+procedure TMonThread.Execute;  
 begin
   while not Terminated do
   begin
@@ -482,13 +482,13 @@ end;
 
 ```pascal
 // ❌ INCORRECT
-procedure TMonThread.Execute;
+procedure TMonThread.Execute;  
 begin
   Form1.Edit1.Text := 'Texte'; // DANGER !
 end;
 
 // ✅ CORRECT
-procedure TMonThread.Execute;
+procedure TMonThread.Execute;  
 begin
   Synchronize(@MettreAJourEdit);
 end;
@@ -501,7 +501,7 @@ end;
 var
   ListePartagee: TStringList;
 
-procedure TMonThread.Execute;
+procedure TMonThread.Execute;  
 begin
   ListePartagee.Add('Item'); // Pas thread-safe !
 end;
@@ -511,7 +511,7 @@ var
   ListePartagee: TStringList;
   CS: TCriticalSection;
 
-procedure TMonThread.Execute;
+procedure TMonThread.Execute;  
 begin
   CS.Enter;
   try
@@ -550,7 +550,7 @@ CS1.Leave;
 ### 5. Libérer les ressources correctement
 
 ```pascal
-procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);  
 begin
   // Demander l'arrêt du thread
   if Assigned(MonThread) then

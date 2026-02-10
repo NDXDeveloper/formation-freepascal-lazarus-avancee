@@ -101,7 +101,7 @@ implementation
 
 { TTask }
 
-constructor TTask.Create(AProc: TTaskProc);
+constructor TTask.Create(AProc: TTaskProc);  
 begin
   inherited Create;
   TaskProc := AProc;
@@ -109,14 +109,14 @@ end;
 
 { TWorkerThread }
 
-constructor TWorkerThread.Create(APool: TObject);
+constructor TWorkerThread.Create(APool: TObject);  
 begin
   inherited Create(False); // Démarrer immédiatement
   FPool := APool;
   FreeOnTerminate := False;
 end;
 
-procedure TWorkerThread.Execute;
+procedure TWorkerThread.Execute;  
 var
   Task: TTask;
   Pool: TSimpleThreadPool;
@@ -149,7 +149,7 @@ end;
 
 { TSimpleThreadPool }
 
-constructor TSimpleThreadPool.Create(AWorkerCount: Integer);
+constructor TSimpleThreadPool.Create(AWorkerCount: Integer);  
 var
   i: Integer;
 begin
@@ -170,13 +170,13 @@ begin
     FWorkers[i] := TWorkerThread.Create(Self);
 end;
 
-destructor TSimpleThreadPool.Destroy;
+destructor TSimpleThreadPool.Destroy;  
 begin
   Shutdown;
   inherited;
 end;
 
-procedure TSimpleThreadPool.AddTask(ATask: TTaskProc);
+procedure TSimpleThreadPool.AddTask(ATask: TTaskProc);  
 var
   Task: TTask;
   List: TList;
@@ -199,7 +199,7 @@ begin
   FTaskAvailable.SetEvent;
 end;
 
-function TSimpleThreadPool.GetTask: TTask;
+function TSimpleThreadPool.GetTask: TTask;  
 var
   List: TList;
 begin
@@ -221,7 +221,7 @@ begin
   end;
 end;
 
-procedure TSimpleThreadPool.Shutdown;
+procedure TSimpleThreadPool.Shutdown;  
 var
   i: Integer;
   List: TList;
@@ -261,7 +261,7 @@ end.
 ### Utilisation du thread pool simple
 
 ```pascal
-procedure TForm1.ButtonStartClick(Sender: TObject);
+procedure TForm1.ButtonStartClick(Sender: TObject);  
 var
   Pool: TSimpleThreadPool;
   i: Integer;
@@ -283,7 +283,7 @@ begin
   end;
 end;
 
-procedure TForm1.TacheExemple;
+procedure TForm1.TacheExemple;  
 begin
   // Cette méthode sera exécutée par un worker
   Sleep(1000); // Simuler un traitement
@@ -292,7 +292,7 @@ begin
   TThread.Synchronize(nil, @AfficherMessage);
 end;
 
-procedure TForm1.AfficherMessage;
+procedure TForm1.AfficherMessage;  
 begin
   Memo1.Lines.Add('Tâche terminée à ' + TimeToStr(Now));
 end;
@@ -361,7 +361,7 @@ implementation
 
 { TAdvancedTask }
 
-constructor TAdvancedTask.Create(AProc: TPoolProc; APriority: TTaskPriority; AData: Pointer);
+constructor TAdvancedTask.Create(AProc: TPoolProc; APriority: TTaskPriority; AData: Pointer);  
 begin
   inherited Create;
   FProc := AProc;
@@ -369,7 +369,7 @@ begin
   FData := AData;
 end;
 
-procedure TAdvancedTask.Execute;
+procedure TAdvancedTask.Execute;  
 begin
   if Assigned(FProc) then
     FProc();
@@ -377,7 +377,7 @@ end;
 
 { TTaskComparer }
 
-function TTaskComparer.Compare(const Left, Right: TAdvancedTask): Integer;
+function TTaskComparer.Compare(const Left, Right: TAdvancedTask): Integer;  
 begin
   // Priorité plus élevée = exécution en premier
   Result := Ord(Right.Priority) - Ord(Left.Priority);
@@ -385,7 +385,7 @@ end;
 
 { TAdvancedThreadPool }
 
-constructor TAdvancedThreadPool.Create(AWorkerCount: Integer);
+constructor TAdvancedThreadPool.Create(AWorkerCount: Integer);  
 var
   i: Integer;
 begin
@@ -408,7 +408,7 @@ begin
   end;
 end;
 
-destructor TAdvancedThreadPool.Destroy;
+destructor TAdvancedThreadPool.Destroy;  
 begin
   WaitForAll;
   FShutdown := True;
@@ -421,7 +421,7 @@ begin
   inherited;
 end;
 
-procedure TAdvancedThreadPool.Execute(AProc: TPoolProc; APriority: TTaskPriority);
+procedure TAdvancedThreadPool.Execute(AProc: TPoolProc; APriority: TTaskPriority);  
 var
   Task: TAdvancedTask;
   List: TList<TAdvancedTask>;
@@ -447,14 +447,14 @@ begin
   FTaskAvailable.SetEvent;
 end;
 
-procedure TAdvancedThreadPool.WaitForAll;
+procedure TAdvancedThreadPool.WaitForAll;  
 begin
   // Attendre que toutes les tâches soient terminées
   while GetActiveTaskCount > 0 do
     Sleep(100);
 end;
 
-function TAdvancedThreadPool.GetActiveTaskCount: Integer;
+function TAdvancedThreadPool.GetActiveTaskCount: Integer;  
 begin
   FCS.Enter;
   try
@@ -519,7 +519,7 @@ implementation
 
 { TWorkItem }
 
-constructor TWorkItem.Create(AID: Integer; const AData: string);
+constructor TWorkItem.Create(AID: Integer; const AData: string);  
 begin
   inherited Create;
   ID := AID;
@@ -528,7 +528,7 @@ end;
 
 { TConsumerThread }
 
-constructor TConsumerThread.Create(AQueue: TThreadList; AEvent: TEvent);
+constructor TConsumerThread.Create(AQueue: TThreadList; AEvent: TEvent);  
 begin
   inherited Create(False);
   FWorkQueue := AQueue;
@@ -536,7 +536,7 @@ begin
   FreeOnTerminate := False;
 end;
 
-procedure TConsumerThread.Execute;
+procedure TConsumerThread.Execute;  
 var
   Item: TWorkItem;
   List: TList;
@@ -577,7 +577,7 @@ begin
   end;
 end;
 
-procedure TConsumerThread.ProcessItem(Item: TWorkItem);
+procedure TConsumerThread.ProcessItem(Item: TWorkItem);  
 begin
   // Traitement de l'élément
   WriteLn(Format('Thread %d traite item %d: %s',
@@ -587,7 +587,7 @@ end;
 
 { TProducerConsumer }
 
-constructor TProducerConsumer.Create(AConsumerCount: Integer);
+constructor TProducerConsumer.Create(AConsumerCount: Integer);  
 var
   i: Integer;
 begin
@@ -602,7 +602,7 @@ begin
     FConsumers[i] := TConsumerThread.Create(FWorkQueue, FWorkAvailable);
 end;
 
-destructor TProducerConsumer.Destroy;
+destructor TProducerConsumer.Destroy;  
 var
   i: Integer;
   List: TList;
@@ -631,7 +631,7 @@ begin
   inherited;
 end;
 
-procedure TProducerConsumer.Produce(const AData: string);
+procedure TProducerConsumer.Produce(const AData: string);  
 var
   Item: TWorkItem;
   List: TList;
@@ -662,7 +662,7 @@ end.
 ### Utilisation du Producer-Consumer
 
 ```pascal
-procedure TForm1.TestProducerConsumer;
+procedure TForm1.TestProducerConsumer;  
 var
   PC: TProducerConsumer;
   i: Integer;
@@ -715,7 +715,7 @@ begin
   FOnMainThread := AOnMainThread;
 end;
 
-procedure TCallbackTask.Execute;
+procedure TCallbackTask.Execute;  
 var
   Success: Boolean;
   ErrorMsg: string;
@@ -749,7 +749,7 @@ begin
   end;
 end;
 
-procedure TCallbackTask.DoCallback;
+procedure TCallbackTask.DoCallback;  
 begin
   if Assigned(FCallback) then
     FCallback(FLastSuccess, FLastError);
@@ -761,12 +761,12 @@ end;
 ### Utilisation avec callback
 
 ```pascal
-procedure TForm1.TraitementLong;
+procedure TForm1.TraitementLong;  
 begin
   Sleep(2000); // Traitement long
 end;
 
-procedure TForm1.OnTaskComplete(Success: Boolean; const ErrorMsg: string);
+procedure TForm1.OnTaskComplete(Success: Boolean; const ErrorMsg: string);  
 begin
   if Success then
     ShowMessage('Tâche terminée avec succès')
@@ -774,7 +774,7 @@ begin
     ShowMessage('Erreur : ' + ErrorMsg);
 end;
 
-procedure TForm1.ExecuterAvecCallback;
+procedure TForm1.ExecuterAvecCallback;  
 var
   Task: TCallbackTask;
 begin
@@ -825,7 +825,7 @@ Nombre optimal = Nombre de cœurs × (1 + Temps d'attente / Temps CPU)
 type
   TWorkloadType = (wtCPU, wtIO, wtMixed);
 
-function GetOptimalWorkerCount(WorkloadType: TWorkloadType): Integer;
+function GetOptimalWorkerCount(WorkloadType: TWorkloadType): Integer;  
 var
   CoreCount: Integer;
 begin
@@ -850,7 +850,7 @@ end;
 Il est crucial de gérer les exceptions dans les workers pour éviter les crashs.
 
 ```pascal
-procedure TWorkerThread.Execute;
+procedure TWorkerThread.Execute;  
 var
   Task: TTask;
 begin
@@ -910,7 +910,7 @@ type
     procedure ResetStats;
   end;
 
-function TMonitoredThreadPool.GetStats: TThreadPoolStats;
+function TMonitoredThreadPool.GetStats: TThreadPoolStats;  
 begin
   FStatsCS.Enter;
   try
@@ -920,7 +920,7 @@ begin
   end;
 end;
 
-procedure TMonitoredThreadPool.ResetStats;
+procedure TMonitoredThreadPool.ResetStats;  
 begin
   FStatsCS.Enter;
   try
@@ -972,7 +972,7 @@ uses
 ### Priorités et ordonnancement
 
 ```pascal
-procedure ConfigurerPriorite(Thread: TThread);
+procedure ConfigurerPriorite(Thread: TThread);  
 begin
   {$IFDEF WINDOWS}
   // Sous Windows : priorités plus fines
@@ -1017,7 +1017,7 @@ Pool.AddTask(@CalculerTousLesDoubles);
 ### 3. Toujours nettoyer proprement
 
 ```pascal
-procedure TForm1.FormDestroy(Sender: TObject);
+procedure TForm1.FormDestroy(Sender: TObject);  
 begin
   if Assigned(FPool) then
   begin
@@ -1043,7 +1043,7 @@ type
     function IsTimeout: Boolean;
   end;
 
-function TTimeoutTask.IsTimeout: Boolean;
+function TTimeoutTask.IsTimeout: Boolean;  
 begin
   Result := MilliSecondsBetween(Now, FStartTime) > FTimeout;
 end;
@@ -1075,7 +1075,7 @@ type
     function StealWork: TTask;
   end;
 
-function TWorkStealingWorker.StealWork: TTask;
+function TWorkStealingWorker.StealWork: TTask;  
 var
   i: Integer;
   OtherWorker: TWorkStealingWorker;
@@ -1173,7 +1173,7 @@ implementation
 uses
   FPImage, FPReadJPEG, FPWriteJPEG;
 
-constructor TImageProcessorPool.Create(AWorkerCount: Integer);
+constructor TImageProcessorPool.Create(AWorkerCount: Integer);  
 begin
   inherited Create;
   FPool := TSimpleThreadPool.Create(AWorkerCount);
@@ -1182,14 +1182,14 @@ begin
   FProcessedFiles := 0;
 end;
 
-destructor TImageProcessorPool.Destroy;
+destructor TImageProcessorPool.Destroy;  
 begin
   FPool.Free;
   FCS.Free;
   inherited;
 end;
 
-procedure TImageProcessorPool.ProcessImage(Task: TImageTask);
+procedure TImageProcessorPool.ProcessImage(Task: TImageTask);  
 var
   Image: TFPMemoryImage;
   Reader: TFPReaderJPEG;
@@ -1239,7 +1239,7 @@ begin
   end;
 end;
 
-procedure TImageProcessorPool.UpdateProgress;
+procedure TImageProcessorPool.UpdateProgress;  
 begin
   if Assigned(FOnProgress) then
     FOnProgress(Self);
@@ -1282,7 +1282,7 @@ begin
   end;
 end;
 
-function TImageProcessorPool.GetProgress: Integer;
+function TImageProcessorPool.GetProgress: Integer;  
 begin
   FCS.Enter;
   try
@@ -1301,7 +1301,7 @@ end.
 #### Utilisation du processeur d'images
 
 ```pascal
-procedure TForm1.ButtonProcessClick(Sender: TObject);
+procedure TForm1.ButtonProcessClick(Sender: TObject);  
 begin
   FProcessor := TImageProcessorPool.Create(4);
   FProcessor.OnProgress := @OnImageProgress;
@@ -1314,7 +1314,7 @@ begin
   );
 end;
 
-procedure TForm1.OnImageProgress(Sender: TObject);
+procedure TForm1.OnImageProgress(Sender: TObject);  
 begin
   ProgressBar1.Position := FProcessor.GetProgress;
   LabelStatus.Caption := Format('Progression : %d%%', [FProcessor.GetProgress]);
@@ -1398,13 +1398,13 @@ implementation
 
 { THTTPRequest }
 
-constructor THTTPRequest.Create;
+constructor THTTPRequest.Create;  
 begin
   inherited Create;
   Headers := TStringList.Create;
 end;
 
-destructor THTTPRequest.Destroy;
+destructor THTTPRequest.Destroy;  
 begin
   Headers.Free;
   inherited;
@@ -1412,7 +1412,7 @@ end;
 
 { THTTPResponse }
 
-constructor THTTPResponse.Create;
+constructor THTTPResponse.Create;  
 begin
   inherited Create;
   Headers := TStringList.Create;
@@ -1420,13 +1420,13 @@ begin
   StatusText := 'OK';
 end;
 
-destructor THTTPResponse.Destroy;
+destructor THTTPResponse.Destroy;  
 begin
   Headers.Free;
   inherited;
 end;
 
-function THTTPResponse.ToString: string;
+function THTTPResponse.ToString: string;  
 var
   i: Integer;
 begin
@@ -1441,7 +1441,7 @@ end;
 
 { TWebServer }
 
-constructor TWebServer.Create(APort: Integer; AWorkerCount: Integer);
+constructor TWebServer.Create(APort: Integer; AWorkerCount: Integer);  
 begin
   inherited Create;
   FPort := APort;
@@ -1450,7 +1450,7 @@ begin
   FRunning := False;
 end;
 
-destructor TWebServer.Destroy;
+destructor TWebServer.Destroy;  
 begin
   Stop;
   FPool.Free;
@@ -1460,14 +1460,14 @@ end;
 
 { TListenThread }
 
-constructor TListenThread.Create(AServer: TWebServer);
+constructor TListenThread.Create(AServer: TWebServer);  
 begin
   inherited Create(True); // Créer suspendu
   FServer := AServer;
   FreeOnTerminate := False;
 end;
 
-procedure TListenThread.Execute;
+procedure TListenThread.Execute;  
 var
   ClientSocket: TTCPBlockSocket;
 begin
@@ -1493,14 +1493,14 @@ end;
 
 { TWebServer }
 
-procedure TWebServer.Start;
+procedure TWebServer.Start;  
 begin
   FRunning := True;
   FListenThread := TListenThread.Create(Self);
   FListenThread.Start;
 end;
 
-procedure TWebServer.Stop;
+procedure TWebServer.Stop;  
 begin
   FRunning := False;
 
@@ -1511,7 +1511,7 @@ begin
   end;
 end;
 
-procedure TWebServer.HandleConnection(ClientSocket: TTCPBlockSocket);
+procedure TWebServer.HandleConnection(ClientSocket: TTCPBlockSocket);  
 var
   Request: THTTPRequest;
   Response: THTTPResponse;
@@ -1550,7 +1550,7 @@ begin
   end;
 end;
 
-procedure TWebServer.ParseRequest(const Data: string; Request: THTTPRequest);
+procedure TWebServer.ParseRequest(const Data: string; Request: THTTPRequest);  
 var
   Lines: TStringList;
   FirstLine: string;
@@ -1592,7 +1592,7 @@ end.
 #### Utilisation du serveur web
 
 ```pascal
-procedure TForm1.StartServer;
+procedure TForm1.StartServer;  
 begin
   FServer := TWebServer.Create(8080, 8); // Port 8080, 8 workers
 
@@ -1602,7 +1602,7 @@ begin
   ShowMessage('Serveur démarré sur http://localhost:8080');
 end;
 
-procedure TForm1.HandleHTTPRequest(Request: THTTPRequest; Response: THTTPResponse);
+procedure TForm1.HandleHTTPRequest(Request: THTTPRequest; Response: THTTPResponse);  
 begin
   // Gérer différentes routes
   if Request.URI = '/' then
@@ -1666,21 +1666,21 @@ type
 
 implementation
 
-constructor TParallelCalculator.Create(AWorkerCount: Integer);
+constructor TParallelCalculator.Create(AWorkerCount: Integer);  
 begin
   inherited Create;
   FPool := TSimpleThreadPool.Create(AWorkerCount);
   FCS := TCriticalSection.Create;
 end;
 
-destructor TParallelCalculator.Destroy;
+destructor TParallelCalculator.Destroy;  
 begin
   FPool.Free;
   FCS.Free;
   inherited;
 end;
 
-function TParallelCalculator.ParallelSum(const Data: array of Double): Double;
+function TParallelCalculator.ParallelSum(const Data: array of Double): Double;  
 var
   i, ChunkSize, WorkerCount: Integer;
   Range: TDataRange;
@@ -1767,19 +1767,19 @@ type
     destructor Destroy; override;
   end;
 
-constructor TDebugThreadPool.Create(AWorkerCount: Integer);
+constructor TDebugThreadPool.Create(AWorkerCount: Integer);  
 begin
   inherited;
   FLogCS := TCriticalSection.Create;
 end;
 
-destructor TDebugThreadPool.Destroy;
+destructor TDebugThreadPool.Destroy;  
 begin
   FLogCS.Free;
   inherited;
 end;
 
-procedure TDebugThreadPool.Log(const Msg: string);
+procedure TDebugThreadPool.Log(const Msg: string);  
 begin
   FLogCS.Enter;
   try
@@ -1809,7 +1809,7 @@ type
     function IsDeadlocked: Boolean;
   end;
 
-function TDeadlockDetector.IsDeadlocked: Boolean;
+function TDeadlockDetector.IsDeadlocked: Boolean;  
 begin
   FCS.Enter;
   try
@@ -1841,7 +1841,7 @@ type
     function GetAverageTime: Double; // Temps moyen par tâche
   end;
 
-function TPoolBenchmark.GetThroughput: Double;
+function TPoolBenchmark.GetThroughput: Double;  
 var
   Duration: Double;
 begin
@@ -1872,7 +1872,7 @@ type
     function Pop(var Task: TTask; Timeout: Cardinal): Boolean;
   end;
 
-constructor TLockFreePool.Create(AQueueDepth: Integer);
+constructor TLockFreePool.Create(AQueueDepth: Integer);  
 begin
   inherited Create;
   FQueue := TThreadedQueue<TTask>.Create(AQueueDepth,
@@ -1881,12 +1881,12 @@ begin
   );
 end;
 
-procedure TLockFreePool.Push(Task: TTask);
+procedure TLockFreePool.Push(Task: TTask);  
 begin
   FQueue.PushItem(Task);
 end;
 
-function TLockFreePool.Pop(var Task: TTask; Timeout: Cardinal): Boolean;
+function TLockFreePool.Pop(var Task: TTask; Timeout: Cardinal): Boolean;  
 begin
   Result := (FQueue.PopItem(Task, Timeout) = wrSignaled);
 end;

@@ -41,8 +41,8 @@ Séquentiel:          Parallèle (4 cœurs):
 Différentes opérations exécutées en parallèle.
 
 ```
-Tâche A: Charger données    } En parallèle
-Tâche B: Calculer statistiques }
+Tâche A: Charger données    } En parallèle  
+Tâche B: Calculer statistiques }  
 Tâche C: Générer rapport    }
 ```
 
@@ -111,7 +111,7 @@ procedure ParallelFor(AStartIndex, AEndIndex: Integer;
 uses
   MTProcs;
 
-procedure TraiterElement(Index: Integer);
+procedure TraiterElement(Index: Integer);  
 begin
   WriteLn('Traitement de l''élément ', Index, ' par thread ', GetCurrentThreadId);
   Sleep(100); // Simuler un traitement
@@ -135,7 +135,7 @@ var
   Nombres: array[0..999] of Integer;
   i: Integer;
 
-procedure InitialiserDonnees;
+procedure InitialiserDonnees;  
 var
   i: Integer;
 begin
@@ -143,7 +143,7 @@ begin
     Nombres[i] := i;
 end;
 
-procedure DoublerNombre(Index: Integer);
+procedure DoublerNombre(Index: Integer);  
 begin
   Nombres[Index] := Nombres[Index] * 2;
 end;
@@ -170,7 +170,7 @@ uses
 type
   TDoubleArray = array of Double;
 
-procedure MapParallel(var Data: TDoubleArray; Func: function(X: Double): Double);
+procedure MapParallel(var Data: TDoubleArray; Func: function(X: Double): Double);  
 var
   i: Integer;
 begin
@@ -183,7 +183,7 @@ begin
   );
 end;
 
-function Carre(X: Double): Double;
+function Carre(X: Double): Double;  
 begin
   Result := X * X;
 end;
@@ -255,7 +255,7 @@ begin
   end;
 end;
 
-function EstPair(X: Integer): Boolean;
+function EstPair(X: Integer): Boolean;  
 begin
   Result := (X mod 2) = 0;
 end;
@@ -286,7 +286,7 @@ end.
 uses
   MTProcs, SyncObjs;
 
-function SumParallel(const Data: array of Integer): Int64;
+function SumParallel(const Data: array of Integer): Int64;  
 var
   PartialSums: array of Int64;
   CS: TCriticalSection;
@@ -348,21 +348,21 @@ end.
 uses
   MTProcs;
 
-procedure Tache1;
+procedure Tache1;  
 begin
   WriteLn('Tâche 1 : Chargement des données...');
   Sleep(1000);
   WriteLn('Tâche 1 : Terminée');
 end;
 
-procedure Tache2;
+procedure Tache2;  
 begin
   WriteLn('Tâche 2 : Calcul des statistiques...');
   Sleep(1500);
   WriteLn('Tâche 2 : Terminée');
 end;
 
-procedure Tache3;
+procedure Tache3;  
 begin
   WriteLn('Tâche 3 : Génération du rapport...');
   Sleep(800);
@@ -425,7 +425,7 @@ begin
   end;
 end;
 
-function AnalyserParallel(const Data: array of Integer): TResultat;
+function AnalyserParallel(const Data: array of Integer): TResultat;  
 var
   ThreadCount, ChunkSize, i: Integer;
   Results: array of TResultat;
@@ -496,7 +496,7 @@ type
 
   TImageData = array of array of TRGB;
 
-procedure ConvertirEnNoirEtBlanc(var Image: TImageData);
+procedure ConvertirEnNoirEtBlanc(var Image: TImageData);  
 var
   Height: Integer;
 begin
@@ -523,7 +523,7 @@ begin
   );
 end;
 
-procedure AppliquerFlou(var Image: TImageData; Rayon: Integer);
+procedure AppliquerFlou(var Image: TImageData; Rayon: Integer);  
 var
   Height: Integer;
   Temp: TImageData;
@@ -586,7 +586,7 @@ end.
 uses
   MTProcs, Math, SysUtils, DateUtils;
 
-procedure MergeSort(var Data: array of Integer; Left, Right: Integer);
+procedure MergeSort(var Data: array of Integer; Left, Right: Integer);  
 var
   Middle: Integer;
 
@@ -688,7 +688,7 @@ end.
 uses
   MTProcs, Math, SysUtils, DateUtils, SyncObjs;
 
-function CalculerPiParallel(NombreEchantillons: Int64): Double;
+function CalculerPiParallel(NombreEchantillons: Int64): Double;  
 var
   PointsDansCercle: Int64;
   CS: TCriticalSection;
@@ -773,7 +773,7 @@ type
 
   TSearchResults = array of TSearchResult;
 
-function RechercherDansFichier(const FileName, SearchText: string): TSearchResults;
+function RechercherDansFichier(const FileName, SearchText: string): TSearchResults;  
 var
   Lines: TStringList;
   i: Integer;
@@ -805,7 +805,7 @@ begin
   Result := Results;
 end;
 
-function RechercherDansRepertoire(const Directory, SearchText: string): TSearchResults;
+function RechercherDansRepertoire(const Directory, SearchText: string): TSearchResults;  
 var
   FileList: TStringList;
   AllResults: array of TSearchResults;
@@ -887,7 +887,7 @@ type
     Efficiency: Double;
   end;
 
-function BenchmarkParallel(SequentialProc, ParallelProc: TProcedure): TBenchmarkResult;
+function BenchmarkParallel(SequentialProc, ParallelProc: TProcedure): TBenchmarkResult;  
 var
   Start: TDateTime;
   ThreadCount: Integer;
@@ -1075,7 +1075,7 @@ uses
   MTProcs;
 
 // ❌ MAUVAIS - Déséquilibre si les tâches ont des durées variables
-procedure MauvaisEquilibrage(const Tasks: array of Integer);
+procedure MauvaisEquilibrage(const Tasks: array of Integer);  
 var
   ChunkSize, ThreadCount: Integer;
 begin
@@ -1098,7 +1098,7 @@ begin
 end;
 
 // ✅ BON - Work stealing : les threads piochent dans une queue commune
-procedure BonEquilibrage(const Tasks: array of Integer);
+procedure BonEquilibrage(const Tasks: array of Integer);  
 begin
   // MTProcs fait du work stealing automatiquement
   ProcThreadPool.DoParallel(
@@ -1165,7 +1165,7 @@ implementation
 
 { TPipelineStageThread }
 
-constructor TPipelineStageThread.Create(APipeline: TPipeline; AStageIndex: Integer);
+constructor TPipelineStageThread.Create(APipeline: TPipeline; AStageIndex: Integer);  
 begin
   inherited Create(False); // Démarrer immédiatement
   FPipeline := APipeline;
@@ -1173,7 +1173,7 @@ begin
   FreeOnTerminate := False;
 end;
 
-procedure TPipelineStageThread.Execute;
+procedure TPipelineStageThread.Execute;  
 begin
   case FStageIndex of
     0: FPipeline.Stage1Worker;
@@ -1184,7 +1184,7 @@ end;
 
 { TPipeline }
 
-constructor TPipeline.Create;
+constructor TPipeline.Create;  
 begin
   inherited Create;
 
@@ -1194,7 +1194,7 @@ begin
   FRunning := False;
 end;
 
-destructor TPipeline.Destroy;
+destructor TPipeline.Destroy;  
 begin
   Stop;
   FStage1Queue.Free;
@@ -1203,7 +1203,7 @@ begin
   inherited;
 end;
 
-procedure TPipeline.Stage1Worker;
+procedure TPipeline.Stage1Worker;  
 var
   Data: TDataItem;
 begin
@@ -1221,7 +1221,7 @@ begin
   end;
 end;
 
-procedure TPipeline.Stage2Worker;
+procedure TPipeline.Stage2Worker;  
 var
   Data: TDataItem;
 begin
@@ -1236,7 +1236,7 @@ begin
   end;
 end;
 
-procedure TPipeline.Stage3Worker;
+procedure TPipeline.Stage3Worker;  
 var
   Data: TDataItem;
 begin
@@ -1250,7 +1250,7 @@ begin
   end;
 end;
 
-procedure TPipeline.Start;
+procedure TPipeline.Start;  
 begin
   FRunning := True;
 
@@ -1259,7 +1259,7 @@ begin
   FWorkers[2] := TPipelineStageThread.Create(Self, 2);
 end;
 
-procedure TPipeline.Stop;
+procedure TPipeline.Stop;  
 var
   i: Integer;
 begin
@@ -1273,12 +1273,12 @@ begin
     end;
 end;
 
-procedure TPipeline.AddInput(Data: TDataItem);
+procedure TPipeline.AddInput(Data: TDataItem);  
 begin
   FStage1Queue.PushItem(Data);
 end;
 
-function TPipeline.GetOutput(out Data: TDataItem; Timeout: Cardinal): Boolean;
+function TPipeline.GetOutput(out Data: TDataItem; Timeout: Cardinal): Boolean;  
 begin
   Result := FOutputQueue.PopItem(Data, Timeout) = wrSignaled;
 end;
@@ -1373,12 +1373,12 @@ begin
 end;
 
 // Fonctions d'exemple
-function Carre(const X: Integer): Integer;
+function Carre(const X: Integer): Integer;  
 begin
   Result := X * X;
 end;
 
-function Additionner(const A, B: Integer): Integer;
+function Additionner(const A, B: Integer): Integer;  
 begin
   Result := A + B;
 end;
@@ -1412,7 +1412,7 @@ Implémentation parallèle du tri rapide.
 uses
   MTProcs, SysUtils, DateUtils;
 
-procedure ParallelQuickSort(var Data: array of Integer; Left, Right: Integer);
+procedure ParallelQuickSort(var Data: array of Integer; Left, Right: Integer);  
 const
   THRESHOLD = 1000; // En dessous de ce seuil, tri séquentiel
 var
@@ -1557,7 +1557,7 @@ begin
 end;
 
 // Utilisation
-procedure TraiterAvecGestionErreurs;
+procedure TraiterAvecGestionErreurs;  
 begin
   try
     SafeParallelFor(0, 99,
@@ -1609,20 +1609,20 @@ type
     procedure PrintReport;
   end;
 
-constructor TActivityLogger.Create;
+constructor TActivityLogger.Create;  
 begin
   inherited;
   SetLength(FActivities, 0);
   FCS := TCriticalSection.Create;
 end;
 
-destructor TActivityLogger.Destroy;
+destructor TActivityLogger.Destroy;  
 begin
   FCS.Free;
   inherited;
 end;
 
-procedure TActivityLogger.LogStart(TaskIndex: Integer);
+procedure TActivityLogger.LogStart(TaskIndex: Integer);  
 var
   Activity: TThreadActivity;
 begin
@@ -1639,7 +1639,7 @@ begin
   end;
 end;
 
-procedure TActivityLogger.LogEnd(TaskIndex: Integer);
+procedure TActivityLogger.LogEnd(TaskIndex: Integer);  
 var
   i: Integer;
   ThreadID: TThreadID;
@@ -1661,7 +1661,7 @@ begin
   end;
 end;
 
-procedure TActivityLogger.PrintReport;
+procedure TActivityLogger.PrintReport;  
 var
   i: Integer;
   Duration: Double;
@@ -1743,7 +1743,7 @@ type
     procedure PrintSuggestions;
   end;
 
-function TPerformanceAnalyzer.Analyze: TPerformanceIssue;
+function TPerformanceAnalyzer.Analyze: TPerformanceIssue;  
 var
   i: Integer;
   Sum, Mean, Variance, StdDev: Double;
@@ -1772,7 +1772,7 @@ begin
     Result := piLoadImbalance; // Par défaut
 end;
 
-procedure TPerformanceAnalyzer.PrintSuggestions;
+procedure TPerformanceAnalyzer.PrintSuggestions;  
 begin
   case Analyze of
     piLoadImbalance:
@@ -1796,7 +1796,7 @@ MTProcs fonctionne de manière identique sur Windows et Ubuntu, mais il existe d
 uses
   Windows;
 
-procedure OptimizeForWindows;
+procedure OptimizeForWindows;  
 begin
   // Définir l'affinité processeur
   SetProcessAffinityMask(GetCurrentProcess, $FF); // Tous les cœurs
@@ -1810,7 +1810,7 @@ end;
 uses
   BaseUnix, Unix;
 
-procedure OptimizeForLinux;
+procedure OptimizeForLinux;  
 begin
   // Définir la politique de scheduling
   // Nice value : -20 (haute priorité) à 19 (basse priorité)
@@ -1845,7 +1845,7 @@ end.
 
 ```pascal
 // Benchmark multi-plateforme
-procedure BenchmarkPlatform;
+procedure BenchmarkPlatform;  
 var
   Start: TDateTime;
   i: Integer;
@@ -1941,7 +1941,7 @@ begin
   FreeOnTerminate := False;
 end;
 
-procedure TParallelForThread.Execute;
+procedure TParallelForThread.Execute;  
 var
   j: Integer;
 begin

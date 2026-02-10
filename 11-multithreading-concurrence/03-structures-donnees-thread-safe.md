@@ -20,13 +20,13 @@ var
   Liste: TList;
 
 // Thread 1
-procedure Thread1.Execute;
+procedure Thread1.Execute;  
 begin
   Liste.Add(Pointer(1)); // Peut causer une corruption !
 end;
 
 // Thread 2
-procedure Thread2.Execute;
+procedure Thread2.Execute;  
 begin
   Liste.Add(Pointer(2)); // Peut causer une corruption !
 end;
@@ -153,7 +153,7 @@ implementation
 
 { TProducerThread }
 
-constructor TProducerThread.Create(AList: TThreadList; AID: Integer);
+constructor TProducerThread.Create(AList: TThreadList; AID: Integer);  
 begin
   inherited Create(False);
   FList := AList;
@@ -161,7 +161,7 @@ begin
   FreeOnTerminate := True;
 end;
 
-procedure TProducerThread.Execute;
+procedure TProducerThread.Execute;  
 var
   i: Integer;
   Value: PtrInt;
@@ -178,14 +178,14 @@ end;
 
 { TConsumerThread }
 
-constructor TConsumerThread.Create(AList: TThreadList);
+constructor TConsumerThread.Create(AList: TThreadList);  
 begin
   inherited Create(False);
   FList := AList;
   FreeOnTerminate := True;
 end;
 
-procedure TConsumerThread.Execute;
+procedure TConsumerThread.Execute;  
 var
   InternalList: TList;
   Value: PtrInt;
@@ -215,7 +215,7 @@ end.
 ### Utilisation
 
 ```pascal
-procedure TestThreadSafeList;
+procedure TestThreadSafeList;  
 var
   SharedList: TThreadList;
   Producer1, Producer2: TProducerThread;
@@ -290,14 +290,14 @@ implementation
 
 { TThreadSafeList<T> }
 
-constructor TThreadSafeList<T>.Create;
+constructor TThreadSafeList<T>.Create;  
 begin
   inherited Create;
   FList := TList<T>.Create;
   FLock := TCriticalSection.Create;
 end;
 
-destructor TThreadSafeList<T>.Destroy;
+destructor TThreadSafeList<T>.Destroy;  
 begin
   FLock.Enter;
   try
@@ -309,7 +309,7 @@ begin
   inherited;
 end;
 
-procedure TThreadSafeList<T>.Add(const Item: T);
+procedure TThreadSafeList<T>.Add(const Item: T);  
 begin
   FLock.Enter;
   try
@@ -319,7 +319,7 @@ begin
   end;
 end;
 
-function TThreadSafeList<T>.Remove(const Item: T): Boolean;
+function TThreadSafeList<T>.Remove(const Item: T): Boolean;  
 var
   Index: Integer;
 begin
@@ -334,7 +334,7 @@ begin
   end;
 end;
 
-procedure TThreadSafeList<T>.Clear;
+procedure TThreadSafeList<T>.Clear;  
 begin
   FLock.Enter;
   try
@@ -344,7 +344,7 @@ begin
   end;
 end;
 
-function TThreadSafeList<T>.Count: Integer;
+function TThreadSafeList<T>.Count: Integer;  
 begin
   FLock.Enter;
   try
@@ -354,7 +354,7 @@ begin
   end;
 end;
 
-function TThreadSafeList<T>.Get(Index: Integer): T;
+function TThreadSafeList<T>.Get(Index: Integer): T;  
 begin
   FLock.Enter;
   try
@@ -364,7 +364,7 @@ begin
   end;
 end;
 
-procedure TThreadSafeList<T>.Put(Index: Integer; const Value: T);
+procedure TThreadSafeList<T>.Put(Index: Integer; const Value: T);  
 begin
   FLock.Enter;
   try
@@ -374,18 +374,18 @@ begin
   end;
 end;
 
-function TThreadSafeList<T>.Lock: TList<T>;
+function TThreadSafeList<T>.Lock: TList<T>;  
 begin
   FLock.Enter;
   Result := FList;
 end;
 
-procedure TThreadSafeList<T>.Unlock;
+procedure TThreadSafeList<T>.Unlock;  
 begin
   FLock.Leave;
 end;
 
-function TThreadSafeList<T>.Contains(const Item: T): Boolean;
+function TThreadSafeList<T>.Contains(const Item: T): Boolean;  
 begin
   FLock.Enter;
   try
@@ -395,7 +395,7 @@ begin
   end;
 end;
 
-function TThreadSafeList<T>.IndexOf(const Item: T): Integer;
+function TThreadSafeList<T>.IndexOf(const Item: T): Integer;  
 begin
   FLock.Enter;
   try
@@ -405,7 +405,7 @@ begin
   end;
 end;
 
-procedure TThreadSafeList<T>.Sort(const Comparer: IComparer<T>);
+procedure TThreadSafeList<T>.Sort(const Comparer: IComparer<T>);  
 begin
   FLock.Enter;
   try
@@ -498,14 +498,14 @@ implementation
 
 { TThreadSafeDictionary<TKey, TValue> }
 
-constructor TThreadSafeDictionary<TKey, TValue>.Create;
+constructor TThreadSafeDictionary<TKey, TValue>.Create;  
 begin
   inherited Create;
   FDictionary := TDictionary<TKey, TValue>.Create;
   FLock := TMultiReadExclusiveWriteSynchronizer.Create;
 end;
 
-destructor TThreadSafeDictionary<TKey, TValue>.Destroy;
+destructor TThreadSafeDictionary<TKey, TValue>.Destroy;  
 begin
   FLock.BeginWrite;
   try
@@ -517,7 +517,7 @@ begin
   inherited;
 end;
 
-procedure TThreadSafeDictionary<TKey, TValue>.Add(const Key: TKey; const Value: TValue);
+procedure TThreadSafeDictionary<TKey, TValue>.Add(const Key: TKey; const Value: TValue);  
 begin
   FLock.BeginWrite;
   try
@@ -527,7 +527,7 @@ begin
   end;
 end;
 
-procedure TThreadSafeDictionary<TKey, TValue>.AddOrSetValue(const Key: TKey; const Value: TValue);
+procedure TThreadSafeDictionary<TKey, TValue>.AddOrSetValue(const Key: TKey; const Value: TValue);  
 begin
   FLock.BeginWrite;
   try
@@ -537,7 +537,7 @@ begin
   end;
 end;
 
-function TThreadSafeDictionary<TKey, TValue>.Remove(const Key: TKey): Boolean;
+function TThreadSafeDictionary<TKey, TValue>.Remove(const Key: TKey): Boolean;  
 begin
   FLock.BeginWrite;
   try
@@ -547,7 +547,7 @@ begin
   end;
 end;
 
-procedure TThreadSafeDictionary<TKey, TValue>.Clear;
+procedure TThreadSafeDictionary<TKey, TValue>.Clear;  
 begin
   FLock.BeginWrite;
   try
@@ -557,7 +557,7 @@ begin
   end;
 end;
 
-function TThreadSafeDictionary<TKey, TValue>.TryGetValue(const Key: TKey; out Value: TValue): Boolean;
+function TThreadSafeDictionary<TKey, TValue>.TryGetValue(const Key: TKey; out Value: TValue): Boolean;  
 begin
   FLock.BeginRead;
   try
@@ -567,7 +567,7 @@ begin
   end;
 end;
 
-function TThreadSafeDictionary<TKey, TValue>.ContainsKey(const Key: TKey): Boolean;
+function TThreadSafeDictionary<TKey, TValue>.ContainsKey(const Key: TKey): Boolean;  
 begin
   FLock.BeginRead;
   try
@@ -577,7 +577,7 @@ begin
   end;
 end;
 
-function TThreadSafeDictionary<TKey, TValue>.Count: Integer;
+function TThreadSafeDictionary<TKey, TValue>.Count: Integer;  
 begin
   FLock.BeginRead;
   try
@@ -587,22 +587,22 @@ begin
   end;
 end;
 
-procedure TThreadSafeDictionary<TKey, TValue>.BeginRead;
+procedure TThreadSafeDictionary<TKey, TValue>.BeginRead;  
 begin
   FLock.BeginRead;
 end;
 
-procedure TThreadSafeDictionary<TKey, TValue>.EndRead;
+procedure TThreadSafeDictionary<TKey, TValue>.EndRead;  
 begin
   FLock.EndRead;
 end;
 
-procedure TThreadSafeDictionary<TKey, TValue>.BeginWrite;
+procedure TThreadSafeDictionary<TKey, TValue>.BeginWrite;  
 begin
   FLock.BeginWrite;
 end;
 
-procedure TThreadSafeDictionary<TKey, TValue>.EndWrite;
+procedure TThreadSafeDictionary<TKey, TValue>.EndWrite;  
 begin
   FLock.EndWrite;
 end;
@@ -680,7 +680,7 @@ implementation
 
 { TThreadSafeQueue<T> }
 
-constructor TThreadSafeQueue<T>.Create(AMaxSize: Integer);
+constructor TThreadSafeQueue<T>.Create(AMaxSize: Integer);  
 begin
   inherited Create;
   FQueue := TQueue<T>.Create;
@@ -689,7 +689,7 @@ begin
   FMaxSize := AMaxSize;
 end;
 
-destructor TThreadSafeQueue<T>.Destroy;
+destructor TThreadSafeQueue<T>.Destroy;  
 begin
   FLock.Enter;
   try
@@ -702,7 +702,7 @@ begin
   inherited;
 end;
 
-function TThreadSafeQueue<T>.Enqueue(const Item: T; Timeout: Cardinal): Boolean;
+function TThreadSafeQueue<T>.Enqueue(const Item: T; Timeout: Cardinal): Boolean;  
 var
   StartTime: TDateTime;
 begin
@@ -736,7 +736,7 @@ begin
   end;
 end;
 
-function TThreadSafeQueue<T>.Dequeue(out Item: T; Timeout: Cardinal): Boolean;
+function TThreadSafeQueue<T>.Dequeue(out Item: T; Timeout: Cardinal): Boolean;  
 begin
   Result := False;
 
@@ -760,7 +760,7 @@ begin
   end;
 end;
 
-function TThreadSafeQueue<T>.TryDequeue(out Item: T): Boolean;
+function TThreadSafeQueue<T>.TryDequeue(out Item: T): Boolean;  
 begin
   FLock.Enter;
   try
@@ -776,7 +776,7 @@ begin
   end;
 end;
 
-function TThreadSafeQueue<T>.Count: Integer;
+function TThreadSafeQueue<T>.Count: Integer;  
 begin
   FLock.Enter;
   try
@@ -786,7 +786,7 @@ begin
   end;
 end;
 
-function TThreadSafeQueue<T>.IsEmpty: Boolean;
+function TThreadSafeQueue<T>.IsEmpty: Boolean;  
 begin
   FLock.Enter;
   try
@@ -796,7 +796,7 @@ begin
   end;
 end;
 
-function TThreadSafeQueue<T>.IsFull: Boolean;
+function TThreadSafeQueue<T>.IsFull: Boolean;  
 begin
   FLock.Enter;
   try
@@ -806,7 +806,7 @@ begin
   end;
 end;
 
-procedure TThreadSafeQueue<T>.Clear;
+procedure TThreadSafeQueue<T>.Clear;  
 begin
   FLock.Enter;
   try
@@ -835,7 +835,7 @@ var
   Msg: TMessage;
 
 // Thread producteur
-procedure ProducerThread;
+procedure ProducerThread;  
 var
   i: Integer;
 begin
@@ -851,7 +851,7 @@ begin
 end;
 
 // Thread consommateur
-procedure ConsumerThread;
+procedure ConsumerThread;  
 var
   Msg: TMessage;
 begin
@@ -899,14 +899,14 @@ implementation
 
 { TThreadSafeStack<T> }
 
-constructor TThreadSafeStack<T>.Create;
+constructor TThreadSafeStack<T>.Create;  
 begin
   inherited Create;
   FStack := TStack<T>.Create;
   FLock := TCriticalSection.Create;
 end;
 
-destructor TThreadSafeStack<T>.Destroy;
+destructor TThreadSafeStack<T>.Destroy;  
 begin
   FLock.Enter;
   try
@@ -918,7 +918,7 @@ begin
   inherited;
 end;
 
-procedure TThreadSafeStack<T>.Push(const Item: T);
+procedure TThreadSafeStack<T>.Push(const Item: T);  
 begin
   FLock.Enter;
   try
@@ -928,7 +928,7 @@ begin
   end;
 end;
 
-function TThreadSafeStack<T>.Pop(out Item: T): Boolean;
+function TThreadSafeStack<T>.Pop(out Item: T): Boolean;  
 begin
   FLock.Enter;
   try
@@ -940,7 +940,7 @@ begin
   end;
 end;
 
-function TThreadSafeStack<T>.TryPeek(out Item: T): Boolean;
+function TThreadSafeStack<T>.TryPeek(out Item: T): Boolean;  
 begin
   FLock.Enter;
   try
@@ -952,7 +952,7 @@ begin
   end;
 end;
 
-function TThreadSafeStack<T>.Count: Integer;
+function TThreadSafeStack<T>.Count: Integer;  
 begin
   FLock.Enter;
   try
@@ -962,7 +962,7 @@ begin
   end;
 end;
 
-function TThreadSafeStack<T>.IsEmpty: Boolean;
+function TThreadSafeStack<T>.IsEmpty: Boolean;  
 begin
   FLock.Enter;
   try
@@ -972,7 +972,7 @@ begin
   end;
 end;
 
-procedure TThreadSafeStack<T>.Clear;
+procedure TThreadSafeStack<T>.Clear;  
 begin
   FLock.Enter;
   try
@@ -1019,39 +1019,39 @@ implementation
 
 { TAtomicCounter }
 
-constructor TAtomicCounter.Create(InitialValue: Integer);
+constructor TAtomicCounter.Create(InitialValue: Integer);  
 begin
   inherited Create;
   FValue := InitialValue;
 end;
 
-function TAtomicCounter.Increment: Integer;
+function TAtomicCounter.Increment: Integer;  
 begin
   Result := InterlockedIncrement(FValue);
 end;
 
-function TAtomicCounter.Decrement: Integer;
+function TAtomicCounter.Decrement: Integer;  
 begin
   Result := InterlockedDecrement(FValue);
 end;
 
-function TAtomicCounter.Add(Delta: Integer): Integer;
+function TAtomicCounter.Add(Delta: Integer): Integer;  
 begin
   Result := InterlockedExchangeAdd(FValue, Delta) + Delta;
 end;
 
-function TAtomicCounter.Get: Integer;
+function TAtomicCounter.Get: Integer;  
 begin
   // La lecture d'un Integer est atomique sur la plupart des architectures
   Result := FValue;
 end;
 
-procedure TAtomicCounter.&Set(Value: Integer);
+procedure TAtomicCounter.&Set(Value: Integer);  
 begin
   InterlockedExchange(FValue, Value);
 end;
 
-function TAtomicCounter.CompareExchange(NewValue, Comparand: Integer): Integer;
+function TAtomicCounter.CompareExchange(NewValue, Comparand: Integer): Integer;  
 begin
   Result := InterlockedCompareExchange(FValue, NewValue, Comparand);
 end;
@@ -1127,7 +1127,7 @@ implementation
 
 { TThreadSafeCache<TKey, TValue> }
 
-constructor TThreadSafeCache<TKey, TValue>.Create(DefaultTTLSeconds: Integer);
+constructor TThreadSafeCache<TKey, TValue>.Create(DefaultTTLSeconds: Integer);  
 begin
   inherited Create;
   FCache := TDictionary<TKey, TCacheItem<TValue>>.Create;
@@ -1135,7 +1135,7 @@ begin
   FDefaultTTL := DefaultTTLSeconds;
 end;
 
-destructor TThreadSafeCache<TKey, TValue>.Destroy;
+destructor TThreadSafeCache<TKey, TValue>.Destroy;  
 begin
   FLock.BeginWrite;
   try
@@ -1147,7 +1147,7 @@ begin
   inherited;
 end;
 
-procedure TThreadSafeCache<TKey, TValue>.RemoveExpired;
+procedure TThreadSafeCache<TKey, TValue>.RemoveExpired;  
 var
   KeysToRemove: TList<TKey>;
   Pair: TPair<TKey, TCacheItem<TValue>>;
@@ -1170,7 +1170,7 @@ begin
   end;
 end;
 
-procedure TThreadSafeCache<TKey, TValue>.Add(const Key: TKey; const Value: TValue; TTLSeconds: Integer);
+procedure TThreadSafeCache<TKey, TValue>.Add(const Key: TKey; const Value: TValue; TTLSeconds: Integer);  
 var
   Item: TCacheItem<TValue>;
   TTL: Integer;
@@ -1192,7 +1192,7 @@ begin
   end;
 end;
 
-function TThreadSafeCache<TKey, TValue>.TryGetValue(const Key: TKey; out Value: TValue): Boolean;
+function TThreadSafeCache<TKey, TValue>.TryGetValue(const Key: TKey; out Value: TValue): Boolean;  
 var
   Item: TCacheItem<TValue>;
 begin
@@ -1213,14 +1213,14 @@ begin
   end;
 end;
 
-function TThreadSafeCache<TKey, TValue>.ContainsKey(const Key: TKey): Boolean;
+function TThreadSafeCache<TKey, TValue>.ContainsKey(const Key: TKey): Boolean;  
 var
   Value: TValue;
 begin
   Result := TryGetValue(Key, Value);
 end;
 
-procedure TThreadSafeCache<TKey, TValue>.Remove(const Key: TKey);
+procedure TThreadSafeCache<TKey, TValue>.Remove(const Key: TKey);  
 begin
   FLock.BeginWrite;
   try
@@ -1230,7 +1230,7 @@ begin
   end;
 end;
 
-procedure TThreadSafeCache<TKey, TValue>.Clear;
+procedure TThreadSafeCache<TKey, TValue>.Clear;  
 begin
   FLock.BeginWrite;
   try
@@ -1240,7 +1240,7 @@ begin
   end;
 end;
 
-function TThreadSafeCache<TKey, TValue>.Count: Integer;
+function TThreadSafeCache<TKey, TValue>.Count: Integer;  
 begin
   FLock.BeginRead;
   try
@@ -1321,7 +1321,7 @@ implementation
 
 { TThreadSafeObjectPool<T> }
 
-constructor TThreadSafeObjectPool<T>.Create(AFactory: TObjectFactory<T>; AMaxSize: Integer);
+constructor TThreadSafeObjectPool<T>.Create(AFactory: TObjectFactory<T>; AMaxSize: Integer);  
 begin
   inherited Create;
   FFactory := AFactory;
@@ -1333,7 +1333,7 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TThreadSafeObjectPool<T>.Destroy;
+destructor TThreadSafeObjectPool<T>.Destroy;  
 var
   Obj: T;
   List: TList<T>;
@@ -1360,7 +1360,7 @@ begin
   inherited;
 end;
 
-function TThreadSafeObjectPool<T>.Acquire(Timeout: Cardinal): T;
+function TThreadSafeObjectPool<T>.Acquire(Timeout: Cardinal): T;  
 var
   CanCreate: Boolean;
 begin
@@ -1397,7 +1397,7 @@ begin
   end;
 end;
 
-procedure TThreadSafeObjectPool<T>.Release(Obj: T);
+procedure TThreadSafeObjectPool<T>.Release(Obj: T);  
 begin
   if not Assigned(Obj) then
     Exit;
@@ -1409,12 +1409,12 @@ begin
   FAvailable.Enqueue(Obj);
 end;
 
-function TThreadSafeObjectPool<T>.AvailableCount: Integer;
+function TThreadSafeObjectPool<T>.AvailableCount: Integer;  
 begin
   Result := FAvailable.Count;
 end;
 
-function TThreadSafeObjectPool<T>.InUseCount: Integer;
+function TThreadSafeObjectPool<T>.InUseCount: Integer;  
 begin
   Result := FInUse.Count;
 end;
@@ -1433,7 +1433,7 @@ type
     procedure Disconnect;
   end;
 
-function CreateConnection: TDatabaseConnection;
+function CreateConnection: TDatabaseConnection;  
 begin
   Result := TDatabaseConnection.Create;
   Result.ConnectionString := 'Server=localhost;Database=test';
@@ -1510,7 +1510,7 @@ implementation
 
 { TThreadSafeCircularBuffer<T> }
 
-constructor TThreadSafeCircularBuffer<T>.Create(ACapacity: Integer);
+constructor TThreadSafeCircularBuffer<T>.Create(ACapacity: Integer);  
 begin
   inherited Create;
   FCapacity := ACapacity;
@@ -1521,13 +1521,13 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TThreadSafeCircularBuffer<T>.Destroy;
+destructor TThreadSafeCircularBuffer<T>.Destroy;  
 begin
   FLock.Free;
   inherited;
 end;
 
-function TThreadSafeCircularBuffer<T>.Write(const Item: T): Boolean;
+function TThreadSafeCircularBuffer<T>.Write(const Item: T): Boolean;  
 begin
   FLock.Enter;
   try
@@ -1544,7 +1544,7 @@ begin
   end;
 end;
 
-function TThreadSafeCircularBuffer<T>.Read(out Item: T): Boolean;
+function TThreadSafeCircularBuffer<T>.Read(out Item: T): Boolean;  
 begin
   FLock.Enter;
   try
@@ -1561,7 +1561,7 @@ begin
   end;
 end;
 
-function TThreadSafeCircularBuffer<T>.Peek(out Item: T): Boolean;
+function TThreadSafeCircularBuffer<T>.Peek(out Item: T): Boolean;  
 begin
   FLock.Enter;
   try
@@ -1574,7 +1574,7 @@ begin
   end;
 end;
 
-function TThreadSafeCircularBuffer<T>.Count: Integer;
+function TThreadSafeCircularBuffer<T>.Count: Integer;  
 begin
   FLock.Enter;
   try
@@ -1584,7 +1584,7 @@ begin
   end;
 end;
 
-function TThreadSafeCircularBuffer<T>.Available: Integer;
+function TThreadSafeCircularBuffer<T>.Available: Integer;  
 begin
   FLock.Enter;
   try
@@ -1594,7 +1594,7 @@ begin
   end;
 end;
 
-function TThreadSafeCircularBuffer<T>.IsFull: Boolean;
+function TThreadSafeCircularBuffer<T>.IsFull: Boolean;  
 begin
   FLock.Enter;
   try
@@ -1604,7 +1604,7 @@ begin
   end;
 end;
 
-function TThreadSafeCircularBuffer<T>.IsEmpty: Boolean;
+function TThreadSafeCircularBuffer<T>.IsEmpty: Boolean;  
 begin
   FLock.Enter;
   try
@@ -1614,7 +1614,7 @@ begin
   end;
 end;
 
-procedure TThreadSafeCircularBuffer<T>.Clear;
+procedure TThreadSafeCircularBuffer<T>.Clear;  
 begin
   FLock.Enter;
   try
@@ -1637,7 +1637,7 @@ var
   Sample: SmallInt;
 
 // Thread producteur (capture audio)
-procedure AudioCaptureThread;
+procedure AudioCaptureThread;  
 begin
   while not Terminated do
   begin
@@ -1649,7 +1649,7 @@ begin
 end;
 
 // Thread consommateur (lecture audio)
-procedure AudioPlaybackThread;
+procedure AudioPlaybackThread;  
 var
   Sample: SmallInt;
 begin
@@ -1680,7 +1680,7 @@ end;
 #### TCriticalSection
 ```pascal
 // Bon pour : modifications simples, courte durée
-FCS.Enter;
+FCS.Enter;  
 try
   Inc(FCounter);
   FList.Add(Item);
@@ -1693,7 +1693,7 @@ end;
 ```pascal
 // Bon pour : beaucoup de lectures, peu d'écritures
 // Lecture (plusieurs threads simultanés)
-FLock.BeginRead;
+FLock.BeginRead;  
 try
   Result := FData[Key];
 finally
@@ -1701,7 +1701,7 @@ finally
 end;
 
 // Écriture (exclusif)
-FLock.BeginWrite;
+FLock.BeginWrite;  
 try
   FData[Key] := Value;
 finally
@@ -1712,7 +1712,7 @@ end;
 #### Opérations atomiques
 ```pascal
 // Bon pour : opérations très simples et fréquentes
-InterlockedIncrement(FCounter);
+InterlockedIncrement(FCounter);  
 InterlockedExchange(FValue, NewValue);
 ```
 
@@ -1753,7 +1753,7 @@ type
     procedure Notify(const Data: T);
   end;
 
-procedure TThreadSafeObserver<T>.Notify(const Data: T);
+procedure TThreadSafeObserver<T>.Notify(const Data: T);  
 var
   List: TList<TNotifyProc>;
   Observer: TNotifyProc;
@@ -1774,12 +1774,12 @@ end;
 
 ```pascal
 // ❌ INCORRECT - Risque de deadlock si exception
-FLock.Enter;
-DoSomething(); // Peut lever une exception
+FLock.Enter;  
+DoSomething(); // Peut lever une exception  
 FLock.Leave;
 
 // ✅ CORRECT
-FLock.Enter;
+FLock.Enter;  
 try
   DoSomething();
 finally
@@ -1791,7 +1791,7 @@ end;
 
 ```pascal
 // ❌ INCORRECT - Verrouillage trop long
-FLock.Enter;
+FLock.Enter;  
 try
   Data := LoadFromDatabase(); // Opération lente !
   FCache.Add(Key, Data);
@@ -1800,8 +1800,8 @@ finally
 end;
 
 // ✅ CORRECT - Charger hors du verrou
-Data := LoadFromDatabase();
-FLock.Enter;
+Data := LoadFromDatabase();  
+FLock.Enter;  
 try
   FCache.Add(Key, Data);
 finally
@@ -1813,7 +1813,7 @@ end;
 
 ```pascal
 // ❌ DANGER - Risque de deadlock
-FLock1.Enter;
+FLock1.Enter;  
 try
   FLock2.Enter; // Ordre différent ailleurs = deadlock possible
   try
@@ -1864,7 +1864,7 @@ type
     procedure CheckAccess;
   end;
 
-procedure TRaceDetector.CheckAccess;
+procedure TRaceDetector.CheckAccess;  
 var
   CurrentThread: TThreadID;
 begin
@@ -1881,7 +1881,7 @@ end;
 ### Logger les accès concurrents
 
 ```pascal
-procedure LogThreadAccess(const Operation: string);
+procedure LogThreadAccess(const Operation: string);  
 begin
   WriteLn(Format('[%s] Thread %d: %s',
     [FormatDateTime('hh:nn:ss.zzz', Now),

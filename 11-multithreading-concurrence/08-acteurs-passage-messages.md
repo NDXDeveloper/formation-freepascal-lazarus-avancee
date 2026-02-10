@@ -185,7 +185,7 @@ implementation
 
 { TMessage }
 
-constructor TMessage.Create(ASender: TActor);
+constructor TMessage.Create(ASender: TActor);  
 begin
   inherited Create;
   FSender := ASender;
@@ -193,13 +193,13 @@ end;
 
 { TMailbox }
 
-constructor TMailbox.Create;
+constructor TMailbox.Create;  
 begin
   inherited Create;
   FQueue := TThreadedQueue<TMessage>.Create(1000, INFINITE, INFINITE);
 end;
 
-destructor TMailbox.Destroy;
+destructor TMailbox.Destroy;  
 var
   Msg: TMessage;
 begin
@@ -211,29 +211,29 @@ begin
   inherited;
 end;
 
-procedure TMailbox.Post(Msg: TMessage);
+procedure TMailbox.Post(Msg: TMessage);  
 begin
   FQueue.PushItem(Msg);
 end;
 
-function TMailbox.Receive(out Msg: TMessage; Timeout: Cardinal): Boolean;
+function TMailbox.Receive(out Msg: TMessage; Timeout: Cardinal): Boolean;  
 begin
   Result := FQueue.PopItem(Msg, Timeout) = wrSignaled;
 end;
 
-function TMailbox.IsEmpty: Boolean;
+function TMailbox.IsEmpty: Boolean;  
 begin
   Result := FQueue.TotalItemsPushed = FQueue.TotalItemsPopped;
 end;
 
-function TMailbox.Count: Integer;
+function TMailbox.Count: Integer;  
 begin
   Result := FQueue.TotalItemsPushed - FQueue.TotalItemsPopped;
 end;
 
 { TActor }
 
-constructor TActor.Create(const AName: string);
+constructor TActor.Create(const AName: string);  
 begin
   inherited Create;
   FName := AName;
@@ -241,14 +241,14 @@ begin
   FRunning := False;
 end;
 
-destructor TActor.Destroy;
+destructor TActor.Destroy;  
 begin
   Stop;
   FMailbox.Free;
   inherited;
 end;
 
-procedure TActor.Start;
+procedure TActor.Start;  
 begin
   if FRunning then
     Exit;
@@ -271,7 +271,7 @@ begin
   FThread.Start;
 end;
 
-procedure TActor.Stop;
+procedure TActor.Stop;  
 begin
   if not FRunning then
     Exit;
@@ -289,12 +289,12 @@ begin
   PostStop;
 end;
 
-procedure TActor.Send(Msg: TMessage);
+procedure TActor.Send(Msg: TMessage);  
 begin
   FMailbox.Post(Msg);
 end;
 
-procedure TActor.ProcessMessages;
+procedure TActor.ProcessMessages;  
 var
   Msg: TMessage;
 begin
@@ -311,12 +311,12 @@ begin
   end;
 end;
 
-procedure TActor.PreStart;
+procedure TActor.PreStart;  
 begin
   // Hook vide, à surcharger si nécessaire
 end;
 
-procedure TActor.PostStop;
+procedure TActor.PostStop;  
 begin
   // Hook vide, à surcharger si nécessaire
 end;
@@ -354,19 +354,19 @@ type
 
 implementation
 
-constructor TValueResponseMessage.Create(ASender: TActor; AValue: Integer);
+constructor TValueResponseMessage.Create(ASender: TActor; AValue: Integer);  
 begin
   inherited Create(ASender);
   FValue := AValue;
 end;
 
-constructor TCounterActor.Create(const AName: string);
+constructor TCounterActor.Create(const AName: string);  
 begin
   inherited Create(AName);
   FValue := 0;
 end;
 
-procedure TCounterActor.Receive(Msg: TMessage);
+procedure TCounterActor.Receive(Msg: TMessage);  
 begin
   if Msg is TIncrementMessage then
   begin
@@ -464,7 +464,7 @@ implementation
 
 { TRequestMessage }
 
-constructor TRequestMessage.Create(ASender: TActor);
+constructor TRequestMessage.Create(ASender: TActor);  
 begin
   inherited Create(ASender);
   CreateGUID(FRequestID);
@@ -482,7 +482,7 @@ end;
 
 { TRequestReplyManager }
 
-constructor TRequestReplyManager.Create;
+constructor TRequestReplyManager.Create;  
 begin
   inherited Create;
   FPendingRequests := TDictionary<TGUID, TEvent>.Create;
@@ -490,7 +490,7 @@ begin
   FCS := TCriticalSection.Create;
 end;
 
-destructor TRequestReplyManager.Destroy;
+destructor TRequestReplyManager.Destroy;  
 begin
   FPendingRequests.Free;
   FResponses.Free;
@@ -540,7 +540,7 @@ begin
   end;
 end;
 
-procedure TRequestReplyManager.HandleReply(Reply: TReplyMessage);
+procedure TRequestReplyManager.HandleReply(Reply: TReplyMessage);  
 var
   Event: TEvent;
 begin
@@ -607,7 +607,7 @@ implementation
 
 { TErrorMessage }
 
-constructor TErrorMessage.Create(AFailedActor: TActor; AError: Exception);
+constructor TErrorMessage.Create(AFailedActor: TActor; AError: Exception);  
 begin
   inherited Create(nil);
   FFailedActor := AFailedActor;
@@ -616,14 +616,14 @@ end;
 
 { TSupervisorActor }
 
-constructor TSupervisorActor.Create(const AName: string; Strategy: TSupervisionStrategy);
+constructor TSupervisorActor.Create(const AName: string; Strategy: TSupervisionStrategy);  
 begin
   inherited Create(AName);
   FChildren := TList<TActor>.Create;
   FStrategy := Strategy;
 end;
 
-destructor TSupervisorActor.Destroy;
+destructor TSupervisorActor.Destroy;  
 var
   Child: TActor;
 begin
@@ -633,25 +633,25 @@ begin
   inherited;
 end;
 
-procedure TSupervisorActor.AddChild(Child: TActor);
+procedure TSupervisorActor.AddChild(Child: TActor);  
 begin
   FChildren.Add(Child);
   Child.Start;
 end;
 
-procedure TSupervisorActor.RemoveChild(Child: TActor);
+procedure TSupervisorActor.RemoveChild(Child: TActor);  
 begin
   FChildren.Remove(Child);
   Child.Stop;
 end;
 
-procedure TSupervisorActor.Receive(Msg: TMessage);
+procedure TSupervisorActor.Receive(Msg: TMessage);  
 begin
   if Msg is TErrorMessage then
     HandleChildError(TErrorMessage(Msg).FailedActor, TErrorMessage(Msg).Error);
 end;
 
-procedure TSupervisorActor.HandleChildError(Child: TActor; Error: Exception);
+procedure TSupervisorActor.HandleChildError(Child: TActor; Error: Exception);  
 begin
   WriteLn(Format('[%s] Enfant %s a échoué : %s', [Name, Child.Name, Error.Message]));
 
@@ -738,7 +738,7 @@ implementation
 
 { TSubscribeMessage }
 
-constructor TSubscribeMessage.Create(ASender: TActor; const ATopic: string);
+constructor TSubscribeMessage.Create(ASender: TActor; const ATopic: string);  
 begin
   inherited Create(ASender);
   FTopic := ATopic;
@@ -746,7 +746,7 @@ end;
 
 { TUnsubscribeMessage }
 
-constructor TUnsubscribeMessage.Create(ASender: TActor; const ATopic: string);
+constructor TUnsubscribeMessage.Create(ASender: TActor; const ATopic: string);  
 begin
   inherited Create(ASender);
   FTopic := ATopic;
@@ -764,13 +764,13 @@ end;
 
 { TEventBusActor }
 
-constructor TEventBusActor.Create(const AName: string);
+constructor TEventBusActor.Create(const AName: string);  
 begin
   inherited Create(AName);
   FSubscribers := TDictionary<string, TList<TActor>>.Create;
 end;
 
-destructor TEventBusActor.Destroy;
+destructor TEventBusActor.Destroy;  
 var
   List: TList<TActor>;
 begin
@@ -780,7 +780,7 @@ begin
   inherited;
 end;
 
-procedure TEventBusActor.Receive(Msg: TMessage);
+procedure TEventBusActor.Receive(Msg: TMessage);  
 var
   Subscribers: TList<TActor>;
   Subscriber: TActor;
@@ -839,7 +839,7 @@ type
     procedure Receive(Msg: TMessage); override;
   end;
 
-procedure TSubscriberActor.Receive(Msg: TMessage);
+procedure TSubscriberActor.Receive(Msg: TMessage);  
 begin
   if Msg is TPublishMessage then
     WriteLn(Format('[%s] Reçu sur "%s" : %s',
@@ -956,7 +956,7 @@ implementation
 
 { TJoinRoomMessage }
 
-constructor TJoinRoomMessage.Create(ASender: TActor; const ARoomName: string);
+constructor TJoinRoomMessage.Create(ASender: TActor; const ARoomName: string);  
 begin
   inherited Create(ASender);
   FRoomName := ARoomName;
@@ -964,7 +964,7 @@ end;
 
 { TLeaveRoomMessage }
 
-constructor TLeaveRoomMessage.Create(ASender: TActor; const ARoomName: string);
+constructor TLeaveRoomMessage.Create(ASender: TActor; const ARoomName: string);  
 begin
   inherited Create(ASender);
   FRoomName := ARoomName;
@@ -972,7 +972,7 @@ end;
 
 { TChatMessage }
 
-constructor TChatMessage.Create(ASender: TActor; const ARoomName, AText: string);
+constructor TChatMessage.Create(ASender: TActor; const ARoomName, AText: string);  
 begin
   inherited Create(ASender);
   FRoomName := ARoomName;
@@ -981,13 +981,13 @@ end;
 
 { TUserActor }
 
-constructor TUserActor.Create(const AUsername: string);
+constructor TUserActor.Create(const AUsername: string);  
 begin
   inherited Create(AUsername);
   FUsername := AUsername;
 end;
 
-procedure TUserActor.Receive(Msg: TMessage);
+procedure TUserActor.Receive(Msg: TMessage);  
 begin
   if Msg is TChatMessage then
   begin
@@ -998,19 +998,19 @@ end;
 
 { TChatRoomActor }
 
-constructor TChatRoomActor.Create(const ARoomName: string);
+constructor TChatRoomActor.Create(const ARoomName: string);  
 begin
   inherited Create(ARoomName);
   FUsers := TList<TActor>.Create;
 end;
 
-destructor TChatRoomActor.Destroy;
+destructor TChatRoomActor.Destroy;  
 begin
   FUsers.Free;
   inherited;
 end;
 
-procedure TChatRoomActor.Receive(Msg: TMessage);
+procedure TChatRoomActor.Receive(Msg: TMessage);  
 var
   User: TActor;
 begin
@@ -1038,13 +1038,13 @@ end;
 
 { TChatServerActor }
 
-constructor TChatServerActor.Create;
+constructor TChatServerActor.Create;  
 begin
   inherited Create('ChatServer');
   FRooms := TDictionary<string, TChatRoomActor>.Create;
 end;
 
-destructor TChatServerActor.Destroy;
+destructor TChatServerActor.Destroy;  
 var
   Room: TChatRoomActor;
 begin
@@ -1054,7 +1054,7 @@ begin
   inherited;
 end;
 
-function TChatServerActor.GetOrCreateRoom(const RoomName: string): TChatRoomActor;
+function TChatServerActor.GetOrCreateRoom(const RoomName: string): TChatRoomActor;  
 begin
   if not FRooms.TryGetValue(RoomName, Result) then
   begin
@@ -1065,7 +1065,7 @@ begin
   end;
 end;
 
-procedure TChatServerActor.Receive(Msg: TMessage);
+procedure TChatServerActor.Receive(Msg: TMessage);  
 var
   Room: TChatRoomActor;
 begin
@@ -1189,7 +1189,7 @@ type
 
 implementation
 
-constructor TRouterActor.Create(const AName: string; Strategy: TRoutingStrategy);
+constructor TRouterActor.Create(const AName: string; Strategy: TRoutingStrategy);  
 begin
   inherited Create(AName);
   FRoutees := TList<TActor>.Create;
@@ -1197,18 +1197,18 @@ begin
   FCurrentIndex := 0;
 end;
 
-destructor TRouterActor.Destroy;
+destructor TRouterActor.Destroy;  
 begin
   FRoutees.Free;
   inherited;
 end;
 
-procedure TRouterActor.AddRoutee(Routee: TActor);
+procedure TRouterActor.AddRoutee(Routee: TActor);  
 begin
   FRoutees.Add(Routee);
 end;
 
-function TRouterActor.SelectRoutee: TActor;
+function TRouterActor.SelectRoutee: TActor;  
 var
   i, MinSize, Size: Integer;
 begin
@@ -1245,7 +1245,7 @@ begin
   end;
 end;
 
-procedure TRouterActor.Receive(Msg: TMessage);
+procedure TRouterActor.Receive(Msg: TMessage);  
 var
   Routee: TActor;
 begin
@@ -1319,7 +1319,7 @@ implementation
 
 { TPipelineMessage }
 
-constructor TPipelineMessage.Create(ASender: TActor; const AData: string; AStage: Integer);
+constructor TPipelineMessage.Create(ASender: TActor; const AData: string; AStage: Integer);  
 begin
   inherited Create(ASender);
   FData := AData;
@@ -1328,19 +1328,19 @@ end;
 
 { TPipelineStageActor }
 
-constructor TPipelineStageActor.Create(const AName: string; AStageNumber: Integer);
+constructor TPipelineStageActor.Create(const AName: string; AStageNumber: Integer);  
 begin
   inherited Create(AName);
   FStageNumber := AStageNumber;
   FNextStage := nil;
 end;
 
-procedure TPipelineStageActor.SetNextStage(NextStage: TActor);
+procedure TPipelineStageActor.SetNextStage(NextStage: TActor);  
 begin
   FNextStage := NextStage;
 end;
 
-procedure TPipelineStageActor.Receive(Msg: TMessage);
+procedure TPipelineStageActor.Receive(Msg: TMessage);  
 var
   PipeMsg: TPipelineMessage;
   ProcessedData: string;
@@ -1364,21 +1364,21 @@ end;
 
 { TUpperCaseStage }
 
-function TUpperCaseStage.ProcessData(const Data: string): string;
+function TUpperCaseStage.ProcessData(const Data: string): string;  
 begin
   Result := UpperCase(Data);
 end;
 
 { TPrefixStage }
 
-function TPrefixStage.ProcessData(const Data: string): string;
+function TPrefixStage.ProcessData(const Data: string): string;  
 begin
   Result := '>>> ' + Data;
 end;
 
 { TReverseStage }
 
-function TReverseStage.ProcessData(const Data: string): string;
+function TReverseStage.ProcessData(const Data: string): string;  
 var
   i: Integer;
 begin
@@ -1479,7 +1479,7 @@ implementation
 
 { TWorkMessage }
 
-constructor TWorkMessage.Create(ASender: TActor; AWorkID, AData: Integer);
+constructor TWorkMessage.Create(ASender: TActor; AWorkID, AData: Integer);  
 begin
   inherited Create(ASender);
   FWorkID := AWorkID;
@@ -1488,7 +1488,7 @@ end;
 
 { TResultMessage }
 
-constructor TResultMessage.Create(ASender: TActor; AWorkID, AResult: Integer);
+constructor TResultMessage.Create(ASender: TActor; AWorkID, AResult: Integer);  
 begin
   inherited Create(ASender);
   FWorkID := AWorkID;
@@ -1497,7 +1497,7 @@ end;
 
 { TWorkerActor }
 
-procedure TWorkerActor.Receive(Msg: TMessage);
+procedure TWorkerActor.Receive(Msg: TMessage);  
 var
   WorkMsg: TWorkMessage;
   Result: Integer;
@@ -1519,7 +1519,7 @@ end;
 
 { TAggregatorActor }
 
-constructor TAggregatorActor.Create(const AName: string; ExpectedResults: Integer);
+constructor TAggregatorActor.Create(const AName: string; ExpectedResults: Integer);  
 begin
   inherited Create(AName);
   FExpectedResults := ExpectedResults;
@@ -1527,7 +1527,7 @@ begin
   FTotalResult := 0;
 end;
 
-procedure TAggregatorActor.Receive(Msg: TMessage);
+procedure TAggregatorActor.Receive(Msg: TMessage);  
 var
   ResultMsg: TResultMessage;
 begin
@@ -1619,13 +1619,13 @@ type
     property Timestamp: TDateTime read FTimestamp;
   end;
 
-constructor TBenchmarkMessage.Create(ASender: TActor);
+constructor TBenchmarkMessage.Create(ASender: TActor);  
 begin
   inherited Create(ASender);
   FTimestamp := Now;
 end;
 
-function BenchmarkActor(Actor: TActor; MessageCount: Integer): TPerformanceMetrics;
+function BenchmarkActor(Actor: TActor; MessageCount: Integer): TPerformanceMetrics;  
 var
   i: Integer;
   StartTime, EndTime: TDateTime;
@@ -1686,7 +1686,7 @@ type
 
 implementation
 
-constructor TMessagePool<T>.Create(InitialSize: Integer);
+constructor TMessagePool<T>.Create(InitialSize: Integer);  
 var
   i: Integer;
 begin
@@ -1699,7 +1699,7 @@ begin
     FPool.Push(T.Create(nil));
 end;
 
-destructor TMessagePool<T>.Destroy;
+destructor TMessagePool<T>.Destroy;  
 var
   Msg: T;
 begin
@@ -1714,7 +1714,7 @@ begin
   inherited;
 end;
 
-function TMessagePool<T>.Acquire: T;
+function TMessagePool<T>.Acquire: T;  
 begin
   FCS.Enter;
   try
@@ -1727,7 +1727,7 @@ begin
   end;
 end;
 
-procedure TMessagePool<T>.Release(Msg: T);
+procedure TMessagePool<T>.Release(Msg: T);  
 begin
   FCS.Enter;
   try
@@ -1755,13 +1755,13 @@ type
     property Messages: TList<TMessage> read FMessages;
   end;
 
-constructor TBatchMessage.Create(ASender: TActor);
+constructor TBatchMessage.Create(ASender: TActor);  
 begin
   inherited Create(ASender);
   FMessages := TList<TMessage>.Create;
 end;
 
-destructor TBatchMessage.Destroy;
+destructor TBatchMessage.Destroy;  
 var
   Msg: TMessage;
 begin
@@ -1771,13 +1771,13 @@ begin
   inherited;
 end;
 
-procedure TBatchMessage.Add(Msg: TMessage);
+procedure TBatchMessage.Add(Msg: TMessage);  
 begin
   FMessages.Add(Msg);
 end;
 
 // Acteur qui traite par batch
-procedure TBatchActor.Receive(Msg: TMessage);
+procedure TBatchActor.Receive(Msg: TMessage);  
 var
   BatchMsg: TBatchMessage;
   SubMsg: TMessage;
@@ -1830,7 +1830,7 @@ uses
   {$IFDEF LINUX}BaseUnix,{$ENDIF}
   Classes, SysUtils;
 
-procedure OptimizeActorSystem;
+procedure OptimizeActorSystem;  
 begin
   {$IFDEF WINDOWS}
   // Windows : Augmenter la priorité si nécessaire
@@ -1882,7 +1882,7 @@ var
 
 implementation
 
-constructor TActorLogger.Create(const FileName: string);
+constructor TActorLogger.Create(const FileName: string);  
 begin
   inherited Create;
   FCS := TCriticalSection.Create;
@@ -1890,14 +1890,14 @@ begin
   Rewrite(FLogFile);
 end;
 
-destructor TActorLogger.Destroy;
+destructor TActorLogger.Destroy;  
 begin
   CloseFile(FLogFile);
   FCS.Free;
   inherited;
 end;
 
-procedure TActorLogger.Log(Level: TLogLevel; Actor: TActor; const Msg: string);
+procedure TActorLogger.Log(Level: TLogLevel; Actor: TActor; const Msg: string);  
 var
   LevelStr: string;
 begin
@@ -1921,7 +1921,7 @@ begin
   end;
 end;
 
-procedure TActorLogger.LogMessage(Actor: TActor; Msg: TMessage);
+procedure TActorLogger.LogMessage(Actor: TActor; Msg: TMessage);  
 begin
   Log(llDebug, Actor, Format('Message reçu : %s', [Msg.ClassName]));
 end;
@@ -1946,7 +1946,7 @@ type
     procedure PrintStats;
   end;
 
-procedure TActorMonitor.PrintStats;
+procedure TActorMonitor.PrintStats;  
 var
   Actor: TActor;
 begin
@@ -1984,13 +1984,13 @@ type
 
 ```pascal
 // ❌ MAUVAIS - Blocage dans Receive
-procedure TBadActor.Receive(Msg: TMessage);
+procedure TBadActor.Receive(Msg: TMessage);  
 begin
   Sleep(5000); // Bloque le traitement !
 end;
 
 // ✅ BON - Traitement rapide
-procedure TGoodActor.Receive(Msg: TMessage);
+procedure TGoodActor.Receive(Msg: TMessage);  
 begin
   // Traitement rapide
   ProcessQuickly(Msg);
@@ -2017,7 +2017,7 @@ type
 ### 4. Gérer les erreurs correctement
 
 ```pascal
-procedure TResilientActor.Receive(Msg: TMessage);
+procedure TResilientActor.Receive(Msg: TMessage);  
 begin
   try
     ProcessMessage(Msg);

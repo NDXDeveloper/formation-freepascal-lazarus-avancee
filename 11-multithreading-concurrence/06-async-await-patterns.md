@@ -18,7 +18,7 @@ La **programmation asynchrone** permet d'exécuter des opérations longues sans 
 
 ```pascal
 // ❌ Bloque l'interface pendant 5 secondes
-procedure ButtonClick(Sender: TObject);
+procedure ButtonClick(Sender: TObject);  
 begin
   Label1.Caption := 'Téléchargement...';
   DownloadFile('http://example.com/file.zip'); // BLOQUE ICI 5 secondes
@@ -31,7 +31,7 @@ end;
 
 ```pascal
 // ✅ N'bloque pas l'interface
-procedure ButtonClick(Sender: TObject);
+procedure ButtonClick(Sender: TObject);  
 begin
   Label1.Caption := 'Téléchargement...';
 
@@ -71,7 +71,7 @@ Un **callback** est une fonction appelée quand une opération asynchrone se ter
 type
   TAsyncCallback = procedure(Success: Boolean; const Data: string);
 
-procedure DownloadAsync(const URL: string; Callback: TAsyncCallback);
+procedure DownloadAsync(const URL: string; Callback: TAsyncCallback);  
 var
   Thread: TThread;
 begin
@@ -104,7 +104,7 @@ begin
 end;
 
 // Utilisation
-procedure TForm1.ButtonClick(Sender: TObject);
+procedure TForm1.ButtonClick(Sender: TObject);  
 begin
   DownloadAsync('http://example.com/data.json',
     procedure(Success: Boolean; const Data: string)
@@ -162,7 +162,7 @@ implementation
 
 { TFuture<T> }
 
-constructor TFuture<T>.Create;
+constructor TFuture<T>.Create;  
 begin
   inherited Create;
   FState := fsWaiting;
@@ -170,14 +170,14 @@ begin
   FCS := TCriticalSection.Create;
 end;
 
-destructor TFuture<T>.Destroy;
+destructor TFuture<T>.Destroy;  
 begin
   FEvent.Free;
   FCS.Free;
   inherited;
 end;
 
-procedure TFuture<T>.SetValue(const Value: T);
+procedure TFuture<T>.SetValue(const Value: T);  
 begin
   FCS.Enter;
   try
@@ -189,7 +189,7 @@ begin
   end;
 end;
 
-procedure TFuture<T>.SetError(const Error: string);
+procedure TFuture<T>.SetError(const Error: string);  
 begin
   FCS.Enter;
   try
@@ -201,12 +201,12 @@ begin
   end;
 end;
 
-function TFuture<T>.Wait(Timeout: Cardinal): Boolean;
+function TFuture<T>.Wait(Timeout: Cardinal): Boolean;  
 begin
   Result := FEvent.WaitFor(Timeout) = wrSignaled;
 end;
 
-function TFuture<T>.GetValue: T;
+function TFuture<T>.GetValue: T;  
 begin
   Wait;
 
@@ -220,7 +220,7 @@ begin
   end;
 end;
 
-function TFuture<T>.IsCompleted: Boolean;
+function TFuture<T>.IsCompleted: Boolean;  
 begin
   FCS.Enter;
   try
@@ -230,7 +230,7 @@ begin
   end;
 end;
 
-function TFuture<T>.IsFailed: Boolean;
+function TFuture<T>.IsFailed: Boolean;  
 begin
   FCS.Enter;
   try
@@ -252,7 +252,7 @@ uses
 type
   TStringFuture = specialize TFuture<string>;
 
-function DownloadAsync(const URL: string): TStringFuture;
+function DownloadAsync(const URL: string): TStringFuture;  
 begin
   Result := TStringFuture.Create;
 
@@ -342,7 +342,7 @@ implementation
 
 { TTask<T> }
 
-constructor TTask<T>.Create(Func: TAsyncFunc<T>);
+constructor TTask<T>.Create(Func: TAsyncFunc<T>);  
 begin
   inherited Create;
   FCS := TCriticalSection.Create;
@@ -360,7 +360,7 @@ begin
   FThread.Start;
 end;
 
-destructor TTask<T>.Destroy;
+destructor TTask<T>.Destroy;  
 begin
   Wait;
   FCS.Free;
@@ -369,7 +369,7 @@ begin
   inherited;
 end;
 
-procedure TTask<T>.Execute(Func: TAsyncFunc<T>);
+procedure TTask<T>.Execute(Func: TAsyncFunc<T>);  
 begin
   try
     FResult := Func();
@@ -412,19 +412,19 @@ begin
   end;
 end;
 
-function TTask<T>.&Then(Callback: TAsyncCallback<T>): TTask<T>;
+function TTask<T>.&Then(Callback: TAsyncCallback<T>): TTask<T>;  
 begin
   FOnSuccess := Callback;
   Result := Self;
 end;
 
-function TTask<T>.Catch(ErrorHandler: TAsyncErrorCallback): TTask<T>;
+function TTask<T>.Catch(ErrorHandler: TAsyncErrorCallback): TTask<T>;  
 begin
   FOnError := ErrorHandler;
   Result := Self;
 end;
 
-function TTask<T>.Wait(Timeout: Cardinal): Boolean;
+function TTask<T>.Wait(Timeout: Cardinal): Boolean;  
 var
   StartTime: TDateTime;
 begin
@@ -441,7 +441,7 @@ begin
   Result := True;
 end;
 
-function TTask<T>.GetResult: T;
+function TTask<T>.GetResult: T;  
 begin
   Wait;
 
@@ -469,7 +469,7 @@ type
   TIntegerTask = specialize TTask<Integer>;
 
 // Fonction asynchrone
-function DownloadDataAsync(const URL: string): TStringTask;
+function DownloadDataAsync(const URL: string): TStringTask;  
 begin
   Result := TStringTask.Create(
     function: string
@@ -481,7 +481,7 @@ begin
 end;
 
 // Utilisation avec chaînage
-procedure TForm1.ButtonDownloadClick(Sender: TObject);
+procedure TForm1.ButtonDownloadClick(Sender: TObject);  
 begin
   DownloadDataAsync('http://example.com/api/users')
     .&Then(
@@ -516,7 +516,7 @@ type
     class function Sequential<T>(Tasks: array of TTask<T>): TTask<T>;
   end;
 
-class function TAsyncChain.Sequential<T>(Tasks: array of TTask<T>): TTask<T>;
+class function TAsyncChain.Sequential<T>(Tasks: array of TTask<T>): TTask<T>;  
 begin
   Result := TTask<T>.Create(
     function: T
@@ -534,7 +534,7 @@ begin
 end;
 
 // Utilisation
-procedure ExecuteSequential;
+procedure ExecuteSequential;  
 var
   Task1, Task2, Task3: TStringTask;
 begin
@@ -564,7 +564,7 @@ type
     class function WhenAny<T>(Tasks: array of TTask<T>): TTask<T>;
   end;
 
-class function TAsyncParallel.WhenAll<T>(Tasks: array of TTask<T>): TTask<T>;
+class function TAsyncParallel.WhenAll<T>(Tasks: array of TTask<T>): TTask<T>;  
 begin
   Result := TTask<T>.Create(
     function: T
@@ -581,7 +581,7 @@ begin
   );
 end;
 
-class function TAsyncParallel.WhenAny<T>(Tasks: array of TTask<T>): TTask<T>;
+class function TAsyncParallel.WhenAny<T>(Tasks: array of TTask<T>): TTask<T>;  
 begin
   Result := TTask<T>.Create(
     function: T
@@ -609,7 +609,7 @@ begin
 end;
 
 // Utilisation
-procedure ExecuteParallel;
+procedure ExecuteParallel;  
 var
   Tasks: array[0..2] of TStringTask;
 begin
@@ -806,7 +806,7 @@ uses
 
 { TAsyncCache<TKey, TValue> }
 
-constructor TAsyncCache<TKey, TValue>.Create(TTLSeconds: Integer);
+constructor TAsyncCache<TKey, TValue>.Create(TTLSeconds: Integer);  
 begin
   inherited Create;
   FCache := specialize TDictionary<TKey, TCacheEntry<TValue>>.Create;
@@ -814,7 +814,7 @@ begin
   FTTLSeconds := TTLSeconds;
 end;
 
-destructor TAsyncCache<TKey, TValue>.Destroy;
+destructor TAsyncCache<TKey, TValue>.Destroy;  
 begin
   FCache.Free;
   FCS.Free;
@@ -885,13 +885,13 @@ type
 var
   UserCache: TUserCache;
 
-function FetchUserFromAPI(UserID: Integer): string;
+function FetchUserFromAPI(UserID: Integer): string;  
 begin
   Sleep(1000); // Simuler un appel API lent
   Result := Format('User #%d data', [UserID]);
 end;
 
-procedure LoadUser(UserID: Integer);
+procedure LoadUser(UserID: Integer);  
 var
   Task: TStringTask;
 begin
@@ -928,7 +928,7 @@ end;
 ### Try-Catch asynchrone
 
 ```pascal
-function SafeAsyncOperation<T>(Func: TAsyncFunc<T>): specialize TTask<T>;
+function SafeAsyncOperation<T>(Func: TAsyncFunc<T>): specialize TTask<T>;  
 type
   TResultTask = specialize TTask<T>;
 begin
@@ -967,7 +967,7 @@ type
     function GetException(Index: Integer): Exception;
   end;
 
-function WhenAllWithErrors<T>(Tasks: array of TTask<T>): TTask<T>;
+function WhenAllWithErrors<T>(Tasks: array of TTask<T>): TTask<T>;  
 type
   TResultTask = specialize TTask<T>;
 begin
@@ -1027,7 +1027,7 @@ type
       Enabled: Boolean);
   end;
 
-class procedure TAsyncUI.UpdateLabel(ALabel: TLabel; const NewText: string);
+class procedure TAsyncUI.UpdateLabel(ALabel: TLabel; const NewText: string);  
 begin
   TThread.Synchronize(nil,
     procedure
@@ -1037,7 +1037,7 @@ begin
   );
 end;
 
-class procedure TAsyncUI.UpdateProgress(AProgressBar: TProgressBar; Position: Integer);
+class procedure TAsyncUI.UpdateProgress(AProgressBar: TProgressBar; Position: Integer);  
 begin
   TThread.Synchronize(nil,
     procedure
@@ -1047,7 +1047,7 @@ begin
   );
 end;
 
-class procedure TAsyncUI.EnableControl(AControl: TControl; Enabled: Boolean);
+class procedure TAsyncUI.EnableControl(AControl: TControl; Enabled: Boolean);  
 begin
   TThread.Synchronize(nil,
     procedure
@@ -1061,7 +1061,7 @@ end;
 ### Exemple complet avec interface
 
 ```pascal
-procedure TForm1.ButtonDownloadClick(Sender: TObject);
+procedure TForm1.ButtonDownloadClick(Sender: TObject);  
 var
   Task: TStringTask;
 begin
@@ -1117,7 +1117,7 @@ Les patterns Async/Await fonctionnent de manière identique sur Windows et Ubunt
 uses
   Windows;
 
-procedure OptimizeForWindows;
+procedure OptimizeForWindows;  
 begin
   // Windows utilise son thread pool natif
   // Pas de configuration spéciale nécessaire
@@ -1132,7 +1132,7 @@ end;
 uses
   BaseUnix;
 
-procedure OptimizeForLinux;
+procedure OptimizeForLinux;  
 begin
   // Linux utilise pthreads
   // Considérer les limites du système
@@ -1147,7 +1147,7 @@ end;
 
 ```pascal
 // ❌ MAUVAIS - Fuite mémoire
-procedure BadAsync;
+procedure BadAsync;  
 begin
   TStringTask.Create(
     function: string
@@ -1158,7 +1158,7 @@ begin
 end;
 
 // ✅ BON - Avec gestion mémoire
-procedure GoodAsync;
+procedure GoodAsync;  
 var
   Task: TStringTask;
 begin
@@ -1191,7 +1191,7 @@ type
     constructor CreateAuto(Func: TAsyncFunc<T>);
   end;
 
-constructor TAutoTask<T>.CreateAuto(Func: TAsyncFunc<T>);
+constructor TAutoTask<T>.CreateAuto(Func: TAsyncFunc<T>);  
 begin
   inherited Create(Func);
 
@@ -1207,7 +1207,7 @@ end;
 
 ```pascal
 // ❌ DANGER - Deadlock possible
-procedure DeadlockRisk;
+procedure DeadlockRisk;  
 var
   Task: TStringTask;
 begin
@@ -1228,7 +1228,7 @@ begin
 end;
 
 // ✅ CORRECT - Pas de synchronisation bloquante
-procedure NoDeadlock;
+procedure NoDeadlock;  
 var
   Task: TStringTask;
 begin
@@ -1254,7 +1254,7 @@ end;
 
 ```pascal
 // ❌ MAUVAIS - Exception non gérée
-procedure BadExceptionHandling;
+procedure BadExceptionHandling;  
 var
   Task: TStringTask;
 begin
@@ -1269,7 +1269,7 @@ begin
 end;
 
 // ✅ BON - Exceptions gérées
-procedure GoodExceptionHandling;
+procedure GoodExceptionHandling;  
 var
   Task: TStringTask;
 begin
@@ -1348,20 +1348,20 @@ implementation
 
 { TCancellationToken }
 
-constructor TCancellationToken.Create;
+constructor TCancellationToken.Create;  
 begin
   inherited Create;
   FCS := TCriticalSection.Create;
   FCancelled := False;
 end;
 
-destructor TCancellationToken.Destroy;
+destructor TCancellationToken.Destroy;  
 begin
   FCS.Free;
   inherited;
 end;
 
-procedure TCancellationToken.Cancel;
+procedure TCancellationToken.Cancel;  
 begin
   FCS.Enter;
   try
@@ -1371,7 +1371,7 @@ begin
   end;
 end;
 
-function TCancellationToken.IsCancelled: Boolean;
+function TCancellationToken.IsCancelled: Boolean;  
 begin
   FCS.Enter;
   try
@@ -1381,7 +1381,7 @@ begin
   end;
 end;
 
-procedure TCancellationToken.ThrowIfCancelled;
+procedure TCancellationToken.ThrowIfCancelled;  
 begin
   if IsCancelled then
     raise Exception.Create('Opération annulée');
@@ -1389,7 +1389,7 @@ end;
 
 { TCancellableTask<T> }
 
-constructor TCancellableTask<T>.Create(Func: TAsyncFunc<T>; Token: TCancellationToken);
+constructor TCancellableTask<T>.Create(Func: TAsyncFunc<T>; Token: TCancellationToken);  
 begin
   inherited Create;
   FToken := Token;
@@ -1412,7 +1412,7 @@ begin
   FThread.Start;
 end;
 
-function TCancellableTask<T>.Wait: Boolean;
+function TCancellableTask<T>.Wait: Boolean;  
 begin
   while not FCompleted and not FToken.IsCancelled do
     Sleep(10);
@@ -1420,14 +1420,14 @@ begin
   Result := FCompleted and not FToken.IsCancelled;
 end;
 
-function TCancellableTask<T>.GetResult: T;
+function TCancellableTask<T>.GetResult: T;  
 begin
   Wait;
   FToken.ThrowIfCancelled;
   Result := FResult;
 end;
 
-procedure TCancellableTask<T>.Cancel;
+procedure TCancellableTask<T>.Cancel;  
 begin
   FToken.Cancel;
 end;
@@ -1444,7 +1444,7 @@ uses
 type
   TStringCancellableTask = specialize TCancellableTask<string>;
 
-procedure DownloadWithCancellation;
+procedure DownloadWithCancellation;  
 var
   Token: TCancellationToken;
   Task: TStringCancellableTask;
@@ -1489,7 +1489,7 @@ end;
 
 ```pascal
 // ❌ MAUVAIS - Callback hell (pyramide de la mort)
-procedure CallbackHell;
+procedure CallbackHell;  
 begin
   DownloadAsync('http://api1.com',
     procedure(Data1: string)
@@ -1516,7 +1516,7 @@ begin
 end;
 
 // ✅ BON - Chaînage avec Then
-procedure CleanChaining;
+procedure CleanChaining;  
 begin
   DownloadAsync('http://api1.com')
     .&Then(
@@ -1577,7 +1577,7 @@ type
 
 implementation
 
-constructor TDebouncer.Create(DelayMs: Integer);
+constructor TDebouncer.Create(DelayMs: Integer);  
 begin
   inherited Create;
   FDelay := DelayMs;
@@ -1587,21 +1587,21 @@ begin
   FTimer.OnTimer := DoTimer;
 end;
 
-destructor TDebouncer.Destroy;
+destructor TDebouncer.Destroy;  
 begin
   FTimer.Free;
   FCS.Free;
   inherited;
 end;
 
-procedure TDebouncer.DoTimer(Sender: TObject);
+procedure TDebouncer.DoTimer(Sender: TObject);  
 begin
   FTimer.Enabled := False;
   if Assigned(FAction) then
     FAction();
 end;
 
-procedure TDebouncer.Trigger(Action: TProc);
+procedure TDebouncer.Trigger(Action: TProc);  
 begin
   FCS.Enter;
   try
@@ -1626,7 +1626,7 @@ uses
 var
   SearchDebouncer: TDebouncer;
 
-procedure TForm1.EditSearchChange(Sender: TObject);
+procedure TForm1.EditSearchChange(Sender: TObject);  
 begin
   // Attendre 500ms après la dernière frappe avant de chercher
   SearchDebouncer.Trigger(
@@ -1637,12 +1637,12 @@ begin
   );
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   SearchDebouncer := TDebouncer.Create(500); // 500ms de délai
 end;
 
-procedure TForm1.FormDestroy(Sender: TObject);
+procedure TForm1.FormDestroy(Sender: TObject);  
 begin
   SearchDebouncer.Free;
 end;
@@ -1678,7 +1678,7 @@ type
 
 implementation
 
-constructor TThrottler.Create(IntervalMs: Integer);
+constructor TThrottler.Create(IntervalMs: Integer);  
 begin
   inherited Create;
   FInterval := IntervalMs;
@@ -1686,7 +1686,7 @@ begin
   FPending := False;
 end;
 
-procedure TThrottler.Execute(Action: TProc);
+procedure TThrottler.Execute(Action: TProc);  
 var
   Elapsed: Integer;
 begin
@@ -1754,7 +1754,7 @@ implementation
 uses
   DateUtils;
 
-constructor TRateLimiter.Create(MaxRequests: Integer; TimeWindowMs: Integer);
+constructor TRateLimiter.Create(MaxRequests: Integer; TimeWindowMs: Integer);  
 begin
   inherited Create;
   FMaxRequests := MaxRequests;
@@ -1763,14 +1763,14 @@ begin
   FCS := TCriticalSection.Create;
 end;
 
-destructor TRateLimiter.Destroy;
+destructor TRateLimiter.Destroy;  
 begin
   FRequestTimes.Free;
   FCS.Free;
   inherited;
 end;
 
-function TRateLimiter.TryExecute(Action: TProc): Boolean;
+function TRateLimiter.TryExecute(Action: TProc): Boolean;  
 var
   Now: TDateTime;
   Cutoff: TDateTime;
@@ -1798,7 +1798,7 @@ begin
   end;
 end;
 
-procedure TRateLimiter.ExecuteOrWait(Action: TProc);
+procedure TRateLimiter.ExecuteOrWait(Action: TProc);  
 var
   Executed: Boolean;
 begin
@@ -1824,7 +1824,7 @@ uses
 var
   APILimiter: TRateLimiter;
 
-procedure CallAPI(const Endpoint: string);
+procedure CallAPI(const Endpoint: string);  
 begin
   // Limiter à 10 requêtes par seconde
   APILimiter.ExecuteOrWait(
@@ -1931,7 +1931,7 @@ end.
 ### Utilisation du téléchargeur
 
 ```pascal
-procedure TForm1.ButtonDownloadClick(Sender: TObject);
+procedure TForm1.ButtonDownloadClick(Sender: TObject);  
 begin
   TAsyncDownloader.DownloadFile(
     'http://example.com/largefile.zip',
@@ -2047,7 +2047,7 @@ begin
   FCurrentSearch.Start;
 end;
 
-class procedure TAsyncSearch.CancelSearch;
+class procedure TAsyncSearch.CancelSearch;  
 begin
   if Assigned(FCurrentSearch) then
   begin
@@ -2104,7 +2104,7 @@ type
 
 implementation
 
-constructor TAsyncTaskQueue.Create(WorkerCount: Integer);
+constructor TAsyncTaskQueue.Create(WorkerCount: Integer);  
 var
   i: Integer;
 begin
@@ -2114,7 +2114,7 @@ begin
   FRunning := False;
 end;
 
-destructor TAsyncTaskQueue.Destroy;
+destructor TAsyncTaskQueue.Destroy;  
 begin
   Stop;
   FQueue.Free;
@@ -2123,14 +2123,14 @@ end;
 
 { TQueueWorkerThread }
 
-constructor TQueueWorkerThread.Create(AQueue: TAsyncTaskQueue);
+constructor TQueueWorkerThread.Create(AQueue: TAsyncTaskQueue);  
 begin
   inherited Create(False);
   FQueue := AQueue;
   FreeOnTerminate := False;
 end;
 
-procedure TQueueWorkerThread.Execute;
+procedure TQueueWorkerThread.Execute;  
 var
   Task: TAsyncTask;
 begin
@@ -2150,12 +2150,12 @@ end;
 
 { TAsyncTaskQueue }
 
-procedure TAsyncTaskQueue.Enqueue(Task: TAsyncTask);
+procedure TAsyncTaskQueue.Enqueue(Task: TAsyncTask);  
 begin
   FQueue.PushItem(Task);
 end;
 
-procedure TAsyncTaskQueue.Start;
+procedure TAsyncTaskQueue.Start;  
 var
   i: Integer;
 begin
@@ -2165,7 +2165,7 @@ begin
     FWorkers[i] := TQueueWorkerThread.Create(Self);
 end;
 
-procedure TAsyncTaskQueue.Stop;
+procedure TAsyncTaskQueue.Stop;  
 var
   i: Integer;
 begin
@@ -2181,7 +2181,7 @@ begin
   end;
 end;
 
-function TAsyncTaskQueue.GetQueueSize: Integer;
+function TAsyncTaskQueue.GetQueueSize: Integer;  
 begin
   Result := FQueue.TotalItemsPushed - FQueue.TotalItemsPopped;
 end;
@@ -2198,7 +2198,7 @@ uses
 var
   TaskQueue: TAsyncTaskQueue;
 
-procedure ProcessFiles;
+procedure ProcessFiles;  
 var
   Files: TStringList;
   i: Integer;
@@ -2306,7 +2306,7 @@ end.
 ### Tests unitaires
 
 ```pascal
-procedure TestAsyncOperation;
+procedure TestAsyncOperation;  
 var
   Task: TStringTask;
   Result: string;
@@ -2323,7 +2323,7 @@ begin
   end;
 end;
 
-procedure TestAsyncError;
+procedure TestAsyncError;  
 var
   Task: TStringTask;
   ErrorCaught: Boolean;

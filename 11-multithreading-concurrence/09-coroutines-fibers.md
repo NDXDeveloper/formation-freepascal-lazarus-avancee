@@ -25,11 +25,11 @@ Une **coroutine** est une fonction qui peut :
 ```
 Thread                          Coroutine
 ━━━━━━━━━━━━━━━━━━━━━━━━       ━━━━━━━━━━━━━━━━━━━━━━━━
-Préemptif                       Coopératif
-Ordonnancé par l'OS             Ordonnancé par le programme
-Overhead élevé                  Overhead minimal
-Parallèle (multi-cœur)          Concurrent (mono-cœur)
-Context switch coûteux          Context switch léger
+Préemptif                       Coopératif  
+Ordonnancé par l'OS             Ordonnancé par le programme  
+Overhead élevé                  Overhead minimal  
+Parallèle (multi-cœur)          Concurrent (mono-cœur)  
+Context switch coûteux          Context switch léger  
 Risque de race conditions       Pas de race conditions
 ```
 
@@ -37,7 +37,7 @@ Risque de race conditions       Pas de race conditions
 
 ```pascal
 // Thread : exécution parallèle
-Thread1: A1 → A2 → A3 → A4
+Thread1: A1 → A2 → A3 → A4  
 Thread2: B1 → B2 → B3 → B4
 (En même temps sur différents cœurs)
 
@@ -53,7 +53,7 @@ Main: A1 → [yield] → B1 → [yield] → A2 → [yield] → B2 → ...
 **Yield** suspend l'exécution de la coroutine et rend le contrôle à l'appelant.
 
 ```pascal
-procedure MonGenerateur;
+procedure MonGenerateur;  
 begin
   WriteLn('Début');
   Yield;  // Suspend ici, retourne à l'appelant
@@ -96,10 +96,10 @@ Les **fibers** sont l'implémentation bas niveau des coroutines. Ce sont des thr
 ```
 Thread                          Fiber
 ━━━━━━━━━━━━━━━━━━━━━━━━       ━━━━━━━━━━━━━━━━━━━━━━━━
-Géré par l'OS                   Géré par l'application
-Stack : ~1 MB                   Stack : ~64 KB (configurable)
-Context switch : ~1-2 µs        Context switch : ~100 ns
-Création coûteuse               Création légère
+Géré par l'OS                   Géré par l'application  
+Stack : ~1 MB                   Stack : ~64 KB (configurable)  
+Context switch : ~1-2 µs        Context switch : ~100 ns  
+Création coûteuse               Création légère  
 Scheduling automatique          Scheduling manuel
 ```
 
@@ -146,7 +146,7 @@ procedure Yield;
 
 implementation
 
-constructor TCoroutine.Create(Proc: TCoroutineProc);
+constructor TCoroutine.Create(Proc: TCoroutineProc);  
 begin
   inherited Create;
   FProc := Proc;
@@ -154,7 +154,7 @@ begin
   FYieldPoint := 0;
 end;
 
-procedure TCoroutine.Resume;
+procedure TCoroutine.Resume;  
 var
   PreviousCoroutine: TCoroutine;
 begin
@@ -179,12 +179,12 @@ begin
   end;
 end;
 
-function TCoroutine.IsDead: Boolean;
+function TCoroutine.IsDead: Boolean;  
 begin
   Result := FState = csDead;
 end;
 
-procedure Yield;
+procedure Yield;  
 begin
   if Assigned(CurrentCoroutine) then
     CurrentCoroutine.FState := csSuspended;
@@ -245,14 +245,14 @@ implementation
 
 { TGenerator<T> }
 
-constructor TGenerator<T>.Create;
+constructor TGenerator<T>.Create;  
 begin
   inherited Create;
   FFinished := False;
   FIndex := 0;
 end;
 
-function TGenerator<T>.MoveNext: Boolean;
+function TGenerator<T>.MoveNext: Boolean;  
 begin
   Result := GetNext;
   if Result then
@@ -261,14 +261,14 @@ begin
     FFinished := True;
 end;
 
-function TGenerator<T>.Current: T;
+function TGenerator<T>.Current: T;  
 begin
   Result := FCurrentValue;
 end;
 
 { TRangeGenerator }
 
-constructor TRangeGenerator.Create(AStart, AStop, AStep: Integer);
+constructor TRangeGenerator.Create(AStart, AStop, AStep: Integer);  
 begin
   inherited Create;
   FStart := AStart;
@@ -277,7 +277,7 @@ begin
   FCurrentValue := AStart - FStep; // Commence avant le premier
 end;
 
-function TRangeGenerator.GetNext: Boolean;
+function TRangeGenerator.GetNext: Boolean;  
 begin
   FCurrentValue := FCurrentValue + FStep;
 
@@ -296,7 +296,7 @@ end.
 uses
   Generators;
 
-procedure TestRangeGenerator;
+procedure TestRangeGenerator;  
 var
   Gen: TRangeGenerator;
 begin
@@ -329,14 +329,14 @@ type
     constructor Create;
   end;
 
-constructor TFibonacciGenerator.Create;
+constructor TFibonacciGenerator.Create;  
 begin
   inherited Create;
   FA := 0;
   FB := 1;
 end;
 
-function TFibonacciGenerator.GetNext: Boolean;
+function TFibonacciGenerator.GetNext: Boolean;  
 var
   Temp: Int64;
 begin
@@ -381,13 +381,13 @@ type
     constructor Create;
   end;
 
-constructor TPrimeGenerator.Create;
+constructor TPrimeGenerator.Create;  
 begin
   inherited Create;
   FCurrentValue := 1; // Commence avant 2 (premier nombre premier)
 end;
 
-function TPrimeGenerator.IsPrime(N: Integer): Boolean;
+function TPrimeGenerator.IsPrime(N: Integer): Boolean;  
 var
   i: Integer;
 begin
@@ -409,7 +409,7 @@ begin
   Result := True;
 end;
 
-function TPrimeGenerator.GetNext: Boolean;
+function TPrimeGenerator.GetNext: Boolean;  
 begin
   repeat
     Inc(FCurrentValue);
@@ -457,7 +457,7 @@ type
     constructor Create(const Elements: array of Integer);
   end;
 
-constructor TPermutationGenerator.Create(const Elements: array of Integer);
+constructor TPermutationGenerator.Create(const Elements: array of Integer);  
 var
   i: Integer;
 begin
@@ -475,7 +475,7 @@ begin
   FFirst := True;
 end;
 
-procedure TPermutationGenerator.Swap(var A, B: Integer);
+procedure TPermutationGenerator.Swap(var A, B: Integer);  
 var
   Temp: Integer;
 begin
@@ -484,7 +484,7 @@ begin
   B := Temp;
 end;
 
-function TPermutationGenerator.NextPermutation: Boolean;
+function TPermutationGenerator.NextPermutation: Boolean;  
 var
   i, j, k: Integer;
 begin
@@ -520,7 +520,7 @@ begin
   Result := True;
 end;
 
-function TPermutationGenerator.GetNext: Boolean;
+function TPermutationGenerator.GetNext: Boolean;  
 var
   i: Integer;
 begin
@@ -624,19 +624,19 @@ implementation
 
 { TListIterator<T> }
 
-constructor TListIterator<T>.Create(AList: TList<T>);
+constructor TListIterator<T>.Create(AList: TList<T>);  
 begin
   inherited Create;
   FList := AList;
   FIndex := -1;
 end;
 
-function TListIterator<T>.GetCurrent: T;
+function TListIterator<T>.GetCurrent: T;  
 begin
   Result := FList[FIndex];
 end;
 
-function TListIterator<T>.MoveNext: Boolean;
+function TListIterator<T>.MoveNext: Boolean;  
 begin
   Inc(FIndex);
   Result := FIndex < FList.Count;
@@ -644,7 +644,7 @@ end;
 
 { TFilterIterator<T> }
 
-constructor TFilterIterator<T>.Create(Source: TIterator<T>; Predicate: TPredicate<T>);
+constructor TFilterIterator<T>.Create(Source: TIterator<T>; Predicate: TPredicate<T>);  
 begin
   inherited Create;
   FSource := Source;
@@ -652,14 +652,14 @@ begin
   FHasCurrent := False;
 end;
 
-function TFilterIterator<T>.GetCurrent: T;
+function TFilterIterator<T>.GetCurrent: T;  
 begin
   if not FHasCurrent then
     raise Exception.Create('No current value');
   Result := FCurrent;
 end;
 
-function TFilterIterator<T>.MoveNext: Boolean;
+function TFilterIterator<T>.MoveNext: Boolean;  
 begin
   while FSource.MoveNext do
   begin
@@ -689,7 +689,7 @@ var
   Iterator: TListIterator<Integer>;
   FilteredIterator: TFilterIterator<Integer>;
 
-function IsEven(N: Integer): Boolean;
+function IsEven(N: Integer): Boolean;  
 begin
   Result := N mod 2 = 0;
 end;
@@ -768,12 +768,12 @@ implementation
 
 { TAsyncOperation }
 
-function TAsyncOperation.IsCompleted: Boolean;
+function TAsyncOperation.IsCompleted: Boolean;  
 begin
   Result := FCompleted;
 end;
 
-function TAsyncOperation.GetResult: Variant;
+function TAsyncOperation.GetResult: Variant;  
 begin
   if not FCompleted then
     raise Exception.Create('Operation not completed');
@@ -782,13 +782,13 @@ end;
 
 { TAsyncCoroutine }
 
-procedure TAsyncCoroutine.AddOperation(Op: TAsyncOperation);
+procedure TAsyncCoroutine.AddOperation(Op: TAsyncOperation);  
 begin
   SetLength(FOperations, Length(FOperations) + 1);
   FOperations[High(FOperations)] := Op;
 end;
 
-function TAsyncCoroutine.Step: Boolean;
+function TAsyncCoroutine.Step: Boolean;  
 begin
   if FCurrentOp >= Length(FOperations) then
     Exit(False);
@@ -803,7 +803,7 @@ begin
   Result := FCurrentOp < Length(FOperations);
 end;
 
-function TAsyncCoroutine.Run: Variant;
+function TAsyncCoroutine.Run: Variant;  
 begin
   FCurrentOp := 0;
 
@@ -839,21 +839,21 @@ type
     destructor Destroy; override;
   end;
 
-constructor TLineReader.Create(const FileName: string);
+constructor TLineReader.Create(const FileName: string);  
 begin
   inherited Create;
   FFileName := FileName;
   FOpened := False;
 end;
 
-destructor TLineReader.Destroy;
+destructor TLineReader.Destroy;  
 begin
   if FOpened then
     CloseFile(FFile);
   inherited;
 end;
 
-function TLineReader.GetNext: Boolean;
+function TLineReader.GetNext: Boolean;  
 begin
   if not FOpened then
   begin
@@ -916,7 +916,7 @@ type
     constructor Create(Source: TGenerator<TIn>; MapFunc: TFunc<TIn, TOut>);
   end;
 
-function TMapGenerator<TIn, TOut>.GetNext: Boolean;
+function TMapGenerator<TIn, TOut>.GetNext: Boolean;  
 begin
   Result := FSource.MoveNext;
   if Result then
@@ -929,12 +929,12 @@ var
   Squares: TMapGenerator<Integer, Integer>;
   EvenSquares: TFilterIterator<Integer>;
 
-function Square(N: Integer): Integer;
+function Square(N: Integer): Integer;  
 begin
   Result := N * N;
 end;
 
-function IsEven(N: Integer): Boolean;
+function IsEven(N: Integer): Boolean;  
 begin
   Result := N mod 2 = 0;
 end;
@@ -974,13 +974,13 @@ type
     procedure Stop;
   end;
 
-procedure TStateMachine.Start;
+procedure TStateMachine.Start;  
 begin
   FState := 0;
   FRunning := True;
 end;
 
-function TStateMachine.Step: Boolean;
+function TStateMachine.Step: Boolean;  
 begin
   if not FRunning then
     Exit(False);
@@ -1014,7 +1014,7 @@ begin
   Result := FRunning;
 end;
 
-procedure TStateMachine.Stop;
+procedure TStateMachine.Stop;  
 begin
   FRunning := False;
 end;
@@ -1067,7 +1067,7 @@ procedure OptimizeForPlatform;
 
 implementation
 
-procedure OptimizeForPlatform;
+procedure OptimizeForPlatform;  
 begin
   {$IFDEF WINDOWS}
   WriteLn('Optimisation Windows : utilisation de fibers natifs possible');
@@ -1090,7 +1090,7 @@ end.
 ✅ **Simplicité**
 ```pascal
 // Sans coroutine : callbacks imbriqués
-GetDataAsync(function(data)
+GetDataAsync(function(data)  
 begin
   ProcessAsync(data, function(result)
   begin
@@ -1102,9 +1102,9 @@ begin
 end);
 
 // Avec coroutine : code linéaire
-data := Await(GetDataAsync());
-result := Await(ProcessAsync(data));
-success := Await(SaveAsync(result));
+data := Await(GetDataAsync());  
+result := Await(ProcessAsync(data));  
+success := Await(SaveAsync(result));  
 WriteLn('Done');
 ```
 
@@ -1125,7 +1125,7 @@ WriteLn('Done');
 ❌ **Blocking bloque tout**
 ```pascal
 // Si une coroutine bloque, toutes bloquent
-procedure BadCoroutine;
+procedure BadCoroutine;  
 begin
   Sleep(1000); // Bloque TOUTES les coroutines !
   Yield;
@@ -1142,14 +1142,14 @@ end;
 
 ```pascal
 // ❌ MAUVAIS
-procedure BadCoroutine;
+procedure BadCoroutine;  
 begin
   Sleep(1000); // Bloque tout
   Yield;
 end;
 
 // ✅ BON
-procedure GoodCoroutine;
+procedure GoodCoroutine;  
 var
   StartTime: TDateTime;
 begin
@@ -1175,7 +1175,7 @@ type
     destructor Destroy; override;
   end;
 
-destructor TResourceGenerator.Destroy;
+destructor TResourceGenerator.Destroy;  
 begin
   FFile.Free; // TOUJOURS libérer
   inherited;
@@ -1186,7 +1186,7 @@ end;
 
 ```pascal
 // ❌ MAUVAIS - Récursion infinie
-function InfiniteGenerator: TGenerator<Integer>;
+function InfiniteGenerator: TGenerator<Integer>;  
 begin
   while True do
   begin
@@ -1207,14 +1207,14 @@ type
     constructor Create(MaxCount: Integer);
   end;
 
-constructor TLimitedGenerator.Create(MaxCount: Integer);
+constructor TLimitedGenerator.Create(MaxCount: Integer);  
 begin
   inherited Create;
   FMaxCount := MaxCount;
   FCount := 0;
 end;
 
-function TLimitedGenerator.GetNext: Boolean;
+function TLimitedGenerator.GetNext: Boolean;  
 begin
   Inc(FCount);
   Result := FCount <= FMaxCount;
@@ -1233,7 +1233,7 @@ type
     function GetNext: Boolean; override;
   end;
 
-function TDocumentedGenerator.GetNext: Boolean;
+function TDocumentedGenerator.GetNext: Boolean;  
 begin
   // Yield point 1 : Après initialisation
   FCurrentValue := InitializeData();
@@ -1256,7 +1256,7 @@ type
     function GetNext: Boolean; override;
   end;
 
-function TSafeGenerator.GetNext: Boolean;
+function TSafeGenerator.GetNext: Boolean;  
 begin
   try
     // Traitement qui peut échouer
@@ -1313,9 +1313,9 @@ type
   cothread_t = Pointer;
 
 // Fonctions LibCo
-function co_active: cothread_t; cdecl; external;
-function co_create(size: cuint; entry: Pointer): cothread_t; cdecl; external;
-procedure co_delete(thread: cothread_t); cdecl; external;
+function co_active: cothread_t; cdecl; external;  
+function co_create(size: cuint; entry: Pointer): cothread_t; cdecl; external;  
+procedure co_delete(thread: cothread_t); cdecl; external;  
 procedure co_switch(thread: cothread_t); cdecl; external;
 
 implementation
@@ -1333,7 +1333,7 @@ var
   MainThread: cothread_t;
   WorkerThread: cothread_t;
 
-procedure WorkerProc; cdecl;
+procedure WorkerProc; cdecl;  
 begin
   WriteLn('Worker: Début');
   co_switch(MainThread); // Yield vers le thread principal
@@ -1389,8 +1389,8 @@ type
   end;
 
 // Fonctions ucontext
-function getcontext(var ucp: ucontext_t): cint; cdecl; external 'c';
-function setcontext(const ucp: ucontext_t): cint; cdecl; external 'c';
+function getcontext(var ucp: ucontext_t): cint; cdecl; external 'c';  
+function setcontext(const ucp: ucontext_t): cint; cdecl; external 'c';  
 procedure makecontext(var ucp: ucontext_t; func: Pointer;
   argc: cint); cdecl; varargs; external 'c';
 function swapcontext(var oucp: ucontext_t;
@@ -1444,7 +1444,7 @@ implementation
 
 { TProducer<T> }
 
-function TProducer<T>.GetNext: Boolean;
+function TProducer<T>.GetNext: Boolean;  
 begin
   try
     FCurrentValue := Produce;
@@ -1456,25 +1456,25 @@ end;
 
 { TPipeline<T> }
 
-constructor TPipeline<T>.Create(Producer: TProducer<T>);
+constructor TPipeline<T>.Create(Producer: TProducer<T>);  
 begin
   inherited Create;
   FProducer := Producer;
   FConsumers := TList<TConsumer<T>>.Create;
 end;
 
-destructor TPipeline<T>.Destroy;
+destructor TPipeline<T>.Destroy;  
 begin
   FConsumers.Free;
   inherited;
 end;
 
-procedure TPipeline<T>.AddConsumer(Consumer: TConsumer<T>);
+procedure TPipeline<T>.AddConsumer(Consumer: TConsumer<T>);  
 begin
   FConsumers.Add(Consumer);
 end;
 
-procedure TPipeline<T>.Run;
+procedure TPipeline<T>.Run;  
 var
   Consumer: TConsumer<T>;
 begin
@@ -1512,14 +1512,14 @@ type
     procedure Consume(const Item: Integer); override;
   end;
 
-constructor TNumberProducer.Create(Max: Integer);
+constructor TNumberProducer.Create(Max: Integer);  
 begin
   inherited Create;
   FCount := 0;
   FMax := Max;
 end;
 
-function TNumberProducer.Produce: Integer;
+function TNumberProducer.Produce: Integer;  
 begin
   Inc(FCount);
   if FCount > FMax then
@@ -1527,12 +1527,12 @@ begin
   Result := FCount;
 end;
 
-procedure TPrinterConsumer.Consume(const Item: Integer);
+procedure TPrinterConsumer.Consume(const Item: Integer);  
 begin
   WriteLn('Nombre : ', Item);
 end;
 
-procedure TSquareConsumer.Consume(const Item: Integer);
+procedure TSquareConsumer.Consume(const Item: Integer);  
 begin
   WriteLn('Carré : ', Item * Item);
 end;
@@ -1583,7 +1583,7 @@ type
     function ToArray: TArray<T>;
   end;
 
-constructor TLazyList<T>.Create(Generator: TGenerator<T>);
+constructor TLazyList<T>.Create(Generator: TGenerator<T>);  
 begin
   inherited Create;
   FGenerator := Generator;
@@ -1591,13 +1591,13 @@ begin
   FAllGenerated := False;
 end;
 
-destructor TLazyList<T>.Destroy;
+destructor TLazyList<T>.Destroy;  
 begin
   FCache.Free;
   inherited;
 end;
 
-function TLazyList<T>.Get(Index: Integer): T;
+function TLazyList<T>.Get(Index: Integer): T;  
 begin
   // Générer jusqu'à l'index demandé
   while (FCache.Count <= Index) and not FAllGenerated do
@@ -1614,7 +1614,7 @@ begin
     raise Exception.Create('Index out of range');
 end;
 
-function TLazyList<T>.Take(Count: Integer): TArray<T>;
+function TLazyList<T>.Take(Count: Integer): TArray<T>;  
 var
   i: Integer;
 begin
@@ -1623,7 +1623,7 @@ begin
     Result[i] := Get(i);
 end;
 
-function TLazyList<T>.ToArray: TArray<T>;
+function TLazyList<T>.ToArray: TArray<T>;  
 begin
   // Générer tout
   while FGenerator.MoveNext do
@@ -1673,7 +1673,7 @@ type
     procedure Reset;
   end;
 
-constructor TMemoizedGenerator<T>.Create(Source: TGenerator<T>);
+constructor TMemoizedGenerator<T>.Create(Source: TGenerator<T>);  
 begin
   inherited Create;
   FSource := Source;
@@ -1681,13 +1681,13 @@ begin
   FIndex := -1;
 end;
 
-destructor TMemoizedGenerator<T>.Destroy;
+destructor TMemoizedGenerator<T>.Destroy;  
 begin
   FCache.Free;
   inherited;
 end;
 
-function TMemoizedGenerator<T>.GetNext: Boolean;
+function TMemoizedGenerator<T>.GetNext: Boolean;  
 begin
   Inc(FIndex);
 
@@ -1707,7 +1707,7 @@ begin
   end;
 end;
 
-procedure TMemoizedGenerator<T>.Reset;
+procedure TMemoizedGenerator<T>.Reset;  
 begin
   FIndex := -1;
 end;
@@ -1750,7 +1750,7 @@ end;
 
 ```pascal
 // 1. THREADS : Parallélisme vrai
-procedure WithThreads;
+procedure WithThreads;  
 var
   Thread1, Thread2: TThread;
 begin
@@ -1768,7 +1768,7 @@ begin
 end;
 
 // 2. COROUTINES : Concurrence coopérative
-procedure WithCoroutines;
+procedure WithCoroutines;  
 var
   Coro1, Coro2: TCoroutine;
 begin
@@ -1786,7 +1786,7 @@ begin
 end;
 
 // 3. ASYNC/AWAIT : Asynchrone simplifié
-procedure WithAsyncAwait;
+procedure WithAsyncAwait;  
 begin
   Task1Async()
     .&Then(procedure
@@ -1838,7 +1838,7 @@ function BenchmarkGenerator(Gen: TRangeGenerator; Iterations: Integer): TBenchma
 
 implementation
 
-function BenchmarkGenerator(Gen: TRangeGenerator; Iterations: Integer): TBenchmarkResult;
+function BenchmarkGenerator(Gen: TRangeGenerator; Iterations: Integer): TBenchmarkResult;  
 var
   StartTime, EndTime: TDateTime;
   i: Integer;
@@ -1871,7 +1871,7 @@ end.
 ### Comparaison de performances
 
 ```pascal
-procedure CompareApproaches;
+procedure CompareApproaches;  
 var
   StartTime: TDateTime;
   i, Sum: Integer;
@@ -1958,7 +1958,7 @@ Numbers
 4. **State machines complexes**
 ```pascal
 // Machine à états avec yield entre chaque état
-FSM.Start;
+FSM.Start;  
 while FSM.Step do
   Sleep(100); // Pause entre états
 ```

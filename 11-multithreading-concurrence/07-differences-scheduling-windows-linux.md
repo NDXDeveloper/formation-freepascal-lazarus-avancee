@@ -16,7 +16,7 @@ SetThreadPriority(Handle, 15); // Valeur Windows spécifique
 type
   TAppPriority = (apBackground, apNormal, apImportant);
 
-procedure SetApplicationPriority(Priority: TAppPriority);
+procedure SetApplicationPriority(Priority: TAppPriority);  
 begin
   case Priority of
     apBackground:
@@ -54,7 +54,7 @@ end;
 ### 2. Gérer les échecs de changement de priorité
 
 ```pascal
-function TrySetHighPriority: Boolean;
+function TrySetHighPriority: Boolean;  
 begin
   Result := True;
 
@@ -75,7 +75,7 @@ begin
 end;
 
 // Utilisation
-procedure ConfigureApplication;
+procedure ConfigureApplication;  
 begin
   if not TrySetHighPriority then
   begin
@@ -108,7 +108,7 @@ type
 
 implementation
 
-class procedure TPlatformTest.TestScheduling;
+class procedure TPlatformTest.TestScheduling;  
 var
   StartTime: TDateTime;
   Iterations: Int64;
@@ -136,7 +136,7 @@ begin
   WriteLn('Context switches estimés : ', Iterations div 10000);
 end;
 
-class procedure TPlatformTest.TestContextSwitchCost;
+class procedure TPlatformTest.TestContextSwitchCost;  
 var
   Thread1, Thread2: TThread;
   StartTime, EndTime: TDateTime;
@@ -189,7 +189,7 @@ begin
   Thread2.Free;
 end;
 
-class procedure TPlatformTest.TestPriorityEffects;
+class procedure TPlatformTest.TestPriorityEffects;  
 var
   HighPriority, LowPriority: TThread;
   CountHigh, CountLow: Int64;
@@ -296,7 +296,7 @@ type
 
 implementation
 
-constructor TRealtimeThread.Create;
+constructor TRealtimeThread.Create;  
 begin
   inherited Create(True);
 
@@ -314,7 +314,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TRealtimeThread.Execute;
+procedure TRealtimeThread.Execute;  
 var
   LastTime, CurrentTime: QWord;
   Delta: Int64;
@@ -369,7 +369,7 @@ type
 
 implementation
 
-constructor TServerThread.Create(WorkerID: Integer);
+constructor TServerThread.Create(WorkerID: Integer);  
 begin
   inherited Create(True);
   FWorkerID := WorkerID;
@@ -391,7 +391,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TServerThread.Execute;
+procedure TServerThread.Execute;  
 begin
   while not Terminated do
   begin
@@ -432,7 +432,7 @@ implementation
 
 { TUIThread }
 
-procedure TUIThread.Execute;
+procedure TUIThread.Execute;  
 begin
   {$IFDEF WINDOWS}
   // Windows : Priorité normale avec priority boost
@@ -455,7 +455,7 @@ end;
 
 { TBackgroundWorker }
 
-procedure TBackgroundWorker.Execute;
+procedure TBackgroundWorker.Execute;  
 begin
   {$IFDEF WINDOWS}
   // Windows : Basse priorité pour ne pas gêner l'UI
@@ -490,7 +490,7 @@ var
   SharedResource: TCriticalSection;
 
 // Thread haute priorité
-procedure HighPriorityThread;
+procedure HighPriorityThread;  
 begin
   SharedResource.Enter;
   try
@@ -501,7 +501,7 @@ begin
 end;
 
 // Thread basse priorité
-procedure LowPriorityThread;
+procedure LowPriorityThread;  
 begin
   SharedResource.Enter;
   try
@@ -516,7 +516,7 @@ end;
 
 ```pascal
 // 1. Utiliser des verrous courts
-procedure BetterLowPriorityThread;
+procedure BetterLowPriorityThread;  
 begin
   SharedResource.Enter;
   try
@@ -542,7 +542,7 @@ end;
 
 ```pascal
 // Thread haute priorité qui monopolise le CPU
-procedure GreedyThread;
+procedure GreedyThread;  
 begin
   while not Terminated do
   begin
@@ -556,7 +556,7 @@ end;
 
 ```pascal
 // Ajouter des yields réguliers
-procedure PoliteThread;
+procedure PoliteThread;  
 begin
   while not Terminated do
   begin
@@ -571,7 +571,7 @@ begin
 end;
 
 // Ou utiliser un délai approprié
-procedure BetterThread;
+procedure BetterThread;  
 begin
   while not Terminated do
   begin
@@ -643,7 +643,7 @@ end;
 
 ```pascal
 // ❌ MAUVAIS - Tous les threads sur le même cœur
-for i := 0 to 7 do
+for i := 0 to 7 do  
 begin
   Thread := CreateThread();
   SetThreadAffinityMask(Thread.Handle, $01); // Tous sur CPU 0 !
@@ -676,7 +676,7 @@ begin
 end;
 
 // Ou mieux : laisser l'OS gérer l'affinité
-for i := 0 to 7 do
+for i := 0 to 7 do  
 begin
   Thread := CreateThread();
   // Pas d'affinité = L'OS optimise automatiquement
@@ -740,13 +740,13 @@ type
 
 implementation
 
-constructor TPortableThread.Create(Priority: TAppThreadPriority);
+constructor TPortableThread.Create(Priority: TAppThreadPriority);  
 begin
   inherited Create(True);
   FAppPriority := Priority;
 end;
 
-procedure TPortableThread.ApplyPlatformSettings;
+procedure TPortableThread.ApplyPlatformSettings;  
 begin
   case FAppPriority of
     atpBackground:
@@ -794,7 +794,7 @@ begin
   end;
 end;
 
-procedure TPortableThread.Execute;
+procedure TPortableThread.Execute;  
 begin
   ApplyPlatformSettings;
 

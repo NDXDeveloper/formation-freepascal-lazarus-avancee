@@ -24,11 +24,11 @@ Par défaut, le système d'exploitation décide librement sur quel cœur exécut
 ### Pourquoi contrôler l'affinité ?
 
 ```
-Sans affinité :
+Sans affinité :  
 Thread A : Cœur 0 → Cœur 2 → Cœur 1 → Cœur 3
            (migrations fréquentes = perte de cache)
 
-Avec affinité :
+Avec affinité :  
 Thread A : Cœur 0 → Cœur 0 → Cœur 0 → Cœur 0
            (pas de migration = cache préservé)
 ```
@@ -78,9 +78,9 @@ function SetProcessAffinityMask(
 Le masque d'affinité est un nombre binaire où chaque bit représente un cœur :
 
 ```
-Bit 0 (valeur 1)   = Cœur 0
-Bit 1 (valeur 2)   = Cœur 1
-Bit 2 (valeur 4)   = Cœur 2
+Bit 0 (valeur 1)   = Cœur 0  
+Bit 1 (valeur 2)   = Cœur 1  
+Bit 2 (valeur 4)   = Cœur 2  
 Bit 3 (valeur 8)   = Cœur 3
 ...
 
@@ -111,14 +111,14 @@ type
     constructor Create(ACoreNumber: Integer);
   end;
 
-constructor TWorkerThread.Create(ACoreNumber: Integer);
+constructor TWorkerThread.Create(ACoreNumber: Integer);  
 begin
   inherited Create(True); // Créé suspendu
   FCoreNumber := ACoreNumber;
   FreeOnTerminate := True;
 end;
 
-procedure TWorkerThread.Execute;
+procedure TWorkerThread.Execute;  
 var
   Mask: DWORD_PTR;
   OldMask: DWORD_PTR;
@@ -172,7 +172,7 @@ end.
 ### Obtenir des informations système sous Windows
 
 ```pascal
-procedure GetCPUInfo;
+procedure GetCPUInfo;  
 var
   SysInfo: SYSTEM_INFO;
   ProcessAffinityMask, SystemAffinityMask: DWORD_PTR;
@@ -209,8 +209,8 @@ type
   end;
 
 // Macros C converties en fonctions Pascal
-procedure CPU_ZERO(var CpuSet: cpu_set_t); inline;
-procedure CPU_SET(cpu: Integer; var CpuSet: cpu_set_t); inline;
+procedure CPU_ZERO(var CpuSet: cpu_set_t); inline;  
+procedure CPU_SET(cpu: Integer; var CpuSet: cpu_set_t); inline;  
 function CPU_ISSET(cpu: Integer; const CpuSet: cpu_set_t): Boolean; inline;
 
 // Fonctions système
@@ -224,12 +224,12 @@ function sched_getaffinity(pid: pid_t; cpusetsize: size_t;
 ### Implémentation des macros CPU_*
 
 ```pascal
-procedure CPU_ZERO(var CpuSet: cpu_set_t);
+procedure CPU_ZERO(var CpuSet: cpu_set_t);  
 begin
   FillChar(CpuSet, SizeOf(CpuSet), 0);
 end;
 
-procedure CPU_SET(cpu: Integer; var CpuSet: cpu_set_t);
+procedure CPU_SET(cpu: Integer; var CpuSet: cpu_set_t);  
 var
   idx, bit: Integer;
 begin
@@ -238,7 +238,7 @@ begin
   CpuSet.__bits[idx] := CpuSet.__bits[idx] or (QWord(1) shl bit);
 end;
 
-function CPU_ISSET(cpu: Integer; const CpuSet: cpu_set_t): Boolean;
+function CPU_ISSET(cpu: Integer; const CpuSet: cpu_set_t): Boolean;  
 var
   idx, bit: Integer;
 begin
@@ -263,12 +263,12 @@ type
     __bits: array[0..15] of QWord;
   end;
 
-procedure CPU_ZERO(var CpuSet: cpu_set_t); inline;
+procedure CPU_ZERO(var CpuSet: cpu_set_t); inline;  
 begin
   FillChar(CpuSet, SizeOf(CpuSet), 0);
 end;
 
-procedure CPU_SET(cpu: Integer; var CpuSet: cpu_set_t); inline;
+procedure CPU_SET(cpu: Integer; var CpuSet: cpu_set_t); inline;  
 var
   idx, bit: Integer;
 begin
@@ -290,14 +290,14 @@ type
     constructor Create(ACoreNumber: Integer);
   end;
 
-constructor TWorkerThread.Create(ACoreNumber: Integer);
+constructor TWorkerThread.Create(ACoreNumber: Integer);  
 begin
   inherited Create(True);
   FCoreNumber := ACoreNumber;
   FreeOnTerminate := True;
 end;
 
-procedure TWorkerThread.Execute;
+procedure TWorkerThread.Execute;  
 var
   CpuSet: cpu_set_t;
   i: Integer;
@@ -349,17 +349,17 @@ end.
 ### Obtenir des informations système sous Linux
 
 ```pascal
-function GetCPUCount: Integer;
+function GetCPUCount: Integer;  
 begin
   Result := sysconf(_SC_NPROCESSORS_ONLN); // Cœurs en ligne
 end;
 
-function GetCPUCountConfigured: Integer;
+function GetCPUCountConfigured: Integer;  
 begin
   Result := sysconf(_SC_NPROCESSORS_CONF); // Cœurs configurés
 end;
 
-procedure ShowCPUAffinity;
+procedure ShowCPUAffinity;  
 var
   CpuSet: cpu_set_t;
   i: Integer;
@@ -413,11 +413,11 @@ type
     {$ENDIF}
   end;
 
-function GetCPUCount: Integer;
-function SetThreadAffinity(ThreadID: TThreadID; CoreNumber: Integer): Boolean;
-function SetThreadAffinitySet(ThreadID: TThreadID; const CpuSet: TCPUSet): Boolean;
-procedure InitCPUSet(var CpuSet: TCPUSet);
-procedure AddCPUToSet(var CpuSet: TCPUSet; CoreNumber: Integer);
+function GetCPUCount: Integer;  
+function SetThreadAffinity(ThreadID: TThreadID; CoreNumber: Integer): Boolean;  
+function SetThreadAffinitySet(ThreadID: TThreadID; const CpuSet: TCPUSet): Boolean;  
+procedure InitCPUSet(var CpuSet: TCPUSet);  
+procedure AddCPUToSet(var CpuSet: TCPUSet; CoreNumber: Integer);  
 function GetCurrentThreadAffinity(var CpuSet: TCPUSet): Boolean;
 
 implementation
@@ -465,7 +465,7 @@ begin
   {$ENDIF}
 end;
 
-procedure InitCPUSet(var CpuSet: TCPUSet);
+procedure InitCPUSet(var CpuSet: TCPUSet);  
 begin
   {$IFDEF WINDOWS}
   CpuSet.Mask := 0;
@@ -491,7 +491,7 @@ begin
   {$ENDIF}
 end;
 
-function SetThreadAffinitySet(ThreadID: TThreadID; const CpuSet: TCPUSet): Boolean;
+function SetThreadAffinitySet(ThreadID: TThreadID; const CpuSet: TCPUSet): Boolean;  
 begin
   {$IFDEF WINDOWS}
   Result := SetThreadAffinityMask(ThreadID, CpuSet.Mask) <> 0;
@@ -540,14 +540,14 @@ type
     constructor Create(ACoreNumber: Integer);
   end;
 
-constructor TWorkerThread.Create(ACoreNumber: Integer);
+constructor TWorkerThread.Create(ACoreNumber: Integer);  
 begin
   inherited Create(True);
   FCoreNumber := ACoreNumber;
   FreeOnTerminate := True;
 end;
 
-procedure TWorkerThread.Execute;
+procedure TWorkerThread.Execute;  
 var
   i: Integer;
   Sum: Int64;
@@ -594,7 +594,7 @@ end.
 
 ```pascal
 // Séparer les threads I/O des threads de calcul
-procedure ConfigureThreadPool;
+procedure ConfigureThreadPool;  
 var
   CpuSet: TCPUSet;
 begin
@@ -616,7 +616,7 @@ end;
 
 ```pascal
 // Dédier un cœur à une tâche temps-réel
-procedure SetupRealTimeTask;
+procedure SetupRealTimeTask;  
 var
   RTCore: Integer;
 begin
@@ -632,7 +632,7 @@ end;
 
 ```pascal
 // Sur les systèmes NUMA, garder les threads près de leur mémoire
-procedure OptimizeForNUMA;
+procedure OptimizeForNUMA;  
 begin
   // Socket 0 : cœurs 0-7
   // Socket 1 : cœurs 8-15

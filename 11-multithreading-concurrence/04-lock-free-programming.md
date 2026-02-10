@@ -64,7 +64,7 @@ L'opération **Compare-And-Swap** est l'instruction fondamentale du lock-free.
 
 **Principe :**
 ```
-function CompareAndSwap(var Target; Expected, NewValue: Value): Boolean;
+function CompareAndSwap(var Target; Expected, NewValue: Value): Boolean;  
 begin
   if Target = Expected then
   begin
@@ -84,11 +84,11 @@ Un problème classique du lock-free où une valeur change de A → B → A, donn
 
 **Exemple du problème :**
 ```
-Thread 1                    Thread 2
+Thread 1                    Thread 2  
 Lit A
                            Change A en B
                            Change B en A
-CAS réussit (croit que rien n'a changé)
+CAS réussit (croit que rien n'a changé)  
 Mais en réalité, des changements ont eu lieu !
 ```
 
@@ -103,12 +103,12 @@ Les processeurs modernes peuvent réordonner les instructions pour optimiser les
 
 ```pascal
 // Sans barrier : ordre non garanti
-Write(Data);
+Write(Data);  
 Write(Flag);  // Un autre thread peut voir Flag = true avant que Data soit écrit !
 
 // Avec barrier : ordre garanti
-Write(Data);
-WriteBarrier;  // Garantit que Data est écrit avant Flag
+Write(Data);  
+WriteBarrier;  // Garantit que Data est écrit avant Flag  
 Write(Flag);
 ```
 
@@ -223,31 +223,31 @@ implementation
 
 { TLockFreeCounter }
 
-constructor TLockFreeCounter.Create(InitialValue: Integer);
+constructor TLockFreeCounter.Create(InitialValue: Integer);  
 begin
   inherited Create;
   FValue := InitialValue;
 end;
 
-function TLockFreeCounter.Increment: Integer;
+function TLockFreeCounter.Increment: Integer;  
 begin
   // InterlockedIncrement retourne la NOUVELLE valeur
   Result := InterlockedIncrement(FValue);
 end;
 
-function TLockFreeCounter.Decrement: Integer;
+function TLockFreeCounter.Decrement: Integer;  
 begin
   Result := InterlockedDecrement(FValue);
 end;
 
-function TLockFreeCounter.Add(Delta: Integer): Integer;
+function TLockFreeCounter.Add(Delta: Integer): Integer;  
 begin
   // InterlockedExchangeAdd retourne l'ANCIENNE valeur
   // Donc on ajoute Delta pour obtenir la nouvelle
   Result := InterlockedExchangeAdd(FValue, Delta) + Delta;
 end;
 
-function TLockFreeCounter.Get: Integer;
+function TLockFreeCounter.Get: Integer;  
 begin
   // La lecture d'un Integer aligné est atomique sur x86/x64
   Result := FValue;
@@ -256,12 +256,12 @@ begin
   // Result := InterlockedCompareExchange(FValue, 0, 0);
 end;
 
-procedure TLockFreeCounter.SetValue(NewValue: Integer);
+procedure TLockFreeCounter.SetValue(NewValue: Integer);  
 begin
   InterlockedExchange(FValue, NewValue);
 end;
 
-function TLockFreeCounter.IncrementIfLessThan(Limit: Integer): Boolean;
+function TLockFreeCounter.IncrementIfLessThan(Limit: Integer): Boolean;  
 var
   OldValue, NewValue: Integer;
 begin
@@ -291,7 +291,7 @@ var
   i: Integer;
 
 // Plusieurs threads peuvent faire ceci simultanément
-procedure WorkerThread;
+procedure WorkerThread;  
 var
   i: Integer;
 begin
@@ -351,13 +351,13 @@ implementation
 
 { TLockFreeStack }
 
-constructor TLockFreeStack.Create;
+constructor TLockFreeStack.Create;  
 begin
   inherited Create;
   FTop := nil;
 end;
 
-destructor TLockFreeStack.Destroy;
+destructor TLockFreeStack.Destroy;  
 var
   Node: PLockFreeNode;
   Data: Pointer;
@@ -369,7 +369,7 @@ begin
   inherited;
 end;
 
-procedure TLockFreeStack.Push(Data: Pointer);
+procedure TLockFreeStack.Push(Data: Pointer);  
 var
   NewNode: PLockFreeNode;
   OldTop: PLockFreeNode;
@@ -389,7 +389,7 @@ begin
   ) = Pointer(OldTop);
 end;
 
-function TLockFreeStack.Pop(out Data: Pointer): Boolean;
+function TLockFreeStack.Pop(out Data: Pointer): Boolean;  
 var
   OldTop, NewTop: PLockFreeNode;
 begin
@@ -415,7 +415,7 @@ begin
   Result := True;
 end;
 
-function TLockFreeStack.IsEmpty: Boolean;
+function TLockFreeStack.IsEmpty: Boolean;  
 begin
   Result := FTop = nil;
 end;
@@ -431,8 +431,8 @@ end.
 ```
 État initial : A → B → C
 
-Thread 1 : Lit A, veut le retirer
-Thread 2 : Pop A, Pop B, Push A  (A est recyclé)
+Thread 1 : Lit A, veut le retirer  
+Thread 2 : Pop A, Pop B, Push A  (A est recyclé)  
 Thread 1 : CAS réussit (A est toujours là) mais Next pointe sur une mauvaise adresse !
 ```
 
@@ -505,7 +505,7 @@ implementation
 
 { TLockFreeQueue }
 
-constructor TLockFreeQueue.Create;
+constructor TLockFreeQueue.Create;  
 var
   DummyNode: PLockFreeQueueNode;
 begin
@@ -520,7 +520,7 @@ begin
   FTail := DummyNode;
 end;
 
-destructor TLockFreeQueue.Destroy;
+destructor TLockFreeQueue.Destroy;  
 var
   Node, NextNode: PLockFreeQueueNode;
 begin
@@ -536,7 +536,7 @@ begin
   inherited;
 end;
 
-procedure TLockFreeQueue.Enqueue(Data: Pointer);
+procedure TLockFreeQueue.Enqueue(Data: Pointer);  
 var
   NewNode: PLockFreeQueueNode;
   OldTail, OldNext: PLockFreeQueueNode;
@@ -585,7 +585,7 @@ begin
   end;
 end;
 
-function TLockFreeQueue.Dequeue(out Data: Pointer): Boolean;
+function TLockFreeQueue.Dequeue(out Data: Pointer): Boolean;  
 var
   OldHead, OldTail, OldNext: PLockFreeQueueNode;
 begin
@@ -631,7 +631,7 @@ begin
   end;
 end;
 
-function TLockFreeQueue.IsEmpty: Boolean;
+function TLockFreeQueue.IsEmpty: Boolean;  
 begin
   Result := FHead^.Next = nil;
 end;
@@ -648,7 +648,7 @@ var
   Value: Integer;
 
 // Thread producteur
-procedure Producer;
+procedure Producer;  
 var
   i: Integer;
 begin
@@ -660,7 +660,7 @@ begin
 end;
 
 // Thread consommateur
-procedure Consumer;
+procedure Consumer;  
 var
   Data: Pointer;
   Value: Integer;
@@ -721,7 +721,7 @@ implementation
 
 { TLockFreeHashTable }
 
-constructor TLockFreeHashTable.Create;
+constructor TLockFreeHashTable.Create;  
 var
   i: Integer;
 begin
@@ -730,7 +730,7 @@ begin
     FBuckets[i] := nil;
 end;
 
-destructor TLockFreeHashTable.Destroy;
+destructor TLockFreeHashTable.Destroy;  
 var
   i: Integer;
   Node, NextNode: PHashNode;
@@ -750,13 +750,13 @@ begin
   inherited;
 end;
 
-function TLockFreeHashTable.Hash(Key: Integer): Integer;
+function TLockFreeHashTable.Hash(Key: Integer): Integer;  
 begin
   // Simple hash function
   Result := (Key * 2654435761) mod HASH_TABLE_SIZE;
 end;
 
-procedure TLockFreeHashTable.Insert(Key: Integer; Value: Pointer);
+procedure TLockFreeHashTable.Insert(Key: Integer; Value: Pointer);  
 var
   BucketIndex: Integer;
   NewNode, OldHead: PHashNode;
@@ -779,7 +779,7 @@ begin
   ) = Pointer(OldHead);
 end;
 
-function TLockFreeHashTable.Find(Key: Integer; out Value: Pointer): Boolean;
+function TLockFreeHashTable.Find(Key: Integer; out Value: Pointer): Boolean;  
 var
   BucketIndex: Integer;
   Node: PHashNode;
@@ -801,7 +801,7 @@ begin
   Result := False;
 end;
 
-function TLockFreeHashTable.Delete(Key: Integer): Boolean;
+function TLockFreeHashTable.Delete(Key: Integer): Boolean;  
 var
   BucketIndex: Integer;
   Prev, Current, Next: PHashNode;
@@ -825,7 +825,7 @@ end.
 Contrôler l'ordre d'exécution des instructions mémoire.
 
 ```pascal
-procedure WriteBarrier; inline;
+procedure WriteBarrier; inline;  
 begin
   {$IFDEF CPUX86}
   asm
@@ -839,7 +839,7 @@ begin
   {$ENDIF}
 end;
 
-procedure ReadBarrier; inline;
+procedure ReadBarrier; inline;  
 begin
   {$IFDEF CPUX86}
   asm
@@ -853,7 +853,7 @@ begin
   {$ENDIF}
 end;
 
-procedure FullBarrier; inline;
+procedure FullBarrier; inline;  
 begin
   {$IFDEF CPUX86}
   asm
@@ -884,27 +884,27 @@ type
     procedure Reset;
   end;
 
-constructor TBackoffStrategy.Create(MaxWait: Integer);
+constructor TBackoffStrategy.Create(MaxWait: Integer);  
 begin
   inherited Create;
   FMaxWait := MaxWait;
   FCurrentWait := 1;
 end;
 
-procedure TBackoffStrategy.Wait;
+procedure TBackoffStrategy.Wait;  
 begin
   // Attente exponentielle
   Sleep(FCurrentWait);
   FCurrentWait := Min(FCurrentWait * 2, FMaxWait); // uses Math
 end;
 
-procedure TBackoffStrategy.Reset;
+procedure TBackoffStrategy.Reset;  
 begin
   FCurrentWait := 1;
 end;
 
 // Utilisation dans une boucle CAS
-procedure OperationAvecBackoff;
+procedure OperationAvecBackoff;  
 var
   Backoff: TBackoffStrategy;
 begin
@@ -950,31 +950,31 @@ type
 
 implementation
 
-constructor THazardPointer.Create;
+constructor THazardPointer.Create;  
 begin
   inherited;
   FProtected := TThreadSafeList<Pointer>.Create;
 end;
 
-destructor THazardPointer.Destroy;
+destructor THazardPointer.Destroy;  
 begin
   FProtected.Free;
   inherited;
 end;
 
-procedure THazardPointer.Protect(P: Pointer);
+procedure THazardPointer.Protect(P: Pointer);  
 begin
   if P <> nil then
     FProtected.Add(P);
 end;
 
-procedure THazardPointer.Unprotect(P: Pointer);
+procedure THazardPointer.Unprotect(P: Pointer);  
 begin
   if P <> nil then
     FProtected.Remove(P);
 end;
 
-function THazardPointer.IsSafeToDelete(P: Pointer): Boolean;
+function THazardPointer.IsSafeToDelete(P: Pointer): Boolean;  
 begin
   Result := not FProtected.Contains(P);
 end;
@@ -1035,7 +1035,7 @@ type
 
 ```pascal
 // Test de stress avec plusieurs threads
-procedure StressTest;
+procedure StressTest;  
 var
   Counter: TLockFreeCounter;
   Threads: array[1..100] of TThread;
@@ -1078,7 +1078,7 @@ end;
 
 ```pascal
 // 1. Logging atomique
-procedure AtomicLog(const Msg: string);
+procedure AtomicLog(const Msg: string);  
 var
   CS: TCriticalSection;
 begin
@@ -1095,7 +1095,7 @@ var
   CASAttempts: Integer = 0;   // Integer car InterlockedIncrement = Longint
   CASSuccesses: Integer = 0;
 
-procedure TrackCAS(Success: Boolean);
+procedure TrackCAS(Success: Boolean);  
 begin
   InterlockedIncrement(CASAttempts);
   if Success then
@@ -1103,7 +1103,7 @@ begin
 end;
 
 // 3. Invariants
-procedure CheckInvariant(Condition: Boolean; const Msg: string);
+procedure CheckInvariant(Condition: Boolean; const Msg: string);  
 begin
   if not Condition then
     raise Exception.Create('Invariant violé : ' + Msg);
@@ -1138,18 +1138,18 @@ implementation
 uses
   SysUtils;
 
-procedure TPerformanceMeter.Start;
+procedure TPerformanceMeter.Start;  
 begin
   FStartTime := GetTickCount64;
   FOperationCount := 0;
 end;
 
-procedure TPerformanceMeter.RecordOperation;
+procedure TPerformanceMeter.RecordOperation;  
 begin
   InterlockedIncrement(FOperationCount);
 end;
 
-function TPerformanceMeter.GetThroughput: Double;
+function TPerformanceMeter.GetThroughput: Double;  
 var
   ElapsedMs: Int64;
 begin
@@ -1160,7 +1160,7 @@ begin
     Result := 0;
 end;
 
-function TPerformanceMeter.GetAverageLatency: Double;
+function TPerformanceMeter.GetAverageLatency: Double;  
 var
   ElapsedMs: Int64;
 begin
@@ -1175,7 +1175,7 @@ end;
 ### Comparaison Lock vs Lock-free
 
 ```pascal
-procedure CompareLockVsLockFree;
+procedure CompareLockVsLockFree;  
 var
   LockCounter: Integer;
   LockFreeCounter: TLockFreeCounter;
@@ -1261,11 +1261,11 @@ Sur un processeur quad-core moderne, vous pourriez observer :
 
 ```
 === Test avec Critical Section ===
-Throughput: 1500000 ops/sec
+Throughput: 1500000 ops/sec  
 Résultat: 400000
 
 === Test Lock-Free ===
-Throughput: 8000000 ops/sec
+Throughput: 8000000 ops/sec  
 Résultat: 400000
 ```
 
@@ -1316,7 +1316,7 @@ implementation
 
 { TLockFreeMemoryPool }
 
-constructor TLockFreeMemoryPool.Create;
+constructor TLockFreeMemoryPool.Create;  
 var
   i: Integer;
   Block: PMemoryBlock;
@@ -1335,7 +1335,7 @@ begin
   end;
 end;
 
-destructor TLockFreeMemoryPool.Destroy;
+destructor TLockFreeMemoryPool.Destroy;  
 var
   Block, NextBlock: PMemoryBlock;
 begin
@@ -1351,7 +1351,7 @@ begin
   inherited;
 end;
 
-function TLockFreeMemoryPool.Allocate: PMemoryBlock;
+function TLockFreeMemoryPool.Allocate: PMemoryBlock;  
 var
   OldHead: PMemoryBlock;
 begin
@@ -1377,7 +1377,7 @@ begin
   InterlockedIncrement(FAllocatedCount);
 end;
 
-procedure TLockFreeMemoryPool.Deallocate(Block: PMemoryBlock);
+procedure TLockFreeMemoryPool.Deallocate(Block: PMemoryBlock);  
 var
   OldHead: PMemoryBlock;
 begin
@@ -1396,7 +1396,7 @@ begin
   InterlockedDecrement(FAllocatedCount);
 end;
 
-function TLockFreeMemoryPool.GetAllocatedCount: Integer;
+function TLockFreeMemoryPool.GetAllocatedCount: Integer;  
 begin
   Result := FAllocatedCount;
 end;
@@ -1461,14 +1461,14 @@ implementation
 
 { TLogWriterThread }
 
-constructor TLogWriterThread.Create(ALogger: TLockFreeLogger);
+constructor TLogWriterThread.Create(ALogger: TLockFreeLogger);  
 begin
   inherited Create(False); // Démarrer immédiatement
   FLogger := ALogger;
   FreeOnTerminate := False;
 end;
 
-procedure TLogWriterThread.Execute;
+procedure TLogWriterThread.Execute;  
 var
   Entry, NextEntry: PLogEntry;
   LevelStr: string;
@@ -1506,7 +1506,7 @@ end;
 
 { TLockFreeLogger }
 
-constructor TLockFreeLogger.Create(const FileName: string);
+constructor TLockFreeLogger.Create(const FileName: string);  
 begin
   inherited Create;
 
@@ -1520,7 +1520,7 @@ begin
   FWriterThread := TLogWriterThread.Create(Self);
 end;
 
-destructor TLockFreeLogger.Destroy;
+destructor TLockFreeLogger.Destroy;  
 begin
   FRunning := False;
   FWriterThread.WaitFor;
@@ -1532,7 +1532,7 @@ begin
   inherited;
 end;
 
-procedure TLockFreeLogger.Log(Level: TLogLevel; const Msg: string);
+procedure TLockFreeLogger.Log(Level: TLogLevel; const Msg: string);  
 var
   Entry: PLogEntry;
   OldHead: PLogEntry;
@@ -1555,7 +1555,7 @@ begin
   ) = Pointer(OldHead);
 end;
 
-procedure TLockFreeLogger.Flush;
+procedure TLockFreeLogger.Flush;  
 var
   Entry, NextEntry: PLogEntry;
 begin
@@ -1635,7 +1635,7 @@ implementation
 
 { TLockFreeRingBuffer<T> }
 
-constructor TLockFreeRingBuffer<T>.Create(ACapacity: Integer);
+constructor TLockFreeRingBuffer<T>.Create(ACapacity: Integer);  
 begin
   inherited Create;
   FCapacity := ACapacity + 1; // +1 pour distinguer plein/vide
@@ -1644,12 +1644,12 @@ begin
   FWriteIndex := 0;
 end;
 
-destructor TLockFreeRingBuffer<T>.Destroy;
+destructor TLockFreeRingBuffer<T>.Destroy;  
 begin
   inherited;
 end;
 
-function TLockFreeRingBuffer<T>.Write(const Item: T): Boolean;
+function TLockFreeRingBuffer<T>.Write(const Item: T): Boolean;  
 var
   CurrentWrite, NextWrite, CurrentRead: Integer;
 begin
@@ -1670,7 +1670,7 @@ begin
   Result := True;
 end;
 
-function TLockFreeRingBuffer<T>.Read(out Item: T): Boolean;
+function TLockFreeRingBuffer<T>.Read(out Item: T): Boolean;  
 var
   CurrentRead, NextRead, CurrentWrite: Integer;
 begin
@@ -1691,7 +1691,7 @@ begin
   Result := True;
 end;
 
-function TLockFreeRingBuffer<T>.Count: Integer;
+function TLockFreeRingBuffer<T>.Count: Integer;  
 var
   W, R: Integer;
 begin
@@ -1704,12 +1704,12 @@ begin
     Result := FCapacity - R + W;
 end;
 
-function TLockFreeRingBuffer<T>.IsFull: Boolean;
+function TLockFreeRingBuffer<T>.IsFull: Boolean;  
 begin
   Result := ((FWriteIndex + 1) mod FCapacity) = FReadIndex;
 end;
 
-function TLockFreeRingBuffer<T>.IsEmpty: Boolean;
+function TLockFreeRingBuffer<T>.IsEmpty: Boolean;  
 begin
   Result := FWriteIndex = FReadIndex;
 end;
@@ -1732,7 +1732,7 @@ uses
 // InterlockedIncrement, InterlockedCompareExchange, etc.
 
 // Opérations 64-bit disponibles depuis Windows XP
-function InterlockedIncrement64(var Target: Int64): Int64;
+function InterlockedIncrement64(var Target: Int64): Int64;  
 begin
   Result := Windows.InterlockedIncrement64(Target);
 end;
@@ -1803,7 +1803,7 @@ type
 **Problème :**
 ```pascal
 // Thread 1
-Data := 42;
+Data := 42;  
 Ready := True;  // Un autre thread peut voir Ready=True avant Data=42 !
 
 // Thread 2
@@ -1814,12 +1814,12 @@ if Ready then
 **Solution : Memory barriers**
 ```pascal
 // Thread 1
-Data := 42;
-WriteBarrier;  // Garantit l'ordre
+Data := 42;  
+WriteBarrier;  // Garantit l'ordre  
 Ready := True;
 
 // Thread 2
-if Ready then
+if Ready then  
 begin
   ReadBarrier;  // Garantit l'ordre
   Process(Data);
@@ -1879,7 +1879,7 @@ end;
 ### Tests de correction
 
 ```pascal
-procedure TestCorrectness;
+procedure TestCorrectness;  
 const
   THREAD_COUNT = 10;
   OPS_PER_THREAD = 100000;
@@ -1920,7 +1920,7 @@ end;
 ### Tests de stress
 
 ```pascal
-procedure StressTest;
+procedure StressTest;  
 const
   DURATION_SEC = 60;
 var
@@ -1981,7 +1981,7 @@ type
     Latency: Double;
   end;
 
-procedure SaveBenchmark(const Result: TBenchmarkResult);
+procedure SaveBenchmark(const Result: TBenchmarkResult);  
 var
   F: TextFile;
 begin
@@ -2002,7 +2002,7 @@ begin
   end;
 end;
 
-procedure CheckRegression(const Current, Baseline: TBenchmarkResult);
+procedure CheckRegression(const Current, Baseline: TBenchmarkResult);  
 const
   THRESHOLD = 0.10; // 10% de régression acceptable
 var

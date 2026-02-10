@@ -21,7 +21,7 @@ Un **cœur** (core) est une unité de traitement indépendante dans un processeu
 uses
   Classes;
 
-procedure DetectCPUCores;
+procedure DetectCPUCores;  
 var
   CoreCount: Integer;
 begin
@@ -84,7 +84,7 @@ Décomposer un problème en sous-problèmes indépendants.
 
 ```pascal
 // ❌ Séquentiel : Traiter 1000 éléments un par un
-procedure ProcessSequential(Data: array of Integer);
+procedure ProcessSequential(Data: array of Integer);  
 var
   i: Integer;
 begin
@@ -93,7 +93,7 @@ begin
 end;
 
 // ✅ Parallèle : Diviser en 4 groupes de 250
-procedure ProcessParallel(Data: array of Integer);
+procedure ProcessParallel(Data: array of Integer);  
 var
   Threads: array[0..3] of TThread;
   ChunkSize, i: Integer;
@@ -133,8 +133,8 @@ end;
 La **granularité** est la taille des tâches parallèles.
 
 ```
-Granularité fine   : Beaucoup de petites tâches (overhead élevé)
-Granularité moyenne: Équilibre optimal
+Granularité fine   : Beaucoup de petites tâches (overhead élevé)  
+Granularité moyenne: Équilibre optimal  
 Granularité grossière: Peu de grandes tâches (déséquilibre possible)
 ```
 
@@ -145,7 +145,7 @@ OptimalChunkSize := TotalElements div (ProcessorCount * 2 à 4)
 
 **Exemple :**
 ```pascal
-procedure OptimalGranularity(Data: array of Integer);
+procedure OptimalGranularity(Data: array of Integer);  
 var
   CoreCount, ChunkSize, ChunkCount: Integer;
   i: Integer;
@@ -187,7 +187,7 @@ var
   SharedSum: Integer;
   CS: TCriticalSection;
 
-procedure BadParallel(Data: array of Integer);
+procedure BadParallel(Data: array of Integer);  
 begin
   ProcThreadPool.DoParallel(
     procedure(Index: Integer)
@@ -204,7 +204,7 @@ begin
 end;
 
 // ✅ BON : Réduction locale puis agrégation
-procedure GoodParallel(Data: array of Integer);
+procedure GoodParallel(Data: array of Integer);  
 var
   PartialSums: array of Integer;
   i: Integer;
@@ -320,14 +320,14 @@ function AllocateOnNUMANode(Size: size_t; NodeID: Integer): Pointer;
 
 implementation
 
-procedure BindToNUMANode(NodeID: Integer);
+procedure BindToNUMANode(NodeID: Integer);  
 begin
   // Utiliser numa_run_on_node ou pthread_setaffinity_np
   // Implémentation simplifiée
   WriteLn('Binding thread to NUMA node ', NodeID);
 end;
 
-function AllocateOnNUMANode(Size: size_t; NodeID: Integer): Pointer;
+function AllocateOnNUMANode(Size: size_t; NodeID: Integer): Pointer;  
 begin
   // Utiliser numa_alloc_onnode
   // Implémentation simplifiée
@@ -361,7 +361,7 @@ procedure ParallelMap<T>(var Data: array of T; MapFunc: TMapFunc<T>);
 
 implementation
 
-procedure ParallelMap<T>(var Data: array of T; MapFunc: TMapFunc<T>);
+procedure ParallelMap<T>(var Data: array of T; MapFunc: TMapFunc<T>);  
 begin
   ProcThreadPool.DoParallel(
     procedure(Index: Integer)
@@ -377,7 +377,7 @@ end.
 
 **Utilisation :**
 ```pascal
-function Square(N: Integer): Integer;
+function Square(N: Integer): Integer;  
 begin
   Result := N * N;
 end;
@@ -469,7 +469,7 @@ end.
 
 **Utilisation :**
 ```pascal
-function Add(const A, B: Integer): Integer;
+function Add(const A, B: Integer): Integer;  
 begin
   Result := A + B;
 end;
@@ -512,7 +512,7 @@ implementation
 const
   PARALLEL_THRESHOLD = 1000; // En dessous, tri séquentiel
 
-procedure SequentialQuickSort(var Data: array of Integer; Left, Right: Integer);
+procedure SequentialQuickSort(var Data: array of Integer; Left, Right: Integer);  
 var
   Pivot, Temp, i, j: Integer;
 begin
@@ -544,7 +544,7 @@ begin
     SequentialQuickSort(Data, i, Right);
 end;
 
-procedure ParallelQuickSort(var Data: array of Integer; Left, Right: Integer);
+procedure ParallelQuickSort(var Data: array of Integer; Left, Right: Integer);  
 var
   Pivot, Temp, i, j: Integer;
 begin
@@ -648,42 +648,42 @@ implementation
 
 { TWorkQueue }
 
-constructor TWorkQueue.Create;
+constructor TWorkQueue.Create;  
 begin
   inherited Create;
   FQueue := TThreadedQueue<TWorkItem>.Create(1000, INFINITE, INFINITE);
 end;
 
-destructor TWorkQueue.Destroy;
+destructor TWorkQueue.Destroy;  
 begin
   FQueue.Free;
   inherited;
 end;
 
-procedure TWorkQueue.Push(Item: TWorkItem);
+procedure TWorkQueue.Push(Item: TWorkItem);  
 begin
   FQueue.PushItem(Item);
 end;
 
-function TWorkQueue.Pop(out Item: TWorkItem): Boolean;
+function TWorkQueue.Pop(out Item: TWorkItem): Boolean;  
 begin
   Result := FQueue.PopItem(Item, 0) = wrSignaled;
 end;
 
-function TWorkQueue.TrySteal(out Item: TWorkItem): Boolean;
+function TWorkQueue.TrySteal(out Item: TWorkItem): Boolean;  
 begin
   // Dans une vraie implémentation, on volerait par la fin
   Result := Pop(Item);
 end;
 
-function TWorkQueue.IsEmpty: Boolean;
+function TWorkQueue.IsEmpty: Boolean;  
 begin
   Result := FQueue.TotalItemsPushed = FQueue.TotalItemsPopped;
 end;
 
 { TWorkStealingPool }
 
-constructor TWorkStealingPool.Create(WorkerCount: Integer);
+constructor TWorkStealingPool.Create(WorkerCount: Integer);  
 var
   i: Integer;
 begin
@@ -698,7 +698,7 @@ begin
   FRunning := False;
 end;
 
-destructor TWorkStealingPool.Destroy;
+destructor TWorkStealingPool.Destroy;  
 var
   i: Integer;
 begin
@@ -710,7 +710,7 @@ begin
   inherited;
 end;
 
-procedure TWorkStealingPool.WorkerProc(WorkerID: Integer);
+procedure TWorkStealingPool.WorkerProc(WorkerID: Integer);  
 var
   Work: TWorkItem;
   i, VictimID: Integer;
@@ -740,7 +740,7 @@ begin
   end;
 end;
 
-procedure TWorkStealingPool.Submit(Work: TWorkItem);
+procedure TWorkStealingPool.Submit(Work: TWorkItem);  
 var
   TargetQueue: Integer;
 begin
@@ -749,7 +749,7 @@ begin
   FQueues[TargetQueue].Push(Work);
 end;
 
-procedure TWorkStealingPool.Start;
+procedure TWorkStealingPool.Start;  
 var
   i: Integer;
 
@@ -775,7 +775,7 @@ begin
   end;
 end;
 
-procedure TWorkStealingPool.Stop;
+procedure TWorkStealingPool.Stop;  
 var
   i: Integer;
 begin
@@ -807,7 +807,7 @@ Traiter plusieurs données avec une seule instruction.
 {$OPTIMIZATION LEVEL3}
 {$OPTIMIZATION AUTOVECTORIZATION}
 
-procedure VectorAdd(const A, B: array of Single; var Result: array of Single);
+procedure VectorAdd(const A, B: array of Single; var Result: array of Single);  
 var
   i: Integer;
 begin
@@ -817,7 +817,7 @@ begin
 end;
 
 // Version manuelle avec assembleur inline (x64)
-procedure VectorAddSSE(const A, B: array of Single; var Result: array of Single);
+procedure VectorAddSSE(const A, B: array of Single; var Result: array of Single);  
 var
   i: Integer;
 begin
@@ -868,7 +868,7 @@ end;
 Pré-charger les données dans le cache avant utilisation.
 
 ```pascal
-procedure ProcessWithPrefetch(Data: PInteger; Count: Integer);
+procedure ProcessWithPrefetch(Data: PInteger; Count: Integer);  
 var
   i: Integer;
 begin
@@ -919,7 +919,7 @@ function MeasureSpeedup(SequentialProc, ParallelProc: TProcedure): TSpeedupResul
 
 implementation
 
-function MeasureSpeedup(SequentialProc, ParallelProc: TProcedure): TSpeedupResult;
+function MeasureSpeedup(SequentialProc, ParallelProc: TProcedure): TSpeedupResult;  
 var
   StartTime: TDateTime;
 begin
@@ -992,7 +992,7 @@ var
   SyncCounter: Int64 = 0;
   ComputeCounter: Int64 = 0;
 
-procedure DetectBottlenecks(var Report: TBottleneckReport);
+procedure DetectBottlenecks(var Report: TBottleneckReport);  
 begin
   Report.TotalTime := 1000.0; // Example
   Report.SyncTime := (SyncCounter / Report.TotalTime) * 100;
@@ -1031,12 +1031,12 @@ uses
   {$IFDEF WINDOWS}, Windows{$ENDIF}
   {$IFDEF LINUX}, BaseUnix, Unix{$ENDIF};
 
-procedure SetThreadAffinity(ThreadHandle: TThreadID; CoreMask: NativeUInt);
+procedure SetThreadAffinity(ThreadHandle: TThreadID; CoreMask: NativeUInt);  
 procedure PinToCorePortable(CoreNumber: Integer);
 
 implementation
 
-procedure SetThreadAffinity(ThreadHandle: TThreadID; CoreMask: NativeUInt);
+procedure SetThreadAffinity(ThreadHandle: TThreadID; CoreMask: NativeUInt);  
 begin
   {$IFDEF WINDOWS}
   SetThreadAffinityMask(ThreadHandle, CoreMask);
@@ -1048,7 +1048,7 @@ begin
   {$ENDIF}
 end;
 
-procedure PinToCorePortable(CoreNumber: Integer);
+procedure PinToCorePortable(CoreNumber: Integer);  
 var
   Mask: NativeUInt;
 begin
@@ -1091,12 +1091,12 @@ type
     L3Cache: Integer;
   end;
 
-function GetCPUInfo: TCPUInfo;
+function GetCPUInfo: TCPUInfo;  
 procedure PrintCPUTopology;
 
 implementation
 
-function GetCPUInfo: TCPUInfo;
+function GetCPUInfo: TCPUInfo;  
 begin
   Result.LogicalCores := TThread.ProcessorCount;
   Result.CacheLine := 64; // Typique
@@ -1119,7 +1119,7 @@ begin
   Result.L3Cache := 8 * 1024 * 1024; // 8 MB
 end;
 
-procedure PrintCPUTopology;
+procedure PrintCPUTopology;  
 var
   Info: TCPUInfo;
 begin
@@ -1141,7 +1141,7 @@ end.
 ### Performance Windows vs Linux
 
 ```pascal
-procedure ComparePerformance;
+procedure ComparePerformance;  
 var
   StartTime: TDateTime;
   i, Sum: Integer;
@@ -1209,13 +1209,13 @@ type
 
   TImageData = array of array of TRGB;
 
-procedure ApplyFilterParallel(var Image: TImageData);
-procedure ConvertToGrayscaleParallel(var Image: TImageData);
+procedure ApplyFilterParallel(var Image: TImageData);  
+procedure ConvertToGrayscaleParallel(var Image: TImageData);  
 procedure BlurParallel(var Image: TImageData; Radius: Integer);
 
 implementation
 
-procedure ApplyFilterParallel(var Image: TImageData);
+procedure ApplyFilterParallel(var Image: TImageData);  
 var
   Height: Integer;
 begin
@@ -1238,7 +1238,7 @@ begin
   );
 end;
 
-procedure ConvertToGrayscaleParallel(var Image: TImageData);
+procedure ConvertToGrayscaleParallel(var Image: TImageData);  
 var
   Height: Integer;
 begin
@@ -1265,7 +1265,7 @@ begin
   );
 end;
 
-procedure BlurParallel(var Image: TImageData; Radius: Integer);
+procedure BlurParallel(var Image: TImageData; Radius: Integer);  
 var
   Height, Width: Integer;
   Temp: TImageData;
@@ -1331,12 +1331,12 @@ uses
 type
   TMatrix = array of array of Double;
 
-procedure MultiplyMatricesParallel(const A, B: TMatrix; var C: TMatrix);
+procedure MultiplyMatricesParallel(const A, B: TMatrix; var C: TMatrix);  
 procedure MultiplyMatricesTiled(const A, B: TMatrix; var C: TMatrix; BlockSize: Integer);
 
 implementation
 
-procedure MultiplyMatricesParallel(const A, B: TMatrix; var C: TMatrix);
+procedure MultiplyMatricesParallel(const A, B: TMatrix; var C: TMatrix);  
 var
   N: Integer;
 begin
@@ -1361,7 +1361,7 @@ begin
   );
 end;
 
-procedure MultiplyMatricesTiled(const A, B: TMatrix; var C: TMatrix; BlockSize: Integer);
+procedure MultiplyMatricesTiled(const A, B: TMatrix; var C: TMatrix; BlockSize: Integer);  
 var
   N: Integer;
 begin
@@ -1615,7 +1615,7 @@ begin
   );
 end;
 
-function DecompressDataParallel(const Chunks: array of TCompressedChunk): TBytes;
+function DecompressDataParallel(const Chunks: array of TCompressedChunk): TBytes;  
 var
   TotalSize, i, Offset: Integer;
   DecompressedChunks: array of TBytes;
