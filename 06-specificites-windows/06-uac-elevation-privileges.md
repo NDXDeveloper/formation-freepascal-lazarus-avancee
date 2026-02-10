@@ -150,7 +150,7 @@ end;
 uses
   Windows, SysUtils;
 
-function EstExecuteEnTantQuAdmin: Boolean;
+function EstExecuteEnTantQuAdmin: Boolean;  
 var
   TokenHandle: THandle;
   Elevation: TOKEN_ELEVATION;
@@ -177,7 +177,7 @@ begin
   end;
 end;
 
-function EstAdministrateur: Boolean;
+function EstAdministrateur: Boolean;  
 var
   TokenHandle: THandle;
   TokenInformation: TOKEN_GROUPS;
@@ -236,7 +236,7 @@ end;
 uses
   Registry;
 
-function UACEstActive: Boolean;
+function UACEstActive: Boolean;  
 var
   Reg: TRegistry;
   EnableLUA: Integer;
@@ -271,7 +271,7 @@ begin
   end;
 end;
 
-function ObtenirNiveauUAC: Integer;
+function ObtenirNiveauUAC: Integer;  
 var
   Reg: TRegistry;
 begin
@@ -310,7 +310,7 @@ end;
 uses
   Windows, ShellAPI, SysUtils;
 
-function RelancerAvecElevation: Boolean;
+function RelancerAvecElevation: Boolean;  
 var
   ExeName: string;
   Params: string;
@@ -376,7 +376,7 @@ end;
 ### Méthode 2 : Élever une action spécifique
 
 ```pascal
-function ExecuterCommandeElevee(const Commande, Parametres: string): Boolean;
+function ExecuterCommandeElevee(const Commande, Parametres: string): Boolean;  
 var
   SEI: TShellExecuteInfo;
 begin
@@ -406,7 +406,7 @@ begin
 end;
 
 // Exemple d'utilisation
-procedure ModifierFichierSysteme;
+procedure ModifierFichierSysteme;  
 begin
   if not EstExecuteEnTantQuAdmin then
   begin
@@ -432,13 +432,13 @@ uses
 const
   BCM_SETSHIELD = $160C;
 
-procedure AjouterBouclierUAC(Button: TButton);
+procedure AjouterBouclierUAC(Button: TButton);  
 begin
   // Envoyer le message pour afficher le bouclier
   SendMessage(Button.Handle, BCM_SETSHIELD, 0, LPARAM(True));
 end;
 
-procedure AjouterBouclierSurBouton(Button: TBitBtn);
+procedure AjouterBouclierSurBouton(Button: TBitBtn);  
 var
   Icon: TIcon;
   IconHandle: HICON;
@@ -459,7 +459,7 @@ begin
 end;
 
 // Utilisation
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   // Vérifier si l'action nécessite l'élévation
   if not EstExecuteEnTantQuAdmin then
@@ -469,7 +469,7 @@ begin
   end;
 end;
 
-procedure TForm1.BtnModifierSystemeClick(Sender: TObject);
+procedure TForm1.BtnModifierSystemeClick(Sender: TObject);  
 begin
   if not EstExecuteEnTantQuAdmin then
   begin
@@ -502,12 +502,12 @@ type
     procedure AdapterInterface;
   end;
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   AdapterInterface;
 end;
 
-procedure TMainForm.AdapterInterface;
+procedure TMainForm.AdapterInterface;  
 begin
   if EstExecuteEnTantQuAdmin then
   begin
@@ -545,7 +545,7 @@ begin
     LabelStatut.Caption := LabelStatut.Caption + ' (UAC désactivé)';
 end;
 
-procedure TMainForm.BtnElevationClick(Sender: TObject);
+procedure TMainForm.BtnElevationClick(Sender: TObject);  
 begin
   RelancerAvecElevation;
 end;
@@ -581,27 +581,27 @@ implementation
 uses
   Windows, SysUtils, Registry;
 
-constructor TOperationPrivilegiee.Create;
+constructor TOperationPrivilegiee.Create;  
 begin
   FEstEleve := EstExecuteEnTantQuAdmin;
 end;
 
-function TOperationPrivilegiee.PeutModifierSysteme: Boolean;
+function TOperationPrivilegiee.PeutModifierSysteme: Boolean;  
 begin
   Result := FEstEleve;
 end;
 
-function TOperationPrivilegiee.PeutAccederRegistreSystem: Boolean;
+function TOperationPrivilegiee.PeutAccederRegistreSystem: Boolean;  
 begin
   Result := FEstEleve;
 end;
 
-function TOperationPrivilegiee.PeutInstallerService: Boolean;
+function TOperationPrivilegiee.PeutInstallerService: Boolean;  
 begin
   Result := FEstEleve;
 end;
 
-function TOperationPrivilegiee.ModifierFichierSysteme(const Fichier: string): Boolean;
+function TOperationPrivilegiee.ModifierFichierSysteme(const Fichier: string): Boolean;  
 begin
   Result := False;
 
@@ -621,7 +621,7 @@ begin
   end;
 end;
 
-function TOperationPrivilegiee.EcrireRegistreSystem(const Cle, Valeur: string): Boolean;
+function TOperationPrivilegiee.EcrireRegistreSystem(const Cle, Valeur: string): Boolean;  
 var
   Reg: TRegistry;
 begin
@@ -651,7 +651,7 @@ begin
   end;
 end;
 
-function TOperationPrivilegiee.InstallerService(const NomService, CheminExe: string): Boolean;
+function TOperationPrivilegiee.InstallerService(const NomService, CheminExe: string): Boolean;  
 var
   SCManager, Service: SC_HANDLE;
 begin
@@ -732,20 +732,20 @@ type
 
 implementation
 
-constructor TProcessusCommunication.Create(const NomPipe: string);
+constructor TProcessusCommunication.Create(const NomPipe: string);  
 begin
   FNomPipe := '\\.\pipe\' + NomPipe;
   FPipeHandle := INVALID_HANDLE_VALUE;
 end;
 
-destructor TProcessusCommunication.Destroy;
+destructor TProcessusCommunication.Destroy;  
 begin
   if FPipeHandle <> INVALID_HANDLE_VALUE then
     CloseHandle(FPipeHandle);
   inherited;
 end;
 
-function TProcessusCommunication.CreerServeurPipe: Boolean;
+function TProcessusCommunication.CreerServeurPipe: Boolean;  
 var
   SecurityAttr: TSecurityAttributes;
   SecurityDesc: TSecurityDescriptor;
@@ -778,7 +778,7 @@ begin
   end;
 end;
 
-function TProcessusCommunication.ConnecterClientPipe: Boolean;
+function TProcessusCommunication.ConnecterClientPipe: Boolean;  
 begin
   FPipeHandle := CreateFile(
     PChar(FNomPipe),
@@ -793,7 +793,7 @@ begin
   Result := FPipeHandle <> INVALID_HANDLE_VALUE;
 end;
 
-function TProcessusCommunication.EnvoyerMessage(const Message: string): Boolean;
+function TProcessusCommunication.EnvoyerMessage(const Message: string): Boolean;  
 var
   BytesWritten: DWORD;
   Buffer: AnsiString;
@@ -807,7 +807,7 @@ begin
   Result := WriteFile(FPipeHandle, Buffer[1], Length(Buffer), BytesWritten, nil);
 end;
 
-function TProcessusCommunication.RecevoirMessage(out Message: string): Boolean;
+function TProcessusCommunication.RecevoirMessage(out Message: string): Boolean;  
 var
   Buffer: array[0..4095] of AnsiChar;
   BytesRead: DWORD;
@@ -911,7 +911,7 @@ end;
 ### 1. Principe du moindre privilège
 
 ```pascal
-procedure ExecuterTache;
+procedure ExecuterTache;  
 begin
   // Toujours vérifier si l'élévation est vraiment nécessaire
   if TacheNecessiteElevation then
@@ -933,7 +933,7 @@ end;
 ### 2. Validation des entrées
 
 ```pascal
-function ValiderCheminSecurise(const Chemin: string): Boolean;
+function ValiderCheminSecurise(const Chemin: string): Boolean;  
 begin
   Result := False;
 
@@ -962,7 +962,7 @@ begin
     Result := True;
 end;
 
-function ValiderParametresSecurises(const Params: string): Boolean;
+function ValiderParametresSecurises(const Params: string): Boolean;  
 var
   ParamsInterdits: array[0..4] of string = ('&', '|', '>', '<', ';');
   i: Integer;
@@ -1014,7 +1014,7 @@ type
 
 implementation
 
-constructor TJournalUAC.Create;
+constructor TJournalUAC.Create;  
 var
   CheminLog: string;
 begin
@@ -1031,13 +1031,13 @@ begin
     Rewrite(FHandle);
 end;
 
-destructor TJournalUAC.Destroy;
+destructor TJournalUAC.Destroy;  
 begin
   CloseFile(FHandle);
   inherited;
 end;
 
-procedure TJournalUAC.LogElevation(Reussie: Boolean; const Details: string);
+procedure TJournalUAC.LogElevation(Reussie: Boolean; const Details: string);  
 var
   Statut: string;
 begin
@@ -1051,14 +1051,14 @@ begin
   Flush(FHandle);
 end;
 
-procedure TJournalUAC.LogActionPrivilegiee(const Action, Resultat: string);
+procedure TJournalUAC.LogActionPrivilegiee(const Action, Resultat: string);  
 begin
   WriteLn(FHandle, Format('[%s] ACTION PRIVILÉGIÉE - %s - Résultat: %s - PID: %d',
     [DateTimeToStr(Now), Action, Resultat, GetCurrentProcessId]));
   Flush(FHandle);
 end;
 
-procedure TJournalUAC.LogErreurSecurite(const Erreur: string);
+procedure TJournalUAC.LogErreurSecurite(const Erreur: string);  
 begin
   WriteLn(FHandle, Format('[%s] ERREUR SÉCURITÉ - %s - Code: %d',
     [DateTimeToStr(Now), Erreur, GetLastError]));
@@ -1068,7 +1068,7 @@ begin
   EnregistrerDansObservateurEvenements(Erreur);
 end;
 
-procedure EnregistrerDansObservateurEvenements(const Message: string);
+procedure EnregistrerDansObservateurEvenements(const Message: string);  
 var
   EventLog: THandle;
   Messages: array[0..0] of PChar;
@@ -1118,7 +1118,7 @@ type
 
 implementation
 
-constructor TTokenManager.Create;
+constructor TTokenManager.Create;  
 begin
   if not OpenProcessToken(GetCurrentProcess,
                           TOKEN_ADJUST_PRIVILEGES or TOKEN_QUERY,
@@ -1126,14 +1126,14 @@ begin
     RaiseLastOSError;
 end;
 
-destructor TTokenManager.Destroy;
+destructor TTokenManager.Destroy;  
 begin
   if FTokenHandle <> 0 then
     CloseHandle(FTokenHandle);
   inherited;
 end;
 
-function TTokenManager.ObtenirPrivilege(const NomPrivilege: string): Boolean;
+function TTokenManager.ObtenirPrivilege(const NomPrivilege: string): Boolean;  
 var
   TokenPriv, PrevTokenPriv: TTokenPrivileges;
   ReturnLength: DWORD;
@@ -1155,27 +1155,27 @@ begin
     Result := False;
 end;
 
-function TTokenManager.ActiverPrivilegeDebug: Boolean;
+function TTokenManager.ActiverPrivilegeDebug: Boolean;  
 begin
   Result := ObtenirPrivilege('SeDebugPrivilege');
 end;
 
-function TTokenManager.ActiverPrivilegeBackup: Boolean;
+function TTokenManager.ActiverPrivilegeBackup: Boolean;  
 begin
   Result := ObtenirPrivilege('SeBackupPrivilege');
 end;
 
-function TTokenManager.ActiverPrivilegeRestore: Boolean;
+function TTokenManager.ActiverPrivilegeRestore: Boolean;  
 begin
   Result := ObtenirPrivilege('SeRestorePrivilege');
 end;
 
-function TTokenManager.ActiverPrivilegeShutdown: Boolean;
+function TTokenManager.ActiverPrivilegeShutdown: Boolean;  
 begin
   Result := ObtenirPrivilege('SeShutdownPrivilege');
 end;
 
-function TTokenManager.DesactiverPrivilege(const NomPrivilege: string): Boolean;
+function TTokenManager.DesactiverPrivilege(const NomPrivilege: string): Boolean;  
 var
   TokenPriv: TTokenPrivileges;
 begin
@@ -1190,7 +1190,7 @@ begin
   Result := AdjustTokenPrivileges(FTokenHandle, False, TokenPriv, 0, nil, PDWORD(nil)^);
 end;
 
-function TTokenManager.ObtenirInfosToken: string;
+function TTokenManager.ObtenirInfosToken: string;  
 var
   TokenUser: ^TOKEN_USER;
   InfoLength: DWORD;
@@ -1221,7 +1221,7 @@ begin
   end;
 end;
 
-function TTokenManager.ImpersonnerUtilisateur(const NomUtilisateur: string): Boolean;
+function TTokenManager.ImpersonnerUtilisateur(const NomUtilisateur: string): Boolean;  
 var
   Token: THandle;
 begin
@@ -1235,7 +1235,7 @@ begin
   // (Complexe, nécessite LogonUser et ImpersonateLoggedOnUser)
 end;
 
-procedure TTokenManager.RevenirIdentiteOriginale;
+procedure TTokenManager.RevenirIdentiteOriginale;  
 begin
   RevertToSelf;
 end;
@@ -1271,13 +1271,13 @@ type
     property CodeSortie: Integer read FCodeSortie;
   end;
 
-constructor TElevationHelper.Create;
+constructor TElevationHelper.Create;  
 begin
   ParseCommandLine;
   FCodeSortie := 0;
 end;
 
-procedure TElevationHelper.ParseCommandLine;
+procedure TElevationHelper.ParseCommandLine;  
 var
   i: Integer;
   Param: string;
@@ -1317,7 +1317,7 @@ begin
   end;
 end;
 
-function TElevationHelper.Executer: Boolean;
+function TElevationHelper.Executer: Boolean;  
 var
   SEI: TShellExecuteInfo;
   ExitCode: DWORD;
@@ -1423,7 +1423,7 @@ type
 
 implementation
 
-constructor TConfigurationManager.Create(SystemeConfig: Boolean);
+constructor TConfigurationManager.Create(SystemeConfig: Boolean);  
 begin
   FSystemConfig := SystemeConfig;
   FConfigFile := GetConfigPath;
@@ -1432,7 +1432,7 @@ begin
   FNeedElevation := SystemeConfig and not TenterEcriture(FConfigFile);
 end;
 
-function TConfigurationManager.GetConfigPath: string;
+function TConfigurationManager.GetConfigPath: string;  
 begin
   if FSystemConfig then
   begin
@@ -1448,7 +1448,7 @@ begin
   ForceDirectories(ExtractFilePath(Result));
 end;
 
-function TConfigurationManager.TenterEcriture(const Chemin: string): Boolean;
+function TConfigurationManager.TenterEcriture(const Chemin: string): Boolean;  
 var
   F: TextFile;
 begin
@@ -1464,7 +1464,7 @@ begin
   end;
 end;
 
-function TConfigurationManager.LireValeur(const Section, Cle: string; Defaut: string): string;
+function TConfigurationManager.LireValeur(const Section, Cle: string; Defaut: string): string;  
 var
   Ini: TIniFile;
 begin
@@ -1476,7 +1476,7 @@ begin
   end;
 end;
 
-function TConfigurationManager.EcrireValeur(const Section, Cle, Valeur: string): Boolean;
+function TConfigurationManager.EcrireValeur(const Section, Cle, Valeur: string): Boolean;  
 var
   Ini: TIniFile;
 begin
@@ -1505,7 +1505,7 @@ begin
   end;
 end;
 
-function TConfigurationManager.LireRegistre(const Cle, Valeur: string): string;
+function TConfigurationManager.LireRegistre(const Cle, Valeur: string): string;  
 var
   Reg: TRegistry;
 begin
@@ -1531,7 +1531,7 @@ begin
   end;
 end;
 
-function TConfigurationManager.EcrireRegistre(const Cle, Nom, Valeur: string): Boolean;
+function TConfigurationManager.EcrireRegistre(const Cle, Nom, Valeur: string): Boolean;  
 var
   Reg: TRegistry;
   Access: DWORD;
@@ -1606,12 +1606,12 @@ type
     function DemanderElevation: Boolean;
   end;
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   InitialiserApplication;
 end;
 
-procedure TMainForm.InitialiserApplication;
+procedure TMainForm.InitialiserApplication;  
 begin
   // Créer les gestionnaires
   FJournal := TJournalUAC.Create;
@@ -1653,7 +1653,7 @@ begin
   FJournal.LogElevation(EstExecuteEnTantQuAdmin, 'Démarrage application');
 end;
 
-procedure TMainForm.AfficherStatutUAC;
+procedure TMainForm.AfficherStatutUAC;  
 var
   StatutText: string;
 begin
@@ -1672,12 +1672,12 @@ begin
   StatusBar.SimpleText := StatutText;
 end;
 
-procedure TMainForm.BtnOperationNormaleClick(Sender: TObject);
+procedure TMainForm.BtnOperationNormaleClick(Sender: TObject);  
 begin
   EffectuerOperationNormale;
 end;
 
-procedure TMainForm.EffectuerOperationNormale;
+procedure TMainForm.EffectuerOperationNormale;  
 var
   ConfigUser: TConfigurationManager;
   Valeur: string;
@@ -1710,7 +1710,7 @@ begin
   end;
 end;
 
-procedure TMainForm.BtnOperationAdminClick(Sender: TObject);
+procedure TMainForm.BtnOperationAdminClick(Sender: TObject);  
 begin
   if not EstExecuteEnTantQuAdmin then
   begin
@@ -1729,7 +1729,7 @@ begin
     EffectuerOperationPrivilegiee;
 end;
 
-procedure TMainForm.EffectuerOperationPrivilegiee;
+procedure TMainForm.EffectuerOperationPrivilegiee;  
 begin
   MemoLog.Lines.Add('--- Opération privilégiée ---');
 
@@ -1769,7 +1769,7 @@ begin
   end;
 end;
 
-function TMainForm.DemanderElevation: Boolean;
+function TMainForm.DemanderElevation: Boolean;  
 var
   ExeName, Params: string;
 begin
@@ -1799,7 +1799,7 @@ end.
 ### Problème : "L'opération demandée nécessite une élévation"
 
 ```pascal
-procedure GererErreurElevation;
+procedure GererErreurElevation;  
 begin
   case GetLastError of
     ERROR_ELEVATION_REQUIRED:
@@ -1820,7 +1820,7 @@ end;
 ### Problème : Le manifeste n'est pas pris en compte
 
 ```pascal
-procedure VerifierManifeste;
+procedure VerifierManifeste;  
 var
   ManifestPresent: Boolean;
   Handle: THandle;
@@ -1837,7 +1837,7 @@ end;
 ### Problème : Détection incorrecte des privilèges
 
 ```pascal
-function VerificationComplete: string;
+function VerificationComplete: string;  
 var
   InfoAdmin, InfoEleve, InfoUAC: string;
 begin
@@ -1975,25 +1975,25 @@ implementation
 
 { TUACManager }
 
-constructor TUACManager.CreateInstance;
+constructor TUACManager.CreateInstance;  
 begin
   inherited Create;
   DetectStatus;
 end;
 
-class function TUACManager.Instance: TUACManager;
+class function TUACManager.Instance: TUACManager;  
 begin
   if not Assigned(FInstance) then
     FInstance := TUACManager.CreateInstance;
   Result := FInstance;
 end;
 
-class procedure TUACManager.FreeInstance;
+class procedure TUACManager.FreeInstance;  
 begin
   FreeAndNil(FInstance);
 end;
 
-procedure TUACManager.DetectStatus;
+procedure TUACManager.DetectStatus;  
 var
   TokenHandle: THandle;
   Elevation: TOKEN_ELEVATION;
@@ -2044,7 +2044,7 @@ begin
   end;
 end;
 
-function TUACManager.RequestElevation(const Reason: string): Boolean;
+function TUACManager.RequestElevation(const Reason: string): Boolean;  
 var
   Msg: string;
 begin
@@ -2069,7 +2069,7 @@ begin
   end;
 end;
 
-function TUACManager.RunElevated(const Command, Params: string; Wait: Boolean): Boolean;
+function TUACManager.RunElevated(const Command, Params: string; Wait: Boolean): Boolean;  
 var
   SEI: TShellExecuteInfo;
   ExitCode: DWORD;
@@ -2099,12 +2099,12 @@ begin
   end;
 end;
 
-function TUACManager.CanWriteToSystemFolders: Boolean;
+function TUACManager.CanWriteToSystemFolders: Boolean;  
 begin
   Result := FIsElevated or not FUACEnabled;
 end;
 
-function TUACManager.CanModifyRegistry(RootKey: HKEY): Boolean;
+function TUACManager.CanModifyRegistry(RootKey: HKEY): Boolean;  
 begin
   if RootKey = HKEY_CURRENT_USER then
     Result := True
@@ -2122,7 +2122,7 @@ begin
   FRequiresElevation := RequiresElevation;
 end;
 
-function TPrivilegedOperation.Execute: Boolean;
+function TPrivilegedOperation.Execute: Boolean;  
 begin
   Result := False;
 
@@ -2143,7 +2143,7 @@ end;
 
 { TUACMonitor }
 
-procedure TUACMonitor.Execute;
+procedure TUACMonitor.Execute;  
 begin
   while not Terminated do
   begin
@@ -2177,12 +2177,12 @@ program ExempleUtilisationUAC;
 uses
   UAC, SysUtils;
 
-procedure OperationSimple;
+procedure OperationSimple;  
 begin
   WriteLn('Opération simple exécutée');
 end;
 
-procedure OperationPrivilegiee;
+procedure OperationPrivilegiee;  
 begin
   WriteLn('Modification du système...');
   // Code nécessitant l'élévation
@@ -2326,7 +2326,7 @@ Les versions récentes de Windows introduisent de nouvelles fonctionnalités :
 
 ```pascal
 // Exemple de tâche planifiée pour éviter l'UAC
-procedure CreerTachePlanifiee(const NomTache, Programme: string);
+procedure CreerTachePlanifiee(const NomTache, Programme: string);  
 var
   TaskService: Variant;
   RootFolder: Variant;

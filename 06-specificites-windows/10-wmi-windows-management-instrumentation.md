@@ -49,7 +49,7 @@ WMI organise les informations en :
 WMI utilise WQL (WMI Query Language), similaire à SQL mais pour interroger le système :
 
 ```sql
-SELECT * FROM Win32_Process
+SELECT * FROM Win32_Process  
 SELECT Name, ProcessId FROM Win32_Process WHERE Name = 'notepad.exe'
 ```
 
@@ -83,7 +83,7 @@ end.
 ### Connexion à WMI
 
 ```pascal
-procedure GetSystemInfo;
+procedure GetSystemInfo;  
 var
   WMIService: OLEVariant;
   WQLQuery: string;
@@ -126,7 +126,7 @@ end;
 ### 1. Lister les processus en cours
 
 ```pascal
-procedure ListProcesses;
+procedure ListProcesses;  
 var
   WMIService, ObjectSet, ProcessItem: OLEVariant;
   Enum: IEnumVariant;
@@ -152,7 +152,7 @@ end;
 ### 2. Informations sur les disques
 
 ```pascal
-procedure GetDiskInfo;
+procedure GetDiskInfo;  
 var
   WMIService, ObjectSet, DiskItem: OLEVariant;
   Enum: IEnumVariant;
@@ -185,7 +185,7 @@ end;
 ### 3. Surveiller l'insertion de clés USB
 
 ```pascal
-procedure MonitorUSBInsertion;
+procedure MonitorUSBInsertion;  
 var
   WMIService, EventSource, USBEvent: OLEVariant;
   WQLEventQuery: string;
@@ -219,7 +219,7 @@ end;
 ### 4. Obtenir les logiciels installés
 
 ```pascal
-procedure ListInstalledSoftware;
+procedure ListInstalledSoftware;  
 var
   WMIService, ObjectSet, SoftwareItem: OLEVariant;
   Enum: IEnumVariant;
@@ -277,7 +277,7 @@ var
 
 implementation
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   // Initialiser COM au démarrage
   CoInitialize(nil);
@@ -294,18 +294,18 @@ begin
   ListView1.Columns[2].Width := 100;
 end;
 
-procedure TForm1.FormDestroy(Sender: TObject);
+procedure TForm1.FormDestroy(Sender: TObject);  
 begin
   // Libérer COM à la fermeture
   CoUninitialize;
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 begin
   RefreshProcessList;
 end;
 
-procedure TForm1.RefreshProcessList;
+procedure TForm1.RefreshProcessList;  
 var
   WMIService, ObjectSet, ProcessItem: OLEVariant;
   Enum: IEnumVariant;
@@ -360,7 +360,7 @@ end.
 ### Erreurs courantes et solutions
 
 ```pascal
-procedure SafeWMIQuery(const Query: string);
+procedure SafeWMIQuery(const Query: string);  
 var
   WMIService, ObjectSet: OLEVariant;
 begin
@@ -436,7 +436,7 @@ ObjectSet := WMIService.ExecQuery(
 ### 3. Libérer les ressources
 
 ```pascal
-procedure CleanWMIQuery;
+procedure CleanWMIQuery;  
 var
   WMIService, ObjectSet: OLEVariant;
 begin

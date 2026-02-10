@@ -228,8 +228,8 @@ Créez `build.bat` :
 @echo off
 echo === Compilation du MSI ===
 
-REM Variables
-set SOURCE_DIR=.\bin
+REM Variables  
+set SOURCE_DIR=.\bin  
 set WIX_DIR=C:\Program Files (x86)\WiX Toolset v3.11\bin
 
 REM Compilation
@@ -238,11 +238,11 @@ REM Compilation
 REM Liaison
 "%WIX_DIR%\light.exe" -ext WixUIExtension obj\MonApplication.wixobj -o MonApplication.msi
 
-REM Nettoyage
-del obj\*.wixobj
+REM Nettoyage  
+del obj\*.wixobj  
 del MonApplication.wixpdb
 
-echo === MSI créé avec succès ===
+echo === MSI créé avec succès ===  
 pause
 ```
 
@@ -344,7 +344,7 @@ const
   ERROR_INSTALL_FAILURE = 1603;
 
 // Point d'entrée pour MSI
-function ConfigureApplication(hInstall: MSIHANDLE): UINT; stdcall;
+function ConfigureApplication(hInstall: MSIHANDLE): UINT; stdcall;  
 var
   Reg: TRegistry;
   InstallDir: string;
@@ -389,7 +389,7 @@ end;
 exports
   ConfigureApplication;
 
-begin
+begin  
 end.
 ```
 
@@ -601,21 +601,21 @@ Créez `patch.wxs` :
 ### Activer la journalisation
 
 ```batch
-REM Installation avec log détaillé
+REM Installation avec log détaillé  
 msiexec /i MonApplication.msi /l*v install.log
 
-REM Options de log :
-REM   i - Status messages
-REM   w - Non-fatal warnings
-REM   e - Error messages
-REM   a - Start of actions
-REM   r - Action records
-REM   u - User requests
-REM   c - Initial UI parameters
-REM   m - Out-of-memory messages
-REM   o - Out-of-disk-space messages
-REM   p - Terminal properties
-REM   v - Verbose output
+REM Options de log :  
+REM   i - Status messages  
+REM   w - Non-fatal warnings  
+REM   e - Error messages  
+REM   a - Start of actions  
+REM   r - Action records  
+REM   u - User requests  
+REM   c - Initial UI parameters  
+REM   m - Out-of-memory messages  
+REM   o - Out-of-disk-space messages  
+REM   p - Terminal properties  
+REM   v - Verbose output  
 REM   * - All information
 ```
 
@@ -645,7 +645,7 @@ type
     procedure ShowReport;
   end;
 
-constructor TLogAnalyzer.Create;
+constructor TLogAnalyzer.Create;  
 begin
   FLogFile := TStringList.Create;
   FErrors := TStringList.Create;
@@ -653,7 +653,7 @@ begin
   FActions := TStringList.Create;
 end;
 
-destructor TLogAnalyzer.Destroy;
+destructor TLogAnalyzer.Destroy;  
 begin
   FLogFile.Free;
   FErrors.Free;
@@ -662,7 +662,7 @@ begin
   inherited;
 end;
 
-procedure TLogAnalyzer.LoadLog(const FileName: string);
+procedure TLogAnalyzer.LoadLog(const FileName: string);  
 begin
   if FileExists(FileName) then
     FLogFile.LoadFromFile(FileName)
@@ -670,7 +670,7 @@ begin
     raise Exception.Create('Fichier log non trouvé : ' + FileName);
 end;
 
-procedure TLogAnalyzer.ParseLine(const Line: string);
+procedure TLogAnalyzer.ParseLine(const Line: string);  
 begin
   // Erreurs
   if ContainsText(Line, 'Error') or ContainsText(Line, 'Failed') then
@@ -685,7 +685,7 @@ begin
     FActions.Add(Line);
 end;
 
-procedure TLogAnalyzer.Analyze;
+procedure TLogAnalyzer.Analyze;  
 var
   i: Integer;
   ActionStart, ActionEnd: TDateTime;
@@ -713,7 +713,7 @@ begin
   end;
 end;
 
-procedure TLogAnalyzer.ShowReport;
+procedure TLogAnalyzer.ShowReport;  
 var
   i: Integer;
 begin
@@ -776,19 +776,19 @@ end.
 ### Paramètres d'installation silencieuse
 
 ```batch
-REM Installation silencieuse de base
+REM Installation silencieuse de base  
 msiexec /i MonApplication.msi /qn
 
-REM Avec propriétés personnalisées
+REM Avec propriétés personnalisées  
 msiexec /i MonApplication.msi /qn INSTALLDIR="C:\MonApp" DATABASE_SERVER="192.168.1.100"
 
-REM Avec interface réduite
+REM Avec interface réduite  
 msiexec /i MonApplication.msi /qb
 
-REM Désinstallation silencieuse
+REM Désinstallation silencieuse  
 msiexec /x MonApplication.msi /qn
 
-REM Réparation silencieuse
+REM Réparation silencieuse  
 msiexec /f MonApplication.msi /qn
 ```
 
@@ -910,19 +910,19 @@ implementation
 uses
   Windows, ActiveX;
 
-constructor TWiXGenerator.Create;
+constructor TWiXGenerator.Create;  
 begin
   FFiles := TStringList.Create;
   FUpgradeCode := GenerateGUID;
 end;
 
-destructor TWiXGenerator.Destroy;
+destructor TWiXGenerator.Destroy;  
 begin
   FFiles.Free;
   inherited;
 end;
 
-function TWiXGenerator.GenerateGUID: string;
+function TWiXGenerator.GenerateGUID: string;  
 var
   Guid: TGUID;
 begin
@@ -930,24 +930,24 @@ begin
   Result := GUIDToString(Guid);
 end;
 
-procedure TWiXGenerator.SetProductInfo(const Name, Version, Manufacturer: string);
+procedure TWiXGenerator.SetProductInfo(const Name, Version, Manufacturer: string);  
 begin
   FProductName := Name;
   FProductVersion := Version;
   FManufacturer := Manufacturer;
 end;
 
-procedure TWiXGenerator.AddFile(const FileName, SourcePath: string);
+procedure TWiXGenerator.AddFile(const FileName, SourcePath: string);  
 begin
   FFiles.Add(FileName + '=' + SourcePath);
 end;
 
-procedure TWiXGenerator.AddDirectory(const DirName: string);
+procedure TWiXGenerator.AddDirectory(const DirName: string);  
 begin
   FFiles.Add('DIR:' + DirName);
 end;
 
-function TWiXGenerator.CreateProductElement(Doc: TXMLDocument): TDOMElement;
+function TWiXGenerator.CreateProductElement(Doc: TXMLDocument): TDOMElement;  
 var
   Product, Package, MajorUpgrade, MediaTemplate: TDOMElement;
 begin
@@ -983,7 +983,7 @@ begin
   Result := Product;
 end;
 
-function TWiXGenerator.CreateDirectoryStructure(Doc: TXMLDocument): TDOMElement;
+function TWiXGenerator.CreateDirectoryStructure(Doc: TXMLDocument): TDOMElement;  
 var
   Fragment, Directory, SubDir1, SubDir2, InstallFolder: TDOMElement;
 begin
@@ -1027,7 +1027,7 @@ begin
   Result := Fragment;
 end;
 
-function TWiXGenerator.CreateComponentGroup(Doc: TXMLDocument): TDOMElement;
+function TWiXGenerator.CreateComponentGroup(Doc: TXMLDocument): TDOMElement;  
 var
   Fragment, ComponentGroup, Component, FileElem: TDOMElement;
   i: Integer;
@@ -1082,7 +1082,7 @@ begin
   Result := Fragment;
 end;
 
-function TWiXGenerator.GenerateWiX(const OutputFile: string): Boolean;
+function TWiXGenerator.GenerateWiX(const OutputFile: string): Boolean;  
 var
   Doc: TXMLDocument;
   Root, Product, Feature, ComponentGroupRef: TDOMElement;
@@ -1215,7 +1215,7 @@ implementation
 uses
   FileUtil, Windows, ShellAPI, Process;
 
-procedure TInstallWizardForm.FormCreate(Sender: TObject);
+procedure TInstallWizardForm.FormCreate(Sender: TObject);  
 var
   Node: TTreeNode;
 begin
@@ -1257,7 +1257,7 @@ begin
   UpdateButtons;
 end;
 
-procedure TInstallWizardForm.UpdateButtons;
+procedure TInstallWizardForm.UpdateButtons;  
 begin
   BtnBack.Enabled := FCurrentPage > 0;
 
@@ -1304,7 +1304,7 @@ begin
   end;
 end;
 
-procedure TInstallWizardForm.ChangePage(NewPage: Integer);
+procedure TInstallWizardForm.ChangePage(NewPage: Integer);  
 begin
   if (NewPage >= 0) and (NewPage < PageControl.PageCount) then
   begin
@@ -1319,7 +1319,7 @@ begin
   end;
 end;
 
-procedure TInstallWizardForm.BtnNextClick(Sender: TObject);
+procedure TInstallWizardForm.BtnNextClick(Sender: TObject);  
 begin
   if FCurrentPage = 5 then // Page de fin
   begin
@@ -1338,12 +1338,12 @@ begin
   end;
 end;
 
-procedure TInstallWizardForm.BtnBackClick(Sender: TObject);
+procedure TInstallWizardForm.BtnBackClick(Sender: TObject);  
 begin
   ChangePage(FCurrentPage - 1);
 end;
 
-procedure TInstallWizardForm.BtnBrowseClick(Sender: TObject);
+procedure TInstallWizardForm.BtnBrowseClick(Sender: TObject);  
 var
   Dir: string;
 begin
@@ -1356,12 +1356,12 @@ begin
   end;
 end;
 
-procedure TInstallWizardForm.CheckAcceptLicenseClick(Sender: TObject);
+procedure TInstallWizardForm.CheckAcceptLicenseClick(Sender: TObject);  
 begin
   UpdateButtons;
 end;
 
-procedure TInstallWizardForm.TreeViewComponentsClick(Sender: TObject);
+procedure TInstallWizardForm.TreeViewComponentsClick(Sender: TObject);  
 var
   Node: TTreeNode;
 begin
@@ -1383,7 +1383,7 @@ begin
   end;
 end;
 
-procedure TInstallWizardForm.CalculateSpace;
+procedure TInstallWizardForm.CalculateSpace;  
 var
   FreeSpace: Int64;
   RequiredSpace: Int64;
@@ -1401,7 +1401,7 @@ begin
     LabelSpaceAvailable.Font.Color := clGreen;
 end;
 
-function TInstallWizardForm.ValidatePage: Boolean;
+function TInstallWizardForm.ValidatePage: Boolean;  
 begin
   Result := True;
 
@@ -1425,7 +1425,7 @@ begin
   end;
 end;
 
-procedure TInstallWizardForm.StartInstallation;
+procedure TInstallWizardForm.StartInstallation;  
 var
   Generator: TWiXGenerator;
   i: Integer;
@@ -1472,7 +1472,7 @@ begin
   RunMSI;
 end;
 
-procedure TInstallWizardForm.RunMSI;
+procedure TInstallWizardForm.RunMSI;  
 var
   Process: TProcess;
   MSIFile: string;
@@ -1524,7 +1524,7 @@ begin
   end;
 end;
 
-procedure TInstallWizardForm.Log(const Message: string);
+procedure TInstallWizardForm.Log(const Message: string);  
 begin
   ListBoxProgress.Items.Add(FormatDateTime('hh:nn:ss', Now) + ' - ' + Message);
   ListBoxProgress.ItemIndex := ListBoxProgress.Count - 1;
@@ -1643,7 +1643,7 @@ var
   Service: TMonService;
   ServiceTable: array[0..1] of TServiceTableEntry;
 
-function ServiceCtrlHandler(Control: DWORD): DWORD; stdcall;
+function ServiceCtrlHandler(Control: DWORD): DWORD; stdcall;  
 begin
   Result := NO_ERROR;
 
@@ -1665,7 +1665,7 @@ begin
   end;
 end;
 
-procedure ServiceMain(ArgCount: DWORD; Args: PPChar); stdcall;
+procedure ServiceMain(ArgCount: DWORD; Args: PPChar); stdcall;  
 begin
   Service.FServiceStatusHandle := RegisterServiceCtrlHandler(
     PChar(Service.FServiceName), @ServiceCtrlHandler);
@@ -1679,7 +1679,7 @@ begin
   end;
 end;
 
-constructor TMonService.Create;
+constructor TMonService.Create;  
 begin
   FServiceName := 'MonService';
   FStopEvent := CreateEvent(nil, True, False, nil);
@@ -1690,13 +1690,13 @@ begin
   FServiceStatus.dwControlsAccepted := SERVICE_ACCEPT_STOP or SERVICE_ACCEPT_SHUTDOWN;
 end;
 
-destructor TMonService.Destroy;
+destructor TMonService.Destroy;  
 begin
   CloseHandle(FStopEvent);
   inherited;
 end;
 
-procedure TMonService.SetServiceStatus(State: DWORD);
+procedure TMonService.SetServiceStatus(State: DWORD);  
 begin
   FServiceStatus.dwCurrentState := State;
   FServiceStatus.dwCheckPoint := 0;
@@ -1705,18 +1705,18 @@ begin
   Windows.SetServiceStatus(FServiceStatusHandle, @FServiceStatus);
 end;
 
-procedure TMonService.Start;
+procedure TMonService.Start;  
 begin
   // Initialisation du service
   // Charger la configuration, ouvrir les connexions, etc.
 end;
 
-procedure TMonService.Stop;
+procedure TMonService.Stop;  
 begin
   SetEvent(FStopEvent);
 end;
 
-procedure TMonService.Execute;
+procedure TMonService.Execute;  
 begin
   // Boucle principale du service
   while WaitForSingleObject(FStopEvent, 1000) = WAIT_TIMEOUT do
@@ -1728,7 +1728,7 @@ begin
   SetServiceStatus(SERVICE_STOPPED);
 end;
 
-procedure TMonService.Install;
+procedure TMonService.Install;  
 var
   SCManager, Service: SC_HANDLE;
   Path: string;
@@ -1764,7 +1764,7 @@ begin
   end;
 end;
 
-procedure TMonService.Uninstall;
+procedure TMonService.Uninstall;  
 var
   SCManager, Service: SC_HANDLE;
 begin
@@ -1875,12 +1875,12 @@ Compilation avec localisation :
 
 ```batch
 @echo off
-REM Compiler pour le français
-candle.exe MonApp.wxs -dLanguage=1036 -out obj\fr\
+REM Compiler pour le français  
+candle.exe MonApp.wxs -dLanguage=1036 -out obj\fr\  
 light.exe -cultures:fr-FR -loc fr-FR.wxl obj\fr\MonApp.wixobj -out MonApp_FR.msi
 
-REM Compiler pour l'anglais
-candle.exe MonApp.wxs -dLanguage=1033 -out obj\en\
+REM Compiler pour l'anglais  
+candle.exe MonApp.wxs -dLanguage=1033 -out obj\en\  
 light.exe -cultures:en-US -loc en-US.wxl obj\en\MonApp.wixobj -out MonApp_EN.msi
 ```
 
@@ -1910,13 +1910,13 @@ const
     (Code: 1034; Name: 'Español'; Culture: 'es-ES'; MSIFile: 'MonApp_ES.msi')
   );
 
-function GetSystemLanguage: Word;
-function GetMSIForLanguage(LangCode: Word): string;
+function GetSystemLanguage: Word;  
+function GetMSIForLanguage(LangCode: Word): string;  
 function InstallLocalizedMSI: Boolean;
 
 implementation
 
-function GetSystemLanguage: Word;
+function GetSystemLanguage: Word;  
 begin
   Result := GetUserDefaultUILanguage;
 
@@ -1929,7 +1929,7 @@ begin
     Result := 1033;
 end;
 
-function GetMSIForLanguage(LangCode: Word): string;
+function GetMSIForLanguage(LangCode: Word): string;  
 var
   i: Integer;
 begin
@@ -1945,7 +1945,7 @@ begin
   end;
 end;
 
-function InstallLocalizedMSI: Boolean;
+function InstallLocalizedMSI: Boolean;  
 var
   LangCode: Word;
   MSIFile: string;
@@ -2020,21 +2020,21 @@ type
 
 implementation
 
-constructor TMSITransform.Create(const MSIFile, TransformFile: string);
+constructor TMSITransform.Create(const MSIFile, TransformFile: string);  
 begin
   CoInitialize(nil);
   FTransformFile := TransformFile;
   OpenDatabase(MSIFile);
 end;
 
-destructor TMSITransform.Destroy;
+destructor TMSITransform.Destroy;  
 begin
   FDatabase := Unassigned;
   CoUninitialize;
   inherited;
 end;
 
-procedure TMSITransform.OpenDatabase(const MSIFile: string);
+procedure TMSITransform.OpenDatabase(const MSIFile: string);  
 var
   Installer: OleVariant;
 begin
@@ -2042,7 +2042,7 @@ begin
   FDatabase := Installer.OpenDatabase(MSIFile, 1); // msiOpenDatabaseModeTransact
 end;
 
-procedure TMSITransform.SetProperty(const Name, Value: string);
+procedure TMSITransform.SetProperty(const Name, Value: string);  
 var
   View, Record_: OleVariant;
   SQL: string;
@@ -2073,7 +2073,7 @@ begin
   end;
 end;
 
-procedure TMSITransform.SetFeatureLevel(const FeatureName: string; Level: Integer);
+procedure TMSITransform.SetFeatureLevel(const FeatureName: string; Level: Integer);  
 var
   View: OleVariant;
   SQL: string;
@@ -2084,7 +2084,7 @@ begin
   View.Execute;
 end;
 
-procedure TMSITransform.AddRegistryEntry(Root: Integer; const Key, Name, Value: string);
+procedure TMSITransform.AddRegistryEntry(Root: Integer; const Key, Name, Value: string);  
 var
   View, Record_: OleVariant;
   SQL: string;
@@ -2113,14 +2113,14 @@ begin
   View.Execute(Record_);
 end;
 
-procedure TMSITransform.GenerateTransform(const OriginalMSI: string);
+procedure TMSITransform.GenerateTransform(const OriginalMSI: string);  
 begin
   FDatabase.GenerateTransform(OriginalMSI, FTransformFile);
   FDatabase.CreateTransformSummaryInfo(OriginalMSI, FTransformFile, 0, 0);
 end;
 
 // Utilisation
-procedure CreerTransformEntreprise;
+procedure CreerTransformEntreprise;  
 var
   Transform: TMSITransform;
 begin
@@ -2160,7 +2160,7 @@ program PrepareGPODeployment;
 uses
   SysUtils, Classes, Windows, Registry;
 
-procedure CreateDeploymentPackage(const MSIPath, TargetFolder: string);
+procedure CreateDeploymentPackage(const MSIPath, TargetFolder: string);  
 var
   AdminFolder: string;
   Files: TStringList;
@@ -2238,13 +2238,13 @@ type
     procedure ShowReport;
   end;
 
-constructor TMSIChecker.Create(const ProductCode: string);
+constructor TMSIChecker.Create(const ProductCode: string);  
 begin
   FProductCode := ProductCode;
   FIsInstalled := False;
 end;
 
-procedure TMSIChecker.CheckRegistry;
+procedure TMSIChecker.CheckRegistry;  
 var
   Reg: TRegistry;
   Key: string;
@@ -2274,7 +2274,7 @@ begin
   end;
 end;
 
-procedure TMSIChecker.CheckFiles;
+procedure TMSIChecker.CheckFiles;  
 var
   RequiredFiles: TStringList;
   i: Integer;
@@ -2303,7 +2303,7 @@ begin
   end;
 end;
 
-procedure TMSIChecker.CheckServices;
+procedure TMSIChecker.CheckServices;  
 var
   SCManager, Service: SC_HANDLE;
   ServiceStatus: SERVICE_STATUS;
@@ -2337,7 +2337,7 @@ begin
   end;
 end;
 
-function TMSIChecker.RunDiagnostics: Boolean;
+function TMSIChecker.RunDiagnostics: Boolean;  
 begin
   WriteLn('=== DIAGNOSTIC DE L''INSTALLATION ===');
   WriteLn;
@@ -2368,7 +2368,7 @@ begin
   end;
 end;
 
-procedure TMSIChecker.RepairInstallation;
+procedure TMSIChecker.RepairInstallation;  
 var
   Process: TProcess;
 begin
@@ -2398,7 +2398,7 @@ begin
   end;
 end;
 
-procedure TMSIChecker.ShowReport;
+procedure TMSIChecker.ShowReport;  
 var
   ReportFile: TextFile;
   FileName: string;

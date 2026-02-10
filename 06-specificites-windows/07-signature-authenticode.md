@@ -92,16 +92,16 @@ Export-PfxCertificate -Cert $cert -FilePath "MonCertificat.pfx" -Password $pwd
 ### Option 3 : Utiliser makecert (méthode classique)
 
 ```batch
-REM Créer un certificat racine
+REM Créer un certificat racine  
 makecert -r -pe -n "CN=Mon CA Test" -ss CA -sr CurrentUser ^
     -a sha256 -cy authority -sky signature -sv MonCA.pvk MonCA.cer
 
-REM Créer un certificat de signature
+REM Créer un certificat de signature  
 makecert -pe -n "CN=Mon Application" -a sha256 -cy end ^
     -sky signature -ic MonCA.cer -iv MonCA.pvk ^
     -sv MonApp.pvk MonApp.cer
 
-REM Convertir en PFX
+REM Convertir en PFX  
 pvk2pfx -pvk MonApp.pvk -spc MonApp.cer -pfx MonApp.pfx -po MotDePasse123!
 ```
 
@@ -163,13 +163,13 @@ Dans Lazarus :
 Ou créer un fichier `version.rc` :
 ```rc
 1 VERSIONINFO
-FILEVERSION 1,0,0,0
-PRODUCTVERSION 1,0,0,0
-FILEFLAGSMASK 0x3F
-FILEFLAGS 0x0
-FILEOS 0x4
-FILETYPE 0x1
-FILESUBTYPE 0x0
+FILEVERSION 1,0,0,0  
+PRODUCTVERSION 1,0,0,0  
+FILEFLAGSMASK 0x3F  
+FILEFLAGS 0x0  
+FILEOS 0x4  
+FILETYPE 0x1  
+FILESUBTYPE 0x0  
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
@@ -198,10 +198,10 @@ Compiler : `windres version.rc version.res`
 
 ```batch
 @echo off
-REM Signature simple
+REM Signature simple  
 signtool sign /f "MonCertificat.pfx" /p "MotDePasse123!" "MonApplication.exe"
 
-REM Vérifier la signature
+REM Vérifier la signature  
 signtool verify /pa "MonApplication.exe"
 ```
 
@@ -209,14 +209,14 @@ signtool verify /pa "MonApplication.exe"
 
 ```batch
 @echo off
-REM Signature avec horodatage (recommandé)
+REM Signature avec horodatage (recommandé)  
 signtool sign /f "MonCertificat.pfx" /p "MotDePasse123!" ^
     /t http://timestamp.digicert.com ^
     /d "Mon Application" ^
     "MonApplication.exe"
 
-REM Alternatives de serveurs timestamp
-REM Sectigo : http://timestamp.sectigo.com
+REM Alternatives de serveurs timestamp  
+REM Sectigo : http://timestamp.sectigo.com  
 REM GlobalSign : http://timestamp.globalsign.com/scripts/timstamp.dll
 ```
 
@@ -224,7 +224,7 @@ REM GlobalSign : http://timestamp.globalsign.com/scripts/timstamp.dll
 
 ```batch
 @echo off
-REM Signature SHA-256 avec timestamp RFC3161
+REM Signature SHA-256 avec timestamp RFC3161  
 signtool sign /f "MonCertificat.pfx" /p "MotDePasse123!" ^
     /fd sha256 ^
     /tr http://timestamp.digicert.com ^
@@ -241,9 +241,9 @@ signtool sign /f "MonCertificat.pfx" /p "MotDePasse123!" ^
 Créez `sign.bat` dans le dossier du projet :
 ```batch
 @echo off
-set SIGNTOOL="C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x64\signtool.exe"
-set CERT_PATH="C:\Certificats\MonCertificat.pfx"
-set CERT_PASS=MotDePasse123!
+set SIGNTOOL="C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x64\signtool.exe"  
+set CERT_PATH="C:\Certificats\MonCertificat.pfx"  
+set CERT_PASS=MotDePasse123!  
 set TIMESTAMP=http://timestamp.digicert.com
 
 echo Signature de %1...
@@ -271,7 +271,7 @@ program SignatureHelper;
 uses
   SysUtils, Process;
 
-procedure SignerFichier(const CheminFichier: string);
+procedure SignerFichier(const CheminFichier: string);  
 var
   Process: TProcess;
   SignTool: string;
@@ -336,7 +336,7 @@ end.
 uses
   Windows, SysUtils, JwaWinTrust, JwaWinCrypt;
 
-function VerifierSignature(const CheminFichier: string): Boolean;
+function VerifierSignature(const CheminFichier: string): Boolean;  
 var
   FileData: TWinTrustFileInfo;
   WinTrustData: TWinTrustData;
@@ -389,7 +389,7 @@ end;
 ### Obtenir les informations du certificat
 
 ```pascal
-procedure AfficherInfosCertificat(const CheminFichier: string);
+procedure AfficherInfosCertificat(const CheminFichier: string);  
 var
   hStore: HCERTSTORE;
   hMsg: HCRYPTMSG;
@@ -461,13 +461,13 @@ Pour une compatibilité maximale (Windows 7 et versions récentes) :
 
 ```batch
 @echo off
-REM Première signature SHA-1
+REM Première signature SHA-1  
 signtool sign /f "MonCertificat.pfx" /p "MotDePasse123!" ^
     /t http://timestamp.digicert.com ^
     /d "Mon Application" ^
     "MonApplication.exe"
 
-REM Ajout signature SHA-256
+REM Ajout signature SHA-256  
 signtool sign /f "MonCertificat.pfx" /p "MotDePasse123!" ^
     /as /fd sha256 ^
     /tr http://timestamp.digicert.com ^
@@ -486,8 +486,8 @@ echo Double signature appliquee
 @echo off
 setlocal enabledelayedexpansion
 
-set SIGNTOOL="C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x64\signtool.exe"
-set CERT="MonCertificat.pfx"
+set SIGNTOOL="C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x64\signtool.exe"  
+set CERT="MonCertificat.pfx"  
 set PASS="MotDePasse123!"
 
 echo === Signature de tous les executables ===
@@ -506,7 +506,7 @@ for %%f in (*.exe *.dll) do (
     )
 )
 
-echo.
+echo.  
 echo === Verification des signatures ===
 %SIGNTOOL% verify /pa *.exe *.dll
 
@@ -540,7 +540,7 @@ type
     procedure VerifierSignatures(const Dossier: string);
   end;
 
-constructor TSignatureManager.Create;
+constructor TSignatureManager.Create;  
 begin
   // Configuration
   FSignTool := 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x64\signtool.exe';
@@ -555,20 +555,20 @@ begin
   Log('Date : ' + DateTimeToStr(Now));
 end;
 
-destructor TSignatureManager.Destroy;
+destructor TSignatureManager.Destroy;  
 begin
   Log('=== Fin de la session ===');
   CloseFile(FLogFile);
   inherited;
 end;
 
-procedure TSignatureManager.Log(const Message: string);
+procedure TSignatureManager.Log(const Message: string);  
 begin
   WriteLn(FLogFile, '[' + TimeToStr(Now) + '] ' + Message);
   WriteLn(Message);  // Afficher aussi dans la console
 end;
 
-function TSignatureManager.SignerUnFichier(const Fichier: string): Boolean;
+function TSignatureManager.SignerUnFichier(const Fichier: string): Boolean;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -611,7 +611,7 @@ begin
   end;
 end;
 
-procedure TSignatureManager.SignerDossier(const Dossier: string; const Masque: string);
+procedure TSignatureManager.SignerDossier(const Dossier: string; const Masque: string);  
 var
   SearchRec: TSearchRec;
   Chemin: string;
@@ -646,7 +646,7 @@ begin
   Log('Échecs : ' + IntToStr(NbFichiers - NbSucces));
 end;
 
-procedure TSignatureManager.VerifierSignatures(const Dossier: string);
+procedure TSignatureManager.VerifierSignatures(const Dossier: string);  
 var
   Process: TProcess;
   Output: TStringList;
@@ -741,7 +741,7 @@ implementation
 uses
   JwaCryptProt;  // Pour DPAPI
 
-constructor TCertificatManager.Create;
+constructor TCertificatManager.Create;  
 begin
   FCertPath := '';
   FPassword := '';
@@ -750,7 +750,7 @@ begin
   LirePasswordSecurise;
 end;
 
-function TCertificatManager.ChiffrerPassword(const Pass: string): string;
+function TCertificatManager.ChiffrerPassword(const Pass: string): string;  
 var
   DataIn, DataOut: DATA_BLOB;
   Description: PWideChar;
@@ -772,7 +772,7 @@ begin
     raise Exception.Create('Erreur lors du chiffrement du mot de passe');
 end;
 
-function TCertificatManager.DechiffrerPassword(const PassChiffre: string): string;
+function TCertificatManager.DechiffrerPassword(const PassChiffre: string): string;  
 var
   DataIn, DataOut: DATA_BLOB;
 begin
@@ -789,7 +789,7 @@ begin
     Result := '';
 end;
 
-function TCertificatManager.LirePasswordSecurise: string;
+function TCertificatManager.LirePasswordSecurise: string;  
 var
   Reg: TRegistry;
   PassChiffre: string;
@@ -833,7 +833,7 @@ begin
   end;
 end;
 
-procedure TCertificatManager.ConfigurerCertificat(const Chemin, Password: string);
+procedure TCertificatManager.ConfigurerCertificat(const Chemin, Password: string);  
 var
   Reg: TRegistry;
   PassChiffre: string;
@@ -858,7 +858,7 @@ begin
   end;
 end;
 
-procedure TCertificatManager.EffacerPassword;
+procedure TCertificatManager.EffacerPassword;  
 begin
   // Effacer le mot de passe de la mémoire
   if Length(FPassword) > 0 then
@@ -868,7 +868,7 @@ begin
   end;
 end;
 
-function TCertificatManager.SignerFichier(const Fichier: string): Boolean;
+function TCertificatManager.SignerFichier(const Fichier: string): Boolean;  
 begin
   // Implémenter la signature...
   Result := True;
@@ -890,13 +890,13 @@ end.
 - S'assurer que le certificat contient la clé privée
 
 ```batch
-REM Vérifier le contenu du certificat
+REM Vérifier le contenu du certificat  
 certutil -dump "MonCertificat.pfx"
 
-REM Lister les certificats dans le magasin
+REM Lister les certificats dans le magasin  
 certutil -store -user My
 
-REM Installer le certificat dans le magasin (optionnel)
+REM Installer le certificat dans le magasin (optionnel)  
 certutil -f -user -p "MotDePasse123!" -importPFX "MonCertificat.pfx"
 ```
 
@@ -935,7 +935,7 @@ implementation
 uses
   Windows, WinInet, SysUtils;
 
-function TestConnexionHTTP(const URL: string): Boolean;
+function TestConnexionHTTP(const URL: string): Boolean;  
 var
   hInternet, hConnect: HINTERNET;
   Host, Path: string;
@@ -987,7 +987,7 @@ begin
   end;
 end;
 
-function TrouverServeurDisponible: string;
+function TrouverServeurDisponible: string;  
 var
   i: Integer;
 begin
@@ -1019,7 +1019,7 @@ end.
 **Solution : Installer les certificats intermédiaires**
 
 ```pascal
-procedure InstallerCertificatsIntermediaires;
+procedure InstallerCertificatsIntermediaires;  
 var
   Process: TProcess;
 begin
@@ -1037,7 +1037,7 @@ begin
   end;
 end;
 
-procedure VerifierChaineCertificat(const CheminCertificat: string);
+procedure VerifierChaineCertificat(const CheminCertificat: string);  
 var
   Process: TProcess;
   Output: TStringList;
@@ -1090,7 +1090,7 @@ implementation
 uses
   SysUtils, DateUtils;
 
-procedure TReputationBuilder.ConseilsPourReputation;
+procedure TReputationBuilder.ConseilsPourReputation;  
 begin
   WriteLn('=== Conseils pour améliorer la réputation SmartScreen ===');
   WriteLn;
@@ -1115,7 +1115,7 @@ begin
   WriteLn('   - Catégorie : Software developer');
 end;
 
-function TReputationBuilder.EstimationTempsReputation: Integer;
+function TReputationBuilder.EstimationTempsReputation: Integer;  
 begin
   // Estimation basée sur l'expérience
   if FNombreTelechargements < 100 then
@@ -1293,7 +1293,7 @@ implementation
 uses
   fpjson, jsonparser, fphttpclient;
 
-constructor TAzureKeyVaultSigner.Create(const VaultName, CertName: string);
+constructor TAzureKeyVaultSigner.Create(const VaultName, CertName: string);  
 begin
   FVaultName := VaultName;
   FCertificateName := CertName;
@@ -1307,7 +1307,7 @@ begin
   FTenantId := TenantId;
 end;
 
-function TAzureKeyVaultSigner.GetAccessToken: string;
+function TAzureKeyVaultSigner.GetAccessToken: string;  
 var
   HTTP: TFPHTTPClient;
   Response: string;
@@ -1342,7 +1342,7 @@ begin
   end;
 end;
 
-function TAzureKeyVaultSigner.SignerAvecKeyVault(const FichierASignier: string): Boolean;
+function TAzureKeyVaultSigner.SignerAvecKeyVault(const FichierASignier: string): Boolean;  
 var
   Process: TProcess;
   Token: string;
@@ -1397,7 +1397,7 @@ end.
 ### Signature de DLL
 
 ```pascal
-procedure SignerDLL(const CheminDLL: string);
+procedure SignerDLL(const CheminDLL: string);  
 var
   Process: TProcess;
 begin
@@ -1436,7 +1436,7 @@ end;
 ### Signature de scripts PowerShell
 
 ```pascal
-procedure SignerScriptPowerShell(const CheminScript: string);
+procedure SignerScriptPowerShell(const CheminScript: string);  
 var
   Process: TProcess;
 begin
@@ -1469,7 +1469,7 @@ end;
 ### Signature de packages MSI
 
 ```pascal
-procedure SignerMSI(const CheminMSI: string);
+procedure SignerMSI(const CheminMSI: string);  
 var
   Process: TProcess;
 begin
@@ -1512,7 +1512,7 @@ program VisualiserSignature;
 uses
   Windows, SysUtils, JwaWinCrypt, DateUtils;
 
-procedure AfficherDetailsSignature(const Fichier: string);
+procedure AfficherDetailsSignature(const Fichier: string);  
 var
   hStore: HCERTSTORE;
   hMsg: HCRYPTMSG;
@@ -1613,7 +1613,7 @@ begin
   end;
 end;
 
-procedure VerifierTimestamp(hMsg: HCRYPTMSG);
+procedure VerifierTimestamp(hMsg: HCRYPTMSG);  
 var
   dwSize: DWORD;
   pTimeStamp: Pointer;
@@ -1701,18 +1701,18 @@ implementation
 uses
   JwaWinCrypt;
 
-constructor TCertificateStore.Create;
+constructor TCertificateStore.Create;  
 begin
   FCertificates := TList.Create;
 end;
 
-destructor TCertificateStore.Destroy;
+destructor TCertificateStore.Destroy;  
 begin
   FCertificates.Free;
   inherited;
 end;
 
-function TCertificateStore.GetCertificateInfo(CertContext: PCCERT_CONTEXT): TCertificateInfo;
+function TCertificateStore.GetCertificateInfo(CertContext: PCCERT_CONTEXT): TCertificateInfo;  
 var
   NameSize: DWORD;
   i: Integer;
@@ -1744,7 +1744,7 @@ begin
   Result.Thumbprint := 'TODO: Calculate thumbprint';
 end;
 
-procedure TCertificateStore.LoadFromStore(StoreName: string);
+procedure TCertificateStore.LoadFromStore(StoreName: string);  
 var
   hStore: HCERTSTORE;
   pCertContext: PCCERT_CONTEXT;
@@ -1770,7 +1770,7 @@ begin
   end;
 end;
 
-procedure TCertificateStore.ListCertificates;
+procedure TCertificateStore.ListCertificates;  
 var
   i: Integer;
   Cert: ^TCertificateInfo;
@@ -1803,7 +1803,7 @@ begin
     WriteLn('Aucun certificat trouvé');
 end;
 
-procedure TCertificateStore.CheckExpiration(DaysWarning: Integer);
+procedure TCertificateStore.CheckExpiration(DaysWarning: Integer);  
 var
   i: Integer;
   Cert: ^TCertificateInfo;
@@ -1837,7 +1837,7 @@ begin
     WriteLn('✅ Tous les certificats sont valides pour plus de ', DaysWarning, ' jours');
 end;
 
-procedure TCertificateStore.LoadFromFile(const FileName: string; const Password: string);
+procedure TCertificateStore.LoadFromFile(const FileName: string; const Password: string);  
 var
   hStore: HCERTSTORE;
   CertBlob: CRYPT_DATA_BLOB;
@@ -1882,7 +1882,7 @@ begin
   end;
 end;
 
-function TCertificateStore.FindByThumbprint(const Thumbprint: string): TCertificateInfo;
+function TCertificateStore.FindByThumbprint(const Thumbprint: string): TCertificateInfo;  
 var
   i: Integer;
   Cert: ^TCertificateInfo;
@@ -1900,7 +1900,7 @@ begin
   end;
 end;
 
-function TCertificateStore.FindBySubject(const Subject: string): TCertificateInfo;
+function TCertificateStore.FindBySubject(const Subject: string): TCertificateInfo;  
 var
   i: Integer;
   Cert: ^TCertificateInfo;
@@ -1957,7 +1957,7 @@ type
     procedure Executer;
   end;
 
-constructor TSignatureApp.Create;
+constructor TSignatureApp.Create;  
 begin
   FCertStore := TCertificateStore.Create;
   FConfig := TStringList.Create;
@@ -1965,7 +1965,7 @@ begin
   InitialiserLog;
 end;
 
-destructor TSignatureApp.Destroy;
+destructor TSignatureApp.Destroy;  
 begin
   SauvegarderConfiguration;
   CloseFile(FLogFile);
@@ -1974,7 +1974,7 @@ begin
   inherited;
 end;
 
-procedure TSignatureApp.ChargerConfiguration;
+procedure TSignatureApp.ChargerConfiguration;  
 var
   ConfigFile: string;
 begin
@@ -1994,7 +1994,7 @@ begin
   end;
 end;
 
-procedure TSignatureApp.SauvegarderConfiguration;
+procedure TSignatureApp.SauvegarderConfiguration;  
 var
   ConfigFile: string;
 begin
@@ -2002,7 +2002,7 @@ begin
   FConfig.SaveToFile(ConfigFile);
 end;
 
-procedure TSignatureApp.InitialiserLog;
+procedure TSignatureApp.InitialiserLog;  
 var
   LogFileName: string;
 begin
@@ -2017,13 +2017,13 @@ begin
   Log('=== Session démarrée : ' + DateTimeToStr(Now) + ' ===');
 end;
 
-procedure TSignatureApp.Log(const Message: string);
+procedure TSignatureApp.Log(const Message: string);  
 begin
   WriteLn(FLogFile, '[' + TimeToStr(Now) + '] ' + Message);
   Flush(FLogFile);
 end;
 
-procedure TSignatureApp.MenuPrincipal;
+procedure TSignatureApp.MenuPrincipal;  
 var
   Choix: string;
 begin
@@ -2054,7 +2054,7 @@ begin
   until False;
 end;
 
-procedure TSignatureApp.GererCertificats;
+procedure TSignatureApp.GererCertificats;  
 var
   Choix: string;
   PfxFile: string;
@@ -2125,7 +2125,7 @@ begin
   until False;
 end;
 
-procedure TSignatureApp.SignerFichiers;
+procedure TSignatureApp.SignerFichiers;  
 var
   Fichier: string;
   Certificat: string;
@@ -2228,7 +2228,7 @@ begin
   end;
 end;
 
-procedure TSignatureApp.VerifierSignatures;
+procedure TSignatureApp.VerifierSignatures;  
 var
   Dossier: string;
   SearchRec: TSearchRec;
@@ -2341,7 +2341,7 @@ begin
             [NbFichiers, NbSignes, NbValides]));
 end;
 
-procedure TSignatureApp.ConfigurerApplication;
+procedure TSignatureApp.ConfigurerApplication;  
 var
   Choix: string;
   Path: string;
@@ -2462,7 +2462,7 @@ begin
   until False;
 end;
 
-function TSignatureApp.ChoisirCertificat: string;
+function TSignatureApp.ChoisirCertificat: string;  
 begin
   Result := FConfig.Values['Certificate'];
 
@@ -2481,14 +2481,14 @@ begin
   end;
 end;
 
-function TSignatureApp.DemanderMotDePasse: string;
+function TSignatureApp.DemanderMotDePasse: string;  
 begin
   Write('Mot de passe du certificat : ');
   // Dans une vraie application, masquer la saisie
   ReadLn(Result);
 end;
 
-procedure TSignatureApp.Executer;
+procedure TSignatureApp.Executer;  
 begin
   WriteLn('Bienvenue dans le Gestionnaire de Signature Authenticode');
   WriteLn('Version 1.0 - FreePascal/Lazarus');

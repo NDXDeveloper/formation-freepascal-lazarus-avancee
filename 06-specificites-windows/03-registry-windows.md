@@ -42,7 +42,7 @@ Le Registre est organisé en cinq ruches principales (plus quelques ruches dynam
 
 ### 1. HKEY_CLASSES_ROOT (HKCR)
 ```
-But : Associations de fichiers et informations COM/OLE
+But : Associations de fichiers et informations COM/OLE  
 Contient :
 - Extensions de fichiers (.txt, .docx, .exe...)
 - Types MIME
@@ -54,7 +54,7 @@ Exemple : Quel programme ouvre les fichiers .pdf ?
 
 ### 2. HKEY_CURRENT_USER (HKCU)
 ```
-But : Configuration de l'utilisateur actuellement connecté
+But : Configuration de l'utilisateur actuellement connecté  
 Contient :
 - Préférences du bureau
 - Variables d'environnement utilisateur
@@ -66,7 +66,7 @@ Exemple : Fond d'écran, thème, paramètres de votre application
 
 ### 3. HKEY_LOCAL_MACHINE (HKLM)
 ```
-But : Configuration globale de la machine
+But : Configuration globale de la machine  
 Contient :
 - HARDWARE : Configuration matérielle
 - SOFTWARE : Applications installées pour tous
@@ -78,7 +78,7 @@ Exemple : Liste des programmes installés, configuration réseau
 
 ### 4. HKEY_USERS (HKU)
 ```
-But : Profils de tous les utilisateurs
+But : Profils de tous les utilisateurs  
 Contient :
 - .DEFAULT : Profil par défaut
 - S-1-5-... : Profils des utilisateurs (par SID)
@@ -89,7 +89,7 @@ Note : HKCU est en fait un lien vers HKU\[SID_utilisateur_actuel]
 
 ### 5. HKEY_CURRENT_CONFIG (HKCC)
 ```
-But : Configuration matérielle actuelle
+But : Configuration matérielle actuelle  
 Contient :
 - Profil matériel en cours d'utilisation
 - Configuration d'affichage actuelle
@@ -134,7 +134,7 @@ Pour accéder à une valeur, il faut connaître son chemin complet :
 ```
 Ruche\Clé\Sous-clé\Sous-sous-clé\...\NomValeur
 
-Exemple :
+Exemple :  
 HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run
 ```
 
@@ -214,24 +214,24 @@ CRÉATION/SUPPRESSION
 
 #### 1. Éditeur du Registre (regedit.exe)
 ```
-Lancement : Win+R → regedit
-Fonction : Interface graphique pour naviguer/modifier
-Utilité : Explorer, chercher, exporter/importer
+Lancement : Win+R → regedit  
+Fonction : Interface graphique pour naviguer/modifier  
+Utilité : Explorer, chercher, exporter/importer  
 Attention : Modifications directes possibles !
 ```
 
 #### 2. Ligne de commande (reg.exe)
 ```batch
-REM Interroger une valeur
+REM Interroger une valeur  
 reg query HKCU\Software\MonApp /v Version
 
-REM Ajouter une valeur
+REM Ajouter une valeur  
 reg add HKCU\Software\MonApp /v Theme /t REG_SZ /d "Dark"
 
-REM Exporter une clé
+REM Exporter une clé  
 reg export HKCU\Software\MonApp backup.reg
 
-REM Supprimer une valeur
+REM Supprimer une valeur  
 reg delete HKCU\Software\MonApp /v OldSetting /f
 ```
 
@@ -265,34 +265,34 @@ Get-ItemProperty -Path "HKCU:\Software\MonApp"
 
 ### 1. Démarrage automatique d'une application
 ```
-Clé : HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run
-Valeur : "MonApp" = "C:\Program Files\MonApp\MonApp.exe"
+Clé : HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run  
+Valeur : "MonApp" = "C:\Program Files\MonApp\MonApp.exe"  
 Effet : L'application démarre à la connexion de l'utilisateur
 ```
 
 ### 2. Association de fichier
 ```
-Clé : HKEY_CLASSES_ROOT\.monext
+Clé : HKEY_CLASSES_ROOT\.monext  
 Valeur par défaut : "MonApp.Document"
 
-Clé : HKEY_CLASSES_ROOT\MonApp.Document\shell\open\command
-Valeur par défaut : "C:\Program Files\MonApp\MonApp.exe "%1""
+Clé : HKEY_CLASSES_ROOT\MonApp.Document\shell\open\command  
+Valeur par défaut : "C:\Program Files\MonApp\MonApp.exe "%1""  
 Effet : Double-clic sur .monext ouvre avec MonApp
 ```
 
 ### 3. Menu contextuel de l'Explorateur
 ```
-Clé : HKEY_CLASSES_ROOT\*\shell\MonApp
+Clé : HKEY_CLASSES_ROOT\*\shell\MonApp  
 Valeur par défaut : "Ouvrir avec MonApp"
 
-Clé : HKEY_CLASSES_ROOT\*\shell\MonApp\command
-Valeur par défaut : "C:\Program Files\MonApp\MonApp.exe "%1""
+Clé : HKEY_CLASSES_ROOT\*\shell\MonApp\command  
+Valeur par défaut : "C:\Program Files\MonApp\MonApp.exe "%1""  
 Effet : "Ouvrir avec MonApp" dans le menu clic-droit
 ```
 
 ### 4. Configuration d'application
 ```
-Clé : HKEY_CURRENT_USER\Software\MonEntreprise\MonApp\Settings
+Clé : HKEY_CURRENT_USER\Software\MonEntreprise\MonApp\Settings  
 Valeurs :
 - "Theme" = "Dark"
 - "Language" = "FR"

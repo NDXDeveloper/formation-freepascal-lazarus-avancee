@@ -38,7 +38,7 @@ Avant de plonger dans DirectX, sachez que FreePascal offre plusieurs options pou
 
 ```pascal
 // Vérifier la version de DirectX installée
-procedure CheckDirectXVersion;
+procedure CheckDirectXVersion;  
 var
   Registry: TRegistry;
   Version: string;
@@ -108,13 +108,13 @@ type
 
 implementation
 
-constructor TDirect2DForm.Create(AOwner: TComponent);
+constructor TDirect2DForm.Create(AOwner: TComponent);  
 begin
   inherited;
   InitDirect2D;
 end;
 
-procedure TDirect2DForm.InitDirect2D;
+procedure TDirect2DForm.InitDirect2D;  
 var
   RenderTargetProps: D2D1_RENDER_TARGET_PROPERTIES;
   HwndRenderTargetProps: D2D1_HWND_RENDER_TARGET_PROPERTIES;
@@ -143,7 +143,7 @@ begin
   );
 end;
 
-procedure TDirect2DForm.DrawScene;
+procedure TDirect2DForm.DrawScene;  
 var
   Brush: ID2D1SolidColorBrush;
   Color: D2D1_COLOR_F;
@@ -171,12 +171,12 @@ begin
   end;
 end;
 
-procedure TDirect2DForm.Paint;
+procedure TDirect2DForm.Paint;  
 begin
   DrawScene;
 end;
 
-destructor TDirect2DForm.Destroy;
+destructor TDirect2DForm.Destroy;  
 begin
   FRenderTarget := nil;
   FD2DFactory := nil;
@@ -216,7 +216,7 @@ type
 
 implementation
 
-constructor TSoundPlayer.Create(WindowHandle: HWND);
+constructor TSoundPlayer.Create(WindowHandle: HWND);  
 var
   BufferDesc: DSBUFFERDESC;
 begin
@@ -237,7 +237,7 @@ begin
   FDirectSound.CreateSoundBuffer(BufferDesc, FPrimaryBuffer, nil);
 end;
 
-function TSoundPlayer.LoadWaveFile(const FileName: string): IDirectSoundBuffer;
+function TSoundPlayer.LoadWaveFile(const FileName: string): IDirectSoundBuffer;  
 var
   WaveFile: TFileStream;
   WaveFormat: TWaveFormatEx;
@@ -292,7 +292,7 @@ begin
   end;
 end;
 
-procedure TSoundPlayer.PlaySound(const WaveFile: string);
+procedure TSoundPlayer.PlaySound(const WaveFile: string);  
 var
   Buffer: IDirectSoundBuffer;
 begin
@@ -305,14 +305,14 @@ begin
   end;
 end;
 
-procedure TSoundPlayer.SetVolume(Buffer: IDirectSoundBuffer; Volume: Integer);
+procedure TSoundPlayer.SetVolume(Buffer: IDirectSoundBuffer; Volume: Integer);  
 begin
   // Volume de -10000 (silence) à 0 (volume max)
   if Assigned(Buffer) then
     Buffer.SetVolume(Volume);
 end;
 
-destructor TSoundPlayer.Destroy;
+destructor TSoundPlayer.Destroy;  
 begin
   FSoundBuffers.Free;
   FPrimaryBuffer := nil;
@@ -363,14 +363,14 @@ type
 
 implementation
 
-constructor TVideoPlayer.Create(AOwner: TComponent);
+constructor TVideoPlayer.Create(AOwner: TComponent);  
 begin
   inherited;
   CoInitialize(nil);
   InitializeDirectShow;
 end;
 
-procedure TVideoPlayer.InitializeDirectShow;
+procedure TVideoPlayer.InitializeDirectShow;  
 begin
   // Créer le Filter Graph
   CoCreateInstance(
@@ -389,7 +389,7 @@ begin
   FGraphBuilder.QueryInterface(IID_IBasicAudio, FBasicAudio);
 end;
 
-function TVideoPlayer.LoadVideo(const FileName: string): Boolean;
+function TVideoPlayer.LoadVideo(const FileName: string): Boolean;  
 var
   WideFileName: PWideChar;
 begin
@@ -419,19 +419,19 @@ begin
   end;
 end;
 
-procedure TVideoPlayer.Play;
+procedure TVideoPlayer.Play;  
 begin
   if Assigned(FMediaControl) then
     FMediaControl.Run;
 end;
 
-procedure TVideoPlayer.Pause;
+procedure TVideoPlayer.Pause;  
 begin
   if Assigned(FMediaControl) then
     FMediaControl.Pause;
 end;
 
-procedure TVideoPlayer.Stop;
+procedure TVideoPlayer.Stop;  
 begin
   if Assigned(FMediaControl) then
   begin
@@ -442,7 +442,7 @@ begin
   end;
 end;
 
-procedure TVideoPlayer.SetVolume(Volume: Integer);
+procedure TVideoPlayer.SetVolume(Volume: Integer);  
 var
   DBVolume: Integer;
 begin
@@ -457,21 +457,21 @@ begin
   FBasicAudio.put_Volume(DBVolume);
 end;
 
-function TVideoPlayer.GetDuration: Int64;
+function TVideoPlayer.GetDuration: Int64;  
 begin
   Result := 0;
   if Assigned(FMediaSeeking) then
     FMediaSeeking.GetDuration(Result);
 end;
 
-function TVideoPlayer.GetPosition: Int64;
+function TVideoPlayer.GetPosition: Int64;  
 begin
   Result := 0;
   if Assigned(FMediaSeeking) then
     FMediaSeeking.GetCurrentPosition(Result);
 end;
 
-procedure TVideoPlayer.SetPosition(Position: Int64);
+procedure TVideoPlayer.SetPosition(Position: Int64);  
 begin
   if Assigned(FMediaSeeking) then
     FMediaSeeking.SetPositions(
@@ -482,7 +482,7 @@ begin
     );
 end;
 
-procedure TVideoPlayer.CleanupDirectShow;
+procedure TVideoPlayer.CleanupDirectShow;  
 begin
   if Assigned(FVideoWindow) then
   begin
@@ -501,7 +501,7 @@ begin
   FGraphBuilder := nil;
 end;
 
-destructor TVideoPlayer.Destroy;
+destructor TVideoPlayer.Destroy;  
 begin
   CleanupDirectShow;
   CoUninitialize;
@@ -557,13 +557,13 @@ function MFStartup(Version: DWORD; dwFlags: DWORD = 0): HResult;
 function MFShutdown: HResult;
   stdcall; external 'mfplat.dll';
 
-constructor TMediaFoundationPlayer.Create;
+constructor TMediaFoundationPlayer.Create;  
 begin
   inherited;
   Initialize;
 end;
 
-procedure TMediaFoundationPlayer.Initialize;
+procedure TMediaFoundationPlayer.Initialize;  
 var
   hr: HResult;
 begin
@@ -574,7 +574,7 @@ begin
     raise Exception.Create('Impossible d''initialiser Media Foundation');
 end;
 
-procedure TMediaFoundationPlayer.PlayMediaFile(const FileName: string);
+procedure TMediaFoundationPlayer.PlayMediaFile(const FileName: string);  
 begin
   if not FInitialized then
     Exit;
@@ -584,7 +584,7 @@ begin
   WriteLn('Lecture de: ', FileName);
 end;
 
-destructor TMediaFoundationPlayer.Destroy;
+destructor TMediaFoundationPlayer.Destroy;  
 begin
   if FInitialized then
     MFShutdown;
@@ -640,14 +640,14 @@ const
   CLSID_XAudio2: TGUID = '{5A9CE6A2-5BA4-4C68-A85B-6E3B0F4E5A6F}';
   IID_IXAudio2: TGUID = '{8BCFG3B8-432F-40BD-BA06-C0B6CFC9DE45}';
 
-constructor TXAudio2Player.Create;
+constructor TXAudio2Player.Create;  
 begin
   inherited;
   CoInitialize(nil);
   Initialize;
 end;
 
-procedure TXAudio2Player.Initialize;
+procedure TXAudio2Player.Initialize;  
 var
   hr: HResult;
 begin
@@ -671,7 +671,7 @@ begin
     raise Exception.Create('Impossible d''initialiser XAudio2');
 end;
 
-procedure TXAudio2Player.PlayWaveData(Data: Pointer; Size: Integer);
+procedure TXAudio2Player.PlayWaveData(Data: Pointer; Size: Integer);  
 begin
   if not FInitialized then
     Exit;
@@ -681,7 +681,7 @@ begin
   WriteLn('Lecture audio - Taille: ', Size, ' octets');
 end;
 
-destructor TXAudio2Player.Destroy;
+destructor TXAudio2Player.Destroy;  
 begin
   if FInitialized then
   begin
@@ -729,7 +729,7 @@ type
 
 implementation
 
-constructor TWebcamCapture.Create(PreviewPanel: TPanel);
+constructor TWebcamCapture.Create(PreviewPanel: TPanel);  
 begin
   inherited Create;
   FPreviewPanel := PreviewPanel;
@@ -737,7 +737,7 @@ begin
   InitializeCapture;
 end;
 
-function TWebcamCapture.GetFirstVideoDevice: IMoniker;
+function TWebcamCapture.GetFirstVideoDevice: IMoniker;  
 var
   DevEnum: ICreateDevEnum;
   EnumMoniker: IEnumMoniker;
@@ -758,7 +758,7 @@ begin
   end;
 end;
 
-function TWebcamCapture.InitializeCapture: Boolean;
+function TWebcamCapture.InitializeCapture: Boolean;  
 var
   SourceFilter: IBaseFilter;
   hr: HResult;
@@ -815,26 +815,26 @@ begin
   Result := True;
 end;
 
-procedure TWebcamCapture.StartPreview;
+procedure TWebcamCapture.StartPreview;  
 begin
   if Assigned(FMediaControl) then
     FMediaControl.Run;
 end;
 
-procedure TWebcamCapture.StopPreview;
+procedure TWebcamCapture.StopPreview;  
 begin
   if Assigned(FMediaControl) then
     FMediaControl.Stop;
 end;
 
-procedure TWebcamCapture.TakeSnapshot(Bitmap: TBitmap);
+procedure TWebcamCapture.TakeSnapshot(Bitmap: TBitmap);  
 begin
   // Implémentation simplifiée
   // Nécessite l'ajout d'un Sample Grabber au graph
   WriteLn('Capture d''image...');
 end;
 
-destructor TWebcamCapture.Destroy;
+destructor TWebcamCapture.Destroy;  
 begin
   StopPreview;
 
@@ -863,7 +863,7 @@ end.
 
 ```pascal
 // TOUJOURS libérer les ressources DirectX
-procedure SafeReleaseDirectX;
+procedure SafeReleaseDirectX;  
 begin
   try
     // Arrêter les lectures en cours
@@ -885,7 +885,7 @@ end;
 ### 2. Gestion des erreurs DirectX
 
 ```pascal
-function DirectXErrorToString(ErrorCode: HResult): string;
+function DirectXErrorToString(ErrorCode: HResult): string;  
 begin
   case ErrorCode of
     E_FAIL: Result := 'Échec général';
@@ -902,7 +902,7 @@ begin
 end;
 
 // Utilisation
-procedure SafeDirectXCall(hr: HResult; const Operation: string);
+procedure SafeDirectXCall(hr: HResult; const Operation: string);  
 begin
   if Failed(hr) then
     raise Exception.CreateFmt('%s a échoué: %s',
@@ -913,7 +913,7 @@ end;
 ### 3. Détection des capacités matérielles
 
 ```pascal
-procedure CheckHardwareCapabilities;
+procedure CheckHardwareCapabilities;  
 var
   D3D: IDirect3D9;
   D3DCaps: D3DCAPS9;
@@ -974,7 +974,7 @@ begin
   end;
 end;
 
-function GetFormatName(Format: TD3DFormat): string;
+function GetFormatName(Format: TD3DFormat): string;  
 begin
   case Format of
     D3DFMT_R8G8B8: Result := 'RGB 24-bit';
@@ -1009,7 +1009,7 @@ type
     procedure PreloadResources(const FileList: TStringList);
   end;
 
-constructor TResourceManager.Create(MaxCacheMB: Integer);
+constructor TResourceManager.Create(MaxCacheMB: Integer);  
 begin
   inherited Create;
   FTextureCache := TStringList.Create;
@@ -1018,7 +1018,7 @@ begin
   FCurrentCacheSize := 0;
 end;
 
-procedure TResourceManager.CleanupCache;
+procedure TResourceManager.CleanupCache;  
 var
   i: Integer;
   OldestTime: TDateTime;
@@ -1050,7 +1050,7 @@ begin
   end;
 end;
 
-function TResourceManager.LoadTexture(const FileName: string): IDirect3DTexture9;
+function TResourceManager.LoadTexture(const FileName: string): IDirect3DTexture9;  
 var
   Index: Integer;
 begin
@@ -1073,7 +1073,7 @@ begin
   CleanupCache;
 end;
 
-procedure TResourceManager.PreloadResources(const FileList: TStringList);
+procedure TResourceManager.PreloadResources(const FileList: TStringList);  
 var
   i: Integer;
 begin
@@ -1188,7 +1188,7 @@ implementation
 
 {$R *.dfm}
 
-procedure TMediaPlayer.FormCreate(Sender: TObject);
+procedure TMediaPlayer.FormCreate(Sender: TObject);  
 begin
   // Initialiser COM
   CoInitialize(nil);
@@ -1218,7 +1218,7 @@ begin
   UpdateControls;
 end;
 
-procedure TMediaPlayer.InitializeDirectShow;
+procedure TMediaPlayer.InitializeDirectShow;  
 begin
   try
     // Créer le Filter Graph Manager
@@ -1243,7 +1243,7 @@ begin
   end;
 end;
 
-function TMediaPlayer.LoadMediaFile(const FileName: string): Boolean;
+function TMediaPlayer.LoadMediaFile(const FileName: string): Boolean;  
 var
   hr: HResult;
   WideFileName: PWideChar;
@@ -1322,7 +1322,7 @@ begin
   end;
 end;
 
-procedure TMediaPlayer.PlayButtonClick(Sender: TObject);
+procedure TMediaPlayer.PlayButtonClick(Sender: TObject);  
 begin
   if not Assigned(FMediaControl) then Exit;
 
@@ -1345,7 +1345,7 @@ begin
   end;
 end;
 
-procedure TMediaPlayer.PauseButtonClick(Sender: TObject);
+procedure TMediaPlayer.PauseButtonClick(Sender: TObject);  
 begin
   if not Assigned(FMediaControl) then Exit;
 
@@ -1362,7 +1362,7 @@ begin
   end;
 end;
 
-procedure TMediaPlayer.StopButtonClick(Sender: TObject);
+procedure TMediaPlayer.StopButtonClick(Sender: TObject);  
 var
   Position: Int64;
 begin
@@ -1392,7 +1392,7 @@ begin
   end;
 end;
 
-procedure TMediaPlayer.OpenButtonClick(Sender: TObject);
+procedure TMediaPlayer.OpenButtonClick(Sender: TObject);  
 begin
   if OpenDialog.Execute then
   begin
@@ -1404,7 +1404,7 @@ begin
   end;
 end;
 
-procedure TMediaPlayer.VolumeTrackBarChange(Sender: TObject);
+procedure TMediaPlayer.VolumeTrackBarChange(Sender: TObject);  
 var
   Volume: Integer;
 begin
@@ -1423,7 +1423,7 @@ begin
   end;
 end;
 
-procedure TMediaPlayer.PositionTrackBarChange(Sender: TObject);
+procedure TMediaPlayer.PositionTrackBarChange(Sender: TObject);  
 var
   NewPosition: Int64;
 begin
@@ -1441,7 +1441,7 @@ begin
   end;
 end;
 
-procedure TMediaPlayer.Timer1Timer(Sender: TObject);
+procedure TMediaPlayer.Timer1Timer(Sender: TObject);  
 var
   CurrentPosition: Int64;
   EventCode: Integer;
@@ -1480,7 +1480,7 @@ begin
   end;
 end;
 
-procedure TMediaPlayer.UpdateTimeDisplay;
+procedure TMediaPlayer.UpdateTimeDisplay;  
 var
   CurrentPosition: Int64;
 begin
@@ -1493,7 +1493,7 @@ begin
     TimeLabel.Caption := '00:00 / 00:00';
 end;
 
-function TMediaPlayer.FormatTime(NanoSeconds: Int64): string;
+function TMediaPlayer.FormatTime(NanoSeconds: Int64): string;  
 var
   Seconds: Integer;
   Minutes: Integer;
@@ -1512,7 +1512,7 @@ begin
     Result := Format('%2.2d:%2.2d', [Minutes, Seconds]);
 end;
 
-procedure TMediaPlayer.UpdateControls;
+procedure TMediaPlayer.UpdateControls;  
 begin
   PlayButton.Enabled := not FIsPlaying and (FFileName <> '');
   PauseButton.Enabled := FIsPlaying;
@@ -1520,7 +1520,7 @@ begin
   PositionTrackBar.Enabled := FFileName <> '';
 end;
 
-procedure TMediaPlayer.FormResize(Sender: TObject);
+procedure TMediaPlayer.FormResize(Sender: TObject);  
 begin
   // Ajuster la fenêtre vidéo
   if Assigned(FVideoWindow) then
@@ -1529,7 +1529,7 @@ begin
   end;
 end;
 
-procedure TMediaPlayer.SetFullScreen(Value: Boolean);
+procedure TMediaPlayer.SetFullScreen(Value: Boolean);  
 begin
   if FIsFullScreen = Value then Exit;
 
@@ -1557,18 +1557,18 @@ begin
   FormResize(nil);
 end;
 
-procedure TMediaPlayer.FullScreenMenuItemClick(Sender: TObject);
+procedure TMediaPlayer.FullScreenMenuItemClick(Sender: TObject);  
 begin
   SetFullScreen(not FIsFullScreen);
 end;
 
-procedure TMediaPlayer.ShowError(const Msg: string);
+procedure TMediaPlayer.ShowError(const Msg: string);  
 begin
   MessageDlg(Msg, mtError, [mbOK], 0);
   StatusBar.SimpleText := 'Erreur: ' + Msg;
 end;
 
-procedure TMediaPlayer.CleanupDirectShow;
+procedure TMediaPlayer.CleanupDirectShow;  
 begin
   try
     Timer1.Enabled := False;
@@ -1595,7 +1595,7 @@ begin
   end;
 end;
 
-procedure TMediaPlayer.FormDestroy(Sender: TObject);
+procedure TMediaPlayer.FormDestroy(Sender: TObject);  
 begin
   CleanupDirectShow;
   CoUninitialize;
@@ -1619,7 +1619,7 @@ end.
 ### Vérification de l'installation
 
 ```pascal
-procedure CheckMultimediaSupport;
+procedure CheckMultimediaSupport;  
 var
   hr: HResult;
   D3D: IDirect3D9;

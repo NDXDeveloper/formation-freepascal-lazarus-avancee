@@ -282,19 +282,19 @@ implementation
 
 uses ComServ;
 
-function TMonCalculateur.Additionner(a, b: Integer): Integer;
+function TMonCalculateur.Additionner(a, b: Integer): Integer;  
 begin
   FDernierResultat := a + b;
   Result := FDernierResultat;
 end;
 
-function TMonCalculateur.Multiplier(a, b: Integer): Integer;
+function TMonCalculateur.Multiplier(a, b: Integer): Integer;  
 begin
   FDernierResultat := a * b;
   Result := FDernierResultat;
 end;
 
-function TMonCalculateur.GetDernierResultat: Integer;
+function TMonCalculateur.GetDernierResultat: Integer;  
 begin
   Result := FDernierResultat;
 end;
@@ -433,19 +433,19 @@ var
 
 implementation
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   CoInitialize(nil);
   CreerNavigateur;
 end;
 
-procedure TForm1.FormDestroy(Sender: TObject);
+procedure TForm1.FormDestroy(Sender: TObject);  
 begin
   FWebBrowser := Unassigned;
   CoUninitialize;
 end;
 
-procedure TForm1.CreerNavigateur;
+procedure TForm1.CreerNavigateur;  
 var
   WebBrowserControl: TOleControl;
 begin
@@ -593,7 +593,7 @@ end;
 Vérifiez toujours si un composant COM est disponible :
 
 ```pascal
-function ExcelDisponible: Boolean;
+function ExcelDisponible: Boolean;  
 var
   ExcelApp: Variant;
 begin

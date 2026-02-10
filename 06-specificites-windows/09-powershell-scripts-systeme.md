@@ -33,10 +33,10 @@ Les **cmdlets** (command-lets) sont les commandes PowerShell. Elles suivent le f
 
 ```powershell
 # Exemples de cmdlets
-Get-Process      # Obtenir la liste des processus
-Set-Location     # Changer de répertoire
-New-Item         # Créer un fichier ou dossier
-Remove-Item      # Supprimer un élément
+Get-Process      # Obtenir la liste des processus  
+Set-Location     # Changer de répertoire  
+New-Item         # Créer un fichier ou dossier  
+Remove-Item      # Supprimer un élément  
 Start-Service    # Démarrer un service
 ```
 
@@ -69,7 +69,7 @@ Get-Process | Sort-Object WorkingSet -Descending | Select-Object -First 5
 uses
   Windows, ShellAPI, SysUtils;
 
-procedure ExecuterCommandePowerShell(const Commande: string);
+procedure ExecuterCommandePowerShell(const Commande: string);  
 var
   Params: string;
 begin
@@ -92,7 +92,7 @@ end;
 uses
   Classes, SysUtils, Process;
 
-function ExecuterPowerShell(const Commande: string; var Sortie: string): Boolean;
+function ExecuterPowerShell(const Commande: string; var Sortie: string): Boolean;  
 var
   Process: TProcess;
   OutputList: TStringList;
@@ -185,27 +185,27 @@ type
 
 implementation
 
-constructor TPowerShell.Create;
+constructor TPowerShell.Create;  
 begin
   FOutputBuffer := TStringList.Create;
   FErrorBuffer := TStringList.Create;
   FLastExitCode := 0;
 end;
 
-destructor TPowerShell.Destroy;
+destructor TPowerShell.Destroy;  
 begin
   FOutputBuffer.Free;
   FErrorBuffer.Free;
   inherited;
 end;
 
-function TPowerShell.PrepareCommand(const Command: string): string;
+function TPowerShell.PrepareCommand(const Command: string): string;  
 begin
   // Échapper les caractères spéciaux si nécessaire
   Result := StringReplace(Command, '"', '\"', [rfReplaceAll]);
 end;
 
-function TPowerShell.Execute(const Command: string): Boolean;
+function TPowerShell.Execute(const Command: string): Boolean;  
 begin
   FOutputBuffer.Clear;
   FErrorBuffer.Clear;
@@ -253,7 +253,7 @@ begin
   end;
 end;
 
-function TPowerShell.ExecuteScript(const ScriptFile: string): Boolean;
+function TPowerShell.ExecuteScript(const ScriptFile: string): Boolean;  
 var
   Command: string;
 begin
@@ -268,7 +268,7 @@ begin
   Result := Execute(Command);
 end;
 
-function TPowerShell.ExecuteAndGetOutput(const Command: string): string;
+function TPowerShell.ExecuteAndGetOutput(const Command: string): string;  
 begin
   if Execute(Command) then
     Result := FOutputBuffer.Text
@@ -276,7 +276,7 @@ begin
     Result := '';
 end;
 
-function TPowerShell.ExecuteAndGetJSON(const Command: string): TJSONData;
+function TPowerShell.ExecuteAndGetJSON(const Command: string): TJSONData;  
 var
   JsonCommand: string;
   JsonOutput: string;
@@ -304,13 +304,13 @@ begin
   end;
 end;
 
-procedure TPowerShell.GetSystemInfo;
+procedure TPowerShell.GetSystemInfo;  
 begin
   Execute('Get-ComputerInfo | Select-Object CsName, OsName, OsVersion, ' +
           'OsArchitecture, CsProcessors, CsTotalPhysicalMemory');
 end;
 
-procedure TPowerShell.GetProcessList(List: TStrings);
+procedure TPowerShell.GetProcessList(List: TStrings);  
 begin
   List.Clear;
 
@@ -321,7 +321,7 @@ begin
   end;
 end;
 
-procedure TPowerShell.GetServiceList(List: TStrings);
+procedure TPowerShell.GetServiceList(List: TStrings);  
 begin
   List.Clear;
 
@@ -391,7 +391,7 @@ type
 
 implementation
 
-constructor TPSScriptGenerator.Create;
+constructor TPSScriptGenerator.Create;  
 begin
   FScript := TStringList.Create;
   FIndentLevel := 0;
@@ -405,13 +405,13 @@ begin
   AddLine('');
 end;
 
-destructor TPSScriptGenerator.Destroy;
+destructor TPSScriptGenerator.Destroy;  
 begin
   FScript.Free;
   inherited;
 end;
 
-procedure TPSScriptGenerator.AddLine(const Line: string);
+procedure TPSScriptGenerator.AddLine(const Line: string);  
 var
   IndentStr: string;
   i: Integer;
@@ -423,23 +423,23 @@ begin
   FScript.Add(IndentStr + Line);
 end;
 
-procedure TPSScriptGenerator.Indent;
+procedure TPSScriptGenerator.Indent;  
 begin
   Inc(FIndentLevel);
 end;
 
-procedure TPSScriptGenerator.Unindent;
+procedure TPSScriptGenerator.Unindent;  
 begin
   if FIndentLevel > 0 then
     Dec(FIndentLevel);
 end;
 
-procedure TPSScriptGenerator.AddComment(const Comment: string);
+procedure TPSScriptGenerator.AddComment(const Comment: string);  
 begin
   AddLine('# ' + Comment);
 end;
 
-procedure TPSScriptGenerator.AddVariable(const Name, Value: string);
+procedure TPSScriptGenerator.AddVariable(const Name, Value: string);  
 begin
   if Pos(' ', Value) > 0 then
     AddLine('$' + Name + ' = "' + Value + '"')
@@ -447,69 +447,69 @@ begin
     AddLine('$' + Name + ' = ' + Value);
 end;
 
-procedure TPSScriptGenerator.AddCommand(const Command: string);
+procedure TPSScriptGenerator.AddCommand(const Command: string);  
 begin
   AddLine(Command);
 end;
 
-procedure TPSScriptGenerator.BeginIf(const Condition: string);
+procedure TPSScriptGenerator.BeginIf(const Condition: string);  
 begin
   AddLine('if (' + Condition + ') {');
   Indent;
 end;
 
-procedure TPSScriptGenerator.AddElseIf(const Condition: string);
+procedure TPSScriptGenerator.AddElseIf(const Condition: string);  
 begin
   Unindent;
   AddLine('} elseif (' + Condition + ') {');
   Indent;
 end;
 
-procedure TPSScriptGenerator.AddElse;
+procedure TPSScriptGenerator.AddElse;  
 begin
   Unindent;
   AddLine('} else {');
   Indent;
 end;
 
-procedure TPSScriptGenerator.EndIf;
+procedure TPSScriptGenerator.EndIf;  
 begin
   Unindent;
   AddLine('}');
 end;
 
-procedure TPSScriptGenerator.BeginForEach(const Item, Collection: string);
+procedure TPSScriptGenerator.BeginForEach(const Item, Collection: string);  
 begin
   AddLine('foreach ($' + Item + ' in ' + Collection + ') {');
   Indent;
 end;
 
-procedure TPSScriptGenerator.EndForEach;
+procedure TPSScriptGenerator.EndForEach;  
 begin
   Unindent;
   AddLine('}');
 end;
 
-procedure TPSScriptGenerator.BeginTryCatch;
+procedure TPSScriptGenerator.BeginTryCatch;  
 begin
   AddLine('try {');
   Indent;
 end;
 
-procedure TPSScriptGenerator.BeginCatch;
+procedure TPSScriptGenerator.BeginCatch;  
 begin
   Unindent;
   AddLine('} catch {');
   Indent;
 end;
 
-procedure TPSScriptGenerator.EndTryCatch;
+procedure TPSScriptGenerator.EndTryCatch;  
 begin
   Unindent;
   AddLine('}');
 end;
 
-procedure TPSScriptGenerator.AddGetProcess(const ProcessName: string);
+procedure TPSScriptGenerator.AddGetProcess(const ProcessName: string);  
 begin
   if ProcessName = '' then
     AddLine('$processes = Get-Process')
@@ -517,7 +517,7 @@ begin
     AddLine('$process = Get-Process -Name "' + ProcessName + '" -ErrorAction SilentlyContinue');
 end;
 
-procedure TPSScriptGenerator.AddGetService(const ServiceName: string);
+procedure TPSScriptGenerator.AddGetService(const ServiceName: string);  
 begin
   if ServiceName = '' then
     AddLine('$services = Get-Service')
@@ -525,7 +525,7 @@ begin
     AddLine('$service = Get-Service -Name "' + ServiceName + '" -ErrorAction SilentlyContinue');
 end;
 
-procedure TPSScriptGenerator.AddFileOperation(const Operation, Path: string);
+procedure TPSScriptGenerator.AddFileOperation(const Operation, Path: string);  
 begin
   if LowerCase(Operation) = 'create' then
     AddLine('New-Item -Path "' + Path + '" -ItemType File -Force')
@@ -539,7 +539,7 @@ begin
     AddLine('Move-Item -Path "' + Path + '" -Destination "' + Path + '.old"');
 end;
 
-procedure TPSScriptGenerator.AddRegistryOperation(const Operation, Key, Value: string);
+procedure TPSScriptGenerator.AddRegistryOperation(const Operation, Key, Value: string);  
 var
   RegPath: string;
 begin
@@ -555,12 +555,12 @@ begin
     AddLine('Remove-ItemProperty -Path "' + RegPath + '" -Name "' + Value + '"');
 end;
 
-function TPSScriptGenerator.GenerateScript: string;
+function TPSScriptGenerator.GenerateScript: string;  
 begin
   Result := FScript.Text;
 end;
 
-procedure TPSScriptGenerator.SaveToFile(const FileName: string);
+procedure TPSScriptGenerator.SaveToFile(const FileName: string);  
 begin
   FScript.SaveToFile(FileName);
 end;
@@ -576,7 +576,7 @@ program ExempleGenerateurPS;
 uses
   PSScriptGenerator, SysUtils;
 
-procedure GenererScriptMaintenance;
+procedure GenererScriptMaintenance;  
 var
   Generator: TPSScriptGenerator;
 begin
@@ -677,18 +677,18 @@ type
 
 implementation
 
-constructor TProcessManager.Create;
+constructor TProcessManager.Create;  
 begin
   FPowerShell := TPowerShell.Create;
 end;
 
-destructor TProcessManager.Destroy;
+destructor TProcessManager.Destroy;  
 begin
   FPowerShell.Free;
   inherited;
 end;
 
-function TProcessManager.IsProcessRunning(const ProcessName: string): Boolean;
+function TProcessManager.IsProcessRunning(const ProcessName: string): Boolean;  
 var
   Command: string;
   Output: string;
@@ -699,7 +699,7 @@ begin
   Result := Trim(Output) = 'True';
 end;
 
-function TProcessManager.GetProcessInfo(const ProcessName: string): string;
+function TProcessManager.GetProcessInfo(const ProcessName: string): string;  
 var
   Command: string;
 begin
@@ -712,7 +712,7 @@ begin
   Result := FPowerShell.ExecuteAndGetOutput(Command);
 end;
 
-function TProcessManager.KillProcess(const ProcessName: string): Boolean;
+function TProcessManager.KillProcess(const ProcessName: string): Boolean;  
 var
   Command: string;
 begin
@@ -721,7 +721,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TProcessManager.StartProcess(const ExePath: string; const Arguments: string): Boolean;
+function TProcessManager.StartProcess(const ExePath: string; const Arguments: string): Boolean;  
 var
   Command: string;
 begin
@@ -734,7 +734,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TProcessManager.GetProcessMemory(const ProcessName: string): Int64;
+function TProcessManager.GetProcessMemory(const ProcessName: string): Int64;  
 var
   Command: string;
   Output: string;
@@ -751,7 +751,7 @@ begin
   Result := StrToInt64Def(Trim(Output), 0);
 end;
 
-procedure TProcessManager.ListTopProcessesByMemory(Count: Integer; List: TStrings);
+procedure TProcessManager.ListTopProcessesByMemory(Count: Integer; List: TStrings);  
 var
   Command: string;
 begin
@@ -804,18 +804,18 @@ type
 
 implementation
 
-constructor TServiceManager.Create;
+constructor TServiceManager.Create;  
 begin
   FPowerShell := TPowerShell.Create;
 end;
 
-destructor TServiceManager.Destroy;
+destructor TServiceManager.Destroy;  
 begin
   FPowerShell.Free;
   inherited;
 end;
 
-function TServiceManager.StatusStringToEnum(const Status: string): TServiceStatus;
+function TServiceManager.StatusStringToEnum(const Status: string): TServiceStatus;  
 begin
   if Status = 'Stopped' then Result := ssStopped
   else if Status = 'StartPending' then Result := ssStartPending
@@ -827,7 +827,7 @@ begin
   else Result := ssUnknown;
 end;
 
-function TServiceManager.GetServiceStatus(const ServiceName: string): TServiceStatus;
+function TServiceManager.GetServiceStatus(const ServiceName: string): TServiceStatus;  
 var
   Command, Output: string;
 begin
@@ -837,7 +837,7 @@ begin
   Result := StatusStringToEnum(Output);
 end;
 
-function TServiceManager.StartService(const ServiceName: string): Boolean;
+function TServiceManager.StartService(const ServiceName: string): Boolean;  
 var
   Command: string;
 begin
@@ -845,7 +845,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TServiceManager.StopService(const ServiceName: string): Boolean;
+function TServiceManager.StopService(const ServiceName: string): Boolean;  
 var
   Command: string;
 begin
@@ -853,7 +853,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TServiceManager.RestartService(const ServiceName: string): Boolean;
+function TServiceManager.RestartService(const ServiceName: string): Boolean;  
 var
   Command: string;
 begin
@@ -861,7 +861,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TServiceManager.ServiceExists(const ServiceName: string): Boolean;
+function TServiceManager.ServiceExists(const ServiceName: string): Boolean;  
 var
   Command, Output: string;
 begin
@@ -871,7 +871,7 @@ begin
   Result := Trim(Output) = 'True';
 end;
 
-function TServiceManager.InstallService(const ServiceName, BinaryPath, DisplayName: string): Boolean;
+function TServiceManager.InstallService(const ServiceName, BinaryPath, DisplayName: string): Boolean;  
 var
   Command: string;
 begin
@@ -882,7 +882,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TServiceManager.UninstallService(const ServiceName: string): Boolean;
+function TServiceManager.UninstallService(const ServiceName: string): Boolean;  
 var
   Command: string;
 begin
@@ -901,7 +901,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-procedure TServiceManager.GetServiceList(List: TStrings; RunningOnly: Boolean);
+procedure TServiceManager.GetServiceList(List: TStrings; RunningOnly: Boolean);  
 var
   Command: string;
 begin
@@ -952,18 +952,18 @@ type
 
 implementation
 
-constructor TRegistryManager.Create;
+constructor TRegistryManager.Create;  
 begin
   FPowerShell := TPowerShell.Create;
 end;
 
-destructor TRegistryManager.Destroy;
+destructor TRegistryManager.Destroy;  
 begin
   FPowerShell.Free;
   inherited;
 end;
 
-function TRegistryManager.ConvertHiveToPS(Hive: string): string;
+function TRegistryManager.ConvertHiveToPS(Hive: string): string;  
 begin
   Hive := UpperCase(Hive);
   if (Hive = 'HKLM') or (Hive = 'HKEY_LOCAL_MACHINE') then
@@ -980,7 +980,7 @@ begin
     Result := Hive;
 end;
 
-function TRegistryManager.ReadValue(const Hive, Key, ValueName: string): string;
+function TRegistryManager.ReadValue(const Hive, Key, ValueName: string): string;  
 var
   Command: string;
 begin
@@ -1026,7 +1026,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TRegistryManager.DeleteValue(const Hive, Key, ValueName: string): Boolean;
+function TRegistryManager.DeleteValue(const Hive, Key, ValueName: string): Boolean;  
 var
   Command: string;
 begin
@@ -1037,7 +1037,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TRegistryManager.CreateKey(const Hive, Key: string): Boolean;
+function TRegistryManager.CreateKey(const Hive, Key: string): Boolean;  
 var
   Command: string;
 begin
@@ -1048,7 +1048,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TRegistryManager.DeleteKey(const Hive, Key: string): Boolean;
+function TRegistryManager.DeleteKey(const Hive, Key: string): Boolean;  
 var
   Command: string;
 begin
@@ -1059,7 +1059,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TRegistryManager.KeyExists(const Hive, Key: string): Boolean;
+function TRegistryManager.KeyExists(const Hive, Key: string): Boolean;  
 var
   Command, Output: string;
 begin
@@ -1071,7 +1071,7 @@ begin
   Result := Trim(Output) = 'True';
 end;
 
-procedure TRegistryManager.ListSubKeys(const Hive, Key: string; List: TStrings);
+procedure TRegistryManager.ListSubKeys(const Hive, Key: string; List: TStrings);  
 var
   Command: string;
 begin
@@ -1085,7 +1085,7 @@ begin
     List.Assign(FPowerShell.Output);
 end;
 
-procedure TRegistryManager.ListValues(const Hive, Key: string; List: TStrings);
+procedure TRegistryManager.ListValues(const Hive, Key: string; List: TStrings);  
 var
   Command: string;
 begin
@@ -1101,7 +1101,7 @@ begin
     List.Assign(FPowerShell.Output);
 end;
 
-function TRegistryManager.ExportKey(const Hive, Key, FilePath: string): Boolean;
+function TRegistryManager.ExportKey(const Hive, Key, FilePath: string): Boolean;  
 var
   Command: string;
   FullPath: string;
@@ -1180,18 +1180,18 @@ type
 
 implementation
 
-constructor TFileManager.Create;
+constructor TFileManager.Create;  
 begin
   FPowerShell := TPowerShell.Create;
 end;
 
-destructor TFileManager.Destroy;
+destructor TFileManager.Destroy;  
 begin
   FPowerShell.Free;
   inherited;
 end;
 
-function TFileManager.GetFileInfo(const FilePath: string): TFileInfo;
+function TFileManager.GetFileInfo(const FilePath: string): TFileInfo;  
 var
   Command: string;
   JsonData: TJSONData;
@@ -1229,7 +1229,7 @@ begin
   end;
 end;
 
-function TFileManager.CopyFile(const Source, Destination: string; Overwrite: Boolean): Boolean;
+function TFileManager.CopyFile(const Source, Destination: string; Overwrite: Boolean): Boolean;  
 var
   Command: string;
 begin
@@ -1241,7 +1241,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TFileManager.MoveFile(const Source, Destination: string): Boolean;
+function TFileManager.MoveFile(const Source, Destination: string): Boolean;  
 var
   Command: string;
 begin
@@ -1249,7 +1249,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TFileManager.DeleteFile(const FilePath: string; Force: Boolean): Boolean;
+function TFileManager.DeleteFile(const FilePath: string; Force: Boolean): Boolean;  
 var
   Command: string;
 begin
@@ -1261,7 +1261,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TFileManager.FileExists(const FilePath: string): Boolean;
+function TFileManager.FileExists(const FilePath: string): Boolean;  
 var
   Command, Output: string;
 begin
@@ -1270,7 +1270,7 @@ begin
   Result := Trim(Output) = 'True';
 end;
 
-function TFileManager.CreateDirectory(const Path: string): Boolean;
+function TFileManager.CreateDirectory(const Path: string): Boolean;  
 var
   Command: string;
 begin
@@ -1278,7 +1278,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TFileManager.DeleteDirectory(const Path: string; Recursive: Boolean): Boolean;
+function TFileManager.DeleteDirectory(const Path: string; Recursive: Boolean): Boolean;  
 var
   Command: string;
 begin
@@ -1290,7 +1290,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TFileManager.DirectoryExists(const Path: string): Boolean;
+function TFileManager.DirectoryExists(const Path: string): Boolean;  
 var
   Command, Output: string;
 begin
@@ -1299,7 +1299,7 @@ begin
   Result := Trim(Output) = 'True';
 end;
 
-procedure TFileManager.ListFiles(const Path, Pattern: string; List: TStrings; Recursive: Boolean);
+procedure TFileManager.ListFiles(const Path, Pattern: string; List: TStrings; Recursive: Boolean);  
 var
   Command: string;
 begin
@@ -1318,7 +1318,7 @@ begin
     List.Assign(FPowerShell.Output);
 end;
 
-procedure TFileManager.ListDirectories(const Path: string; List: TStrings);
+procedure TFileManager.ListDirectories(const Path: string; List: TStrings);  
 var
   Command: string;
 begin
@@ -1331,7 +1331,7 @@ begin
     List.Assign(FPowerShell.Output);
 end;
 
-function TFileManager.GetFileHash(const FilePath: string; Algorithm: string): string;
+function TFileManager.GetFileHash(const FilePath: string; Algorithm: string): string;  
 var
   Command: string;
 begin
@@ -1342,7 +1342,7 @@ begin
   Result := Trim(FPowerShell.ExecuteAndGetOutput(Command));
 end;
 
-function TFileManager.CompareFiles(const File1, File2: string): Boolean;
+function TFileManager.CompareFiles(const File1, File2: string): Boolean;  
 var
   Command, Output: string;
 begin
@@ -1356,7 +1356,7 @@ begin
   Result := Trim(Output) = 'True';
 end;
 
-function TFileManager.CompressFiles(const SourcePath, ArchivePath: string): Boolean;
+function TFileManager.CompressFiles(const SourcePath, ArchivePath: string): Boolean;  
 var
   Command: string;
 begin
@@ -1367,7 +1367,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TFileManager.ExtractArchive(const ArchivePath, DestinationPath: string): Boolean;
+function TFileManager.ExtractArchive(const ArchivePath, DestinationPath: string): Boolean;  
 var
   Command: string;
 begin
@@ -1378,7 +1378,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TFileManager.GetDiskUsage(const Path: string): Int64;
+function TFileManager.GetDiskUsage(const Path: string): Int64;  
 var
   Command, Output: string;
 begin
@@ -1391,7 +1391,7 @@ begin
   Result := StrToInt64Def(Trim(Output), 0);
 end;
 
-procedure TFileManager.FindLargeFiles(const Path: string; MinSizeMB: Integer; List: TStrings);
+procedure TFileManager.FindLargeFiles(const Path: string; MinSizeMB: Integer; List: TStrings);  
 var
   Command: string;
 begin
@@ -1407,7 +1407,7 @@ begin
     List.Assign(FPowerShell.Output);
 end;
 
-procedure TFileManager.FindOldFiles(const Path: string; DaysOld: Integer; List: TStrings);
+procedure TFileManager.FindOldFiles(const Path: string; DaysOld: Integer; List: TStrings);  
 var
   Command: string;
 begin
@@ -1475,20 +1475,20 @@ type
 
 implementation
 
-constructor TSystemMaintenance.Create;
+constructor TSystemMaintenance.Create;  
 begin
   FPowerShell := TPowerShell.Create;
   FLogFile := GetEnvironmentVariable('TEMP') + '\maintenance_' +
               FormatDateTime('yyyymmdd', Now) + '.log';
 end;
 
-destructor TSystemMaintenance.Destroy;
+destructor TSystemMaintenance.Destroy;  
 begin
   FPowerShell.Free;
   inherited;
 end;
 
-procedure TSystemMaintenance.LogMessage(const Message: string);
+procedure TSystemMaintenance.LogMessage(const Message: string);  
 var
   Command: string;
 begin
@@ -1500,7 +1500,7 @@ begin
   FPowerShell.Execute(Command);
 end;
 
-function TSystemMaintenance.CleanTempFiles: Boolean;
+function TSystemMaintenance.CleanTempFiles: Boolean;  
 var
   Script: TStringList;
 begin
@@ -1542,7 +1542,7 @@ begin
   end;
 end;
 
-function TSystemMaintenance.CleanWindowsTemp: Boolean;
+function TSystemMaintenance.CleanWindowsTemp: Boolean;  
 var
   Command: string;
 begin
@@ -1560,7 +1560,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TSystemMaintenance.CleanBrowserCache: Boolean;
+function TSystemMaintenance.CleanBrowserCache: Boolean;  
 var
   Script: TStringList;
 begin
@@ -1603,7 +1603,7 @@ begin
   end;
 end;
 
-function TSystemMaintenance.CleanRecycleBin: Boolean;
+function TSystemMaintenance.CleanRecycleBin: Boolean;  
 var
   Command: string;
 begin
@@ -1613,7 +1613,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TSystemMaintenance.CleanOldLogs(DaysToKeep: Integer): Boolean;
+function TSystemMaintenance.CleanOldLogs(DaysToKeep: Integer): Boolean;  
 var
   Command: string;
 begin
@@ -1631,7 +1631,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TSystemMaintenance.DefragmentDisk(const Drive: string): Boolean;
+function TSystemMaintenance.DefragmentDisk(const Drive: string): Boolean;  
 var
   Command: string;
 begin
@@ -1645,7 +1645,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TSystemMaintenance.CheckDisk(const Drive: string): Boolean;
+function TSystemMaintenance.CheckDisk(const Drive: string): Boolean;  
 var
   Command: string;
 begin
@@ -1659,7 +1659,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TSystemMaintenance.OptimizeStartup: Boolean;
+function TSystemMaintenance.OptimizeStartup: Boolean;  
 var
   Script: TStringList;
 begin
@@ -1689,7 +1689,7 @@ begin
   end;
 end;
 
-function TSystemMaintenance.FlushDNSCache: Boolean;
+function TSystemMaintenance.FlushDNSCache: Boolean;  
 var
   Command: string;
 begin
@@ -1699,7 +1699,7 @@ begin
   Result := FPowerShell.Execute(Command);
 end;
 
-function TSystemMaintenance.ResetNetworkStack: Boolean;
+function TSystemMaintenance.ResetNetworkStack: Boolean;  
 var
   Script: TStringList;
 begin
@@ -1721,7 +1721,7 @@ begin
   end;
 end;
 
-function TSystemMaintenance.RunMaintenance(Tasks: TMaintenanceTasks): Boolean;
+function TSystemMaintenance.RunMaintenance(Tasks: TMaintenanceTasks): Boolean;  
 begin
   Result := True;
   LogMessage('=== Début de la maintenance système ===');
@@ -1779,7 +1779,7 @@ type
     procedure Run;
   end;
 
-constructor TSystemAdmin.Create;
+constructor TSystemAdmin.Create;  
 begin
   WriteLn('Initialisation des modules...');
 
@@ -1794,7 +1794,7 @@ begin
   WriteLn;
 end;
 
-destructor TSystemAdmin.Destroy;
+destructor TSystemAdmin.Destroy;  
 begin
   FPowerShell.Free;
   FProcessManager.Free;
@@ -1805,7 +1805,7 @@ begin
   inherited;
 end;
 
-procedure TSystemAdmin.ShowMenu;
+procedure TSystemAdmin.ShowMenu;  
 begin
   WriteLn('========================================');
   WriteLn('    ADMINISTRATION SYSTÈME WINDOWS');
@@ -1822,7 +1822,7 @@ begin
   Write('Votre choix : ');
 end;
 
-procedure TSystemAdmin.ProcessMenu;
+procedure TSystemAdmin.ProcessMenu;  
 var
   Choice: string;
   ProcessName: string;
@@ -1910,7 +1910,7 @@ begin
   until Choice = '0';
 end;
 
-procedure TSystemAdmin.ServiceMenu;
+procedure TSystemAdmin.ServiceMenu;  
 var
   Choice: string;
   ServiceName: string;
@@ -2009,7 +2009,7 @@ begin
   until Choice = '0';
 end;
 
-procedure TSystemAdmin.FileMenu;
+procedure TSystemAdmin.FileMenu;  
 var
   Choice: string;
   Path, Pattern, Destination: string;
@@ -2148,7 +2148,7 @@ begin
   until Choice = '0';
 end;
 
-procedure TSystemAdmin.MaintenanceMenu;
+procedure TSystemAdmin.MaintenanceMenu;  
 var
   Choice: string;
   Tasks: TMaintenanceTasks;
@@ -2236,7 +2236,7 @@ begin
   until Choice = '0';
 end;
 
-procedure TSystemAdmin.SystemInfoMenu;
+procedure TSystemAdmin.SystemInfoMenu;  
 var
   Output: string;
   Command: string;
@@ -2282,7 +2282,7 @@ begin
   ReadLn;
 end;
 
-procedure TSystemAdmin.Run;
+procedure TSystemAdmin.Run;  
 var
   Choice: string;
   Command: string;
@@ -2368,7 +2368,7 @@ begin
 end.
 
 // Fonction helper pour vérifier les droits admin
-function IsUserAdmin: Boolean;
+function IsUserAdmin: Boolean;  
 var
   PS: TPowerShell;
   Output: string;
@@ -2513,7 +2513,7 @@ type
 
 implementation
 
-constructor TSecurePowerShell.Create;
+constructor TSecurePowerShell.Create;  
 begin
   inherited Create;
 
@@ -2534,14 +2534,14 @@ begin
   FBlockedCommands.Add('Stop-Service WinDefend');
 end;
 
-destructor TSecurePowerShell.Destroy;
+destructor TSecurePowerShell.Destroy;  
 begin
   FAllowedCommands.Free;
   FBlockedCommands.Free;
   inherited;
 end;
 
-function TSecurePowerShell.ValidateCommand(const Command: string): Boolean;
+function TSecurePowerShell.ValidateCommand(const Command: string): Boolean;  
 var
   i: Integer;
   LowerCommand: string;
@@ -2574,7 +2574,7 @@ begin
   end;
 end;
 
-function TSecurePowerShell.SanitizeInput(const Input: string): string;
+function TSecurePowerShell.SanitizeInput(const Input: string): string;  
 begin
   Result := Input;
 
@@ -2593,7 +2593,7 @@ begin
     Result := Copy(Result, 1, 1000);
 end;
 
-function TSecurePowerShell.ExecuteSecure(const Command: string): Boolean;
+function TSecurePowerShell.ExecuteSecure(const Command: string): Boolean;  
 var
   SanitizedCommand: string;
 begin
@@ -2615,12 +2615,12 @@ begin
   );
 end;
 
-procedure TSecurePowerShell.AddAllowedCommand(const Command: string);
+procedure TSecurePowerShell.AddAllowedCommand(const Command: string);  
 begin
   FAllowedCommands.Add(Command);
 end;
 
-procedure TSecurePowerShell.AddBlockedCommand(const Command: string);
+procedure TSecurePowerShell.AddBlockedCommand(const Command: string);  
 begin
   FBlockedCommands.Add(Command);
 end;
@@ -2653,12 +2653,12 @@ type
 
 implementation
 
-constructor TElevatedPowerShell.Create;
+constructor TElevatedPowerShell.Create;  
 begin
   FIsElevated := CheckElevation;
 end;
 
-function TElevatedPowerShell.CheckElevation: Boolean;
+function TElevatedPowerShell.CheckElevation: Boolean;  
 var
   TokenHandle: THandle;
   Elevation: TOKEN_ELEVATION;
@@ -2678,7 +2678,7 @@ begin
   end;
 end;
 
-function TElevatedPowerShell.RunElevated(const Script: string): Boolean;
+function TElevatedPowerShell.RunElevated(const Script: string): Boolean;  
 var
   ScriptFile: string;
   ScriptContent: TStringList;
@@ -2782,18 +2782,18 @@ type
 
 implementation
 
-constructor TWMIQuery.Create;
+constructor TWMIQuery.Create;  
 begin
   FPowerShell := TPowerShell.Create;
 end;
 
-destructor TWMIQuery.Destroy;
+destructor TWMIQuery.Destroy;  
 begin
   FPowerShell.Free;
   inherited;
 end;
 
-function TWMIQuery.GetWMIProperty(const ClassName, PropertyName: string): string;
+function TWMIQuery.GetWMIProperty(const ClassName, PropertyName: string): string;  
 var
   Command: string;
 begin
@@ -2801,7 +2801,7 @@ begin
   Result := FPowerShell.ExecuteAndGetOutput(Command);
 end;
 
-function TWMIQuery.GetBIOSInfo: string;
+function TWMIQuery.GetBIOSInfo: string;  
 var
   Command: string;
 begin
@@ -2811,7 +2811,7 @@ begin
   Result := FPowerShell.ExecuteAndGetOutput(Command);
 end;
 
-function TWMIQuery.GetNetworkAdapters: string;
+function TWMIQuery.GetNetworkAdapters: string;  
 var
   Command: string;
 begin
@@ -2822,7 +2822,7 @@ begin
   Result := FPowerShell.ExecuteAndGetOutput(Command);
 end;
 
-function TWMIQuery.GetInstalledSoftware: string;
+function TWMIQuery.GetInstalledSoftware: string;  
 var
   Command: string;
 begin
@@ -2833,7 +2833,7 @@ begin
   Result := FPowerShell.ExecuteAndGetOutput(Command);
 end;
 
-function TWMIQuery.GetEventLogs(const LogName: string; Count: Integer): string;
+function TWMIQuery.GetEventLogs(const LogName: string; Count: Integer): string;  
 var
   Command: string;
 begin
@@ -2877,7 +2877,7 @@ type
 
 implementation
 
-constructor TActiveDirectory.Create(const Domain: string);
+constructor TActiveDirectory.Create(const Domain: string);  
 begin
   FPowerShell := TPowerShell.Create;
   FDomain := Domain;
@@ -2886,13 +2886,13 @@ begin
   FPowerShell.Execute('Import-Module ActiveDirectory -ErrorAction SilentlyContinue');
 end;
 
-destructor TActiveDirectory.Destroy;
+destructor TActiveDirectory.Destroy;  
 begin
   FPowerShell.Free;
   inherited;
 end;
 
-function TActiveDirectory.GetUser(const Username: string): string;
+function TActiveDirectory.GetUser(const Username: string): string;  
 var
   Command: string;
 begin
@@ -2900,7 +2900,7 @@ begin
   Result := FPowerShell.ExecuteAndGetOutput(Command);
 end;
 
-function TActiveDirectory.GetUserGroups(const Username: string): string;
+function TActiveDirectory.GetUserGroups(const Username: string): string;  
 var
   Command: string;
 begin
@@ -2911,7 +2911,7 @@ begin
   Result := FPowerShell.ExecuteAndGetOutput(Command);
 end;
 
-function TActiveDirectory.GetComputerInfo(const ComputerName: string): string;
+function TActiveDirectory.GetComputerInfo(const ComputerName: string): string;  
 var
   Command: string;
 begin
@@ -2922,7 +2922,7 @@ begin
   Result := FPowerShell.ExecuteAndGetOutput(Command);
 end;
 
-function TActiveDirectory.IsUserInGroup(const Username, GroupName: string): Boolean;
+function TActiveDirectory.IsUserInGroup(const Username, GroupName: string): Boolean;  
 var
   Command, Output: string;
 begin
@@ -2934,17 +2934,17 @@ begin
   Result := Trim(Output) = 'True';
 end;
 
-procedure TActiveDirectory.DisableUser(const Username: string);
+procedure TActiveDirectory.DisableUser(const Username: string);  
 begin
   FPowerShell.Execute(Format('Disable-ADAccount -Identity %s', [Username]));
 end;
 
-procedure TActiveDirectory.EnableUser(const Username: string);
+procedure TActiveDirectory.EnableUser(const Username: string);  
 begin
   FPowerShell.Execute(Format('Enable-ADAccount -Identity %s', [Username]));
 end;
 
-procedure TActiveDirectory.ResetPassword(const Username, NewPassword: string);
+procedure TActiveDirectory.ResetPassword(const Username, NewPassword: string);  
 var
   Command: string;
 begin
@@ -3016,8 +3016,8 @@ const
      Solution: 'Vérifier que la commande précédente retourne des données')
   );
 
-function DiagnosePowerShellError(const ErrorMessage: string): string;
-function GetPowerShellVersion: string;
+function DiagnosePowerShellError(const ErrorMessage: string): string;  
+function GetPowerShellVersion: string;  
 function TestPowerShellConnectivity: Boolean;
 
 implementation
@@ -3025,7 +3025,7 @@ implementation
 uses
   SysUtils, PowerShellWrapper;
 
-function DiagnosePowerShellError(const ErrorMessage: string): string;
+function DiagnosePowerShellError(const ErrorMessage: string): string;  
 var
   LowerError: string;
 begin
@@ -3052,7 +3052,7 @@ begin
     Result := CommonErrors[8].Solution;
 end;
 
-function GetPowerShellVersion: string;
+function GetPowerShellVersion: string;  
 var
   PS: TPowerShell;
 begin
@@ -3064,7 +3064,7 @@ begin
   end;
 end;
 
-function TestPowerShellConnectivity: Boolean;
+function TestPowerShellConnectivity: Boolean;  
 var
   PS: TPowerShell;
   Output: string;
@@ -3101,7 +3101,7 @@ type
 
 implementation
 
-class function TOptimizationTips.OptimizeScript(const Script: string): string;
+class function TOptimizationTips.OptimizeScript(const Script: string): string;  
 var
   Lines: TStringList;
   i: Integer;
@@ -3150,7 +3150,7 @@ begin
   end;
 end;
 
-class function TOptimizationTips.ConvertToParallelProcessing(const Script: string): string;
+class function TOptimizationTips.ConvertToParallelProcessing(const Script: string): string;  
 begin
   // Convertir ForEach-Object en traitement parallèle
   Result := StringReplace(Script,
@@ -3162,7 +3162,7 @@ begin
   Result := Result + ' -ThrottleLimit 5';
 end;
 
-class function TOptimizationTips.AddProgressReporting(const Script: string): string;
+class function TOptimizationTips.AddProgressReporting(const Script: string): string;  
 var
   Lines: TStringList;
 begin

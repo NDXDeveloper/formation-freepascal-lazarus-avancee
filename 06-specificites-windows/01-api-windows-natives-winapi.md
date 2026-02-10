@@ -66,7 +66,7 @@ Un handle est comme un numéro de ticket : Windows vous donne un numéro qui rep
 Commençons par quelque chose de simple : afficher une boîte de dialogue Windows native.
 
 ```pascal
-program PremierWinAPI;
+program PremierWinAPI;  
 uses Windows;
 
 begin
@@ -101,7 +101,7 @@ function MessageBox(hWnd: HWND; lpText, lpCaption: LPCTSTR; uType: UINT): Intege
 L'API Windows permet d'obtenir de nombreuses informations sur le système :
 
 ```pascal
-program InfoSysteme;
+program InfoSysteme;  
 uses Windows, SysUtils;
 
 var
@@ -143,7 +143,7 @@ end.
 L'API Windows permet de manipuler toutes les fenêtres du système :
 
 ```pascal
-program ManipulerFenetres;
+program ManipulerFenetres;  
 uses Windows, SysUtils;
 
 var
@@ -198,7 +198,7 @@ Les constantes principales pour `ShowWindow` :
 L'API Windows offre des fonctions puissantes pour la gestion des fichiers :
 
 ```pascal
-program GestionFichiers;
+program GestionFichiers;  
 uses Windows, SysUtils;
 
 var
@@ -271,7 +271,7 @@ implementation
 {$R *.lfm}
 
 // Fonction callback pour énumérer les fenêtres
-function EnumWindowsProc(Handle: HWND; lParam: LPARAM): BOOL; stdcall;
+function EnumWindowsProc(Handle: HWND; lParam: LPARAM): BOOL; stdcall;  
 var
   Titre: array[0..255] of Char;
   Memo: TMemo;
@@ -290,7 +290,7 @@ begin
   end;
 end;
 
-procedure TForm1.ListerFenetres;
+procedure TForm1.ListerFenetres;  
 begin
   Memo1.Clear;
   Memo1.Lines.Add('=== Fenêtres visibles ===');
@@ -299,7 +299,7 @@ begin
   EnumWindows(@EnumWindowsProc, LPARAM(Memo1));
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 begin
   ListerFenetres;
 end;
@@ -312,7 +312,7 @@ end.
 L'API Windows permet de gérer les processus en cours d'exécution :
 
 ```pascal
-program GestionProcessus;
+program GestionProcessus;  
 uses Windows, SysUtils;
 
 var
@@ -364,7 +364,7 @@ end.
 L'API Windows permet d'accéder au registre système (base de données de configuration) :
 
 ```pascal
-program LectureRegistre;
+program LectureRegistre;  
 uses Windows, Registry, SysUtils;
 
 var
@@ -458,7 +458,7 @@ end;
 
 ```pascal
 // Pour les callbacks Windows, utiliser stdcall
-function MonCallback(param: Integer): BOOL; stdcall;
+function MonCallback(param: Integer): BOOL; stdcall;  
 begin
   Result := True;
 end;

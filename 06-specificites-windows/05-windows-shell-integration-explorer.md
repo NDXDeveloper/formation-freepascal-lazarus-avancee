@@ -70,19 +70,19 @@ end;
 uses
   ShellAPI, Windows;
 
-procedure OuvrirFichier(const CheminFichier: string);
+procedure OuvrirFichier(const CheminFichier: string);  
 begin
   // Ouvre le fichier avec l'application associée
   ShellExecute(0, 'open', PChar(CheminFichier), nil, nil, SW_SHOWNORMAL);
 end;
 
-procedure OuvrirDossier(const CheminDossier: string);
+procedure OuvrirDossier(const CheminDossier: string);  
 begin
   // Ouvre le dossier dans l'Explorateur Windows
   ShellExecute(0, 'explore', PChar(CheminDossier), nil, nil, SW_SHOWNORMAL);
 end;
 
-procedure OuvrirURL(const URL: string);
+procedure OuvrirURL(const URL: string);  
 begin
   // Ouvre l'URL dans le navigateur par défaut
   ShellExecute(0, 'open', PChar(URL), nil, nil, SW_SHOWNORMAL);
@@ -99,7 +99,7 @@ end;
 ### Exécuter des programmes avec paramètres
 
 ```pascal
-procedure LancerProgramme(const Programme, Parametres, DossierTravail: string);
+procedure LancerProgramme(const Programme, Parametres, DossierTravail: string);  
 var
   InfoExec: TShellExecuteInfo;
 begin
@@ -135,7 +135,7 @@ end;
 uses
   Registry, Windows;
 
-procedure AjouterMenuContextuel(const NomCommande, Libelle, CheminProgramme: string);
+procedure AjouterMenuContextuel(const NomCommande, Libelle, CheminProgramme: string);  
 var
   Reg: TRegistry;
   Commande: string;
@@ -183,7 +183,7 @@ end;
 ### Ajouter un menu contextuel pour des types de fichiers spécifiques
 
 ```pascal
-procedure AjouterMenuPourExtension(const Extension, NomCommande, Libelle, Programme: string);
+procedure AjouterMenuPourExtension(const Extension, NomCommande, Libelle, Programme: string);  
 var
   Reg: TRegistry;
   TypeFichier: string;
@@ -235,7 +235,7 @@ end;
 ### Créer une nouvelle association de fichier
 
 ```pascal
-procedure AssocierExtension(const Extension, Description, Programme, Icone: string);
+procedure AssocierExtension(const Extension, Description, Programme, Icone: string);  
 var
   Reg: TRegistry;
   TypeFichier: string;
@@ -324,19 +324,19 @@ type
 
 implementation
 
-constructor TSystemTrayApp.Create(AOwner: TComponent);
+constructor TSystemTrayApp.Create(AOwner: TComponent);  
 begin
   inherited;
   AjouterIconeTray;
 end;
 
-destructor TSystemTrayApp.Destroy;
+destructor TSystemTrayApp.Destroy;  
 begin
   RetirerIconeTray;
   inherited;
 end;
 
-procedure TSystemTrayApp.AjouterIconeTray;
+procedure TSystemTrayApp.AjouterIconeTray;  
 begin
   FillChar(FIconData, SizeOf(FIconData), 0);
   FIconData.cbSize := SizeOf(TNotifyIconData);
@@ -350,12 +350,12 @@ begin
   Shell_NotifyIcon(NIM_ADD, @FIconData);
 end;
 
-procedure TSystemTrayApp.RetirerIconeTray;
+procedure TSystemTrayApp.RetirerIconeTray;  
 begin
   Shell_NotifyIcon(NIM_DELETE, @FIconData);
 end;
 
-procedure TSystemTrayApp.WMTrayIcon(var Message: TMessage);
+procedure TSystemTrayApp.WMTrayIcon(var Message: TMessage);  
 var
   Point: TPoint;
 begin
@@ -382,7 +382,7 @@ end.
 ### Notifications Windows (Toast Notifications)
 
 ```pascal
-procedure AfficherNotification(const Titre, Message: string; TypeIcone: Integer = NIIF_INFO);
+procedure AfficherNotification(const Titre, Message: string; TypeIcone: Integer = NIIF_INFO);  
 var
   IconData: TNotifyIconData;
 begin
@@ -414,7 +414,7 @@ end;
 uses
   ShlObj, ActiveX;
 
-function ObtenirDossierSpecial(CSIDL: Integer): string;
+function ObtenirDossierSpecial(CSIDL: Integer): string;  
 var
   Chemin: array[0..MAX_PATH] of Char;
 begin
@@ -539,7 +539,7 @@ end;
 ### Lire les propriétés d'un raccourci
 
 ```pascal
-function LireRaccourci(const CheminRaccourci: string): string;
+function LireRaccourci(const CheminRaccourci: string): string;  
 var
   ShellLink: IShellLink;
   PersistFile: IPersistFile;
@@ -571,7 +571,7 @@ end;
 uses
   ShlObj;
 
-function SelectionnerDossier(const Titre: string; DossierInitial: string = ''): string;
+function SelectionnerDossier(const Titre: string; DossierInitial: string = ''): string;  
 var
   BrowseInfo: TBrowseInfo;
   ItemIDList: PItemIDList;
@@ -609,7 +609,7 @@ end;
 ### Boîte de dialogue "Exécuter"
 
 ```pascal
-procedure AfficherDialogueExecuter;
+procedure AfficherDialogueExecuter;  
 begin
   // Affiche la boîte de dialogue Exécuter de Windows
   ShellExecute(0, 'open', 'rundll32.exe',
@@ -641,25 +641,25 @@ begin
 end;
 
 // Copier un fichier avec progression
-procedure CopierAvecProgression(const Source, Dest: string);
+procedure CopierAvecProgression(const Source, Dest: string);  
 begin
   OperationFichierShell(FO_COPY, Source, Dest, FOF_SIMPLEPROGRESS);
 end;
 
 // Déplacer un fichier
-procedure DeplacerFichier(const Source, Dest: string);
+procedure DeplacerFichier(const Source, Dest: string);  
 begin
   OperationFichierShell(FO_MOVE, Source, Dest, 0);
 end;
 
 // Supprimer vers la Corbeille
-procedure SupprimerVersCorbeille(const Fichier: string);
+procedure SupprimerVersCorbeille(const Fichier: string);  
 begin
   OperationFichierShell(FO_DELETE, Fichier, '', FOF_ALLOWUNDO);
 end;
 
 // Renommer un fichier
-procedure RenommerFichier(const Ancien, Nouveau: string);
+procedure RenommerFichier(const Ancien, Nouveau: string);  
 begin
   OperationFichierShell(FO_RENAME, Ancien, Nouveau, 0);
 end;
@@ -678,7 +678,7 @@ type
     IndexIcone: Integer;
   end;
 
-function ObtenirInfoFichier(const CheminFichier: string): TInfoFichier;
+function ObtenirInfoFichier(const CheminFichier: string): TInfoFichier;  
 var
   SHFileInfo: TSHFileInfo;
 begin
@@ -710,7 +710,7 @@ end;
 ### Ajouter un programme au menu Démarrer
 
 ```pascal
-procedure AjouterAuMenuDemarrer(const NomProgramme, CheminExe: string);
+procedure AjouterAuMenuDemarrer(const NomProgramme, CheminExe: string);  
 var
   DossierMenuDemarrer, CheminRaccourci: string;
 begin
@@ -740,7 +740,7 @@ end;
 ### Ajouter au démarrage automatique
 
 ```pascal
-procedure AjouterAuDemarrage(const NomProgramme, CheminExe: string);
+procedure AjouterAuDemarrage(const NomProgramme, CheminExe: string);  
 var
   Reg: TRegistry;
 begin
@@ -764,7 +764,7 @@ end;
 ### Afficher les propriétés d'un fichier
 
 ```pascal
-procedure AfficherProprietesFichier(const CheminFichier: string);
+procedure AfficherProprietesFichier(const CheminFichier: string);  
 var
   SEI: TShellExecuteInfo;
 begin
@@ -782,7 +782,7 @@ end;
 ### Ouvrir les paramètres système
 
 ```pascal
-procedure OuvrirParametresSysteme(const Page: string = '');
+procedure OuvrirParametresSysteme(const Page: string = '');  
 begin
   if Page = '' then
     ShellExecute(0, 'open', 'control', nil, nil, SW_SHOWNORMAL)
@@ -821,19 +821,19 @@ type
 
 implementation
 
-procedure TFormDragDrop.FormCreate(Sender: TObject);
+procedure TFormDragDrop.FormCreate(Sender: TObject);  
 begin
   // Activer l'acceptation des fichiers
   DragAcceptFiles(Handle, True);
 end;
 
-procedure TFormDragDrop.FormDestroy(Sender: TObject);
+procedure TFormDragDrop.FormDestroy(Sender: TObject);  
 begin
   // Désactiver l'acceptation des fichiers
   DragAcceptFiles(Handle, False);
 end;
 
-procedure TFormDragDrop.WMDropFiles(var Msg: TWMDropFiles);
+procedure TFormDragDrop.WMDropFiles(var Msg: TWMDropFiles);  
 var
   NombreFichiers, i: Integer;
   NomFichier: array[0..MAX_PATH] of Char;
@@ -869,7 +869,7 @@ end.
 ### Lancer une recherche Windows
 
 ```pascal
-procedure LancerRecherche(const DossierDepart: string = '');
+procedure LancerRecherche(const DossierDepart: string = '');  
 var
   Params: string;
 begin
@@ -882,7 +882,7 @@ begin
 end;
 
 // Recherche avec des critères spécifiques
-procedure RechercherAvecCriteres(const Terme, DossierDepart: string);
+procedure RechercherAvecCriteres(const Terme, DossierDepart: string);  
 var
   RequeteRecherche: string;
 begin
@@ -910,7 +910,7 @@ end;
 uses
   ComObj, ActiveX, Variants;
 
-procedure RechercherDansIndex(const Requete: string);
+procedure RechercherDansIndex(const Requete: string);  
 var
   Connection, Recordset: Variant;
   SQL: string;
@@ -956,7 +956,7 @@ end;
 uses
   ShlObj, ActiveX, Graphics;
 
-function ObtenirMiniature(const CheminFichier: string; Largeur, Hauteur: Integer): TBitmap;
+function ObtenirMiniature(const CheminFichier: string; Largeur, Hauteur: Integer): TBitmap;  
 var
   ShellFolder: IShellFolder;
   ExtractImage: IExtractImage;
@@ -1021,7 +1021,7 @@ end;
 ### Gestionnaire de prévisualisation
 
 ```pascal
-procedure AfficherPrevisualisation(const CheminFichier: string);
+procedure AfficherPrevisualisation(const CheminFichier: string);  
 var
   SEI: TShellExecuteInfo;
 begin
@@ -1048,7 +1048,7 @@ end;
 uses
   ShlObj, PropSys, ObjectArray, ActiveX, ComObj;
 
-procedure CreerJumpList;
+procedure CreerJumpList;  
 var
   DestList: ICustomDestinationList;
   RemovedItems: IObjectArray;
@@ -1104,7 +1104,7 @@ end;
 uses
   ShlObj, KnownFolders, ShObjIdl, ActiveX, ComObj;
 
-procedure CreerBibliotheque(const NomBibliotheque: string);
+procedure CreerBibliotheque(const NomBibliotheque: string);  
 var
   LibraryManager: IShellLibrary;
   SavedTo: IShellItem;
@@ -1130,7 +1130,7 @@ begin
 end;
 
 // Ajouter un dossier à une bibliothèque
-procedure AjouterDossierBibliotheque(const NomBibliotheque, CheminDossier: string);
+procedure AjouterDossierBibliotheque(const NomBibliotheque, CheminDossier: string);  
 var
   LibraryManager: IShellLibrary;
   FolderItem: IShellItem;
@@ -1177,13 +1177,13 @@ uses
 var
   CF_MONFORMAT: UINT;
 
-procedure InitialiserFormatsPersonnalises;
+procedure InitialiserFormatsPersonnalises;  
 begin
   // Enregistrer un format personnalisé
   CF_MONFORMAT := RegisterClipboardFormat('MonApplication.DonneesSpeciales');
 end;
 
-procedure CopierDonneesPersonnalisees(const Donnees: string);
+procedure CopierDonneesPersonnalisees(const Donnees: string);  
 var
   hMem: HGLOBAL;
   pMem: Pointer;
@@ -1209,7 +1209,7 @@ begin
   end;
 end;
 
-function CollerDonneesPersonnalisees: string;
+function CollerDonneesPersonnalisees: string;  
 var
   hMem: HGLOBAL;
   pMem: Pointer;
@@ -1261,21 +1261,21 @@ type
 
 implementation
 
-procedure TClipboardMonitor.CreateWnd;
+procedure TClipboardMonitor.CreateWnd;  
 begin
   inherited;
   // S'enregistrer comme observateur du presse-papiers
   FNextClipboardViewer := SetClipboardViewer(Handle);
 end;
 
-procedure TClipboardMonitor.DestroyWnd;
+procedure TClipboardMonitor.DestroyWnd;  
 begin
   // Se retirer de la chaîne d'observateurs
   ChangeClipboardChain(Handle, FNextClipboardViewer);
   inherited;
 end;
 
-procedure TClipboardMonitor.WMDrawClipboard(var Message: TWMDrawClipboard);
+procedure TClipboardMonitor.WMDrawClipboard(var Message: TWMDrawClipboard);  
 begin
   // Le presse-papiers a changé
   OnClipboardChange;
@@ -1285,7 +1285,7 @@ begin
     SendMessage(FNextClipboardViewer, WM_DRAWCLIPBOARD, 0, 0);
 end;
 
-procedure TClipboardMonitor.WMChangeCBChain(var Message: TWMChangeCBChain);
+procedure TClipboardMonitor.WMChangeCBChain(var Message: TWMChangeCBChain);  
 begin
   // Mettre à jour la chaîne si nécessaire
   if Message.Remove = FNextClipboardViewer then
@@ -1294,7 +1294,7 @@ begin
     SendMessage(FNextClipboardViewer, WM_CHANGECBCHAIN, Message.Remove, Message.Next);
 end;
 
-procedure TClipboardMonitor.OnClipboardChange;
+procedure TClipboardMonitor.OnClipboardChange;  
 begin
   WriteLn('Le presse-papiers a changé !');
   // Traiter le changement ici
@@ -1325,7 +1325,7 @@ type
                          out pvarData: VARIANT): HRESULT; stdcall;
   end;
 
-function TMonColumnProvider.GetColumnInfo(dwIndex: DWORD; out psci: SHCOLUMNINFO): HRESULT;
+function TMonColumnProvider.GetColumnInfo(dwIndex: DWORD; out psci: SHCOLUMNINFO): HRESULT;  
 begin
   if dwIndex = 0 then
   begin
@@ -1389,7 +1389,7 @@ type
     function GetPriority(out pPriority: Integer): HRESULT; stdcall;
   end;
 
-function TMonIconOverlay.IsMemberOf(pwszPath: LPCWSTR; dwAttrib: DWORD): HRESULT;
+function TMonIconOverlay.IsMemberOf(pwszPath: LPCWSTR; dwAttrib: DWORD): HRESULT;  
 var
   CheminFichier: string;
 begin
@@ -1465,7 +1465,7 @@ uses
 var
   ImageListSystem: HIMAGELIST;
 
-procedure InitialiserCacheIcones;
+procedure InitialiserCacheIcones;  
 var
   FileInfo: TSHFileInfo;
 begin
@@ -1477,7 +1477,7 @@ begin
   SendMessage(ListView1.Handle, LVM_SETIMAGELIST, LVSIL_SMALL, ImageListSystem);
 end;
 
-function ObtenirIndexIcone(const CheminFichier: string): Integer;
+function ObtenirIndexIcone(const CheminFichier: string): Integer;  
 var
   FileInfo: TSHFileInfo;
 begin
@@ -1490,7 +1490,7 @@ end;
 ### Opérations asynchrones Shell
 
 ```pascal
-procedure OperationAsynchrone(const Fichiers: TStringList);
+procedure OperationAsynchrone(const Fichiers: TStringList);  
 var
   FileOp: TSHFileOpStruct;
   Thread: TThread;
@@ -1525,7 +1525,7 @@ end;
 ### 1. Gestion des chemins longs
 
 ```pascal
-function CheminLongWindows(const Chemin: string): string;
+function CheminLongWindows(const Chemin: string): string;  
 begin
   // Préfixe pour supporter les chemins > 260 caractères
   if Length(Chemin) > MAX_PATH then
@@ -1538,7 +1538,7 @@ end;
 ### 2. Vérification des versions Windows
 
 ```pascal
-function SupportsJumpLists: Boolean;
+function SupportsJumpLists: Boolean;  
 var
   VersionInfo: TOSVersionInfo;
 begin
@@ -1553,7 +1553,7 @@ end;
 ### 3. Notification des changements
 
 ```pascal
-procedure NotifierChangementShell(TypeChangement: Longint);
+procedure NotifierChangementShell(TypeChangement: Longint);  
 begin
   SHChangeNotify(TypeChangement, SHCNF_IDLIST or SHCNF_FLUSHNOWAIT, nil, nil);
 end;
@@ -1569,7 +1569,7 @@ end;
 ### 4. Libération des ressources COM
 
 ```pascal
-procedure LibererInterfaceCOM(var Intf);
+procedure LibererInterfaceCOM(var Intf);  
 var
   IUnk: IUnknown;
 begin
@@ -1587,7 +1587,7 @@ end;
 ### Vérifier les permissions d'accès
 
 ```pascal
-function VerifierAccesFichier(const CheminFichier: string; AccesDemande: DWORD): Boolean;
+function VerifierAccesFichier(const CheminFichier: string; AccesDemande: DWORD): Boolean;  
 var
   SecurityDescriptor: PSecurityDescriptor;
   DesiredAccess: DWORD;
@@ -1711,7 +1711,7 @@ type
     procedure TraiterFichier(const CheminFichier: string);
   end;
 
-constructor TMonGestionnaire.Create;
+constructor TMonGestionnaire.Create;  
 begin
   FExtensions := TStringList.Create;
   FExtensions.Add('.monext');
@@ -1719,13 +1719,13 @@ begin
   FMenuContextuel := 'MonGestionnaire';
 end;
 
-destructor TMonGestionnaire.Destroy;
+destructor TMonGestionnaire.Destroy;  
 begin
   FExtensions.Free;
   inherited;
 end;
 
-procedure TMonGestionnaire.EnregistrerAssociations;
+procedure TMonGestionnaire.EnregistrerAssociations;  
 var
   Reg: TRegistry;
   i: Integer;
@@ -1776,7 +1776,7 @@ begin
   end;
 end;
 
-procedure TMonGestionnaire.CreerMenusContextuels;
+procedure TMonGestionnaire.CreerMenusContextuels;  
 var
   Reg: TRegistry;
 begin
@@ -1817,7 +1817,7 @@ begin
   end;
 end;
 
-procedure TMonGestionnaire.InitialiserIconeTray;
+procedure TMonGestionnaire.InitialiserIconeTray;  
 begin
   FillChar(FIconeTray, SizeOf(FIconeTray), 0);
   FIconeTray.cbSize := SizeOf(TNotifyIconData);
@@ -1831,7 +1831,7 @@ begin
   Shell_NotifyIcon(NIM_ADD, @FIconeTray);
 end;
 
-procedure TMonGestionnaire.Installer;
+procedure TMonGestionnaire.Installer;  
 begin
   WriteLn('Installation de Mon Gestionnaire...');
   EnregistrerAssociations;
@@ -1840,7 +1840,7 @@ begin
   WriteLn('Installation terminée !');
 end;
 
-procedure TMonGestionnaire.Desinstaller;
+procedure TMonGestionnaire.Desinstaller;  
 var
   Reg: TRegistry;
   i: Integer;
@@ -1874,7 +1874,7 @@ begin
   WriteLn('Désinstallation terminée');
 end;
 
-procedure TMonGestionnaire.TraiterFichier(const CheminFichier: string);
+procedure TMonGestionnaire.TraiterFichier(const CheminFichier: string);  
 var
   InfoFichier: TSHFileInfo;
   Extension: string;
@@ -1987,7 +1987,7 @@ const
     (CSIDL: CSIDL_FONTS; Nom: 'Polices'; Description: 'Polices de caractères')
   );
 
-function ObtenirCheminSpecial(CSIDL: Integer): string;
+function ObtenirCheminSpecial(CSIDL: Integer): string;  
 var
   Chemin: array[0..MAX_PATH] of Char;
 begin
@@ -1997,7 +1997,7 @@ begin
     Result := 'Non disponible';
 end;
 
-procedure CreerRaccourciVers(const DossierSpecial: TDossierSpecial);
+procedure CreerRaccourciVers(const DossierSpecial: TDossierSpecial);  
 var
   Chemin, CheminRaccourci, Bureau: string;
   ShellLink: IShellLink;
@@ -2031,7 +2031,7 @@ begin
   end;
 end;
 
-procedure AfficherInfosDossier(const DossierSpecial: TDossierSpecial);
+procedure AfficherInfosDossier(const DossierSpecial: TDossierSpecial);  
 var
   Chemin: string;
   SearchRec: TSearchRec;
@@ -2171,7 +2171,7 @@ type
     destructor Destroy; override;
   end;
 
-constructor TShellMonitor.Create;
+constructor TShellMonitor.Create;  
 var
   LogFileName: string;
 begin
@@ -2188,7 +2188,7 @@ begin
   FNotifyHandle := 0;
 end;
 
-destructor TShellMonitor.Destroy;
+destructor TShellMonitor.Destroy;  
 begin
   if FNotifyHandle <> 0 then
     FindCloseChangeNotification(FNotifyHandle);
@@ -2200,7 +2200,7 @@ begin
   inherited;
 end;
 
-procedure TShellMonitor.LogEvent(const Message: string);
+procedure TShellMonitor.LogEvent(const Message: string);  
 begin
   WriteLn(FLogFile, '[', TimeToStr(Now), '] ', Message);
   Flush(FLogFile);
@@ -2209,7 +2209,7 @@ begin
   WriteLn('[', TimeToStr(Now), '] ', Message);
 end;
 
-procedure TShellMonitor.Execute;
+procedure TShellMonitor.Execute;  
 var
   PIDLDesktop: PItemIDList;
   NotifyInfo: TSHChangeNotifyEntry;
