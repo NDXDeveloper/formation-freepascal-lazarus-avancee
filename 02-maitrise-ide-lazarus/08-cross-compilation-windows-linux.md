@@ -195,8 +195,8 @@ Dépendances typiques Linux :
 
 ```bash
 # Sur une machine Linux
-mkdir linux_libs
-cp /lib/x86_64-linux-gnu/libc.so.6 linux_libs/
+mkdir linux_libs  
+cp /lib/x86_64-linux-gnu/libc.so.6 linux_libs/  
 cp /lib/x86_64-linux-gnu/libdl.so.2 linux_libs/
 # ... autres bibliothèques
 
@@ -208,7 +208,7 @@ scp -r linux_libs/ user@windows:/path/to/project/
 
 ```dockerfile
 # Dockerfile pour extraire les libs
-FROM ubuntu:20.04
+FROM ubuntu:20.04  
 RUN apt-get update && apt-get install -y \
     libc6-dev \
     libgtk2.0-dev \
@@ -255,7 +255,7 @@ end.
 #### Gestion des chemins
 
 ```pascal
-function GetConfigPath: string;
+function GetConfigPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('APPDATA') + '\MonApp\';
@@ -270,7 +270,7 @@ begin
     CreateDir(Result);
 end;
 
-function GetExecutablePath: string;
+function GetExecutablePath: string;  
 begin
   Result := ExtractFilePath(ParamStr(0));
   {$IFDEF WINDOWS}
@@ -288,7 +288,7 @@ end;
 uses
   LazFileUtils;  // Utilitaires multi-plateformes
 
-procedure WorkWithPaths;
+procedure WorkWithPaths;  
 var
   FullPath: string;
 begin
@@ -316,7 +316,7 @@ end;
 
 ```bash
 # Ubuntu/Debian
-sudo apt-get update
+sudo apt-get update  
 sudo apt-get install mingw-w64
 
 # Vérifier l'installation
@@ -330,11 +330,11 @@ sudo apt-get install fp-units-win32 fp-units-win64
 
 ```bash
 # Télécharger les sources FPC
-cd ~
+cd ~  
 svn co https://svn.freepascal.org/svn/fpc/trunk fpc-source
 
 # Compiler le cross-compiler
-cd fpc-source
+cd fpc-source  
 make clean all OS_TARGET=win64 CPU_TARGET=x86_64
 
 # Installer
@@ -477,11 +477,11 @@ Projet → Options → Chemins
 @echo off
 echo === Cross-compilation Windows vers Linux ===
 
-set PROJECT=MonProjet
-set LAZARUS=C:\lazarus
+set PROJECT=MonProjet  
+set LAZARUS=C:\lazarus  
 set FPC=C:\lazarus\fpc\3.2.2\bin\x86_64-win64
 
-REM Nettoyer
+REM Nettoyer  
 del /Q lib\x86_64-linux\*.*
 
 REM Compiler pour Linux
@@ -519,9 +519,9 @@ pause
 
 echo "=== Cross-compilation Linux vers Windows ==="
 
-PROJECT="MonProjet"
-LAZARUS="/usr/lib/lazarus"
-TARGET_OS="win64"
+PROJECT="MonProjet"  
+LAZARUS="/usr/lib/lazarus"  
+TARGET_OS="win64"  
 TARGET_CPU="x86_64"
 
 # Nettoyer
@@ -556,7 +556,7 @@ fi
 
 `Makefile` :
 ```makefile
-PROJECT = MonProjet
+PROJECT = MonProjet  
 LAZBUILD = lazbuild
 
 # Détection de l'OS
@@ -586,7 +586,7 @@ cross: windows linux
 clean:
 	rm -rf lib/ bin/
 
-install:
+install:  
 ifeq ($(HOST_OS),linux)
 	cp bin/linux/$(PROJECT) /usr/local/bin/
 else
@@ -620,7 +620,7 @@ type
 
 implementation
 
-procedure TTestCrossPlatform.TestPathSeparator;
+procedure TTestCrossPlatform.TestPathSeparator;  
 var
   Path: string;
 begin
@@ -635,7 +635,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TTestCrossPlatform.TestFileOperations;
+procedure TTestCrossPlatform.TestFileOperations;  
 var
   TestFile: string;
 begin
@@ -661,7 +661,7 @@ begin
   DeleteFile(TestFile);
 end;
 
-procedure TTestCrossPlatform.TestSystemCalls;
+procedure TTestCrossPlatform.TestSystemCalls;  
 begin
   {$IFDEF WINDOWS}
   AssertTrue(Length(GetEnvironmentVariable('WINDIR')) > 0);
@@ -690,7 +690,7 @@ RUN apt-get update && apt-get install -y \
     libx11-6 \
     xvfb
 
-COPY bin/linux/monapp /usr/local/bin/
+COPY bin/linux/monapp /usr/local/bin/  
 RUN chmod +x /usr/local/bin/monapp
 
 # Lancer avec display virtuel
@@ -814,12 +814,12 @@ project/
 Fichier `.desktop` pour Linux :
 ```ini
 [Desktop Entry]
-Version=1.0
-Type=Application
-Name=Mon Application
-Comment=Description de mon application
-Exec=/usr/local/bin/monapp
-Icon=monapp
+Version=1.0  
+Type=Application  
+Name=Mon Application  
+Comment=Description de mon application  
+Exec=/usr/local/bin/monapp  
+Icon=monapp  
 Categories=Utility;Development;
 ```
 

@@ -35,10 +35,10 @@ C:\lazarus\lazbuild.exe
 
 Si pas dans le PATH, ajouter :
 ```batch
-REM Ajouter au PATH temporairement
+REM Ajouter au PATH temporairement  
 set PATH=%PATH%;C:\lazarus
 
-REM Ou utiliser le chemin complet
+REM Ou utiliser le chemin complet  
 C:\lazarus\lazbuild.exe mon_projet.lpi
 ```
 
@@ -49,7 +49,7 @@ C:\lazarus\lazbuild.exe mon_projet.lpi
 /usr/bin/lazbuild
 
 # Vérifier l'installation
-which lazbuild
+which lazbuild  
 lazbuild --version
 
 # Si non installé
@@ -63,7 +63,7 @@ sudo apt-get install lazarus
 /Applications/Lazarus/lazbuild
 
 # Ou si installé via Homebrew
-brew install lazarus
+brew install lazarus  
 lazbuild --version
 ```
 
@@ -84,10 +84,10 @@ lazbuild MonProjet.lpi
 
 **Résultat attendu :**
 ```
-Lazarus build tool v2.2.6
-FPC version: 3.2.2
-Building project: MonProjet.lpi
-Target: MonProjet.exe
+Lazarus build tool v2.2.6  
+FPC version: 3.2.2  
+Building project: MonProjet.lpi  
+Target: MonProjet.exe  
 Success: Project compiled successfully
 ```
 
@@ -168,7 +168,7 @@ MonProjet/
 
 Commande :
 ```bash
-cd MonProjet
+cd MonProjet  
 lazbuild MonProjet.lpi
 
 # Résultat : MonProjet.exe (Windows) ou MonProjet (Linux)
@@ -190,10 +190,10 @@ lazbuild --skip-dependencies MonProjet.lpi
 
 ```batch
 @echo off
-echo === Compilation de tous les projets ===
+echo === Compilation de tous les projets ===  
 echo.
 
-set PROJECTS=Projet1.lpi Projet2.lpi Projet3.lpi
+set PROJECTS=Projet1.lpi Projet2.lpi Projet3.lpi  
 set FAILED=
 
 for %%P in (%PROJECTS%) do (
@@ -222,10 +222,10 @@ if defined FAILED (
 ```bash
 #!/bin/bash
 
-echo "=== Compilation de tous les projets ==="
+echo "=== Compilation de tous les projets ==="  
 echo
 
-PROJECTS="Projet1.lpi Projet2.lpi Projet3.lpi"
+PROJECTS="Projet1.lpi Projet2.lpi Projet3.lpi"  
 FAILED=""
 
 for PROJECT in $PROJECTS; do
@@ -306,37 +306,37 @@ lazbuild --os=win32 --cpu=i386 --ws=win32 MonProjet.lpi
 ```bash
 #!/bin/bash
 
-PROJECT="MonProjet.lpi"
+PROJECT="MonProjet.lpi"  
 VERSION="1.0.0"
 
 echo "=== Cross-compilation v$VERSION ==="
 
 # Créer les répertoires de sortie
-mkdir -p bin/windows/x64
-mkdir -p bin/windows/x86
-mkdir -p bin/linux/x64
+mkdir -p bin/windows/x64  
+mkdir -p bin/windows/x86  
+mkdir -p bin/linux/x64  
 mkdir -p bin/macos/x64
 
 # Windows 64-bit
-echo "Compilation Windows 64-bit..."
+echo "Compilation Windows 64-bit..."  
 lazbuild --os=win64 --cpu=x86_64 --ws=win32 \
          --build-mode=Release $PROJECT
 mv MonProjet.exe bin/windows/x64/
 
 # Windows 32-bit
-echo "Compilation Windows 32-bit..."
+echo "Compilation Windows 32-bit..."  
 lazbuild --os=win32 --cpu=i386 --ws=win32 \
          --build-mode=Release $PROJECT
 mv MonProjet.exe bin/windows/x86/
 
 # Linux 64-bit
-echo "Compilation Linux 64-bit..."
+echo "Compilation Linux 64-bit..."  
 lazbuild --os=linux --cpu=x86_64 --ws=gtk2 \
          --build-mode=Release $PROJECT
 mv MonProjet bin/linux/x64/
 
 # macOS 64-bit (si cross-compiler disponible)
-echo "Compilation macOS 64-bit..."
+echo "Compilation macOS 64-bit..."  
 lazbuild --os=darwin --cpu=x86_64 --ws=cocoa \
          --build-mode=Release $PROJECT
 mv MonProjet bin/macos/x64/
@@ -354,23 +354,23 @@ echo "=== Cross-compilation terminée ==="
 @echo off
 setlocal enabledelayedexpansion
 
-REM Récupérer la version depuis Git
-for /f "tokens=*" %%i in ('git describe --tags --always') do set VERSION=%%i
+REM Récupérer la version depuis Git  
+for /f "tokens=*" %%i in ('git describe --tags --always') do set VERSION=%%i  
 if "%VERSION%"=="" set VERSION=dev
 
-REM Récupérer la date
-for /f "tokens=2 delims==" %%i in ('wmic os get localdatetime /value') do set datetime=%%i
+REM Récupérer la date  
+for /f "tokens=2 delims==" %%i in ('wmic os get localdatetime /value') do set datetime=%%i  
 set BUILD_DATE=%datetime:~0,8%-%datetime:~8,6%
 
 echo === Build version %VERSION% (%BUILD_DATE%) ===
 
-REM Créer le fichier de version
-echo const > src\version.inc
-echo   APP_VERSION = '%VERSION%'; >> src\version.inc
-echo   BUILD_DATE = '%BUILD_DATE%'; >> src\version.inc
+REM Créer le fichier de version  
+echo const > src\version.inc  
+echo   APP_VERSION = '%VERSION%'; >> src\version.inc  
+echo   BUILD_DATE = '%BUILD_DATE%'; >> src\version.inc  
 echo   BUILD_NUMBER = '%datetime:~8,6%'; >> src\version.inc
 
-REM Compiler
+REM Compiler  
 lazbuild --build-mode=Release MonProjet.lpi
 
 if %errorlevel% == 0 (
@@ -389,14 +389,14 @@ if %errorlevel% == 0 (
 #!/bin/bash
 
 # Récupérer la version depuis Git
-VERSION=$(git describe --tags --always 2>/dev/null || echo "dev")
-BUILD_DATE=$(date +%Y%m%d-%H%M%S)
+VERSION=$(git describe --tags --always 2>/dev/null || echo "dev")  
+BUILD_DATE=$(date +%Y%m%d-%H%M%S)  
 BUILD_NUMBER=$(date +%s)
 
 echo "=== Build version $VERSION ($BUILD_DATE) ==="
 
 # Créer le fichier de version
-cat > src/version.inc << EOF
+cat > src/version.inc << EOF  
 const
   APP_VERSION = '$VERSION';
   BUILD_DATE = '$BUILD_DATE';
@@ -424,10 +424,10 @@ fi
 #!/bin/bash
 
 # Configuration
-PROJECT_DIR="/home/build/projects"
-LOG_DIR="/var/log/builds"
-EMAIL="dev-team@company.com"
-DATE=$(date +%Y%m%d)
+PROJECT_DIR="/home/build/projects"  
+LOG_DIR="/var/log/builds"  
+EMAIL="dev-team@company.com"  
+DATE=$(date +%Y%m%d)  
 LOG_FILE="$LOG_DIR/build-$DATE.log"
 
 # Fonction de log
@@ -441,15 +441,15 @@ log "=== Build nocturne démarré ==="
 cd "$PROJECT_DIR"
 
 # Mise à jour du code
-log "Mise à jour depuis Git..."
+log "Mise à jour depuis Git..."  
 git pull origin main >> "$LOG_FILE" 2>&1
 
 # Nettoyer
-log "Nettoyage..."
+log "Nettoyage..."  
 rm -rf lib/* bin/*
 
 # Compiler tous les modes
-MODES="Debug Release Test"
+MODES="Debug Release Test"  
 SUCCESS=true
 
 for MODE in $MODES; do
@@ -716,20 +716,20 @@ Créer `lazbuild.cfg` :
 
 # Chemins
 [Paths]
-LazarusDir=/usr/lib/lazarus
-CompilerPath=/usr/bin/fpc
+LazarusDir=/usr/lib/lazarus  
+CompilerPath=/usr/bin/fpc  
 ConfigPath=~/.lazarus
 
 # Options par défaut
 [Options]
-BuildMode=Release
-Verbose=false
+BuildMode=Release  
+Verbose=false  
 BuildAll=true
 
 # Environnement
 [Environment]
-FPCDIR=/usr/lib/fpc/3.2.2
-PP=/usr/bin/fpc
+FPCDIR=/usr/lib/fpc/3.2.2  
+PP=/usr/bin/fpc  
 FPCTARGET=x86_64-linux
 ```
 
@@ -737,13 +737,13 @@ FPCTARGET=x86_64-linux
 
 ```bash
 # Linux/macOS
-export LAZARUS_DIR=/usr/lib/lazarus
-export FPC_DIR=/usr/lib/fpc/3.2.2
+export LAZARUS_DIR=/usr/lib/lazarus  
+export FPC_DIR=/usr/lib/fpc/3.2.2  
 export LAZBUILD_OPTIONS="--quiet --build-all"
 
 # Windows
-set LAZARUS_DIR=C:\lazarus
-set FPC_DIR=C:\lazarus\fpc\3.2.2
+set LAZARUS_DIR=C:\lazarus  
+set FPC_DIR=C:\lazarus\fpc\3.2.2  
 set LAZBUILD_OPTIONS=--quiet --build-all
 ```
 
@@ -780,8 +780,8 @@ set LAZBUILD_OPTIONS=--quiet --build-all
 Script utilisant les profils :
 ```python
 #!/usr/bin/env python3
-import json
-import subprocess
+import json  
+import subprocess  
 import sys
 
 def build_with_profile(profile_name):
@@ -833,7 +833,7 @@ if __name__ == '__main__':
 # 3 : Erreur de configuration
 
 # Vérifier dans un script
-lazbuild MonProjet.lpi
+lazbuild MonProjet.lpi  
 RESULT=$?
 
 case $RESULT in
@@ -851,12 +851,12 @@ esac
 ```bash
 #!/bin/bash
 
-PROJECT="MonProjet.lpi"
-LOG_FILE="build.log"
+PROJECT="MonProjet.lpi"  
+LOG_FILE="build.log"  
 ERROR_FILE="errors.log"
 
 # Compiler et capturer la sortie
-lazbuild "$PROJECT" 2>&1 | tee "$LOG_FILE"
+lazbuild "$PROJECT" 2>&1 | tee "$LOG_FILE"  
 RESULT=${PIPESTATUS[0]}
 
 if [ $RESULT -ne 0 ]; then
@@ -902,9 +902,9 @@ fi
 
 ```bash
 # Linux : compiler plusieurs projets en parallèle
-lazbuild Projet1.lpi &
-lazbuild Projet2.lpi &
-lazbuild Projet3.lpi &
+lazbuild Projet1.lpi &  
+lazbuild Projet2.lpi &  
+lazbuild Projet3.lpi &  
 wait  # Attendre que tous les builds se terminent
 
 # Ou utiliser GNU parallel si disponible
@@ -916,7 +916,7 @@ echo -e "Projet1.lpi\nProjet2.lpi\nProjet3.lpi" | \
 
 ```bash
 # Utiliser un cache partagé
-export LAZBUILD_CACHE=/tmp/lazbuild-cache
+export LAZBUILD_CACHE=/tmp/lazbuild-cache  
 mkdir -p $LAZBUILD_CACHE
 
 lazbuild --primary-config-path=$LAZBUILD_CACHE MonProjet.lpi
@@ -939,9 +939,9 @@ lazbuild -B MonProjet.lpi
 `monitor_builds.py` :
 ```python
 #!/usr/bin/env python3
-import subprocess
-import time
-import datetime
+import subprocess  
+import time  
+import datetime  
 import sqlite3
 
 def init_db():
@@ -1031,7 +1031,7 @@ if __name__ == '__main__':
 **Linux :**
 ```bash
 # Vérifier l'installation
-which lazarus
+which lazarus  
 find / -name lazbuild 2>/dev/null
 
 # Ajouter au PATH
@@ -1040,7 +1040,7 @@ export PATH=$PATH:/usr/lib/lazarus
 
 **Windows :**
 ```batch
-REM Ajouter au PATH système
+REM Ajouter au PATH système  
 setx PATH "%PATH%;C:\lazarus"
 ```
 
@@ -1048,7 +1048,7 @@ setx PATH "%PATH%;C:\lazarus"
 
 ```bash
 # Vérifier le chemin
-ls -la *.lpi
+ls -la *.lpi  
 pwd
 
 # Utiliser le chemin absolu
@@ -1072,7 +1072,7 @@ lazbuild --add-package-link RequiredPackage.lpk
 lazbuild -vvv MonProjet.lpi > debug.log 2>&1
 
 # Analyser les erreurs
-grep -i error debug.log
+grep -i error debug.log  
 grep -i "not found" debug.log
 ```
 
@@ -1101,8 +1101,8 @@ MonProjet/
 ```makefile
 # Makefile pour lazbuild
 
-PROJECT = MonProjet.lpi
-LAZBUILD = lazbuild
+PROJECT = MonProjet.lpi  
+LAZBUILD = lazbuild  
 MODE ?= Release
 
 .PHONY: all clean build test deploy
@@ -1116,11 +1116,11 @@ clean:
 	rm -rf lib/ bin/
 	$(LAZBUILD) --clean $(PROJECT)
 
-test: MODE=Test
+test: MODE=Test  
 test: build
 	./bin/test/MonProjet --run-tests
 
-deploy: MODE=Release
+deploy: MODE=Release  
 deploy: build
 	@echo "Deploying to server..."
 	scp bin/release/MonProjet user@server:/opt/app/
@@ -1175,7 +1175,7 @@ Exemples :
 
 # Script de release complet avec lazbuild
 
-VERSION=$1
+VERSION=$1  
 if [ -z "$VERSION" ]; then
     echo "Usage: $0 <version>"
     echo "Example: $0 1.2.3"
@@ -1194,7 +1194,7 @@ fi
 git tag -a "v$VERSION" -m "Release version $VERSION"
 
 # Créer le répertoire de release
-RELEASE_DIR="releases/v$VERSION"
+RELEASE_DIR="releases/v$VERSION"  
 mkdir -p "$RELEASE_DIR"
 
 # Compiler pour toutes les plateformes
@@ -1241,8 +1241,8 @@ for PLATFORM in "${PLATFORMS[@]}"; do
 done
 
 # Générer les checksums
-cd "$RELEASE_DIR"
-sha256sum * > SHA256SUMS
+cd "$RELEASE_DIR"  
+sha256sum * > SHA256SUMS  
 cd - > /dev/null
 
 # Créer les notes de release
@@ -1275,7 +1275,7 @@ MonProjet-v$VERSION-win64.exe
 
 ### Linux
 \`\`\`bash
-tar xzf MonProjet-v$VERSION-linux-x86_64.tar.gz
+tar xzf MonProjet-v$VERSION-linux-x86_64.tar.gz  
 chmod +x MonProjet-v$VERSION-linux-x86_64
 ./MonProjet-v$VERSION-linux-x86_64
 \`\`\`
@@ -1286,13 +1286,13 @@ sha256sum -c SHA256SUMS
 \`\`\`
 EOF
 
-echo ""
-echo "=== Release v$VERSION créée avec succès ==="
-echo "Fichiers dans : $RELEASE_DIR"
-echo ""
-echo "Prochaines étapes :"
-echo "1. Compléter RELEASE_NOTES.md"
-echo "2. git push origin v$VERSION"
+echo ""  
+echo "=== Release v$VERSION créée avec succès ==="  
+echo "Fichiers dans : $RELEASE_DIR"  
+echo ""  
+echo "Prochaines étapes :"  
+echo "1. Compléter RELEASE_NOTES.md"  
+echo "2. git push origin v$VERSION"  
 echo "3. Uploader sur GitHub/GitLab releases"
 ```
 
@@ -1493,12 +1493,12 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Créer un utilisateur build
-RUN useradd -m -s /bin/bash builder
-USER builder
+RUN useradd -m -s /bin/bash builder  
+USER builder  
 WORKDIR /home/builder
 
 # Script de build
-COPY build.sh /usr/local/bin/
+COPY build.sh /usr/local/bin/  
 RUN chmod +x /usr/local/bin/build.sh
 
 ENTRYPOINT ["/usr/local/bin/build.sh"]
@@ -1530,13 +1530,13 @@ services:
 
 # Déploiement continu avec lazbuild
 
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
-COMMIT=$(git rev-parse --short HEAD)
+BRANCH=$(git rev-parse --abbrev-ref HEAD)  
+COMMIT=$(git rev-parse --short HEAD)  
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 
-echo "=== Déploiement continu ==="
-echo "Branche : $BRANCH"
-echo "Commit : $COMMIT"
+echo "=== Déploiement continu ==="  
+echo "Branche : $BRANCH"  
+echo "Commit : $COMMIT"  
 echo "Timestamp : $TIMESTAMP"
 
 # Déterminer l'environnement selon la branche
@@ -1562,30 +1562,30 @@ case $BRANCH in
         ;;
 esac
 
-echo "Environnement : $ENV"
-echo "Mode : $MODE"
+echo "Environnement : $ENV"  
+echo "Mode : $MODE"  
 echo "Serveur : $SERVER"
 
 # Compiler
-echo "Compilation..."
+echo "Compilation..."  
 if ! lazbuild --build-mode="$MODE" MonProjet.lpi; then
     echo "Erreur de compilation"
     exit 1
 fi
 
 # Tests smoke
-echo "Tests smoke..."
+echo "Tests smoke..."  
 if ! ./bin/MonProjet --smoke-test; then
     echo "Tests smoke échoués"
     exit 1
 fi
 
 # Créer le package
-PACKAGE="MonProjet-$ENV-$COMMIT-$TIMESTAMP.tar.gz"
+PACKAGE="MonProjet-$ENV-$COMMIT-$TIMESTAMP.tar.gz"  
 tar czf "$PACKAGE" -C bin MonProjet
 
 # Déployer
-echo "Déploiement sur $SERVER..."
+echo "Déploiement sur $SERVER..."  
 scp "$PACKAGE" "deploy@$SERVER:/opt/deployments/"
 
 # Exécuter le script de déploiement distant
@@ -1611,8 +1611,8 @@ fi
 `generate_dashboard.py` :
 ```python
 #!/usr/bin/env python3
-import sqlite3
-import datetime
+import sqlite3  
+import datetime  
 import json
 
 def generate_html_dashboard():
@@ -1719,14 +1719,14 @@ if __name__ == '__main__':
 `prometheus_exporter.py` :
 ```python
 #!/usr/bin/env python3
-from prometheus_client import start_http_server, Gauge, Counter
-import sqlite3
+from prometheus_client import start_http_server, Gauge, Counter  
+import sqlite3  
 import time
 
 # Métriques Prometheus
-build_duration = Gauge('lazbuild_duration_seconds', 'Build duration in seconds', ['project', 'mode'])
-build_success = Counter('lazbuild_success_total', 'Successful builds', ['project'])
-build_failure = Counter('lazbuild_failure_total', 'Failed builds', ['project'])
+build_duration = Gauge('lazbuild_duration_seconds', 'Build duration in seconds', ['project', 'mode'])  
+build_success = Counter('lazbuild_success_total', 'Successful builds', ['project'])  
+build_failure = Counter('lazbuild_failure_total', 'Failed builds', ['project'])  
 build_size = Gauge('lazbuild_binary_size_bytes', 'Binary size in bytes', ['project'])
 
 def update_metrics():
@@ -1774,14 +1774,14 @@ if __name__ == '__main__':
 
 # Build matrix pour tests complets
 
-MODES=("Debug" "Release" "Test")
-PLATFORMS=("win32:i386" "win64:x86_64" "linux:x86_64" "linux:i386")
+MODES=("Debug" "Release" "Test")  
+PLATFORMS=("win32:i386" "win64:x86_64" "linux:x86_64" "linux:i386")  
 WIDGETSETS=("win32" "gtk2" "gtk3" "qt5")
 
-echo "=== Build Matrix Execution ==="
+echo "=== Build Matrix Execution ==="  
 echo "Total combinations: $((${#MODES[@]} * ${#PLATFORMS[@]}))"
 
-RESULTS_FILE="build_matrix_results.csv"
+RESULTS_FILE="build_matrix_results.csv"  
 echo "Mode,Platform,CPU,WidgetSet,Result,Duration" > "$RESULTS_FILE"
 
 for MODE in "${MODES[@]}"; do
@@ -1818,19 +1818,19 @@ for MODE in "${MODES[@]}"; do
     done
 done
 
-echo ""
-echo "=== Matrix Build Complete ==="
+echo ""  
+echo "=== Matrix Build Complete ==="  
 echo "Results saved to: $RESULTS_FILE"
 
 # Générer un rapport
-SUCCESS_COUNT=$(grep -c "SUCCESS" "$RESULTS_FILE")
+SUCCESS_COUNT=$(grep -c "SUCCESS" "$RESULTS_FILE")  
 TOTAL_COUNT=$(($(wc -l < "$RESULTS_FILE") - 1))  # -1 pour l'en-tête
 
-echo ""
-echo "Summary:"
-echo "  Total builds: $TOTAL_COUNT"
-echo "  Successful: $SUCCESS_COUNT"
-echo "  Failed: $((TOTAL_COUNT - SUCCESS_COUNT))"
+echo ""  
+echo "Summary:"  
+echo "  Total builds: $TOTAL_COUNT"  
+echo "  Successful: $SUCCESS_COUNT"  
+echo "  Failed: $((TOTAL_COUNT - SUCCESS_COUNT))"  
 echo "  Success rate: $((SUCCESS_COUNT * 100 / TOTAL_COUNT))%"
 ```
 

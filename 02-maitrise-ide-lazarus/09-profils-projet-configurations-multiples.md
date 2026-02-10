@@ -45,7 +45,7 @@ Structure des modes de compilation :
 Les modes peuvent hériter les uns des autres :
 
 ```
-Hiérarchie d'héritage :
+Hiérarchie d'héritage :  
 Default (base)
 ├── Debug (hérite de Default)
 │   ├── Debug-Windows (hérite de Debug)
@@ -277,7 +277,7 @@ Code conditionnel :
 {$IFDEF TEST_MODE}
 uses consoletestrunner;
 
-procedure RunTests;
+procedure RunTests;  
 var
   App: TTestRunner;
 begin
@@ -342,7 +342,7 @@ procedure SaveData;
 
 implementation
 
-procedure SaveData;
+procedure SaveData;  
 begin
   {$IFDEF DEMO_VERSION}
   if RecordCount >= MAX_RECORDS then
@@ -510,19 +510,19 @@ for %%M in (%MODES%) do (
     )
 )
 
-echo.
+echo.  
 echo === Tous les modes compilés avec succès ===
 
-REM Créer les archives
-echo.
+REM Créer les archives  
+echo.  
 echo Création des archives...
 
 cd bin\release\win64
 7z a ..\..\..\MonProjet-Win64-Release.zip *.*
 cd ..\..\..
 
-echo.
-echo Terminé !
+echo.  
+echo Terminé !  
 pause
 ```
 
@@ -548,18 +548,18 @@ for MODE in $MODES; do
     fi
 done
 
-echo ""
+echo ""  
 echo "=== Tous les modes compilés avec succès ==="
 
 # Créer les archives
-echo ""
+echo ""  
 echo "Création des archives..."
 
-cd bin/release/linux
-tar czf ../../../MonProjet-Linux-Release.tar.gz *
+cd bin/release/linux  
+tar czf ../../../MonProjet-Linux-Release.tar.gz *  
 cd ../../..
 
-echo ""
+echo ""  
 echo "Terminé !"
 ```
 
@@ -583,7 +583,7 @@ Mode Release - Commandes :
 Script `update_version.sh` :
 ```bash
 #!/bin/bash
-PROJECT_PATH=$1
+PROJECT_PATH=$1  
 VERSION=$2
 
 # Mettre à jour le numéro de version
@@ -608,7 +608,7 @@ echo "const BUILD_DATE = '$(date +%Y-%m-%d %H:%M:%S)';" > $PROJECT_PATH/builddat
 *.lps
 
 # Ignorer les répertoires de build
-bin/
+bin/  
 lib/
 
 # Garder les configs de mode
@@ -822,7 +822,7 @@ implementation
 uses
   SysUtils;
 
-procedure LogBuildInfo;
+procedure LogBuildInfo;  
 var
   LogFile: TextFile;
   LogPath: string;

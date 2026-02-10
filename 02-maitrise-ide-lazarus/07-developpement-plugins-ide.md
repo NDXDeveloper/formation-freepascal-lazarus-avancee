@@ -116,7 +116,7 @@ procedure Register;
 
 implementation
 
-procedure Register;
+procedure Register;  
 begin
   // Point d'entrée du plugin
   MonPlugin := TMonPlugin.Create;
@@ -124,7 +124,7 @@ end;
 
 { TMonPlugin }
 
-constructor TMonPlugin.Create;
+constructor TMonPlugin.Create;  
 begin
   // Ajouter un élément au menu Outils
   FMenuItemMonPlugin := RegisterIDEMenuCommand(
@@ -137,13 +137,13 @@ begin
   );
 end;
 
-destructor TMonPlugin.Destroy;
+destructor TMonPlugin.Destroy;  
 begin
   // Nettoyage si nécessaire
   inherited Destroy;
 end;
 
-procedure TMonPlugin.ExecuteMonAction(Sender: TObject);
+procedure TMonPlugin.ExecuteMonAction(Sender: TObject);  
 begin
   ShowMessage('Mon premier plugin fonctionne !');
 end;
@@ -181,7 +181,7 @@ Options → IDE Integration :
 ### Ajouter un élément de menu
 
 ```pascal
-procedure AddMenuItem;
+procedure AddMenuItem;  
 var
   MenuItem: TIDEMenuCommand;
 begin
@@ -212,7 +212,7 @@ end;
 ```pascal
 uses ToolBarIntf, Graphics;
 
-procedure AddToolBarButton;
+procedure AddToolBarButton;  
 var
   ToolButton: TIDEButtonCommand;
   Bitmap: TBitmap;
@@ -273,7 +273,7 @@ procedure ShowMyPluginWindow;
 
 implementation
 
-procedure ShowMyPluginWindow;
+procedure ShowMyPluginWindow;  
 begin
   if MyPluginForm = nil then
   begin
@@ -290,7 +290,7 @@ begin
   MyPluginForm.Show;
 end;
 
-constructor TMyPluginForm.Create(AOwner: TComponent);
+constructor TMyPluginForm.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   Caption := 'Mon Plugin';
@@ -308,7 +308,7 @@ begin
   Button1.OnClick := @Button1Click;
 end;
 
-procedure TMyPluginForm.Button1Click(Sender: TObject);
+procedure TMyPluginForm.Button1Click(Sender: TObject);  
 begin
   Memo1.Lines.Add('Analyse en cours...');
   // Votre code d'analyse
@@ -324,7 +324,7 @@ end.
 ```pascal
 uses SrcEditorIntf;
 
-procedure AnalyzeCurrentSource;
+procedure AnalyzeCurrentSource;  
 var
   SourceEditor: TSourceEditorInterface;
   Source: string;
@@ -355,7 +355,7 @@ end;
 ### Modifier le code source
 
 ```pascal
-procedure InsertCodeAtCursor;
+procedure InsertCodeAtCursor;  
 var
   SourceEditor: TSourceEditorInterface;
   CodeToInsert: string;
@@ -377,7 +377,7 @@ end;
 ### Ajouter des marqueurs dans l'éditeur
 
 ```pascal
-procedure AddBookmark;
+procedure AddBookmark;  
 var
   SourceEditor: TSourceEditorInterface;
   Line: Integer;
@@ -402,7 +402,7 @@ end;
 ```pascal
 uses ProjectIntf, LazIDEIntf;
 
-procedure ShowProjectInfo;
+procedure ShowProjectInfo;  
 var
   Project: TLazProject;
   i: Integer;
@@ -432,7 +432,7 @@ end;
 ### Modifier les options du projet
 
 ```pascal
-procedure SetProjectOptions;
+procedure SetProjectOptions;  
 var
   Project: TLazProject;
 begin
@@ -493,7 +493,7 @@ procedure Register;
 
 implementation
 
-procedure Register;
+procedure Register;  
 begin
   RegisterNewItemCategory(TNewItemProject);
   RegisterProjectDescriptor(TMyFileWizard.Create);
@@ -501,12 +501,12 @@ end;
 
 { TMyFileWizard }
 
-function TMyFileWizard.GetLocalizedName: string;
+function TMyFileWizard.GetLocalizedName: string;  
 begin
   Result := 'Ma classe personnalisée';
 end;
 
-function TMyFileWizard.GetLocalizedDescription: string;
+function TMyFileWizard.GetLocalizedDescription: string;  
 begin
   Result := 'Crée une classe avec template personnalisé';
 end;
@@ -544,7 +544,7 @@ end;
 
 { TMyWizardForm }
 
-constructor TMyWizardForm.Create(AOwner: TComponent);
+constructor TMyWizardForm.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   Caption := 'Assistant nouvelle classe';
@@ -592,7 +592,7 @@ end.
 ```pascal
 uses CodeToolManager, CodeCache, CodeTree;
 
-procedure AnalyzePascalCode;
+procedure AnalyzePascalCode;  
 var
   Code: TCodeBuffer;
   Tool: TCodeTool;
@@ -629,7 +629,7 @@ end;
 ### Générer du code automatiquement
 
 ```pascal
-procedure GenerateProperty;
+procedure GenerateProperty;  
 var
   SourceEditor: TSourceEditorInterface;
   FieldName, PropName: string;
@@ -688,7 +688,7 @@ procedure Register;
 
 implementation
 
-procedure Register;
+procedure Register;  
 begin
   // Enregistrer l'éditeur pour un type spécifique
   RegisterPropertyEditor(
@@ -701,12 +701,12 @@ end;
 
 { TMyColorPropertyEditor }
 
-function TMyColorPropertyEditor.GetAttributes: TPropertyAttributes;
+function TMyColorPropertyEditor.GetAttributes: TPropertyAttributes;  
 begin
   Result := [paDialog, paRevertable];
 end;
 
-procedure TMyColorPropertyEditor.Edit;
+procedure TMyColorPropertyEditor.Edit;  
 var
   ColorDialog: TColorDialog;
 begin
@@ -720,12 +720,12 @@ begin
   end;
 end;
 
-function TMyColorPropertyEditor.GetValue: string;
+function TMyColorPropertyEditor.GetValue: string;  
 begin
   Result := ColorToString(GetOrdValue);
 end;
 
-procedure TMyColorPropertyEditor.SetValue(const AValue: string);
+procedure TMyColorPropertyEditor.SetValue(const AValue: string);  
 begin
   SetOrdValue(StringToColor(AValue));
 end;
@@ -752,7 +752,7 @@ type
     destructor Destroy; override;
   end;
 
-constructor TIDEEventHandler.Create;
+constructor TIDEEventHandler.Create;  
 begin
   // S'abonner aux événements
   LazarusIDE.AddHandlerOnProjectOpened(@OnProjectOpened);
@@ -761,7 +761,7 @@ begin
                                               @OnSourceEditorModified);
 end;
 
-destructor TIDEEventHandler.Destroy;
+destructor TIDEEventHandler.Destroy;  
 begin
   // Se désabonner
   LazarusIDE.RemoveHandlerOnProjectOpened(@OnProjectOpened);
@@ -783,7 +783,7 @@ begin
   ShowMessage('Projet fermé : ' + AProject.Title);
 end;
 
-procedure TIDEEventHandler.OnSourceEditorModified(Sender: TObject);
+procedure TIDEEventHandler.OnSourceEditorModified(Sender: TObject);  
 begin
   // Code modifié
   // Attention : appelé très souvent !
@@ -799,7 +799,7 @@ uses SysUtils, Classes;
 
 // Technique 1 : Messages de debug
 {$IFDEF DEBUG}
-procedure DebugLog(const Msg: string);
+procedure DebugLog(const Msg: string);  
 begin
   WriteLn('PLUGIN: ' + Msg);
   // Ou dans un fichier
@@ -846,22 +846,22 @@ type
 
 implementation
 
-procedure TTestMyPlugin.SetUp;
+procedure TTestMyPlugin.SetUp;  
 begin
   // Initialiser
 end;
 
-procedure TTestMyPlugin.TearDown;
+procedure TTestMyPlugin.TearDown;  
 begin
   // Nettoyer
 end;
 
-procedure TTestMyPlugin.TestMenuCreation;
+procedure TTestMyPlugin.TestMenuCreation;  
 begin
   AssertNotNull('Menu doit être créé', MonPlugin.FMenuItemMonPlugin);
 end;
 
-procedure TTestMyPlugin.TestActionExecution;
+procedure TTestMyPlugin.TestActionExecution;  
 begin
   // Tester l'action
   MonPlugin.ExecuteMonAction(nil);
@@ -941,22 +941,22 @@ Pour publier sur Online Package Manager :
 
 ### Anchor Docking
 ```
-Fonctionnalité : Fenêtres ancrables
-Complexité : Élevée
+Fonctionnalité : Fenêtres ancrables  
+Complexité : Élevée  
 Apprentissage : Gestion des fenêtres
 ```
 
 ### PascalScript
 ```
-Fonctionnalité : Scripting dans l'IDE
-Complexité : Moyenne
+Fonctionnalité : Scripting dans l'IDE  
+Complexité : Moyenne  
 Apprentissage : Intégration de scripting
 ```
 
 ### Editor Macro Script
 ```
-Fonctionnalité : Macros pour l'éditeur
-Complexité : Moyenne
+Fonctionnalité : Macros pour l'éditeur  
+Complexité : Moyenne  
 Apprentissage : Automatisation éditeur
 ```
 
@@ -976,7 +976,7 @@ MonPlugin/
 ### Gestion d'erreurs
 
 ```pascal
-procedure SafeExecute;
+procedure SafeExecute;  
 begin
   try
     // Code risqué
@@ -1002,7 +1002,7 @@ end;
 // Note : les procédures anonymes nécessitent le modeswitch suivant en mode ObjFPC :
 {$modeswitch anonymousfunctions}
 
-procedure HeavyOperation;
+procedure HeavyOperation;  
 begin
   // Utiliser un thread
   TThread.CreateAnonymousThread(

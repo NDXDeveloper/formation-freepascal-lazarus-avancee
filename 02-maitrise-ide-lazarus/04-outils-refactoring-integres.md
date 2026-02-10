@@ -51,7 +51,7 @@ C'est l'outil de refactoring le plus utilisé. Il permet de renommer :
 
 **Avant le refactoring :**
 ```pascal
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 var
   x: Integer;  // Nom peu clair
   y: string;   // Nom peu clair
@@ -90,7 +90,7 @@ end;
 
 **Après le refactoring :**
 ```pascal
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 var
   compteur: Integer;    // Nom clair !
   texteUtilisateur: string;  // Nom clair !
@@ -125,7 +125,7 @@ Vous avez un bloc de code qui fait une tâche spécifique ? Transformez-le en pr
 
 **Avant : Code dupliqué**
 ```pascal
-procedure TForm1.CalculerTaxes;
+procedure TForm1.CalculerTaxes;  
 begin
   // Calcul complexe répété
   Total := SousTotal * 1.15;
@@ -183,7 +183,7 @@ begin
     Result := Result * 0.90;
 end;
 
-procedure TForm1.CalculerTaxes;
+procedure TForm1.CalculerTaxes;  
 begin
   Total := CalculerMontantFinal(SousTotal, ClientVIP, CodePromo);
   Label1.Caption := FormatFloat('0.00', Total);
@@ -233,17 +233,17 @@ type
 ```pascal
 { TPersonne }
 
-constructor TPersonne.Create(const ANom: string; AAge: Integer);
+constructor TPersonne.Create(const ANom: string; AAge: Integer);  
 begin
 
 end;
 
-procedure TPersonne.Afficher;
+procedure TPersonne.Afficher;  
 begin
 
 end;
 
-function TPersonne.EstMajeur: Boolean;
+function TPersonne.EstMajeur: Boolean;  
 begin
 
 end;
@@ -278,13 +278,13 @@ type
 
 implementation
 
-procedure TPersonne.SetAge(AValue: Integer);
+procedure TPersonne.SetAge(AValue: Integer);  
 begin
   if FAge = AValue then Exit;
   FAge := AValue;
 end;
 
-procedure TPersonne.SetNom(AValue: string);
+procedure TPersonne.SetNom(AValue: string);  
 begin
   if FNom = AValue then Exit;
   FNom := AValue;
@@ -297,7 +297,7 @@ end;
 
 Si vous écrivez d'abord l'implémentation :
 ```pascal
-procedure TForm1.NouvelleMethode;
+procedure TForm1.NouvelleMethode;  
 begin
   ShowMessage('Hello');
 end;
@@ -311,7 +311,7 @@ end;
 
 **Situation :** Vous utilisez une variable non déclarée :
 ```pascal
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 begin
   i := 0;  // 'i' n'est pas déclaré !
   for i := 0 to 10 do
@@ -340,7 +340,7 @@ end;
 
 **Résultat :**
 ```pascal
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 var
   i: Integer;  // Ajouté automatiquement !
 begin
@@ -354,7 +354,7 @@ end;
 
 **Vous appelez une procédure inexistante :**
 ```pascal
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 begin
   AfficherResultat(42, 'Test');  // N'existe pas encore
 end;
@@ -362,7 +362,7 @@ end;
 
 **Ctrl+Shift+D propose de créer :**
 ```pascal
-procedure TForm1.AfficherResultat(AValue: Integer; AText: string);
+procedure TForm1.AfficherResultat(AValue: Integer; AText: string);  
 begin
   // TODO: Implémenter AfficherResultat
 end;
@@ -374,7 +374,7 @@ end;
 
 **Problème :** Vous utilisez `TStringList` mais `Classes` n'est pas dans uses :
 ```pascal
-procedure TForm1.Test;
+procedure TForm1.Test;  
 var
   List: TStringList;  // Erreur : TStringList non trouvé
 begin
@@ -434,17 +434,17 @@ Lazarus peut reformater tout votre code selon des règles prédéfinies :
 
 **Avant formatage :**
 ```pascal
-procedure TForm1.Test;
-var
-i,j:Integer;
-s:string;
-begin
-if True then begin
+procedure TForm1.Test;  
+var  
+i,j:Integer;  
+s:string;  
+begin  
+if True then begin  
 ShowMessage('Test');
         for i:=0 to 10 do begin
     j:=i*2;
-s:=IntToStr(j);
-Memo1.Lines.Add(s);
+s:=IntToStr(j);  
+Memo1.Lines.Add(s);  
 end;
     end;
 end;
@@ -452,7 +452,7 @@ end;
 
 **Après formatage (Ctrl+D) :**
 ```pascal
-procedure TForm1.Test;
+procedure TForm1.Test;  
 var
   i, j: Integer;
   s: string;
@@ -598,23 +598,23 @@ type
 
 **Ctrl+Shift+C génère :**
 ```pascal
-function TProduit.GetPrix: Double;
+function TProduit.GetPrix: Double;  
 begin
   Result := FPrix;
 end;
 
-procedure TProduit.SetPrix(AValue: Double);
+procedure TProduit.SetPrix(AValue: Double);  
 begin
   if FPrix = AValue then Exit;
   FPrix := AValue;
 end;
 
-function TProduit.GetQuantite: Integer;
+function TProduit.GetQuantite: Integer;  
 begin
   Result := FQuantite;
 end;
 
-procedure TProduit.SetQuantite(AValue: Integer);
+procedure TProduit.SetQuantite(AValue: Integer);  
 begin
   if FQuantite = AValue then Exit;
   FQuantite := AValue;
@@ -676,7 +676,7 @@ Si vous modifiez une déclaration de méthode, **Ctrl+Shift+S** synchronise avec
 procedure MaMethode(NouveauParam: string);
 
 // L'implémentation est automatiquement mise à jour
-procedure TForm1.MaMethode(NouveauParam: string);
+procedure TForm1.MaMethode(NouveauParam: string);  
 begin
   // Code existant préservé
 end;
@@ -769,7 +769,7 @@ Avant de refactoriser :
 
 **Avant : Procédure globale**
 ```pascal
-procedure CalculerTVA(Montant: Double; var Resultat: Double);
+procedure CalculerTVA(Montant: Double; var Resultat: Double);  
 begin
   Resultat := Montant * 1.20;
 end;
@@ -790,7 +790,7 @@ type
     class function CalculerTVA(Montant: Double): Double;
   end;
 
-class function TCalculateur.CalculerTVA(Montant: Double): Double;
+class function TCalculateur.CalculerTVA(Montant: Double): Double;  
 begin
   Result := Montant * 1.20;
 end;

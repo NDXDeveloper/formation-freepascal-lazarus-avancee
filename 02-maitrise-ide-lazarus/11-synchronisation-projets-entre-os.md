@@ -60,15 +60,15 @@ ConfigFile := GetAppConfigDir(False) + 'config.ini';
 
 **2. Fins de ligne mixtes**
 ```
-Symptôme : Git affiche des modifications partout
-Cause : Mélange CRLF/LF
+Symptôme : Git affiche des modifications partout  
+Cause : Mélange CRLF/LF  
 Solution : Configuration Git et .gitattributes
 ```
 
 **3. Dépendances système**
 ```
-Windows : Besoin de DLLs spécifiques
-Linux : Packages système requis
+Windows : Besoin de DLLs spécifiques  
+Linux : Packages système requis  
 macOS : Frameworks nécessaires
 ```
 
@@ -121,7 +121,7 @@ MonProjetPortable/
 *.rsj
 *.lps
 *.bak*
-backup/
+backup/  
 lib/
 
 # === Executables ===
@@ -134,7 +134,7 @@ bin/
 
 # === OS Specific ===
 # Windows
-Thumbs.db
+Thumbs.db  
 Desktop.ini
 *.lnk
 
@@ -239,7 +239,7 @@ uses
 
 { TCrossPlatformHelper }
 
-class function TCrossPlatformHelper.GetPlatformName: string;
+class function TCrossPlatformHelper.GetPlatformName: string;  
 begin
   {$IFDEF WINDOWS}
     {$IFDEF WIN32}
@@ -262,7 +262,7 @@ begin
   {$ENDIF}
 end;
 
-class function TCrossPlatformHelper.GetHomeDirectory: string;
+class function TCrossPlatformHelper.GetHomeDirectory: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('USERPROFILE');
@@ -273,12 +273,12 @@ begin
   Result := IncludeTrailingPathDelimiter(Result);
 end;
 
-class function TCrossPlatformHelper.GetTempDirectory: string;
+class function TCrossPlatformHelper.GetTempDirectory: string;  
 begin
   Result := GetTempDir;  // Lazarus fonction portable
 end;
 
-class function TCrossPlatformHelper.GetAppDataDirectory: string;
+class function TCrossPlatformHelper.GetAppDataDirectory: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('APPDATA');
@@ -299,7 +299,7 @@ begin
     CreateDir(Result);
 end;
 
-class function TCrossPlatformHelper.ExecuteCommand(const ACommand: string): Boolean;
+class function TCrossPlatformHelper.ExecuteCommand(const ACommand: string): Boolean;  
 begin
   {$IFDEF WINDOWS}
   Result := ShellExecute(0, 'open', PChar(ACommand), nil, nil, SW_SHOW) > 32;
@@ -310,7 +310,7 @@ begin
   {$ENDIF}
 end;
 
-class function TCrossPlatformHelper.OpenURL(const AURL: string): Boolean;
+class function TCrossPlatformHelper.OpenURL(const AURL: string): Boolean;  
 begin
   {$IFDEF WINDOWS}
   Result := ShellExecute(0, 'open', PChar(AURL), nil, nil, SW_SHOW) > 32;
@@ -325,7 +325,7 @@ begin
   {$ENDIF}
 end;
 
-class function TCrossPlatformHelper.GetSystemInfo: string;
+class function TCrossPlatformHelper.GetSystemInfo: string;  
 begin
   Result := 'Platform: ' + GetPlatformName + LineEnding;
   Result := Result + 'Home: ' + GetHomeDirectory + LineEnding;
@@ -381,7 +381,7 @@ implementation
 
 { TPathHelper }
 
-class function TPathHelper.NormalizePath(const APath: string): string;
+class function TPathHelper.NormalizePath(const APath: string): string;  
 begin
   Result := APath;
 
@@ -396,7 +396,7 @@ begin
   Result := StringReplace(Result, PathDelim + PathDelim, PathDelim, [rfReplaceAll]);
 end;
 
-class function TPathHelper.BuildPath(const Parts: array of string): string;
+class function TPathHelper.BuildPath(const Parts: array of string): string;  
 var
   i: Integer;
 begin
@@ -413,12 +413,12 @@ begin
   Result := NormalizePath(Result);
 end;
 
-class function TPathHelper.GetExecutablePath: string;
+class function TPathHelper.GetExecutablePath: string;  
 begin
   Result := ExtractFilePath(ParamStr(0));
 end;
 
-class function TPathHelper.GetConfigPath: string;
+class function TPathHelper.GetConfigPath: string;  
 begin
   // Utiliser la fonction Lazarus portable
   Result := GetAppConfigDir(False);
@@ -427,7 +427,7 @@ begin
     CreateDir(Result);
 end;
 
-class function TPathHelper.GetDataPath: string;
+class function TPathHelper.GetDataPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetExecutablePath + 'data' + PathDelim;
@@ -440,7 +440,7 @@ begin
   {$ENDIF}
 end;
 
-class function TPathHelper.GetLogPath: string;
+class function TPathHelper.GetLogPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetConfigPath + 'logs' + PathDelim;
@@ -456,7 +456,7 @@ begin
     CreateDir(Result);
 end;
 
-class function TPathHelper.IsAbsolutePath(const APath: string): Boolean;
+class function TPathHelper.IsAbsolutePath(const APath: string): Boolean;  
 begin
   {$IFDEF WINDOWS}
   // Windows : C:\ ou \\server\
@@ -468,7 +468,7 @@ begin
   {$ENDIF}
 end;
 
-class function TPathHelper.MakeRelativePath(const APath, ABase: string): string;
+class function TPathHelper.MakeRelativePath(const APath, ABase: string): string;  
 begin
   Result := CreateRelativePath(APath, ABase);
 end;
@@ -484,7 +484,7 @@ end.
 
 ```bash
 # Configuration pour tous les OS
-git config --global core.autocrlf input  # Linux/macOS
+git config --global core.autocrlf input  # Linux/macOS  
 git config --global core.autocrlf true   # Windows
 
 # Ignorer les changements de permissions (Linux/macOS)
@@ -515,7 +515,7 @@ if git diff --cached --name-only | xargs -I {} file {} | grep CRLF; then
 fi
 
 # Vérifier les fichiers sensibles à la casse
-FILES=$(git diff --cached --name-only)
+FILES=$(git diff --cached --name-only)  
 for f in $FILES; do
     LOWER=$(echo "$f" | tr '[:upper:]' '[:lower:]')
     if [ "$f" != "$LOWER" ]; then
@@ -537,11 +537,11 @@ echo "✅ Vérifications passées"
 
 # Script de synchronisation multi-OS
 
-PROJECT_NAME="MonProjet"
-REMOTE="origin"
+PROJECT_NAME="MonProjet"  
+REMOTE="origin"  
 BRANCH=$(git branch --show-current)
 
-echo "=== Synchronisation du projet $PROJECT_NAME ==="
+echo "=== Synchronisation du projet $PROJECT_NAME ==="  
 echo "Branche : $BRANCH"
 
 # Fonction pour détecter l'OS
@@ -557,15 +557,15 @@ detect_os() {
     fi
 }
 
-OS=$(detect_os)
+OS=$(detect_os)  
 echo "OS détecté : $OS"
 
 # Sauvegarder les modifications locales
-echo "Sauvegarde des modifications locales..."
+echo "Sauvegarde des modifications locales..."  
 git stash push -m "Auto-stash before sync $(date +%Y%m%d-%H%M%S)"
 
 # Récupérer les dernières modifications
-echo "Récupération des modifications distantes..."
+echo "Récupération des modifications distantes..."  
 git fetch $REMOTE
 
 # Fusionner ou rebaser
@@ -584,7 +584,7 @@ if git stash list | grep -q "Auto-stash before sync"; then
 fi
 
 # Nettoyer les fichiers spécifiques à l'OS
-echo "Nettoyage des fichiers temporaires..."
+echo "Nettoyage des fichiers temporaires..."  
 case $OS in
     windows)
         find . -name "*.exe" -o -name "*.dll" | xargs rm -f
@@ -598,7 +598,7 @@ case $OS in
 esac
 
 # Recompiler pour l'OS actuel
-echo "Recompilation pour $OS..."
+echo "Recompilation pour $OS..."  
 case $OS in
     windows)
         lazbuild.exe --build-mode=Debug $PROJECT_NAME.lpi
@@ -643,20 +643,20 @@ Script de création de VM : `create_dev_vms.sh`
 # Créer des VMs de développement
 
 # VM Ubuntu
-VBoxManage createvm --name "Ubuntu-Dev" --ostype Ubuntu_64 --register
-VBoxManage modifyvm "Ubuntu-Dev" --memory 4096 --cpus 2
-VBoxManage createhd --filename "Ubuntu-Dev.vdi" --size 30000
-VBoxManage storagectl "Ubuntu-Dev" --name "SATA" --add sata --controller IntelAhci
+VBoxManage createvm --name "Ubuntu-Dev" --ostype Ubuntu_64 --register  
+VBoxManage modifyvm "Ubuntu-Dev" --memory 4096 --cpus 2  
+VBoxManage createhd --filename "Ubuntu-Dev.vdi" --size 30000  
+VBoxManage storagectl "Ubuntu-Dev" --name "SATA" --add sata --controller IntelAhci  
 VBoxManage storageattach "Ubuntu-Dev" --storagectl "SATA" --port 0 --device 0 --type hdd --medium "Ubuntu-Dev.vdi"
 
 # Dossier partagé
 VBoxManage sharedfolder add "Ubuntu-Dev" --name "projects" --hostpath "$(pwd)" --automount
 
 # VM Windows
-VBoxManage createvm --name "Windows-Dev" --ostype Windows10_64 --register
-VBoxManage modifyvm "Windows-Dev" --memory 4096 --cpus 2
-VBoxManage createhd --filename "Windows-Dev.vdi" --size 40000
-VBoxManage storagectl "Windows-Dev" --name "SATA" --add sata --controller IntelAhci
+VBoxManage createvm --name "Windows-Dev" --ostype Windows10_64 --register  
+VBoxManage modifyvm "Windows-Dev" --memory 4096 --cpus 2  
+VBoxManage createhd --filename "Windows-Dev.vdi" --size 40000  
+VBoxManage storagectl "Windows-Dev" --name "SATA" --add sata --controller IntelAhci  
 VBoxManage storageattach "Windows-Dev" --storagectl "SATA" --port 0 --device 0 --type hdd --medium "Windows-Dev.vdi"
 
 # Dossier partagé
@@ -683,15 +683,15 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Créer utilisateur de développement
-RUN useradd -m -s /bin/bash developer
-USER developer
+RUN useradd -m -s /bin/bash developer  
+USER developer  
 WORKDIR /home/developer
 
 # Copier le projet
 COPY --chown=developer:developer . /home/developer/project
 
 # Compiler
-WORKDIR /home/developer/project
+WORKDIR /home/developer/project  
 RUN lazbuild --build-mode=Release MonProjet.lpi
 
 CMD ["./bin/linux/MonProjet"]
@@ -745,13 +745,13 @@ wsl --install -d Ubuntu-22.04
 # Configurer la mémoire
 @"
 [wsl2]
-memory=8GB
-processors=4
+memory=8GB  
+processors=4  
 localhostForwarding=true
 "@ | Out-File -FilePath "$env:USERPROFILE\.wslconfig" -Encoding ASCII
 
 # Redémarrer WSL
-wsl --shutdown
+wsl --shutdown  
 wsl
 ```
 
@@ -767,7 +767,7 @@ $WSLPath = "/mnt/c/Projects/MonProjet"
 Write-Host "=== Synchronisation Windows <-> WSL ===" -ForegroundColor Green
 
 # Compiler sur Windows
-Write-Host "Compilation Windows..." -ForegroundColor Yellow
+Write-Host "Compilation Windows..." -ForegroundColor Yellow  
 Set-Location $ProjectPath
 & lazbuild.exe --build-mode=Release MonProjet.lpi
 
@@ -779,7 +779,7 @@ if ($LASTEXITCODE -eq 0) {
 }
 
 # Compiler sur WSL
-Write-Host "Compilation Linux (WSL)..." -ForegroundColor Yellow
+Write-Host "Compilation Linux (WSL)..." -ForegroundColor Yellow  
 wsl bash -c "cd $WSLPath && lazbuild --build-mode=Release MonProjet.lpi"
 
 if ($LASTEXITCODE -eq 0) {
@@ -840,17 +840,17 @@ uses
 
 { TCrossPlatformTests }
 
-procedure TCrossPlatformTests.SetUp;
+procedure TCrossPlatformTests.SetUp;  
 begin
   // Préparation pour chaque test
 end;
 
-procedure TCrossPlatformTests.TearDown;
+procedure TCrossPlatformTests.TearDown;  
 begin
   // Nettoyage après chaque test
 end;
 
-procedure TCrossPlatformTests.TestPathHandling;
+procedure TCrossPlatformTests.TestPathHandling;  
 var
   TestPath: string;
   Expected: string;
@@ -885,7 +885,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TCrossPlatformTests.TestFileOperations;
+procedure TCrossPlatformTests.TestFileOperations;  
 var
   TestFile: string;
   TestContent: TStringList;
@@ -915,7 +915,7 @@ begin
   end;
 end;
 
-procedure TCrossPlatformTests.TestConfigStorage;
+procedure TCrossPlatformTests.TestConfigStorage;  
 var
   ConfigPath: string;
   ConfigFile: string;
@@ -941,7 +941,7 @@ begin
   end;
 end;
 
-procedure TCrossPlatformTests.TestPlatformSpecific;
+procedure TCrossPlatformTests.TestPlatformSpecific;  
 begin
   // Test de détection de plateforme
   {$IFDEF WINDOWS}
@@ -966,7 +966,7 @@ begin
              DirectoryExists(TCrossPlatformHelper.GetTempDirectory));
 end;
 
-procedure TCrossPlatformTests.TestSystemCalls;
+procedure TCrossPlatformTests.TestSystemCalls;  
 var
   Success: Boolean;
 begin
@@ -980,7 +980,7 @@ begin
   AssertTrue('Command execution', Success);
 end;
 
-procedure TCrossPlatformTests.TestGUIComponents;
+procedure TCrossPlatformTests.TestGUIComponents;  
 begin
   // Tests spécifiques aux composants GUI selon l'OS
   {$IFDEF WINDOWS}
@@ -1012,13 +1012,13 @@ end.
 
 # Script pour exécuter les tests sur toutes les plateformes
 
-PROJECT="MonProjet"
-TEST_RESULTS_DIR="test_results"
+PROJECT="MonProjet"  
+TEST_RESULTS_DIR="test_results"  
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 
 mkdir -p $TEST_RESULTS_DIR
 
-echo "=== Tests Multi-Plateformes ==="
+echo "=== Tests Multi-Plateformes ==="  
 echo "Timestamp: $TIMESTAMP"
 
 # Fonction pour exécuter les tests
@@ -1071,7 +1071,7 @@ if VBoxManage list runningvms | grep -q "Ubuntu-Dev"; then
 fi
 
 # Générer le rapport consolidé
-echo ""
+echo ""  
 echo "=== Génération du rapport consolidé ==="
 
 cat > "$TEST_RESULTS_DIR/summary_${TIMESTAMP}.html" << EOF
@@ -1331,8 +1331,8 @@ sync:results:
 
 # Synchronisation bidirectionnelle avec rsync
 
-SOURCE_DIR="."
-REMOTE_HOST="dev-server"
+SOURCE_DIR="."  
+REMOTE_HOST="dev-server"  
 REMOTE_DIR="/home/developer/projects/MonProjet"
 
 # Exclusions communes
@@ -1341,17 +1341,17 @@ EXCLUDES="--exclude=*.ppu --exclude=*.o --exclude=*.exe --exclude=*.so --exclude
 echo "=== Synchronisation avec rsync ==="
 
 # Synchroniser vers le serveur
-echo "Upload des modifications..."
+echo "Upload des modifications..."  
 rsync -avz --delete $EXCLUDES \
     "$SOURCE_DIR/" \
     "$REMOTE_HOST:$REMOTE_DIR/"
 
 # Compiler sur le serveur
-echo "Compilation distante..."
+echo "Compilation distante..."  
 ssh $REMOTE_HOST "cd $REMOTE_DIR && lazbuild --build-mode=Release MonProjet.lpi"
 
 # Récupérer les binaires
-echo "Récupération des binaires..."
+echo "Récupération des binaires..."  
 rsync -avz \
     "$REMOTE_HOST:$REMOTE_DIR/bin/" \
     "$SOURCE_DIR/bin/"
@@ -1398,15 +1398,15 @@ echo "=== Synchronisation terminée ==="
 
 # Synchronisation avec stockage cloud
 
-REMOTE="gdrive"  # ou dropbox, onedrive, etc.
-PROJECT_DIR="MonProjet"
-LOCAL_PATH="."
+REMOTE="gdrive"  # ou dropbox, onedrive, etc.  
+PROJECT_DIR="MonProjet"  
+LOCAL_PATH="."  
 REMOTE_PATH="$REMOTE:Development/$PROJECT_DIR"
 
 echo "=== Synchronisation Cloud avec rclone ==="
 
 # Synchronisation bidirectionnelle
-echo "Synchronisation bidirectionnelle..."
+echo "Synchronisation bidirectionnelle..."  
 rclone bisync "$LOCAL_PATH" "$REMOTE_PATH" \
     --exclude "*.ppu" \
     --exclude "*.o" \
@@ -1418,7 +1418,7 @@ rclone bisync "$LOCAL_PATH" "$REMOTE_PATH" \
     --verbose
 
 # Backup des binaires compilés
-echo "Backup des binaires..."
+echo "Backup des binaires..."  
 for platform in windows linux macos; do
     if [ -d "bin/$platform" ]; then
         rclone copy "bin/$platform" "$REMOTE_PATH/releases/$(date +%Y%m%d)/$platform"
@@ -1478,7 +1478,7 @@ uses
 
 { TConfigManager }
 
-constructor TConfigManager.Create;
+constructor TConfigManager.Create;  
 begin
   FConfigPath := GetAppConfigDir(False);
   ForceDirectories(FConfigPath);
@@ -1486,49 +1486,49 @@ begin
   LoadOSSpecificConfig;
 end;
 
-destructor TConfigManager.Destroy;
+destructor TConfigManager.Destroy;  
 begin
   SaveOSSpecificConfig;
   FIniFile.Free;
   inherited Destroy;
 end;
 
-function TConfigManager.GetConfigFileName: string;
+function TConfigManager.GetConfigFileName: string;  
 begin
   Result := FConfigPath + 'config.ini';
 end;
 
-procedure TConfigManager.SetValue(const Section, Key, Value: string);
+procedure TConfigManager.SetValue(const Section, Key, Value: string);  
 begin
   FIniFile.WriteString(Section, Key, Value);
 end;
 
-function TConfigManager.GetValue(const Section, Key, Default: string): string;
+function TConfigManager.GetValue(const Section, Key, Default: string): string;  
 begin
   Result := FIniFile.ReadString(Section, Key, Default);
 end;
 
-procedure TConfigManager.SetIntValue(const Section, Key: string; Value: Integer);
+procedure TConfigManager.SetIntValue(const Section, Key: string; Value: Integer);  
 begin
   FIniFile.WriteInteger(Section, Key, Value);
 end;
 
-function TConfigManager.GetIntValue(const Section, Key: string; Default: Integer): Integer;
+function TConfigManager.GetIntValue(const Section, Key: string; Default: Integer): Integer;  
 begin
   Result := FIniFile.ReadInteger(Section, Key, Default);
 end;
 
-procedure TConfigManager.SetBoolValue(const Section, Key: string; Value: Boolean);
+procedure TConfigManager.SetBoolValue(const Section, Key: string; Value: Boolean);  
 begin
   FIniFile.WriteBool(Section, Key, Value);
 end;
 
-function TConfigManager.GetBoolValue(const Section, Key: string; Default: Boolean): Boolean;
+function TConfigManager.GetBoolValue(const Section, Key: string; Default: Boolean): Boolean;  
 begin
   Result := FIniFile.ReadBool(Section, Key, Default);
 end;
 
-procedure TConfigManager.LoadOSSpecificConfig;
+procedure TConfigManager.LoadOSSpecificConfig;  
 var
   OSSection: string;
 begin
@@ -1553,7 +1553,7 @@ begin
   end;
 end;
 
-procedure TConfigManager.SaveOSSpecificConfig;
+procedure TConfigManager.SaveOSSpecificConfig;  
 var
   OSSection: string;
 begin
@@ -1572,7 +1572,7 @@ begin
   SetValue(OSSection, 'Version', {$I %FPCVERSION%});
 end;
 
-procedure TConfigManager.ExportToJSON(const FileName: string);
+procedure TConfigManager.ExportToJSON(const FileName: string);  
 var
   JSONObject: TJSONObject;
   Sections: TStringList;
@@ -1614,7 +1614,7 @@ begin
   end;
 end;
 
-procedure TConfigManager.ImportFromJSON(const FileName: string);
+procedure TConfigManager.ImportFromJSON(const FileName: string);  
 var
   JSONData: TJSONData;
   JSONObject: TJSONObject;
@@ -1741,8 +1741,8 @@ brew install monprojet
 
 ### Clone et Build
 ```bash
-git clone https://github.com/user/monprojet
-cd monprojet
+git clone https://github.com/user/monprojet  
+cd monprojet  
 lazbuild --build-mode=Release MonProjet.lpi
 ```
 

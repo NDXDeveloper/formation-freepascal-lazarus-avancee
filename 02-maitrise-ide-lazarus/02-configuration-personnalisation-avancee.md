@@ -225,11 +225,11 @@ Chaque élément du langage peut avoir sa propre couleur :
 ```
 Élément          | Texte    | Fond     | Gras | Italique
 -----------------|----------|----------|------|----------
-Mots réservés    | #569CD6  | -        | ✓    | ✗
-Chaînes          | #CE9178  | -        | ✗    | ✗
-Nombres          | #B5CEA8  | -        | ✗    | ✗
-Commentaires     | #6A9955  | -        | ✗    | ✓
-Directives       | #C586C0  | -        | ✗    | ✗
+Mots réservés    | #569CD6  | -        | ✓    | ✗  
+Chaînes          | #CE9178  | -        | ✗    | ✗  
+Nombres          | #B5CEA8  | -        | ✗    | ✗  
+Commentaires     | #6A9955  | -        | ✗    | ✓  
+Directives       | #C586C0  | -        | ✗    | ✗  
 Symboles         | #D4D4D4  | -        | ✗    | ✗
 ```
 
@@ -262,7 +262,7 @@ Déclenchement :
 
 ```pascal
 // Tapez "forb" puis Ctrl+J génère :
-for i := 0 to List.Count - 1 do
+for i := 0 to List.Count - 1 do  
 begin
   |
 end;
@@ -298,8 +298,8 @@ Recherche : [Compiler]
 
 Commande                    | Raccourci 1  | Raccourci 2
 ---------------------------|--------------|-------------
-Compiler                   | Ctrl+F9      | -
-Compiler et Exécuter       | F9           | Shift+F9
+Compiler                   | Ctrl+F9      | -  
+Compiler et Exécuter       | F9           | Shift+F9  
 Construction rapide        | Shift+F9     | -
 ```
 
@@ -319,8 +319,8 @@ Simple clic :
 
 #### Double-clic et triple-clic
 ```
-Double-clic : [Sélectionner le mot]
-Triple-clic : [Sélectionner la ligne]
+Double-clic : [Sélectionner le mot]  
+Triple-clic : [Sélectionner la ligne]  
 Quadruple-clic : [Sélectionner le paragraphe]
 ```
 
@@ -381,7 +381,7 @@ Chemin GDB : [C:\lazarus\mingw\x86_64-win64\bin\gdb.exe]
 
 #### Linux
 ```
-Type de débogueur : [GDB          ▼]
+Type de débogueur : [GDB          ▼]  
 Chemin GDB : [/usr/bin/gdb]
 ```
 
@@ -448,13 +448,13 @@ Lazarus permet plusieurs configurations via `--primary-config-path` :
 
 #### Windows (raccourci)
 ```batch
-lazarus.exe --primary-config-path=C:\lazarus-profiles\web
+lazarus.exe --primary-config-path=C:\lazarus-profiles\web  
 lazarus.exe --primary-config-path=C:\lazarus-profiles\mobile
 ```
 
 #### Linux (alias bash)
 ```bash
-alias lazarus-web='lazarus --primary-config-path=~/.lazarus-web'
+alias lazarus-web='lazarus --primary-config-path=~/.lazarus-web'  
 alias lazarus-mobile='lazarus --primary-config-path=~/.lazarus-mobile'
 ```
 
@@ -508,16 +508,16 @@ Profil "Embedded/IoT" :
 #### Windows (batch)
 ```batch
 @echo off
-set BACKUP_DIR=D:\LazarusBackup\%DATE:/=-%
-xcopy "%LOCALAPPDATA%\lazarus" "%BACKUP_DIR%" /E /I /Y
+set BACKUP_DIR=D:\LazarusBackup\%DATE:/=-%  
+xcopy "%LOCALAPPDATA%\lazarus" "%BACKUP_DIR%" /E /I /Y  
 echo Configuration sauvegardée dans %BACKUP_DIR%
 ```
 
 #### Linux (bash)
 ```bash
 #!/bin/bash
-BACKUP_DIR=~/LazarusBackup/$(date +%Y%m%d)
-cp -r ~/.lazarus "$BACKUP_DIR"
+BACKUP_DIR=~/LazarusBackup/$(date +%Y%m%d)  
+cp -r ~/.lazarus "$BACKUP_DIR"  
 echo "Configuration sauvegardée dans $BACKUP_DIR"
 ```
 

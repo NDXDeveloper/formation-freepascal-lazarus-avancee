@@ -87,11 +87,11 @@ git --version
 
 ```bash
 # Installation
-sudo apt update
+sudo apt update  
 sudo apt install git
 
 # Configuration globale
-git config --global user.name "Votre Nom"
+git config --global user.name "Votre Nom"  
 git config --global user.email "vous@email.com"
 
 # Vérification
@@ -187,7 +187,7 @@ cat > .gitignore << 'EOF'
 *.rsj
 *.lps
 *.bak*
-backup/
+backup/  
 lib/
 *.exe
 *.dll
@@ -199,9 +199,9 @@ lib/
 *.session
 
 # Dossiers de build
-bin/
-build/
-debug/
+bin/  
+build/  
+debug/  
 release/
 
 # IDE
@@ -210,7 +210,7 @@ release/
 EOF
 
 # Premier commit
-git add .
+git add .  
 git commit -m "Initial commit - Projet Lazarus"
 ```
 
@@ -383,7 +383,7 @@ Quand Git ne peut pas fusionner automatiquement :
 
 ```pascal
 // Fichier avec conflit
-procedure Calculate;
+procedure Calculate;  
 begin
 <<<<<<< HEAD
   Result := OldMethod;
@@ -467,14 +467,14 @@ backup/
 *.session
 
 # Dossiers de compilation
-lib/
-units/
-bin/
+lib/  
+units/  
+bin/  
 build/
 
 # === OS Specific ===
 # Windows
-Thumbs.db
+Thumbs.db  
 Desktop.ini
 
 # macOS
@@ -496,7 +496,7 @@ Desktop.ini
 ```
 Type: Description courte (max 50 caractères)
 
-Description détaillée si nécessaire.
+Description détaillée si nécessaire.  
 Expliquez POURQUOI, pas comment.
 
 Fixes #123  // Référence au ticket
@@ -504,13 +504,13 @@ Fixes #123  // Référence au ticket
 
 **Types de commits :**
 ```
-feat:     Nouvelle fonctionnalité
-fix:      Correction de bug
-docs:     Documentation
-style:    Formatage (pas de changement de code)
-refactor: Refactoring du code
-test:     Ajout de tests
-chore:    Maintenance, config
+feat:     Nouvelle fonctionnalité  
+fix:      Correction de bug  
+docs:     Documentation  
+style:    Formatage (pas de changement de code)  
+refactor: Refactoring du code  
+test:     Ajout de tests  
+chore:    Maintenance, config  
 perf:     Amélioration des performances
 ```
 
@@ -539,7 +539,7 @@ ssh-keygen -t ed25519 -C "votre@email.com"
 ssh-add ~/.ssh/id_ed25519
 
 # Linux : Démarrer l'agent si nécessaire
-eval "$(ssh-agent -s)"
+eval "$(ssh-agent -s)"  
 ssh-add ~/.ssh/id_ed25519
 
 # Copier la clé publique
@@ -662,7 +662,7 @@ Créez `.git/hooks/pre-commit` :
 #!/bin/bash
 # Compile le projet avant commit
 
-echo "Compilation du projet..."
+echo "Compilation du projet..."  
 lazbuild projet.lpi
 
 if [ $? -ne 0 ]; then
@@ -686,7 +686,7 @@ chmod +x .git/hooks/pre-commit
 #!/bin/bash
 # Formater les fichiers Pascal
 
-for file in $(git diff --cached --name-only | grep "\.pas$")
+for file in $(git diff --cached --name-only | grep "\.pas$")  
 do
     echo "Formatage de $file"
     ptop -c ptop.cfg "$file" "$file.tmp"
@@ -761,8 +761,8 @@ Solution :
 
 ```bash
 # Configurer Git LFS pour gros fichiers
-git lfs track "*.exe"
-git lfs track "*.dll"
+git lfs track "*.exe"  
+git lfs track "*.dll"  
 git lfs track "resources/*.png"
 ```
 
@@ -770,7 +770,7 @@ git lfs track "resources/*.png"
 
 ```bash
 # Configuration globale
-git config --global core.autocrlf true  # Windows
+git config --global core.autocrlf true  # Windows  
 git config --global core.autocrlf input # Linux/Mac
 
 # Dans le projet (.gitattributes)
@@ -801,14 +801,14 @@ git config --global core.autocrlf input # Linux/Mac
 @echo off
 echo === Backup Git du projet ===
 
-REM Sauvegarder les modifications
-git add .
+REM Sauvegarder les modifications  
+git add .  
 git commit -m "Backup automatique %date% %time%"
 
-REM Pousser vers le serveur
+REM Pousser vers le serveur  
 git push origin main
 
-echo Backup terminé !
+echo Backup terminé !  
 pause
 ```
 

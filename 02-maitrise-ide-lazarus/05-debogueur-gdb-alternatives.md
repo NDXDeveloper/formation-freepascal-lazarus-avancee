@@ -181,7 +181,7 @@ Une fois arrêté, vous pouvez contrôler l'exécution :
 - **Run to Cursor (F4)** : Continue jusqu'au curseur
 
 ```pascal
-procedure Principal;
+procedure Principal;  
 begin
   Initialiser;      // F8 : exécute sans entrer
   x := Calculer(5); // F7 : entre dans Calculer
@@ -220,9 +220,9 @@ Lazarus offre plusieurs modes selon vos besoins :
 
 Configuration par défaut pour le développement :
 ```
-Optimisation : Aucune (-O0)
-Symboles : Complets (-g)
-Assertions : Activées (-Sa)
+Optimisation : Aucune (-O0)  
+Symboles : Complets (-g)  
+Assertions : Activées (-Sa)  
 Vérifications : Toutes activées (-Cr -Co -Ct)
 ```
 
@@ -230,9 +230,9 @@ Vérifications : Toutes activées (-Cr -Co -Ct)
 
 Pour déboguer en conditions réelles :
 ```
-Optimisation : Niveau 2 (-O2)
-Symboles : Externes (-Xg)
-Assertions : Désactivées
+Optimisation : Niveau 2 (-O2)  
+Symboles : Externes (-Xg)  
+Assertions : Désactivées  
 Vérifications : Désactivées
 ```
 
@@ -240,8 +240,8 @@ Vérifications : Désactivées
 
 Pour analyser les performances :
 ```
-Optimisation : Niveau 2 (-O2)
-Symboles : Complets (-g)
+Optimisation : Niveau 2 (-O2)  
+Symboles : Complets (-g)  
 Profiling : Activé (-pg)
 ```
 
@@ -260,8 +260,8 @@ Profiling : Activé (-pg)
 
 Exemple : S'arrêter seulement quand i = 100
 ```
-Condition : i = 100
-Hit Count : Ignorer les 5 premiers passages
+Condition : i = 100  
+Hit Count : Ignorer les 5 premiers passages  
 Action : Logger un message sans arrêter
 ```
 
@@ -344,7 +344,7 @@ Processus de débogage :
 
 ```pascal
 // Au lieu de mettre des points d'arrêt partout :
-procedure Complex;
+procedure Complex;  
 begin
   // Point d'arrêt ici pour vérifier l'entrée
   if not ValidateInput then Exit;

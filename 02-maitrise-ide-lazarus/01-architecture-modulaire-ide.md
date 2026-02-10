@@ -230,7 +230,7 @@ Les modules ne sont pas isolés, ils communiquent constamment :
 5. L'**Éditeur** génère automatiquement le squelette de la procédure
 
 ```pascal
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 begin
   // Le curseur se place ici automatiquement
 end;
@@ -279,10 +279,10 @@ Chaque module gère ses propres ressources :
 ```
 Module          | RAM utilisée | Thread | Priorité
 ----------------|--------------|--------|----------
-Main IDE        | ~50 MB       | Main   | Haute
-Source Editor   | ~20-100 MB   | Main   | Haute
-Form Designer   | ~30 MB       | Main   | Moyenne
-Compilateur     | Variable     | Séparé | Basse
+Main IDE        | ~50 MB       | Main   | Haute  
+Source Editor   | ~20-100 MB   | Main   | Haute  
+Form Designer   | ~30 MB       | Main   | Moyenne  
+Compilateur     | Variable     | Séparé | Basse  
 Débogueur       | ~40 MB       | Séparé | Moyenne
 ```
 

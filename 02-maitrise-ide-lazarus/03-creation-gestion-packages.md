@@ -147,28 +147,28 @@ type
 
 implementation
 
-constructor TMonBoutonSpecial.Create(AOwner: TComponent);
+constructor TMonBoutonSpecial.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FColorHover := clSkyBlue;
   FIsHovering := False;
 end;
 
-procedure TMonBoutonSpecial.MouseEnter;
+procedure TMonBoutonSpecial.MouseEnter;  
 begin
   inherited;
   FIsHovering := True;
   Invalidate; // Redessiner
 end;
 
-procedure TMonBoutonSpecial.MouseLeave;
+procedure TMonBoutonSpecial.MouseLeave;  
 begin
   inherited;
   FIsHovering := False;
   Invalidate;
 end;
 
-procedure TMonBoutonSpecial.Paint;
+procedure TMonBoutonSpecial.Paint;  
 var
   OldColor: TColor;
 begin
@@ -204,7 +204,7 @@ procedure Register;
 
 implementation
 
-procedure Register;
+procedure Register;  
 begin
   // Enregistrer dans l'onglet 'Mes Composants' de la palette
   RegisterComponents('Mes Composants', [TMonBoutonSpecial]);
@@ -407,7 +407,7 @@ lazres monpackage_icons.lrs monbouton.png
 
 Ou directement dans le code :
 ```pascal
-procedure Register;
+procedure Register;  
 begin
   RegisterComponents('Mes Composants', [TMonBoutonSpecial]);
   // L'icône doit avoir le même nom que la classe
@@ -448,7 +448,7 @@ type
 
 implementation
 
-function TCrossPlatformHelper.GetSystemPath: string;
+function TCrossPlatformHelper.GetSystemPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('WINDIR');
@@ -458,7 +458,7 @@ begin
   {$ENDIF}
 end;
 
-function TCrossPlatformHelper.GetConfigPath: string;
+function TCrossPlatformHelper.GetConfigPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('APPDATA');
@@ -645,7 +645,7 @@ type
     procedure TestColorHover;
   end;
 
-procedure TTestMonBouton.TestCreate;
+procedure TTestMonBouton.TestCreate;  
 var
   Btn: TMonBoutonSpecial;
 begin
@@ -657,7 +657,7 @@ begin
   end;
 end;
 
-procedure TTestMonBouton.TestColorHover;
+procedure TTestMonBouton.TestColorHover;  
 var
   Btn: TMonBoutonSpecial;
 begin
@@ -725,7 +725,7 @@ type
     function GetAttributes: TPropertyAttributes; override;
   end;
 
-procedure TColorPropertyEditor.Edit;
+procedure TColorPropertyEditor.Edit;  
 var
   ColorDialog: TColorDialog;
 begin
@@ -753,7 +753,7 @@ type
     procedure Execute; override;
   end;
 
-procedure TMonExpert.Execute;
+procedure TMonExpert.Execute;  
 begin
   ShowMessage('Mon expert fonctionne !');
   // Générer du code, créer des fichiers, etc.
