@@ -62,12 +62,12 @@ Le compilateur croisé permet de compiler sur Windows pour ARM :
 
 ```bash
 # Installer les outils de base
-sudo apt update
+sudo apt update  
 sudo apt install lazarus
 
 # Installer le support ARM
-sudo apt install fpc-source
-sudo apt install gcc-arm-linux-gnueabihf
+sudo apt install fpc-source  
+sudo apt install gcc-arm-linux-gnueabihf  
 sudo apt install fp-compiler-arm-linux
 
 # Pour ARM 64 bits
@@ -188,7 +188,7 @@ fpc -Parm -Tlinux -O3 -CfVFPV3 monprogramme.pas
 scp monprogramme pi@192.168.1.100:/home/pi/
 
 # Se connecter et exécuter
-ssh pi@192.168.1.100
+ssh pi@192.168.1.100  
 chmod +x monprogramme
 ./monprogramme
 ```
@@ -234,7 +234,7 @@ const
   GPIOC_CRH = GPIOC_BASE + $04;
   GPIOC_ODR = GPIOC_BASE + $0C;
 
-procedure DelayMs(ms: longword);
+procedure DelayMs(ms: longword);  
 var
   i: longword;
 begin
@@ -334,7 +334,7 @@ var
   // Variables globales statiques (pas d'allocation dynamique)
   Buffer: array[0..MAX_BUFFER-1] of Byte;
 
-procedure ProcessData;
+procedure ProcessData;  
 var
   // Variables locales sur la pile
   temp: Word;
@@ -371,10 +371,10 @@ type
   TPinMode = (pmInput, pmOutput);
   TPinValue = (pvLow, pvHigh);
 
-procedure InitGPIO;
-procedure SetPinMode(pin: TGPIOPin; mode: TPinMode);
-procedure WritePin(pin: TGPIOPin; value: TPinValue);
-function ReadPin(pin: TGPIOPin): TPinValue;
+procedure InitGPIO;  
+procedure SetPinMode(pin: TGPIOPin; mode: TPinMode);  
+procedure WritePin(pin: TGPIOPin; value: TPinValue);  
+function ReadPin(pin: TGPIOPin): TPinValue;  
 procedure CleanupGPIO;
 
 implementation
@@ -398,7 +398,7 @@ const
   GPCLR0 = 40;    // Pin Output Clear
   GPLEV0 = 52;    // Pin Level
 
-procedure InitGPIO;
+procedure InitGPIO;  
 var
   mem_fd: Integer;
 begin
@@ -417,7 +417,7 @@ begin
   fpClose(mem_fd);
 end;
 
-procedure SetPinMode(pin: TGPIOPin; mode: TPinMode);
+procedure SetPinMode(pin: TGPIOPin; mode: TPinMode);  
 var
   reg, shift: Integer;
   val: LongWord;
@@ -434,7 +434,7 @@ begin
   PLongWord(gpio_mem + GPFSEL0 + reg * 4)^ := val;
 end;
 
-procedure WritePin(pin: TGPIOPin; value: TPinValue);
+procedure WritePin(pin: TGPIOPin; value: TPinValue);  
 begin
   if value = pvHigh then
     PLongWord(gpio_mem + GPSET0)^ := 1 shl pin
@@ -442,7 +442,7 @@ begin
     PLongWord(gpio_mem + GPCLR0)^ := 1 shl pin;
 end;
 
-function ReadPin(pin: TGPIOPin): TPinValue;
+function ReadPin(pin: TGPIOPin): TPinValue;  
 begin
   if (PLongWord(gpio_mem + GPLEV0)^ and (1 shl pin)) <> 0 then
     Result := pvHigh
@@ -450,7 +450,7 @@ begin
     Result := pvLow;
 end;
 
-procedure CleanupGPIO;
+procedure CleanupGPIO;  
 begin
   if gpio_mem <> nil then
     fpMunmap(gpio_mem, 4096);
@@ -486,7 +486,7 @@ gdbserver :2345 monprogramme
 Pour les systèmes sans débogueur, utiliser des messages :
 
 ```pascal
-procedure DebugLog(const msg: string);
+procedure DebugLog(const msg: string);  
 begin
   {$IFDEF RASPBERRY_PI}
     // Écrire dans un fichier log
@@ -516,7 +516,7 @@ Le comportement peut différer entre l'émulation et le matériel réel, surtout
 ARM peut être little-endian ou big-endian :
 
 ```pascal
-function SwapEndian32(value: LongWord): LongWord;
+function SwapEndian32(value: LongWord): LongWord;  
 begin
   {$IFDEF ENDIAN_BIG}
     Result := value;
@@ -534,7 +534,7 @@ end;
 Sur systèmes embarqués alimentés par batterie :
 
 ```pascal
-procedure EnterLowPowerMode;
+procedure EnterLowPowerMode;  
 begin
   {$IFDEF CPUARM}
     // Utiliser les instructions WFI (Wait For Interrupt)
@@ -552,7 +552,7 @@ Les systèmes embarqués ont souvent une pile limitée :
 ```pascal
 {$MAXSTACKSIZE 4096}  // Limiter la taille de la pile
 
-procedure ProcessLargeData;
+procedure ProcessLargeData;  
 var
   // Éviter les grandes variables locales
   // buffer: array[0..10000] of Byte;  // MAUVAIS !

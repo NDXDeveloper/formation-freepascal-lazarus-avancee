@@ -47,7 +47,7 @@ L'idée est de créer une couche d'abstraction qui cache les différences entre 
 
 ```pascal
 // Votre code reste identique sur toutes les plateformes
-Config.SetValue('General', 'Language', 'fr');
+Config.SetValue('General', 'Language', 'fr');  
 Language := Config.GetValue('General', 'Language', 'en');
 ```
 
@@ -141,7 +141,7 @@ uses
 
 { TUnifiedConfig }
 
-constructor TUnifiedConfig.Create(const AppName: string; Storage: TConfigStorage);
+constructor TUnifiedConfig.Create(const AppName: string; Storage: TConfigStorage);  
 begin
   inherited Create;
   FAppName := AppName;
@@ -155,7 +155,7 @@ begin
   InitializeStorage;
 end;
 
-destructor TUnifiedConfig.Destroy;
+destructor TUnifiedConfig.Destroy;  
 begin
   Save;  // Sauvegarder automatiquement à la destruction
 
@@ -167,7 +167,7 @@ begin
   inherited Destroy;
 end;
 
-function TUnifiedConfig.GetDefaultStorage: TConfigStorage;
+function TUnifiedConfig.GetDefaultStorage: TConfigStorage;  
 begin
   {$IFDEF WINDOWS}
     // Sur Windows, utiliser le registre par défaut pour les applications installées
@@ -182,7 +182,7 @@ begin
   {$ENDIF}
 end;
 
-function TUnifiedConfig.GetConfigPath: string;
+function TUnifiedConfig.GetConfigPath: string;  
 begin
   {$IFDEF WINDOWS}
     case FStorage of
@@ -213,7 +213,7 @@ begin
     ForceDirectories(Result);
 end;
 
-procedure TUnifiedConfig.InitializeStorage;
+procedure TUnifiedConfig.InitializeStorage;  
 var
   ConfigFile: string;
 begin
@@ -244,7 +244,7 @@ begin
   end;
 end;
 
-procedure TUnifiedConfig.SetValue(const Section, Key, Value: string);
+procedure TUnifiedConfig.SetValue(const Section, Key, Value: string);  
 begin
   case FStorage of
     csIniFile, csJSON, csXML:
@@ -270,7 +270,7 @@ begin
   end;
 end;
 
-function TUnifiedConfig.GetValue(const Section, Key, Default: string): string;
+function TUnifiedConfig.GetValue(const Section, Key, Default: string): string;  
 begin
   Result := Default;
 
@@ -300,12 +300,12 @@ begin
   end;
 end;
 
-procedure TUnifiedConfig.SetInteger(const Section, Key: string; Value: Integer);
+procedure TUnifiedConfig.SetInteger(const Section, Key: string; Value: Integer);  
 begin
   SetValue(Section, Key, IntToStr(Value));
 end;
 
-function TUnifiedConfig.GetInteger(const Section, Key: string; Default: Integer): Integer;
+function TUnifiedConfig.GetInteger(const Section, Key: string; Default: Integer): Integer;  
 var
   S: string;
 begin
@@ -313,12 +313,12 @@ begin
   Result := StrToIntDef(S, Default);
 end;
 
-procedure TUnifiedConfig.SetBoolean(const Section, Key: string; Value: Boolean);
+procedure TUnifiedConfig.SetBoolean(const Section, Key: string; Value: Boolean);  
 begin
   SetValue(Section, Key, BoolToStr(Value, True));
 end;
 
-function TUnifiedConfig.GetBoolean(const Section, Key: string; Default: Boolean): Boolean;
+function TUnifiedConfig.GetBoolean(const Section, Key: string; Default: Boolean): Boolean;  
 var
   S: string;
 begin
@@ -326,12 +326,12 @@ begin
   Result := StrToBoolDef(S, Default);
 end;
 
-procedure TUnifiedConfig.SetFloat(const Section, Key: string; Value: Double);
+procedure TUnifiedConfig.SetFloat(const Section, Key: string; Value: Double);  
 begin
   SetValue(Section, Key, FloatToStr(Value));
 end;
 
-function TUnifiedConfig.GetFloat(const Section, Key: string; Default: Double): Double;
+function TUnifiedConfig.GetFloat(const Section, Key: string; Default: Double): Double;  
 var
   S: string;
 begin
@@ -339,7 +339,7 @@ begin
   Result := StrToFloatDef(S, Default);
 end;
 
-procedure TUnifiedConfig.GetSections(Sections: TStrings);
+procedure TUnifiedConfig.GetSections(Sections: TStrings);  
 begin
   Sections.Clear;
 
@@ -360,7 +360,7 @@ begin
   end;
 end;
 
-procedure TUnifiedConfig.GetKeys(const Section: string; Keys: TStrings);
+procedure TUnifiedConfig.GetKeys(const Section: string; Keys: TStrings);  
 begin
   Keys.Clear;
 
@@ -387,7 +387,7 @@ begin
   end;
 end;
 
-procedure TUnifiedConfig.DeleteKey(const Section, Key: string);
+procedure TUnifiedConfig.DeleteKey(const Section, Key: string);  
 begin
   case FStorage of
     csIniFile, csJSON, csXML:
@@ -412,7 +412,7 @@ begin
   end;
 end;
 
-procedure TUnifiedConfig.DeleteSection(const Section: string);
+procedure TUnifiedConfig.DeleteSection(const Section: string);  
 begin
   case FStorage of
     csIniFile, csJSON, csXML:
@@ -431,7 +431,7 @@ begin
   end;
 end;
 
-procedure TUnifiedConfig.Save;
+procedure TUnifiedConfig.Save;  
 begin
   // Forcer l'écriture sur disque
   case FStorage of
@@ -450,7 +450,7 @@ begin
   end;
 end;
 
-procedure TUnifiedConfig.Reload;
+procedure TUnifiedConfig.Reload;  
 begin
   // Recharger la configuration depuis le stockage
   FreeAndNil(FIniFile);
@@ -461,7 +461,7 @@ begin
   InitializeStorage;
 end;
 
-function TUnifiedConfig.BackupConfig(const BackupPath: string): Boolean;
+function TUnifiedConfig.BackupConfig(const BackupPath: string): Boolean;  
 var
   BackupFile: string;
   SourceFile: string;
@@ -495,7 +495,7 @@ begin
   end;
 end;
 
-function TUnifiedConfig.RestoreConfig(const BackupPath: string): Boolean;
+function TUnifiedConfig.RestoreConfig(const BackupPath: string): Boolean;  
 var
   BackupFile: string;
   TargetFile: string;
@@ -612,7 +612,7 @@ uses
   , BaseUnix
   {$ENDIF};
 
-class function TConfigPaths.GetConfigPath(Level: TConfigLevel; const AppName: string): string;
+class function TConfigPaths.GetConfigPath(Level: TConfigLevel; const AppName: string): string;  
 begin
   {$IFDEF WINDOWS}
   case Level of
@@ -683,7 +683,7 @@ begin
     ForceDirectories(Result);
 end;
 
-class function TConfigPaths.GetDataPath(const AppName: string): string;
+class function TConfigPaths.GetDataPath(const AppName: string): string;  
 begin
   {$IFDEF WINDOWS}
     // C:\Users\Username\AppData\Local\AppName
@@ -705,7 +705,7 @@ begin
     ForceDirectories(Result);
 end;
 
-class function TConfigPaths.GetCachePath(const AppName: string): string;
+class function TConfigPaths.GetCachePath(const AppName: string): string;  
 begin
   {$IFDEF WINDOWS}
     // C:\Users\Username\AppData\Local\AppName\Cache
@@ -724,7 +724,7 @@ begin
     ForceDirectories(Result);
 end;
 
-class function TConfigPaths.GetLogPath(const AppName: string): string;
+class function TConfigPaths.GetLogPath(const AppName: string): string;  
 begin
   {$IFDEF WINDOWS}
     // C:\Users\Username\AppData\Local\AppName\Logs
@@ -799,7 +799,7 @@ type
 
 implementation
 
-constructor TJSONConfig.Create(const FileName: string);
+constructor TJSONConfig.Create(const FileName: string);  
 begin
   inherited Create;
   FFileName := FileName;
@@ -817,7 +817,7 @@ begin
   end;
 end;
 
-destructor TJSONConfig.Destroy;
+destructor TJSONConfig.Destroy;  
 begin
   if FModified then
     Save;
@@ -826,7 +826,7 @@ begin
   inherited Destroy;
 end;
 
-function TJSONConfig.GetPath(const Path: string): TJSONData;
+function TJSONConfig.GetPath(const Path: string): TJSONData;  
 var
   Parts: TStringArray;
   Current: TJSONData;
@@ -851,7 +851,7 @@ begin
   Result := Current;
 end;
 
-procedure TJSONConfig.SetPath(const Path: string; AValue: TJSONData);
+procedure TJSONConfig.SetPath(const Path: string; AValue: TJSONData);  
 var
   Parts: TStringArray;
   Current, Parent: TJSONObject;
@@ -879,27 +879,27 @@ begin
   FModified := True;
 end;
 
-procedure TJSONConfig.SetValue(const Path: string; const Value: string);
+procedure TJSONConfig.SetValue(const Path: string; const Value: string);  
 begin
   SetPath(Path, TJSONString.Create(Value));
 end;
 
-procedure TJSONConfig.SetValue(const Path: string; Value: Integer);
+procedure TJSONConfig.SetValue(const Path: string; Value: Integer);  
 begin
   SetPath(Path, TJSONIntegerNumber.Create(Value));
 end;
 
-procedure TJSONConfig.SetValue(const Path: string; Value: Boolean);
+procedure TJSONConfig.SetValue(const Path: string; Value: Boolean);  
 begin
   SetPath(Path, TJSONBoolean.Create(Value));
 end;
 
-procedure TJSONConfig.SetValue(const Path: string; Value: Double);
+procedure TJSONConfig.SetValue(const Path: string; Value: Double);  
 begin
   SetPath(Path, TJSONFloatNumber.Create(Value));
 end;
 
-function TJSONConfig.GetValue(const Path: string; const Default: string): string;
+function TJSONConfig.GetValue(const Path: string; const Default: string): string;  
 var
   Data: TJSONData;
 begin
@@ -913,7 +913,7 @@ begin
   end;
 end;
 
-function TJSONConfig.GetValue(const Path: string; Default: Integer): Integer;
+function TJSONConfig.GetValue(const Path: string; Default: Integer): Integer;  
 var
   Data: TJSONData;
 begin
@@ -927,7 +927,7 @@ begin
   end;
 end;
 
-function TJSONConfig.GetValue(const Path: string; Default: Boolean): Boolean;
+function TJSONConfig.GetValue(const Path: string; Default: Boolean): Boolean;  
 var
   Data: TJSONData;
 begin
@@ -941,7 +941,7 @@ begin
   end;
 end;
 
-function TJSONConfig.GetValue(const Path: string; Default: Double): Double;
+function TJSONConfig.GetValue(const Path: string; Default: Double): Double;  
 var
   Data: TJSONData;
 begin
@@ -955,7 +955,7 @@ begin
   end;
 end;
 
-procedure TJSONConfig.AddToArray(const Path: string; const Value: string);
+procedure TJSONConfig.AddToArray(const Path: string; const Value: string);  
 var
   Data: TJSONData;
   Arr: TJSONArray;
@@ -974,7 +974,7 @@ begin
   FModified := True;
 end;
 
-function TJSONConfig.GetArray(const Path: string): TStringArray;
+function TJSONConfig.GetArray(const Path: string): TStringArray;  
 var
   Data: TJSONData;
   Arr: TJSONArray;
@@ -992,7 +992,7 @@ begin
   end;
 end;
 
-procedure TJSONConfig.Save;
+procedure TJSONConfig.Save;  
 var
   Stream: TFileStream;
   JSONStr: string;
@@ -1016,7 +1016,7 @@ begin
   end;
 end;
 
-procedure TJSONConfig.Load;
+procedure TJSONConfig.Load;  
 var
   Stream: TFileStream;
   Parser: TJSONParser;
@@ -1039,7 +1039,7 @@ begin
   end;
 end;
 
-procedure TJSONConfig.Clear;
+procedure TJSONConfig.Clear;  
 begin
   FreeAndNil(FRoot);
   FRoot := TJSONObject.Create;
@@ -1100,7 +1100,7 @@ implementation
 
 { TConfigMigrator }
 
-constructor TConfigMigrator.Create(Config: TUnifiedConfig);
+constructor TConfigMigrator.Create(Config: TUnifiedConfig);  
 begin
   inherited Create;
   FConfig := Config;
@@ -1111,7 +1111,7 @@ begin
   FCurrentVersion.Build := 0;
 end;
 
-function TConfigMigrator.GetStoredVersion: TConfigVersion;
+function TConfigMigrator.GetStoredVersion: TConfigVersion;  
 var
   VersionStr: string;
 begin
@@ -1119,12 +1119,12 @@ begin
   Result := StringToVersion(VersionStr);
 end;
 
-procedure TConfigMigrator.SetStoredVersion(const Version: TConfigVersion);
+procedure TConfigMigrator.SetStoredVersion(const Version: TConfigVersion);  
 begin
   FConfig.SetValue('Meta', 'ConfigVersion', VersionToString(Version));
 end;
 
-function TConfigMigrator.NeedsMigration: Boolean;
+function TConfigMigrator.NeedsMigration: Boolean;  
 var
   StoredVer: TConfigVersion;
 begin
@@ -1135,7 +1135,7 @@ begin
              (StoredVer.Minor < FCurrentVersion.Minor));
 end;
 
-procedure TConfigMigrator.CheckAndMigrate;
+procedure TConfigMigrator.CheckAndMigrate;  
 var
   StoredVer: TConfigVersion;
   BackupPath: string;
@@ -1181,7 +1181,7 @@ begin
   WriteLn('Migration terminée avec succès');
 end;
 
-procedure TConfigMigrator.MigrateFrom1_0To2_0;
+procedure TConfigMigrator.MigrateFrom1_0To2_0;  
 begin
   // Exemple : Renommer des clés
 
@@ -1207,7 +1207,7 @@ begin
   FConfig.SetValue('Features', 'UpdateChannel', 'stable');
 end;
 
-procedure TConfigMigrator.MigrateFrom2_0To2_1;
+procedure TConfigMigrator.MigrateFrom2_0To2_1;  
 var
   OldLang: string;
   NewLang: string;
@@ -1235,7 +1235,7 @@ begin
   FConfig.SetBoolean('Appearance', 'DarkMode', False);
 end;
 
-procedure TConfigMigrator.MigrateFrom2_1To3_0;
+procedure TConfigMigrator.MigrateFrom2_1To3_0;  
 var
   Sections: TStringList;
   Keys: TStringList;
@@ -1277,12 +1277,12 @@ begin
   FConfig.SetValue('Advanced', 'PluginDirectory', '');
 end;
 
-class function TConfigMigrator.VersionToString(const Version: TConfigVersion): string;
+class function TConfigMigrator.VersionToString(const Version: TConfigVersion): string;  
 begin
   Result := Format('%d.%d.%d', [Version.Major, Version.Minor, Version.Build]);
 end;
 
-class function TConfigMigrator.StringToVersion(const VersionStr: string): TConfigVersion;
+class function TConfigMigrator.StringToVersion(const VersionStr: string): TConfigVersion;  
 var
   Parts: TStringArray;
 begin
@@ -1386,14 +1386,14 @@ uses
 
 { TConfigValidator }
 
-constructor TConfigValidator.Create;
+constructor TConfigValidator.Create;  
 begin
   inherited Create;
   FErrors := TStringList.Create;
   SetLength(FRules, 0);
 end;
 
-destructor TConfigValidator.Destroy;
+destructor TConfigValidator.Destroy;  
 begin
   FErrors.Free;
   inherited Destroy;
@@ -1456,7 +1456,7 @@ begin
   FRules[High(FRules)] := Rule;
 end;
 
-function TConfigValidator.Validate(Config: TUnifiedConfig): Boolean;
+function TConfigValidator.Validate(Config: TUnifiedConfig): Boolean;  
 var
   i: Integer;
   Value: string;
@@ -1501,7 +1501,7 @@ begin
   end;
 end;
 
-procedure TConfigValidator.ApplyDefaults(Config: TUnifiedConfig);
+procedure TConfigValidator.ApplyDefaults(Config: TUnifiedConfig);  
 var
   i: Integer;
   Value: string;
@@ -1688,12 +1688,12 @@ begin
   end;
 end;
 
-function TConfigValidator.GetErrors: TStringList;
+function TConfigValidator.GetErrors: TStringList;  
 begin
   Result := FErrors;
 end;
 
-procedure TConfigValidator.ClearErrors;
+procedure TConfigValidator.ClearErrors;  
 begin
   FErrors.Clear;
 end;
@@ -1723,7 +1723,7 @@ var
   Validator: TConfigValidator;
   JsonConfig: TJSONConfig;
 
-procedure InitializeConfiguration;
+procedure InitializeConfiguration;  
 var
   i: Integer;
 begin
@@ -1780,7 +1780,7 @@ begin
   Validator.Free;
 end;
 
-procedure DemonstrateJSONConfig;
+procedure DemonstrateJSONConfig;  
 var
   RecentFiles: TStringArray;
   i: Integer;
@@ -1819,7 +1819,7 @@ begin
   end;
 end;
 
-procedure ShowConfigurationInfo;
+procedure ShowConfigurationInfo;  
 var
   Sections: TStringList;
   Keys: TStringList;
@@ -1972,14 +1972,14 @@ implementation
 uses
   Base64;
 
-constructor TSecureConfig.Create(Config: TUnifiedConfig; const MasterPassword: string);
+constructor TSecureConfig.Create(Config: TUnifiedConfig; const MasterPassword: string);  
 begin
   inherited Create;
   FConfig := Config;
   FMasterKey := GenerateKeyFromPassword(MasterPassword);
 end;
 
-function TSecureConfig.GenerateKeyFromPassword(const Password: string): string;
+function TSecureConfig.GenerateKeyFromPassword(const Password: string): string;  
 var
   Hash: TDCP_sha256;
   Digest: array[0..31] of byte;
@@ -1999,7 +1999,7 @@ begin
   end;
 end;
 
-function TSecureConfig.EncryptString(const Plain: string): string;
+function TSecureConfig.EncryptString(const Plain: string): string;  
 var
   Cipher: TDCP_rijndael;
   Data: string;
@@ -2020,7 +2020,7 @@ begin
   end;
 end;
 
-function TSecureConfig.DecryptString(const Encrypted: string): string;
+function TSecureConfig.DecryptString(const Encrypted: string): string;  
 var
   Cipher: TDCP_rijndael;
   Data: string;
@@ -2047,7 +2047,7 @@ begin
   end;
 end;
 
-procedure TSecureConfig.SetSecureValue(const Section, Key, Value: string);
+procedure TSecureConfig.SetSecureValue(const Section, Key, Value: string);  
 var
   Encrypted: string;
 begin
@@ -2058,7 +2058,7 @@ begin
   FConfig.SetBoolean(Section, Key + '_Encrypted', True);
 end;
 
-function TSecureConfig.GetSecureValue(const Section, Key, Default: string): string;
+function TSecureConfig.GetSecureValue(const Section, Key, Default: string): string;  
 var
   Encrypted: string;
   IsEncrypted: Boolean;
@@ -2081,18 +2081,18 @@ begin
   end;
 end;
 
-procedure TSecureConfig.SetCredentials(const Section, Username, Password: string);
+procedure TSecureConfig.SetCredentials(const Section, Username, Password: string);  
 begin
   FConfig.SetValue(Section, 'Username', Username);  // Username en clair
   SetSecureValue(Section, 'Password', Password);     // Password chiffré
 end;
 
-function TSecureConfig.GetUsername(const Section: string): string;
+function TSecureConfig.GetUsername(const Section: string): string;  
 begin
   Result := FConfig.GetValue(Section, 'Username', '');
 end;
 
-function TSecureConfig.GetPassword(const Section: string): string;
+function TSecureConfig.GetPassword(const Section: string): string;  
 begin
   Result := GetSecureValue(Section, 'Password', '');
 end;
@@ -2142,7 +2142,7 @@ type
 
 implementation
 
-constructor TMultiEnvironmentConfig.Create(const AppName: string);
+constructor TMultiEnvironmentConfig.Create(const AppName: string);  
 begin
   inherited Create;
 
@@ -2156,14 +2156,14 @@ begin
   FEnvConfig := TUnifiedConfig.Create(AppName + '.' + GetEnvironmentName(FCurrentEnv));
 end;
 
-destructor TMultiEnvironmentConfig.Destroy;
+destructor TMultiEnvironmentConfig.Destroy;  
 begin
   FBaseConfig.Free;
   FEnvConfig.Free;
   inherited Destroy;
 end;
 
-function TMultiEnvironmentConfig.DetectEnvironment: TEnvironment;
+function TMultiEnvironmentConfig.DetectEnvironment: TEnvironment;  
 var
   EnvVar: string;
 begin
@@ -2194,7 +2194,7 @@ begin
   end;
 end;
 
-function TMultiEnvironmentConfig.GetEnvironmentName(Env: TEnvironment): string;
+function TMultiEnvironmentConfig.GetEnvironmentName(Env: TEnvironment): string;  
 begin
   case Env of
     envDevelopment: Result := 'dev';
@@ -2204,7 +2204,7 @@ begin
   end;
 end;
 
-function TMultiEnvironmentConfig.GetValue(const Section, Key, Default: string): string;
+function TMultiEnvironmentConfig.GetValue(const Section, Key, Default: string): string;  
 begin
   // D'abord chercher dans la config de l'environnement
   Result := FEnvConfig.GetValue(Section, Key, '');
@@ -2223,7 +2223,7 @@ begin
     FEnvConfig.SetValue(Section, Key, Value);   // Config spécifique
 end;
 
-procedure TMultiEnvironmentConfig.SwitchEnvironment(Env: TEnvironment);
+procedure TMultiEnvironmentConfig.SwitchEnvironment(Env: TEnvironment);  
 begin
   if Env = FCurrentEnv then
     Exit;
@@ -2294,7 +2294,7 @@ uses
   {$ENDIF}
   DateUtils;
 
-constructor TConfigWatcher.Create(Config: TUnifiedConfig; CheckInterval: Integer);
+constructor TConfigWatcher.Create(Config: TUnifiedConfig; CheckInterval: Integer);  
 begin
   inherited Create;
 
@@ -2310,7 +2310,7 @@ begin
   FLastModified := GetFileModificationTime;
 end;
 
-destructor TConfigWatcher.Destroy;
+destructor TConfigWatcher.Destroy;  
 begin
   Stop;
   FTimer.Free;
@@ -2318,17 +2318,17 @@ begin
   inherited Destroy;
 end;
 
-procedure TConfigWatcher.Start;
+procedure TConfigWatcher.Start;  
 begin
   FTimer.Enabled := True;
 end;
 
-procedure TConfigWatcher.Stop;
+procedure TConfigWatcher.Stop;  
 begin
   FTimer.Enabled := False;
 end;
 
-function TConfigWatcher.GetFileModificationTime: TDateTime;
+function TConfigWatcher.GetFileModificationTime: TDateTime;  
 var
   ConfigFile: string;
   {$IFDEF WINDOWS}
@@ -2365,7 +2365,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TConfigWatcher.TakeSnapshot;
+procedure TConfigWatcher.TakeSnapshot;  
 var
   Sections, Keys: TStringList;
   i, j: Integer;
@@ -2396,7 +2396,7 @@ begin
   end;
 end;
 
-function TConfigWatcher.CompareSnapshots: Boolean;
+function TConfigWatcher.CompareSnapshots: Boolean;  
 var
   NewSnapshot: TStringList;
   i: Integer;
@@ -2441,7 +2441,7 @@ begin
   end;
 end;
 
-procedure TConfigWatcher.TimerTick(Sender: TObject);
+procedure TConfigWatcher.TimerTick(Sender: TObject);  
 var
   CurrentModified: TDateTime;
 begin
@@ -2513,13 +2513,13 @@ implementation
 uses
   DOM, XMLWrite, XMLRead, jsonparser, IniFiles, DateUtils;
 
-constructor TConfigExporter.Create(Config: TUnifiedConfig);
+constructor TConfigExporter.Create(Config: TUnifiedConfig);  
 begin
   inherited Create;
   FConfig := Config;
 end;
 
-function TConfigExporter.ExportToINI(const FileName: string): Boolean;
+function TConfigExporter.ExportToINI(const FileName: string): Boolean;  
 var
   Ini: TIniFile;
   Sections, Keys: TStringList;
@@ -2552,7 +2552,7 @@ begin
   end;
 end;
 
-function TConfigExporter.ExportToJSON(const FileName: string): Boolean;
+function TConfigExporter.ExportToJSON(const FileName: string): Boolean;  
 var
   Root: TJSONObject;
   SectionObj: TJSONObject;
@@ -2612,7 +2612,7 @@ begin
   end;
 end;
 
-function TConfigExporter.ExportToXML(const FileName: string): Boolean;
+function TConfigExporter.ExportToXML(const FileName: string): Boolean;  
 var
   Doc: TXMLDocument;
   Root, SectionNode, KeyNode: TDOMNode;
@@ -2728,7 +2728,7 @@ begin
   end;
 end;
 
-function TConfigExporter.ImportFromINI(const FileName: string): Boolean;
+function TConfigExporter.ImportFromINI(const FileName: string): Boolean;  
 var
   Ini: TIniFile;
   Sections, Keys: TStringList;
@@ -2768,7 +2768,7 @@ begin
   end;
 end;
 
-function TConfigExporter.ImportFromJSON(const FileName: string): Boolean;
+function TConfigExporter.ImportFromJSON(const FileName: string): Boolean;  
 var
   Stream: TFileStream;
   Parser: TJSONParser;
@@ -2821,7 +2821,7 @@ begin
   end;
 end;
 
-function TConfigExporter.ImportBundle(const FileName: string): Boolean;
+function TConfigExporter.ImportBundle(const FileName: string): Boolean;  
 var
   UnZip: TUnZipper;
   TempDir: string;
@@ -2865,7 +2865,7 @@ begin
   end;
 end;
 
-function TConfigExporter.CompareWithFile(const FileName: string): TStringList;
+function TConfigExporter.CompareWithFile(const FileName: string): TStringList;  
 var
   TempConfig: TUnifiedConfig;
   Exporter: TConfigExporter;
@@ -3061,7 +3061,7 @@ uses
 
 { TFormConfig }
 
-procedure TFormConfig.FormCreate(Sender: TObject);
+procedure TFormConfig.FormCreate(Sender: TObject);  
 var
   MasterPassword: string;
 begin
@@ -3092,7 +3092,7 @@ begin
   FModified := False;
 end;
 
-procedure TFormConfig.FormDestroy(Sender: TObject);
+procedure TFormConfig.FormDestroy(Sender: TObject);  
 begin
   FWatcher.Stop;
   FWatcher.Free;
@@ -3102,13 +3102,13 @@ begin
   FConfig.Free;
 end;
 
-procedure TFormConfig.FormShow(Sender: TObject);
+procedure TFormConfig.FormShow(Sender: TObject);  
 begin
   LoadConfiguration;
   UpdateProxyControls;
 end;
 
-procedure TFormConfig.InitializeValidator;
+procedure TFormConfig.InitializeValidator;  
 begin
   // Définir les règles de validation
   FValidator.AddEnumRule('General', 'Language',
@@ -3128,7 +3128,7 @@ begin
     ['Debug', 'Info', 'Warning', 'Error', 'Fatal'], False, 'Info');
 end;
 
-procedure TFormConfig.InitializeControls;
+procedure TFormConfig.InitializeControls;  
 begin
   // Remplir les listes déroulantes
   ComboLanguage.Items.Clear;
@@ -3162,7 +3162,7 @@ begin
   EditConfigPath.Text := FConfig.ConfigPath;
 end;
 
-procedure TFormConfig.LoadConfiguration;
+procedure TFormConfig.LoadConfiguration;  
 var
   Lang: string;
   Theme: string;
@@ -3220,7 +3220,7 @@ begin
   LoadRawConfiguration;
 end;
 
-procedure TFormConfig.LoadRawConfiguration;
+procedure TFormConfig.LoadRawConfiguration;  
 var
   Sections, Keys: TStringList;
   i, j: Integer;
@@ -3251,7 +3251,7 @@ begin
   end;
 end;
 
-procedure TFormConfig.SaveConfiguration;
+procedure TFormConfig.SaveConfiguration;  
 begin
   // Sauvegarder les paramètres généraux
   case ComboLanguage.ItemIndex of
@@ -3297,7 +3297,7 @@ begin
   FConfig.Save;
 end;
 
-procedure TFormConfig.ValidateConfiguration;
+procedure TFormConfig.ValidateConfiguration;  
 var
   Errors: TStringList;
   ErrorMsg: string;
@@ -3319,7 +3319,7 @@ begin
   end;
 end;
 
-procedure TFormConfig.UpdateProxyControls;
+procedure TFormConfig.UpdateProxyControls;  
 begin
   EditProxyHost.Enabled := CheckUseProxy.Checked;
   SpinProxyPort.Enabled := CheckUseProxy.Checked;
@@ -3327,7 +3327,7 @@ begin
   EditProxyPassword.Enabled := CheckUseProxy.Checked;
 end;
 
-procedure TFormConfig.SetModified(Value: Boolean);
+procedure TFormConfig.SetModified(Value: Boolean);  
 begin
   FModified := Value;
   BtnApply.Enabled := FModified;
@@ -3338,14 +3338,14 @@ begin
     StatusBar.SimpleText := '';
 end;
 
-procedure TFormConfig.BtnOKClick(Sender: TObject);
+procedure TFormConfig.BtnOKClick(Sender: TObject);  
 begin
   SaveConfiguration;
   ValidateConfiguration;
   ModalResult := mrOK;
 end;
 
-procedure TFormConfig.BtnCancelClick(Sender: TObject);
+procedure TFormConfig.BtnCancelClick(Sender: TObject);  
 begin
   if FModified then
   begin
@@ -3358,7 +3358,7 @@ begin
     ModalResult := mrCancel;
 end;
 
-procedure TFormConfig.BtnApplyClick(Sender: TObject);
+procedure TFormConfig.BtnApplyClick(Sender: TObject);  
 begin
   SaveConfiguration;
   ValidateConfiguration;
@@ -3368,13 +3368,13 @@ begin
   StatusBar.SimpleText := 'Configuration appliquée';
 end;
 
-procedure TFormConfig.CheckUseProxyChange(Sender: TObject);
+procedure TFormConfig.CheckUseProxyChange(Sender: TObject);  
 begin
   UpdateProxyControls;
   SetModified(True);
 end;
 
-procedure TFormConfig.BtnBrowseConfigClick(Sender: TObject);
+procedure TFormConfig.BtnBrowseConfigClick(Sender: TObject);  
 var
   Dir: string;
 begin
@@ -3386,7 +3386,7 @@ begin
   end;
 end;
 
-procedure TFormConfig.BtnExportINIClick(Sender: TObject);
+procedure TFormConfig.BtnExportINIClick(Sender: TObject);  
 var
   SaveDialog: TSaveDialog;
 begin
@@ -3408,7 +3408,7 @@ begin
   end;
 end;
 
-procedure TFormConfig.BtnExportJSONClick(Sender: TObject);
+procedure TFormConfig.BtnExportJSONClick(Sender: TObject);  
 var
   SaveDialog: TSaveDialog;
 begin
@@ -3430,7 +3430,7 @@ begin
   end;
 end;
 
-procedure TFormConfig.BtnExportBundleClick(Sender: TObject);
+procedure TFormConfig.BtnExportBundleClick(Sender: TObject);  
 var
   SaveDialog: TSaveDialog;
 begin
@@ -3452,7 +3452,7 @@ begin
   end;
 end;
 
-procedure TFormConfig.BtnImportClick(Sender: TObject);
+procedure TFormConfig.BtnImportClick(Sender: TObject);  
 var
   OpenDialog: TOpenDialog;
   Success: Boolean;
@@ -3494,7 +3494,7 @@ begin
   end;
 end;
 
-procedure TFormConfig.BtnCompareClick(Sender: TObject);
+procedure TFormConfig.BtnCompareClick(Sender: TObject);  
 var
   OpenDialog: TOpenDialog;
   Differences: TStringList;
@@ -3526,7 +3526,7 @@ begin
   end;
 end;
 
-procedure TFormConfig.ConfigChanged(Sender: TObject; const Section, Key: string);
+procedure TFormConfig.ConfigChanged(Sender: TObject; const Section, Key: string);  
 begin
   // La configuration a été modifiée en externe
   if MessageDlg('Configuration modifiée',

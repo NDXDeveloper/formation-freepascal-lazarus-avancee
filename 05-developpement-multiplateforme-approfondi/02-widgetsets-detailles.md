@@ -24,12 +24,12 @@ hButton := CreateWindow('BUTTON', 'Cliquez-moi',
                        10, 10, 100, 30, hParentWindow, 0, hInstance, nil);
 
 // Créer un bouton sur Linux avec GTK
-button := gtk_button_new_with_label('Cliquez-moi');
-gtk_widget_set_size_request(button, 100, 30);
+button := gtk_button_new_with_label('Cliquez-moi');  
+gtk_widget_set_size_request(button, 100, 30);  
 gtk_fixed_put(GTK_FIXED(container), button, 10, 10);
 
 // Créer un bouton sur Linux avec Qt
-button := QPushButton_Create('Cliquez-moi');
+button := QPushButton_Create('Cliquez-moi');  
 QPushButton_setGeometry(button, 10, 10, 100, 30);
 ```
 
@@ -115,9 +115,9 @@ Le choix du widgetset dépend de plusieurs facteurs :
 Prenons l'exemple de la création d'un bouton :
 
 ```pascal
-Button1 := TButton.Create(Form1);
-Button1.Parent := Form1;
-Button1.Caption := 'Mon Bouton';
+Button1 := TButton.Create(Form1);  
+Button1.Parent := Form1;  
+Button1.Caption := 'Mon Bouton';  
 Button1.SetBounds(10, 10, 100, 30);
 ```
 
@@ -194,7 +194,7 @@ begin
 end;
 
 // Widgetset GTK2 - Callback GTK
-procedure gtk_button_clicked_callback(Widget: PGtkWidget; Data: gpointer); cdecl;
+procedure gtk_button_clicked_callback(Widget: PGtkWidget; Data: gpointer); cdecl;  
 var
   Button: TButton;
 begin
@@ -257,7 +257,7 @@ Le widgetset est sélectionné lors de la compilation. Vous pouvez le spécifier
 #### 1. Dans l'IDE Lazarus
 
 ```
-Projet → Options du projet → Ajouts et Substitutions →
+Projet → Options du projet → Ajouts et Substitutions →  
 Définir LCLWidgetType → [Sélectionner le widgetset]
 ```
 
@@ -304,7 +304,7 @@ Vous pouvez déterminer quel widgetset est utilisé pendant l'exécution :
 ```pascal
 uses InterfaceBase, LCLPlatformDef;
 
-procedure AfficherWidgetset;
+procedure AfficherWidgetset;  
 var
   WS: TLCLPlatform;
 begin
@@ -358,7 +358,7 @@ Tous les widgetsets n'implémentent pas toutes les fonctionnalités :
 
 ```pascal
 // Code de test automatisé
-procedure TestButton;
+procedure TestButton;  
 var
   Btn: TButton;
 begin
@@ -384,7 +384,7 @@ end;
 #### 2. **Gérer les Différences Connues**
 
 ```pascal
-function GetButtonHeight: Integer;
+function GetButtonHeight: Integer;  
 begin
   // Ajuster selon le widgetset
   {$IFDEF LCLWin32}
@@ -410,7 +410,7 @@ SendMessage(Button1.Handle, BM_SETSTATE, 1, 0);
 {$ENDIF}
 
 // PRÉFÉRER - Utiliser les méthodes LCL
-Button1.SetFocus;
+Button1.SetFocus;  
 Button1.Invalidate;
 ```
 
@@ -430,7 +430,7 @@ uses
   {$ENDIF}
   LCLType, LCLIntf;
 
-procedure SetButtonStyle(Button: TButton);
+procedure SetButtonStyle(Button: TButton);  
 begin
   {$IFDEF LCLWin32}
   // Accès direct à l'API Windows
@@ -459,13 +459,13 @@ type
     constructor Create(AOwner: TComponent); override;
   end;
 
-class function TCustomWidget.GetControlClassDefaultSize: TSize;
+class function TCustomWidget.GetControlClassDefaultSize: TSize;  
 begin
   Result.CX := 100;
   Result.CY := 100;
 end;
 
-procedure TCustomWidget.CreateParams(var Params: TCreateParams);
+procedure TCustomWidget.CreateParams(var Params: TCreateParams);  
 begin
   inherited CreateParams(Params);
 
@@ -506,7 +506,7 @@ Chaque widgetset a ses caractéristiques de performance :
 
 ```pascal
 // 1. Réduire les mises à jour visuelles
-ListBox1.Items.BeginUpdate;
+ListBox1.Items.BeginUpdate;  
 try
   // Ajouter beaucoup d'éléments
   for i := 0 to 10000 do
@@ -521,7 +521,7 @@ Form1.DoubleBuffered := True;
 {$ENDIF}
 
 // 3. Optimiser le dessin personnalisé
-procedure TCustomControl.Paint;
+procedure TCustomControl.Paint;  
 begin
   // Vérifier le widgetset pour optimiser
   {$IFDEF LCLWin32}
@@ -541,8 +541,8 @@ end;
 #### 1. **Composant qui ne s'affiche pas correctement**
 ```pascal
 // Forcer le recalcul de la mise en page
-Component.InvalidatePreferredSize;
-Component.AdjustSize;
+Component.InvalidatePreferredSize;  
+Component.AdjustSize;  
 Application.ProcessMessages;
 ```
 
@@ -556,7 +556,7 @@ if not Button1.HandleAllocated then
 #### 3. **Différences de taille entre widgetsets**
 ```pascal
 // Utiliser AutoSize et Anchors plutôt que des positions fixes
-Button1.AutoSize := True;
+Button1.AutoSize := True;  
 Button1.Anchors := [akLeft, akTop];
 ```
 

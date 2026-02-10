@@ -81,26 +81,26 @@ type
 
 implementation
 
-procedure TTestMonUnite.SetUp;
+procedure TTestMonUnite.SetUp;  
 begin
   // Code exécuté avant chaque test
   // Initialiser les variables, créer des objets, etc.
 end;
 
-procedure TTestMonUnite.TearDown;
+procedure TTestMonUnite.TearDown;  
 begin
   // Code exécuté après chaque test
   // Nettoyer, libérer la mémoire, supprimer les fichiers temporaires
 end;
 
-procedure TTestMonUnite.TestAddition;
+procedure TTestMonUnite.TestAddition;  
 begin
   // Test simple
   AssertEquals('2 + 2 devrait égaler 4', 4, Addition(2, 2));
   AssertEquals('Nombres négatifs', -5, Addition(-2, -3));
 end;
 
-procedure TTestMonUnite.TestDivision;
+procedure TTestMonUnite.TestDivision;  
 begin
   // Test avec vérification d'exception
   AssertEquals('Division normale', 2.5, Division(5, 2), 0.001);
@@ -110,7 +110,7 @@ begin
     @TestDivisionParZero);
 end;
 
-procedure TTestMonUnite.TestCheminFichier;
+procedure TTestMonUnite.TestCheminFichier;  
 var
   Chemin: string;
 begin
@@ -140,11 +140,11 @@ FPCUnit fournit de nombreuses méthodes pour vérifier vos résultats :
 
 ```pascal
 // Assertions de base
-AssertTrue('Message', Condition);
-AssertFalse('Message', Condition);
-AssertEquals('Message', Attendu, Obtenu);
-AssertNull('Message', Objet);
-AssertNotNull('Message', Objet);
+AssertTrue('Message', Condition);  
+AssertFalse('Message', Condition);  
+AssertEquals('Message', Attendu, Obtenu);  
+AssertNull('Message', Objet);  
+AssertNotNull('Message', Objet);  
 AssertSame('Message', Objet1, Objet2);
 
 // Assertions pour les nombres flottants (avec tolérance)
@@ -181,7 +181,7 @@ type
 
 implementation
 
-procedure TTestPlateforme.TestCheminsSysteme;
+procedure TTestPlateforme.TestCheminsSysteme;  
 var
   CheminTemp: string;
   CheminHome: string;
@@ -205,7 +205,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TTestPlateforme.TestPermissions;
+procedure TTestPlateforme.TestPermissions;  
 var
   NomFichier: string;
   Fichier: TextFile;
@@ -238,7 +238,7 @@ begin
   end;
 end;
 
-procedure TTestPlateforme.TestProcessus;
+procedure TTestPlateforme.TestProcessus;  
 var
   Output: string;
 begin
@@ -294,21 +294,21 @@ type
 
 implementation
 
-procedure TTestInterface.SetUp;
+procedure TTestInterface.SetUp;  
 begin
   // Créer le formulaire pour les tests
   Application.Initialize;
   FForm := TFormPrincipal.Create(nil);
 end;
 
-procedure TTestInterface.TearDown;
+procedure TTestInterface.TearDown;  
 begin
   // Libérer le formulaire
   FForm.Free;
   FForm := nil;
 end;
 
-procedure TTestInterface.TestCreationFormulaire;
+procedure TTestInterface.TestCreationFormulaire;  
 begin
   AssertNotNull('Formulaire créé', FForm);
   AssertEquals('Titre correct', 'Mon Application', FForm.Caption);
@@ -324,7 +324,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TTestInterface.TestBoutons;
+procedure TTestInterface.TestBoutons;  
 begin
   AssertNotNull('Bouton OK existe', FForm.BtnOK);
   AssertTrue('Bouton OK visible', FForm.BtnOK.Visible);
@@ -337,7 +337,7 @@ begin
   AssertEquals('Action effectuée', 'OK', FForm.DernierAction);
 end;
 
-procedure TTestInterface.TestMenus;
+procedure TTestInterface.TestMenus;  
 begin
   AssertNotNull('Menu principal existe', FForm.MainMenu);
   AssertTrue('Menu Fichier existe', FForm.MenuFichier.Count > 0);
@@ -354,7 +354,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TTestInterface.TestRedimensionnement;
+procedure TTestInterface.TestRedimensionnement;  
 var
   AncienneLargeur: Integer;
 begin
@@ -406,7 +406,7 @@ type
 
 implementation
 
-class function TTestSuitePrincipale.Suite: TTestSuite;
+class function TTestSuitePrincipale.Suite: TTestSuite;  
 var
   TestSuite: TTestSuite;
 begin
@@ -505,11 +505,11 @@ end.
 
 ```batch
 @echo off
-echo ========================================
-echo Tests automatises Windows
+echo ========================================  
+echo Tests automatises Windows  
 echo ========================================
 
-REM Compiler les tests
+REM Compiler les tests  
 fpc -Mobjfpc -Sh TestsConsole.pas
 
 if %errorlevel% neq 0 (
@@ -517,7 +517,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-REM Executer les tests
+REM Executer les tests  
 TestsConsole.exe --format=xml --all > resultats_windows.xml
 
 if %errorlevel% neq 0 (
@@ -526,7 +526,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo Tous les tests sont passes!
+echo Tous les tests sont passes!  
 exit /b 0
 ```
 
@@ -535,8 +535,8 @@ exit /b 0
 ```bash
 #!/bin/bash
 
-echo "========================================"
-echo "Tests automatisés Linux/Ubuntu"
+echo "========================================"  
+echo "Tests automatisés Linux/Ubuntu"  
 echo "========================================"
 
 # Compiler les tests
@@ -556,7 +556,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "Tous les tests sont passés!"
+echo "Tous les tests sont passés!"  
 exit 0
 ```
 
@@ -654,13 +654,13 @@ type
 
 implementation
 
-constructor TTestDataManager.Create;
+constructor TTestDataManager.Create;  
 begin
   FDataPath := GetTestDataPath;
   ForceDirectories(FDataPath);
 end;
 
-function TTestDataManager.GetTestDataPath: string;
+function TTestDataManager.GetTestDataPath: string;  
 begin
   // Utiliser un dossier temporaire selon l'OS
   {$IFDEF WINDOWS}
@@ -676,12 +676,12 @@ begin
     CreateDir(Result);
 end;
 
-function TTestDataManager.GetTestFile(const AFileName: string): string;
+function TTestDataManager.GetTestFile(const AFileName: string): string;  
 begin
   Result := FDataPath + AFileName;
 end;
 
-procedure TTestDataManager.CreateTestFile(const AFileName, AContent: string);
+procedure TTestDataManager.CreateTestFile(const AFileName, AContent: string);  
 var
   F: TextFile;
   FullPath: string;
@@ -696,7 +696,7 @@ begin
   end;
 end;
 
-procedure TTestDataManager.CleanupTestFiles;
+procedure TTestDataManager.CleanupTestFiles;  
 var
   SearchRec: TSearchRec;
 begin
@@ -745,17 +745,17 @@ type
 
 implementation
 
-procedure TTestPerformance.StartTimer;
+procedure TTestPerformance.StartTimer;  
 begin
   FStartTime := Now;
 end;
 
-function TTestPerformance.StopTimer: Integer;
+function TTestPerformance.StopTimer: Integer;  
 begin
   Result := MilliSecondsBetween(Now, FStartTime);
 end;
 
-procedure TTestPerformance.TestVitesseCalcul;
+procedure TTestPerformance.TestVitesseCalcul;  
 var
   i, j: Integer;
   Temps: Integer;
@@ -782,7 +782,7 @@ begin
              [MaxTemps, Temps]), Temps < MaxTemps);
 end;
 
-procedure TTestPerformance.TestVitesseIO;
+procedure TTestPerformance.TestVitesseIO;  
 var
   F: TextFile;
   i: Integer;
@@ -826,7 +826,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TTestPerformance.TestVitesseMemoire;
+procedure TTestPerformance.TestVitesseMemoire;  
 var
   Liste: TStringList;
   i: Integer;
@@ -891,7 +891,7 @@ begin
   FNomFichier := ANomFichier;
 end;
 
-procedure TRapportHTML.Generer;
+procedure TRapportHTML.Generer;  
 var
   F: TextFile;
   i: Integer;
@@ -975,7 +975,7 @@ end.
 ### Tests efficaces
 
 ```pascal
-procedure TMonTest.TestExempleComplet;
+procedure TMonTest.TestExempleComplet;  
 var
   Resultat: Double;
   FichierTest: string;
@@ -999,7 +999,7 @@ end;
 ### Gestion des différences OS
 
 ```pascal
-procedure TTestOS.TestComportementSpecifique;
+procedure TTestOS.TestComportementSpecifique;  
 begin
   {$IFDEF WINDOWS}
     RunTestWindows;
@@ -1012,13 +1012,13 @@ begin
   {$ENDIF}
 end;
 
-procedure TTestOS.RunTestWindows;
+procedure TTestOS.RunTestWindows;  
 begin
   // Tests spécifiques Windows
   AssertTrue('Service Windows', WindowsServiceExists('Spooler'));
 end;
 
-procedure TTestOS.RunTestUnix;
+procedure TTestOS.RunTestUnix;  
 begin
   // Tests spécifiques Unix
   AssertTrue('Daemon Unix', UnixDaemonExists('cron'));
@@ -1030,7 +1030,7 @@ end;
 ### Techniques de diagnostic
 
 ```pascal
-procedure TTestDebug.TestAvecDiagnostic;
+procedure TTestDebug.TestAvecDiagnostic;  
 var
   Valeur: Integer;
   Message: string;
@@ -1094,7 +1094,7 @@ var
 
 implementation
 
-constructor TTestLogger.Create(const AFileName: string);
+constructor TTestLogger.Create(const AFileName: string);  
 begin
   FLogFileName := AFileName;
   FEnabled := True;
@@ -1117,7 +1117,7 @@ begin
   Flush(FLogFile);
 end;
 
-destructor TTestLogger.Destroy;
+destructor TTestLogger.Destroy;  
 begin
   if FEnabled then
   begin
@@ -1128,7 +1128,7 @@ begin
   inherited;
 end;
 
-procedure TTestLogger.Log(ALevel: TLogLevel; const AMessage: string);
+procedure TTestLogger.Log(ALevel: TLogLevel; const AMessage: string);  
 const
   LevelStr: array[TLogLevel] of string =
     ('DEBUG', 'INFO', 'WARNING', 'ERROR');
@@ -1141,7 +1141,7 @@ begin
   Flush(FLogFile);
 end;
 
-procedure TTestLogger.LogPlatform(const AMessage: string);
+procedure TTestLogger.LogPlatform(const AMessage: string);  
 begin
   {$IFDEF WINDOWS}
     Log(llInfo, '[Windows] ' + AMessage);
@@ -1152,7 +1152,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TTestLogger.LogMemory;
+procedure TTestLogger.LogMemory;  
 var
   HeapStatus: THeapStatus;
 begin
@@ -1163,7 +1163,7 @@ begin
        HeapStatus.CurrHeapSize]));
 end;
 
-procedure TTestLogger.LogException(E: Exception);
+procedure TTestLogger.LogException(E: Exception);  
 begin
   Log(llError, 'Exception: ' + E.ClassName + ' - ' + E.Message);
   {$IFDEF WINDOWS}
@@ -1204,19 +1204,19 @@ type
 
 implementation
 
-procedure TTestAvecLog.SetUp;
+procedure TTestAvecLog.SetUp;  
 begin
   TestLog.Log(llInfo, 'Début du test: ' + Self.TestName);
   TestLog.LogMemory;
 end;
 
-procedure TTestAvecLog.TearDown;
+procedure TTestAvecLog.TearDown;  
 begin
   TestLog.LogMemory;
   TestLog.Log(llInfo, 'Fin du test: ' + Self.TestName);
 end;
 
-procedure TTestAvecLog.TestOperationComplexe;
+procedure TTestAvecLog.TestOperationComplexe;  
 var
   i: Integer;
   Liste: TStringList;
@@ -1312,20 +1312,20 @@ implementation
 
 { TMockFileService }
 
-constructor TMockFileService.Create;
+constructor TMockFileService.Create;  
 begin
   FFiles := TStringList.Create;
   FReadCount := 0;
   FWriteCount := 0;
 end;
 
-destructor TMockFileService.Destroy;
+destructor TMockFileService.Destroy;  
 begin
   FFiles.Free;
   inherited;
 end;
 
-function TMockFileService.ReadFile(const AFileName: string): string;
+function TMockFileService.ReadFile(const AFileName: string): string;  
 var
   Index: Integer;
 begin
@@ -1344,26 +1344,26 @@ begin
   FFiles.Values[AFileName] := AContent;
 end;
 
-function TMockFileService.FileExists(const AFileName: string): Boolean;
+function TMockFileService.FileExists(const AFileName: string): Boolean;  
 begin
   Result := FFiles.IndexOfName(AFileName) >= 0;
 end;
 
-procedure TMockFileService.Reset;
+procedure TMockFileService.Reset;  
 begin
   FFiles.Clear;
   FReadCount := 0;
   FWriteCount := 0;
 end;
 
-procedure TMockFileService.SetFileContent(const AFileName, AContent: string);
+procedure TMockFileService.SetFileContent(const AFileName, AContent: string);  
 begin
   FFiles.Values[AFileName] := AContent;
 end;
 
 { TRealFileService }
 
-function TRealFileService.ReadFile(const AFileName: string): string;
+function TRealFileService.ReadFile(const AFileName: string): string;  
 var
   F: TextFile;
   Line: string;
@@ -1399,7 +1399,7 @@ begin
   end;
 end;
 
-function TRealFileService.FileExists(const AFileName: string): Boolean;
+function TRealFileService.FileExists(const AFileName: string): Boolean;  
 begin
   Result := SysUtils.FileExists(AFileName);
 end;
@@ -1445,12 +1445,12 @@ implementation
 
 { TProcesseurFichier }
 
-constructor TProcesseurFichier.Create(AFileService: IFileService);
+constructor TProcesseurFichier.Create(AFileService: IFileService);  
 begin
   FFileService := AFileService;
 end;
 
-function TProcesseurFichier.ProcesserFichier(const ANomFichier: string): string;
+function TProcesseurFichier.ProcesserFichier(const ANomFichier: string): string;  
 var
   Contenu: string;
 begin
@@ -1468,19 +1468,19 @@ end;
 
 { TTestProcesseurFichier }
 
-procedure TTestProcesseurFichier.SetUp;
+procedure TTestProcesseurFichier.SetUp;  
 begin
   FMockService := TMockFileService.Create;
   FProcesseur := TProcesseurFichier.Create(FMockService);
 end;
 
-procedure TTestProcesseurFichier.TearDown;
+procedure TTestProcesseurFichier.TearDown;  
 begin
   FProcesseur.Free;
   // FMockService est libéré automatiquement (interface)
 end;
 
-procedure TTestProcesseurFichier.TestProcesserFichierSimple;
+procedure TTestProcesseurFichier.TestProcesserFichierSimple;  
 var
   Resultat: string;
 begin
@@ -1496,7 +1496,7 @@ begin
              FMockService.FileExists('test.txt.processed'));
 end;
 
-procedure TTestProcesseurFichier.TestProcesserFichierInexistant;
+procedure TTestProcesseurFichier.TestProcesserFichierInexistant;  
 var
   Resultat: string;
 begin
@@ -1506,7 +1506,7 @@ begin
   AssertEquals('Message d''erreur', 'Fichier introuvable', Resultat);
 end;
 
-procedure TTestProcesseurFichier.TestVerifierAppels;
+procedure TTestProcesseurFichier.TestVerifierAppels;  
 begin
   FMockService.SetFileContent('data.txt', 'test');
 
@@ -1566,7 +1566,7 @@ implementation
 
 { TSnapshotManager }
 
-constructor TSnapshotManager.Create;
+constructor TSnapshotManager.Create;  
 begin
   {$IFDEF WINDOWS}
     FSnapshotDir := ExtractFilePath(ParamStr(0)) + 'snapshots\';
@@ -1577,7 +1577,7 @@ begin
   ForceDirectories(FSnapshotDir);
 end;
 
-function TSnapshotManager.GetSnapshotPath(const AName: string): string;
+function TSnapshotManager.GetSnapshotPath(const AName: string): string;  
 begin
   Result := FSnapshotDir + AName + '.snapshot';
 end;
@@ -1596,7 +1596,7 @@ begin
   end;
 end;
 
-function TSnapshotManager.LoadSnapshot(const AName: string): string;
+function TSnapshotManager.LoadSnapshot(const AName: string): string;  
 var
   F: TextFile;
   Line: string;
@@ -1647,17 +1647,17 @@ end;
 
 { TTestRegression }
 
-procedure TTestRegression.SetUp;
+procedure TTestRegression.SetUp;  
 begin
   FSnapshots := TSnapshotManager.Create;
 end;
 
-procedure TTestRegression.TearDown;
+procedure TTestRegression.TearDown;  
 begin
   FSnapshots.Free;
 end;
 
-procedure TTestRegression.TestFormatageJSON;
+procedure TTestRegression.TestFormatageJSON;  
 var
   JSON: TJSONObject;
   Output: string;
@@ -1679,7 +1679,7 @@ begin
   end;
 end;
 
-procedure TTestRegression.TestCalculComplexe;
+procedure TTestRegression.TestCalculComplexe;  
 var
   Resultat: string;
   i: Integer;
@@ -1694,7 +1694,7 @@ begin
              FSnapshots.CompareWithSnapshot('calcul_complexe', Resultat));
 end;
 
-procedure TTestRegression.TestSortieHTML;
+procedure TTestRegression.TestSortieHTML;  
 var
   HTML: TStringList;
 begin
@@ -1858,7 +1858,7 @@ begin
 end;
 {$ENDIF}
 
-procedure TTestCompatibilite.TestVersionOS;
+procedure TTestCompatibilite.TestVersionOS;  
 var
   Version: string;
 begin
@@ -1876,7 +1876,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TTestCompatibilite.TestFonctionnalitesModernes;
+procedure TTestCompatibilite.TestFonctionnalitesModernes;  
 begin
   {$IFDEF WINDOWS}
     if IsWindows10OrNewer then
@@ -1908,7 +1908,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TTestCompatibilite.TestRetrocompatibilite;
+procedure TTestCompatibilite.TestRetrocompatibilite;  
 begin
   // Tester que les fonctionnalités de base fonctionnent partout
 
@@ -1989,7 +1989,7 @@ implementation
 
 { TBenchmarkRunner }
 
-function TBenchmarkRunner.CalculerEcartType(const Temps: array of Double): Double;
+function TBenchmarkRunner.CalculerEcartType(const Temps: array of Double): Double;  
 var
   Moyenne, Somme: Double;
   i: Integer;
@@ -2060,7 +2060,7 @@ begin
   FResultats[High(FResultats)] := Result;
 end;
 
-procedure TBenchmarkRunner.SaveResults(const AFileName: string);
+procedure TBenchmarkRunner.SaveResults(const AFileName: string);  
 var
   F: TextFile;
   i: Integer;
@@ -2104,7 +2104,7 @@ begin
   end;
 end;
 
-procedure TBenchmarkRunner.CompareWithBaseline(const ABaseline: string);
+procedure TBenchmarkRunner.CompareWithBaseline(const ABaseline: string);  
 var
   F: TextFile;
   Line: string;
@@ -2152,12 +2152,12 @@ end;
 
 { TTestPerformanceCrossPlatform }
 
-procedure TTestPerformanceCrossPlatform.SetUp;
+procedure TTestPerformanceCrossPlatform.SetUp;  
 begin
   FBenchmark := TBenchmarkRunner.Create;
 end;
 
-procedure TTestPerformanceCrossPlatform.TearDown;
+procedure TTestPerformanceCrossPlatform.TearDown;  
 var
   NomFichier: string;
 begin
@@ -2174,7 +2174,7 @@ begin
   FBenchmark.Free;
 end;
 
-procedure TTestPerformanceCrossPlatform.BenchStringConcat;
+procedure TTestPerformanceCrossPlatform.BenchStringConcat;  
 var
   S: string;
   i: Integer;
@@ -2184,7 +2184,7 @@ begin
     S := S + IntToStr(i);
 end;
 
-procedure TTestPerformanceCrossPlatform.BenchListSort;
+procedure TTestPerformanceCrossPlatform.BenchListSort;  
 var
   Liste: TStringList;
   i: Integer;
@@ -2199,7 +2199,7 @@ begin
   end;
 end;
 
-procedure TTestPerformanceCrossPlatform.BenchFileIO;
+procedure TTestPerformanceCrossPlatform.BenchFileIO;  
 var
   NomFichier: string;
   F: TextFile;
@@ -2219,7 +2219,7 @@ begin
   DeleteFile(NomFichier);
 end;
 
-procedure TTestPerformanceCrossPlatform.TestPerformanceStrings;
+procedure TTestPerformanceCrossPlatform.TestPerformanceStrings;  
 var
   Result: TBenchmarkResult;
 begin
@@ -2234,7 +2234,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TTestPerformanceCrossPlatform.TestPerformanceListes;
+procedure TTestPerformanceCrossPlatform.TestPerformanceListes;  
 var
   Result: TBenchmarkResult;
 begin
@@ -2244,7 +2244,7 @@ begin
   AssertTrue('Performance tri acceptable', Result.TempsMoyen < 20);
 end;
 
-procedure TTestPerformanceCrossPlatform.TestPerformanceIO;
+procedure TTestPerformanceCrossPlatform.TestPerformanceIO;  
 var
   Result: TBenchmarkResult;
 begin
@@ -2414,7 +2414,7 @@ begin
   ForceDirectories(FOutputDir);
 end;
 
-function TTestReportGenerator.GetPlatformInfo: TJSONObject;
+function TTestReportGenerator.GetPlatformInfo: TJSONObject;  
 begin
   Result := TJSONObject.Create;
   Result.Add('platform', FPlatform);
@@ -2424,7 +2424,7 @@ begin
   Result.Add('os', {$I %FPCTARGETOS%});
 end;
 
-function TTestReportGenerator.GetTestResultsJSON: TJSONArray;
+function TTestReportGenerator.GetTestResultsJSON: TJSONArray;  
 var
   i: Integer;
   TestObj: TJSONObject;
@@ -2446,7 +2446,7 @@ begin
   end;
 end;
 
-procedure TTestReportGenerator.GenerateCSS(const AFileName: string);
+procedure TTestReportGenerator.GenerateCSS(const AFileName: string);  
 var
   F: TextFile;
 begin
@@ -2531,7 +2531,7 @@ begin
   end;
 end;
 
-procedure TTestReportGenerator.GenerateJS(const AFileName: string);
+procedure TTestReportGenerator.GenerateJS(const AFileName: string);  
 var
   F: TextFile;
 begin
@@ -2578,7 +2578,7 @@ begin
   end;
 end;
 
-procedure TTestReportGenerator.GenerateFullReport;
+procedure TTestReportGenerator.GenerateFullReport;  
 var
   F: TextFile;
   i: Integer;
@@ -2695,7 +2695,7 @@ begin
   WriteLn('Rapport généré: ', HTMLFile);
 end;
 
-procedure TTestReportGenerator.GenerateJSONReport(const AFileName: string);
+procedure TTestReportGenerator.GenerateJSONReport(const AFileName: string);  
 var
   RootObj: TJSONObject;
   ResultsArray: TJSONArray;
@@ -2725,7 +2725,7 @@ begin
   end;
 end;
 
-procedure TTestReportGenerator.GenerateSummary(const AFileName: string);
+procedure TTestReportGenerator.GenerateSummary(const AFileName: string);  
 var
   F: TextFile;
 begin
@@ -2855,12 +2855,12 @@ MonProjet/
 test_runner.py - Orchestrateur de tests multi-plateformes
 """
 
-import os
-import sys
-import platform
-import subprocess
-import json
-import datetime
+import os  
+import sys  
+import platform  
+import subprocess  
+import json  
+import datetime  
 from pathlib import Path
 
 class TestOrchestrator:
@@ -3188,14 +3188,14 @@ else
 endif
 
 # Configuration
-FPC := fpc
-FPC_FLAGS := -Mobjfpc -Sh -B -FE./bin -FU./units
-TEST_DIR := tests
-BIN_DIR := bin
+FPC := fpc  
+FPC_FLAGS := -Mobjfpc -Sh -B -FE./bin -FU./units  
+TEST_DIR := tests  
+BIN_DIR := bin  
 REPORT_DIR := $(TEST_DIR)$(PATH_SEP)reports
 
 # Fichiers
-TEST_CONSOLE := $(BIN_DIR)$(PATH_SEP)TestsConsole$(EXE_EXT)
+TEST_CONSOLE := $(BIN_DIR)$(PATH_SEP)TestsConsole$(EXE_EXT)  
 TEST_GUI := $(BIN_DIR)$(PATH_SEP)TestsGUI$(EXE_EXT)
 
 # Cibles principales
@@ -3268,7 +3268,7 @@ clean:
 	$(RM) $(REPORT_DIR)$(PATH_SEP)*.*
 
 # Installation des dépendances (pour CI/CD)
-install-deps:
+install-deps:  
 ifeq ($(PLATFORM),Windows)
 	@echo "Installation des dépendances Windows..."
 	# Commandes spécifiques Windows
@@ -3306,8 +3306,8 @@ Description du module testé et de la stratégie de test adoptée.
 
 **Données de test:**
 ```
-Montant: 100.00 EUR
-Taux: 20%
+Montant: 100.00 EUR  
+Taux: 20%  
 Résultat attendu: 120.00 EUR
 ```
 

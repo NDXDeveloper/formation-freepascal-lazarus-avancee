@@ -25,7 +25,7 @@ La compilation conditionnelle permet au compilateur de :
 uses
   Windows, Registry;  // Unités Windows uniquement
 
-procedure LireRegistre;
+procedure LireRegistre;  
 var
   reg: TRegistry;
 begin
@@ -156,7 +156,7 @@ end.
 ### Symboles d'architecture
 
 ```pascal
-procedure AfficherArchitecture;
+procedure AfficherArchitecture;  
 begin
   WriteLn('Architecture du processeur :');
 
@@ -200,7 +200,7 @@ end;
 ### Symboles du compilateur
 
 ```pascal
-procedure InfoCompilateur;
+procedure InfoCompilateur;  
 begin
   {$IFDEF FPC}
     WriteLn('Compilateur : FreePascal');
@@ -273,7 +273,7 @@ type
     procedure Executer;
   end;
 
-constructor TApplication.Create;
+constructor TApplication.Create;  
 begin
   {$IFDEF VERSION_PREMIUM}
   FFeaturesPremium := True;
@@ -381,10 +381,10 @@ unit SystemePortable;
 
 interface
 
-procedure ObtenirInfoSysteme(out OS, Architecture: string);
-function ObtenirNomMachine: string;
-function ObtenirNomUtilisateur: string;
-function ObtenirRepertoireTemp: string;
+procedure ObtenirInfoSysteme(out OS, Architecture: string);  
+function ObtenirNomMachine: string;  
+function ObtenirNomUtilisateur: string;  
+function ObtenirRepertoireTemp: string;  
 procedure ExecuterCommande(const Commande: string);
 
 implementation
@@ -399,7 +399,7 @@ uses
   {$ENDIF}
   ;
 
-procedure ObtenirInfoSysteme(out OS, Architecture: string);
+procedure ObtenirInfoSysteme(out OS, Architecture: string);  
 begin
   {$IFDEF WINDOWS}
     OS := 'Windows';
@@ -445,7 +445,7 @@ begin
   {$ENDIF}
 end;
 
-function ObtenirNomUtilisateur: string;
+function ObtenirNomUtilisateur: string;  
 begin
   {$IFDEF WINDOWS}
     Result := GetEnvironmentVariable('USERNAME');
@@ -459,7 +459,7 @@ begin
     Result := 'Utilisateur';
 end;
 
-function ObtenirRepertoireTemp: string;
+function ObtenirRepertoireTemp: string;  
 begin
   {$IFDEF WINDOWS}
     Result := GetEnvironmentVariable('TEMP');
@@ -478,7 +478,7 @@ begin
   Result := IncludeTrailingPathDelimiter(Result);
 end;
 
-procedure ExecuterCommande(const Commande: string);
+procedure ExecuterCommande(const Commande: string);  
 begin
   {$IFDEF WINDOWS}
     WinExec(PChar('cmd /c ' + Commande), SW_HIDE);
@@ -508,8 +508,8 @@ type
 
 function LancerProcessus(const Programme: string;
                         const Parametres: array of string): Boolean;
-function TuerProcessus(PID: Integer): Boolean;
-function ProcessusExiste(PID: Integer): Boolean;
+function TuerProcessus(PID: Integer): Boolean;  
+function ProcessusExiste(PID: Integer): Boolean;  
 function ListerProcessus: TArray<TProcessInfo>;
 
 implementation
@@ -717,13 +717,13 @@ type
 
 implementation
 
-constructor TFormPortable.Create(AOwner: TComponent);
+constructor TFormPortable.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   AdapterInterface;
 end;
 
-procedure TFormPortable.AdapterInterface;
+procedure TFormPortable.AdapterInterface;  
 begin
   // Adaptation de la police
   {$IFDEF WINDOWS}
@@ -781,7 +781,7 @@ end.
 ### Dialogues système natifs
 
 ```pascal
-procedure OuvrirFichierNatif(out NomFichier: string);
+procedure OuvrirFichierNatif(out NomFichier: string);  
 var
   dialog: TOpenDialog;
 begin
@@ -832,8 +832,8 @@ interface
 type
   TFonctionExterne = function(Param: Integer): Integer; cdecl;
 
-function ChargerBibliotheque: Boolean;
-procedure LibererBibliotheque;
+function ChargerBibliotheque: Boolean;  
+procedure LibererBibliotheque;  
 function AppelerFonction(Valeur: Integer): Integer;
 
 implementation
@@ -845,7 +845,7 @@ var
   HandleBib: TLibHandle = 0;
   FonctionPtr: TFonctionExterne = nil;
 
-function ChargerBibliotheque: Boolean;
+function ChargerBibliotheque: Boolean;  
 const
   {$IFDEF WINDOWS}
   NOM_BIBLIOTHEQUE = 'malib.dll';
@@ -916,7 +916,7 @@ begin
     WriteLn('Erreur chargement bibliothèque : ', GetLoadErrorStr);
 end;
 
-procedure LibererBibliotheque;
+procedure LibererBibliotheque;  
 begin
   if HandleBib <> 0 then
   begin
@@ -926,7 +926,7 @@ begin
   end;
 end;
 
-function AppelerFonction(Valeur: Integer): Integer;
+function AppelerFonction(Valeur: Integer): Integer;  
 begin
   if Assigned(FonctionPtr) then
     Result := FonctionPtr(Valeur)
@@ -1038,7 +1038,7 @@ type
     property Architecture: string read FArchitecture;
   end;
 
-constructor TApplication.Create;
+constructor TApplication.Create;  
 begin
   InitialiserPlateforme;
   ConfigurerChemins;
@@ -1048,13 +1048,13 @@ begin
   WriteLn('Initialisation terminée');
 end;
 
-destructor TApplication.Destroy;
+destructor TApplication.Destroy;  
 begin
   WriteLn('Fermeture de l''application');
   inherited;
 end;
 
-procedure TApplication.InitialiserPlateforme;
+procedure TApplication.InitialiserPlateforme;  
 begin
   // Détection de la plateforme
   {$IFDEF WINDOWS}
@@ -1115,7 +1115,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TApplication.ConfigurerChemins;
+procedure TApplication.ConfigurerChemins;  
 var
   baseDir: string;
 begin
@@ -1156,7 +1156,7 @@ begin
   end;
 end;
 
-procedure TApplication.ChargerConfiguration;
+procedure TApplication.ChargerConfiguration;  
 var
   configFile: string;
   config: TStringList;
@@ -1214,7 +1214,7 @@ begin
   end;
 end;
 
-procedure TApplication.AfficherInfos;
+procedure TApplication.AfficherInfos;  
 begin
   WriteLn('Informations système :');
   WriteLn('  Plateforme : ', FPlateforme);
@@ -1257,7 +1257,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TApplication.Executer;
+procedure TApplication.Executer;  
 begin
   WriteLn;
   WriteLn('Exécution de l''application...');
@@ -1474,13 +1474,13 @@ type
     function ObtenirNom: string;
   end;
 
-procedure TServiceWindows.Executer;
+procedure TServiceWindows.Executer;  
 begin
   WriteLn('Exécution du service Windows');
   // Code spécifique Windows
 end;
 
-function TServiceWindows.ObtenirNom: string;
+function TServiceWindows.ObtenirNom: string;  
 begin
   Result := 'Service Windows';
 end;
@@ -1494,13 +1494,13 @@ type
     function ObtenirNom: string;
   end;
 
-procedure TServiceLinux.Executer;
+procedure TServiceLinux.Executer;  
 begin
   WriteLn('Exécution du service Linux');
   // Code spécifique Linux
 end;
 
-function TServiceLinux.ObtenirNom: string;
+function TServiceLinux.ObtenirNom: string;  
 begin
   Result := 'Service Linux';
 end;
@@ -1514,19 +1514,19 @@ type
     function ObtenirNom: string;
   end;
 
-procedure TServiceMacOS.Executer;
+procedure TServiceMacOS.Executer;  
 begin
   WriteLn('Exécution du service macOS');
   // Code spécifique macOS
 end;
 
-function TServiceMacOS.ObtenirNom: string;
+function TServiceMacOS.ObtenirNom: string;  
 begin
   Result := 'Service macOS';
 end;
 {$ENDIF}
 
-function CreerService: IService;
+function CreerService: IService;  
 begin
   {$IFDEF WINDOWS}
     Result := TServiceWindows.Create;
@@ -1631,7 +1631,7 @@ type
     property DetailsSysteme: string read FDetailsSysteme;
   end;
 
-procedure GererErreurSysteme(E: Exception);
+procedure GererErreurSysteme(E: Exception);  
 procedure LogErreur(const Message: string; Niveau: Integer = 0);
 
 implementation
@@ -1646,7 +1646,7 @@ uses
   {$ENDIF}
   ;
 
-constructor EApplicationError.Create(const Msg: string; CodeErreur: Integer);
+constructor EApplicationError.Create(const Msg: string; CodeErreur: Integer);  
 begin
   inherited Create(Msg);
   FCodeErreur := CodeErreur;
@@ -1670,7 +1670,7 @@ begin
   {$ENDIF}
 end;
 
-procedure GererErreurSysteme(E: Exception);
+procedure GererErreurSysteme(E: Exception);  
 begin
   {$IFDEF DEBUG}
   // En debug, afficher toutes les infos
@@ -1703,7 +1703,7 @@ begin
   {$ENDIF}
 end;
 
-procedure LogErreur(const Message: string; Niveau: Integer);
+procedure LogErreur(const Message: string; Niveau: Integer);  
 var
   logFile: string;
   f: TextFile;
@@ -1766,28 +1766,28 @@ type
 implementation
 
 // Implémentation commune
-procedure TMonType.MethodeCommune;
+procedure TMonType.MethodeCommune;  
 begin
   // Code commun à toutes les plateformes
 end;
 
 // Implémentations spécifiques regroupées
 {$IFDEF WINDOWS}
-procedure TMonType.MethodeWindows;
+procedure TMonType.MethodeWindows;  
 begin
   // Code Windows
 end;
 {$ENDIF}
 
 {$IFDEF LINUX}
-procedure TMonType.MethodeLinux;
+procedure TMonType.MethodeLinux;  
 begin
   // Code Linux
 end;
 {$ENDIF}
 
 // ❌ MAUVAIS : Mélanger les conditions
-procedure MauvaiseOrganisation;
+procedure MauvaiseOrganisation;  
 begin
   {$IFDEF WINDOWS}
   DoSomething;
@@ -1820,7 +1820,7 @@ const
   {$ENDIF}
 
 // Utilisation
-WriteLn('Plateforme : ', PLATFORM_NAME);
+WriteLn('Plateforme : ', PLATFORM_NAME);  
 configPath := GetHomeDir + CONFIG_DIR + 'monapp/';
 
 // ❌ MAUVAIS : Valeurs magiques répétées
@@ -1877,7 +1877,7 @@ path := home + '/.config/monapp/';
 ### Vérifier les symboles actifs
 
 ```pascal
-procedure AfficherSymbolesActifs;
+procedure AfficherSymbolesActifs;  
 begin
   WriteLn('=== Symboles de compilation actifs ===');
 

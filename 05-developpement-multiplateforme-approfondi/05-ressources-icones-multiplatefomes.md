@@ -72,7 +72,7 @@ Pour un fichier `.rc` (recommandé) :
 MAINICON ICON "resources/icons/windows/app.ico"
 
 // Images communes
-IMG_OPEN BITMAP "resources/common/toolbar/open.bmp"
+IMG_OPEN BITMAP "resources/common/toolbar/open.bmp"  
 IMG_SAVE BITMAP "resources/common/toolbar/save.bmp"
 ```
 
@@ -122,7 +122,7 @@ end.
 #### Par programmation
 
 ```pascal
-procedure TFormPrincipale.FormCreate(Sender: TObject);
+procedure TFormPrincipale.FormCreate(Sender: TObject);  
 begin
   {$IFDEF WINDOWS}
     Application.Icon.LoadFromFile('resources/icons/windows/app.ico');
@@ -179,13 +179,13 @@ var
 
 implementation
 
-constructor TResourceManager.Create;
+constructor TResourceManager.Create;  
 begin
   inherited Create;
   FResourcePath := ExtractFilePath(ParamStr(0)) + 'resources' + PathDelim;
 end;
 
-function TResourceManager.GetPlatformPath: string;
+function TResourceManager.GetPlatformPath: string;  
 begin
   {$IFDEF WINDOWS}
     Result := FResourcePath + 'windows' + PathDelim;
@@ -196,7 +196,7 @@ begin
   {$ENDIF}
 end;
 
-function TResourceManager.LoadImage(const AName: string): TPicture;
+function TResourceManager.LoadImage(const AName: string): TPicture;  
 var
   ImagePath: string;
 begin
@@ -212,7 +212,7 @@ begin
     Result.LoadFromFile(ImagePath);
 end;
 
-function TResourceManager.LoadIcon(const AName: string; ASize: Integer): TIcon;
+function TResourceManager.LoadIcon(const AName: string; ASize: Integer): TIcon;  
 var
   IconPath: string;
   IconName: string;
@@ -233,7 +233,7 @@ begin
     Result.LoadFromFile(IconPath);
 end;
 
-function TResourceManager.GetResourcePath(const AResource: string): string;
+function TResourceManager.GetResourcePath(const AResource: string): string;  
 begin
   Result := FResourcePath + AResource;
 end;
@@ -250,7 +250,7 @@ end.
 ### Utilisation du gestionnaire
 
 ```pascal
-procedure TFormPrincipale.LoadResources;
+procedure TFormPrincipale.LoadResources;  
 var
   BtnIcon: TIcon;
 begin
@@ -280,7 +280,7 @@ Lazarus propose la composant `TImageList` pour gérer les collections d'images :
 3. Double-cliquez pour ajouter des images
 
 ```pascal
-procedure TFormPrincipale.InitializeImageList;
+procedure TFormPrincipale.InitializeImageList;  
 begin
   ImageList1.Clear;
 
@@ -307,7 +307,7 @@ end;
 Les écrans modernes ont des résolutions élevées. Votre application doit s'adapter :
 
 ```pascal
-procedure TFormPrincipale.FormCreate(Sender: TObject);
+procedure TFormPrincipale.FormCreate(Sender: TObject);  
 begin
   // Activer la mise à l'échelle automatique
   Self.Scaled := True;
@@ -320,7 +320,7 @@ begin
   end;
 end;
 
-procedure TFormPrincipale.LoadHighDPIResources;
+procedure TFormPrincipale.LoadHighDPIResources;  
 var
   IconSize: Integer;
 begin
@@ -349,7 +349,7 @@ end;
 ### Implémentation hybride
 
 ```pascal
-function TResourceManager.LoadImageSmart(const AName: string): TPicture;
+function TResourceManager.LoadImageSmart(const AName: string): TPicture;  
 var
   ExternalPath: string;
   ResStream: TResourceStream;
@@ -399,7 +399,7 @@ type
     function GetImage(const AName: string): TPicture;
   end;
 
-function TResourceCache.GetImage(const AName: string): TPicture;
+function TResourceCache.GetImage(const AName: string): TPicture;  
 var
   Index: Integer;
 begin
@@ -468,7 +468,7 @@ done
 ### Vérification des ressources au démarrage
 
 ```pascal
-procedure TFormPrincipale.CheckResources;
+procedure TFormPrincipale.CheckResources;  
 var
   MissingResources: TStringList;
 begin

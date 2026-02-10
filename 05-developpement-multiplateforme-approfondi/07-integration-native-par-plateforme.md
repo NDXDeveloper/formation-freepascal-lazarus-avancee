@@ -75,7 +75,7 @@ type
 
 implementation
 
-constructor TSystemTrayManager.Create(AMainForm: TForm);
+constructor TSystemTrayManager.Create(AMainForm: TForm);  
 begin
   inherited Create;
   FMainForm := AMainForm;
@@ -100,14 +100,14 @@ begin
   FTrayIcon.Hint := Application.Title;
 end;
 
-destructor TSystemTrayManager.Destroy;
+destructor TSystemTrayManager.Destroy;  
 begin
   FTrayIcon.Free;
   FPopupMenu.Free;
   inherited;
 end;
 
-procedure TSystemTrayManager.CreateTrayMenu;
+procedure TSystemTrayManager.CreateTrayMenu;  
 var
   MenuItem: TMenuItem;
 begin
@@ -152,7 +152,7 @@ begin
   FPopupMenu.Items.Add(MenuItem);
 end;
 
-procedure TSystemTrayManager.SetupPlatformSpecific;
+procedure TSystemTrayManager.SetupPlatformSpecific;  
 begin
   {$IFDEF WINDOWS}
   // Configuration spécifique Windows
@@ -195,7 +195,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TSystemTrayManager.OnTrayClick(Sender: TObject);
+procedure TSystemTrayManager.OnTrayClick(Sender: TObject);  
 begin
   // Simple clic : ne rien faire ou afficher un menu
   // Le comportement dépend de l'OS
@@ -206,30 +206,30 @@ begin
   {$ENDIF}
 end;
 
-procedure TSystemTrayManager.OnTrayDblClick(Sender: TObject);
+procedure TSystemTrayManager.OnTrayDblClick(Sender: TObject);  
 begin
   // Double-clic : restaurer la fenêtre principale
   OnMenuShow(Sender);
 end;
 
-procedure TSystemTrayManager.OnMenuShow(Sender: TObject);
+procedure TSystemTrayManager.OnMenuShow(Sender: TObject);  
 begin
   FMainForm.Show;
   FMainForm.WindowState := wsNormal;
   Application.BringToFront;
 end;
 
-procedure TSystemTrayManager.OnMenuQuit(Sender: TObject);
+procedure TSystemTrayManager.OnMenuQuit(Sender: TObject);  
 begin
   Application.Terminate;
 end;
 
-procedure TSystemTrayManager.UpdateIcon(AIcon: TIcon);
+procedure TSystemTrayManager.UpdateIcon(AIcon: TIcon);  
 begin
   FTrayIcon.Icon := AIcon;
 end;
 
-procedure TSystemTrayManager.SetVisible(AVisible: Boolean);
+procedure TSystemTrayManager.SetVisible(AVisible: Boolean);  
 begin
   FTrayIcon.Visible := AVisible;
 end;
@@ -292,7 +292,7 @@ type
 
 implementation
 
-constructor TNativeNotification.Create;
+constructor TNativeNotification.Create;  
 begin
   inherited Create;
   FTimeout := 5000; // 5 secondes par défaut
@@ -317,7 +317,7 @@ begin
 end;
 
 {$IFDEF WINDOWS}
-procedure TNativeNotification.ShowWindowsNotification;
+procedure TNativeNotification.ShowWindowsNotification;  
 var
   NotifyIconData: TNotifyIconData;
 begin
@@ -334,7 +334,7 @@ begin
   Shell_NotifyIcon(NIM_MODIFY, @NotifyIconData);
 end;
 
-procedure TNativeNotification.ShowWindows10Toast;
+procedure TNativeNotification.ShowWindows10Toast;  
 begin
   // Windows 10+ : utiliser les notifications toast modernes
   // Ceci nécessite l'enregistrement de l'application dans le registre
@@ -357,7 +357,7 @@ begin
     '');
 end;
 
-function TNativeNotification.IsWindows10OrNewer: Boolean;
+function TNativeNotification.IsWindows10OrNewer: Boolean;  
 var
   Reg: TRegistry;
   Version: string;
@@ -379,7 +379,7 @@ end;
 {$ENDIF}
 
 {$IFDEF UNIX}
-procedure TNativeNotification.ShowLinuxNotification;
+procedure TNativeNotification.ShowLinuxNotification;  
 var
   Process: TProcess;
   Icon: string;
@@ -404,7 +404,7 @@ begin
   end;
 end;
 
-function TNativeNotification.GetNotificationIcon(AType: TNotificationType): string;
+function TNativeNotification.GetNotificationIcon(AType: TNotificationType): string;  
 begin
   // Utiliser les icônes standard du système
   case AType of
@@ -481,7 +481,7 @@ type
 
 implementation
 
-constructor TFileAssociationManager.Create;
+constructor TFileAssociationManager.Create;  
 begin
   inherited Create;
   FApplicationPath := ParamStr(0);
@@ -588,7 +588,7 @@ end;
 {$ENDIF}
 
 {$IFDEF UNIX}
-procedure TFileAssociationManager.CreateDesktopFile;
+procedure TFileAssociationManager.CreateDesktopFile;  
 var
   DesktopFile: TStringList;
   DesktopPath: string;
@@ -655,7 +655,7 @@ begin
   end;
 end;
 
-procedure TFileAssociationManager.UpdateMimeDatabase;
+procedure TFileAssociationManager.UpdateMimeDatabase;  
 var
   Process: TProcess;
 begin
@@ -684,7 +684,7 @@ begin
 end;
 {$ENDIF}
 
-function TFileAssociationManager.IsRegistered(const AExtension: string): Boolean;
+function TFileAssociationManager.IsRegistered(const AExtension: string): Boolean;  
 begin
   {$IFDEF WINDOWS}
   var
@@ -708,7 +708,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TFileAssociationManager.HandleOpenedFile(const AFileName: string);
+procedure TFileAssociationManager.HandleOpenedFile(const AFileName: string);  
 begin
   // Traiter le fichier ouvert
   if FileExists(AFileName) then
@@ -720,7 +720,7 @@ begin
   end;
 end;
 
-procedure TFileAssociationManager.UnregisterExtension(const AExtension: string);
+procedure TFileAssociationManager.UnregisterExtension(const AExtension: string);  
 begin
   {$IFDEF WINDOWS}
   UnregisterWindowsAssociation(AExtension);
@@ -789,7 +789,7 @@ type
 
 implementation
 
-constructor TSystemMenuManager.Create;
+constructor TSystemMenuManager.Create;  
 begin
   inherited Create;
   FApplicationPath := ParamStr(0);
@@ -802,7 +802,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TSystemMenuManager.InstallShortcuts;
+procedure TSystemMenuManager.InstallShortcuts;  
 begin
   {$IFDEF WINDOWS}
   AddToStartMenu;
@@ -852,7 +852,7 @@ begin
   end;
 end;
 
-procedure TSystemMenuManager.AddToStartMenu;
+procedure TSystemMenuManager.AddToStartMenu;  
 var
   StartMenuPath: array[0..MAX_PATH] of Char;
   ShortcutPath: string;
@@ -867,7 +867,7 @@ begin
   end;
 end;
 
-procedure TSystemMenuManager.AddToDesktop;
+procedure TSystemMenuManager.AddToDesktop;  
 var
   DesktopPath: array[0..MAX_PATH] of Char;
   ShortcutPath: string;
@@ -882,7 +882,7 @@ begin
   end;
 end;
 
-procedure TSystemMenuManager.PinToTaskbar;
+procedure TSystemMenuManager.PinToTaskbar;  
 begin
   // Windows 10+ : épingler à la barre des tâches
   // Ceci est plus complexe car Microsoft a restreint l'API
@@ -896,7 +896,7 @@ end;
 {$ENDIF}
 
 {$IFDEF UNIX}
-procedure TSystemMenuManager.CreateLinuxLauncher;
+procedure TSystemMenuManager.CreateLinuxLauncher;  
 var
   DesktopFile: TStringList;
   DesktopPath: string;
@@ -964,7 +964,7 @@ begin
   end;
 end;
 
-procedure TSystemMenuManager.AddToApplicationMenu;
+procedure TSystemMenuManager.AddToApplicationMenu;  
 var
   Process: TProcess;
 begin
@@ -1005,7 +1005,7 @@ begin
   end;
 end;
 
-procedure TSystemMenuManager.AddToDesktop;
+procedure TSystemMenuManager.AddToDesktop;  
 var
   DesktopPath: string;
   SourcePath: string;
@@ -1042,7 +1042,7 @@ begin
   end;
 end;
 
-procedure TSystemMenuManager.AddToDock;
+procedure TSystemMenuManager.AddToDock;  
 begin
   // L'ajout au dock dépend de l'environnement de bureau
 
@@ -1068,7 +1068,7 @@ begin
 end;
 {$ENDIF}
 
-procedure TSystemMenuManager.RemoveShortcuts;
+procedure TSystemMenuManager.RemoveShortcuts;  
 begin
   {$IFDEF WINDOWS}
   var
@@ -1111,7 +1111,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TSystemMenuManager.CreateQuickLaunchEntry;
+procedure TSystemMenuManager.CreateQuickLaunchEntry;  
 begin
   {$IFDEF WINDOWS}
   var
@@ -1197,14 +1197,14 @@ type
 
 implementation
 
-constructor TThemeManager.Create;
+constructor TThemeManager.Create;  
 begin
   inherited Create;
   FCurrentTheme := tsSystem;
   DetectSystemTheme;
 end;
 
-procedure TThemeManager.DetectSystemTheme;
+procedure TThemeManager.DetectSystemTheme;  
 begin
   {$IFDEF WINDOWS}
   FCurrentTheme := GetWindowsTheme;
@@ -1218,7 +1218,7 @@ begin
 end;
 
 {$IFDEF WINDOWS}
-function TThemeManager.GetWindowsTheme: TThemeStyle;
+function TThemeManager.GetWindowsTheme: TThemeStyle;  
 begin
   if IsWindowsDarkMode then
     Result := tsDark
@@ -1226,7 +1226,7 @@ begin
     Result := tsLight;
 end;
 
-function TThemeManager.IsWindowsDarkMode: Boolean;
+function TThemeManager.IsWindowsDarkMode: Boolean;  
 var
   Reg: TRegistry;
   LightTheme: Integer;
@@ -1256,7 +1256,7 @@ begin
   end;
 end;
 
-procedure TThemeManager.ApplyWindowsTheme;
+procedure TThemeManager.ApplyWindowsTheme;  
 begin
   // Activer les styles visuels Windows si disponibles
   if ThemeServices.ThemesEnabled then
@@ -1277,7 +1277,7 @@ end;
 {$ENDIF}
 
 {$IFDEF UNIX}
-function TThemeManager.GetLinuxTheme: TThemeStyle;
+function TThemeManager.GetLinuxTheme: TThemeStyle;  
 var
   ThemeName: string;
 begin
@@ -1292,7 +1292,7 @@ begin
     Result := tsLight;
 end;
 
-function TThemeManager.GetGTKTheme: string;
+function TThemeManager.GetGTKTheme: string;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -1334,7 +1334,7 @@ begin
   end;
 end;
 
-procedure TThemeManager.ApplyLinuxTheme;
+procedure TThemeManager.ApplyLinuxTheme;  
 begin
   // Sur Linux, la LCL s'adapte généralement automatiquement
   // au thème GTK/Qt, mais on peut forcer certains paramètres
@@ -1343,7 +1343,7 @@ begin
 end;
 {$ENDIF}
 
-procedure TThemeManager.UpdateApplicationColors;
+procedure TThemeManager.UpdateApplicationColors;  
 begin
   // Adapter les couleurs de l'application selon le thème
   case FCurrentTheme of
@@ -1372,7 +1372,7 @@ begin
     FOnThemeChange(Self);
 end;
 
-procedure UpdateControlColors(AParent: TWinControl; ADarkMode: Boolean);
+procedure UpdateControlColors(AParent: TWinControl; ADarkMode: Boolean);  
 var
   i: Integer;
   Control: TControl;
@@ -1406,7 +1406,7 @@ begin
   end;
 end;
 
-procedure TThemeManager.ApplyTheme(ATheme: TThemeStyle);
+procedure TThemeManager.ApplyTheme(ATheme: TThemeStyle);  
 begin
   FCurrentTheme := ATheme;
 
@@ -1416,7 +1416,7 @@ begin
     UpdateApplicationColors;
 end;
 
-procedure TThemeManager.RegisterThemeChangeHandler;
+procedure TThemeManager.RegisterThemeChangeHandler;  
 begin
   {$IFDEF WINDOWS}
   // Sur Windows, on peut surveiller les changements de registre
@@ -1479,14 +1479,14 @@ type
 
 implementation
 
-constructor TAutoStartManager.Create;
+constructor TAutoStartManager.Create;  
 begin
   inherited Create;
   FApplicationPath := ParamStr(0);
   FApplicationName := ChangeFileExt(ExtractFileName(FApplicationPath), '');
 end;
 
-procedure TAutoStartManager.EnableAutoStart;
+procedure TAutoStartManager.EnableAutoStart;  
 begin
   {$IFDEF WINDOWS}
   SetWindowsAutoStart(True);
@@ -1497,7 +1497,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TAutoStartManager.DisableAutoStart;
+procedure TAutoStartManager.DisableAutoStart;  
 begin
   {$IFDEF WINDOWS}
   SetWindowsAutoStart(False);
@@ -1508,7 +1508,7 @@ begin
   {$ENDIF}
 end;
 
-function TAutoStartManager.IsAutoStartEnabled: Boolean;
+function TAutoStartManager.IsAutoStartEnabled: Boolean;  
 begin
   {$IFDEF WINDOWS}
   Result := GetWindowsAutoStart;
@@ -1520,7 +1520,7 @@ begin
 end;
 
 {$IFDEF WINDOWS}
-procedure TAutoStartManager.SetWindowsAutoStart(AEnable: Boolean);
+procedure TAutoStartManager.SetWindowsAutoStart(AEnable: Boolean);  
 var
   Reg: TRegistry;
 begin
@@ -1542,7 +1542,7 @@ begin
   end;
 end;
 
-function TAutoStartManager.GetWindowsAutoStart: Boolean;
+function TAutoStartManager.GetWindowsAutoStart: Boolean;  
 var
   Reg: TRegistry;
 begin
@@ -1564,7 +1564,7 @@ end;
 {$ENDIF}
 
 {$IFDEF UNIX}
-procedure TAutoStartManager.SetLinuxAutoStart(AEnable: Boolean);
+procedure TAutoStartManager.SetLinuxAutoStart(AEnable: Boolean);  
 var
   AutostartDir: string;
   DesktopFile: string;
@@ -1610,7 +1610,7 @@ begin
   end;
 end;
 
-function TAutoStartManager.GetLinuxAutoStart: Boolean;
+function TAutoStartManager.GetLinuxAutoStart: Boolean;  
 var
   DesktopFile: string;
 begin
@@ -1619,7 +1619,7 @@ begin
   Result := FileExists(DesktopFile);
 end;
 
-procedure TAutoStartManager.CreateSystemdService;
+procedure TAutoStartManager.CreateSystemdService;  
 var
   ServiceFile: TStringList;
   ServicePath: string;
@@ -1659,7 +1659,7 @@ begin
 end;
 {$ENDIF}
 
-procedure TAutoStartManager.CreateServiceEntry;
+procedure TAutoStartManager.CreateServiceEntry;  
 begin
   {$IFDEF WINDOWS}
   // Sur Windows, créer un service nécessite des privilèges admin
@@ -1723,7 +1723,7 @@ var
 
 implementation
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   // Initialiser l'intégration native
   InitializeNativeIntegration;
@@ -1732,7 +1732,7 @@ begin
   HandleCommandLineFile;
 end;
 
-procedure TFormMain.InitializeNativeIntegration;
+procedure TFormMain.InitializeNativeIntegration;  
 begin
   // Créer le gestionnaire de zone de notification
   FTrayManager := TSystemTrayManager.Create(Self);
@@ -1771,7 +1771,7 @@ begin
                   'L''application est prête et intégrée au système');
 end;
 
-procedure TFormMain.FormDestroy(Sender: TObject);
+procedure TFormMain.FormDestroy(Sender: TObject);  
 begin
   // Libérer les ressources
   FTrayManager.Free;
@@ -1782,7 +1782,7 @@ begin
   FAutoStart.Free;
 end;
 
-procedure TFormMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+procedure TFormMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);  
 begin
   // Au lieu de fermer, minimiser dans la zone de notification
   {$IFDEF WINDOWS}
@@ -1808,7 +1808,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TFormMain.HandleCommandLineFile;
+procedure TFormMain.HandleCommandLineFile;  
 begin
   // Si un fichier est passé en paramètre
   if ParamCount > 0 then
@@ -1821,13 +1821,13 @@ begin
   end;
 end;
 
-procedure TFormMain.ShowNotification(const ATitle, AMessage: string);
+procedure TFormMain.ShowNotification(const ATitle, AMessage: string);  
 begin
   if Assigned(FNotifications) then
     FNotifications.Show(ATitle, AMessage, ntInfo);
 end;
 
-procedure TFormMain.OnThemeChanged(Sender: TObject);
+procedure TFormMain.OnThemeChanged(Sender: TObject);  
 begin
   // Réagir au changement de thème
   case FThemeManager.CurrentTheme of
@@ -1838,7 +1838,7 @@ begin
   end;
 end;
 
-procedure TFormMain.MenuOptionsClick(Sender: TObject);
+procedure TFormMain.MenuOptionsClick(Sender: TObject);  
 begin
   // Dialogue d'options avec intégration native
   with TFormOptions.Create(Self) do
@@ -1961,7 +1961,7 @@ uses
   , Process
   {$ENDIF};
 
-procedure TFormOptions.FormCreate(Sender: TObject);
+procedure TFormOptions.FormCreate(Sender: TObject);  
 begin
   FFileAssociations := TStringList.Create;
 
@@ -1984,7 +1984,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TFormOptions.LoadCurrentSettings;
+procedure TFormOptions.LoadCurrentSettings;  
 var
   Config: TIniFile;
   ConfigPath: string;
@@ -2045,7 +2045,7 @@ begin
   end;
 end;
 
-procedure TFormOptions.ApplySettings;
+procedure TFormOptions.ApplySettings;  
 var
   Config: TIniFile;
   ConfigPath: string;
@@ -2111,7 +2111,7 @@ begin
   end;
 end;
 
-procedure TFormOptions.UpdatePlatformSpecificOptions;
+procedure TFormOptions.UpdatePlatformSpecificOptions;  
 begin
   {$IFDEF WINDOWS}
   // Afficher les options Windows
@@ -2149,7 +2149,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TFormOptions.ButtonAddFileTypeClick(Sender: TObject);
+procedure TFormOptions.ButtonAddFileTypeClick(Sender: TObject);  
 var
   Extension: string;
   Description: string;
@@ -2183,7 +2183,7 @@ begin
   end;
 end;
 
-procedure TFormOptions.ButtonRemoveFileTypeClick(Sender: TObject);
+procedure TFormOptions.ButtonRemoveFileTypeClick(Sender: TObject);  
 var
   FileAssoc: TFileAssociationManager;
   Extension: string;
@@ -2211,7 +2211,7 @@ begin
   end;
 end;
 
-procedure TFormOptions.RadioButtonThemeChange(Sender: TObject);
+procedure TFormOptions.RadioButtonThemeChange(Sender: TObject);  
 var
   ThemeManager: TThemeManager;
   NewTheme: TThemeStyle;
@@ -2232,7 +2232,7 @@ begin
   end;
 end;
 
-procedure TFormOptions.CheckBoxAutoStartChange(Sender: TObject);
+procedure TFormOptions.CheckBoxAutoStartChange(Sender: TObject);  
 begin
   // Avertir l'utilisateur des implications
   if CheckBoxAutoStart.Checked then
@@ -2249,7 +2249,7 @@ begin
   end;
 end;
 
-procedure TFormOptions.ButtonApplyClick(Sender: TObject);
+procedure TFormOptions.ButtonApplyClick(Sender: TObject);  
 begin
   ApplySettings;
   ShowMessage('Paramètres appliqués');
@@ -2300,7 +2300,7 @@ type
 
 implementation
 
-function TPermissionsManager.IsElevated: Boolean;
+function TPermissionsManager.IsElevated: Boolean;  
 begin
   {$IFDEF WINDOWS}
   Result := IsRunAsAdmin;
@@ -2312,7 +2312,7 @@ begin
 end;
 
 {$IFDEF WINDOWS}
-function TPermissionsManager.IsRunAsAdmin: Boolean;
+function TPermissionsManager.IsRunAsAdmin: Boolean;  
 var
   TokenHandle: THandle;
   TokenInformation: TOKEN_ELEVATION;
@@ -2359,12 +2359,12 @@ end;
 {$ENDIF}
 
 {$IFDEF UNIX}
-function TPermissionsManager.IsRunAsRoot: Boolean;
+function TPermissionsManager.IsRunAsRoot: Boolean;  
 begin
   Result := fpGetUID = 0;
 end;
 
-function TPermissionsManager.HasSudoRights: Boolean;
+function TPermissionsManager.HasSudoRights: Boolean;  
 var
   Output: string;
 begin
@@ -2372,7 +2372,7 @@ begin
   Result := RunCommand('sudo', ['-n', 'true'], Output);
 end;
 
-function TPermissionsManager.RunWithSudo(const ACommand: string): Boolean;
+function TPermissionsManager.RunWithSudo(const ACommand: string): Boolean;  
 var
   Output: string;
 begin
@@ -2390,7 +2390,7 @@ begin
 end;
 {$ENDIF}
 
-function TPermissionsManager.RequestElevation: Boolean;
+function TPermissionsManager.RequestElevation: Boolean;  
 begin
   {$IFDEF WINDOWS}
   if not IsRunAsAdmin then
@@ -2427,7 +2427,7 @@ begin
   {$ENDIF}
 end;
 
-function TPermissionsManager.RestartElevated: Boolean;
+function TPermissionsManager.RestartElevated: Boolean;  
 begin
   {$IFDEF WINDOWS}
   Result := RunElevated(ParamStr(0));
@@ -2442,7 +2442,7 @@ begin
   {$ENDIF}
 end;
 
-function TPermissionsManager.CheckPermission(const AResource: string): Boolean;
+function TPermissionsManager.CheckPermission(const AResource: string): Boolean;  
 begin
   // Vérifier les permissions pour une ressource spécifique
   {$IFDEF WINDOWS}
@@ -2496,7 +2496,7 @@ Il est important de tester votre application sur :
 #### 3. **Gérer les erreurs gracieusement**
 
 ```pascal
-procedure SafeNativeOperation;
+procedure SafeNativeOperation;  
 begin
   try
     // Opération native

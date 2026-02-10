@@ -37,9 +37,9 @@ L'apparence et le comportement de l'interface :
 
 ```pascal
 // Même code, apparence différente
-Button1 := TButton.Create(Form1);
-Button1.Caption := 'OK';
-Button1.Width := 75;
+Button1 := TButton.Create(Form1);  
+Button1.Caption := 'OK';  
+Button1.Width := 75;  
 Button1.Height := 25;
 
 // Résultat :
@@ -111,7 +111,7 @@ La bonne nouvelle : Lazarus et la LCL abstraient déjà beaucoup de différences
 
 ```pascal
 // Ce code fonctionne partout sans modification
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 begin
   ShowMessage('Hello World');
   OpenDialog1.Execute;
@@ -145,7 +145,7 @@ Certaines différences nécessitent votre attention :
 
 ```pascal
 // Code qui fonctionne sur Windows mais pas Linux
-procedure OuvrirConfig;
+procedure OuvrirConfig;  
 var
   ConfigFile: string;
 begin
@@ -170,7 +170,7 @@ end;
 
 ```pascal
 // Toujours utiliser les constantes système
-function GetConfigPath: string;
+function GetConfigPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('APPDATA');
@@ -210,7 +210,7 @@ end;
 
 ```pascal
 // Détecter les capacités à l'exécution
-procedure AdapterInterface;
+procedure AdapterInterface;  
 begin
   // Détecter la résolution
   if Screen.Width < 1024 then
@@ -266,7 +266,7 @@ end;
 {$ENDIF}
 
 // Détecter le système à l'exécution
-function GetOSVersion: string;
+function GetOSVersion: string;  
 begin
   {$IFDEF WINDOWS}
   Result := Format('Windows %d.%d Build %d',
@@ -280,7 +280,7 @@ begin
 end;
 
 // Détecter l'architecture
-function Is64Bit: Boolean;
+function Is64Bit: Boolean;  
 begin
   Result := SizeOf(Pointer) = 8;
 end;
@@ -299,7 +299,7 @@ type
     procedure TestSystemIntegration;
   end;
 
-procedure TPlatformTest.TestPathSeparators;
+procedure TPlatformTest.TestPathSeparators;  
 var
   TestPath: string;
 begin
@@ -327,7 +327,7 @@ type
     class function CheckRegistry: Boolean;
   end;
 
-class function TPortabilityChecker.CheckPath(const Path: string): Boolean;
+class function TPortabilityChecker.CheckPath(const Path: string): Boolean;  
 begin
   Result := True;
 
@@ -365,7 +365,7 @@ end;
 
 ```pascal
 // ❌ MAUVAIS : Code non portable
-procedure SaveData;
+procedure SaveData;  
 var
   F: TextFile;
 begin
@@ -379,7 +379,7 @@ begin
 end;
 
 // ✅ BON : Code portable
-procedure SaveDataPortable;
+procedure SaveDataPortable;  
 var
   FilePath: string;
   SL: TStringList;

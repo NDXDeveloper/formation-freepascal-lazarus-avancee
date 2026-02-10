@@ -44,7 +44,7 @@ Le problème est évident : le même besoin (créer un fichier, afficher un mess
 Sans abstraction, votre code ressemblerait à ceci :
 
 ```pascal
-procedure SauvegarderFichier(const NomFichier: string; const Contenu: string);
+procedure SauvegarderFichier(const NomFichier: string; const Contenu: string);  
 begin
   {$IFDEF WINDOWS}
   // 50 lignes de code spécifique Windows
@@ -89,7 +89,7 @@ end;
 L'abstraction consiste à créer une couche intermédiaire qui "cache" les différences entre les systèmes :
 
 ```pascal
-procedure SauvegarderFichier(const NomFichier: string; const Contenu: string);
+procedure SauvegarderFichier(const NomFichier: string; const Contenu: string);  
 var
   F: TextFile;
 begin
@@ -113,7 +113,7 @@ La RTL est la bibliothèque de base de FreePascal qui abstrait les opérations s
 #### Gestion des Fichiers
 
 ```pascal
-program ExempleRTL;
+program ExempleRTL;  
 uses SysUtils;
 
 var
@@ -201,7 +201,7 @@ La FCL construit sur la RTL en offrant des classes et composants plus sophistiqu
 #### Exemple avec TFileStream (Gestion de Fichiers Avancée)
 
 ```pascal
-program FCLExample;
+program FCLExample;  
 uses Classes, SysUtils;
 
 var
@@ -240,7 +240,7 @@ end.
 #### TRegistry : Abstraction du Registre Windows / Configuration Linux
 
 ```pascal
-program ConfigPortable;
+program ConfigPortable;  
 uses Registry, SysUtils;
 
 var
@@ -278,7 +278,7 @@ end.
 La LCL abstrait complètement les différences d'interface graphique entre les OS.
 
 ```pascal
-program LCLExample;
+program LCLExample;  
 uses Forms, Dialogs, StdCtrls, Controls;
 
 type
@@ -291,7 +291,7 @@ type
 var
   MainForm: TMainForm;
 
-procedure TMainForm.Button1Click(Sender: TObject);
+procedure TMainForm.Button1Click(Sender: TObject);  
 begin
   // Ces dialogues s'adaptent à l'OS
 
@@ -380,7 +380,7 @@ type
   {$ENDIF}
 
 {$IFDEF WINDOWS}
-function TWindowsPlatform.GetOSName: string;
+function TWindowsPlatform.GetOSName: string;  
 var
   VersionInfo: TOSVersionInfo;
 begin
@@ -396,7 +396,7 @@ begin
     Result := 'Windows';
 end;
 
-function TWindowsPlatform.GetUserName: string;
+function TWindowsPlatform.GetUserName: string;  
 var
   Buffer: array[0..255] of Char;
   Size: DWORD;
@@ -408,7 +408,7 @@ begin
     Result := 'Unknown';
 end;
 
-function TWindowsPlatform.GetComputerName: string;
+function TWindowsPlatform.GetComputerName: string;  
 var
   Buffer: array[0..255] of Char;
   Size: DWORD;
@@ -420,7 +420,7 @@ begin
     Result := 'Unknown';
 end;
 
-function TWindowsPlatform.IsAdmin: Boolean;
+function TWindowsPlatform.IsAdmin: Boolean;  
 var
   Token: THandle;
   Elevation: TOKEN_ELEVATION;
@@ -437,7 +437,7 @@ begin
   end;
 end;
 
-function TWindowsPlatform.GetMemoryInfo: Int64;
+function TWindowsPlatform.GetMemoryInfo: Int64;  
 var
   MemStatus: TMemoryStatusEx;
 begin
@@ -450,7 +450,7 @@ end;
 {$ENDIF}
 
 {$IFDEF UNIX}
-function TUnixPlatform.GetOSName: string;
+function TUnixPlatform.GetOSName: string;  
 begin
   // Lire depuis /etc/os-release ou uname
   Result := 'Linux/Unix';
@@ -462,14 +462,14 @@ begin
   end;
 end;
 
-function TUnixPlatform.GetUserName: string;
+function TUnixPlatform.GetUserName: string;  
 begin
   Result := GetEnvironmentVariable('USER');
   if Result = '' then
     Result := GetEnvironmentVariable('LOGNAME');
 end;
 
-function TUnixPlatform.GetComputerName: string;
+function TUnixPlatform.GetComputerName: string;  
 begin
   Result := GetEnvironmentVariable('HOSTNAME');
   if Result = '' then
@@ -489,13 +489,13 @@ begin
   end;
 end;
 
-function TUnixPlatform.IsAdmin: Boolean;
+function TUnixPlatform.IsAdmin: Boolean;  
 begin
   // Sur Unix, vérifier si UID = 0 (root)
   Result := FpGetuid = 0;
 end;
 
-function TUnixPlatform.GetMemoryInfo: Int64;
+function TUnixPlatform.GetMemoryInfo: Int64;  
 var
   F: TextFile;
   Line: string;
@@ -529,7 +529,7 @@ begin
 end;
 {$ENDIF}
 
-function GetPlatformInfo: IPlatformInfo;
+function GetPlatformInfo: IPlatformInfo;  
 begin
   {$IFDEF WINDOWS}
   Result := TWindowsPlatform.Create;
@@ -545,7 +545,7 @@ end.
 ### Utilisation de l'Abstraction
 
 ```pascal
-program TestAbstraction;
+program TestAbstraction;  
 uses PlatformServices, SysUtils;
 
 var
@@ -588,7 +588,7 @@ type
   end;
 
 { Factory qui crée la bonne instance }
-function CreateNotification: TNotification;
+function CreateNotification: TNotification;  
 begin
   {$IFDEF WINDOWS}
   Result := TWindowsNotification.Create;
@@ -679,7 +679,7 @@ type
     function GetValue(const Key: string): string;
   end;
 
-constructor TConfiguration.Create;
+constructor TConfiguration.Create;  
 begin
   {$IFDEF WINDOWS}
   FStrategy := TRegistryStrategy.Create;
@@ -699,7 +699,7 @@ const
   CONFIG_PATH = 'C:\Program Files\MyApp\';
 
 // BON - Portable
-function GetConfigPath: string;
+function GetConfigPath: string;  
 begin
   Result := IncludeTrailingPathDelimiter(GetAppConfigDir(False));
 end;
@@ -771,7 +771,7 @@ end.
 
   @param FileName Le fichier à ouvrir
   @returns True si succès }
-function OpenDocument(const FileName: string): Boolean;
+function OpenDocument(const FileName: string): Boolean;  
 begin
   {$IFDEF WINDOWS}
   Result := ShellExecute(0, 'open', PChar(FileName), nil, nil,
@@ -799,11 +799,11 @@ end;
 
 ```pascal
 // ERREUR - Threads non initialisés sur Unix
-program MonProgramme;
+program MonProgramme;  
 uses Classes;
 
 // CORRECT
-program MonProgramme;
+program MonProgramme;  
 uses
   {$IFDEF UNIX}cthreads,{$ENDIF} // DOIT être en premier !
   Classes;
@@ -857,7 +857,7 @@ const
   SQLITE_DLL = 'C:\Program Files\SQLite\sqlite3.dll';
 
 // CORRECT - Recherche portable
-function GetSQLiteLibrary: string;
+function GetSQLiteLibrary: string;  
 begin
   {$IFDEF WINDOWS}
   Result := 'sqlite3.dll';
@@ -910,7 +910,7 @@ type
 
 implementation
 
-procedure TTestAbstraction.TestPathSeparator;
+procedure TTestAbstraction.TestPathSeparator;  
 var
   Path: string;
 begin
@@ -923,7 +923,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TTestAbstraction.TestTempDirectory;
+procedure TTestAbstraction.TestTempDirectory;  
 var
   TempDir: string;
 begin
@@ -940,7 +940,7 @@ begin
   DeleteFile(TempDir + 'test.tmp');
 end;
 
-procedure TTestAbstraction.TestFileOperations;
+procedure TTestAbstraction.TestFileOperations;  
 var
   TestFile: string;
   Content: TStringList;
@@ -970,7 +970,7 @@ begin
   end;
 end;
 
-procedure TTestAbstraction.TestProcessLaunch;
+procedure TTestAbstraction.TestProcessLaunch;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -1041,14 +1041,14 @@ uses
   {$ENDIF}
   Forms, Controls, ExtCtrls, SysUtils;
 
-class function TNotificationManager.Instance: TNotificationManager;
+class function TNotificationManager.Instance: TNotificationManager;  
 begin
   if not Assigned(FInstance) then
     FInstance := TNotificationManager.Create;
   Result := FInstance;
 end;
 
-function TNotificationManager.SupportsNativeNotifications: Boolean;
+function TNotificationManager.SupportsNativeNotifications: Boolean;  
 begin
   {$IFDEF WINDOWS}
   // Windows 10+ supporte les notifications modernes
@@ -1306,12 +1306,12 @@ begin
   {$ENDIF}
 end;
 
-class function TPermissionManager.IsWritable(const FileName: string): Boolean;
+class function TPermissionManager.IsWritable(const FileName: string): Boolean;  
 begin
   Result := fpWrite in GetFilePermissions(FileName);
 end;
 
-class function TPermissionManager.IsExecutable(const FileName: string): Boolean;
+class function TPermissionManager.IsExecutable(const FileName: string): Boolean;  
 begin
   Result := fpExecute in GetFilePermissions(FileName);
 end;
@@ -1375,24 +1375,24 @@ uses
   , LCLType, LCLIntf
   {$ENDIF};
 
-class function TClipboardManager.Instance: TClipboardManager;
+class function TClipboardManager.Instance: TClipboardManager;  
 begin
   if not Assigned(FInstance) then
     FInstance := TClipboardManager.Create;
   Result := FInstance;
 end;
 
-procedure TClipboardManager.SetText(const Text: string);
+procedure TClipboardManager.SetText(const Text: string);  
 begin
   Clipboard.AsText := Text;
 end;
 
-function TClipboardManager.GetText: string;
+function TClipboardManager.GetText: string;  
 begin
   Result := Clipboard.AsText;
 end;
 
-function TClipboardManager.HasText: Boolean;
+function TClipboardManager.HasText: Boolean;  
 begin
   Result := Clipboard.HasFormat(CF_TEXT);
 end;
@@ -1446,13 +1446,13 @@ begin
   {$ENDIF}
 end;
 
-function TClipboardManager.GetHTML: string;
+function TClipboardManager.GetHTML: string;  
 begin
   // Implémentation simplifiée
   Result := Clipboard.AsText;
 end;
 
-function TClipboardManager.HasHTML: Boolean;
+function TClipboardManager.HasHTML: Boolean;  
 begin
   {$IFDEF WINDOWS}
   Result := Clipboard.HasFormat(RegisterClipboardFormat('HTML Format'));
@@ -1461,12 +1461,12 @@ begin
   {$ENDIF}
 end;
 
-procedure TClipboardManager.Clear;
+procedure TClipboardManager.Clear;  
 begin
   Clipboard.Clear;
 end;
 
-procedure TClipboardManager.CopyFile(const FileName: string);
+procedure TClipboardManager.CopyFile(const FileName: string);  
 var
   Files: TStringList;
 begin
@@ -1495,7 +1495,7 @@ begin
   end;
 end;
 
-function TClipboardManager.GetFiles: TStringList;
+function TClipboardManager.GetFiles: TStringList;  
 begin
   Result := TStringList.Create;
   // Implémentation simplifiée
@@ -1508,7 +1508,7 @@ begin
   end;
 end;
 
-function TClipboardManager.HasFiles: Boolean;
+function TClipboardManager.HasFiles: Boolean;  
 begin
   {$IFDEF WINDOWS}
   Result := Clipboard.HasFormat(CF_HDROP);
@@ -1531,9 +1531,9 @@ unit DebugHelpers;
 
 interface
 
-procedure DebugLog(const Message: string); overload;
-procedure DebugLog(const Format: string; const Args: array of const); overload;
-procedure DebugPlatformInfo;
+procedure DebugLog(const Message: string); overload;  
+procedure DebugLog(const Format: string; const Args: array of const); overload;  
+procedure DebugPlatformInfo;  
 procedure AssertPortable(Condition: Boolean; const Message: string);
 
 implementation
@@ -1579,12 +1579,12 @@ begin
   {$ENDIF}
 end;
 
-procedure DebugLog(const Format: string; const Args: array of const);
+procedure DebugLog(const Format: string; const Args: array of const);  
 begin
   DebugLog(SysUtils.Format(Format, Args));
 end;
 
-procedure DebugPlatformInfo;
+procedure DebugPlatformInfo;  
 begin
   DebugLog('=== Platform Information ===');
 
@@ -1631,7 +1631,7 @@ begin
   DebugLog('=========================');
 end;
 
-procedure AssertPortable(Condition: Boolean; const Message: string);
+procedure AssertPortable(Condition: Boolean; const Message: string);  
 begin
   if not Condition then
   begin
@@ -1652,7 +1652,7 @@ end.
 ### Exemple d'Utilisation du Débogage
 
 ```pascal
-program TestDebug;
+program TestDebug;  
 uses DebugHelpers, SysUtils;
 
 begin
