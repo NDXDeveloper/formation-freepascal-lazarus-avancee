@@ -151,7 +151,7 @@ end.
 La première étape consiste à créer une table pour suivre les versions appliquées :
 
 ```pascal
-function TMigrationManager.EnsureVersionTable: Boolean;
+function TMigrationManager.EnsureVersionTable: Boolean;  
 var
   Query: TSQLQuery;
 begin
@@ -188,7 +188,7 @@ end;
 ### Obtenir la version actuelle
 
 ```pascal
-function TMigrationManager.GetCurrentVersion: Integer;
+function TMigrationManager.GetCurrentVersion: Integer;  
 var
   Query: TSQLQuery;
 begin
@@ -216,7 +216,7 @@ end;
 ### Enregistrer une migration
 
 ```pascal
-procedure TMigrationManager.RegisterMigration(AMigration: TMigration);
+procedure TMigrationManager.RegisterMigration(AMigration: TMigration);  
 begin
   FMigrations.Add(AMigration);
 end;
@@ -225,7 +225,7 @@ end;
 ### Appliquer les migrations (UP)
 
 ```pascal
-function TMigrationManager.MigrateUp(ATargetVersion: Integer = -1): Boolean;
+function TMigrationManager.MigrateUp(ATargetVersion: Integer = -1): Boolean;  
 var
   i: Integer;
   Migration: TMigration;
@@ -295,7 +295,7 @@ end;
 ### Revenir en arrière (DOWN)
 
 ```pascal
-function TMigrationManager.MigrateDown(ATargetVersion: Integer): Boolean;
+function TMigrationManager.MigrateDown(ATargetVersion: Integer): Boolean;  
 var
   i: Integer;
   Migration: TMigration;
@@ -372,7 +372,7 @@ program MigrationExample;
 uses
   Classes, SysUtils, SQLDB, PQConnection, MigrationManager;
 
-procedure DefineMigrations(Manager: TMigrationManager);
+procedure DefineMigrations(Manager: TMigrationManager);  
 var
   Migration: TMigration;
 begin
@@ -471,7 +471,7 @@ Migration.UpSQL.Add('ALTER TABLE users ADD COLUMN age INTEGER'); // Ajout tardif
 ✅ **Bon :**
 ```pascal
 // Créer migration_005
-Migration := TMigration.Create(5, 'Ajout colonne age');
+Migration := TMigration.Create(5, 'Ajout colonne age');  
 Migration.UpSQL.Add('ALTER TABLE users ADD COLUMN age INTEGER');
 ```
 
@@ -481,8 +481,8 @@ Toujours tester que vos migrations peuvent monter ET descendre correctement :
 
 ```pascal
 // Test du cycle complet
-Manager.MigrateUp(5);      // Monter à v5
-Manager.MigrateDown(3);    // Descendre à v3
+Manager.MigrateUp(5);      // Monter à v5  
+Manager.MigrateDown(3);    // Descendre à v3  
 Manager.MigrateUp;         // Remonter à la dernière version
 ```
 
@@ -491,7 +491,7 @@ Manager.MigrateUp;         // Remonter à la dernière version
 Chaque migration doit être exécutée dans une transaction pour garantir l'atomicité :
 
 ```pascal
-FConnection.Transaction.StartTransaction;
+FConnection.Transaction.StartTransaction;  
 try
   // Appliquer la migration
   Query.ExecSQL;
@@ -520,8 +520,8 @@ Lors de modifications de structure, pensez aux données existantes :
 
 ```pascal
 // Ajouter une colonne NOT NULL avec valeur par défaut
-Migration.UpSQL.Add('ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT ''user''');
-Migration.UpSQL.Add('UPDATE users SET role = ''user'' WHERE role IS NULL');
+Migration.UpSQL.Add('ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT ''user''');  
+Migration.UpSQL.Add('UPDATE users SET role = ''user'' WHERE role IS NULL');  
 Migration.UpSQL.Add('ALTER TABLE users ALTER COLUMN role SET NOT NULL');
 ```
 
@@ -563,7 +563,7 @@ Certains types varient entre SGBD :
 
 ```pascal
 // Fonction helper pour générer du SQL compatible
-function GetAutoIncrementSQL(DBType: TDatabaseType): String;
+function GetAutoIncrementSQL(DBType: TDatabaseType): String;  
 begin
   case DBType of
     dtPostgreSQL: Result := 'SERIAL';
@@ -578,7 +578,7 @@ end;
 Utilisez des chemins compatibles :
 
 ```pascal
-function GetMigrationPath: String;
+function GetMigrationPath: String;  
 begin
   {$IFDEF WINDOWS}
   Result := ExtractFilePath(ParamStr(0)) + 'migrations\';
@@ -598,7 +598,7 @@ end;
 Pour des projets complexes, stockez vos migrations dans des fichiers SQL séparés :
 
 ```pascal
-procedure TMigrationManager.LoadMigrationsFromFiles(const APath: String);
+procedure TMigrationManager.LoadMigrationsFromFiles(const APath: String);  
 var
   SearchRec: TSearchRec;
   FileName, FilePath: String;
@@ -658,7 +658,7 @@ CREATE INDEX idx_users_email ON users(email);
 
 -- === DOWN ===
 
-DROP INDEX idx_users_email;
+DROP INDEX idx_users_email;  
 DROP TABLE users;
 ```
 
@@ -674,7 +674,7 @@ program migrate;
 uses
   SysUtils, MigrationManager;
 
-procedure ShowHelp;
+procedure ShowHelp;  
 begin
   WriteLn('Gestionnaire de migrations de base de données');
   WriteLn('Usage: migrate [commande]');
@@ -687,7 +687,7 @@ begin
   WriteLn('  create    - Créer un nouveau fichier de migration');
 end;
 
-procedure ExecuteMigration(const Command: String; const Param: String = '');
+procedure ExecuteMigration(const Command: String; const Param: String = '');  
 var
   Manager: TMigrationManager;
   Connection: TSQLConnection;

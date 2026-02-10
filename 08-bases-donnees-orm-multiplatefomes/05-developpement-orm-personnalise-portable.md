@@ -10,16 +10,16 @@ Un **ORM (Object-Relational Mapping)** est une technique de programmation qui pe
 
 **Sans ORM (SQL brut) :**
 ```pascal
-Query.SQL.Text := 'SELECT * FROM clients WHERE id = ' + IntToStr(ClientID);
-Query.Open;
-Nom := Query.FieldByName('nom').AsString;
+Query.SQL.Text := 'SELECT * FROM clients WHERE id = ' + IntToStr(ClientID);  
+Query.Open;  
+Nom := Query.FieldByName('nom').AsString;  
 Email := Query.FieldByName('email').AsString;
 ```
 
 **Avec ORM :**
 ```pascal
-Client := TClient.Load(ClientID);
-Nom := Client.Nom;
+Client := TClient.Load(ClientID);  
+Nom := Client.Nom;  
 Email := Client.Email;
 ```
 
@@ -123,7 +123,7 @@ implementation
 
 { TColumnAttribute }
 
-constructor TColumnAttribute.Create(const AColumnName: string);
+constructor TColumnAttribute.Create(const AColumnName: string);  
 begin
   inherited Create;
   FColumnName := AColumnName;
@@ -131,7 +131,7 @@ end;
 
 { TTableAttribute }
 
-constructor TTableAttribute.Create(const ATableName: string);
+constructor TTableAttribute.Create(const ATableName: string);  
 begin
   inherited Create;
   FTableName := ATableName;
@@ -139,14 +139,14 @@ end;
 
 { TEntityBase }
 
-constructor TEntityBase.Create;
+constructor TEntityBase.Create;  
 begin
   inherited Create;
   FIsNew := True;
   FIsModified := False;
 end;
 
-procedure TEntityBase.MarkAsModified;
+procedure TEntityBase.MarkAsModified;  
 begin
   if not FIsNew then
     FIsModified := True;
@@ -221,14 +221,14 @@ implementation
 
 { TClient }
 
-constructor TClient.Create;
+constructor TClient.Create;  
 begin
   inherited Create;
   FActif := True;
   FDateInscription := Now;
 end;
 
-procedure TClient.SetNom(const Value: string);
+procedure TClient.SetNom(const Value: string);  
 begin
   if FNom <> Value then
   begin
@@ -237,7 +237,7 @@ begin
   end;
 end;
 
-procedure TClient.SetPrenom(const Value: string);
+procedure TClient.SetPrenom(const Value: string);  
 begin
   if FPrenom <> Value then
   begin
@@ -246,7 +246,7 @@ begin
   end;
 end;
 
-procedure TClient.SetEmail(const Value: string);
+procedure TClient.SetEmail(const Value: string);  
 begin
   if FEmail <> Value then
   begin
@@ -255,7 +255,7 @@ begin
   end;
 end;
 
-procedure TClient.SetTelephone(const Value: string);
+procedure TClient.SetTelephone(const Value: string);  
 begin
   if FTelephone <> Value then
   begin
@@ -264,7 +264,7 @@ begin
   end;
 end;
 
-procedure TClient.SetVille(const Value: string);
+procedure TClient.SetVille(const Value: string);  
 begin
   if FVille <> Value then
   begin
@@ -273,7 +273,7 @@ begin
   end;
 end;
 
-procedure TClient.SetActif(Value: Boolean);
+procedure TClient.SetActif(Value: Boolean);  
 begin
   if FActif <> Value then
   begin
@@ -317,7 +317,7 @@ implementation
 
 { TSQLMapper }
 
-class function TSQLMapper.GetTableName(EntityClass: TClass): string;
+class function TSQLMapper.GetTableName(EntityClass: TClass): string;  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -341,7 +341,7 @@ begin
   end;
 end;
 
-class function TSQLMapper.GetPrimaryKeyName(EntityClass: TClass): string;
+class function TSQLMapper.GetPrimaryKeyName(EntityClass: TClass): string;  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -369,7 +369,7 @@ begin
   end;
 end;
 
-class function TSQLMapper.GetColumnName(PropInfo: PPropInfo): string;
+class function TSQLMapper.GetColumnName(PropInfo: PPropInfo): string;  
 begin
   // Simplification : retourne le nom de la propriété en minuscules
   // Dans une version complète, on lirait l'attribut TColumn
@@ -388,7 +388,7 @@ begin
     Result := Result + ' WHERE ' + WhereClause;
 end;
 
-class function TSQLMapper.GenerateSelectByIDSQL(EntityClass: TClass): string;
+class function TSQLMapper.GenerateSelectByIDSQL(EntityClass: TClass): string;  
 var
   TableName, PKName: string;
 begin
@@ -397,7 +397,7 @@ begin
   Result := Format('SELECT * FROM %s WHERE %s = :id', [TableName, PKName]);
 end;
 
-class function TSQLMapper.GenerateInsertSQL(Entity: TEntityBase): string;
+class function TSQLMapper.GenerateInsertSQL(Entity: TEntityBase): string;  
 var
   TableName: string;
   PropList: PPropList;
@@ -437,7 +437,7 @@ begin
   end;
 end;
 
-class function TSQLMapper.GenerateUpdateSQL(Entity: TEntityBase): string;
+class function TSQLMapper.GenerateUpdateSQL(Entity: TEntityBase): string;  
 var
   TableName, PKName: string;
   PropList: PPropList;
@@ -474,7 +474,7 @@ begin
   end;
 end;
 
-class function TSQLMapper.GenerateDeleteSQL(EntityClass: TClass; ID: Integer): string;
+class function TSQLMapper.GenerateDeleteSQL(EntityClass: TClass; ID: Integer): string;  
 var
   TableName, PKName: string;
 begin
@@ -533,21 +533,21 @@ implementation
 
 { TEntityManager }
 
-constructor TEntityManager.Create(Connection: TZConnection);
+constructor TEntityManager.Create(Connection: TZConnection);  
 begin
   inherited Create;
   FConnection := Connection;
   FInTransaction := False;
 end;
 
-destructor TEntityManager.Destroy;
+destructor TEntityManager.Destroy;  
 begin
   if FInTransaction then
     Rollback;
   inherited Destroy;
 end;
 
-procedure TEntityManager.FillEntityFromDataset(Entity: TEntityBase; Dataset: TDataset);
+procedure TEntityManager.FillEntityFromDataset(Entity: TEntityBase; Dataset: TDataset);  
 var
   PropList: PPropList;
   PropCount, i: Integer;
@@ -585,7 +585,7 @@ begin
   end;
 end;
 
-procedure TEntityManager.SetParametersFromEntity(Query: TZQuery; Entity: TEntityBase);
+procedure TEntityManager.SetParametersFromEntity(Query: TZQuery; Entity: TEntityBase);  
 var
   PropList: PPropList;
   PropCount, i: Integer;
@@ -620,7 +620,7 @@ begin
   end;
 end;
 
-function TEntityManager.Find<T>(ID: Integer): T;
+function TEntityManager.Find<T>(ID: Integer): T;  
 var
   Query: TZQuery;
   SQL: string;
@@ -644,7 +644,7 @@ begin
   end;
 end;
 
-function TEntityManager.FindAll<T>(const WhereClause: string): TList<T>;
+function TEntityManager.FindAll<T>(const WhereClause: string): TList<T>;  
 var
   Query: TZQuery;
   SQL: string;
@@ -670,7 +670,7 @@ begin
   end;
 end;
 
-procedure TEntityManager.Save(Entity: TEntityBase);
+procedure TEntityManager.Save(Entity: TEntityBase);  
 var
   Query: TZQuery;
   SQL: string;
@@ -702,7 +702,7 @@ begin
   end;
 end;
 
-procedure TEntityManager.Delete(Entity: TEntityBase);
+procedure TEntityManager.Delete(Entity: TEntityBase);  
 var
   ID: Integer;
 begin
@@ -710,7 +710,7 @@ begin
   Delete(Entity.ClassType, ID);
 end;
 
-procedure TEntityManager.Delete<T>(ID: Integer);
+procedure TEntityManager.Delete<T>(ID: Integer);  
 var
   Query: TZQuery;
   SQL: string;
@@ -726,7 +726,7 @@ begin
   end;
 end;
 
-procedure TEntityManager.BeginTransaction;
+procedure TEntityManager.BeginTransaction;  
 begin
   if not FInTransaction then
   begin
@@ -735,7 +735,7 @@ begin
   end;
 end;
 
-procedure TEntityManager.Commit;
+procedure TEntityManager.Commit;  
 begin
   if FInTransaction then
   begin
@@ -744,7 +744,7 @@ begin
   end;
 end;
 
-procedure TEntityManager.Rollback;
+procedure TEntityManager.Rollback;  
 begin
   if FInTransaction then
   begin
@@ -805,7 +805,7 @@ end.
 ### Créer un nouvel enregistrement (INSERT)
 
 ```pascal
-procedure CreerNouveauClient(EM: TEntityManager);
+procedure CreerNouveauClient(EM: TEntityManager);  
 var
   Client: TClient;
 begin
@@ -830,7 +830,7 @@ end;
 ### Lire un enregistrement (SELECT)
 
 ```pascal
-procedure AfficherClient(EM: TEntityManager; ClientID: Integer);
+procedure AfficherClient(EM: TEntityManager; ClientID: Integer);  
 var
   Client: TClient;
 begin
@@ -852,7 +852,7 @@ end;
 ### Modifier un enregistrement (UPDATE)
 
 ```pascal
-procedure ModifierEmailClient(EM: TEntityManager; ClientID: Integer);
+procedure ModifierEmailClient(EM: TEntityManager; ClientID: Integer);  
 var
   Client: TClient;
 begin
@@ -875,14 +875,14 @@ end;
 ### Supprimer un enregistrement (DELETE)
 
 ```pascal
-procedure SupprimerClient(EM: TEntityManager; ClientID: Integer);
+procedure SupprimerClient(EM: TEntityManager; ClientID: Integer);  
 begin
   // Méthode 1 : Supprimer directement par ID
   EM.Delete<TClient>(ClientID);
   WriteLn('Client supprimé');
 end;
 
-procedure SupprimerClientAvecObjet(EM: TEntityManager; ClientID: Integer);
+procedure SupprimerClientAvecObjet(EM: TEntityManager; ClientID: Integer);  
 var
   Client: TClient;
 begin
@@ -901,7 +901,7 @@ end;
 ### Lister tous les enregistrements
 
 ```pascal
-procedure ListerTousLesClients(EM: TEntityManager);
+procedure ListerTousLesClients(EM: TEntityManager);  
 var
   Clients: TList<TClient>;
   Client: TClient;
@@ -927,7 +927,7 @@ end;
 ### Rechercher avec filtre
 
 ```pascal
-procedure RechercherClientsParVille(EM: TEntityManager; const Ville: string);
+procedure RechercherClientsParVille(EM: TEntityManager; const Ville: string);  
 var
   Clients: TList<TClient>;
   Client: TClient;
@@ -1034,7 +1034,7 @@ end.
 ### Requête avec jointure
 
 ```pascal
-procedure AfficherCommandesClient(EM: TEntityManager; ClientID: Integer);
+procedure AfficherCommandesClient(EM: TEntityManager; ClientID: Integer);  
 var
   Commandes: TList<TCommande>;
   Commande: TCommande;
@@ -1081,25 +1081,25 @@ type
 
 implementation
 
-constructor TEntityCache.Create;
+constructor TEntityCache.Create;  
 begin
   inherited Create;
   FCache := TDictionary<string, TEntityBase>.Create;
 end;
 
-destructor TEntityCache.Destroy;
+destructor TEntityCache.Destroy;  
 begin
   Clear;
   FCache.Free;
   inherited Destroy;
 end;
 
-function TEntityCache.GenerateKey(EntityClass: TClass; ID: Integer): string;
+function TEntityCache.GenerateKey(EntityClass: TClass; ID: Integer): string;  
 begin
   Result := EntityClass.ClassName + '_' + IntToStr(ID);
 end;
 
-procedure TEntityCache.Add(Entity: TEntityBase);
+procedure TEntityCache.Add(Entity: TEntityBase);  
 var
   Key: string;
   ID: Integer;
@@ -1109,7 +1109,7 @@ begin
   FCache.AddOrSetValue(Key, Entity);
 end;
 
-function TEntityCache.Get(EntityClass: TClass; ID: Integer): TEntityBase;
+function TEntityCache.Get(EntityClass: TClass; ID: Integer): TEntityBase;  
 var
   Key: string;
 begin
@@ -1118,7 +1118,7 @@ begin
     Result := nil;
 end;
 
-procedure TEntityCache.Remove(EntityClass: TClass; ID: Integer);
+procedure TEntityCache.Remove(EntityClass: TClass; ID: Integer);  
 var
   Key: string;
 begin
@@ -1126,7 +1126,7 @@ begin
   FCache.Remove(Key);
 end;
 
-procedure TEntityCache.Clear;
+procedure TEntityCache.Clear;  
 var
   Entity: TEntityBase;
 begin
@@ -1189,7 +1189,7 @@ implementation
 
 { TValidationError }
 
-constructor TValidationError.Create(const APropName, AMessage: string);
+constructor TValidationError.Create(const APropName, AMessage: string);  
 begin
   inherited Create;
   FPropertyName := APropName;
@@ -1198,13 +1198,13 @@ end;
 
 { TValidationResult }
 
-constructor TValidationResult.Create;
+constructor TValidationResult.Create;  
 begin
   inherited Create;
   FErrors := TList<TValidationError>.Create;
 end;
 
-destructor TValidationResult.Destroy;
+destructor TValidationResult.Destroy;  
 var
   Error: TValidationError;
 begin
@@ -1214,22 +1214,22 @@ begin
   inherited Destroy;
 end;
 
-function TValidationResult.GetIsValid: Boolean;
+function TValidationResult.GetIsValid: Boolean;  
 begin
   Result := FErrors.Count = 0;
 end;
 
-function TValidationResult.GetErrorCount: Integer;
+function TValidationResult.GetErrorCount: Integer;  
 begin
   Result := FErrors.Count;
 end;
 
-procedure TValidationResult.AddError(const PropertyName, ErrorMessage: string);
+procedure TValidationResult.AddError(const PropertyName, ErrorMessage: string);  
 begin
   FErrors.Add(TValidationError.Create(PropertyName, ErrorMessage));
 end;
 
-function TValidationResult.GetErrorsAsString: string;
+function TValidationResult.GetErrorsAsString: string;  
 var
   Error: TValidationError;
 begin
@@ -1278,7 +1278,7 @@ implementation
 uses
   RegExpr;  // Pour validation email
 
-function TClient.Validate: TValidationResult;
+function TClient.Validate: TValidationResult;  
 var
   EmailRegex: TRegExpr;
 begin
@@ -1321,7 +1321,7 @@ end.
 ### Utilisation avec validation
 
 ```pascal
-procedure CreerClientAvecValidation(EM: TEntityManager);
+procedure CreerClientAvecValidation(EM: TEntityManager);  
 var
   Client: TClient;
   ValidationResult: TValidationResult;
@@ -1392,7 +1392,7 @@ implementation
 uses
   ORM.EntityManager;
 
-function TClient.GetCommandes: TList<TCommande>;
+function TClient.GetCommandes: TList<TCommande>;  
 begin
   if not FCommandesLoaded then
   begin
@@ -1407,7 +1407,7 @@ begin
 end;
 
 // Utilisation
-procedure AfficherClientAvecCommandes(EM: TEntityManager; ClientID: Integer);
+procedure AfficherClientAvecCommandes(EM: TEntityManager; ClientID: Integer);  
 var
   Client: TClient;
   Commande: TCommande;
@@ -1467,7 +1467,7 @@ type
 
 implementation
 
-constructor TQueryBuilder.Create(const TableName: string);
+constructor TQueryBuilder.Create(const TableName: string);  
 begin
   inherited Create;
   FTableName := TableName;
@@ -1476,20 +1476,20 @@ begin
   FOffset := 0;
 end;
 
-destructor TQueryBuilder.Destroy;
+destructor TQueryBuilder.Destroy;  
 begin
   FWhereConditions.Free;
   inherited Destroy;
 end;
 
-function TQueryBuilder.Where(const Condition: string): TQueryBuilder;
+function TQueryBuilder.Where(const Condition: string): TQueryBuilder;  
 begin
   FWhereConditions.Clear;
   FWhereConditions.Add(Condition);
   Result := Self;
 end;
 
-function TQueryBuilder.AndWhere(const Condition: string): TQueryBuilder;
+function TQueryBuilder.AndWhere(const Condition: string): TQueryBuilder;  
 begin
   if FWhereConditions.Count > 0 then
     FWhereConditions.Add('AND ' + Condition)
@@ -1498,7 +1498,7 @@ begin
   Result := Self;
 end;
 
-function TQueryBuilder.OrWhere(const Condition: string): TQueryBuilder;
+function TQueryBuilder.OrWhere(const Condition: string): TQueryBuilder;  
 begin
   if FWhereConditions.Count > 0 then
     FWhereConditions.Add('OR ' + Condition)
@@ -1507,7 +1507,7 @@ begin
   Result := Self;
 end;
 
-function TQueryBuilder.OrderBy(const Field: string; Ascending: Boolean): TQueryBuilder;
+function TQueryBuilder.OrderBy(const Field: string; Ascending: Boolean): TQueryBuilder;  
 begin
   FOrderBy := Field;
   if not Ascending then
@@ -1515,19 +1515,19 @@ begin
   Result := Self;
 end;
 
-function TQueryBuilder.Limit(Count: Integer): TQueryBuilder;
+function TQueryBuilder.Limit(Count: Integer): TQueryBuilder;  
 begin
   FLimit := Count;
   Result := Self;
 end;
 
-function TQueryBuilder.Offset(Count: Integer): TQueryBuilder;
+function TQueryBuilder.Offset(Count: Integer): TQueryBuilder;  
 begin
   FOffset := Count;
   Result := Self;
 end;
 
-function TQueryBuilder.BuildSQL: string;
+function TQueryBuilder.BuildSQL: string;  
 var
   i: Integer;
 begin
@@ -1560,7 +1560,7 @@ end.
 ### Utilisation du Query Builder
 
 ```pascal
-procedure RechercheAvecQueryBuilder(EM: TEntityManager);
+procedure RechercheAvecQueryBuilder(EM: TEntityManager);  
 var
   QB: TQueryBuilder;
   SQL: string;
@@ -1651,7 +1651,7 @@ implementation
 
 { TDatabaseAdapterFactory }
 
-class function TDatabaseAdapterFactory.CreateAdapter(DBType: TDatabaseType): IDatabaseAdapter;
+class function TDatabaseAdapterFactory.CreateAdapter(DBType: TDatabaseType): IDatabaseAdapter;  
 begin
   case DBType of
     dtPostgreSQL: Result := TPostgreSQLAdapter.Create;
@@ -1664,66 +1664,66 @@ end;
 
 { TPostgreSQLAdapter }
 
-function TPostgreSQLAdapter.GetAutoIncrementSyntax: string;
+function TPostgreSQLAdapter.GetAutoIncrementSyntax: string;  
 begin
   Result := 'SERIAL PRIMARY KEY';
 end;
 
-function TPostgreSQLAdapter.GetLimitSyntax(Limit, Offset: Integer): string;
+function TPostgreSQLAdapter.GetLimitSyntax(Limit, Offset: Integer): string;  
 begin
   Result := Format('LIMIT %d OFFSET %d', [Limit, Offset]);
 end;
 
-function TPostgreSQLAdapter.QuoteIdentifier(const Identifier: string): string;
+function TPostgreSQLAdapter.QuoteIdentifier(const Identifier: string): string;  
 begin
   Result := '"' + Identifier + '"';
 end;
 
-function TPostgreSQLAdapter.GetDateTimeLiteral(const DateTime: TDateTime): string;
+function TPostgreSQLAdapter.GetDateTimeLiteral(const DateTime: TDateTime): string;  
 begin
   Result := '''' + FormatDateTime('yyyy-mm-dd hh:nn:ss', DateTime) + '''';
 end;
 
 { TMySQLAdapter }
 
-function TMySQLAdapter.GetAutoIncrementSyntax: string;
+function TMySQLAdapter.GetAutoIncrementSyntax: string;  
 begin
   Result := 'INT AUTO_INCREMENT PRIMARY KEY';
 end;
 
-function TMySQLAdapter.GetLimitSyntax(Limit, Offset: Integer): string;
+function TMySQLAdapter.GetLimitSyntax(Limit, Offset: Integer): string;  
 begin
   Result := Format('LIMIT %d, %d', [Offset, Limit]);
 end;
 
-function TMySQLAdapter.QuoteIdentifier(const Identifier: string): string;
+function TMySQLAdapter.QuoteIdentifier(const Identifier: string): string;  
 begin
   Result := '`' + Identifier + '`';
 end;
 
-function TMySQLAdapter.GetDateTimeLiteral(const DateTime: TDateTime): string;
+function TMySQLAdapter.GetDateTimeLiteral(const DateTime: TDateTime): string;  
 begin
   Result := '''' + FormatDateTime('yyyy-mm-dd hh:nn:ss', DateTime) + '''';
 end;
 
 { TSQLiteAdapter }
 
-function TSQLiteAdapter.GetAutoIncrementSyntax: string;
+function TSQLiteAdapter.GetAutoIncrementSyntax: string;  
 begin
   Result := 'INTEGER PRIMARY KEY AUTOINCREMENT';
 end;
 
-function TSQLiteAdapter.GetLimitSyntax(Limit, Offset: Integer): string;
+function TSQLiteAdapter.GetLimitSyntax(Limit, Offset: Integer): string;  
 begin
   Result := Format('LIMIT %d OFFSET %d', [Limit, Offset]);
 end;
 
-function TSQLiteAdapter.QuoteIdentifier(const Identifier: string): string;
+function TSQLiteAdapter.QuoteIdentifier(const Identifier: string): string;  
 begin
   Result := '"' + Identifier + '"';
 end;
 
-function TSQLiteAdapter.GetDateTimeLiteral(const DateTime: TDateTime): string;
+function TSQLiteAdapter.GetDateTimeLiteral(const DateTime: TDateTime): string;  
 begin
   Result := '''' + FormatDateTime('yyyy-mm-dd hh:nn:ss', DateTime) + '''';
 end;
@@ -1784,7 +1784,7 @@ uses
 
 { TMigration }
 
-constructor TMigration.Create(AVersion: Integer; const ADescription: string);
+constructor TMigration.Create(AVersion: Integer; const ADescription: string);  
 begin
   inherited Create;
   FVersion := AVersion;
@@ -1793,7 +1793,7 @@ end;
 
 { TMigrationManager }
 
-constructor TMigrationManager.Create(Connection: TZConnection);
+constructor TMigrationManager.Create(Connection: TZConnection);  
 begin
   inherited Create;
   FConnection := Connection;
@@ -1801,13 +1801,13 @@ begin
   CreateMigrationTable;
 end;
 
-destructor TMigrationManager.Destroy;
+destructor TMigrationManager.Destroy;  
 begin
   FMigrations.Free;
   inherited Destroy;
 end;
 
-procedure TMigrationManager.CreateMigrationTable;
+procedure TMigrationManager.CreateMigrationTable;  
 var
   Query: TZQuery;
 begin
@@ -1825,7 +1825,7 @@ begin
   end;
 end;
 
-function TMigrationManager.GetCurrentVersion: Integer;
+function TMigrationManager.GetCurrentVersion: Integer;  
 var
   Query: TZQuery;
 begin
@@ -1843,7 +1843,7 @@ begin
   end;
 end;
 
-procedure TMigrationManager.SetVersion(Version: Integer);
+procedure TMigrationManager.SetVersion(Version: Integer);  
 var
   Query: TZQuery;
 begin
@@ -1858,12 +1858,12 @@ begin
   end;
 end;
 
-procedure TMigrationManager.RegisterMigration(Migration: TMigration);
+procedure TMigrationManager.RegisterMigration(Migration: TMigration);  
 begin
   FMigrations.Add(Migration);
 end;
 
-procedure TMigrationManager.MigrateToLatest;
+procedure TMigrationManager.MigrateToLatest;  
 var
   CurrentVersion: Integer;
   Migration: TMigration;
@@ -1920,12 +1920,12 @@ type
 
 implementation
 
-constructor TCreateClientsTable.Create;
+constructor TCreateClientsTable.Create;  
 begin
   inherited Create(1, 'Create clients table');
 end;
 
-procedure TCreateClientsTable.Up(Connection: TZConnection);
+procedure TCreateClientsTable.Up(Connection: TZConnection);  
 var
   Query: TZQuery;
 begin
@@ -1949,7 +1949,7 @@ begin
   end;
 end;
 
-procedure TCreateClientsTable.Down(Connection: TZConnection);
+procedure TCreateClientsTable.Down(Connection: TZConnection);  
 var
   Query: TZQuery;
 begin
@@ -1969,7 +1969,7 @@ end.
 ### Utilisation des migrations
 
 ```pascal
-procedure ExecuterMigrations;
+procedure ExecuterMigrations;  
 var
   Connection: TZConnection;
   MigrationManager: TMigrationManager;
@@ -2032,7 +2032,7 @@ type
 
 implementation
 
-procedure TTestORM.SetUp;
+procedure TTestORM.SetUp;  
 begin
   // Utiliser une base de données de test en mémoire
   FConnection := TZConnection.Create(nil);
@@ -2046,13 +2046,13 @@ begin
   FEM := TEntityManager.Create(FConnection);
 end;
 
-procedure TTestORM.TearDown;
+procedure TTestORM.TearDown;  
 begin
   FEM.Free;
   FConnection.Free;
 end;
 
-procedure TTestORM.TestCreateClient;
+procedure TTestORM.TestCreateClient;  
 var
   Client: TClient;
 begin
@@ -2071,7 +2071,7 @@ begin
   end;
 end;
 
-procedure TTestORM.TestFindClient;
+procedure TTestORM.TestFindClient;  
 var
   Client, FoundClient: TClient;
 begin
@@ -2095,7 +2095,7 @@ begin
   end;
 end;
 
-procedure TTestORM.TestTransaction;
+procedure TTestORM.TestTransaction;  
 var
   Client: TClient;
 begin
@@ -2196,7 +2196,7 @@ end;
 ### 4. Transactions pour opérations critiques
 
 ```pascal
-procedure TraiterCommande(EM: TEntityManager; CommandeID: Integer);
+procedure TraiterCommande(EM: TEntityManager; CommandeID: Integer);  
 begin
   EM.BeginTransaction;
   try
@@ -2246,13 +2246,13 @@ type
 
 implementation
 
-constructor TFileLogger.Create(const LogFileName: string);
+constructor TFileLogger.Create(const LogFileName: string);  
 begin
   inherited Create;
   FLogFile := LogFileName;
 end;
 
-procedure TFileLogger.WriteToFile(const Line: string);
+procedure TFileLogger.WriteToFile(const Line: string);  
 var
   F: TextFile;
 begin
@@ -2268,19 +2268,19 @@ begin
   end;
 end;
 
-procedure TFileLogger.Log(Level: TLogLevel; const Message: string);
+procedure TFileLogger.Log(Level: TLogLevel; const Message: string);  
 const
   LevelStr: array[TLogLevel] of string = ('DEBUG', 'INFO', 'WARNING', 'ERROR');
 begin
   WriteToFile(Format('[%s] %s', [LevelStr[Level], Message]));
 end;
 
-procedure TFileLogger.LogSQL(const SQL: string);
+procedure TFileLogger.LogSQL(const SQL: string);  
 begin
   WriteToFile('[SQL] ' + SQL);
 end;
 
-procedure TFileLogger.LogError(const ErrorMsg: string);
+procedure TFileLogger.LogError(const ErrorMsg: string);  
 begin
   Log(llError, ErrorMsg);
 end;
@@ -2302,7 +2302,7 @@ type
     // ...
   end;
 
-constructor TEntityManager.Create(Connection: TZConnection; Logger: IORMLogger);
+constructor TEntityManager.Create(Connection: TZConnection; Logger: IORMLogger);  
 begin
   inherited Create;
   FConnection := Connection;
@@ -2310,7 +2310,7 @@ begin
   FInTransaction := False;
 end;
 
-procedure TEntityManager.Save(Entity: TEntityBase);
+procedure TEntityManager.Save(Entity: TEntityBase);  
 var
   Query: TZQuery;
   SQL: string;
@@ -2379,14 +2379,14 @@ type
 
 implementation
 
-constructor TBatchProcessor.Create(EntityManager: TEntityManager; BatchSize: Integer);
+constructor TBatchProcessor.Create(EntityManager: TEntityManager; BatchSize: Integer);  
 begin
   inherited Create;
   FEntityManager := EntityManager;
   FBatchSize := BatchSize;
 end;
 
-procedure TBatchProcessor.SaveBatch<T>(Entities: TList<T>);
+procedure TBatchProcessor.SaveBatch<T>(Entities: TList<T>);  
 var
   i, Count: Integer;
   Entity: T;
@@ -2414,7 +2414,7 @@ begin
   end;
 end;
 
-procedure TBatchProcessor.DeleteBatch<T>(IDs: TArray<Integer>);
+procedure TBatchProcessor.DeleteBatch<T>(IDs: TArray<Integer>);  
 var
   i, Count: Integer;
   ID: Integer;
@@ -2447,7 +2447,7 @@ end.
 ### Utilisation du batch processor
 
 ```pascal
-procedure ImporterClients(EM: TEntityManager; const CheminCSV: string);
+procedure ImporterClients(EM: TEntityManager; const CheminCSV: string);  
 var
   BatchProcessor: TBatchProcessor;
   Clients: TList<TClient>;
@@ -2540,23 +2540,23 @@ type
 
 implementation
 
-constructor TClientRepository.Create(EntityManager: TEntityManager);
+constructor TClientRepository.Create(EntityManager: TEntityManager);  
 begin
   inherited Create;
   FEntityManager := EntityManager;
 end;
 
-function TClientRepository.GetByID(ID: Integer): TClient;
+function TClientRepository.GetByID(ID: Integer): TClient;  
 begin
   Result := FEntityManager.Find<TClient>(ID);
 end;
 
-function TClientRepository.GetAll: TList<TClient>;
+function TClientRepository.GetAll: TList<TClient>;  
 begin
   Result := FEntityManager.FindAll<TClient>();
 end;
 
-function TClientRepository.GetByEmail(const Email: string): TClient;
+function TClientRepository.GetByEmail(const Email: string): TClient;  
 var
   Clients: TList<TClient>;
 begin
@@ -2576,23 +2576,23 @@ begin
   end;
 end;
 
-function TClientRepository.GetByVille(const Ville: string): TList<TClient>;
+function TClientRepository.GetByVille(const Ville: string): TList<TClient>;  
 begin
   Result := FEntityManager.FindAll<TClient>(
     'ville = ' + QuotedStr(Ville));
 end;
 
-function TClientRepository.GetActifs: TList<TClient>;
+function TClientRepository.GetActifs: TList<TClient>;  
 begin
   Result := FEntityManager.FindAll<TClient>('actif = 1');
 end;
 
-procedure TClientRepository.Save(Client: TClient);
+procedure TClientRepository.Save(Client: TClient);  
 begin
   FEntityManager.Save(Client);
 end;
 
-procedure TClientRepository.Delete(Client: TClient);
+procedure TClientRepository.Delete(Client: TClient);  
 begin
   FEntityManager.Delete(Client);
 end;
@@ -2633,7 +2633,7 @@ type
 
 implementation
 
-constructor TUnitOfWork.Create(EntityManager: TEntityManager);
+constructor TUnitOfWork.Create(EntityManager: TEntityManager);  
 begin
   inherited Create;
   FEntityManager := EntityManager;
@@ -2642,7 +2642,7 @@ begin
   FDeletedEntities := TList<TEntityBase>.Create;
 end;
 
-destructor TUnitOfWork.Destroy;
+destructor TUnitOfWork.Destroy;  
 begin
   FNewEntities.Free;
   FModifiedEntities.Free;
@@ -2650,23 +2650,23 @@ begin
   inherited Destroy;
 end;
 
-procedure TUnitOfWork.RegisterNew(Entity: TEntityBase);
+procedure TUnitOfWork.RegisterNew(Entity: TEntityBase);  
 begin
   FNewEntities.Add(Entity);
 end;
 
-procedure TUnitOfWork.RegisterModified(Entity: TEntityBase);
+procedure TUnitOfWork.RegisterModified(Entity: TEntityBase);  
 begin
   if not FModifiedEntities.Contains(Entity) then
     FModifiedEntities.Add(Entity);
 end;
 
-procedure TUnitOfWork.RegisterDeleted(Entity: TEntityBase);
+procedure TUnitOfWork.RegisterDeleted(Entity: TEntityBase);  
 begin
   FDeletedEntities.Add(Entity);
 end;
 
-procedure TUnitOfWork.Commit;
+procedure TUnitOfWork.Commit;  
 var
   Entity: TEntityBase;
 begin
@@ -2696,7 +2696,7 @@ begin
   end;
 end;
 
-procedure TUnitOfWork.Rollback;
+procedure TUnitOfWork.Rollback;  
 begin
   FNewEntities.Clear;
   FModifiedEntities.Clear;
@@ -2709,7 +2709,7 @@ end.
 ### Utilisation du Unit of Work
 
 ```pascal
-procedure TraiterPlusieursOperations(EM: TEntityManager);
+procedure TraiterPlusieursOperations(EM: TEntityManager);  
 var
   UoW: TUnitOfWork;
   Client1, Client2: TClient;
@@ -2805,13 +2805,13 @@ type
 
 implementation
 
-constructor TClientService.Create(Repository: IClientRepository);
+constructor TClientService.Create(Repository: IClientRepository);  
 begin
   inherited Create;
   FClientRepository := Repository;
 end;
 
-function TClientService.CreerClient(const Nom, Prenom, Email, Ville: string): TClient;
+function TClientService.CreerClient(const Nom, Prenom, Email, Ville: string): TClient;  
 var
   ValidationResult: TValidationResult;
 begin
@@ -2842,23 +2842,23 @@ begin
   EnvoyerEmailBienvenue(Result);
 end;
 
-function TClientService.RechercherParEmail(const Email: string): TClient;
+function TClientService.RechercherParEmail(const Email: string): TClient;  
 begin
   Result := FClientRepository.GetByEmail(Email);
 end;
 
-function TClientService.ObtenirClientsParVille(const Ville: string): TList<TClient>;
+function TClientService.ObtenirClientsParVille(const Ville: string): TList<TClient>;  
 begin
   Result := FClientRepository.GetByVille(Ville);
 end;
 
-procedure TClientService.EnvoyerEmailBienvenue(Client: TClient);
+procedure TClientService.EnvoyerEmailBienvenue(Client: TClient);  
 begin
   // Logique d'envoi d'email (simplifié)
   WriteLn(Format('Email de bienvenue envoyé à %s', [Client.Email]));
 end;
 
-procedure TClientService.DesactiverClient(ClientID: Integer);
+procedure TClientService.DesactiverClient(ClientID: Integer);  
 var
   Client: TClient;
 begin
@@ -2898,7 +2898,7 @@ var
   ClientService: TClientService;
   Client: TClient;
 
-procedure ConfigurerConnexion;
+procedure ConfigurerConnexion;  
 begin
   Connection := TZConnection.Create(nil);
   Connection.Protocol := 'postgresql-9';
@@ -2915,7 +2915,7 @@ begin
   WriteLn('Connecté à la base de données');
 end;
 
-procedure DemonstrationORM;
+procedure DemonstrationORM;  
 begin
   WriteLn('=== Création d''un client ===');
   Client := ClientService.CreerClient(
@@ -3029,7 +3029,7 @@ type
     property Client: TClient read GetClient;
   end;
 
-function TCommande.GetClient: TClient;
+function TCommande.GetClient: TClient;  
 begin
   if not FClientLoaded and Assigned(EntityManager) then
   begin

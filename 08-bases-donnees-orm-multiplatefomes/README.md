@@ -68,9 +68,9 @@ Un ORM (Mapping Objet-Relationnel en français) est une technique qui permet de 
 
 ```pascal
 // Requête SQL directe
-SQLQuery.SQL.Text := 'SELECT id, nom, email FROM clients WHERE age > 18';
-SQLQuery.Open;
-while not SQLQuery.EOF do
+SQLQuery.SQL.Text := 'SELECT id, nom, email FROM clients WHERE age > 18';  
+SQLQuery.Open;  
+while not SQLQuery.EOF do  
 begin
   id := SQLQuery.FieldByName('id').AsInteger;
   nom := SQLQuery.FieldByName('nom').AsString;
@@ -84,8 +84,8 @@ end;
 
 ```pascal
 // Manipulation d'objets
-ClientsList := TClientRepository.FindAll('age > 18');
-for Client in ClientsList do
+ClientsList := TClientRepository.FindAll('age > 18');  
+for Client in ClientsList do  
 begin
   // Client est un objet avec des propriétés typées
   ShowMessage(Client.Nom + ' - ' + Client.Email);
@@ -277,7 +277,7 @@ type
 Ne créer la connexion que quand nécessaire :
 
 ```pascal
-function TDataModule.GetConnection: TSQLConnection;
+function TDataModule.GetConnection: TSQLConnection;  
 begin
   if not Assigned(FConnection) then
   begin

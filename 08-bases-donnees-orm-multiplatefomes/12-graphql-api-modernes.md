@@ -29,9 +29,9 @@ L'API est donc un **intermédiaire** qui permet à votre application de demander
 **Principe :** Chaque ressource a sa propre URL (endpoint).
 
 ```
-GET /users/123              → Obtenir l'utilisateur 123
-GET /users/123/posts        → Obtenir les posts de l'utilisateur 123
-GET /posts/456              → Obtenir le post 456
+GET /users/123              → Obtenir l'utilisateur 123  
+GET /users/123/posts        → Obtenir les posts de l'utilisateur 123  
+GET /posts/456              → Obtenir le post 456  
 GET /posts/456/comments     → Obtenir les commentaires du post 456
 ```
 
@@ -56,10 +56,10 @@ GET /users/123
 2. **Under-fetching** : On ne récupère pas assez de données
 ```
 // Pour afficher un utilisateur avec ses posts et commentaires :
-GET /users/123           → 1 requête
-GET /users/123/posts     → 1 requête
-GET /posts/1/comments    → 1 requête
-GET /posts/2/comments    → 1 requête
+GET /users/123           → 1 requête  
+GET /users/123/posts     → 1 requête  
+GET /posts/1/comments    → 1 requête  
+GET /posts/2/comments    → 1 requête  
 GET /posts/3/comments    → 1 requête
 // Total : 5 requêtes !
 ```
@@ -264,7 +264,7 @@ Nous allons créer un serveur GraphQL simple en utilisant le framework **Brook**
 sudo apt-get install libssl-dev
 
 # Cloner Brook
-git clone https://github.com/risoflora/brookframework.git
+git clone https://github.com/risoflora/brookframework.git  
 cd brookframework
 
 # Compiler et installer
@@ -315,7 +315,7 @@ type
 
 implementation
 
-constructor TGraphQLServer.Create(APort: Word);
+constructor TGraphQLServer.Create(APort: Word);  
 begin
   FPort := APort;
   FServer := TFPHTTPServer.Create(nil);
@@ -323,13 +323,13 @@ begin
   FServer.OnRequest := @HandleRequest;
 end;
 
-destructor TGraphQLServer.Destroy;
+destructor TGraphQLServer.Destroy;  
 begin
   FServer.Free;
   inherited;
 end;
 
-procedure TGraphQLServer.Start;
+procedure TGraphQLServer.Start;  
 begin
   WriteLn('🚀 Serveur GraphQL démarré sur le port ', FPort);
   WriteLn('📍 Endpoint: http://localhost:', FPort, '/graphql');
@@ -337,7 +337,7 @@ begin
   FServer.Active := True;
 end;
 
-procedure TGraphQLServer.Stop;
+procedure TGraphQLServer.Stop;  
 begin
   FServer.Active := False;
   WriteLn('Serveur arrêté');
@@ -659,7 +659,7 @@ type
 
 implementation
 
-constructor TGraphQLClient.Create(const AEndpoint: String);
+constructor TGraphQLClient.Create(const AEndpoint: String);  
 begin
   FEndpoint := AEndpoint;
   FHTTPClient := TFPHTTPClient.Create(nil);
@@ -669,19 +669,19 @@ begin
   FHTTPClient.AddHeader('Content-Type', 'application/json');
 end;
 
-destructor TGraphQLClient.Destroy;
+destructor TGraphQLClient.Destroy;  
 begin
   FHeaders.Free;
   FHTTPClient.Free;
   inherited;
 end;
 
-procedure TGraphQLClient.SetHeader(const Name, Value: String);
+procedure TGraphQLClient.SetHeader(const Name, Value: String);  
 begin
   FHTTPClient.AddHeader(Name, Value);
 end;
 
-function TGraphQLClient.Query(const QueryStr: String; Variables: TJSONObject): TJSONObject;
+function TGraphQLClient.Query(const QueryStr: String; Variables: TJSONObject): TJSONObject;  
 var
   RequestBody: TJSONObject;
   ResponseStr: String;
@@ -726,7 +726,7 @@ begin
   end;
 end;
 
-function TGraphQLClient.Mutate(const MutationStr: String; Variables: TJSONObject): TJSONObject;
+function TGraphQLClient.Mutate(const MutationStr: String; Variables: TJSONObject): TJSONObject;  
 begin
   // Une mutation est traitée comme une query
   Result := Query(MutationStr, Variables);
@@ -905,12 +905,12 @@ type
 
 implementation
 
-constructor TGraphQLResolvers.Create(AConnection: TSQLConnection);
+constructor TGraphQLResolvers.Create(AConnection: TSQLConnection);  
 begin
   FConnection := AConnection;
 end;
 
-function TGraphQLResolvers.GetUser(UserID: Integer): TJSONObject;
+function TGraphQLResolvers.GetUser(UserID: Integer): TJSONObject;  
 var
   Query: TSQLQuery;
 begin
@@ -936,7 +936,7 @@ begin
   end;
 end;
 
-function TGraphQLResolvers.GetUsers: TJSONArray;
+function TGraphQLResolvers.GetUsers: TJSONArray;  
 var
   Query: TSQLQuery;
   UserObj: TJSONObject;
@@ -966,7 +966,7 @@ begin
   end;
 end;
 
-function TGraphQLResolvers.GetUserPosts(UserID: Integer): TJSONArray;
+function TGraphQLResolvers.GetUserPosts(UserID: Integer): TJSONArray;  
 var
   Query: TSQLQuery;
   PostObj: TJSONObject;
@@ -1000,7 +1000,7 @@ begin
   end;
 end;
 
-function TGraphQLResolvers.CreateUser(const Nom, Prenom, Email: String): TJSONObject;
+function TGraphQLResolvers.CreateUser(const Nom, Prenom, Email: String): TJSONObject;  
 var
   Query: TSQLQuery;
   NewID: Integer;
@@ -1038,7 +1038,7 @@ begin
   end;
 end;
 
-function TGraphQLResolvers.UpdateUser(UserID: Integer; const Email: String): TJSONObject;
+function TGraphQLResolvers.UpdateUser(UserID: Integer; const Email: String): TJSONObject;  
 var
   Query: TSQLQuery;
 begin
@@ -1070,7 +1070,7 @@ begin
   end;
 end;
 
-function TGraphQLResolvers.DeleteUser(UserID: Integer): TJSONObject;
+function TGraphQLResolvers.DeleteUser(UserID: Integer): TJSONObject;  
 var
   Query: TSQLQuery;
 begin
@@ -1207,12 +1207,12 @@ type
 
 implementation
 
-constructor TJWTAuth.Create(const ASecretKey: String);
+constructor TJWTAuth.Create(const ASecretKey: String);  
 begin
   FSecretKey := ASecretKey;
 end;
 
-function TJWTAuth.Base64URLEncode(const Data: String): String;
+function TJWTAuth.Base64URLEncode(const Data: String): String;  
 begin
   Result := EncodeStringBase64(Data);
   // Rendre compatible URL
@@ -1221,7 +1221,7 @@ begin
   Result := StringReplace(Result, '=', '', [rfReplaceAll]);
 end;
 
-function TJWTAuth.Base64URLDecode(const Data: String): String;
+function TJWTAuth.Base64URLDecode(const Data: String): String;  
 var
   Temp: String;
 begin
@@ -1237,7 +1237,7 @@ begin
   Result := DecodeStringBase64(Temp);
 end;
 
-function TJWTAuth.HMACSHA256(const Key, Data: String): String;
+function TJWTAuth.HMACSHA256(const Key, Data: String): String;  
 var
   HMAC: THMAC;
 begin
@@ -1288,7 +1288,7 @@ begin
   Result := Header + '.' + Payload + '.' + Signature;
 end;
 
-function TJWTAuth.ValidateToken(const Token: String): TJSONObject;
+function TJWTAuth.ValidateToken(const Token: String): TJSONObject;  
 var
   Parts: TStringArray;
   Header, Payload, Signature: String;
@@ -1330,7 +1330,7 @@ begin
   Result := PayloadJSON;
 end;
 
-function TJWTAuth.GetUserIDFromToken(const Token: String): Integer;
+function TJWTAuth.GetUserIDFromToken(const Token: String): Integer;  
 var
   PayloadJSON: TJSONObject;
 begin
@@ -1375,18 +1375,18 @@ type
 
 implementation
 
-constructor TAuthMiddleware.Create(const SecretKey: String);
+constructor TAuthMiddleware.Create(const SecretKey: String);  
 begin
   FJWTAuth := TJWTAuth.Create(SecretKey);
 end;
 
-destructor TAuthMiddleware.Destroy;
+destructor TAuthMiddleware.Destroy;  
 begin
   FJWTAuth.Free;
   inherited;
 end;
 
-function TAuthMiddleware.AuthenticateRequest(Request: TFPHTTPConnectionRequest): Integer;
+function TAuthMiddleware.AuthenticateRequest(Request: TFPHTTPConnectionRequest): Integer;  
 var
   AuthHeader: String;
   Token: String;
@@ -1420,7 +1420,7 @@ begin
     WriteLn('❌ Token invalide');
 end;
 
-function TAuthMiddleware.IsAuthenticated(Request: TFPHTTPConnectionRequest): Boolean;
+function TAuthMiddleware.IsAuthenticated(Request: TFPHTTPConnectionRequest): Boolean;  
 begin
   Result := AuthenticateRequest(Request) > 0;
 end;
@@ -1474,7 +1474,7 @@ end;
 ```pascal
 // Ajouter au resolver
 
-function TGraphQLResolvers.Login(const Email, Password: String): TJSONObject;
+function TGraphQLResolvers.Login(const Email, Password: String): TJSONObject;  
 var
   Query: TSQLQuery;
   UserID: Integer;
@@ -1753,14 +1753,14 @@ type
 
 implementation
 
-constructor TSubscriptionManager.Create(APort: Word);
+constructor TSubscriptionManager.Create(APort: Word);  
 begin
   FClients := TClientList.Create(True);
   FServer := TInetServer.Create('0.0.0.0', APort);
   FServer.OnConnect := @HandleNewConnection;
 end;
 
-destructor TSubscriptionManager.Destroy;
+destructor TSubscriptionManager.Destroy;  
 begin
   Stop;
   FClients.Free;
@@ -1768,20 +1768,20 @@ begin
   inherited;
 end;
 
-procedure TSubscriptionManager.Start;
+procedure TSubscriptionManager.Start;  
 begin
   FServer.Bind;
   FServer.Listen;
   WriteLn('🔌 Serveur WebSocket démarré');
 end;
 
-procedure TSubscriptionManager.Stop;
+procedure TSubscriptionManager.Stop;  
 begin
   FServer.Close;
   WriteLn('🔌 Serveur WebSocket arrêté');
 end;
 
-procedure TSubscriptionManager.HandleNewConnection(Sender: TObject; Data: TSocketStream);
+procedure TSubscriptionManager.HandleNewConnection(Sender: TObject; Data: TSocketStream);  
 var
   Client: TSubscriptionClient;
 begin
@@ -1794,7 +1794,7 @@ begin
   WriteLn('✅ Nouveau client WebSocket connecté');
 end;
 
-procedure TSubscriptionManager.BroadcastToClients(const Event: String; Data: TJSONObject);
+procedure TSubscriptionManager.BroadcastToClients(const Event: String; Data: TJSONObject);  
 var
   Client: TSubscriptionClient;
   Message: TJSONObject;
@@ -1820,19 +1820,19 @@ begin
   end;
 end;
 
-procedure TSubscriptionManager.PublishNewUser(UserData: TJSONObject);
+procedure TSubscriptionManager.PublishNewUser(UserData: TJSONObject);  
 begin
   WriteLn('📢 Publication: Nouvel utilisateur');
   BroadcastToClients('newUser', UserData);
 end;
 
-procedure TSubscriptionManager.PublishUserUpdate(UserData: TJSONObject);
+procedure TSubscriptionManager.PublishUserUpdate(UserData: TJSONObject);  
 begin
   WriteLn('📢 Publication: Mise à jour utilisateur');
   BroadcastToClients('userUpdate', UserData);
 end;
 
-procedure TSubscriptionManager.PublishNewPost(PostData: TJSONObject);
+procedure TSubscriptionManager.PublishNewPost(PostData: TJSONObject);  
 begin
   WriteLn('📢 Publication: Nouveau post');
   BroadcastToClients('newPost', PostData);
@@ -1997,14 +1997,14 @@ sudo nano /etc/systemd/system/graphql.service
 
 ```ini
 [Unit]
-Description=GraphQL API Server
+Description=GraphQL API Server  
 After=network.target postgresql.service
 
 [Service]
-Type=simple
-User=www-data
-WorkingDirectory=/opt/graphql
-ExecStart=/opt/graphql/GraphQLServerApp
+Type=simple  
+User=www-data  
+WorkingDirectory=/opt/graphql  
+ExecStart=/opt/graphql/GraphQLServerApp  
 Restart=always
 
 [Install]
@@ -2021,7 +2021,7 @@ fpc GraphQLServerApp.pas
 .\GraphQLServerApp.exe
 
 # Installer comme service Windows
-sc create GraphQLService binPath= "C:\Path\To\GraphQLServerApp.exe"
+sc create GraphQLService binPath= "C:\Path\To\GraphQLServerApp.exe"  
 sc start GraphQLService
 ```
 
@@ -2135,7 +2135,7 @@ type UserError {
 
 **Utilisation :**
 ```pascal
-function CreateUser(Input: TCreateUserInput): TJSONObject;
+function CreateUser(Input: TCreateUserInput): TJSONObject;  
 var
   Errors, Error: TJSONObject;
   ErrorsArray: TJSONArray;
@@ -2173,7 +2173,7 @@ end;
 ❌ **Problème N+1 :**
 ```pascal
 // Mauvais : Une requête par utilisateur pour récupérer ses posts
-function GetUsers: TJSONArray;
+function GetUsers: TJSONArray;  
 var
   Query: TSQLQuery;
   User: TJSONObject;
@@ -2197,7 +2197,7 @@ end;
 ✅ **Solution avec DataLoader / Batching :**
 ```pascal
 // Bon : Une seule requête pour tous les posts
-function GetUsersWithPosts: TJSONArray;
+function GetUsersWithPosts: TJSONArray;  
 var
   UsersQuery, PostsQuery: TSQLQuery;
   PostsByUser: TDictionary;
@@ -2261,12 +2261,12 @@ type
 
 implementation
 
-constructor TQueryDepthLimiter.Create(AMaxDepth: Integer);
+constructor TQueryDepthLimiter.Create(AMaxDepth: Integer);  
 begin
   FMaxDepth := AMaxDepth;
 end;
 
-function TQueryDepthLimiter.CalculateDepth(const Query: String): Integer;
+function TQueryDepthLimiter.CalculateDepth(const Query: String): Integer;  
 var
   CurrentDepth, MaxDepth: Integer;
   i: Integer;
@@ -2290,7 +2290,7 @@ begin
   Result := MaxDepth;
 end;
 
-function TQueryDepthLimiter.ValidateQuery(const Query: String): Boolean;
+function TQueryDepthLimiter.ValidateQuery(const Query: String): Boolean;  
 var
   Depth: Integer;
 begin
@@ -2328,12 +2328,12 @@ type
 
 implementation
 
-constructor TQueryComplexityLimiter.Create(AMaxComplexity: Integer);
+constructor TQueryComplexityLimiter.Create(AMaxComplexity: Integer);  
 begin
   FMaxComplexity := AMaxComplexity;
 end;
 
-function TQueryComplexityLimiter.CalculateComplexity(const Query: String): Integer;
+function TQueryComplexityLimiter.CalculateComplexity(const Query: String): Integer;  
 var
   Complexity: Integer;
 begin
@@ -2355,7 +2355,7 @@ begin
   Result := Complexity;
 end;
 
-function TQueryComplexityLimiter.ValidateQuery(const Query: String): Boolean;
+function TQueryComplexityLimiter.ValidateQuery(const Query: String): Boolean;  
 var
   Complexity: Integer;
 begin
@@ -2411,12 +2411,12 @@ type
 
 implementation
 
-constructor TGraphQLLogger.Create(const ALogFile: String);
+constructor TGraphQLLogger.Create(const ALogFile: String);  
 begin
   FLogFile := ALogFile;
 end;
 
-procedure TGraphQLLogger.WriteLog(const Log: TQueryLog);
+procedure TGraphQLLogger.WriteLog(const Log: TQueryLog);  
 var
   F: TextFile;
 begin
@@ -2471,14 +2471,14 @@ begin
     LogSlowQuery(Query, Duration);
 end;
 
-procedure TGraphQLLogger.LogSlowQuery(const Query: String; Duration: Integer);
+procedure TGraphQLLogger.LogSlowQuery(const Query: String; Duration: Integer);  
 begin
   WriteLn('⚠️  REQUÊTE LENTE détectée:');
   WriteLn('   Durée: ', Duration, 'ms');
   WriteLn('   Query: ', Copy(Query, 1, 100), '...');
 end;
 
-procedure TGraphQLLogger.GenerateReport;
+procedure TGraphQLLogger.GenerateReport;  
 var
   F: TextFile;
   Line: String;
@@ -2556,7 +2556,7 @@ var
   Resolvers: TGraphQLResolvers;
   TestsPassed, TestsFailed: Integer;
 
-procedure AssertEquals(const Expected, Actual: String; const TestName: String);
+procedure AssertEquals(const Expected, Actual: String; const TestName: String);  
 begin
   if Expected = Actual then
   begin
@@ -2572,7 +2572,7 @@ begin
   end;
 end;
 
-procedure TestGetUser;
+procedure TestGetUser;  
 var
   User: TJSONObject;
 begin
@@ -2586,7 +2586,7 @@ begin
   end;
 end;
 
-procedure TestCreateUser;
+procedure TestCreateUser;  
 var
   User: TJSONObject;
   UserID: Integer;
@@ -2613,7 +2613,7 @@ begin
   end;
 end;
 
-procedure TestGetUsers;
+procedure TestGetUsers;  
 var
   Users: TJSONArray;
 begin
@@ -2722,8 +2722,8 @@ limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
 
 ```bash
 # Activer le site
-sudo ln -s /etc/nginx/sites-available/graphql /etc/nginx/sites-enabled/
-sudo nginx -t
+sudo ln -s /etc/nginx/sites-available/graphql /etc/nginx/sites-enabled/  
+sudo nginx -t  
 sudo systemctl reload nginx
 ```
 
@@ -2778,8 +2778,8 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copier l'application
-WORKDIR /app
-COPY GraphQLServerApp /app/
+WORKDIR /app  
+COPY GraphQLServerApp /app/  
 COPY config.ini /app/
 
 # Port exposé
@@ -2839,7 +2839,7 @@ docker-compose down
 ### Protection contre les injections
 
 ```pascal
-function SanitizeInput(const Input: String): String;
+function SanitizeInput(const Input: String): String;  
 begin
   Result := Input;
 
@@ -2858,14 +2858,14 @@ end;
 ### Validation des entrées
 
 ```pascal
-function ValidateEmail(const Email: String): Boolean;
+function ValidateEmail(const Email: String): Boolean;  
 const
   EmailRegex = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
 begin
   Result := TRegEx.IsMatch(Email, EmailRegex);
 end;
 
-function ValidateCreateUserInput(const Input: TCreateUserInput): TStringList;
+function ValidateCreateUserInput(const Input: TCreateUserInput): TStringList;  
 begin
   Result := TStringList.Create;
 
@@ -2886,7 +2886,7 @@ end;
 ### Headers de sécurité
 
 ```pascal
-procedure SetSecurityHeaders(Response: TFPHTTPConnectionResponse);
+procedure SetSecurityHeaders(Response: TFPHTTPConnectionResponse);  
 begin
   Response.SetCustomHeader('X-Content-Type-Options', 'nosniff');
   Response.SetCustomHeader('X-Frame-Options', 'DENY');

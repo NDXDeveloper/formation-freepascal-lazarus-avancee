@@ -23,15 +23,15 @@ Une connexion native utilise les bibliothèques officielles fournies par l'édit
 ### Comparaison avec les alternatives
 
 ```
-Connexion Native :
+Connexion Native :  
 Application → Bibliothèque native → Base de données
 (Plus rapide, plus direct)
 
-Connexion ODBC :
+Connexion ODBC :  
 Application → Driver ODBC → Bibliothèque native → Base de données
 (Plus générique, mais plus lent)
 
-Connexion via middleware :
+Connexion via middleware :  
 Application → Serveur intermédiaire → Base de données
 (Pour architectures distribuées)
 ```
@@ -90,17 +90,17 @@ FreePascal/Lazarus fournit des composants spécialisés pour chaque SGBD :
 
 ```pascal
 // PostgreSQL
-TPQConnection      // Version générique
+TPQConnection      // Version générique  
 TPQConnection9_6   // Version spécifique 9.6+
 
 // MySQL/MariaDB
-TMySQL40Connection // MySQL 4.0
-TMySQL41Connection // MySQL 4.1
-TMySQL50Connection // MySQL 5.0
-TMySQL51Connection // MySQL 5.1
-TMySQL55Connection // MySQL 5.5
-TMySQL56Connection // MySQL 5.6
-TMySQL57Connection // MySQL 5.7
+TMySQL40Connection // MySQL 4.0  
+TMySQL41Connection // MySQL 4.1  
+TMySQL50Connection // MySQL 5.0  
+TMySQL51Connection // MySQL 5.1  
+TMySQL55Connection // MySQL 5.5  
+TMySQL56Connection // MySQL 5.6  
+TMySQL57Connection // MySQL 5.7  
 TMySQL80Connection // MySQL 8.0
 
 // SQLite
@@ -140,9 +140,9 @@ Installation via le gestionnaire de paquets :
 sudo apt update
 
 # Installation des clients (exemples)
-sudo apt install libpq-dev          # PostgreSQL
-sudo apt install libmysqlclient-dev # MySQL
-sudo apt install libsqlite3-dev     # SQLite
+sudo apt install libpq-dev          # PostgreSQL  
+sudo apt install libmysqlclient-dev # MySQL  
+sudo apt install libsqlite3-dev     # SQLite  
 sudo apt install firebird-dev       # Firebird
 ```
 
@@ -151,7 +151,7 @@ sudo apt install firebird-dev       # Firebird
 #### Créer un programme de test simple
 
 ```pascal
-program TestConnexion;
+program TestConnexion;  
 uses
   SysUtils, sqldb;
 
@@ -182,12 +182,12 @@ interface
 uses
   Classes, SysUtils, sqldb;
 
-function GetLibraryPath: string;
+function GetLibraryPath: string;  
 function CreateConnection(AType: string): TSQLConnection;
 
 implementation
 
-function GetLibraryPath: string;
+function GetLibraryPath: string;  
 begin
   {$IFDEF WINDOWS}
     Result := ExtractFilePath(ParamStr(0)) + 'libs\';
@@ -202,7 +202,7 @@ begin
   {$ENDIF}
 end;
 
-function CreateConnection(AType: string): TSQLConnection;
+function CreateConnection(AType: string): TSQLConnection;  
 begin
   if AType = 'postgresql' then
     Result := TPQConnection.Create(nil)
@@ -224,11 +224,11 @@ Utiliser des fichiers de configuration pour gérer les différences :
 ```ini
 ; config.ini
 [Database]
-Type=postgresql
-Host=localhost
-Port=5432
-Database=mabase
-Username=user
+Type=postgresql  
+Host=localhost  
+Port=5432  
+Database=mabase  
+Username=user  
 Password=pass
 
 [Windows]
@@ -242,7 +242,7 @@ LibraryPath=/usr/lib/x86_64-linux-gnu/libpq.so.5
 uses
   IniFiles;
 
-procedure ConfigureConnection(AConnection: TSQLConnection);
+procedure ConfigureConnection(AConnection: TSQLConnection);  
 var
   Ini: TIniFile;
   OS: string;
@@ -279,7 +279,7 @@ end;
 #### Bibliothèque introuvable
 
 ```pascal
-procedure TryConnect(AConnection: TSQLConnection);
+procedure TryConnect(AConnection: TSQLConnection);  
 begin
   try
     AConnection.Connected := True;
@@ -310,7 +310,7 @@ end;
 #### Versions incompatibles
 
 ```pascal
-function GetCompatibleConnection(AVersion: string): TSQLConnection;
+function GetCompatibleConnection(AVersion: string): TSQLConnection;  
 begin
   // Pour MySQL, choisir la bonne version
   if Pos('5.7', AVersion) > 0 then
@@ -347,7 +347,7 @@ type
 ### Configuration unifiée
 
 ```pascal
-procedure ConfigureAnyConnection(AConn: TSQLConnection; const AConfig: TDatabaseConfig);
+procedure ConfigureAnyConnection(AConn: TSQLConnection; const AConfig: TDatabaseConfig);  
 begin
   AConn.HostName := AConfig.HostName;
   AConn.DatabaseName := AConfig.DatabaseName;
@@ -395,7 +395,7 @@ type
     procedure ReleaseConnection(AConn: TSQLConnection);
   end;
 
-function TConnectionPool.GetConnection: TSQLConnection;
+function TConnectionPool.GetConnection: TSQLConnection;  
 var
   i: Integer;
 begin
@@ -445,7 +445,7 @@ type
     procedure CheckTimeout;
   end;
 
-function TDatabaseManager.GetConnection: TSQLConnection;
+function TDatabaseManager.GetConnection: TSQLConnection;  
 begin
   case FStrategy of
     csAlwaysConnected:
@@ -477,7 +477,7 @@ end;
 #### Configuration SSL/TLS
 
 ```pascal
-procedure ConfigureSSL(AConnection: TSQLConnection);
+procedure ConfigureSSL(AConnection: TSQLConnection);  
 begin
   {$IFDEF WINDOWS}
     AConnection.Params.Add('sslmode=require');
@@ -507,7 +507,7 @@ uses
   {$ENDIF}
   Base64;
 
-function SecurePassword(const APassword: string; AEncrypt: Boolean): string;
+function SecurePassword(const APassword: string; AEncrypt: Boolean): string;  
 begin
   {$IFDEF WINDOWS}
   if AEncrypt then
@@ -530,7 +530,7 @@ end;
 ### Vérification de la disponibilité
 
 ```pascal
-function TestConnection(AType: string): Boolean;
+function TestConnection(AType: string): Boolean;  
 var
   Conn: TSQLConnection;
   StartTime: TDateTime;
@@ -584,7 +584,7 @@ type
     procedure LogError(AError: string);
   end;
 
-procedure TConnectionLogger.LogConnection(AConn: TSQLConnection; ASuccess: Boolean);
+procedure TConnectionLogger.LogConnection(AConn: TSQLConnection; ASuccess: Boolean);  
 var
   LogEntry: string;
 begin

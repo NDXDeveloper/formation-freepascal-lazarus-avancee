@@ -111,11 +111,11 @@ wget -qO - https://www.mongodb.org/static/pgp/server-7.0.asc | sudo apt-key add 
 echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
 
 # Mettre à jour et installer
-sudo apt-get update
+sudo apt-get update  
 sudo apt-get install -y mongodb-org
 
 # Démarrer MongoDB
-sudo systemctl start mongod
+sudo systemctl start mongod  
 sudo systemctl enable mongod
 
 # Vérifier le statut
@@ -177,20 +177,20 @@ type
 
 implementation
 
-constructor TMongoClient.Create(const AHost: String; APort: Integer; const ADatabase: String);
+constructor TMongoClient.Create(const AHost: String; APort: Integer; const ADatabase: String);  
 begin
   FBaseURL := Format('http://%s:%d', [AHost, APort]);
   FDatabase := ADatabase;
   FHTTPClient := TFPHTTPClient.Create(nil);
 end;
 
-destructor TMongoClient.Destroy;
+destructor TMongoClient.Destroy;  
 begin
   FHTTPClient.Free;
   inherited;
 end;
 
-function TMongoClient.InsertDocument(const Collection, JSONDoc: String): String;
+function TMongoClient.InsertDocument(const Collection, JSONDoc: String): String;  
 var
   URL: String;
   Response: String;
@@ -220,7 +220,7 @@ begin
   end;
 end;
 
-function TMongoClient.FindDocuments(const Collection: String; const Filter: String = '{}'): TJSONArray;
+function TMongoClient.FindDocuments(const Collection: String; const Filter: String = '{}'): TJSONArray;  
 var
   URL: String;
   Response: String;
@@ -239,7 +239,7 @@ begin
   end;
 end;
 
-function TMongoClient.UpdateDocument(const Collection, Filter, Update: String): Boolean;
+function TMongoClient.UpdateDocument(const Collection, Filter, Update: String): Boolean;  
 var
   URL: String;
   Response: String;
@@ -263,7 +263,7 @@ begin
   end;
 end;
 
-function TMongoClient.DeleteDocument(const Collection, Filter: String): Boolean;
+function TMongoClient.DeleteDocument(const Collection, Filter: String): Boolean;  
 var
   URL: String;
 begin
@@ -281,7 +281,7 @@ begin
   end;
 end;
 
-function TMongoClient.CountDocuments(const Collection: String): Integer;
+function TMongoClient.CountDocuments(const Collection: String): Integer;  
 var
   URL: String;
   Response: String;
@@ -419,7 +419,7 @@ end.
 #### Recherches complexes
 
 ```pascal
-procedure ExemplesRecherchesComplexes(Mongo: TMongoClient);
+procedure ExemplesRecherchesComplexes(Mongo: TMongoClient);  
 var
   Documents: TJSONArray;
 begin
@@ -460,7 +460,7 @@ end;
 Les agrégations permettent de traiter et transformer les données (équivalent de GROUP BY en SQL).
 
 ```pascal
-function AggregateClients(Mongo: TMongoClient): TJSONArray;
+function AggregateClients(Mongo: TMongoClient): TJSONArray;  
 var
   Pipeline: String;
 begin
@@ -579,11 +579,11 @@ Redis (REmote DIctionary Server) est une base de données **en mémoire** ultra-
 
 ```bash
 # Installer Redis
-sudo apt-get update
+sudo apt-get update  
 sudo apt-get install redis-server
 
 # Configurer Redis pour démarrer automatiquement
-sudo systemctl enable redis-server
+sudo systemctl enable redis-server  
 sudo systemctl start redis-server
 
 # Vérifier le statut
@@ -632,8 +632,8 @@ port 6379
 requirepass mon_mot_de_passe_securise
 
 # Persistance sur disque
-save 900 1      # Sauvegarder après 900s si 1 clé modifiée
-save 300 10     # Sauvegarder après 300s si 10 clés modifiées
+save 900 1      # Sauvegarder après 900s si 1 clé modifiée  
+save 300 10     # Sauvegarder après 300s si 10 clés modifiées  
 save 60 10000   # Sauvegarder après 60s si 10000 clés modifiées
 
 # Limite mémoire
@@ -712,7 +712,7 @@ type
 
 implementation
 
-constructor TRedisClient.Create(const AHost: String; APort: Integer);
+constructor TRedisClient.Create(const AHost: String; APort: Integer);  
 begin
   FHost := AHost;
   FPort := APort;
@@ -720,7 +720,7 @@ begin
   FSocket := TInetSocket.Create(FHost, FPort);
 end;
 
-destructor TRedisClient.Destroy;
+destructor TRedisClient.Destroy;  
 begin
   if FConnected then
     Disconnect;
@@ -728,7 +728,7 @@ begin
   inherited;
 end;
 
-function TRedisClient.Connect: Boolean;
+function TRedisClient.Connect: Boolean;  
 begin
   try
     FSocket.Connect;
@@ -743,7 +743,7 @@ begin
   end;
 end;
 
-procedure TRedisClient.Disconnect;
+procedure TRedisClient.Disconnect;  
 begin
   if FConnected then
   begin
@@ -752,7 +752,7 @@ begin
   end;
 end;
 
-function TRedisClient.Auth(const Password: String): Boolean;
+function TRedisClient.Auth(const Password: String): Boolean;  
 var
   Response: String;
 begin
@@ -760,7 +760,7 @@ begin
   Result := Pos('OK', Response) > 0;
 end;
 
-function TRedisClient.SendCommand(const Command: String): String;
+function TRedisClient.SendCommand(const Command: String): String;  
 begin
   if not FConnected then
   begin
@@ -775,7 +775,7 @@ begin
   Result := ReadResponse;
 end;
 
-function TRedisClient.ReadResponse: String;
+function TRedisClient.ReadResponse: String;  
 var
   Line: String;
   FirstChar: Char;
@@ -806,7 +806,7 @@ begin
   end;
 end;
 
-function TRedisClient.SetKey(const Key, Value: String): Boolean;
+function TRedisClient.SetKey(const Key, Value: String): Boolean;  
 var
   Response: String;
 begin
@@ -814,12 +814,12 @@ begin
   Result := Pos('OK', Response) > 0;
 end;
 
-function TRedisClient.GetKey(const Key: String): String;
+function TRedisClient.GetKey(const Key: String): String;  
 begin
   Result := SendCommand('GET ' + Key);
 end;
 
-function TRedisClient.DeleteKey(const Key: String): Boolean;
+function TRedisClient.DeleteKey(const Key: String): Boolean;  
 var
   Response: String;
 begin
@@ -827,7 +827,7 @@ begin
   Result := Response = '1';
 end;
 
-function TRedisClient.Exists(const Key: String): Boolean;
+function TRedisClient.Exists(const Key: String): Boolean;  
 var
   Response: String;
 begin
@@ -835,7 +835,7 @@ begin
   Result := Response = '1';
 end;
 
-function TRedisClient.Expire(const Key: String; Seconds: Integer): Boolean;
+function TRedisClient.Expire(const Key: String; Seconds: Integer): Boolean;  
 var
   Response: String;
 begin
@@ -843,7 +843,7 @@ begin
   Result := Response = '1';
 end;
 
-function TRedisClient.TTL(const Key: String): Integer;
+function TRedisClient.TTL(const Key: String): Integer;  
 var
   Response: String;
 begin
@@ -851,7 +851,7 @@ begin
   Result := StrToIntDef(Response, -1);
 end;
 
-function TRedisClient.Incr(const Key: String): Integer;
+function TRedisClient.Incr(const Key: String): Integer;  
 var
   Response: String;
 begin
@@ -859,7 +859,7 @@ begin
   Result := StrToIntDef(Response, 0);
 end;
 
-function TRedisClient.IncrBy(const Key: String; Increment: Integer): Integer;
+function TRedisClient.IncrBy(const Key: String; Increment: Integer): Integer;  
 var
   Response: String;
 begin
@@ -867,7 +867,7 @@ begin
   Result := StrToIntDef(Response, 0);
 end;
 
-function TRedisClient.Decr(const Key: String): Integer;
+function TRedisClient.Decr(const Key: String): Integer;  
 var
   Response: String;
 begin
@@ -875,7 +875,7 @@ begin
   Result := StrToIntDef(Response, 0);
 end;
 
-function TRedisClient.LPush(const Key, Value: String): Integer;
+function TRedisClient.LPush(const Key, Value: String): Integer;  
 var
   Response: String;
 begin
@@ -883,7 +883,7 @@ begin
   Result := StrToIntDef(Response, 0);
 end;
 
-function TRedisClient.RPush(const Key, Value: String): Integer;
+function TRedisClient.RPush(const Key, Value: String): Integer;  
 var
   Response: String;
 begin
@@ -891,17 +891,17 @@ begin
   Result := StrToIntDef(Response, 0);
 end;
 
-function TRedisClient.LPop(const Key: String): String;
+function TRedisClient.LPop(const Key: String): String;  
 begin
   Result := SendCommand('LPOP ' + Key);
 end;
 
-function TRedisClient.RPop(const Key: String): String;
+function TRedisClient.RPop(const Key: String): String;  
 begin
   Result := SendCommand('RPOP ' + Key);
 end;
 
-function TRedisClient.LLen(const Key: String): Integer;
+function TRedisClient.LLen(const Key: String): Integer;  
 var
   Response: String;
 begin
@@ -909,14 +909,14 @@ begin
   Result := StrToIntDef(Response, 0);
 end;
 
-function TRedisClient.LRange(const Key: String; Start, Stop: Integer): TStringList;
+function TRedisClient.LRange(const Key: String; Start, Stop: Integer): TStringList;  
 begin
   // Implémentation simplifiée
   Result := TStringList.Create;
   // Parser la réponse array de Redis
 end;
 
-function TRedisClient.SAdd(const Key, Member: String): Boolean;
+function TRedisClient.SAdd(const Key, Member: String): Boolean;  
 var
   Response: String;
 begin
@@ -924,7 +924,7 @@ begin
   Result := Response = '1';
 end;
 
-function TRedisClient.SRem(const Key, Member: String): Boolean;
+function TRedisClient.SRem(const Key, Member: String): Boolean;  
 var
   Response: String;
 begin
@@ -932,13 +932,13 @@ begin
   Result := Response = '1';
 end;
 
-function TRedisClient.SMembers(const Key: String): TStringList;
+function TRedisClient.SMembers(const Key: String): TStringList;  
 begin
   Result := TStringList.Create;
   // Parser la réponse array de Redis
 end;
 
-function TRedisClient.SCard(const Key: String): Integer;
+function TRedisClient.SCard(const Key: String): Integer;  
 var
   Response: String;
 begin
@@ -946,7 +946,7 @@ begin
   Result := StrToIntDef(Response, 0);
 end;
 
-function TRedisClient.HSet(const Key, Field, Value: String): Boolean;
+function TRedisClient.HSet(const Key, Field, Value: String): Boolean;  
 var
   Response: String;
 begin
@@ -954,18 +954,18 @@ begin
   Result := Pos('1', Response) > 0;
 end;
 
-function TRedisClient.HGet(const Key, Field: String): String;
+function TRedisClient.HGet(const Key, Field: String): String;  
 begin
   Result := SendCommand(Format('HGET %s %s', [Key, Field]));
 end;
 
-function TRedisClient.HGetAll(const Key: String): TStringList;
+function TRedisClient.HGetAll(const Key: String): TStringList;  
 begin
   Result := TStringList.Create;
   // Parser la réponse array de Redis
 end;
 
-function TRedisClient.HDel(const Key, Field: String): Boolean;
+function TRedisClient.HDel(const Key, Field: String): Boolean;  
 var
   Response: String;
 begin
@@ -1150,14 +1150,14 @@ implementation
 uses
   fpjson, jsonparser;
 
-constructor TCacheManager.Create(ARedis: TRedisClient; ADatabase: TSQLConnection; ATTL: Integer);
+constructor TCacheManager.Create(ARedis: TRedisClient; ADatabase: TSQLConnection; ATTL: Integer);  
 begin
   FRedis := ARedis;
   FDatabase := ADatabase;
   FTTL := ATTL;
 end;
 
-function TCacheManager.GetUser(UserID: Integer): String;
+function TCacheManager.GetUser(UserID: Integer): String;  
 var
   CacheKey: String;
   CachedData: String;
@@ -1215,7 +1215,7 @@ begin
   end;
 end;
 
-procedure TCacheManager.InvalidateUser(UserID: Integer);
+procedure TCacheManager.InvalidateUser(UserID: Integer);  
 var
   CacheKey: String;
 begin
@@ -1224,7 +1224,7 @@ begin
   WriteLn('🗑️  Cache invalidé pour user ', UserID);
 end;
 
-procedure TCacheManager.InvalidateAll;
+procedure TCacheManager.InvalidateAll;  
 begin
   // Note: Redis FLUSHDB supprime TOUTE la base
   // En production, utiliser un préfixe et SCAN pour supprimer sélectivement
@@ -1309,13 +1309,13 @@ implementation
 uses
   MD5;
 
-constructor TSessionManager.Create(ARedis: TRedisClient; ASessionTTL: Integer);
+constructor TSessionManager.Create(ARedis: TRedisClient; ASessionTTL: Integer);  
 begin
   FRedis := ARedis;
   FSessionTTL := ASessionTTL;
 end;
 
-function TSessionManager.GenerateSessionID: String;
+function TSessionManager.GenerateSessionID: String;  
 begin
   // Générer un ID de session unique
   Result := MD5Print(MD5String(
@@ -1324,7 +1324,7 @@ begin
   ));
 end;
 
-function TSessionManager.CreateSession(UserID: Integer; const UserData: String): String;
+function TSessionManager.CreateSession(UserID: Integer; const UserData: String): String;  
 var
   SessionID, SessionKey: String;
 begin
@@ -1344,7 +1344,7 @@ begin
   Result := SessionID;
 end;
 
-function TSessionManager.GetSession(const SessionID: String): TJSONObject;
+function TSessionManager.GetSession(const SessionID: String): TJSONObject;  
 var
   SessionKey: String;
   SessionData: TStringList;
@@ -1368,7 +1368,7 @@ begin
   RefreshSession(SessionID);
 end;
 
-function TSessionManager.UpdateSession(const SessionID: String; const Key, Value: String): Boolean;
+function TSessionManager.UpdateSession(const SessionID: String; const Key, Value: String): Boolean;  
 var
   SessionKey: String;
 begin
@@ -1386,7 +1386,7 @@ begin
   RefreshSession(SessionID);
 end;
 
-function TSessionManager.DestroySession(const SessionID: String): Boolean;
+function TSessionManager.DestroySession(const SessionID: String): Boolean;  
 var
   SessionKey: String;
 begin
@@ -1397,7 +1397,7 @@ begin
     WriteLn('✅ Session détruite: ', SessionID);
 end;
 
-function TSessionManager.RefreshSession(const SessionID: String): Boolean;
+function TSessionManager.RefreshSession(const SessionID: String): Boolean;  
 var
   SessionKey: String;
 begin
@@ -1405,7 +1405,7 @@ begin
   Result := FRedis.Expire(SessionKey, FSessionTTL);
 end;
 
-function TSessionManager.IsSessionValid(const SessionID: String): Boolean;
+function TSessionManager.IsSessionValid(const SessionID: String): Boolean;  
 var
   SessionKey: String;
   TTL: Integer;
@@ -1488,14 +1488,14 @@ type
 
 implementation
 
-constructor TRateLimiter.Create(ARedis: TRedisClient; AMaxRequests, AWindowSeconds: Integer);
+constructor TRateLimiter.Create(ARedis: TRedisClient; AMaxRequests, AWindowSeconds: Integer);  
 begin
   FRedis := ARedis;
   FMaxRequests := AMaxRequests;
   FWindowSeconds := AWindowSeconds;
 end;
 
-function TRateLimiter.IsAllowed(const Identifier: String): Boolean;
+function TRateLimiter.IsAllowed(const Identifier: String): Boolean;  
 var
   Key: String;
   CurrentCount: Integer;
@@ -1516,7 +1516,7 @@ begin
     WriteLn('⚠️  Rate limit atteint pour: ', Identifier);
 end;
 
-function TRateLimiter.GetRemainingRequests(const Identifier: String): Integer;
+function TRateLimiter.GetRemainingRequests(const Identifier: String): Integer;  
 var
   Key: String;
   CurrentCount: Integer;
@@ -1529,7 +1529,7 @@ begin
     Result := 0;
 end;
 
-function TRateLimiter.GetResetTime(const Identifier: String): Integer;
+function TRateLimiter.GetResetTime(const Identifier: String): Integer;  
 var
   Key: String;
 begin
@@ -1612,27 +1612,27 @@ type
 
 implementation
 
-constructor TLeaderboard.Create(ARedis: TRedisClient; const ALeaderboardName: String);
+constructor TLeaderboard.Create(ARedis: TRedisClient; const ALeaderboardName: String);  
 begin
   FRedis := ARedis;
   FKey := 'leaderboard:' + ALeaderboardName;
 end;
 
-procedure TLeaderboard.AddScore(const UserID: String; Score: Integer);
+procedure TLeaderboard.AddScore(const UserID: String; Score: Integer);  
 begin
   // ZADD ajoute un membre avec son score dans un sorted set
   FRedis.SendCommand(Format('ZADD %s %d %s', [FKey, Score, UserID]));
   WriteLn('✅ Score ajouté: ', UserID, ' = ', Score);
 end;
 
-procedure TLeaderboard.IncrementScore(const UserID: String; Increment: Integer);
+procedure TLeaderboard.IncrementScore(const UserID: String; Increment: Integer);  
 begin
   // ZINCRBY incrémente le score d'un membre
   FRedis.SendCommand(Format('ZINCRBY %s %d %s', [FKey, Increment, UserID]));
   WriteLn('✅ Score incrémenté: ', UserID, ' +', Increment);
 end;
 
-function TLeaderboard.GetScore(const UserID: String): Integer;
+function TLeaderboard.GetScore(const UserID: String): Integer;  
 var
   Response: String;
 begin
@@ -1640,7 +1640,7 @@ begin
   Result := StrToIntDef(Response, 0);
 end;
 
-function TLeaderboard.GetRank(const UserID: String): Integer;
+function TLeaderboard.GetRank(const UserID: String): Integer;  
 var
   Response: String;
 begin
@@ -1649,7 +1649,7 @@ begin
   Result := StrToIntDef(Response, -1) + 1;  // Convertir en 1-based
 end;
 
-function TLeaderboard.GetTop(Count: Integer): array of TLeaderboardEntry;
+function TLeaderboard.GetTop(Count: Integer): array of TLeaderboardEntry;  
 var
   Response: String;
 begin
@@ -1663,7 +1663,7 @@ begin
   SetLength(Result, 0);
 end;
 
-function TLeaderboard.GetAround(const UserID: String; Range: Integer): array of TLeaderboardEntry;
+function TLeaderboard.GetAround(const UserID: String; Range: Integer): array of TLeaderboardEntry;  
 var
   Rank: Integer;
   StartRank, EndRank: Integer;
@@ -1680,7 +1680,7 @@ begin
   SetLength(Result, 0);
 end;
 
-procedure TLeaderboard.Reset;
+procedure TLeaderboard.Reset;  
 begin
   FRedis.DeleteKey(FKey);
   WriteLn('🗑️  Classement réinitialisé');
@@ -1773,20 +1773,20 @@ implementation
 uses
   MD5;
 
-constructor TJobQueue.Create(ARedis: TRedisClient; const AQueueName: String);
+constructor TJobQueue.Create(ARedis: TRedisClient; const AQueueName: String);  
 begin
   FRedis := ARedis;
   FQueueName := AQueueName;
 end;
 
-function TJobQueue.GenerateJobID: String;
+function TJobQueue.GenerateJobID: String;  
 begin
   Result := 'job_' + MD5Print(MD5String(
     FormatDateTime('yyyymmddhhnnsszzz', Now) + IntToStr(Random(999999))
   ));
 end;
 
-function TJobQueue.EnqueueJob(const TaskType, Payload: String): String;
+function TJobQueue.EnqueueJob(const TaskType, Payload: String): String;  
 var
   JobID, JobKey: String;
   JobData: TJSONObject;
@@ -1816,7 +1816,7 @@ begin
   end;
 end;
 
-function TJobQueue.DequeueJob: TJob;
+function TJobQueue.DequeueJob: TJob;  
 var
   JobID, JobKey, JobDataStr: String;
   JobData: TJSONObject;
@@ -1857,7 +1857,7 @@ begin
   end;
 end;
 
-procedure TJobQueue.CompleteJob(const JobID: String);
+procedure TJobQueue.CompleteJob(const JobID: String);  
 var
   JobKey: String;
 begin
@@ -1870,7 +1870,7 @@ begin
   WriteLn('✅ Job complété: ', JobID);
 end;
 
-procedure TJobQueue.FailJob(const JobID: String; const ErrorMessage: String);
+procedure TJobQueue.FailJob(const JobID: String; const ErrorMessage: String);  
 var
   JobKey: String;
 begin
@@ -1883,12 +1883,12 @@ begin
   WriteLn('❌ Job échoué: ', JobID, ' - ', ErrorMessage);
 end;
 
-function TJobQueue.GetQueueSize: Integer;
+function TJobQueue.GetQueueSize: Integer;  
 begin
   Result := FRedis.LLen('queue:' + FQueueName);
 end;
 
-function TJobQueue.GetJobStatus(const JobID: String): TJobStatus;
+function TJobQueue.GetJobStatus(const JobID: String): TJobStatus;  
 var
   JobKey, Status: String;
 begin
@@ -1929,7 +1929,7 @@ var
   Job: TJob;
   Running: Boolean;
 
-procedure ProcessJob(const Job: TJob);
+procedure ProcessJob(const Job: TJob);  
 begin
   WriteLn('🔧 Traitement du job: ', Job.ID);
   WriteLn('   Type: ', Job.TaskType);
@@ -2194,7 +2194,7 @@ begin
   FCacheTTL := ACacheTTL;
 end;
 
-function THybridDataManager.GetDocument(const Collection, DocumentID: String): String;
+function THybridDataManager.GetDocument(const Collection, DocumentID: String): String;  
 var
   CacheKey: String;
   CachedData: String;
@@ -2224,7 +2224,7 @@ begin
   end;
 end;
 
-function THybridDataManager.SaveDocument(const Collection, DocumentID, Data: String): Boolean;
+function THybridDataManager.SaveDocument(const Collection, DocumentID, Data: String): Boolean;  
 var
   CacheKey: String;
 begin
@@ -2244,7 +2244,7 @@ begin
   end;
 end;
 
-function THybridDataManager.DeleteDocument(const Collection, DocumentID: String): Boolean;
+function THybridDataManager.DeleteDocument(const Collection, DocumentID: String): Boolean;  
 var
   CacheKey: String;
 begin
@@ -2263,7 +2263,7 @@ begin
   end;
 end;
 
-procedure THybridDataManager.IncrementViewCount(const DocumentID: String);
+procedure THybridDataManager.IncrementViewCount(const DocumentID: String);  
 var
   CountKey: String;
 begin
@@ -2272,7 +2272,7 @@ begin
   FRedis.Incr(CountKey);
 end;
 
-function THybridDataManager.GetViewCount(const DocumentID: String): Integer;
+function THybridDataManager.GetViewCount(const DocumentID: String): Integer;  
 var
   CountKey, Value: String;
 begin
@@ -2308,7 +2308,7 @@ sudo tail -f /var/log/redis/redis-server.log
 notepad redis.windows.conf
 
 # Redémarrer (en tant qu'administrateur)
-net stop Redis
+net stop Redis  
 net start Redis
 
 # Logs
@@ -2340,7 +2340,7 @@ mongosh
 notepad "C:\Program Files\MongoDB\Server\7.0\bin\mongod.cfg"
 
 # Redémarrer (en tant qu'administrateur)
-net stop MongoDB
+net stop MongoDB  
 net start MongoDB
 
 # Shell interactif
@@ -2362,8 +2362,8 @@ requirepass votre_mot_de_passe_fort
 
 ```ini
 # redis.conf
-rename-command FLUSHDB ""
-rename-command FLUSHALL ""
+rename-command FLUSHDB ""  
+rename-command FLUSHALL ""  
 rename-command CONFIG "CONFIG_SECRET_NAME"
 ```
 
@@ -2392,7 +2392,7 @@ protected-mode yes
 mongosh
 
 # Créer un administrateur
-use admin
+use admin  
 db.createUser({
   user: "admin",
   pwd: "mot_de_passe_securise",
@@ -2400,7 +2400,7 @@ db.createUser({
 })
 
 # Créer un utilisateur pour l'application
-use mon_app
+use mon_app  
 db.createUser({
   user: "app_user",
   pwd: "mot_de_passe_app",
@@ -2447,7 +2447,7 @@ program RedisMonitor;
 uses
   SysUtils, RedisClient;
 
-procedure DisplayRedisInfo(Redis: TRedisClient);
+procedure DisplayRedisInfo(Redis: TRedisClient);  
 var
   Info: String;
 begin
@@ -2489,7 +2489,7 @@ program MongoMonitor;
 uses
   SysUtils, MongoDBClient;
 
-procedure DisplayMongoStats(Mongo: TMongoClient);
+procedure DisplayMongoStats(Mongo: TMongoClient);  
 var
   Stats: String;
 begin
@@ -2539,15 +2539,15 @@ redis-cli BGSAVE  # En arrière-plan
 
 ```bash
 # 1. Arrêter Redis
-sudo systemctl stop redis-server  # Ubuntu
+sudo systemctl stop redis-server  # Ubuntu  
 net stop Redis  # Windows
 
 # 2. Remplacer dump.rdb
-sudo cp backup_dump.rdb /var/lib/redis/dump.rdb  # Ubuntu
+sudo cp backup_dump.rdb /var/lib/redis/dump.rdb  # Ubuntu  
 copy backup_dump.rdb dump.rdb  # Windows
 
 # 3. Redémarrer Redis
-sudo systemctl start redis-server  # Ubuntu
+sudo systemctl start redis-server  # Ubuntu  
 net start Redis  # Windows
 ```
 

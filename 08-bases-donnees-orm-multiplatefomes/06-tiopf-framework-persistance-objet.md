@@ -51,7 +51,7 @@ tiOPF suit le principe **"Business Objects First"** :
 #### Méthode 2 : Git
 
 ```bash
-cd C:\Dev
+cd C:\Dev  
 git clone https://github.com/graemeg/tiopf.git
 ```
 
@@ -60,8 +60,8 @@ git clone https://github.com/graemeg/tiopf.git
 #### Installation avec Git
 
 ```bash
-cd ~/Developpement
-git clone https://github.com/graemeg/tiopf.git
+cd ~/Developpement  
+git clone https://github.com/graemeg/tiopf.git  
 cd tiopf/Source
 # Ouvrir tiOPF.lpk dans Lazarus et compiler
 ```
@@ -199,14 +199,14 @@ uses
 
 { TClient }
 
-constructor TClient.Create;
+constructor TClient.Create;  
 begin
   inherited Create;
   FActif := True;
   FDateInscription := Now;
 end;
 
-procedure TClient.SetNom(const AValue: string);
+procedure TClient.SetNom(const AValue: string);  
 begin
   if FNom <> AValue then
   begin
@@ -215,7 +215,7 @@ begin
   end;
 end;
 
-procedure TClient.SetPrenom(const AValue: string);
+procedure TClient.SetPrenom(const AValue: string);  
 begin
   if FPrenom <> AValue then
   begin
@@ -224,7 +224,7 @@ begin
   end;
 end;
 
-procedure TClient.SetEmail(const AValue: string);
+procedure TClient.SetEmail(const AValue: string);  
 begin
   if FEmail <> AValue then
   begin
@@ -233,7 +233,7 @@ begin
   end;
 end;
 
-procedure TClient.DoValidate(const AErrors: TtiObjectErrors);
+procedure TClient.DoValidate(const AErrors: TtiObjectErrors);  
 begin
   inherited DoValidate(AErrors);
 
@@ -255,18 +255,18 @@ begin
     AErrors.AddError('Email', 'Format d''email invalide');
 end;
 
-function TClient.NomComplet: string;
+function TClient.NomComplet: string;  
 begin
   Result := FPrenom + ' ' + FNom;
 end;
 
-procedure TClient.Activer;
+procedure TClient.Activer;  
 begin
   FActif := True;
   Dirty := True;
 end;
 
-procedure TClient.Desactiver;
+procedure TClient.Desactiver;  
 begin
   FActif := False;
   Dirty := True;
@@ -274,7 +274,7 @@ end;
 
 { TClientList }
 
-function TClientList.GetItems(Index: Integer): TClient;
+function TClientList.GetItems(Index: Integer): TClient;  
 begin
   Result := TClient(inherited Items[Index]);
 end;
@@ -313,7 +313,7 @@ implementation
 
 { TVisClient }
 
-procedure TVisClient.MapRowToObject;
+procedure TVisClient.MapRowToObject;  
 var
   LClient: TClient;
 begin
@@ -332,7 +332,7 @@ begin
   LClient.ObjectState := posClean;  // L'objet est maintenant propre
 end;
 
-procedure TVisClient.SetupParams;
+procedure TVisClient.SetupParams;  
 var
   LClient: TClient;
 begin
@@ -348,7 +348,7 @@ begin
   Query.ParamAsBoolean['actif'] := LClient.Actif;
 end;
 
-procedure TVisClient.Read(const AObject: TtiObject);
+procedure TVisClient.Read(const AObject: TtiObject);  
 begin
   Query.SQL.Text :=
     'SELECT * FROM clients WHERE oid = :oid';
@@ -359,7 +359,7 @@ begin
     MapRowToObject;
 end;
 
-procedure TVisClient.Update(const AObject: TtiObject);
+procedure TVisClient.Update(const AObject: TtiObject);  
 begin
   Query.SQL.Text :=
     'UPDATE clients SET ' +
@@ -377,7 +377,7 @@ begin
   Query.ExecSQL;
 end;
 
-procedure TVisClient.Insert(const AObject: TtiObject);
+procedure TVisClient.Insert(const AObject: TtiObject);  
 begin
   AObject.OID.CreateOID;  // Générer un nouvel OID
 
@@ -392,7 +392,7 @@ begin
   Query.ExecSQL;
 end;
 
-procedure TVisClient.Delete(const AObject: TtiObject);
+procedure TVisClient.Delete(const AObject: TtiObject);  
 begin
   Query.SQL.Text := 'DELETE FROM clients WHERE oid = :oid';
   Query.ParamAsString['oid'] := AObject.OID.AsString;
@@ -418,7 +418,7 @@ implementation
 uses
   tiOPFManager, Model.Client, Persistence.ClientMapping;
 
-procedure RegisterMappings;
+procedure RegisterMappings;  
 begin
   // Enregistrer le visitor pour la classe TClient
   GTIOPFManager.ClassDBMappingMgr.RegisterMapping(
@@ -454,7 +454,7 @@ interface
 uses
   Classes, SysUtils, tiOPFManager, tiPersistenceLayers;
 
-procedure InitializePersistenceLayer;
+procedure InitializePersistenceLayer;  
 procedure FinalizePersistenceLayer;
 
 implementation
@@ -462,7 +462,7 @@ implementation
 uses
   Persistence.Mappings;
 
-procedure InitializePersistenceLayer;
+procedure InitializePersistenceLayer;  
 begin
   // Créer le gestionnaire global si nécessaire
   if not Assigned(GTIOPFManager) then
@@ -498,7 +498,7 @@ begin
   WriteLn('Couche de persistance initialisée');
 end;
 
-procedure FinalizePersistenceLayer;
+procedure FinalizePersistenceLayer;  
 begin
   if Assigned(GTIOPFManager) then
   begin
@@ -513,7 +513,7 @@ end.
 ### Configuration multi-SGBD
 
 ```pascal
-procedure ConfigurerMySQL;
+procedure ConfigurerMySQL;  
 begin
   GTIOPFManager.ConnectDatabase(
     'MySQL',
@@ -525,7 +525,7 @@ begin
   );
 end;
 
-procedure ConfigurerSQLite;
+procedure ConfigurerSQLite;  
 begin
   GTIOPFManager.ConnectDatabase(
     'SQLite',
@@ -537,7 +537,7 @@ begin
   );
 end;
 
-procedure ConfigurerFirebird;
+procedure ConfigurerFirebird;  
 begin
   GTIOPFManager.ConnectDatabase(
     'Firebird',
@@ -556,7 +556,7 @@ end;
 ### Créer un client (INSERT)
 
 ```pascal
-procedure CreerNouveauClient;
+procedure CreerNouveauClient;  
 var
   Client: TClient;
 begin
@@ -588,7 +588,7 @@ end;
 ### Lire un client (SELECT)
 
 ```pascal
-procedure ChargerClient(const AOID: string);
+procedure ChargerClient(const AOID: string);  
 var
   Client: TClient;
 begin
@@ -610,7 +610,7 @@ end;
 ### Modifier un client (UPDATE)
 
 ```pascal
-procedure ModifierClient(const AOID: string);
+procedure ModifierClient(const AOID: string);  
 var
   Client: TClient;
 begin
@@ -644,7 +644,7 @@ end;
 ### Supprimer un client (DELETE)
 
 ```pascal
-procedure SupprimerClient(const AOID: string);
+procedure SupprimerClient(const AOID: string);  
 var
   Client: TClient;
 begin
@@ -671,7 +671,7 @@ end;
 ### Charger tous les clients
 
 ```pascal
-procedure ChargerTousLesClients;
+procedure ChargerTousLesClients;  
 var
   Clients: TClientList;
   Client: TClient;
@@ -693,7 +693,7 @@ end;
 ### Charger avec critères
 
 ```pascal
-procedure ChargerClientsParVille(const AVille: string);
+procedure ChargerClientsParVille(const AVille: string);  
 var
   Clients: TClientList;
   Client: TClient;
@@ -717,7 +717,7 @@ end;
 ### Recherche avancée avec critères multiples
 
 ```pascal
-procedure RechercheAvancee;
+procedure RechercheAvancee;  
 var
   Clients: TClientList;
 begin
@@ -742,7 +742,7 @@ end;
 ### Tri d'une liste
 
 ```pascal
-procedure TrierClients;
+procedure TrierClients;  
 var
   Clients: TClientList;
 begin
@@ -770,7 +770,7 @@ end;
 ### Filtrage côté client
 
 ```pascal
-procedure FiltrerListe;
+procedure FiltrerListe;  
 var
   Clients, ClientsFiltres: TClientList;
   Client: TClient;
@@ -803,7 +803,7 @@ end;
 ### Transaction simple
 
 ```pascal
-procedure TransactionSimple;
+procedure TransactionSimple;  
 var
   Client1, Client2: TClient;
 begin
@@ -848,7 +848,7 @@ end;
 ### Transaction avec sauvegarde de liste
 
 ```pascal
-procedure SauvegarderListe;
+procedure SauvegarderListe;  
 var
   Clients: TClientList;
   Client: TClient;
@@ -881,7 +881,7 @@ end;
 ### Règles de validation personnalisées
 
 ```pascal
-procedure TClient.DoValidate(const AErrors: TtiObjectErrors);
+procedure TClient.DoValidate(const AErrors: TtiObjectErrors);  
 begin
   inherited DoValidate(AErrors);
 
@@ -905,7 +905,7 @@ begin
       'Cet email est déjà utilisé par un autre client');
 end;
 
-function TClient.EmailUniqueEnBase(const AEmail: string): Boolean;
+function TClient.EmailUniqueEnBase(const AEmail: string): Boolean;  
 var
   Clients: TClientList;
 begin
@@ -928,7 +928,7 @@ end;
 ### Utilisation de la validation
 
 ```pascal
-procedure ValiderAvantSauvegarde;
+procedure ValiderAvantSauvegarde;  
 var
   Client: TClient;
   Error: TtiObjectError;
@@ -998,7 +998,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TFormClients.FormCreate(Sender: TObject);
+procedure TFormClients.FormCreate(Sender: TObject);  
 begin
   FClients := TClientList.Create;
   ChargerClients;
@@ -1015,18 +1015,18 @@ begin
   AfficherClients;
 end;
 
-procedure TFormClients.FormDestroy(Sender: TObject);
+procedure TFormClients.FormDestroy(Sender: TObject);  
 begin
   FClients.Free;
 end;
 
-procedure TFormClients.ChargerClients;
+procedure TFormClients.ChargerClients;  
 begin
   FClients.Clear;
   FClients.Read;
 end;
 
-procedure TFormClients.AfficherClients;
+procedure TFormClients.AfficherClients;  
 var
   i: Integer;
   Client: TClient;
@@ -1045,7 +1045,7 @@ begin
   end;
 end;
 
-procedure TFormClients.ButtonNouveauClick(Sender: TObject);
+procedure TFormClients.ButtonNouveauClick(Sender: TObject);  
 var
   FormEdition: TFormEditionClient;
   Client: TClient;
@@ -1063,7 +1063,7 @@ begin
   end;
 end;
 
-procedure TFormClients.ButtonModifierClick(Sender: TObject);
+procedure TFormClients.ButtonModifierClick(Sender: TObject);  
 var
   FormEdition: TFormEditionClient;
   Client: TClient;
@@ -1090,7 +1090,7 @@ begin
   end;
 end;
 
-procedure TFormClients.ButtonSupprimerClick(Sender: TObject);
+procedure TFormClients.ButtonSupprimerClick(Sender: TObject);  
 var
   Client: TClient;
   Row: Integer;
@@ -1113,7 +1113,7 @@ begin
   end;
 end;
 
-procedure TFormClients.ButtonActualiserClick(Sender: TObject);
+procedure TFormClients.ButtonActualiserClick(Sender: TObject);  
 begin
   ChargerClients;
   AfficherClients;
@@ -1170,7 +1170,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TFormEditionClient.FormCreate(Sender: TObject);
+procedure TFormEditionClient.FormCreate(Sender: TObject);  
 begin
   if not Assigned(FClient) then
   begin
@@ -1186,7 +1186,7 @@ begin
   MemoErreurs.Visible := False;
 end;
 
-procedure TFormEditionClient.ChargerDonnees;
+procedure TFormEditionClient.ChargerDonnees;  
 begin
   EditNom.Text := FClient.Nom;
   EditPrenom.Text := FClient.Prenom;
@@ -1196,7 +1196,7 @@ begin
   CheckBoxActif.Checked := FClient.Actif;
 end;
 
-procedure TFormEditionClient.SauvegarderDonnees;
+procedure TFormEditionClient.SauvegarderDonnees;  
 begin
   FClient.Nom := EditNom.Text;
   FClient.Prenom := EditPrenom.Text;
@@ -1206,7 +1206,7 @@ begin
   FClient.Actif := CheckBoxActif.Checked;
 end;
 
-procedure TFormEditionClient.AfficherErreurs;
+procedure TFormEditionClient.AfficherErreurs;  
 var
   Error: TtiObjectError;
 begin
@@ -1220,7 +1220,7 @@ begin
   MemoErreurs.Visible := True;
 end;
 
-procedure TFormEditionClient.ButtonOKClick(Sender: TObject);
+procedure TFormEditionClient.ButtonOKClick(Sender: TObject);  
 begin
   SauvegarderDonnees;
 
@@ -1234,7 +1234,7 @@ begin
     AfficherErreurs;
 end;
 
-procedure TFormEditionClient.ButtonAnnulerClick(Sender: TObject);
+procedure TFormEditionClient.ButtonAnnulerClick(Sender: TObject);  
 begin
   if FNouveauClient then
     FreeAndNil(FClient);
@@ -1268,7 +1268,7 @@ type
 
 implementation
 
-procedure TClientObserver.Update(ASubject: TtiObject);
+procedure TClientObserver.Update(ASubject: TtiObject);  
 var
   Client: TClient;
 begin
@@ -1298,7 +1298,7 @@ end.
 ### Utilisation de l'observateur
 
 ```pascal
-procedure UtiliserObservateur;
+procedure UtiliserObservateur;  
 var
   Client: TClient;
   Observer: TClientObserver;
@@ -1377,7 +1377,7 @@ implementation
 
 { TCommande }
 
-constructor TCommande.Create;
+constructor TCommande.Create;  
 begin
   inherited Create;
   FDateCommande := Now;
@@ -1385,21 +1385,21 @@ begin
   FClient := nil;
 end;
 
-destructor TCommande.Destroy;
+destructor TCommande.Destroy;  
 begin
   if Assigned(FClient) then
     FClient.Free;
   inherited Destroy;
 end;
 
-function TCommande.GetClient: TClient;
+function TCommande.GetClient: TClient;  
 begin
   if not Assigned(FClient) then
     LoadClient;
   Result := FClient;
 end;
 
-procedure TCommande.LoadClient;
+procedure TCommande.LoadClient;  
 begin
   if FClientOID <> '' then
   begin
@@ -1409,7 +1409,7 @@ begin
   end;
 end;
 
-procedure TCommande.DoValidate(const AErrors: TtiObjectErrors);
+procedure TCommande.DoValidate(const AErrors: TtiObjectErrors);  
 begin
   inherited DoValidate(AErrors);
 
@@ -1423,14 +1423,14 @@ begin
     AErrors.AddError('Numero', 'Le numéro de commande est obligatoire');
 end;
 
-function TCommande.EstLivree: Boolean;
+function TCommande.EstLivree: Boolean;  
 begin
   Result := FStatut = 'Livrée';
 end;
 
 { TCommandeList }
 
-function TCommandeList.GetItems(Index: Integer): TCommande;
+function TCommandeList.GetItems(Index: Integer): TCommande;  
 begin
   Result := TCommande(inherited Items[Index]);
 end;
@@ -1464,28 +1464,28 @@ type
 
 implementation
 
-constructor TClient.Create;
+constructor TClient.Create;  
 begin
   inherited Create;
   FCommandes := nil;
   FCommandesLoaded := False;
 end;
 
-destructor TClient.Destroy;
+destructor TClient.Destroy;  
 begin
   if Assigned(FCommandes) then
     FCommandes.Free;
   inherited Destroy;
 end;
 
-function TClient.GetCommandes: TCommandeList;
+function TClient.GetCommandes: TCommandeList;  
 begin
   if not FCommandesLoaded then
     LoadCommandes;
   Result := FCommandes;
 end;
 
-procedure TClient.LoadCommandes;
+procedure TClient.LoadCommandes;  
 begin
   if not Assigned(FCommandes) then
     FCommandes := TCommandeList.Create;
@@ -1496,12 +1496,12 @@ begin
   FCommandesLoaded := True;
 end;
 
-function TClient.NombreCommandes: Integer;
+function TClient.NombreCommandes: Integer;  
 begin
   Result := Commandes.Count;
 end;
 
-function TClient.MontantTotalCommandes: Currency;
+function TClient.MontantTotalCommandes: Currency;  
 var
   Commande: TCommande;
 begin
@@ -1514,7 +1514,7 @@ end;
 ### Utilisation des relations
 
 ```pascal
-procedure AfficherClientAvecCommandes(const ClientOID: string);
+procedure AfficherClientAvecCommandes(const ClientOID: string);  
 var
   Client: TClient;
   Commande: TCommande;
@@ -1571,7 +1571,7 @@ type
 
 implementation
 
-class function TClientQueries.GetClientsActifs: TClientList;
+class function TClientQueries.GetClientsActifs: TClientList;  
 var
   Query: TtiQuery;
   Client: TClient;
@@ -1605,7 +1605,7 @@ begin
   end;
 end;
 
-class function TClientQueries.GetClientsParVille(const AVille: string): TClientList;
+class function TClientQueries.GetClientsParVille(const AVille: string): TClientList;  
 var
   Query: TtiQuery;
   Client: TClient;
@@ -1630,7 +1630,7 @@ begin
   end;
 end;
 
-class function TClientQueries.GetTopClients(TopN: Integer): TClientList;
+class function TClientQueries.GetTopClients(TopN: Integer): TClientList;  
 var
   Query: TtiQuery;
   Client: TClient;
@@ -1661,7 +1661,7 @@ begin
   end;
 end;
 
-class function TClientQueries.GetStatistiquesParVille: TStringList;
+class function TClientQueries.GetStatistiquesParVille: TStringList;  
 var
   Query: TtiQuery;
 begin
@@ -1694,7 +1694,7 @@ end.
 ### Utilisation des requêtes personnalisées
 
 ```pascal
-procedure UtiliserRequetesPersonnalisees;
+procedure UtiliserRequetesPersonnalisees;  
 var
   Clients: TClientList;
   Stats: TStringList;
@@ -1761,7 +1761,7 @@ var
 
 implementation
 
-constructor TClientCache.Create(MaxSize: Integer);
+constructor TClientCache.Create(MaxSize: Integer);  
 begin
   inherited Create;
   FCache := TDictionary<string, TClient>.Create;
@@ -1769,14 +1769,14 @@ begin
   FMaxCacheSize := MaxSize;
 end;
 
-destructor TClientCache.Destroy;
+destructor TClientCache.Destroy;  
 begin
   Clear;
   FCache.Free;
   inherited Destroy;
 end;
 
-function TClientCache.Get(const AOID: string): TClient;
+function TClientCache.Get(const AOID: string): TClient;  
 begin
   if not FCacheEnabled then
   begin
@@ -1788,7 +1788,7 @@ begin
     Result := nil;
 end;
 
-procedure TClientCache.Put(Client: TClient);
+procedure TClientCache.Put(Client: TClient);  
 begin
   if not FCacheEnabled then
     Exit;
@@ -1801,7 +1801,7 @@ begin
   FCache.AddOrSetValue(Client.OID.AsString, Client.Clone as TClient);
 end;
 
-procedure TClientCache.Remove(const AOID: string);
+procedure TClientCache.Remove(const AOID: string);  
 var
   Client: TClient;
 begin
@@ -1812,7 +1812,7 @@ begin
   end;
 end;
 
-procedure TClientCache.Clear;
+procedure TClientCache.Clear;  
 var
   Client: TClient;
 begin
@@ -1821,7 +1821,7 @@ begin
   FCache.Clear;
 end;
 
-function TClientCache.GetCount: Integer;
+function TClientCache.GetCount: Integer;  
 begin
   Result := FCache.Count;
 end;
@@ -1838,7 +1838,7 @@ end.
 ### Utilisation du cache
 
 ```pascal
-function ChargerClientAvecCache(const AOID: string): TClient;
+function ChargerClientAvecCache(const AOID: string): TClient;  
 begin
   // Vérifier le cache d'abord
   Result := ClientCache.Get(AOID);
@@ -1893,7 +1893,7 @@ implementation
 uses
   AppConfig;
 
-procedure TTestClient.SetUp;
+procedure TTestClient.SetUp;  
 begin
   // Utiliser une base de données de test
   InitializePersistenceLayer;
@@ -1902,12 +1902,12 @@ begin
   // ...
 end;
 
-procedure TTestClient.TearDown;
+procedure TTestClient.TearDown;  
 begin
   FinalizePersistenceLayer;
 end;
 
-procedure TTestClient.TestCreation;
+procedure TTestClient.TestCreation;  
 var
   Client: TClient;
 begin
@@ -1922,7 +1922,7 @@ begin
   end;
 end;
 
-procedure TTestClient.TestValidation;
+procedure TTestClient.TestValidation;  
 var
   Client: TClient;
 begin
@@ -1948,7 +1948,7 @@ begin
   end;
 end;
 
-procedure TTestClient.TestSauvegarde;
+procedure TTestClient.TestSauvegarde;  
 var
   Client: TClient;
   OID: string;
@@ -1972,7 +1972,7 @@ begin
   end;
 end;
 
-procedure TTestClient.TestChargement;
+procedure TTestClient.TestChargement;  
 var
   Client1, Client2: TClient;
 begin
@@ -2000,7 +2000,7 @@ begin
   end;
 end;
 
-procedure TTestClient.TestModification;
+procedure TTestClient.TestModification;  
 var
   Client: TClient;
   NouvelEmail: string;
@@ -2028,7 +2028,7 @@ begin
   end;
 end;
 
-procedure TTestClient.TestSuppression;
+procedure TTestClient.TestSuppression;  
 var
   Client: TClient;
   OID: string;
@@ -2063,7 +2063,7 @@ begin
   end;
 end;
 
-procedure TTestClient.TestListe;
+procedure TTestClient.TestListe;  
 var
   Clients: TClientList;
   Client: TClient;
@@ -2128,13 +2128,13 @@ type
 
 implementation
 
-constructor TCustomtiOPFLogger.Create(const ALogFile: string);
+constructor TCustomtiOPFLogger.Create(const ALogFile: string);  
 begin
   inherited Create;
   FLogFile := ALogFile;
 end;
 
-procedure TCustomtiOPFLogger.WriteToFile(const AMessage: string);
+procedure TCustomtiOPFLogger.WriteToFile(const AMessage: string);  
 var
   F: TextFile;
 begin
@@ -2150,17 +2150,17 @@ begin
   end;
 end;
 
-procedure TCustomtiOPFLogger.Log(const AMessage: string);
+procedure TCustomtiOPFLogger.Log(const AMessage: string);  
 begin
   WriteToFile('[INFO] ' + AMessage);
 end;
 
-procedure TCustomtiOPFLogger.LogSQL(const ASQL: string);
+procedure TCustomtiOPFLogger.LogSQL(const ASQL: string);  
 begin
   WriteToFile('[SQL] ' + ASQL);
 end;
 
-procedure TCustomtiOPFLogger.LogError(const AMessage: string);
+procedure TCustomtiOPFLogger.LogError(const AMessage: string);  
 begin
   WriteToFile('[ERROR] ' + AMessage);
 end;
@@ -2171,7 +2171,7 @@ end.
 ### Configuration du logger
 
 ```pascal
-procedure ConfigurerLogging;
+procedure ConfigurerLogging;  
 var
   Logger: TCustomtiOPFLogger;
   CheminLog: string;
@@ -2196,7 +2196,7 @@ end;
 ### Utilisation du logging
 
 ```pascal
-procedure OperationAvecLogging;
+procedure OperationAvecLogging;  
 var
   Client: TClient;
 begin
@@ -2255,7 +2255,7 @@ type
 
 implementation
 
-function TBaseRepository.FindByID(const AOID: string): T;
+function TBaseRepository.FindByID(const AOID: string): T;  
 begin
   Result := CreateEntity;
   Result.OID.AsString := AOID;
@@ -2267,7 +2267,7 @@ begin
   end;
 end;
 
-function TBaseRepository.FindAll: TList<T>;
+function TBaseRepository.FindAll: TList<T>;  
 var
   List: TtiObjectList;
   Item: TtiObject;
@@ -2283,7 +2283,7 @@ begin
   end;
 end;
 
-function TBaseRepository.FindByCriteria(const ACriteria: TtiCriteria): TList<T>;
+function TBaseRepository.FindByCriteria(const ACriteria: TtiCriteria): TList<T>;  
 var
   List: TtiObjectList;
   Item: TtiObject;
@@ -2300,17 +2300,17 @@ begin
   end;
 end;
 
-procedure TBaseRepository.Save(AEntity: T);
+procedure TBaseRepository.Save(AEntity: T);  
 begin
   AEntity.Save;
 end;
 
-procedure TBaseRepository.Delete(AEntity: T);
+procedure TBaseRepository.Delete(AEntity: T);  
 begin
   AEntity.Delete;
 end;
 
-function TBaseRepository.Count: Integer;
+function TBaseRepository.Count: Integer;  
 var
   List: TtiObjectList;
 begin
@@ -2352,17 +2352,17 @@ type
 
 implementation
 
-function TClientRepository.CreateEntity: TClient;
+function TClientRepository.CreateEntity: TClient;  
 begin
   Result := TClient.Create;
 end;
 
-function TClientRepository.CreateList: TtiObjectList;
+function TClientRepository.CreateList: TtiObjectList;  
 begin
   Result := TClientList.Create;
 end;
 
-function TClientRepository.FindByEmail(const AEmail: string): TClient;
+function TClientRepository.FindByEmail(const AEmail: string): TClient;  
 var
   List: TClientList;
 begin
@@ -2379,7 +2379,7 @@ begin
   end;
 end;
 
-function TClientRepository.FindByVille(const AVille: string): TList<TClient>;
+function TClientRepository.FindByVille(const AVille: string): TList<TClient>;  
 var
   Criteria: TtiCriteria;
 begin
@@ -2392,7 +2392,7 @@ begin
   end;
 end;
 
-function TClientRepository.FindActifs: TList<TClient>;
+function TClientRepository.FindActifs: TList<TClient>;  
 var
   Criteria: TtiCriteria;
 begin
@@ -2446,13 +2446,13 @@ type
 
 implementation
 
-constructor TClientService.Create;
+constructor TClientService.Create;  
 begin
   inherited Create;
   FRepository := TClientRepository.Create;
 end;
 
-destructor TClientService.Destroy;
+destructor TClientService.Destroy;  
 begin
   FRepository.Free;
   inherited Destroy;
@@ -2484,27 +2484,27 @@ begin
     [Result.NomComplet, Result.OID.AsString]));
 end;
 
-function TClientService.ObtenirClient(const AOID: string): TClient;
+function TClientService.ObtenirClient(const AOID: string): TClient;  
 begin
   Result := FRepository.FindByID(AOID);
 end;
 
-function TClientService.RechercherParEmail(const AEmail: string): TClient;
+function TClientService.RechercherParEmail(const AEmail: string): TClient;  
 begin
   Result := FRepository.FindByEmail(AEmail);
 end;
 
-function TClientService.ObtenirTous: TList<TClient>;
+function TClientService.ObtenirTous: TList<TClient>;  
 begin
   Result := FRepository.FindAll;
 end;
 
-function TClientService.ObtenirParVille(const AVille: string): TList<TClient>;
+function TClientService.ObtenirParVille(const AVille: string): TList<TClient>;  
 begin
   Result := FRepository.FindByVille(AVille);
 end;
 
-procedure TClientService.ModifierClient(AClient: TClient);
+procedure TClientService.ModifierClient(AClient: TClient);  
 begin
   if not AClient.IsValid then
     raise Exception.Create('Données client invalides');
@@ -2514,7 +2514,7 @@ begin
   GTIOPFManager.Log.Log(Format('Client modifié: %s', [AClient.NomComplet]));
 end;
 
-procedure TClientService.SupprimerClient(const AOID: string);
+procedure TClientService.SupprimerClient(const AOID: string);  
 var
   Client: TClient;
 begin
@@ -2527,7 +2527,7 @@ begin
   end;
 end;
 
-procedure TClientService.ActiverClient(const AOID: string);
+procedure TClientService.ActiverClient(const AOID: string);  
 var
   Client: TClient;
 begin
@@ -2540,7 +2540,7 @@ begin
   end;
 end;
 
-procedure TClientService.DesactiverClient(const AOID: string);
+procedure TClientService.DesactiverClient(const AOID: string);  
 var
   Client: TClient;
 begin
@@ -2553,7 +2553,7 @@ begin
   end;
 end;
 
-function TClientService.NombreClientsActifs: Integer;
+function TClientService.NombreClientsActifs: Integer;  
 var
   Clients: TList<TClient>;
 begin
@@ -2567,7 +2567,7 @@ begin
   end;
 end;
 
-function TClientService.VerifierEmailUnique(const AEmail: string): Boolean;
+function TClientService.VerifierEmailUnique(const AEmail: string): Boolean;  
 var
   Client: TClient;
 begin
@@ -2617,7 +2617,7 @@ implementation
 uses
   StrUtils;
 
-constructor TClientCSVImporter.Create(AService: TClientService);
+constructor TClientCSVImporter.Create(AService: TClientService);  
 begin
   inherited Create;
   FService := AService;
@@ -2626,13 +2626,13 @@ begin
   FErrorCount := 0;
 end;
 
-destructor TClientCSVImporter.Destroy;
+destructor TClientCSVImporter.Destroy;  
 begin
   FErrors.Free;
   inherited Destroy;
 end;
 
-procedure TClientCSVImporter.ImportFromFile(const AFileName: string);
+procedure TClientCSVImporter.ImportFromFile(const AFileName: string);  
 var
   CSV: TStringList;
   i: Integer;
@@ -2705,7 +2705,7 @@ end.
 ### Utilisation de l'importateur
 
 ```pascal
-procedure ImporterClients;
+procedure ImporterClients;  
 var
   Service: TClientService;
   Importer: TClientCSVImporter;
@@ -2768,7 +2768,7 @@ begin
   FDelimiter := ADelimiter;
 end;
 
-procedure TClientCSVExporter.ExportToFile(const AFileName: string);
+procedure TClientCSVExporter.ExportToFile(const AFileName: string);  
 var
   CSV: TStringList;
   Clients: TList<TClient>;
@@ -2808,7 +2808,7 @@ begin
   end;
 end;
 
-procedure TClientCSVExporter.ExportByVille(const AVille, AFileName: string);
+procedure TClientCSVExporter.ExportByVille(const AVille, AFileName: string);  
 var
   CSV: TStringList;
   Clients: TList<TClient>;
@@ -2919,7 +2919,7 @@ MonProjet/
 
 ```pascal
 // ✅ BON - Toujours libérer les objets
-procedure BonneGestion;
+procedure BonneGestion;  
 var
   Client: TClient;
 begin
@@ -2933,7 +2933,7 @@ begin
 end;
 
 // ✅ BON - Libérer les listes ET leur contenu
-procedure BonneGestionListe;
+procedure BonneGestionListe;  
 var
   Clients: TList<TClient>;
   Client: TClient;
@@ -2952,7 +2952,7 @@ begin
 end;
 
 // ❌ MAUVAIS - Fuite mémoire
-procedure MauvaiseGestion;
+procedure MauvaiseGestion;  
 var
   Client: TClient;
 begin
@@ -2966,7 +2966,7 @@ end;
 ### 3. Validation systématique
 
 ```pascal
-procedure ToujoursValider;
+procedure ToujoursValider;  
 var
   Client: TClient;
 begin
@@ -2993,7 +2993,7 @@ end;
 
 ```pascal
 // ✅ BON - Transactions pour opérations multiples
-procedure OperationsMultiples;
+procedure OperationsMultiples;  
 begin
   GTIOPFManager.BeginTransaction;
   try
@@ -3011,7 +3011,7 @@ end;
 ### 5. Logging approprié
 
 ```pascal
-procedure LoggerCorrectement;
+procedure LoggerCorrectement;  
 var
   Client: TClient;
 begin
@@ -3175,20 +3175,20 @@ var
 
 implementation
 
-constructor TAppConfig.Create;
+constructor TAppConfig.Create;  
 begin
   inherited Create;
   FConfigFile := ExtractFilePath(ParamStr(0)) + 'config.ini';
   FIniFile := TIniFile.Create(FConfigFile);
 end;
 
-destructor TAppConfig.Destroy;
+destructor TAppConfig.Destroy;  
 begin
   FIniFile.Free;
   inherited Destroy;
 end;
 
-procedure TAppConfig.InitializePersistenceLayer;
+procedure TAppConfig.InitializePersistenceLayer;  
 var
   DBType: string;
   Host, Database, User, Password, Params: string;
@@ -3259,22 +3259,22 @@ begin
   WriteLn(Format('Connecté à %s: %s', [DBType, Database]));
 end;
 
-function TAppConfig.GetDatabaseType: string;
+function TAppConfig.GetDatabaseType: string;  
 begin
   Result := FIniFile.ReadString('Database', 'Type', 'PostgreSQL');
 end;
 
-function TAppConfig.GetLogEnabled: Boolean;
+function TAppConfig.GetLogEnabled: Boolean;  
 begin
   Result := FIniFile.ReadBool('Logging', 'Enabled', True);
 end;
 
-function TAppConfig.GetCacheEnabled: Boolean;
+function TAppConfig.GetCacheEnabled: Boolean;  
 begin
   Result := FIniFile.ReadBool('Application', 'CacheEnabled', True);
 end;
 
-function TAppConfig.GetBatchSize: Integer;
+function TAppConfig.GetBatchSize: Integer;  
 begin
   Result := FIniFile.ReadInteger('Application', 'BatchSize', 100);
 end;
@@ -3317,7 +3317,7 @@ implementation
 uses
   TypInfo, Variants, fpjson, jsonparser;
 
-function TtiObjectHelper.ToJSON: string;
+function TtiObjectHelper.ToJSON: string;  
 var
   JSON: TJSONObject;
   PropList: PPropList;
@@ -3358,7 +3358,7 @@ begin
   end;
 end;
 
-procedure TtiObjectHelper.FromJSON(const AJSON: string);
+procedure TtiObjectHelper.FromJSON(const AJSON: string);  
 var
   JSON: TJSONData;
   JSONObj: TJSONObject;
@@ -3404,13 +3404,13 @@ begin
   end;
 end;
 
-function TtiObjectHelper.Clone: TtiObject;
+function TtiObjectHelper.Clone: TtiObject;  
 begin
   Result := TtiObjectClass(Self.ClassType).Create;
   Result.Assign(Self);
 end;
 
-function TtiObjectHelper.GetPropertyValue(const PropName: string): Variant;
+function TtiObjectHelper.GetPropertyValue(const PropName: string): Variant;  
 var
   PropInfo: PPropInfo;
 begin
@@ -3462,7 +3462,7 @@ end.
 ### Utilisation du helper
 
 ```pascal
-procedure UtiliserHelper;
+procedure UtiliserHelper;  
 var
   Client: TClient;
   JSON: string;
@@ -3534,13 +3534,13 @@ implementation
 uses
   DateUtils;
 
-constructor TClientReport.Create(AService: TClientService);
+constructor TClientReport.Create(AService: TClientService);  
 begin
   inherited Create;
   FService := AService;
 end;
 
-function TClientReport.GenerateTextReport(Clients: TList<TClient>): string;
+function TClientReport.GenerateTextReport(Clients: TList<TClient>): string;  
 var
   Client: TClient;
   Lines: TStringList;
@@ -3577,7 +3577,7 @@ begin
   end;
 end;
 
-function TClientReport.GenerateHTMLReport(Clients: TList<TClient>): string;
+function TClientReport.GenerateHTMLReport(Clients: TList<TClient>): string;  
 var
   Client: TClient;
   HTML: TStringList;
@@ -3642,7 +3642,7 @@ begin
   end;
 end;
 
-function TClientReport.GenerateCSVReport(Clients: TList<TClient>): string;
+function TClientReport.GenerateCSVReport(Clients: TList<TClient>): string;  
 var
   Client: TClient;
   CSV: TStringList;
@@ -3734,7 +3734,7 @@ end.
 ### Utilisation du générateur de rapports
 
 ```pascal
-procedure GenererRapports;
+procedure GenererRapports;  
 var
   Service: TClientService;
   Report: TClientReport;
@@ -3782,8 +3782,8 @@ CREATE TABLE audit_log (
     changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_audit_table ON audit_log(table_name);
-CREATE INDEX idx_audit_oid ON audit_log(record_oid);
+CREATE INDEX idx_audit_table ON audit_log(table_name);  
+CREATE INDEX idx_audit_oid ON audit_log(record_oid);  
 CREATE INDEX idx_audit_date ON audit_log(changed_at);
 ```
 
@@ -3816,7 +3816,7 @@ implementation
 uses
   fpjson;
 
-class function TAuditManager.OperationToString(Op: TAuditOperation): string;
+class function TAuditManager.OperationToString(Op: TAuditOperation): string;  
 begin
   case Op of
     aoInsert: Result := 'INSERT';
@@ -3856,7 +3856,7 @@ begin
   end;
 end;
 
-class function TAuditManager.GetHistory(const TableName, RecordOID: string): TStringList;
+class function TAuditManager.GetHistory(const TableName, RecordOID: string): TStringList;  
 var
   Query: TtiQuery;
 begin
@@ -3901,7 +3901,7 @@ end.
 ### Intégration de l'audit dans le Visitor
 
 ```pascal
-procedure TVisClient.Insert(const AObject: TtiObject);
+procedure TVisClient.Insert(const AObject: TtiObject);  
 var
   NewValues: string;
 begin
@@ -3922,7 +3922,7 @@ begin
   TAuditManager.LogChange(AObject, aoInsert, '', NewValues);
 end;
 
-procedure TVisClient.Update(const AObject: TtiObject);
+procedure TVisClient.Update(const AObject: TtiObject);  
 var
   OldClient: TClient;
   OldValues, NewValues: string;
@@ -3960,7 +3960,7 @@ end;
 ### Comptage optimisé
 
 ```pascal
-function TClientRepository.CountActifs: Integer;
+function TClientRepository.CountActifs: Integer;  
 var
   Query: TtiQuery;
 begin
@@ -3987,7 +3987,7 @@ type
     TotalPages: Integer;
   end;
 
-function TClientRepository.GetPaged(PageNumber, PageSize: Integer): TPagedResult<TClient>;
+function TClientRepository.GetPaged(PageNumber, PageSize: Integer): TPagedResult<TClient>;  
 var
   Query: TtiQuery;
   Client: TClient;
@@ -4032,7 +4032,7 @@ end;
 ### Utilisation de la pagination
 
 ```pascal
-procedure AfficherClientsParPage;
+procedure AfficherClientsParPage;  
 var
   Repository: TClientRepository;
   PagedResult: TPagedResult<TClient>;
@@ -4130,32 +4130,32 @@ MonApplication\
 @echo off
 REM deploy_windows.bat
 
-echo ========================================
-echo Deploiement de MonApplication
-echo ========================================
+echo ========================================  
+echo Deploiement de MonApplication  
+echo ========================================  
 echo.
 
-REM Créer la structure de répertoires
-echo Creation des repertoires...
-if not exist ".\logs" mkdir ".\logs"
-if not exist ".\data" mkdir ".\data"
-if not exist ".\reports" mkdir ".\reports"
+REM Créer la structure de répertoires  
+echo Creation des repertoires...  
+if not exist ".\logs" mkdir ".\logs"  
+if not exist ".\data" mkdir ".\data"  
+if not exist ".\reports" mkdir ".\reports"  
 if not exist ".\backup" mkdir ".\backup"
 
-REM Copier les fichiers
-echo Copie des fichiers...
-copy /Y ".\build\MonApp.exe" ".\MonApp.exe"
+REM Copier les fichiers  
+echo Copie des fichiers...  
+copy /Y ".\build\MonApp.exe" ".\MonApp.exe"  
 copy /Y ".\config\config.ini" ".\config.ini"
 
-REM Copier les DLLs
-echo Copie des bibliotheques...
-if not exist ".\libs" mkdir ".\libs"
-copy /Y "C:\PostgreSQL\14\bin\libpq.dll" ".\libs\"
-copy /Y "C:\PostgreSQL\14\bin\libeay32.dll" ".\libs\"
+REM Copier les DLLs  
+echo Copie des bibliotheques...  
+if not exist ".\libs" mkdir ".\libs"  
+copy /Y "C:\PostgreSQL\14\bin\libpq.dll" ".\libs\"  
+copy /Y "C:\PostgreSQL\14\bin\libeay32.dll" ".\libs\"  
 copy /Y "C:\PostgreSQL\14\bin\ssleay32.dll" ".\libs\"
 
-REM Vérifier la connexion à la base
-echo Verification de la base de donnees...
+REM Vérifier la connexion à la base  
+echo Verification de la base de donnees...  
 MonApp.exe --check-db
 
 if %ERRORLEVEL% NEQ 0 (
@@ -4164,10 +4164,10 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
-echo.
-echo ========================================
-echo Deploiement termine avec succes!
-echo ========================================
+echo.  
+echo ========================================  
+echo Deploiement termine avec succes!  
+echo ========================================  
 pause
 ```
 
@@ -4179,14 +4179,14 @@ pause
 
 set -e  # Arrêter en cas d'erreur
 
-APP_NAME="monapp"
-INSTALL_DIR="/opt/monapplication"
-USER="monapplication"
+APP_NAME="monapp"  
+INSTALL_DIR="/opt/monapplication"  
+USER="monapplication"  
 GROUP="monapplication"
 
-echo "========================================"
-echo "Déploiement de $APP_NAME"
-echo "========================================"
+echo "========================================"  
+echo "Déploiement de $APP_NAME"  
+echo "========================================"  
 echo
 
 # Créer l'utilisateur si nécessaire
@@ -4196,28 +4196,28 @@ if ! id "$USER" &>/dev/null; then
 fi
 
 # Créer la structure de répertoires
-echo "Création des répertoires..."
+echo "Création des répertoires..."  
 sudo mkdir -p $INSTALL_DIR/{bin,etc,lib,var/{data,logs,backup},share/docs,tmp}
 
 # Copier les fichiers
-echo "Copie des fichiers..."
-sudo cp ./build/$APP_NAME $INSTALL_DIR/bin/
-sudo cp ./config/config.ini $INSTALL_DIR/etc/
+echo "Copie des fichiers..."  
+sudo cp ./build/$APP_NAME $INSTALL_DIR/bin/  
+sudo cp ./config/config.ini $INSTALL_DIR/etc/  
 sudo cp -r ./docs/* $INSTALL_DIR/share/docs/
 
 # Permissions
-echo "Configuration des permissions..."
-sudo chown -R $USER:$GROUP $INSTALL_DIR
-sudo chmod 755 $INSTALL_DIR/bin/$APP_NAME
-sudo chmod 644 $INSTALL_DIR/etc/config.ini
+echo "Configuration des permissions..."  
+sudo chown -R $USER:$GROUP $INSTALL_DIR  
+sudo chmod 755 $INSTALL_DIR/bin/$APP_NAME  
+sudo chmod 644 $INSTALL_DIR/etc/config.ini  
 sudo chmod 755 $INSTALL_DIR/var/{data,logs,backup}
 
 # Créer un lien symbolique
-echo "Création du lien symbolique..."
+echo "Création du lien symbolique..."  
 sudo ln -sf $INSTALL_DIR/bin/$APP_NAME /usr/local/bin/$APP_NAME
 
 # Vérifier la connexion à la base
-echo "Vérification de la base de données..."
+echo "Vérification de la base de données..."  
 sudo -u $USER $INSTALL_DIR/bin/$APP_NAME --check-db
 
 if [ $? -ne 0 ]; then
@@ -4225,10 +4225,10 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo
-echo "========================================"
-echo "Déploiement terminé avec succès!"
-echo "========================================"
+echo  
+echo "========================================"  
+echo "Déploiement terminé avec succès!"  
+echo "========================================"  
 echo "Pour démarrer: sudo systemctl start $APP_NAME"
 ```
 
@@ -4238,30 +4238,30 @@ echo "Pour démarrer: sudo systemctl start $APP_NAME"
 # /etc/systemd/system/monapplication.service
 
 [Unit]
-Description=Mon Application tiOPF
-After=network.target postgresql.service
+Description=Mon Application tiOPF  
+After=network.target postgresql.service  
 Wants=postgresql.service
 
 [Service]
-Type=simple
-User=monapplication
-Group=monapplication
-WorkingDirectory=/opt/monapplication
-ExecStart=/opt/monapplication/bin/monapp
-Restart=on-failure
-RestartSec=10
-StandardOutput=journal
+Type=simple  
+User=monapplication  
+Group=monapplication  
+WorkingDirectory=/opt/monapplication  
+ExecStart=/opt/monapplication/bin/monapp  
+Restart=on-failure  
+RestartSec=10  
+StandardOutput=journal  
 StandardError=journal
 
 # Variables d'environnement
-Environment="APP_ENV=production"
+Environment="APP_ENV=production"  
 Environment="CONFIG_FILE=/opt/monapplication/etc/config.ini"
 
 # Limites de sécurité
-NoNewPrivileges=true
-PrivateTmp=true
-ProtectSystem=strict
-ProtectHome=true
+NoNewPrivileges=true  
+PrivateTmp=true  
+ProtectSystem=strict  
+ProtectHome=true  
 ReadWritePaths=/opt/monapplication/var
 
 [Install]
@@ -4298,17 +4298,17 @@ sudo journalctl -u monapplication -f
 #!/bin/bash
 # backup_postgres.sh
 
-DB_NAME="gestion_clients"
-DB_USER="postgres"
-BACKUP_DIR="/opt/monapplication/var/backup"
-DATE=$(date +%Y%m%d_%H%M%S)
+DB_NAME="gestion_clients"  
+DB_USER="postgres"  
+BACKUP_DIR="/opt/monapplication/var/backup"  
+DATE=$(date +%Y%m%d_%H%M%S)  
 BACKUP_FILE="$BACKUP_DIR/${DB_NAME}_${DATE}.sql.gz"
 
 # Créer le répertoire si nécessaire
 mkdir -p $BACKUP_DIR
 
 # Sauvegarde
-echo "Sauvegarde de la base $DB_NAME..."
+echo "Sauvegarde de la base $DB_NAME..."  
 pg_dump -U $DB_USER $DB_NAME | gzip > $BACKUP_FILE
 
 if [ $? -eq 0 ]; then
@@ -4334,8 +4334,8 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-DB_NAME="gestion_clients"
-DB_USER="postgres"
+DB_NAME="gestion_clients"  
+DB_USER="postgres"  
 BACKUP_FILE="$1"
 
 if [ ! -f "$BACKUP_FILE" ]; then
@@ -4343,7 +4343,7 @@ if [ ! -f "$BACKUP_FILE" ]; then
     exit 1
 fi
 
-echo "ATTENTION: Cette opération va ECRASER la base $DB_NAME"
+echo "ATTENTION: Cette opération va ECRASER la base $DB_NAME"  
 read -p "Continuer? (oui/non): " confirm
 
 if [ "$confirm" != "oui" ]; then
@@ -4355,11 +4355,11 @@ fi
 psql -U $DB_USER -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='$DB_NAME';"
 
 # Supprimer et recréer la base
-dropdb -U $DB_USER $DB_NAME
+dropdb -U $DB_USER $DB_NAME  
 createdb -U $DB_USER $DB_NAME
 
 # Restaurer
-echo "Restauration en cours..."
+echo "Restauration en cours..."  
 gunzip -c $BACKUP_FILE | psql -U $DB_USER $DB_NAME
 
 if [ $? -eq 0 ]; then
@@ -4419,7 +4419,7 @@ uses
   {$ENDIF}
   tiQuery;
 
-class function THealthCheck.CheckDatabase: THealthStatus;
+class function THealthCheck.CheckDatabase: THealthStatus;  
 var
   Query: TtiQuery;
 begin
@@ -4516,7 +4516,7 @@ begin
 end;
 {$ENDIF}
 
-class function THealthCheck.CheckLogSize: THealthStatus;
+class function THealthCheck.CheckLogSize: THealthStatus;  
 var
   LogDir: string;
   TotalSize: Int64;
@@ -4544,7 +4544,7 @@ begin
     Result := hsHealthy;
 end;
 
-class function THealthCheck.GenerateReport: string;
+class function THealthCheck.GenerateReport: string;  
 const
   StatusStr: array[THealthStatus] of string = ('OK', 'AVERTISSEMENT', 'CRITIQUE');
 var
@@ -4634,7 +4634,7 @@ end.
 
 **Diagnostic :**
 ```pascal
-procedure DiagnosticConnexion;
+procedure DiagnosticConnexion;  
 begin
   WriteLn('=== Diagnostic de connexion ===');
 
@@ -4679,7 +4679,7 @@ end;
 **Solution :**
 ```pascal
 // Vérifier que l'OID n'existe pas déjà
-procedure TVisClient.Insert(const AObject: TtiObject);
+procedure TVisClient.Insert(const AObject: TtiObject);  
 var
   MaxRetries: Integer;
   Retry: Integer;
@@ -4719,7 +4719,7 @@ end;
   {$DEFINE HEAPTRC}
 {$ENDIF}
 
-program MonApp;
+program MonApp;  
 uses
   {$IFDEF HEAPTRC}
   heaptrc,
@@ -4740,7 +4740,7 @@ uses
 uses
   tiProfiler;
 
-procedure ProfilerRequete;
+procedure ProfilerRequete;  
 var
   Profiler: TtiProfiler;
 begin

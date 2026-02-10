@@ -60,8 +60,8 @@ Identique à la méthode Windows :
 
 ```bash
 # Télécharger les sources
-cd ~/Downloads
-wget https://sourceforge.net/projects/zeoslib/files/latest/download -O zeos.zip
+cd ~/Downloads  
+wget https://sourceforge.net/projects/zeoslib/files/latest/download -O zeos.zip  
 unzip zeos.zip
 
 # Déplacer dans un répertoire approprié
@@ -139,7 +139,7 @@ Version optimisée de TZQuery pour les lectures seules.
 #### Configuration Windows
 
 ```pascal
-procedure ConfigurerPostgreSQL_Windows;
+procedure ConfigurerPostgreSQL_Windows;  
 begin
   ZConnection1.Protocol := 'postgresql-9';  // ou 'postgresql' pour auto-detect
   ZConnection1.HostName := 'localhost';
@@ -162,7 +162,7 @@ end;
 #### Configuration Linux
 
 ```pascal
-procedure ConfigurerPostgreSQL_Linux;
+procedure ConfigurerPostgreSQL_Linux;  
 begin
   ZConnection1.Protocol := 'postgresql-9';
   ZConnection1.HostName := 'localhost';
@@ -184,7 +184,7 @@ end;
 #### Configuration multi-plateforme universelle
 
 ```pascal
-procedure ConfigurerPostgreSQL;
+procedure ConfigurerPostgreSQL;  
 begin
   ZConnection1.Protocol := 'postgresql-9';
   ZConnection1.HostName := 'localhost';
@@ -210,7 +210,7 @@ end;
 ### MySQL / MariaDB
 
 ```pascal
-procedure ConfigurerMySQL;
+procedure ConfigurerMySQL;  
 begin
   // Protocoles disponibles : 'mysql-5', 'mysql-8', 'mariadb-10'
   ZConnection1.Protocol := 'mysql-8';
@@ -242,7 +242,7 @@ end;
 SQLite est particulièrement intéressant car il ne nécessite pas de serveur.
 
 ```pascal
-procedure ConfigurerSQLite;
+procedure ConfigurerSQLite;  
 var
   CheminBD: string;
 begin
@@ -276,7 +276,7 @@ end;
 ### Firebird
 
 ```pascal
-procedure ConfigurerFirebird;
+procedure ConfigurerFirebird;  
 begin
   ZConnection1.Protocol := 'firebird-3.0';  // ou 'firebird-4.0'
   ZConnection1.HostName := 'localhost';
@@ -303,7 +303,7 @@ end;
 ### Oracle (pour utilisateurs avancés)
 
 ```pascal
-procedure ConfigurerOracle;
+procedure ConfigurerOracle;  
 begin
   ZConnection1.Protocol := 'oracle';
   ZConnection1.HostName := 'localhost';
@@ -331,7 +331,7 @@ end;
 ### Requêtes SELECT simples
 
 ```pascal
-procedure LireClients;
+procedure LireClients;  
 begin
   ZQuery1.Connection := ZConnection1;
   ZQuery1.SQL.Text := 'SELECT * FROM clients ORDER BY nom';
@@ -354,7 +354,7 @@ end;
 Les requêtes paramétrées sont essentielles pour la sécurité (protection contre les injections SQL) et les performances.
 
 ```pascal
-procedure RechercherClientParVille(const Ville: string);
+procedure RechercherClientParVille(const Ville: string);  
 begin
   ZQuery1.SQL.Text := 'SELECT * FROM clients WHERE ville = :ville';
   ZQuery1.ParamByName('ville').AsString := Ville;
@@ -390,7 +390,7 @@ end;
 ### Requêtes INSERT
 
 ```pascal
-procedure AjouterClient(const Nom, Email, Ville: string);
+procedure AjouterClient(const Nom, Email, Ville: string);  
 begin
   ZQuery1.SQL.Text :=
     'INSERT INTO clients (nom, email, ville, date_inscription) ' +
@@ -409,7 +409,7 @@ end;
 ### Requêtes UPDATE
 
 ```pascal
-procedure ModifierEmailClient(const ClientID: Integer; const NouvelEmail: string);
+procedure ModifierEmailClient(const ClientID: Integer; const NouvelEmail: string);  
 begin
   ZQuery1.SQL.Text :=
     'UPDATE clients SET email = :email WHERE id = :id';
@@ -426,7 +426,7 @@ end;
 ### Requêtes DELETE
 
 ```pascal
-procedure SupprimerClient(const ClientID: Integer);
+procedure SupprimerClient(const ClientID: Integer);  
 begin
   if MessageDlg('Confirmation',
      'Voulez-vous vraiment supprimer ce client ?',
@@ -484,7 +484,7 @@ end;
 ### Transaction avec niveaux d'isolation
 
 ```pascal
-procedure TransactionAvecIsolation;
+procedure TransactionAvecIsolation;  
 begin
   // Définir le niveau d'isolation
   ZConnection1.TransactIsolationLevel := tiReadCommitted;
@@ -506,7 +506,7 @@ end;
 ### Gestion des BLOBs (fichiers, images)
 
 ```pascal
-procedure SauvegarderImage(const ClientID: Integer; const CheminImage: string);
+procedure SauvegarderImage(const ClientID: Integer; const CheminImage: string);  
 var
   FileStream: TFileStream;
 begin
@@ -525,7 +525,7 @@ begin
   end;
 end;
 
-procedure ChargerImage(const ClientID: Integer; const CheminDestination: string);
+procedure ChargerImage(const ClientID: Integer; const CheminDestination: string);  
 var
   FileStream: TFileStream;
 begin
@@ -550,7 +550,7 @@ end;
 ### Procédures stockées
 
 ```pascal
-procedure AppelerProcedureStockee;
+procedure AppelerProcedureStockee;  
 begin
   ZQuery1.SQL.Text := 'CALL calculer_statistiques(:annee)';
   ZQuery1.ParamByName('annee').AsInteger := 2025;
@@ -558,7 +558,7 @@ begin
 end;
 
 // Avec résultat
-procedure AppelerFonction;
+procedure AppelerFonction;  
 begin
   ZQuery1.SQL.Text := 'SELECT calculer_remise(:client_id) AS remise';
   ZQuery1.ParamByName('client_id').AsInteger := 123;
@@ -573,7 +573,7 @@ end;
 ### Métadonnées de la base
 
 ```pascal
-procedure ListerTables;
+procedure ListerTables;  
 var
   Tables: TStringList;
 begin
@@ -587,7 +587,7 @@ begin
   end;
 end;
 
-procedure ListerChamps(const TableName: string);
+procedure ListerChamps(const TableName: string);  
 var
   Columns: TStringList;
   i: Integer;
@@ -609,7 +609,7 @@ end;
 ### Détection des erreurs de connexion
 
 ```pascal
-function TenterConnexion: Boolean;
+function TenterConnexion: Boolean;  
 begin
   Result := False;
   try
@@ -636,7 +636,7 @@ end;
 ### Gestion des erreurs SQL
 
 ```pascal
-procedure ExecuterRequeteSecurisee(const SQL: string);
+procedure ExecuterRequeteSecurisee(const SQL: string);  
 begin
   try
     ZQuery1.SQL.Text := SQL;
@@ -665,7 +665,7 @@ end;
 Pour les requêtes en lecture seule, utilisez `TZReadOnlyQuery` qui est optimisé :
 
 ```pascal
-procedure LireGrosVolume;
+procedure LireGrosVolume;  
 begin
   // Plus rapide que TZQuery pour les lectures seules
   ZReadOnlyQuery1.SQL.Text := 'SELECT * FROM gros_tableau';
@@ -684,7 +684,7 @@ end;
 ### Batch Insert (insertion en masse)
 
 ```pascal
-procedure InsertionMassive;
+procedure InsertionMassive;  
 var
   i: Integer;
 begin
@@ -777,15 +777,15 @@ Si vous avez déjà du code utilisant SQLdb, la migration est simple :
 
 **Avant (SQLdb) :**
 ```pascal
-SQLConnection1.DatabaseName := 'ma_base';
-SQLTransaction1.Database := SQLConnection1;
-SQLQuery1.Database := SQLConnection1;
+SQLConnection1.DatabaseName := 'ma_base';  
+SQLTransaction1.Database := SQLConnection1;  
+SQLQuery1.Database := SQLConnection1;  
 SQLQuery1.Transaction := SQLTransaction1;
 ```
 
 **Après (ZEOS) :**
 ```pascal
-ZConnection1.Database := 'ma_base';
+ZConnection1.Database := 'ma_base';  
 ZQuery1.Connection := ZConnection1;
 // Pas besoin de TSQLTransaction séparé !
 ```
@@ -829,13 +829,13 @@ begin
   FConnection.Connected := True;
 end;
 
-destructor TGestionnaireZEOS.Destroy;
+destructor TGestionnaireZEOS.Destroy;  
 begin
   FConnection.Free;
   inherited;
 end;
 
-function TGestionnaireZEOS.ExecuterRequete(const SQL: string): TZQuery;
+function TGestionnaireZEOS.ExecuterRequete(const SQL: string): TZQuery;  
 begin
   Result := TZQuery.Create(nil);
   Result.Connection := FConnection;
@@ -843,7 +843,7 @@ begin
   Result.Open;
 end;
 
-function TGestionnaireZEOS.ExecuterScalaire(const SQL: string): Variant;
+function TGestionnaireZEOS.ExecuterScalaire(const SQL: string): Variant;  
 var
   Query: TZQuery;
 begin
@@ -862,7 +862,7 @@ begin
   end;
 end;
 
-procedure TGestionnaireZEOS.ExecuterCommande(const SQL: string);
+procedure TGestionnaireZEOS.ExecuterCommande(const SQL: string);  
 var
   Query: TZQuery;
 begin
@@ -973,7 +973,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TFormPrincipale.FormCreate(Sender: TObject);
+procedure TFormPrincipale.FormCreate(Sender: TObject);  
 begin
   ConfigurerConnexion;
 
@@ -984,7 +984,7 @@ begin
   AfficherStatut('Application démarrée');
 end;
 
-procedure TFormPrincipale.ConfigurerConnexion;
+procedure TFormPrincipale.ConfigurerConnexion;  
 begin
   // Configuration multi-plateforme
   ZConnection1.Protocol := 'postgresql-9';
@@ -1012,7 +1012,7 @@ begin
   ZConnection1.AutoCommit := True;
 end;
 
-procedure TFormPrincipale.ButtonConnecterClick(Sender: TObject);
+procedure TFormPrincipale.ButtonConnecterClick(Sender: TObject);  
 begin
   try
     if not ZConnection1.Connected then
@@ -1039,7 +1039,7 @@ begin
   end;
 end;
 
-procedure TFormPrincipale.ButtonChargerClick(Sender: TObject);
+procedure TFormPrincipale.ButtonChargerClick(Sender: TObject);  
 begin
   try
     ZQuery1.Close;
@@ -1056,7 +1056,7 @@ begin
   end;
 end;
 
-procedure TFormPrincipale.ButtonAjouterClick(Sender: TObject);
+procedure TFormPrincipale.ButtonAjouterClick(Sender: TObject);  
 begin
   if (Trim(EditNom.Text) = '') or (Trim(EditEmail.Text) = '') then
   begin
@@ -1098,7 +1098,7 @@ begin
     LabelStatut.Font.Color := clGreen;
 end;
 
-procedure TFormPrincipale.FormDestroy(Sender: TObject);
+procedure TFormPrincipale.FormDestroy(Sender: TObject);  
 begin
   if ZConnection1.Connected then
     ZConnection1.Connected := False;
@@ -1112,7 +1112,7 @@ end.
 ### Liaison avec TDBGrid
 
 ```pascal
-procedure ConfigurerGrille;
+procedure ConfigurerGrille;  
 begin
   // Configurer la requête
   ZQuery1.Connection := ZConnection1;
@@ -1148,7 +1148,7 @@ end;
 ### Liaison avec TDBEdit et TDBComboBox
 
 ```pascal
-procedure ConfigurerEdition;
+procedure ConfigurerEdition;  
 begin
   // Édition de texte
   DBEdit1.DataSource := DataSource1;
@@ -1169,29 +1169,29 @@ end;
 ### Navigation dans les enregistrements
 
 ```pascal
-procedure BoutonPrecedentClick(Sender: TObject);
+procedure BoutonPrecedentClick(Sender: TObject);  
 begin
   if not ZQuery1.BOF then
     ZQuery1.Prior;
 end;
 
-procedure BoutonSuivantClick(Sender: TObject);
+procedure BoutonSuivantClick(Sender: TObject);  
 begin
   if not ZQuery1.EOF then
     ZQuery1.Next;
 end;
 
-procedure BoutonPremierClick(Sender: TObject);
+procedure BoutonPremierClick(Sender: TObject);  
 begin
   ZQuery1.First;
 end;
 
-procedure BoutonDernierClick(Sender: TObject);
+procedure BoutonDernierClick(Sender: TObject);  
 begin
   ZQuery1.Last;
 end;
 
-procedure AfficherPosition;
+procedure AfficherPosition;  
 begin
   LabelPosition.Caption := Format('Enregistrement %d sur %d',
     [ZQuery1.RecNo, ZQuery1.RecordCount]);
@@ -1205,7 +1205,7 @@ end;
 Afficher des commandes avec leurs lignes de détail :
 
 ```pascal
-procedure ConfigurerMasterDetail;
+procedure ConfigurerMasterDetail;  
 begin
   // Table maître (commandes)
   ZQueryCommandes.Connection := ZConnection1;
@@ -1233,7 +1233,7 @@ end;
 ### Filtrage côté client
 
 ```pascal
-procedure FiltrerClients(const Ville: string);
+procedure FiltrerClients(const Ville: string);  
 begin
   if Ville = '' then
     ZQuery1.Filtered := False
@@ -1245,7 +1245,7 @@ begin
 end;
 
 // Filtre plus complexe
-procedure FiltrerParNomEtVille(const Nom, Ville: string);
+procedure FiltrerParNomEtVille(const Nom, Ville: string);  
 var
   Filtre: string;
 begin
@@ -1274,7 +1274,7 @@ end;
 ### Recherche incrémentale
 
 ```pascal
-procedure EditRechercheChange(Sender: TObject);
+procedure EditRechercheChange(Sender: TObject);  
 begin
   if Trim(EditRecherche.Text) = '' then
   begin
@@ -1295,7 +1295,7 @@ end;
 uses
   Clipbrd;  // Pour le presse-papiers
 
-procedure ExporterVersCSV(const NomFichier: string);
+procedure ExporterVersCSV(const NomFichier: string);  
 var
   F: TextFile;
   i: Integer;
@@ -1335,7 +1335,7 @@ begin
   end;
 end;
 
-procedure CopierVersPressePapiers;
+procedure CopierVersPressePapiers;  
 var
   Texte: string;
   i: Integer;
@@ -1375,7 +1375,7 @@ type
     procedure LoguerAction(const Action: string);
   end;
 
-constructor TGestionnaireMultiBases.Create;
+constructor TGestionnaireMultiBases.Create;  
 begin
   // Connexion principale (PostgreSQL)
   FConnexionPrincipale := TZConnection.Create(nil);
@@ -1400,7 +1400,7 @@ begin
   FConnexionLogs.Connected := True;
 end;
 
-procedure TGestionnaireMultiBases.SynchroniserDonnees;
+procedure TGestionnaireMultiBases.SynchroniserDonnees;  
 var
   QuerySource, QueryDest: TZQuery;
 begin
@@ -1442,7 +1442,7 @@ end;
 ### Utilisation du cache
 
 ```pascal
-procedure ActiverCache;
+procedure ActiverCache;  
 begin
   // Activer le cache des requêtes
   ZConnection1.Properties.Add('cachedlobs=true');
@@ -1453,7 +1453,7 @@ end;
 ### Limiter le nombre de résultats
 
 ```pascal
-procedure ChargerAvecLimit(Limit, Offset: Integer);
+procedure ChargerAvecLimit(Limit, Offset: Integer);  
 begin
   // PostgreSQL, MySQL
   ZQuery1.SQL.Text :=
@@ -1483,7 +1483,7 @@ type
     property PageCourante: Integer read FPageCourante;
   end;
 
-constructor TPagination.Create(Query: TZQuery; LignesParPage: Integer);
+constructor TPagination.Create(Query: TZQuery; LignesParPage: Integer);  
 var
   QueryCount: TZQuery;
 begin
@@ -1503,7 +1503,7 @@ begin
   end;
 end;
 
-procedure TPagination.AllerPage(NumPage: Integer);
+procedure TPagination.AllerPage(NumPage: Integer);  
 var
   Offset: Integer;
 begin
@@ -1521,7 +1521,7 @@ begin
   FQuery.Open;
 end;
 
-function TPagination.NombrePages: Integer;
+function TPagination.NombrePages: Integer;  
 begin
   Result := (FTotalEnregistrements + FLignesParPage - 1) div FLignesParPage;
 end;
@@ -1556,7 +1556,7 @@ type
 
 implementation
 
-procedure TTestZEOS.SetUp;
+procedure TTestZEOS.SetUp;  
 begin
   FConnection := TZConnection.Create(nil);
   FConnection.Protocol := 'sqlite-3';
@@ -1571,18 +1571,18 @@ begin
   FQuery.ExecSQL;
 end;
 
-procedure TTestZEOS.TearDown;
+procedure TTestZEOS.TearDown;  
 begin
   FQuery.Free;
   FConnection.Free;
 end;
 
-procedure TTestZEOS.TestConnexion;
+procedure TTestZEOS.TestConnexion;  
 begin
   AssertTrue('Connexion doit être active', FConnection.Connected);
 end;
 
-procedure TTestZEOS.TestInsertionSimple;
+procedure TTestZEOS.TestInsertionSimple;  
 begin
   FQuery.SQL.Text :=
     'INSERT INTO test_clients (nom, email) VALUES (:nom, :email)';
@@ -1597,7 +1597,7 @@ begin
     FQuery.Fields[0].AsInteger);
 end;
 
-procedure TTestZEOS.TestRequeteParametree;
+procedure TTestZEOS.TestRequeteParametree;  
 var
   NomRecherche: string;
 begin
@@ -1618,7 +1618,7 @@ begin
     FQuery.FieldByName('nom').AsString);
 end;
 
-procedure TTestZEOS.TestTransaction;
+procedure TTestZEOS.TestTransaction;  
 begin
   FConnection.StartTransaction;
   try

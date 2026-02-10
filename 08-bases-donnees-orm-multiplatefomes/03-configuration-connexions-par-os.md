@@ -96,7 +96,7 @@ uses
 type
   TSystemeOS = (osWindows, osLinux, osMacOS, osAutre);
 
-function DetecterOS: TSystemeOS;
+function DetecterOS: TSystemeOS;  
 begin
   {$IFDEF WINDOWS}
   Result := osWindows;
@@ -112,7 +112,7 @@ begin
   {$ENDIF}{$ENDIF}{$ENDIF}
 end;
 
-procedure ConfigurerConnexionBD(Connection: TPQConnection);
+procedure ConfigurerConnexionBD(Connection: TPQConnection);  
 var
   OS: TSystemeOS;
   CheminBibliotheque: string;
@@ -167,32 +167,32 @@ MonProjet\
 **Contenu de `windows.ini` :**
 ```ini
 [Database]
-Type=PostgreSQL
-Library=libs\libpq.dll
-Host=localhost
-Port=5432
-Database=ma_base
+Type=PostgreSQL  
+Library=libs\libpq.dll  
+Host=localhost  
+Port=5432  
+Database=ma_base  
 User=postgres
 
 [Paths]
-Data=.\data\
-Logs=.\logs\
+Data=.\data\  
+Logs=.\logs\  
 Temp=%TEMP%\monapp\
 ```
 
 **Contenu de `linux.ini` :**
 ```ini
 [Database]
-Type=PostgreSQL
-Library=libpq.so.5
-Host=localhost
-Port=5432
-Database=ma_base
+Type=PostgreSQL  
+Library=libpq.so.5  
+Host=localhost  
+Port=5432  
+Database=ma_base  
 User=postgres
 
 [Paths]
-Data=/var/lib/monapp/data/
-Logs=/var/log/monapp/
+Data=/var/lib/monapp/data/  
+Logs=/var/log/monapp/  
 Temp=/tmp/monapp/
 ```
 
@@ -212,7 +212,7 @@ type
     Utilisateur: string;
   end;
 
-function ChargerConfiguration: TConfigurationBD;
+function ChargerConfiguration: TConfigurationBD;  
 var
   IniFile: TIniFile;
   CheminConfig: string;
@@ -284,7 +284,7 @@ uses
   {$ENDIF}
   PQConnection, MySQLConnection;
 
-class function TGestionnaireBDFactory.Creer(const TypeBD: string): IGestionnaireBD;
+class function TGestionnaireBDFactory.Creer(const TypeBD: string): IGestionnaireBD;  
 begin
   {$IFDEF WINDOWS}
   Result := TGestionnaireBDWindows.Create(TypeBD);
@@ -334,7 +334,7 @@ CheminBD := ExtractFilePath(ParamStr(0)) + 'data' + PathDelim + 'base.db';
 uses
   SysUtils;
 
-function ConstruireChemin(const Elements: array of string): string;
+function ConstruireChemin(const Elements: array of string): string;  
 var
   i: Integer;
 begin
@@ -369,7 +369,7 @@ end;
 uses
   Windows, SysUtils;
 
-procedure AjouterCheminDLL;
+procedure AjouterCheminDLL;  
 var
   CheminDLLs: string;
 begin
@@ -385,7 +385,7 @@ end;
 uses
   Unix, SysUtils;
 
-procedure AjouterCheminSO;
+procedure AjouterCheminSO;  
 var
   CheminSO, PathActuel: string;
 begin
@@ -426,7 +426,7 @@ implementation
 uses
   SysUtils, Classes, SQLDB;
 
-function TesterPresenceBibliotheque: TTest;
+function TesterPresenceBibliotheque: TTest;  
 begin
   Result.Nom := 'Présence bibliothèque BD';
 
@@ -459,7 +459,7 @@ begin
   {$ENDIF}
 end;
 
-function TesterPermissionsFichiers: TTest;
+function TesterPermissionsFichiers: TTest;  
 var
   TestFile: TextFile;
   CheminTest: string;
@@ -486,7 +486,7 @@ begin
   end;
 end;
 
-function ExecuterTestsConnexion: TArray<TTest>;
+function ExecuterTestsConnexion: TArray<TTest>;  
 begin
   SetLength(Result, 2);
   Result[0] := TesterPresenceBibliotheque;
@@ -531,8 +531,8 @@ type
     ExtensionBibliotheque: string;
   end;
 
-function ObtenirInfoPlateforme: TInfoPlateforme;
-function CheminBibliothequesParDefaut: string;
+function ObtenirInfoPlateforme: TInfoPlateforme;  
+function CheminBibliothequesParDefaut: string;  
 function CheminConfigurationParDefaut: string;
 
 implementation
@@ -547,7 +547,7 @@ end.
 Dans votre code, commentez clairement les sections spécifiques :
 
 ```pascal
-procedure ConfigurerConnexion;
+procedure ConfigurerConnexion;  
 begin
   // Configuration commune à tous les OS
   Connection.HostName := 'localhost';

@@ -141,13 +141,13 @@ ESCLAVE 2  ESCLAVE 3
 # Sur Ubuntu : /etc/postgresql/15/main/postgresql.conf
 
 # Activer la réplication
-wal_level = replica
-max_wal_senders = 10
-max_replication_slots = 10
+wal_level = replica  
+max_wal_senders = 10  
+max_replication_slots = 10  
 wal_keep_size = 1GB
 
 # Activer l'archivage (recommandé)
-archive_mode = on
+archive_mode = on  
 archive_command = 'cp %p /var/lib/postgresql/15/archive/%f'  # Ubuntu
 # archive_command = 'copy "%p" "C:\\PostgreSQL\\archive\\%f"'  # Windows
 ```
@@ -310,12 +310,12 @@ type
 
 implementation
 
-constructor TReplicationMonitor.Create(AConnection: TSQLConnection);
+constructor TReplicationMonitor.Create(AConnection: TSQLConnection);  
 begin
   FConnection := AConnection;
 end;
 
-function TReplicationMonitor.IsMaster: Boolean;
+function TReplicationMonitor.IsMaster: Boolean;  
 var
   Query: TSQLQuery;
 begin
@@ -331,7 +331,7 @@ begin
   end;
 end;
 
-function TReplicationMonitor.GetReplicationStatus: TArray<TReplicationStatus>;
+function TReplicationMonitor.GetReplicationStatus: TArray<TReplicationStatus>;  
 var
   Query: TSQLQuery;
   Status: TReplicationStatus;
@@ -387,7 +387,7 @@ begin
   Result := StatusList;
 end;
 
-function TReplicationMonitor.GetReplicationLag: Integer;
+function TReplicationMonitor.GetReplicationLag: Integer;  
 var
   Query: TSQLQuery;
 begin
@@ -411,7 +411,7 @@ begin
   end;
 end;
 
-function TReplicationMonitor.IsReplicaHealthy: Boolean;
+function TReplicationMonitor.IsReplicaHealthy: Boolean;  
 var
   Lag: Integer;
   Status: string;
@@ -432,7 +432,7 @@ begin
   end;
 end;
 
-procedure TReplicationMonitor.PrintStatus;
+procedure TReplicationMonitor.PrintStatus;  
 var
   Status: TArray<TReplicationStatus>;
   S: TReplicationStatus;
@@ -580,7 +580,7 @@ begin
   FPassword := APassword;
 end;
 
-function TFailoverManager.TestConnection(const Host: String): Boolean;
+function TFailoverManager.TestConnection(const Host: String): Boolean;  
 var
   Connection: TSQLConnector;
 begin
@@ -605,7 +605,7 @@ begin
   end;
 end;
 
-function TFailoverManager.CheckMasterHealth: Boolean;
+function TFailoverManager.CheckMasterHealth: Boolean;  
 begin
   Result := TestConnection(FMasterHost);
 
@@ -613,7 +613,7 @@ begin
     WriteLn('⚠️  Le maître ne répond pas!');
 end;
 
-function TFailoverManager.PromoteReplica: Boolean;
+function TFailoverManager.PromoteReplica: Boolean;  
 var
   Process: TProcess;
   Output: String;
@@ -662,7 +662,7 @@ begin
   end;
 end;
 
-procedure TFailoverManager.NotifyClients;
+procedure TFailoverManager.NotifyClients;  
 begin
   // Ici, vous pourriez :
   // - Envoyer des emails
@@ -674,7 +674,7 @@ begin
   WriteLn('🔄 Mise à jour de la configuration...');
 end;
 
-function TFailoverManager.PerformFailover: Boolean;
+function TFailoverManager.PerformFailover: Boolean;  
 begin
   Result := False;
 
@@ -740,7 +740,7 @@ var
   FailureCount: Integer;
   LastCheck: TDateTime;
 
-procedure CheckAndFailover;
+procedure CheckAndFailover;  
 begin
   if not Manager.CheckMasterHealth then
   begin
@@ -867,20 +867,20 @@ type
 
 implementation
 
-constructor TSyncManager.Create(ALocalConnection, ARemoteConnection: TSQLConnection);
+constructor TSyncManager.Create(ALocalConnection, ARemoteConnection: TSQLConnection);  
 begin
   FLocalConnection := ALocalConnection;
   FRemoteConnection := ARemoteConnection;
   FSyncRecords := TSyncRecordList.Create;
 end;
 
-destructor TSyncManager.Destroy;
+destructor TSyncManager.Destroy;  
 begin
   FSyncRecords.Free;
   inherited;
 end;
 
-procedure TSyncManager.RegisterTable(const TableName: String; Direction: TSyncDirection);
+procedure TSyncManager.RegisterTable(const TableName: String; Direction: TSyncDirection);  
 var
   SyncRec: TSyncRecord;
 begin
@@ -891,7 +891,7 @@ begin
   FSyncRecords.Add(SyncRec);
 end;
 
-function TSyncManager.GetLastSyncTime(const TableName: String): TDateTime;
+function TSyncManager.GetLastSyncTime(const TableName: String): TDateTime;  
 var
   Query: TSQLQuery;
 begin
@@ -918,7 +918,7 @@ begin
   end;
 end;
 
-procedure TSyncManager.SetLastSyncTime(const TableName: String; SyncTime: TDateTime);
+procedure TSyncManager.SetLastSyncTime(const TableName: String; SyncTime: TDateTime);  
 var
   Query: TSQLQuery;
 begin
@@ -949,7 +949,7 @@ begin
   end;
 end;
 
-procedure TSyncManager.SyncTableUp(const TableName: String);
+procedure TSyncManager.SyncTableUp(const TableName: String);  
 var
   LocalQuery, RemoteQuery: TSQLQuery;
   LastSync: TDateTime;
@@ -1021,7 +1021,7 @@ begin
   end;
 end;
 
-procedure TSyncManager.SyncTableDown(const TableName: String);
+procedure TSyncManager.SyncTableDown(const TableName: String);  
 var
   LocalQuery, RemoteQuery: TSQLQuery;
   LastSync: TDateTime;
@@ -1092,7 +1092,7 @@ begin
   end;
 end;
 
-procedure TSyncManager.SyncTable(const TableName: String);
+procedure TSyncManager.SyncTable(const TableName: String);  
 var
   i: Integer;
   SyncRec: TSyncRecord;
@@ -1121,7 +1121,7 @@ begin
   WriteLn('⚠️  Table non enregistrée pour synchronisation: ', TableName);
 end;
 
-procedure TSyncManager.SyncAll;
+procedure TSyncManager.SyncAll;  
 var
   SyncRec: TSyncRecord;
   StartTime: TDateTime;
@@ -1294,8 +1294,8 @@ CREATE TABLE clients (
 );
 
 -- Trigger pour incrémenter la version
-CREATE OR REPLACE FUNCTION increment_version()
-RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION increment_version()  
+RETURNS TRIGGER AS $$  
 BEGIN
     NEW.version := OLD.version + 1;
     NEW.updated_at := NOW();
@@ -1303,9 +1303,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER clients_version_trigger
-BEFORE UPDATE ON clients
-FOR EACH ROW
+CREATE TRIGGER clients_version_trigger  
+BEFORE UPDATE ON clients  
+FOR EACH ROW  
 EXECUTE FUNCTION increment_version();
 ```
 
@@ -1387,8 +1387,8 @@ CREATE INDEX idx_change_log_synced ON change_log(synced, created_at);
 
 ```sql
 -- Fonction générique pour logger les changements
-CREATE OR REPLACE FUNCTION log_changes()
-RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION log_changes()  
+RETURNS TRIGGER AS $$  
 BEGIN
     IF (TG_OP = 'DELETE') THEN
         INSERT INTO change_log (table_name, record_id, operation, data)
@@ -1407,12 +1407,12 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Appliquer le trigger sur les tables à synchroniser
-CREATE TRIGGER clients_change_log
-AFTER INSERT OR UPDATE OR DELETE ON clients
+CREATE TRIGGER clients_change_log  
+AFTER INSERT OR UPDATE OR DELETE ON clients  
 FOR EACH ROW EXECUTE FUNCTION log_changes();
 
-CREATE TRIGGER produits_change_log
-AFTER INSERT OR UPDATE OR DELETE ON produits
+CREATE TRIGGER produits_change_log  
+AFTER INSERT OR UPDATE OR DELETE ON produits  
 FOR EACH ROW EXECUTE FUNCTION log_changes();
 ```
 
@@ -1445,7 +1445,7 @@ type
 
 implementation
 
-constructor TChangeLogSync.Create(ALocalConnection, ARemoteConnection: TSQLConnection);
+constructor TChangeLogSync.Create(ALocalConnection, ARemoteConnection: TSQLConnection);  
 begin
   FLocalConnection := ALocalConnection;
   FRemoteConnection := ARemoteConnection;
@@ -1531,7 +1531,7 @@ begin
   end;
 end;
 
-function TChangeLogSync.SyncChanges(Direction: String): Integer;
+function TChangeLogSync.SyncChanges(Direction: String): Integer;  
 var
   SourceConn, TargetConn: TSQLConnection;
   Query: TSQLQuery;
@@ -1628,7 +1628,7 @@ begin
   end;
 end;
 
-procedure TChangeLogSync.MarkAsSynced(ChangeIDs: array of Integer);
+procedure TChangeLogSync.MarkAsSynced(ChangeIDs: array of Integer);  
 var
   Query: TSQLQuery;
   i: Integer;
@@ -1721,7 +1721,7 @@ type
 
 implementation
 
-constructor TOfflineQueueManager.Create(ALocalConnection, ARemoteConnection: TSQLConnection);
+constructor TOfflineQueueManager.Create(ALocalConnection, ARemoteConnection: TSQLConnection);  
 begin
   FLocalConnection := ALocalConnection;
   FRemoteConnection := ARemoteConnection;
@@ -1731,13 +1731,13 @@ begin
   LoadQueue;
 end;
 
-destructor TOfflineQueueManager.Destroy;
+destructor TOfflineQueueManager.Destroy;  
 begin
   FQueue.Free;
   inherited;
 end;
 
-procedure TOfflineQueueManager.LoadQueue;
+procedure TOfflineQueueManager.LoadQueue;  
 var
   Query: TSQLQuery;
   Op: TQueuedOperation;
@@ -1793,7 +1793,7 @@ begin
   end;
 end;
 
-function TOfflineQueueManager.IsOnline: Boolean;
+function TOfflineQueueManager.IsOnline: Boolean;  
 begin
   try
     FRemoteConnection.Open;
@@ -1832,7 +1832,7 @@ begin
   end;
 end;
 
-function TOfflineQueueManager.ProcessQueue: Integer;
+function TOfflineQueueManager.ProcessQueue: Integer;  
 var
   i: Integer;
   Op: TQueuedOperation;
@@ -1911,7 +1911,7 @@ begin
   LoadQueue;
 end;
 
-procedure TOfflineQueueManager.ClearProcessedOperations;
+procedure TOfflineQueueManager.ClearProcessedOperations;  
 var
   Query: TSQLQuery;
 begin
@@ -1956,7 +1956,7 @@ var
   LastSync: TDateTime;
   Running: Boolean;
 
-procedure PerformSync;
+procedure PerformSync;  
 begin
   WriteLn('[', FormatDateTime('hh:nn:ss', Now), '] Tentative de synchronisation...');
 
@@ -1974,7 +1974,7 @@ begin
   end;
 end;
 
-procedure HandleSignal(Signal: Integer); cdecl;
+procedure HandleSignal(Signal: Integer); cdecl;  
 begin
   WriteLn('Signal reçu: ', Signal, ' - Arrêt du service');
   Running := False;
@@ -2073,20 +2073,20 @@ type
 
 implementation
 
-constructor TSyncConfig.Create;
+constructor TSyncConfig.Create;  
 begin
   FConfigFile := GetConfigPath;
   FIniFile := TIniFile.Create(FConfigFile);
   LoadConfig;
 end;
 
-destructor TSyncConfig.Destroy;
+destructor TSyncConfig.Destroy;  
 begin
   FIniFile.Free;
   inherited;
 end;
 
-function TSyncConfig.GetConfigPath: String;
+function TSyncConfig.GetConfigPath: String;  
 begin
   {$IFDEF WINDOWS}
   Result := ExtractFilePath(ParamStr(0)) + 'sync_config.ini';
@@ -2100,7 +2100,7 @@ begin
   {$ENDIF}
 end;
 
-function TSyncConfig.DetectOS: String;
+function TSyncConfig.DetectOS: String;  
 begin
   {$IFDEF WINDOWS}
   Result := 'Windows';
@@ -2117,7 +2117,7 @@ begin
   {$ENDIF}
 end;
 
-function TSyncConfig.GetLocalDBPath: String;
+function TSyncConfig.GetLocalDBPath: String;  
 begin
   {$IFDEF WINDOWS}
   Result := FIniFile.ReadString('Local', 'DatabasePath',
@@ -2128,22 +2128,22 @@ begin
   {$ENDIF}
 end;
 
-function TSyncConfig.GetRemoteHost: String;
+function TSyncConfig.GetRemoteHost: String;  
 begin
   Result := FIniFile.ReadString('Remote', 'Host', 'localhost');
 end;
 
-function TSyncConfig.GetRemotePort: Integer;
+function TSyncConfig.GetRemotePort: Integer;  
 begin
   Result := FIniFile.ReadInteger('Remote', 'Port', 5432);
 end;
 
-function TSyncConfig.GetSyncInterval: Integer;
+function TSyncConfig.GetSyncInterval: Integer;  
 begin
   Result := FIniFile.ReadInteger('Sync', 'IntervalSeconds', 60);
 end;
 
-procedure TSyncConfig.SaveConfig;
+procedure TSyncConfig.SaveConfig;  
 begin
   FIniFile.WriteString('System', 'OS', DetectOS);
   FIniFile.WriteString('System', 'LastUpdate',
@@ -2151,7 +2151,7 @@ begin
   FIniFile.UpdateFile;
 end;
 
-procedure TSyncConfig.LoadConfig;
+procedure TSyncConfig.LoadConfig;  
 begin
   // Charger ou créer la configuration par défaut
   if not FileExists(FConfigFile) then
@@ -2183,27 +2183,27 @@ end.
 DatabasePath=local.db
 
 [Remote]
-Host=cloud.example.com
-Port=5432
-Database=cloud_db
-Username=postgres
+Host=cloud.example.com  
+Port=5432  
+Database=cloud_db  
+Username=postgres  
 Password=mot_de_passe_securise
 
 [Sync]
-IntervalSeconds=60
-AutoStart=True
-MaxRetries=5
+IntervalSeconds=60  
+AutoStart=True  
+MaxRetries=5  
 TimeoutSeconds=30
 
 [Tables]
 ; Format: TableName=Direction (up/down/bidirectional)
-clients=bidirectional
-produits=down
-commandes=bidirectional
+clients=bidirectional  
+produits=down  
+commandes=bidirectional  
 logs=up
 
 [System]
-OS=Linux
+OS=Linux  
 LastUpdate=2024-01-15 10:30:00
 ```
 
@@ -2235,19 +2235,19 @@ type
     procedure ServiceExecute; override;
   end;
 
-procedure TSyncService.ServiceStart;
+procedure TSyncService.ServiceStart;  
 begin
   FRunning := True;
   LogMessage('Service démarré', EVENTLOG_INFORMATION_TYPE);
 end;
 
-procedure TSyncService.ServiceStop;
+procedure TSyncService.ServiceStop;  
 begin
   FRunning := False;
   LogMessage('Service arrêté', EVENTLOG_INFORMATION_TYPE);
 end;
 
-procedure TSyncService.ServiceExecute;
+procedure TSyncService.ServiceExecute;  
 begin
   while FRunning do
   begin
@@ -2280,20 +2280,20 @@ end.
 **Installation du service Windows :**
 
 ```batch
-REM Compiler le programme
+REM Compiler le programme  
 fpc SyncServiceWin.pas
 
-REM Installer le service (en administrateur)
-sc create SyncService binPath= "C:\Path\To\SyncServiceWin.exe"
+REM Installer le service (en administrateur)  
+sc create SyncService binPath= "C:\Path\To\SyncServiceWin.exe"  
 sc description SyncService "Service de synchronisation de base de données"
 
-REM Démarrer le service
+REM Démarrer le service  
 sc start SyncService
 
-REM Arrêter le service
+REM Arrêter le service  
 sc stop SyncService
 
-REM Désinstaller le service
+REM Désinstaller le service  
 sc delete SyncService
 ```
 
@@ -2303,24 +2303,24 @@ sc delete SyncService
 
 ```ini
 [Unit]
-Description=Service de Synchronisation BDD
+Description=Service de Synchronisation BDD  
 After=network.target postgresql.service
 
 [Service]
-Type=simple
-User=syncuser
-WorkingDirectory=/opt/syncapp
-ExecStart=/opt/syncapp/syncservice
-Restart=on-failure
+Type=simple  
+User=syncuser  
+WorkingDirectory=/opt/syncapp  
+ExecStart=/opt/syncapp/syncservice  
+Restart=on-failure  
 RestartSec=30
 
 # Logs
-StandardOutput=journal
-StandardError=journal
+StandardOutput=journal  
+StandardError=journal  
 SyslogIdentifier=syncservice
 
 # Sécurité
-PrivateTmp=true
+PrivateTmp=true  
 NoNewPrivileges=true
 
 [Install]
@@ -2331,15 +2331,15 @@ WantedBy=multi-user.target
 
 ```bash
 # Copier l'exécutable
-sudo mkdir -p /opt/syncapp
-sudo cp syncservice /opt/syncapp/
+sudo mkdir -p /opt/syncapp  
+sudo cp syncservice /opt/syncapp/  
 sudo chmod +x /opt/syncapp/syncservice
 
 # Copier le fichier de service
 sudo cp syncservice.service /etc/systemd/system/
 
 # Créer l'utilisateur dédié
-sudo useradd -r -s /bin/false syncuser
+sudo useradd -r -s /bin/false syncuser  
 sudo chown -R syncuser:syncuser /opt/syncapp
 
 # Recharger systemd
@@ -2397,13 +2397,13 @@ type
 
 implementation
 
-constructor TSyncAlerts.Create(const ALogFile: String);
+constructor TSyncAlerts.Create(const ALogFile: String);  
 begin
   FLogFile := ALogFile;
   FEmailEnabled := False;
 end;
 
-procedure TSyncAlerts.LogAlert(Level: TAlertLevel; const Message: String);
+procedure TSyncAlerts.LogAlert(Level: TAlertLevel; const Message: String);  
 var
   F: TextFile;
   LevelStr: String;
@@ -2434,7 +2434,7 @@ begin
   end;
 end;
 
-procedure TSyncAlerts.SendEmail(const Subject, Body: String);
+procedure TSyncAlerts.SendEmail(const Subject, Body: String);  
 var
   Process: TProcess;
 begin
@@ -2471,7 +2471,7 @@ begin
   end;
 end;
 
-procedure TSyncAlerts.Alert(Level: TAlertLevel; const Message: String);
+procedure TSyncAlerts.Alert(Level: TAlertLevel; const Message: String);  
 begin
   LogAlert(Level, Message);
 
@@ -2488,12 +2488,12 @@ begin
   end;
 end;
 
-procedure TSyncAlerts.AlertSyncFailure(Attempts: Integer);
+procedure TSyncAlerts.AlertSyncFailure(Attempts: Integer);  
 begin
   Alert(alError, Format('Échec de synchronisation après %d tentatives', [Attempts]));
 end;
 
-procedure TSyncAlerts.AlertHighLag(LagSeconds: Integer);
+procedure TSyncAlerts.AlertHighLag(LagSeconds: Integer);  
 begin
   if LagSeconds > 300 then  // Plus de 5 minutes
     Alert(alCritical, Format('Lag de réplication élevé: %d secondes', [LagSeconds]))
@@ -2501,7 +2501,7 @@ begin
     Alert(alWarning, Format('Lag de réplication: %d secondes', [LagSeconds]));
 end;
 
-procedure TSyncAlerts.AlertDiskSpace(PercentFree: Integer);
+procedure TSyncAlerts.AlertDiskSpace(PercentFree: Integer);  
 begin
   if PercentFree < 10 then
     Alert(alCritical, Format('Espace disque critique: %d%% libre', [PercentFree]))
@@ -2545,7 +2545,7 @@ type
 
 implementation
 
-procedure TDashboardForm.FormCreate(Sender: TObject);
+procedure TDashboardForm.FormCreate(Sender: TObject);  
 begin
   Caption := 'Dashboard de Synchronisation';
   Width := 600;
@@ -2589,7 +2589,7 @@ begin
   UpdateStatus;
 end;
 
-procedure TDashboardForm.UpdateStatus;
+procedure TDashboardForm.UpdateStatus;  
 var
   Lag, QueueSize: Integer;
 begin
@@ -2624,7 +2624,7 @@ begin
   end;
 end;
 
-function TDashboardForm.GetQueueSize: Integer;
+function TDashboardForm.GetQueueSize: Integer;  
 var
   Query: TSQLQuery;
 begin
@@ -2641,7 +2641,7 @@ begin
   end;
 end;
 
-procedure TDashboardForm.RefreshTimerTimer(Sender: TObject);
+procedure TDashboardForm.RefreshTimerTimer(Sender: TObject);  
 begin
   UpdateStatus;
 end;
@@ -2669,9 +2669,9 @@ end.
 
 ```pascal
 // Exemple de connexion sécurisée
-Connection.Params.Add('sslmode=require');
-Connection.Params.Add('sslcert=/path/to/client-cert.pem');
-Connection.Params.Add('sslkey=/path/to/client-key.pem');
+Connection.Params.Add('sslmode=require');  
+Connection.Params.Add('sslcert=/path/to/client-cert.pem');  
+Connection.Params.Add('sslkey=/path/to/client-key.pem');  
 Connection.Params.Add('sslrootcert=/path/to/ca-cert.pem');
 ```
 

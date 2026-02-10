@@ -58,10 +58,10 @@ Le composant de connexion est le point de départ. Il existe un composant spéci
 
 ```pascal
 // Exemple avec MySQL
-MySQL57Connection1.HostName := 'localhost';     // Serveur de base de données
-MySQL57Connection1.DatabaseName := 'ma_base';    // Nom de la base
-MySQL57Connection1.UserName := 'utilisateur';    // Nom d'utilisateur
-MySQL57Connection1.Password := 'motdepasse';     // Mot de passe
+MySQL57Connection1.HostName := 'localhost';     // Serveur de base de données  
+MySQL57Connection1.DatabaseName := 'ma_base';    // Nom de la base  
+MySQL57Connection1.UserName := 'utilisateur';    // Nom d'utilisateur  
+MySQL57Connection1.Password := 'motdepasse';     // Mot de passe  
 MySQL57Connection1.Port := 3306;                 // Port (optionnel, valeur par défaut)
 ```
 
@@ -75,7 +75,7 @@ La transaction gère l'intégrité de vos données. C'est comme une enveloppe de
 #### Configuration de base
 
 ```pascal
-SQLTransaction1.Database := MySQL57Connection1;  // Lier à la connexion
+SQLTransaction1.Database := MySQL57Connection1;  // Lier à la connexion  
 SQLTransaction1.Action := caCommit;              // Action par défaut
 ```
 
@@ -94,8 +94,8 @@ C'est le composant qui exécute vos requêtes SQL et récupère les résultats.
 #### Propriétés principales
 
 ```pascal
-SQLQuery1.Database := MySQL57Connection1;        // Lien vers la connexion
-SQLQuery1.Transaction := SQLTransaction1;        // Lien vers la transaction
+SQLQuery1.Database := MySQL57Connection1;        // Lien vers la connexion  
+SQLQuery1.Transaction := SQLTransaction1;        // Lien vers la transaction  
 SQLQuery1.SQL.Text := 'SELECT * FROM clients';  // La requête SQL
 ```
 
@@ -103,15 +103,15 @@ SQLQuery1.SQL.Text := 'SELECT * FROM clients';  // La requête SQL
 
 **Pour lire des données (SELECT) :**
 ```pascal
-SQLQuery1.SQL.Text := 'SELECT nom, prenom FROM clients';
+SQLQuery1.SQL.Text := 'SELECT nom, prenom FROM clients';  
 SQLQuery1.Open;  // Ouvre et exécute la requête
 ```
 
 **Pour modifier des données (INSERT, UPDATE, DELETE) :**
 ```pascal
-SQLQuery1.SQL.Text := 'UPDATE clients SET ville = :ville WHERE id = :id';
-SQLQuery1.ParamByName('ville').AsString := 'Paris';
-SQLQuery1.ParamByName('id').AsInteger := 1;
+SQLQuery1.SQL.Text := 'UPDATE clients SET ville = :ville WHERE id = :id';  
+SQLQuery1.ParamByName('ville').AsString := 'Paris';  
+SQLQuery1.ParamByName('id').AsInteger := 1;  
 SQLQuery1.ExecSQL;  // Exécute sans retourner de résultats
 ```
 
@@ -120,8 +120,8 @@ SQLQuery1.ExecSQL;  // Exécute sans retourner de résultats
 Pour exécuter plusieurs commandes SQL d'un coup (comme un script de création de base de données).
 
 ```pascal
-SQLScript1.Database := MySQL57Connection1;
-SQLScript1.Transaction := SQLTransaction1;
+SQLScript1.Database := MySQL57Connection1;  
+SQLScript1.Transaction := SQLTransaction1;  
 SQLScript1.Script.Text :=
   'CREATE TABLE clients (id INT, nom VARCHAR(50));' + LineEnding +
   'CREATE TABLE commandes (id INT, client_id INT);';
@@ -170,9 +170,9 @@ Composants visuels (TDBGrid, TDBEdit, etc.)
 
 ```pascal
 // Configurer la connexion
-MySQL57Connection1.HostName := 'localhost';
-MySQL57Connection1.DatabaseName := 'ma_base';
-MySQL57Connection1.UserName := 'user';
+MySQL57Connection1.HostName := 'localhost';  
+MySQL57Connection1.DatabaseName := 'ma_base';  
+MySQL57Connection1.UserName := 'user';  
 MySQL57Connection1.Password := 'pass';
 
 // Se connecter
@@ -182,9 +182,9 @@ MySQL57Connection1.Connected := True;
 ### 2. Préparation de la requête
 
 ```pascal
-SQLQuery1.Close;  // Fermer si déjà ouverte
-SQLQuery1.SQL.Clear;
-SQLQuery1.SQL.Text := 'SELECT * FROM produits WHERE prix < :prix_max';
+SQLQuery1.Close;  // Fermer si déjà ouverte  
+SQLQuery1.SQL.Clear;  
+SQLQuery1.SQL.Text := 'SELECT * FROM produits WHERE prix < :prix_max';  
 SQLQuery1.ParamByName('prix_max').AsFloat := 100.00;
 ```
 
@@ -202,7 +202,7 @@ SQLQuery1.ExecSQL;
 
 ```pascal
 // Parcourir les résultats
-while not SQLQuery1.EOF do
+while not SQLQuery1.EOF do  
 begin
   ShowMessage(SQLQuery1.FieldByName('nom').AsString);
   SQLQuery1.Next;
@@ -222,7 +222,7 @@ SQLTransaction1.Rollback;
 ### 6. Fermeture
 
 ```pascal
-SQLQuery1.Close;
+SQLQuery1.Close;  
 MySQL57Connection1.Connected := False;
 ```
 
@@ -258,7 +258,7 @@ SQLQuery1.SQL.Text := 'SELECT * FROM users WHERE login = ''' + Edit1.Text + ''''
 
 **Bonne pratique (sécurisé) :**
 ```pascal
-SQLQuery1.SQL.Text := 'SELECT * FROM users WHERE login = :login';
+SQLQuery1.SQL.Text := 'SELECT * FROM users WHERE login = :login';  
 SQLQuery1.ParamByName('login').AsString := Edit1.Text;
 ```
 
@@ -281,7 +281,7 @@ MySQL57Connection1.GetFieldNames('clients', ListBox2.Items);
 ```pascal
 SQLQuery1.Prepare;  // Prépare la requête une seule fois
 // Utilisation multiple avec différents paramètres
-for i := 1 to 100 do
+for i := 1 to 100 do  
 begin
   SQLQuery1.ParamByName('id').AsInteger := i;
   SQLQuery1.Open;
@@ -349,7 +349,7 @@ Les données sont lues directement depuis la base :
 ```pascal
 SQLQuery1.Open;
 // Les données sont lues au fur et à mesure
-while not SQLQuery1.EOF do
+while not SQLQuery1.EOF do  
 begin
   ProcessRecord(SQLQuery1);
   SQLQuery1.Next;
@@ -361,7 +361,7 @@ end;
 Toutes les données sont chargées en mémoire :
 
 ```pascal
-SQLQuery1.PacketRecords := -1;  // Charger tous les enregistrements
+SQLQuery1.PacketRecords := -1;  // Charger tous les enregistrements  
 SQLQuery1.Open;
 // Travail en local, sans connexion active
 ```
@@ -372,7 +372,7 @@ SQLQuery1.Open;
 
 ```pascal
 // SQLite ne nécessite pas de serveur
-SQLite3Connection1.DatabaseName := 'data.db';  // Fichier local
+SQLite3Connection1.DatabaseName := 'data.db';  // Fichier local  
 SQLite3Connection1.Connected := True;
 // Pas besoin de username/password
 ```
@@ -380,22 +380,22 @@ SQLite3Connection1.Connected := True;
 ### Configuration MySQL
 
 ```pascal
-MySQL57Connection1.HostName := 'localhost';
-MySQL57Connection1.Port := 3306;
-MySQL57Connection1.DatabaseName := 'mabase';
-MySQL57Connection1.UserName := 'root';
-MySQL57Connection1.Password := 'motdepasse';
+MySQL57Connection1.HostName := 'localhost';  
+MySQL57Connection1.Port := 3306;  
+MySQL57Connection1.DatabaseName := 'mabase';  
+MySQL57Connection1.UserName := 'root';  
+MySQL57Connection1.Password := 'motdepasse';  
 MySQL57Connection1.Connected := True;
 ```
 
 ### Configuration PostgreSQL
 
 ```pascal
-PQConnection1.HostName := 'localhost';
-PQConnection1.Port := 5432;
-PQConnection1.DatabaseName := 'mabase';
-PQConnection1.UserName := 'postgres';
-PQConnection1.Password := 'motdepasse';
+PQConnection1.HostName := 'localhost';  
+PQConnection1.Port := 5432;  
+PQConnection1.DatabaseName := 'mabase';  
+PQConnection1.UserName := 'postgres';  
+PQConnection1.Password := 'motdepasse';  
 PQConnection1.Connected := True;
 ```
 
@@ -405,10 +405,10 @@ PQConnection1.Connected := True;
 
 ```pascal
 // Activer le log SQL
-SQLQuery1.Database.LogEvents := [detActualSQL, detParamValue];
+SQLQuery1.Database.LogEvents := [detActualSQL, detParamValue];  
 SQLQuery1.Database.OnLog := @DatabaseLog;
 
-procedure TForm1.DatabaseLog(Sender: TSQLConnection; EventType: TDBEventType; const Msg: String);
+procedure TForm1.DatabaseLog(Sender: TSQLConnection; EventType: TDBEventType; const Msg: String);  
 begin
   Memo1.Lines.Add(Msg);  // Afficher dans un mémo
 end;

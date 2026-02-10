@@ -121,7 +121,7 @@ Pour les recherches dans du texte (PostgreSQL, MySQL) :
 
 ```sql
 -- PostgreSQL
-CREATE INDEX idx_clients_description_fulltext
+CREATE INDEX idx_clients_description_fulltext  
 ON clients USING gin(to_tsvector('french', description));
 
 -- MySQL
@@ -132,11 +132,11 @@ Utilisé pour des recherches de mots :
 
 ```sql
 -- PostgreSQL
-SELECT * FROM clients
+SELECT * FROM clients  
 WHERE to_tsvector('french', description) @@ to_tsquery('oiseaux');
 
 -- MySQL
-SELECT * FROM clients
+SELECT * FROM clients  
 WHERE MATCH(description) AGAINST('oiseaux' IN NATURAL LANGUAGE MODE);
 ```
 
@@ -145,7 +145,7 @@ WHERE MATCH(description) AGAINST('oiseaux' IN NATURAL LANGUAGE MODE);
 ### Créer un index
 
 ```pascal
-procedure CreerIndexEmail(Connection: TSQLConnection);
+procedure CreerIndexEmail(Connection: TSQLConnection);  
 var
   Query: TSQLQuery;
 begin
@@ -174,7 +174,7 @@ end;
 ### Supprimer un index
 
 ```pascal
-procedure SupprimerIndex(Connection: TSQLConnection; const IndexName: String);
+procedure SupprimerIndex(Connection: TSQLConnection; const IndexName: String);  
 var
   Query: TSQLQuery;
 begin
@@ -209,7 +209,7 @@ end;
 ### Lister les index existants
 
 ```pascal
-procedure ListerIndex(Connection: TSQLConnection; const TableName: String);
+procedure ListerIndex(Connection: TSQLConnection; const TableName: String);  
 var
   Query: TSQLQuery;
 begin
@@ -252,7 +252,7 @@ end;
 Le plan d'exécution vous montre COMMENT la base de données va exécuter votre requête.
 
 ```pascal
-procedure AnalyserRequete(Connection: TSQLConnection; const SQL: String);
+procedure AnalyserRequete(Connection: TSQLConnection; const SQL: String);  
 var
   Query: TSQLQuery;
   ExplainSQL: String;
@@ -320,18 +320,18 @@ Index Scan using idx_clients_ville_age on clients  (cost=0.42..823.21 rows=5000 
 ❌ **Mauvais (lent) :**
 
 ```sql
-SELECT ville, COUNT(*) as nb
-FROM clients
-GROUP BY ville
+SELECT ville, COUNT(*) as nb  
+FROM clients  
+GROUP BY ville  
 HAVING ville = 'Paris';
 ```
 
 ✅ **Bon (rapide) :**
 
 ```sql
-SELECT ville, COUNT(*) as nb
-FROM clients
-WHERE ville = 'Paris'
+SELECT ville, COUNT(*) as nb  
+FROM clients  
+WHERE ville = 'Paris'  
 GROUP BY ville;
 ```
 
@@ -357,9 +357,9 @@ SELECT id, nom, prenom, email FROM clients WHERE id = 123;
 
 ```sql
 -- Récupérer seulement les 100 premiers résultats
-SELECT nom, prenom FROM clients
-WHERE ville = 'Paris'
-ORDER BY nom
+SELECT nom, prenom FROM clients  
+WHERE ville = 'Paris'  
+ORDER BY nom  
 LIMIT 100;
 ```
 
@@ -386,14 +386,14 @@ SELECT * FROM clients WHERE nom = 'DUPONT';
 ❌ **Mauvais (peut être lent) :**
 
 ```sql
-SELECT * FROM clients
+SELECT * FROM clients  
 WHERE id IN (SELECT client_id FROM commandes WHERE montant > 1000);
 ```
 
 ✅ **Bon (généralement plus rapide) :**
 
 ```sql
-SELECT * FROM clients c
+SELECT * FROM clients c  
 WHERE EXISTS (
     SELECT 1 FROM commandes o
     WHERE o.client_id = c.id AND o.montant > 1000
@@ -404,7 +404,7 @@ WHERE EXISTS (
 
 ```pascal
 // Requête optimisée avec jointure
-procedure RechercherClientsAvecCommandes(Connection: TSQLConnection);
+procedure RechercherClientsAvecCommandes(Connection: TSQLConnection);  
 var
   Query: TSQLQuery;
 begin
@@ -481,7 +481,7 @@ Index seulement sur un sous-ensemble de données (PostgreSQL) :
 
 ```sql
 -- Indexer seulement les clients actifs
-CREATE INDEX idx_clients_actifs ON clients(email)
+CREATE INDEX idx_clients_actifs ON clients(email)  
 WHERE statut = 'actif';
 
 -- Cette requête utilise l'index partiel
@@ -544,7 +544,7 @@ type
     property Query: TSQLQuery read FQuery;
   end;
 
-constructor TClientPagination.Create(AConnection: TSQLConnection; APageSize: Integer);
+constructor TClientPagination.Create(AConnection: TSQLConnection; APageSize: Integer);  
 begin
   FConnection := AConnection;
   FPageSize := APageSize;
@@ -553,13 +553,13 @@ begin
   FQuery.Database := FConnection;
 end;
 
-destructor TClientPagination.Destroy;
+destructor TClientPagination.Destroy;  
 begin
   FQuery.Free;
   inherited;
 end;
 
-function TClientPagination.GetFirstPage: Boolean;
+function TClientPagination.GetFirstPage: Boolean;  
 begin
   FLastID := 0;
   FQuery.Close;
@@ -580,7 +580,7 @@ begin
   end;
 end;
 
-function TClientPagination.GetNextPage: Boolean;
+function TClientPagination.GetNextPage: Boolean;  
 begin
   if FLastID = 0 then
   begin
@@ -608,13 +608,13 @@ begin
   end;
 end;
 
-function TClientPagination.HasMorePages: Boolean;
+function TClientPagination.HasMorePages: Boolean;  
 begin
   Result := FQuery.RecordCount = FPageSize;
 end;
 
 // Utilisation
-procedure ChargerTousLesClients;
+procedure ChargerTousLesClients;  
 var
   Pagination: TClientPagination;
 begin
@@ -646,7 +646,7 @@ end;
 ❌ **Très lent (1000 transactions) :**
 
 ```pascal
-for i := 1 to 1000 do
+for i := 1 to 1000 do  
 begin
   Connection.Transaction.StartTransaction;
   Query.SQL.Text := 'INSERT INTO clients (nom) VALUES (:nom)';
@@ -659,7 +659,7 @@ end;
 ✅ **Rapide (1 transaction) :**
 
 ```pascal
-Connection.Transaction.StartTransaction;
+Connection.Transaction.StartTransaction;  
 try
   Query.SQL.Text := 'INSERT INTO clients (nom) VALUES (:nom)';
   for i := 1 to 1000 do
@@ -679,7 +679,7 @@ end;
 ✅ **Encore plus rapide (PostgreSQL) :**
 
 ```pascal
-procedure InsertionMassive(Connection: TSQLConnection; NombreClients: Integer);
+procedure InsertionMassive(Connection: TSQLConnection; NombreClients: Integer);  
 var
   Query: TSQLQuery;
   SQL: TStringList;
@@ -729,7 +729,7 @@ end;
 Pour des insertions massives, vous pouvez désactiver puis recréer les index :
 
 ```pascal
-procedure ImportationMassive(Connection: TSQLConnection; const FichierCSV: String);
+procedure ImportationMassive(Connection: TSQLConnection; const FichierCSV: String);  
 var
   Query: TSQLQuery;
 begin
@@ -817,40 +817,40 @@ implementation
 
 { TCachedResult }
 
-constructor TCachedResult.Create(ATTL: Integer);
+constructor TCachedResult.Create(ATTL: Integer);  
 begin
   FData := TStringList.Create;
   FTimestamp := Now;
   FTTL := ATTL;
 end;
 
-destructor TCachedResult.Destroy;
+destructor TCachedResult.Destroy;  
 begin
   FData.Free;
   inherited;
 end;
 
-function TCachedResult.IsExpired: Boolean;
+function TCachedResult.IsExpired: Boolean;  
 begin
   Result := (Now - FTimestamp) > (FTTL / 86400); // Convertir secondes en jours
 end;
 
 { TQueryCache }
 
-constructor TQueryCache.Create(ADefaultTTL: Integer);
+constructor TQueryCache.Create(ADefaultTTL: Integer);  
 begin
   FCache := TQueryCacheMap.Create;
   FDefaultTTL := ADefaultTTL;
 end;
 
-destructor TQueryCache.Destroy;
+destructor TQueryCache.Destroy;  
 begin
   Clear;
   FCache.Free;
   inherited;
 end;
 
-function TQueryCache.Get(const Key: String): TCachedResult;
+function TQueryCache.Get(const Key: String): TCachedResult;  
 var
   Index: Integer;
 begin
@@ -869,7 +869,7 @@ begin
     Result := nil;
 end;
 
-procedure TQueryCache.Put(const Key: String; Data: TStringList; TTL: Integer);
+procedure TQueryCache.Put(const Key: String; Data: TStringList; TTL: Integer);  
 var
   CachedResult: TCachedResult;
   Index: Integer;
@@ -889,7 +889,7 @@ begin
   FCache.Add(Key, CachedResult);
 end;
 
-procedure TQueryCache.Clear;
+procedure TQueryCache.Clear;  
 var
   i: Integer;
 begin
@@ -898,7 +898,7 @@ begin
   FCache.Clear;
 end;
 
-procedure TQueryCache.RemoveExpired;
+procedure TQueryCache.RemoveExpired;  
 var
   i: Integer;
 begin
@@ -921,7 +921,7 @@ end.
 var
   Cache: TQueryCache;
 
-procedure RechercherVilleAvecCache(const Ville: String);
+procedure RechercherVilleAvecCache(const Ville: String);  
 var
   Query: TSQLQuery;
   CacheKey: String;
@@ -1016,13 +1016,13 @@ var
 
 implementation
 
-constructor TQueryProfiler.Create;
+constructor TQueryProfiler.Create;  
 begin
   FEnabled := True;
   SetLength(FProfiles, 0);
 end;
 
-procedure TQueryProfiler.StartProfile(const SQL: String);
+procedure TQueryProfiler.StartProfile(const SQL: String);  
 var
   Profile: TQueryProfile;
 begin
@@ -1038,7 +1038,7 @@ begin
   FProfiles[High(FProfiles)] := Profile;
 end;
 
-procedure TQueryProfiler.EndProfile(RowCount: Integer);
+procedure TQueryProfiler.EndProfile(RowCount: Integer);  
 begin
   if not FEnabled then Exit;
   if Length(FProfiles) = 0 then Exit;
@@ -1051,7 +1051,7 @@ begin
   end;
 end;
 
-procedure TQueryProfiler.PrintStats;
+procedure TQueryProfiler.PrintStats;  
 var
   i: Integer;
   TotalDuration: Integer;
@@ -1084,7 +1084,7 @@ begin
   WriteLn(Format('Moyenne: %.2f ms par requête', [TotalDuration / Length(FProfiles)]));
 end;
 
-procedure TQueryProfiler.SaveToFile(const FileName: String);
+procedure TQueryProfiler.SaveToFile(const FileName: String);  
 var
   F: TextFile;
   i: Integer;
@@ -1118,7 +1118,7 @@ begin
   end;
 end;
 
-procedure TQueryProfiler.Clear;
+procedure TQueryProfiler.Clear;  
 begin
   SetLength(FProfiles, 0);
 end;
@@ -1132,7 +1132,7 @@ end.
 uses
   QueryProfiler;
 
-procedure ExecuterAvecProfiling;
+procedure ExecuterAvecProfiling;  
 var
   Query: TSQLQuery;
 begin
@@ -1198,9 +1198,9 @@ Les performances peuvent varier entre Windows et Ubuntu pour plusieurs raisons :
 
 ```ini
 # postgresql.conf sur Windows
-shared_buffers = 256MB          # Limité par la mémoire système
-effective_cache_size = 1GB
-work_mem = 4MB
+shared_buffers = 256MB          # Limité par la mémoire système  
+effective_cache_size = 1GB  
+work_mem = 4MB  
 maintenance_work_mem = 64MB
 ```
 
@@ -1208,16 +1208,16 @@ maintenance_work_mem = 64MB
 
 ```ini
 # postgresql.conf sur Ubuntu
-shared_buffers = 512MB          # Peut être plus élevé
-effective_cache_size = 4GB      # Utilise mieux la mémoire système
-work_mem = 8MB
+shared_buffers = 512MB          # Peut être plus élevé  
+effective_cache_size = 4GB      # Utilise mieux la mémoire système  
+work_mem = 8MB  
 maintenance_work_mem = 128MB
 ```
 
 #### 3. Détection automatique de l'OS
 
 ```pascal
-function GetOptimalConnectionParams: TConnectionParams;
+function GetOptimalConnectionParams: TConnectionParams;  
 begin
   {$IFDEF WINDOWS}
   Result.MaxConnections := 50;
@@ -1259,8 +1259,8 @@ CREATE TABLE commandes_2024_03 PARTITION OF commandes
     FOR VALUES FROM ('2024-03-01') TO ('2024-04-01');
 
 -- Index sur chaque partition
-CREATE INDEX idx_commandes_2024_01_date ON commandes_2024_01(date_commande);
-CREATE INDEX idx_commandes_2024_02_date ON commandes_2024_02(date_commande);
+CREATE INDEX idx_commandes_2024_01_date ON commandes_2024_01(date_commande);  
+CREATE INDEX idx_commandes_2024_02_date ON commandes_2024_02(date_commande);  
 CREATE INDEX idx_commandes_2024_03_date ON commandes_2024_03(date_commande);
 ```
 
@@ -1272,7 +1272,7 @@ CREATE INDEX idx_commandes_2024_03_date ON commandes_2024_03(date_commande);
 **Gestion en FreePascal :**
 
 ```pascal
-procedure CreerPartitionMensuelle(Connection: TSQLConnection; Annee, Mois: Integer);
+procedure CreerPartitionMensuelle(Connection: TSQLConnection; Annee, Mois: Integer);  
 var
   Query: TSQLQuery;
   DateDebut, DateFin: TDateTime;
@@ -1321,7 +1321,7 @@ begin
 end;
 
 // Créer automatiquement les partitions pour l'année
-procedure CreerPartitionsAnnuelles(Connection: TSQLConnection; Annee: Integer);
+procedure CreerPartitionsAnnuelles(Connection: TSQLConnection; Annee: Integer);  
 var
   Mois: Integer;
 begin
@@ -1338,7 +1338,7 @@ Les vues matérialisées stockent physiquement le résultat d'une requête compl
 
 ```sql
 -- Vue matérialisée pour statistiques clients
-CREATE MATERIALIZED VIEW stats_clients AS
+CREATE MATERIALIZED VIEW stats_clients AS  
 SELECT
     c.id,
     c.nom,
@@ -1347,12 +1347,12 @@ SELECT
     SUM(o.montant) as total_commandes,
     AVG(o.montant) as montant_moyen,
     MAX(o.date_commande) as derniere_commande
-FROM clients c
-LEFT JOIN commandes o ON c.id = o.client_id
+FROM clients c  
+LEFT JOIN commandes o ON c.id = o.client_id  
 GROUP BY c.id, c.nom, c.prenom;
 
 -- Index sur la vue matérialisée
-CREATE INDEX idx_stats_clients_id ON stats_clients(id);
+CREATE INDEX idx_stats_clients_id ON stats_clients(id);  
 CREATE INDEX idx_stats_clients_total ON stats_clients(total_commandes);
 ```
 
@@ -1396,7 +1396,7 @@ begin
 end;
 
 // Rafraîchissement automatique périodique
-procedure ConfigurerRafraichissementAuto(Connection: TSQLConnection);
+procedure ConfigurerRafraichissementAuto(Connection: TSQLConnection);  
 var
   Timer: TTimer;
 begin
@@ -1406,7 +1406,7 @@ begin
   Timer.Enabled := True;
 end;
 
-procedure RafraichirVuesMaterialisees(Sender: TObject);
+procedure RafraichirVuesMaterialisees(Sender: TObject);  
 begin
   RafraichirVueMaterialisee(Connection, 'stats_clients', True);
   RafraichirVueMaterialisee(Connection, 'stats_produits', True);
@@ -1421,19 +1421,19 @@ Certaines bases de données (PostgreSQL 9.6+) peuvent exécuter des requêtes en
 
 ```sql
 -- Activer le parallélisme
-SET max_parallel_workers_per_gather = 4;
-SET parallel_setup_cost = 100;
+SET max_parallel_workers_per_gather = 4;  
+SET parallel_setup_cost = 100;  
 SET parallel_tuple_cost = 0.1;
 
 -- Forcer le parallélisme pour une requête
-SET parallel_setup_cost = 0;
+SET parallel_setup_cost = 0;  
 SET parallel_tuple_cost = 0;
 ```
 
 **En FreePascal :**
 
 ```pascal
-procedure ActiverParallelisme(Connection: TSQLConnection; NbWorkers: Integer = 4);
+procedure ActiverParallelisme(Connection: TSQLConnection; NbWorkers: Integer = 4);  
 var
   Query: TSQLQuery;
 begin
@@ -1488,12 +1488,12 @@ type
 
 implementation
 
-constructor TDatabaseMaintenance.Create(AConnection: TSQLConnection);
+constructor TDatabaseMaintenance.Create(AConnection: TSQLConnection);  
 begin
   FConnection := AConnection;
 end;
 
-procedure TDatabaseMaintenance.ExecuteVacuum(const TableName: String);
+procedure TDatabaseMaintenance.ExecuteVacuum(const TableName: String);  
 var
   Query: TSQLQuery;
 begin
@@ -1521,7 +1521,7 @@ begin
   end;
 end;
 
-procedure TDatabaseMaintenance.ExecuteAnalyze(const TableName: String);
+procedure TDatabaseMaintenance.ExecuteAnalyze(const TableName: String);  
 var
   Query: TSQLQuery;
 begin
@@ -1544,7 +1544,7 @@ begin
   end;
 end;
 
-procedure TDatabaseMaintenance.ExecuteReindex(const TableName: String);
+procedure TDatabaseMaintenance.ExecuteReindex(const TableName: String);  
 var
   Query: TSQLQuery;
 begin
@@ -1578,7 +1578,7 @@ begin
     ExecuteReindex(TableName);
 end;
 
-procedure TDatabaseMaintenance.PerformFullMaintenance;
+procedure TDatabaseMaintenance.PerformFullMaintenance;  
 var
   Query: TSQLQuery;
   Tables: TStringList;
@@ -1619,7 +1619,7 @@ begin
   end;
 end;
 
-procedure TDatabaseMaintenance.GetTableStats(const TableName: String);
+procedure TDatabaseMaintenance.GetTableStats(const TableName: String);  
 var
   Query: TSQLQuery;
 begin
@@ -1713,13 +1713,13 @@ type
 
 implementation
 
-constructor TSlowQueryLogger.Create(const ALogFile: String; AThresholdMS: Integer);
+constructor TSlowQueryLogger.Create(const ALogFile: String; AThresholdMS: Integer);  
 begin
   FLogFile := ALogFile;
   FThresholdMS := AThresholdMS;
 end;
 
-procedure TSlowQueryLogger.LogSlowQuery(const SQL: String; DurationMS: Integer);
+procedure TSlowQueryLogger.LogSlowQuery(const SQL: String; DurationMS: Integer);  
 var
   F: TextFile;
 begin
@@ -1743,7 +1743,7 @@ begin
   end;
 end;
 
-procedure TSlowQueryLogger.CheckQuery(const SQL: String; StartTime: TDateTime);
+procedure TSlowQueryLogger.CheckQuery(const SQL: String; StartTime: TDateTime);  
 var
   DurationMS: Integer;
 begin
@@ -1785,7 +1785,7 @@ type
 
 implementation
 
-constructor TQueryExecutor.Create(AConnection: TSQLConnection);
+constructor TQueryExecutor.Create(AConnection: TSQLConnection);  
 begin
   FConnection := AConnection;
 
@@ -1797,13 +1797,13 @@ begin
   {$ENDIF}
 end;
 
-destructor TQueryExecutor.Destroy;
+destructor TQueryExecutor.Destroy;  
 begin
   FSlowQueryLogger.Free;
   inherited;
 end;
 
-function TQueryExecutor.Execute(const SQL: String): Integer;
+function TQueryExecutor.Execute(const SQL: String): Integer;  
 var
   Query: TSQLQuery;
   StartTime: TDateTime;
@@ -1823,7 +1823,7 @@ begin
   end;
 end;
 
-function TQueryExecutor.Open(const SQL: String): TSQLQuery;
+function TQueryExecutor.Open(const SQL: String): TSQLQuery;  
 var
   StartTime: TDateTime;
 begin

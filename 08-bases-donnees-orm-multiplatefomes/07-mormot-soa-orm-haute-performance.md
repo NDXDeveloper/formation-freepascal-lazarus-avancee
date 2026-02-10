@@ -264,7 +264,7 @@ CRUD signifie : **C**reate (Créer), **R**ead (Lire), **U**pdate (Mettre à jour
 ### Create - Ajouter des enregistrements
 
 ```pascal
-procedure AddPerson(Database: TRestServerDB);
+procedure AddPerson(Database: TRestServerDB);  
 var
   Person: TPerson;
   ID: TID;
@@ -301,7 +301,7 @@ end;
 **Lire un enregistrement par ID :**
 
 ```pascal
-procedure ReadPerson(Database: TRestServerDB; PersonID: TID);
+procedure ReadPerson(Database: TRestServerDB; PersonID: TID);  
 var
   Person: TPerson;
 begin
@@ -324,7 +324,7 @@ end;
 **Lire tous les enregistrements :**
 
 ```pascal
-procedure ListAllPersons(Database: TRestServerDB);
+procedure ListAllPersons(Database: TRestServerDB);  
 var
   List: TObjectList;
   Person: TPerson;
@@ -350,7 +350,7 @@ end;
 **Recherche avec condition (WHERE) :**
 
 ```pascal
-procedure FindAdults(Database: TRestServerDB);
+procedure FindAdults(Database: TRestServerDB);  
 var
   List: TObjectList;
 begin
@@ -368,7 +368,7 @@ end;
 ### Update - Modifier des enregistrements
 
 ```pascal
-procedure UpdatePerson(Database: TRestServerDB; PersonID: TID);
+procedure UpdatePerson(Database: TRestServerDB; PersonID: TID);  
 var
   Person: TPerson;
 begin
@@ -395,7 +395,7 @@ end;
 ### Delete - Supprimer des enregistrements
 
 ```pascal
-procedure DeletePerson(Database: TRestServerDB; PersonID: TID);
+procedure DeletePerson(Database: TRestServerDB; PersonID: TID);  
 begin
   if Database.Delete(TPerson, PersonID) then
     WriteLn('Personne supprimée')
@@ -407,7 +407,7 @@ end;
 **Supprimer avec condition :**
 
 ```pascal
-procedure DeleteOldPersons(Database: TRestServerDB);
+procedure DeleteOldPersons(Database: TRestServerDB);  
 var
   Count: Integer;
 begin
@@ -475,7 +475,7 @@ end;
 ### Récupérer les relations
 
 ```pascal
-procedure ShowEmployeeWithCompany(Database: TRestServerDB; EmployeeID: TID);
+procedure ShowEmployeeWithCompany(Database: TRestServerDB; EmployeeID: TID);  
 var
   Employee: TEmployee;
 begin
@@ -658,17 +658,17 @@ type
     function GetVersion: RawUtf8;
   end;
 
-function TCalculatorService.Add(A, B: Integer): Integer;
+function TCalculatorService.Add(A, B: Integer): Integer;  
 begin
   Result := A + B;
 end;
 
-function TCalculatorService.Multiply(A, B: Integer): Integer;
+function TCalculatorService.Multiply(A, B: Integer): Integer;  
 begin
   Result := A * B;
 end;
 
-function TCalculatorService.GetVersion: RawUtf8;
+function TCalculatorService.GetVersion: RawUtf8;  
 begin
   Result := '1.0.0';
 end;
@@ -712,7 +712,7 @@ end;
 ### Transactions pour les insertions multiples
 
 ```pascal
-procedure AddManyPersonsFast(Database: TRestServerDB);
+procedure AddManyPersonsFast(Database: TRestServerDB);  
 var
   Person: TPerson;
   i: Integer;
@@ -750,8 +750,8 @@ end;
 Database.Server.CacheOrNil(TPerson).SetCache(TPerson);
 
 // Maintenant les lectures sont ultra-rapides (cache RAM)
-Person := TPerson.Create;
-Database.Retrieve(123, Person); // Depuis le cache si disponible
+Person := TPerson.Create;  
+Database.Retrieve(123, Person); // Depuis le cache si disponible  
 Person.Free;
 ```
 
@@ -759,7 +759,7 @@ Person.Free;
 
 ```pascal
 // Ajouter un index sur une colonne pour accélérer les recherches
-Database.CreateSqlIndex(TPerson, 'LastName', True); // True = unique
+Database.CreateSqlIndex(TPerson, 'LastName', True); // True = unique  
 Database.CreateSqlIndex(TPerson, 'Age', False);    // False = non unique
 ```
 
@@ -860,7 +860,7 @@ Les performances de mORMot sont excellentes sur les deux plateformes, mais :
 
 ```pascal
 // ✓ BON
-Person := TPerson.Create;
+Person := TPerson.Create;  
 try
   // ... utiliser Person
 finally
@@ -875,7 +875,7 @@ Person := TPerson.Create;
 ### 2. Utiliser les transactions pour les opérations multiples
 
 ```pascal
-Database.TransactionBegin(TPerson);
+Database.TransactionBegin(TPerson);  
 try
   // Multiples Add/Update/Delete
   Database.Commit;
@@ -928,7 +928,7 @@ type
     property Email: RawUtf8 read GetEmail write SetEmail;
   end;
 
-procedure TPerson.SetEmail(const Value: RawUtf8);
+procedure TPerson.SetEmail(const Value: RawUtf8);  
 begin
   if Pos('@', Value) = 0 then
     raise Exception.Create('Email invalide');
@@ -1142,12 +1142,12 @@ uses
 
 { TLibraryService }
 
-function TLibraryService.GetDatabase: TRestOrm;
+function TLibraryService.GetDatabase: TRestOrm;  
 begin
   Result := Server as TRestOrm;
 end;
 
-function TLibraryService.BorrowBook(BookID, MemberID: TID): Boolean;
+function TLibraryService.BorrowBook(BookID, MemberID: TID): Boolean;  
 var
   Book: TBook;
   Member: TMember;
@@ -1208,7 +1208,7 @@ begin
   end;
 end;
 
-function TLibraryService.ReturnBook(LoanID: TID): Boolean;
+function TLibraryService.ReturnBook(LoanID: TID): Boolean;  
 var
   Loan: TLoan;
   Book: TBook;
@@ -1259,7 +1259,7 @@ begin
   end;
 end;
 
-function TLibraryService.SearchBooksByTitle(const Title: RawUtf8): RawUtf8;
+function TLibraryService.SearchBooksByTitle(const Title: RawUtf8): RawUtf8;  
 var
   Books: TObjectList;
 begin
@@ -1274,7 +1274,7 @@ begin
   end;
 end;
 
-function TLibraryService.SearchBooksByAuthor(const AuthorName: RawUtf8): RawUtf8;
+function TLibraryService.SearchBooksByAuthor(const AuthorName: RawUtf8): RawUtf8;  
 var
   SQL: RawUtf8;
   Books: TObjectList;
@@ -1293,7 +1293,7 @@ begin
   end;
 end;
 
-function TLibraryService.GetAvailableBooks: Integer;
+function TLibraryService.GetAvailableBooks: Integer;  
 var
   Book: TBook;
   List: TObjectList;
@@ -1312,7 +1312,7 @@ begin
   end;
 end;
 
-function TLibraryService.GetOverdueLoans: RawUtf8;
+function TLibraryService.GetOverdueLoans: RawUtf8;  
 var
   Loans: TObjectList;
 begin
@@ -1326,7 +1326,7 @@ begin
   end;
 end;
 
-function TLibraryService.GetMemberLoanHistory(MemberID: TID): RawUtf8;
+function TLibraryService.GetMemberLoanHistory(MemberID: TID): RawUtf8;  
 var
   Loans: TObjectList;
 begin
@@ -1368,7 +1368,7 @@ var
   HttpServer: TRestHttpServer;
   DbPath: TFileName;
 
-procedure InitializeDatabase;
+procedure InitializeDatabase;  
 var
   Author: TAuthor;
   Book: TBook;
@@ -1513,7 +1513,7 @@ var
   Client: TRestClientHTTP;
   LibraryService: ILibraryService;
 
-procedure DisplayMenu;
+procedure DisplayMenu;  
 begin
   WriteLn;
   WriteLn('=== Menu Principal ===');
@@ -1527,7 +1527,7 @@ begin
   Write('Votre choix : ');
 end;
 
-procedure ListAllBooks;
+procedure ListAllBooks;  
 var
   Books: TObjectList;
   Book: TBook;
@@ -1551,7 +1551,7 @@ begin
   end;
 end;
 
-procedure SearchBooks;
+procedure SearchBooks;  
 var
   SearchTerm: string;
   JsonResult: RawUtf8;
@@ -1576,7 +1576,7 @@ begin
   end;
 end;
 
-procedure BorrowBook;
+procedure BorrowBook;  
 var
   BookID, MemberID: TID;
   Success: Boolean;
@@ -1595,7 +1595,7 @@ begin
     WriteLn('Erreur : impossible d''emprunter ce livre.');
 end;
 
-procedure ReturnBook;
+procedure ReturnBook;  
 var
   LoanID: TID;
   Success: Boolean;
@@ -1612,7 +1612,7 @@ begin
     WriteLn('Erreur : impossible de retourner ce livre.');
 end;
 
-procedure ShowOverdueLoans;
+procedure ShowOverdueLoans;  
 var
   JsonResult: RawUtf8;
   Loans: TDocVariantData;
@@ -1635,7 +1635,7 @@ begin
   end;
 end;
 
-procedure ShowStatistics;
+procedure ShowStatistics;  
 var
   AvailableBooks: Integer;
 begin
@@ -1700,7 +1700,7 @@ end.
 ### Compilation pour Windows
 
 ```batch
-REM Depuis Windows
+REM Depuis Windows  
 lazbuild --build-mode=Release LibraryServer.lpi
 ```
 
@@ -1720,7 +1720,7 @@ Le fichier `LibraryServer` (sans extension) est créé.
 Depuis Windows, compiler pour Linux :
 
 ```batch
-REM Installer d'abord le cross-compiler pour Linux
+REM Installer d'abord le cross-compiler pour Linux  
 REM Via fpcupdeluxe ou manuellement
 
 fpc -o LibraryServer -T linux -P x86_64 LibraryServer.pas
@@ -1760,15 +1760,15 @@ Créer `/etc/systemd/system/library.service` :
 
 ```ini
 [Unit]
-Description=Library Management Service
+Description=Library Management Service  
 After=network.target
 
 [Service]
-Type=simple
-User=library
-WorkingDirectory=/opt/library
-ExecStart=/opt/library/LibraryServer
-Restart=always
+Type=simple  
+User=library  
+WorkingDirectory=/opt/library  
+ExecStart=/opt/library/LibraryServer  
+Restart=always  
 RestartSec=10
 
 [Install]
@@ -1778,8 +1778,8 @@ WantedBy=multi-user.target
 Activer et démarrer :
 
 ```bash
-sudo systemctl enable library.service
-sudo systemctl start library.service
+sudo systemctl enable library.service  
+sudo systemctl start library.service  
 sudo systemctl status library.service
 ```
 
@@ -1797,18 +1797,18 @@ type
     function GetAuthenticationSchemes: TRestServerAuthenticationSignedUriSchemes; override;
   end;
 
-function TSecureLibraryServer.GetAuthenticationSchemes: TRestServerAuthenticationSignedUriSchemes;
+function TSecureLibraryServer.GetAuthenticationSchemes: TRestServerAuthenticationSignedUriSchemes;  
 begin
   // Activer l'authentification par signature
   Result := [suaWeak, suaDefault];
 end;
 
 // Lors de la création du serveur
-Database.CreateMissingTables(0, [itoNoAutoCreateGroups]);
+Database.CreateMissingTables(0, [itoNoAutoCreateGroups]);  
 Database.CreateMissingTables(1, [itoNoAutoCreateUsers]);
 
 // Créer un utilisateur admin
-Database.AuthenticationRegister(TRestServerAuthenticationDefault);
+Database.AuthenticationRegister(TRestServerAuthenticationDefault);  
 Database.Auth.AddUser('admin', 'motdepasse', 'Admin');
 ```
 
@@ -1842,7 +1842,7 @@ type
     function Uri(var Context: TRestServerUriContext): TRestServerUriResult; override;
   end;
 
-function TRateLimitedServer.Uri(var Context: TRestServerUriContext): TRestServerUriResult;
+function TRateLimitedServer.Uri(var Context: TRestServerUriContext): TRestServerUriResult;  
 var
   ClientIP: RawUtf8;
   Count: Integer;
@@ -1877,7 +1877,7 @@ uses
   mormot.core.log;
 
 // Configurer le système de logs
-TSynLog.Family.Level := LOG_VERBOSE;
+TSynLog.Family.Level := LOG_VERBOSE;  
 TSynLog.Family.PerThreadLog := ptIdentifiedInOnFile;
 
 {$IFDEF WINDOWS}
@@ -1887,8 +1887,8 @@ TSynLog.Family.DestinationPath := '/var/log/library/';
 {$ENDIF}
 
 // Logger des informations
-TSynLog.Add.Log(sllInfo, 'Serveur démarré');
-TSynLog.Add.Log(sllWarning, 'Connexion lente détectée');
+TSynLog.Add.Log(sllInfo, 'Serveur démarré');  
+TSynLog.Add.Log(sllWarning, 'Connexion lente détectée');  
 TSynLog.Add.Log(sllError, 'Erreur de base de données', [], Self);
 ```
 
@@ -1971,8 +1971,8 @@ end;
 
 **Windows :**
 ```batch
-REM Télécharger libpq.dll depuis :
-REM https://www.postgresql.org/download/windows/
+REM Télécharger libpq.dll depuis :  
+REM https://www.postgresql.org/download/windows/  
 REM Placer libpq.dll dans le même dossier que votre .exe
 ```
 
@@ -2027,7 +2027,7 @@ end;
 
 **Windows :**
 ```batch
-REM Télécharger depuis https://dev.mysql.com/downloads/connector/c/
+REM Télécharger depuis https://dev.mysql.com/downloads/connector/c/  
 REM Copier libmysql.dll dans le dossier de l'application
 ```
 
@@ -2082,9 +2082,9 @@ sudo apt install unixodbc freetds-bin tdsodbc
 
 # Configurer /etc/odbcinst.ini
 [FreeTDS]
-Description = TDS driver (Sybase/MS SQL)
-Driver = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so
-Setup = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so
+Description = TDS driver (Sybase/MS SQL)  
+Driver = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so  
+Setup = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so  
 UsageCount = 1
 
 # Tester la connexion
@@ -2137,11 +2137,11 @@ end;
 wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-basic-linux.x64-19.19.0.0.0dbru.zip
 
 # Décompresser
-sudo mkdir -p /opt/oracle
+sudo mkdir -p /opt/oracle  
 sudo unzip instantclient-basic-linux.x64-19.19.0.0.0dbru.zip -d /opt/oracle
 
 # Configurer les bibliothèques
-sudo sh -c "echo /opt/oracle/instantclient_19_19 > /etc/ld.so.conf.d/oracle-instantclient.conf"
+sudo sh -c "echo /opt/oracle/instantclient_19_19 > /etc/ld.so.conf.d/oracle-instantclient.conf"  
 sudo ldconfig
 
 # Définir la variable d'environnement
@@ -2184,8 +2184,8 @@ end;
 
 **Windows :**
 ```batch
-REM Télécharger l'installateur depuis firebirdsql.org
-REM Installer Firebird Server
+REM Télécharger l'installateur depuis firebirdsql.org  
+REM Installer Firebird Server  
 REM Les DLL sont automatiquement disponibles
 ```
 
@@ -2195,7 +2195,7 @@ REM Les DLL sont automatiquement disponibles
 sudo apt install firebird3.0-server firebird3.0-utils
 
 # Démarrer le service
-sudo systemctl start firebird3.0
+sudo systemctl start firebird3.0  
 sudo systemctl enable firebird3.0
 
 # Installer les bibliothèques de développement
@@ -2222,7 +2222,7 @@ type
     procedure ReleaseConnection(AConnection: TSqlDBConnection);
   end;
 
-constructor TDatabaseManager.Create(const AConnectionString: RawUtf8);
+constructor TDatabaseManager.Create(const AConnectionString: RawUtf8);  
 begin
   inherited Create;
 
@@ -2239,19 +2239,19 @@ begin
   fPool := fProps.ThreadSafeConnection;
 end;
 
-destructor TDatabaseManager.Destroy;
+destructor TDatabaseManager.Destroy;  
 begin
   fProps.Free;
   inherited;
 end;
 
-function TDatabaseManager.GetConnection: TSqlDBConnection;
+function TDatabaseManager.GetConnection: TSqlDBConnection;  
 begin
   // Obtenir une connexion du pool
   Result := fPool.ThreadSafeConnection;
 end;
 
-procedure TDatabaseManager.ReleaseConnection(AConnection: TSqlDBConnection);
+procedure TDatabaseManager.ReleaseConnection(AConnection: TSqlDBConnection);  
 begin
   // Libérer la connexion (retour au pool)
   AConnection.ReleaseRows;
@@ -2284,7 +2284,7 @@ begin
   fRetryDelay := 1000; // 1 seconde
 end;
 
-function TResilientDatabase.ReconnectIfNeeded: Boolean;
+function TResilientDatabase.ReconnectIfNeeded: Boolean;  
 var
   Retry: Integer;
   Props: TSqlDBConnectionProperties;
@@ -2343,7 +2343,7 @@ var
   DestProps: TSqlDBPostgresConnectionProperties;
   DestDB: TRestServerDB;
 
-procedure MigrateTable(AClass: TOrmClass; const ATableName: string);
+procedure MigrateTable(AClass: TOrmClass; const ATableName: string);  
 var
   SourceList: TObjectList;
   DestItem: TOrm;
@@ -2496,7 +2496,7 @@ implementation
 
 { TLibraryServiceTest }
 
-procedure TLibraryServiceTest.SetUp;
+procedure TLibraryServiceTest.SetUp;  
 var
   Author: TAuthor;
   Book: TBook;
@@ -2541,14 +2541,14 @@ begin
   Member.Free;
 end;
 
-procedure TLibraryServiceTest.TearDown;
+procedure TLibraryServiceTest.TearDown;  
 begin
   fService := nil;
   fDatabase.Free;
   fModel.Free;
 end;
 
-procedure TLibraryServiceTest.TestBorrowBook;
+procedure TLibraryServiceTest.TestBorrowBook;  
 var
   Success: Boolean;
 begin
@@ -2561,7 +2561,7 @@ begin
   // (à implémenter avec une requête sur la base)
 end;
 
-procedure TLibraryServiceTest.TestReturnBook;
+procedure TLibraryServiceTest.TestReturnBook;  
 var
   BorrowSuccess, ReturnSuccess: Boolean;
 begin
@@ -2574,7 +2574,7 @@ begin
   AssertTrue('Le retour devrait réussir', ReturnSuccess);
 end;
 
-procedure TLibraryServiceTest.TestSearchBooksByTitle;
+procedure TLibraryServiceTest.TestSearchBooksByTitle;  
 var
   JsonResult: RawUtf8;
 begin
@@ -2584,7 +2584,7 @@ begin
     JsonResult <> '[]');
 end;
 
-procedure TLibraryServiceTest.TestOverdueLoans;
+procedure TLibraryServiceTest.TestOverdueLoans;  
 var
   JsonResult: RawUtf8;
 begin
@@ -2646,7 +2646,7 @@ uses
   mormot.rest.sqlite3,
   LibraryModel;
 
-procedure BenchmarkInserts(Database: TRestServerDB; Count: Integer);
+procedure BenchmarkInserts(Database: TRestServerDB; Count: Integer);  
 var
   Timer: TPrecisionTimer;
   Person: TPerson;
@@ -2677,7 +2677,7 @@ begin
     [Count / (Timer.Stop / 1000)]));
 end;
 
-procedure BenchmarkReads(Database: TRestServerDB; Count: Integer);
+procedure BenchmarkReads(Database: TRestServerDB; Count: Integer);  
 var
   Timer: TPrecisionTimer;
   Person: TPerson;
@@ -2766,7 +2766,7 @@ const
     'fbclient.dll'    // Firebird
   );
 
-procedure CheckLibraries;
+procedure CheckLibraries;  
 var
   DLL: string;
 begin
@@ -2782,8 +2782,8 @@ end;
 **Ubuntu :**
 ```bash
 # Vérifier les bibliothèques disponibles
-ldconfig -p | grep libpq      # PostgreSQL
-ldconfig -p | grep libmysql   # MySQL
+ldconfig -p | grep libpq      # PostgreSQL  
+ldconfig -p | grep libmysql   # MySQL  
 ldconfig -p | grep libfbclient # Firebird
 
 # Si manquantes, installer
@@ -2793,7 +2793,7 @@ sudo apt install libpq-dev libmysqlclient-dev firebird-dev
 ### Problème : Erreur de connexion à la base
 
 ```pascal
-procedure TestConnection(Props: TSqlDBConnectionProperties);
+procedure TestConnection(Props: TSqlDBConnectionProperties);  
 begin
   try
     WriteLn('Test de connexion...');
@@ -2825,7 +2825,7 @@ end;
 
 ```pascal
 // Activer le mode batch
-Database.BatchStart(TPerson);
+Database.BatchStart(TPerson);  
 try
   for i := 1 to 10000 do
   begin
@@ -3086,7 +3086,7 @@ mORMot est un projet open source qui accueille les contributions :
 **Ancien code Delphi/BDE :**
 ```pascal
 // Ancien code avec BDE
-procedure TForm1.LoadCustomers;
+procedure TForm1.LoadCustomers;  
 begin
   Query1.SQL.Text := 'SELECT * FROM Customers';
   Query1.Open;
@@ -3113,7 +3113,7 @@ type
     property Phone: RawUtf8 read fPhone write fPhone;
   end;
 
-procedure TForm1.LoadCustomers;
+procedure TForm1.LoadCustomers;  
 var
   Customers: TObjectList;
   Customer: TCustomer;
@@ -3171,7 +3171,7 @@ uses
   BDE, // Ancien
   mormot.orm.core, mormot.db.sql.postgres; // Nouveau
 
-procedure MigrateTable(const TableName: string);
+procedure MigrateTable(const TableName: string);  
 var
   BDETable: TTable;
   Customer: TCustomer;
@@ -3220,10 +3220,10 @@ end;
 
 **Windows :**
 ```batch
-REM Créer l'installateur avec Inno Setup
+REM Créer l'installateur avec Inno Setup  
 iscc setup.iss
 
-REM Déployer comme service Windows
+REM Déployer comme service Windows  
 CustomerApp.exe /install
 ```
 
