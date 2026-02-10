@@ -78,7 +78,7 @@ type
 
 implementation
 
-constructor TSandboxedProcess.Create;
+constructor TSandboxedProcess.Create;  
 var
   SidsToDisable: array[0..0] of TSIDAndAttributes;
   AdminSid: PSID;
@@ -118,7 +118,7 @@ begin
   end;
 end;
 
-destructor TSandboxedProcess.Destroy;
+destructor TSandboxedProcess.Destroy;  
 begin
   if FProcessInfo.hProcess <> 0 then
     CloseHandle(FProcessInfo.hProcess);
@@ -129,7 +129,7 @@ begin
   inherited;
 end;
 
-function TSandboxedProcess.Execute(const CommandLine: string): Boolean;
+function TSandboxedProcess.Execute(const CommandLine: string): Boolean;  
 var
   CmdLine: string;
 begin
@@ -156,7 +156,7 @@ begin
   );
 end;
 
-function TSandboxedProcess.IsRunning: Boolean;
+function TSandboxedProcess.IsRunning: Boolean;  
 var
   ExitCode: DWORD;
 begin
@@ -168,7 +168,7 @@ begin
   end;
 end;
 
-procedure TSandboxedProcess.Terminate;
+procedure TSandboxedProcess.Terminate;  
 begin
   if FProcessInfo.hProcess <> 0 then
     TerminateProcess(FProcessInfo.hProcess, 1);
@@ -239,7 +239,7 @@ implementation
 uses
   StrUtils;
 
-constructor TFileSandbox.Create(DefaultMode: TFileAccessMode);
+constructor TFileSandbox.Create(DefaultMode: TFileAccessMode);  
 begin
   inherited Create;
   FAllowedPaths := TStringList.Create;
@@ -248,13 +248,13 @@ begin
   FDefaultMode := DefaultMode;
 end;
 
-destructor TFileSandbox.Destroy;
+destructor TFileSandbox.Destroy;  
 begin
   FAllowedPaths.Free;
   inherited;
 end;
 
-function TFileSandbox.NormalizePath(const Path: string): string;
+function TFileSandbox.NormalizePath(const Path: string): string;  
 begin
   // Convertir en chemin absolu et normaliser
   Result := ExpandFileName(Path);
@@ -264,12 +264,12 @@ begin
     Result := Result + '\';
 end;
 
-procedure TFileSandbox.AddAllowedPath(const Path: string);
+procedure TFileSandbox.AddAllowedPath(const Path: string);  
 begin
   FAllowedPaths.Add(NormalizePath(Path));
 end;
 
-procedure TFileSandbox.RemoveAllowedPath(const Path: string);
+procedure TFileSandbox.RemoveAllowedPath(const Path: string);  
 var
   Index: Integer;
 begin
@@ -278,7 +278,7 @@ begin
     FAllowedPaths.Delete(Index);
 end;
 
-function TFileSandbox.IsPathAllowed(const Path: string): Boolean;
+function TFileSandbox.IsPathAllowed(const Path: string): Boolean;  
 var
   NormalPath: string;
   i: Integer;
@@ -297,17 +297,17 @@ begin
   end;
 end;
 
-function TFileSandbox.CanRead(const FileName: string): Boolean;
+function TFileSandbox.CanRead(const FileName: string): Boolean;  
 begin
   Result := IsPathAllowed(FileName) or (FDefaultMode in [famReadOnly, famReadWrite]);
 end;
 
-function TFileSandbox.CanWrite(const FileName: string): Boolean;
+function TFileSandbox.CanWrite(const FileName: string): Boolean;  
 begin
   Result := IsPathAllowed(FileName) and (FDefaultMode = famReadWrite);
 end;
 
-function TFileSandbox.SafeFileOpen(const FileName: string; Mode: Word): THandle;
+function TFileSandbox.SafeFileOpen(const FileName: string; Mode: Word): THandle;  
 begin
   Result := INVALID_HANDLE_VALUE;
 
@@ -328,7 +328,7 @@ begin
   Result := FileOpen(FileName, Mode);
 end;
 
-procedure TFileSandbox.SafeFileClose(Handle: THandle);
+procedure TFileSandbox.SafeFileClose(Handle: THandle);  
 begin
   if Handle <> INVALID_HANDLE_VALUE then
     FileClose(Handle);
@@ -410,7 +410,7 @@ type
 
 implementation
 
-constructor TJobSandbox.Create(const Limits: TResourceLimits);
+constructor TJobSandbox.Create(const Limits: TResourceLimits);  
 begin
   inherited Create;
   FLimits := Limits;
@@ -423,14 +423,14 @@ begin
   ApplyLimits;
 end;
 
-destructor TJobSandbox.Destroy;
+destructor TJobSandbox.Destroy;  
 begin
   if FJobHandle <> 0 then
     CloseHandle(FJobHandle);
   inherited;
 end;
 
-procedure TJobSandbox.ApplyLimits;
+procedure TJobSandbox.ApplyLimits;  
 var
   BasicLimit: JOBOBJECT_BASIC_LIMIT_INFORMATION;
   ExtendedLimit: JOBOBJECT_EXTENDED_LIMIT_INFORMATION;
@@ -469,12 +469,12 @@ begin
   );
 end;
 
-function TJobSandbox.AddProcess(ProcessHandle: THandle): Boolean;
+function TJobSandbox.AddProcess(ProcessHandle: THandle): Boolean;  
 begin
   Result := AssignProcessToJobObject(FJobHandle, ProcessHandle);
 end;
 
-function TJobSandbox.CreateSandboxedProcess(const CommandLine: string): THandle;
+function TJobSandbox.CreateSandboxedProcess(const CommandLine: string): THandle;  
 var
   StartupInfo: TStartupInfo;
   ProcessInfo: TProcessInformation;
@@ -518,7 +518,7 @@ begin
   end;
 end;
 
-procedure TJobSandbox.Terminate;
+procedure TJobSandbox.Terminate;  
 begin
   if FJobHandle <> 0 then
     TerminateJobObject(FJobHandle, 0);
@@ -602,14 +602,14 @@ implementation
 uses
   Process;
 
-constructor TLinuxSandbox.Create(Namespaces: TNamespaceTypes; const RootPath: string);
+constructor TLinuxSandbox.Create(Namespaces: TNamespaceTypes; const RootPath: string);  
 begin
   inherited Create;
   FNamespaces := Namespaces;
   FRootPath := RootPath;
 end;
 
-procedure TLinuxSandbox.SetupNamespaces;
+procedure TLinuxSandbox.SetupNamespaces;  
 var
   Flags: Integer;
 begin
@@ -631,7 +631,7 @@ begin
   // Pour simplifier, on utilise l'outil système 'unshare'
 end;
 
-procedure TLinuxSandbox.SetupChroot;
+procedure TLinuxSandbox.SetupChroot;  
 begin
   if FRootPath <> '' then
   begin
@@ -641,7 +641,7 @@ begin
   end;
 end;
 
-function TLinuxSandbox.Execute(const Command: string; Args: array of string): Integer;
+function TLinuxSandbox.Execute(const Command: string; Args: array of string): Integer;  
 var
   Process: TProcess;
   i: Integer;
@@ -744,20 +744,20 @@ implementation
 uses
   Process;
 
-constructor TSeccompSandbox.Create(AllowedCalls: TSystemCalls);
+constructor TSeccompSandbox.Create(AllowedCalls: TSystemCalls);  
 begin
   inherited Create;
   FAllowedCalls := AllowedCalls;
 end;
 
-procedure TSeccompSandbox.SetupSeccompFilter;
+procedure TSeccompSandbox.SetupSeccompFilter;  
 begin
   // Note : L'implémentation complète nécessiterait des bindings
   // vers libseccomp ou l'écriture directe de filtres BPF
   // Pour la démonstration, on utilise l'approche simple
 end;
 
-procedure TSeccompSandbox.ApplyFilter;
+procedure TSeccompSandbox.ApplyFilter;  
 var
   Process: TProcess;
 begin
@@ -816,7 +816,7 @@ type
 
 implementation
 
-constructor TFirejailSandbox.Create;
+constructor TFirejailSandbox.Create;  
 begin
   inherited Create;
   FOptions.ReadOnlyPaths := TStringList.Create;
@@ -829,14 +829,14 @@ begin
   FOptions.PrivateDev := True;
 end;
 
-destructor TFirejailSandbox.Destroy;
+destructor TFirejailSandbox.Destroy;  
 begin
   FOptions.ReadOnlyPaths.Free;
   FOptions.WhitelistPaths.Free;
   inherited;
 end;
 
-function TFirejailSandbox.BuildCommandLine: TStringList;
+function TFirejailSandbox.BuildCommandLine: TStringList;  
 var
   i: Integer;
 begin
@@ -863,7 +863,7 @@ begin
     Result.Add('--whitelist=' + FOptions.WhitelistPaths[i]);
 end;
 
-function TFirejailSandbox.Execute(const Command: string; Args: TStringList): Integer;
+function TFirejailSandbox.Execute(const Command: string; Args: TStringList): Integer;  
 var
   Process: TProcess;
   CmdLine: TStringList;
@@ -980,7 +980,7 @@ type
 
 implementation
 
-constructor TDockerSandbox.Create(const ImageName: string);
+constructor TDockerSandbox.Create(const ImageName: string);  
 begin
   inherited Create;
   FImageName := ImageName;
@@ -992,14 +992,14 @@ begin
   FCPULimit := '';
 end;
 
-destructor TDockerSandbox.Destroy;
+destructor TDockerSandbox.Destroy;  
 begin
   FVolumes.Free;
   FEnvironmentVars.Free;
   inherited;
 end;
 
-procedure TDockerSandbox.AddVolume(const HostPath, ContainerPath: string; ReadOnly: Boolean);
+procedure TDockerSandbox.AddVolume(const HostPath, ContainerPath: string; ReadOnly: Boolean);  
 var
   VolumeSpec: string;
 begin
@@ -1009,12 +1009,12 @@ begin
   FVolumes.Add(VolumeSpec);
 end;
 
-procedure TDockerSandbox.AddEnvironmentVar(const Name, Value: string);
+procedure TDockerSandbox.AddEnvironmentVar(const Name, Value: string);  
 begin
   FEnvironmentVars.Add(Name + '=' + Value);
 end;
 
-function TDockerSandbox.Run(const Command: string): Integer;
+function TDockerSandbox.Run(const Command: string): Integer;  
 var
   Process: TProcess;
   i: Integer;
@@ -1080,7 +1080,7 @@ begin
   end;
 end;
 
-function TDockerSandbox.Stop: Boolean;
+function TDockerSandbox.Stop: Boolean;  
 var
   Process: TProcess;
 begin
@@ -1097,7 +1097,7 @@ begin
   end;
 end;
 
-function TDockerSandbox.Remove: Boolean;
+function TDockerSandbox.Remove: Boolean;  
 var
   Process: TProcess;
 begin
@@ -1115,7 +1115,7 @@ begin
   end;
 end;
 
-function TDockerSandbox.GetLogs: string;
+function TDockerSandbox.GetLogs: string;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -1227,7 +1227,7 @@ uses
   {$IFDEF WINDOWS}Windows,{$ENDIF}
   StrUtils;
 
-constructor TPluginSandbox.Create(Permissions: TPluginPermissions);
+constructor TPluginSandbox.Create(Permissions: TPluginPermissions);  
 begin
   inherited Create;
   FPermissions := Permissions;
@@ -1238,21 +1238,21 @@ begin
   FTimeoutSeconds := 30;
 end;
 
-destructor TPluginSandbox.Destroy;
+destructor TPluginSandbox.Destroy;  
 begin
   FLock.Free;
   FAllowedPaths.Free;
   inherited;
 end;
 
-function TPluginSandbox.CheckPermission(Permission: TPluginPermissions): Boolean;
+function TPluginSandbox.CheckPermission(Permission: TPluginPermissions): Boolean;  
 begin
   Result := Permission <= FPermissions;
   if not Result then
     raise Exception.Create('Permission refusée');
 end;
 
-function TPluginSandbox.IsPathAllowed(const Path: string): Boolean;
+function TPluginSandbox.IsPathAllowed(const Path: string): Boolean;  
 var
   NormalPath: string;
   i: Integer;
@@ -1270,7 +1270,7 @@ begin
   end;
 end;
 
-procedure TPluginSandbox.AddAllowedPath(const Path: string);
+procedure TPluginSandbox.AddAllowedPath(const Path: string);  
 begin
   FLock.Enter;
   try
@@ -1280,7 +1280,7 @@ begin
   end;
 end;
 
-function TPluginSandbox.SafeFileRead(const FileName: string; out Content: string): Boolean;
+function TPluginSandbox.SafeFileRead(const FileName: string; out Content: string): Boolean;  
 var
   FileStream: TFileStream;
   StringStream: TStringStream;
@@ -1323,7 +1323,7 @@ begin
   end;
 end;
 
-function TPluginSandbox.SafeFileWrite(const FileName, Content: string): Boolean;
+function TPluginSandbox.SafeFileWrite(const FileName, Content: string): Boolean;  
 var
   FileStream: TFileStream;
   StringStream: TStringStream;
@@ -1360,7 +1360,7 @@ begin
   end;
 end;
 
-function TPluginSandbox.SafeHttpGet(const URL: string; out Response: string): Boolean;
+function TPluginSandbox.SafeHttpGet(const URL: string; out Response: string): Boolean;  
 begin
   Result := False;
   Response := '';
@@ -1375,7 +1375,7 @@ begin
   raise Exception.Create('Non implémenté dans cet exemple');
 end;
 
-function TPluginSandbox.SafeCreateProcess(const Command: string): Boolean;
+function TPluginSandbox.SafeCreateProcess(const Command: string): Boolean;  
 begin
   Result := False;
 
@@ -1466,7 +1466,7 @@ uses
   BaseUnix
   {$ENDIF};
 
-constructor TSecureString.Create(const Value: string);
+constructor TSecureString.Create(const Value: string);  
 begin
   inherited Create;
   FData := nil;
@@ -1475,14 +1475,14 @@ begin
   SetValue(Value);
 end;
 
-destructor TSecureString.Destroy;
+destructor TSecureString.Destroy;  
 begin
   Clear;
   FreeSecure;
   inherited;
 end;
 
-procedure TSecureString.AllocateSecure(Size: Cardinal);
+procedure TSecureString.AllocateSecure(Size: Cardinal);  
 begin
   if FData <> nil then
     FreeSecure;
@@ -1509,7 +1509,7 @@ begin
   FLocked := True;
 end;
 
-procedure TSecureString.FreeSecure;
+procedure TSecureString.FreeSecure;  
 begin
   if FData <> nil then
   begin
@@ -1532,7 +1532,7 @@ begin
   end;
 end;
 
-procedure TSecureString.LockMemory;
+procedure TSecureString.LockMemory;  
 begin
   if not FLocked and (FData <> nil) then
   begin
@@ -1546,7 +1546,7 @@ begin
   end;
 end;
 
-procedure TSecureString.UnlockMemory;
+procedure TSecureString.UnlockMemory;  
 begin
   if FLocked and (FData <> nil) then
   begin
@@ -1560,7 +1560,7 @@ begin
   end;
 end;
 
-function TSecureString.GetValue: string;
+function TSecureString.GetValue: string;  
 begin
   Result := '';
   if (FData <> nil) and (FSize > 0) then
@@ -1570,7 +1570,7 @@ begin
   end;
 end;
 
-procedure TSecureString.SetValue(const Value: string);
+procedure TSecureString.SetValue(const Value: string);  
 var
   Len: Cardinal;
 begin
@@ -1584,7 +1584,7 @@ begin
   end;
 end;
 
-procedure TSecureString.Clear;
+procedure TSecureString.Clear;  
 begin
   if FData <> nil then
     FillChar(FData^, FSize, 0);
@@ -1668,7 +1668,7 @@ const
     'cap_sys_time'
   );
 
-class function TCapabilityManager.GetCapabilities(const Executable: string): TCapabilities;
+class function TCapabilityManager.GetCapabilities(const Executable: string): TCapabilities;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -1740,7 +1740,7 @@ begin
   end;
 end;
 
-class function TCapabilityManager.DropCapabilities: Boolean;
+class function TCapabilityManager.DropCapabilities: Boolean;  
 var
   Process: TProcess;
 begin
@@ -1804,7 +1804,7 @@ Sandbox := TPluginSandbox.Create([ppFileRead, ppFileWrite, ppNetwork,
                                    ppRegistry, ppProcessCreate, ppSystemInfo]);
 
 // ✅ Bon : Uniquement ce qui est nécessaire
-Sandbox := TPluginSandbox.Create([ppFileRead]);
+Sandbox := TPluginSandbox.Create([ppFileRead]);  
 Sandbox.AddAllowedPath('C:\MyApp\PluginData\');
 ```
 
@@ -1813,7 +1813,7 @@ Sandbox.AddAllowedPath('C:\MyApp\PluginData\');
 Combiner plusieurs couches de protection.
 
 ```pascal
-procedure ExecuteUntrustedCode(const PluginPath: string);
+procedure ExecuteUntrustedCode(const PluginPath: string);  
 var
   ProcessSandbox: TSandboxedProcess;
   FileSandbox: TFileSandbox;
@@ -1886,7 +1886,7 @@ type
     procedure LogResourceUsage(Memory, CPU: Cardinal);
   end;
 
-procedure TSandboxLogger.LogAccess(const Resource: string; Allowed: Boolean);
+procedure TSandboxLogger.LogAccess(const Resource: string; Allowed: Boolean);  
 var
   Status: string;
 begin
@@ -1900,7 +1900,7 @@ begin
   Flush(FLogFile);
 end;
 
-procedure TSandboxLogger.LogViolation(const Details: string);
+procedure TSandboxLogger.LogViolation(const Details: string);  
 begin
   WriteLn(FLogFile, FormatDateTime('yyyy-mm-dd hh:nn:ss', Now), ' ',
           'VIOLATION - ', Details);
@@ -1916,7 +1916,7 @@ end;
 Tester le sandbox avec des cas limites.
 
 ```pascal
-procedure TestSandbox;
+procedure TestSandbox;  
 var
   Sandbox: TFileSandbox;
 begin
@@ -1977,7 +1977,7 @@ type
   end;
 
 // Mettre en cache les résultats de vérifications coûteuses
-function TSandboxCache.IsPathAllowed(const Path: string): Boolean;
+function TSandboxCache.IsPathAllowed(const Path: string): Boolean;  
 var
   Index: Integer;
 begin
@@ -2059,7 +2059,7 @@ uses
   FirejailSandbox
   {$ENDIF};
 
-constructor TFileProcessor.Create(const SandboxPath: string);
+constructor TFileProcessor.Create(const SandboxPath: string);  
 begin
   inherited Create;
   FSandboxPath := SandboxPath;
@@ -2077,13 +2077,13 @@ begin
     ForceDirectories(FSandboxPath);
 end;
 
-destructor TFileProcessor.Destroy;
+destructor TFileProcessor.Destroy;  
 begin
   FAllowedExtensions.Free;
   inherited;
 end;
 
-function TFileProcessor.SanitizeFileName(const FileName: string): string;
+function TFileProcessor.SanitizeFileName(const FileName: string): string;  
 var
   i: Integer;
   BaseName, Ext: string;
@@ -2110,7 +2110,7 @@ begin
   Result := Result + '_' + FormatDateTime('yyyymmddhhnnss', Now) + Ext;
 end;
 
-function TFileProcessor.ValidateFile(const FileName: string): Boolean;
+function TFileProcessor.ValidateFile(const FileName: string): Boolean;  
 var
   FileSize: Int64;
   Ext: string;
@@ -2308,7 +2308,7 @@ uses
   {$IFDEF WINDOWS}, Windows{$ENDIF}
   {$IFDEF LINUX}, FirejailSandbox{$ENDIF};
 
-constructor TScriptSandbox.Create;
+constructor TScriptSandbox.Create;  
 begin
   inherited Create;
   FTimeoutSeconds := 10;
@@ -2319,7 +2319,7 @@ begin
     ForceDirectories(FWorkingDirectory);
 end;
 
-function TScriptSandbox.GetInterpreterPath(Language: TScriptLanguage): string;
+function TScriptSandbox.GetInterpreterPath(Language: TScriptLanguage): string;  
 begin
   case Language of
     slPython:
@@ -2345,7 +2345,7 @@ begin
   end;
 end;
 
-function TScriptSandbox.PrepareEnvironment(const ScriptContent: string): string;
+function TScriptSandbox.PrepareEnvironment(const ScriptContent: string): string;  
 var
   ScriptFile: TextFile;
   TempFileName: string;
@@ -2364,7 +2364,7 @@ begin
   Result := TempFileName;
 end;
 
-procedure TScriptSandbox.CleanupEnvironment(const TempPath: string);
+procedure TScriptSandbox.CleanupEnvironment(const TempPath: string);  
 begin
   if FileExists(TempPath) then
     DeleteFile(TempPath);
@@ -2548,7 +2548,7 @@ implementation
 uses
   Process, DockerSandbox;
 
-constructor TImageProcessingHandler.Create(const SandboxPath: string);
+constructor TImageProcessingHandler.Create(const SandboxPath: string);  
 begin
   inherited Create;
   FSandboxPath := SandboxPath;
@@ -2557,7 +2557,7 @@ begin
     ForceDirectories(FSandboxPath);
 end;
 
-function TImageProcessingHandler.ValidateImage(const FilePath: string): Boolean;
+function TImageProcessingHandler.ValidateImage(const FilePath: string): Boolean;  
 var
   Ext: string;
   FileSize: Int64;
@@ -2740,7 +2740,7 @@ end;
 **Solution :**
 
 ```pascal
-function DiagnoseProcessCreation(const Command: string): string;
+function DiagnoseProcessCreation(const Command: string): string;  
 begin
   Result := '';
 
@@ -2810,7 +2810,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TSandboxResourceMonitor.LogResourceUsage;
+procedure TSandboxResourceMonitor.LogResourceUsage;  
 begin
   UpdateMemoryStats;
   WriteLn(Format('Mémoire courante: %d MB, Pic: %d MB, Handles: %d',
@@ -2829,14 +2829,14 @@ end;
 
 **Commandes utiles :**
 ```cmd
-REM Créer un utilisateur limité
-net user sandboxuser /add
+REM Créer un utilisateur limité  
+net user sandboxuser /add  
 net localgroup Users sandboxuser /add
 
-REM Exécuter en tant qu'utilisateur différent
+REM Exécuter en tant qu'utilisateur différent  
 runas /user:sandboxuser "program.exe"
 
-REM Vérifier les privilèges
+REM Vérifier les privilèges  
 whoami /priv
 ```
 
@@ -2863,7 +2863,7 @@ sudo aa-genprof /usr/bin/myapp
 getcap /usr/bin/myapp
 
 # Créer un utilisateur sandboxé
-sudo useradd -m -s /bin/bash sandboxuser
+sudo useradd -m -s /bin/bash sandboxuser  
 sudo su - sandboxuser
 ```
 
@@ -2871,9 +2871,9 @@ sudo su - sandboxuser
 
 ```bash
 # Construire une image de base sécurisée
-FROM ubuntu:22.04
-RUN useradd -m -u 1000 sandbox
-USER sandbox
+FROM ubuntu:22.04  
+RUN useradd -m -u 1000 sandbox  
+USER sandbox  
 WORKDIR /home/sandbox
 # Pas de privilèges root
 

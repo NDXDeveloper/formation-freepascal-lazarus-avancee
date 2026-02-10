@@ -101,7 +101,7 @@ Si votre application exporte des fonctions (DLL/SO), renommez-les de manière no
 **Avant :**
 
 ```pascal
-function CalculateLicenseKey(const UserName: string): string; stdcall;
+function CalculateLicenseKey(const UserName: string): string; stdcall;  
 exports
   CalculateLicenseKey;
 ```
@@ -109,7 +109,7 @@ exports
 **Après :**
 
 ```pascal
-function X7F2A9(const P1: string): string; stdcall;
+function X7F2A9(const P1: string): string; stdcall;  
 exports
   X7F2A9 name 'A1';
 ```
@@ -132,7 +132,7 @@ implementation
 const
   XOR_KEY = $A7; // Clé simple (à améliorer en production)
 
-function DecryptString(const Encrypted: array of Byte): string;
+function DecryptString(const Encrypted: array of Byte): string;  
 var
   i: Integer;
 begin
@@ -167,7 +167,7 @@ Rendre la logique du programme plus difficile à suivre.
 **Technique : Insertion de code mort**
 
 ```pascal
-procedure ProcessData(Data: Integer);
+procedure ProcessData(Data: Integer);  
 var
   Dummy: Integer;
 begin
@@ -195,12 +195,12 @@ type
 var
   Operations: array[0..3] of TOperationProc;
 
-procedure Op1(var Value: Integer); begin Value := Value * 2; end;
-procedure Op2(var Value: Integer); begin Value := Value + 10; end;
-procedure Op3(var Value: Integer); begin Value := Value - 5; end;
+procedure Op1(var Value: Integer); begin Value := Value * 2; end;  
+procedure Op2(var Value: Integer); begin Value := Value + 10; end;  
+procedure Op3(var Value: Integer); begin Value := Value - 5; end;  
 procedure Op4(var Value: Integer); begin Value := Value div 3; end;
 
-procedure Initialize;
+procedure Initialize;  
 begin
   // Ordre aléatoire ou basé sur un calcul complexe
   Operations[0] := @Op2;
@@ -209,7 +209,7 @@ begin
   Operations[3] := @Op3;
 end;
 
-procedure ProcessValue(var Value: Integer; OpIndex: Integer);
+procedure ProcessValue(var Value: Integer; OpIndex: Integer);  
 begin
   Operations[OpIndex](Value);
 end;
@@ -226,12 +226,12 @@ Détecter et contrer les tentatives de débogage.
 uses
   Windows;
 
-function IsDebuggerPresent: Boolean;
+function IsDebuggerPresent: Boolean;  
 begin
   Result := Windows.IsDebuggerPresent;
 end;
 
-function CheckRemoteDebugger: Boolean;
+function CheckRemoteDebugger: Boolean;  
 var
   IsDebugged: BOOL;
 begin
@@ -246,7 +246,7 @@ end;
 
 ```pascal
 {$IFDEF LINUX}
-function IsDebuggerPresent: Boolean;
+function IsDebuggerPresent: Boolean;  
 var
   StatusFile: TextFile;
   Line: string;
@@ -275,7 +275,7 @@ end;
 **Utilisation :**
 
 ```pascal
-procedure ProtectedProcedure;
+procedure ProtectedProcedure;  
 begin
   if IsDebuggerPresent then
   begin
@@ -303,7 +303,7 @@ implementation
 uses
   SysUtils, Classes, md5;
 
-function CalculateFileMD5(const FileName: string): string;
+function CalculateFileMD5(const FileName: string): string;  
 var
   FileStream: TFileStream;
   MD5Digest: TMD5Digest;
@@ -317,7 +317,7 @@ begin
   end;
 end;
 
-function VerifyExecutableIntegrity: Boolean;
+function VerifyExecutableIntegrity: Boolean;  
 const
   // Hash MD5 de l'exécutable original (à calculer et intégrer)
   EXPECTED_HASH = 'A1B2C3D4E5F6...';
@@ -346,7 +346,7 @@ upx --best --ultra-brute monprogramme.exe
 **Ubuntu/Linux :**
 
 ```bash
-sudo apt install upx-ucl
+sudo apt install upx-ucl  
 upx --best --ultra-brute monprogramme
 ```
 
@@ -403,7 +403,7 @@ implementation
 uses
   Classes, SysUtils, ZStream, Base64;
 
-function LoadProtectedResource(const ResourceName: string): TStream;
+function LoadProtectedResource(const ResourceName: string): TStream;  
 var
   ResStream: TResourceStream;
   DecompStream: TDecompressionStream;
@@ -477,13 +477,13 @@ implementation
 uses
   SysUtils, Classes, DCPrijndael, DCPsha256;
 
-constructor TSecureFile.Create(const Password: string);
+constructor TSecureFile.Create(const Password: string);  
 begin
   inherited Create;
   FPassword := Password;
 end;
 
-function TSecureFile.Encrypt(const Data: TBytes): TBytes;
+function TSecureFile.Encrypt(const Data: TBytes): TBytes;  
 var
   Cipher: TDCP_rijndael;
   Hash: TDCP_sha256;
@@ -510,7 +510,7 @@ begin
   end;
 end;
 
-function TSecureFile.Decrypt(const Data: TBytes): TBytes;
+function TSecureFile.Decrypt(const Data: TBytes): TBytes;  
 var
   Cipher: TDCP_rijndael;
   Hash: TDCP_sha256;
@@ -535,7 +535,7 @@ begin
   end;
 end;
 
-procedure TSecureFile.SaveToFile(const FileName: string; const Data: TBytes);
+procedure TSecureFile.SaveToFile(const FileName: string; const Data: TBytes);  
 var
   FS: TFileStream;
   Encrypted: TBytes;
@@ -549,7 +549,7 @@ begin
   end;
 end;
 
-function TSecureFile.LoadFromFile(const FileName: string): TBytes;
+function TSecureFile.LoadFromFile(const FileName: string): TBytes;  
 var
   FS: TFileStream;
   Encrypted: TBytes;
@@ -576,8 +576,8 @@ unit CrossPlatformProtection;
 
 interface
 
-function GetSystemFingerprint: string;
-function IsRunningInVM: Boolean;
+function GetSystemFingerprint: string;  
+function IsRunningInVM: Boolean;  
 function IsDebuggerAttached: Boolean;
 
 implementation
@@ -659,7 +659,7 @@ begin
   {$ENDIF}
 end;
 
-function IsDebuggerAttached: Boolean;
+function IsDebuggerAttached: Boolean;  
 begin
   {$IFDEF WINDOWS}
   Result := Windows.IsDebuggerPresent;
@@ -702,7 +702,7 @@ Niveau 5 : Protection commerciale (optionnel)
 {$UNDEF DEBUG_MODE}
 {$DEFINE PROTECTED_MODE}
 
-procedure CriticalFunction;
+procedure CriticalFunction;  
 begin
   {$IFDEF PROTECTED_MODE}
   if IsDebuggerAttached then Exit;
@@ -735,7 +735,7 @@ function {$IFDEF PROTECTED}X7A2F{$ELSE}ValidateLicense{$ENDIF}
 
 implementation
 
-function GetVersion: string;
+function GetVersion: string;  
 begin
   Result := '1.0.0';
 end;
@@ -794,7 +794,7 @@ Si votre protection inclut des mécanismes intrusifs :
 
 ```pascal
 // Exemple : Détection de VM
-if IsRunningInVM then
+if IsRunningInVM then  
 begin
   if MessageDlg('Cette application a détecté un environnement virtualisé. ' +
                 'Certaines fonctionnalités peuvent être limitées pour des ' +

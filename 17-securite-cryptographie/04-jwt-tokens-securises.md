@@ -130,7 +130,7 @@ Le JWT utilise une variante de Base64 appelée Base64URL :
 uses
   Base64, SysUtils;
 
-function Base64URLEncode(const Data: string): string;
+function Base64URLEncode(const Data: string): string;  
 begin
   Result := EncodeStringBase64(Data);
 
@@ -142,7 +142,7 @@ begin
   Result := StringReplace(Result, '=', '', [rfReplaceAll]);
 end;
 
-function Base64URLDecode(const Data: string): string;
+function Base64URLDecode(const Data: string): string;  
 var
   S: string;
   Padding: Integer;
@@ -183,7 +183,7 @@ type
     Exp: Int64;       // Expiration
   end;
 
-function HMACSHA256(const Data, Key: string): string;
+function HMACSHA256(const Data, Key: string): string;  
 var
   Hash: TDCP_sha256;
   Digest: array[0..31] of Byte;
@@ -207,7 +207,7 @@ begin
   end;
 end;
 
-function CreateJWT(const Payload: TJWTPayload; const Secret: string): string;
+function CreateJWT(const Payload: TJWTPayload; const Secret: string): string;  
 var
   Header: TJWTHeader;
   HeaderJSON, PayloadJSON: string;
@@ -243,7 +243,7 @@ end;
 ### Vérification d'un JWT
 
 ```pascal
-function VerifyJWT(const Token, Secret: string): Boolean;
+function VerifyJWT(const Token, Secret: string): Boolean;  
 var
   Parts: TStringList;
   EncodedHeader, EncodedPayload, ReceivedSignature: string;
@@ -279,7 +279,7 @@ begin
   end;
 end;
 
-function VerifyExpiration(const EncodedPayload: string): Boolean;
+function VerifyExpiration(const EncodedPayload: string): Boolean;  
 var
   PayloadJSON: string;
   JSON: TJSONData;
@@ -304,7 +304,7 @@ end;
 ### Décoder un JWT
 
 ```pascal
-function DecodeJWT(const Token: string; out Payload: TJWTPayload): Boolean;
+function DecodeJWT(const Token: string; out Payload: TJWTPayload): Boolean;  
 var
   Parts: TStringList;
   PayloadJSON: string;
@@ -646,7 +646,7 @@ sessionStorage.setItem('token', jwt);
 ```pascal
 {$IFDEF WINDOWS}
 // Utiliser DPAPI
-function StoreJWT(const Token: string): Boolean;
+function StoreJWT(const Token: string): Boolean;  
 var
   EncryptedToken: string;
 begin
@@ -660,7 +660,7 @@ end;
 ```pascal
 {$IFDEF UNIX}
 // Utiliser Secret Service
-procedure StoreJWT(const Token: string);
+procedure StoreJWT(const Token: string);  
 begin
   ExecuteProcess('secret-tool', [
     'store',
@@ -676,13 +676,13 @@ end;
 
 ```pascal
 // ❌ DANGEREUX
-procedure BadStorage(const Token: string);
+procedure BadStorage(const Token: string);  
 begin
   WriteToFile('token.txt', Token); // Token visible !
 end;
 
 // ✅ CORRECT
-procedure SecureStorage(const Token: string);
+procedure SecureStorage(const Token: string);  
 var
   EncryptedToken: string;
 begin
@@ -696,7 +696,7 @@ end;
 ### Vérifier l'expiration
 
 ```pascal
-function IsJWTExpired(const Token: string): Boolean;
+function IsJWTExpired(const Token: string): Boolean;  
 var
   Parts: TStringList;
   PayloadJSON: string;
@@ -739,7 +739,7 @@ type
     RefreshToken: string;  // Token long (7 jours - 30 jours)
   end;
 
-function CreateTokenPair(const UserID: string): TTokenPair;
+function CreateTokenPair(const UserID: string): TTokenPair;  
 var
   AccessPayload: TJWTPayload;
 begin
@@ -755,7 +755,7 @@ begin
   StoreRefreshToken(UserID, Result.RefreshToken, Now + 30); // 30 jours
 end;
 
-function RefreshAccessToken(const RefreshToken: string): string;
+function RefreshAccessToken(const RefreshToken: string): string;  
 var
   UserID: string;
   NewPayload: TJWTPayload;
@@ -790,7 +790,7 @@ end;
 
 **Protection** :
 ```pascal
-function VerifyJWT(const Token, Secret: string): Boolean;
+function VerifyJWT(const Token, Secret: string): Boolean;  
 var
   HeaderJSON: string;
   JSON: TJSONData;
@@ -825,7 +825,7 @@ end;
 const
   EXPECTED_ALGORITHM = 'HS256';
 
-function VerifyJWT(const Token, Secret: string): Boolean;
+function VerifyJWT(const Token, Secret: string): Boolean;  
 var
   Algorithm: string;
 begin
@@ -849,7 +849,7 @@ end;
 
 **Protection** :
 ```pascal
-function VerifyJWT(const Token, Secret: string): Boolean;
+function VerifyJWT(const Token, Secret: string): Boolean;  
 var
   Payload: TJWTPayload;
 begin
@@ -883,12 +883,12 @@ end;
 **A. Liste noire (Blacklist)** :
 ```pascal
 // Stocker les tokens révoqués (Redis, base de données)
-procedure RevokeJWT(const JTI: string; ExpiresAt: TDateTime);
+procedure RevokeJWT(const JTI: string; ExpiresAt: TDateTime);  
 begin
   AddToBlacklist(JTI, ExpiresAt);
 end;
 
-function IsJWTRevoked(const Token: string): Boolean;
+function IsJWTRevoked(const Token: string): Boolean;  
 var
   Payload: TJWTPayload;
 begin
@@ -910,7 +910,7 @@ Payload.Exp := DateTimeToUnix(Now + (15 / 1440)); // 15 minutes
 Payload.Ver := GetUserTokenVersion(UserID);
 
 // Incrémenter à la déconnexion
-procedure LogoutUser(UserID: string);
+procedure LogoutUser(UserID: string);  
 begin
   IncrementUserTokenVersion(UserID);
   // Tous les anciens tokens deviennent invalides
@@ -922,7 +922,7 @@ end;
 **1. Utiliser HTTPS partout** :
 ```pascal
 // Vérifier que la requête est sécurisée
-if Request.Protocol <> 'https' then
+if Request.Protocol <> 'https' then  
 begin
   Response.StatusCode := 400;
   Response.Content := 'HTTPS required';
@@ -939,7 +939,7 @@ const SECRET = '123456';
 const SECRET = 'kJh#8d$fK2!mN9@pQw7*vX4&zL6^tR3%bG1+hY5)cF0-sV8=nM2';
 
 // ✅ Encore mieux : générer aléatoirement et stocker de manière sécurisée
-function GenerateSecretKey: string;
+function GenerateSecretKey: string;  
 var
   Bytes: TBytes;
   i: Integer;
@@ -978,7 +978,7 @@ const
   REFRESH_TOKEN_LIFETIME = 30;           // 30 jours
   REMEMBER_ME_LIFETIME = 365;            // 1 an (si option "Se souvenir")
 
-function CreateAccessToken(const UserID: string): string;
+function CreateAccessToken(const UserID: string): string;  
 var
   Payload: TJWTPayload;
 begin
@@ -995,22 +995,22 @@ end;
 
 ```pascal
 // ❌ DANGEREUX - Ne jamais faire
-Payload.Password := UserPassword;           // Mot de passe
-Payload.CreditCard := '1234-5678-9012-3456'; // Carte bancaire
+Payload.Password := UserPassword;           // Mot de passe  
+Payload.CreditCard := '1234-5678-9012-3456'; // Carte bancaire  
 Payload.SSN := '123-45-6789';                // Numéro de sécurité sociale
 
 // ✅ CORRECT - Informations non sensibles uniquement
-Payload.Sub := UserID;
-Payload.Name := UserName;
-Payload.Email := UserEmail;
-Payload.Role := UserRole;
+Payload.Sub := UserID;  
+Payload.Name := UserName;  
+Payload.Email := UserEmail;  
+Payload.Role := UserRole;  
 Payload.Permissions := 'read,write'; // Permissions publiques
 ```
 
 **5. Valider tous les claims** :
 
 ```pascal
-function ValidateJWTClaims(const Token: string): Boolean;
+function ValidateJWTClaims(const Token: string): Boolean;  
 var
   Payload: TJWTPayload;
   Now: Int64;
@@ -1078,14 +1078,14 @@ type
     procedure RequireScope(const Scope: string);
   end;
 
-constructor TJWTMiddleware.Create(const SecretKey: string);
+constructor TJWTMiddleware.Create(const SecretKey: string);  
 begin
   inherited Create;
   FSecretKey := SecretKey;
   FRequiredScopes := TStringList.Create;
 end;
 
-destructor TJWTMiddleware.Destroy;
+destructor TJWTMiddleware.Destroy;  
 begin
   FRequiredScopes.Free;
   inherited Destroy;
@@ -1157,13 +1157,13 @@ begin
   Result := True;
 end;
 
-procedure TJWTMiddleware.RequireScope(const Scope: string);
+procedure TJWTMiddleware.RequireScope(const Scope: string);  
 begin
   FRequiredScopes.Add(Scope);
 end;
 
 // Utilisation
-procedure HandleProtectedEndpoint(Request: TRequest; Response: TResponse);
+procedure HandleProtectedEndpoint(Request: TRequest; Response: TResponse);  
 var
   Auth: TJWTMiddleware;
 begin
@@ -1185,7 +1185,7 @@ end;
 ### Extraction du token de différentes sources
 
 ```pascal
-function ExtractToken(Request: TRequest): string;
+function ExtractToken(Request: TRequest): string;  
 begin
   Result := '';
 
@@ -1296,7 +1296,7 @@ begin
 end;
 
 // Utilisation
-if not HasPermission(Token, 'users', 'delete') then
+if not HasPermission(Token, 'users', 'delete') then  
 begin
   Response.StatusCode := 403;
   Response.Content := '{"error":"Permission denied"}';
@@ -1344,7 +1344,7 @@ begin
   end;
 end;
 
-function HasRole(const Token: string; const RequiredRole: TRole): Boolean;
+function HasRole(const Token: string; const RequiredRole: TRole): Boolean;  
 var
   Payload: TJSONObject;
   RolesArray: TJSONArray;
@@ -1393,7 +1393,7 @@ begin
 end;
 
 // Utilisation
-procedure HandleAdminEndpoint(Request: TRequest; Response: TResponse);
+procedure HandleAdminEndpoint(Request: TRequest; Response: TResponse);  
 begin
   RequireRole(Request, Response, rAdmin);
 
@@ -1418,13 +1418,13 @@ type
     function GetUserIDFromToken(const Token: string): string;
   end;
 
-constructor TAPIAuthService.Create(const SecretKey: string);
+constructor TAPIAuthService.Create(const SecretKey: string);  
 begin
   inherited Create;
   FSecretKey := SecretKey;
 end;
 
-function TAPIAuthService.Login(const Email, Password: string): string;
+function TAPIAuthService.Login(const Email, Password: string): string;  
 var
   User: TUser;
   Payload: TJWTPayload;
@@ -1448,12 +1448,12 @@ begin
   LogSecurityEvent('USER_LOGIN', 'User: ' + Email);
 end;
 
-function TAPIAuthService.ValidateToken(const Token: string): Boolean;
+function TAPIAuthService.ValidateToken(const Token: string): Boolean;  
 begin
   Result := VerifyJWT(Token, FSecretKey) and ValidateJWTClaims(Token);
 end;
 
-function TAPIAuthService.GetUserIDFromToken(const Token: string): string;
+function TAPIAuthService.GetUserIDFromToken(const Token: string): string;  
 var
   Payload: TJWTPayload;
 begin
@@ -1467,7 +1467,7 @@ end;
 ### 2. JWT pour réinitialisation de mot de passe
 
 ```pascal
-function CreatePasswordResetToken(const Email: string): string;
+function CreatePasswordResetToken(const Email: string): string;  
 var
   Payload: TJSONObject;
   Token: string;
@@ -1531,7 +1531,7 @@ end;
 ### 3. JWT pour email de vérification
 
 ```pascal
-function CreateEmailVerificationToken(const Email: string): string;
+function CreateEmailVerificationToken(const Email: string): string;  
 var
   Payload: TJSONObject;
 begin
@@ -1548,7 +1548,7 @@ begin
   end;
 end;
 
-function VerifyEmailToken(const Token: string): string;
+function VerifyEmailToken(const Token: string): string;  
 var
   Payload: TJSONObject;
 begin
@@ -1609,7 +1609,7 @@ end;
 ### Décodeur JWT pour tests
 
 ```pascal
-procedure DebugJWT(const Token: string);
+procedure DebugJWT(const Token: string);  
 var
   Parts: TStringList;
   Header, Payload: string;
@@ -1677,7 +1677,7 @@ type
     procedure TestRejectNoneAlgorithm;
   end;
 
-procedure TJWTTests.TestCreateJWT;
+procedure TJWTTests.TestCreateJWT;  
 var
   Payload: TJWTPayload;
   Token: string;
@@ -1696,7 +1696,7 @@ begin
     (Pos('.', Copy(Token, Pos('.', Token) + 1, Length(Token))) > 0));
 end;
 
-procedure TJWTTests.TestVerifyValidJWT;
+procedure TJWTTests.TestVerifyValidJWT;  
 var
   Payload: TJWTPayload;
   Token: string;
@@ -1711,7 +1711,7 @@ begin
     VerifyJWT(Token, 'test-secret'));
 end;
 
-procedure TJWTTests.TestRejectInvalidSignature;
+procedure TJWTTests.TestRejectInvalidSignature;  
 var
   Payload: TJWTPayload;
   Token: string;
@@ -1726,7 +1726,7 @@ begin
     VerifyJWT(Token, 'wrong-secret'));
 end;
 
-procedure TJWTTests.TestRejectExpiredToken;
+procedure TJWTTests.TestRejectExpiredToken;  
 var
   Payload: TJWTPayload;
   Token: string;
@@ -1751,7 +1751,7 @@ end;
 **Windows** :
 ```pascal
 {$IFDEF WINDOWS}
-function GetSecretKey: string;
+function GetSecretKey: string;  
 var
   Registry: TRegistry;
 begin
@@ -1772,7 +1772,7 @@ end;
 **Ubuntu/Linux** :
 ```pascal
 {$IFDEF UNIX}
-function GetSecretKey: string;
+function GetSecretKey: string;  
 var
   F: TextFile;
   SecretFile: string;
@@ -1804,12 +1804,12 @@ Les deux plateformes utilisent le même format (secondes depuis 1970-01-01), don
 
 ```pascal
 // Identique sur Windows et Ubuntu
-function DateTimeToUnix(const AValue: TDateTime): Int64;
+function DateTimeToUnix(const AValue: TDateTime): Int64;  
 begin
   Result := Round((AValue - UnixDateDelta) * SecsPerDay);
 end;
 
-function UnixToDateTime(const AValue: Int64): TDateTime;
+function UnixToDateTime(const AValue: Int64): TDateTime;  
 begin
   Result := UnixDateDelta + (AValue / SecsPerDay);
 end;
@@ -1839,20 +1839,20 @@ type
     procedure Clear;
   end;
 
-constructor TJWTCache.Create(CacheDurationMinutes: Integer);
+constructor TJWTCache.Create(CacheDurationMinutes: Integer);  
 begin
   inherited Create;
   FCache := TDictionary<string, TCachedValidation>.Create;
   FCacheDuration := CacheDurationMinutes / 1440; // Minutes en jours
 end;
 
-destructor TJWTCache.Destroy;
+destructor TJWTCache.Destroy;  
 begin
   FCache.Free;
   inherited Destroy;
 end;
 
-function TJWTCache.ValidateToken(const Token, Secret: string): Boolean;
+function TJWTCache.ValidateToken(const Token, Secret: string): Boolean;  
 var
   Cached: TCachedValidation;
   TokenHash: string;
@@ -1885,7 +1885,7 @@ begin
   FCache.AddOrSetValue(TokenHash, Cached);
 end;
 
-procedure TJWTCache.Clear;
+procedure TJWTCache.Clear;  
 begin
   FCache.Clear;
 end;
@@ -1904,14 +1904,14 @@ type
     function Verify(const Token: string): Boolean;
   end;
 
-constructor TJWTVerifier.Create(const Secret: string);
+constructor TJWTVerifier.Create(const Secret: string);  
 begin
   inherited Create;
   // Pré-hasher la clé secrète pour optimiser
   FSecretHash := HashSecret(Secret);
 end;
 
-function TJWTVerifier.Verify(const Token: string): Boolean;
+function TJWTVerifier.Verify(const Token: string): Boolean;  
 begin
   // Utiliser la clé pré-hachée (plus rapide)
   Result := VerifyWithPreHashedSecret(Token, FSecretHash);
@@ -2008,18 +2008,18 @@ type
 const
   SECRET_KEY = 'votre-super-secret-key-de-64-caracteres-minimum-ici';
 
-constructor TAPIServer.Create(const SecretKey: string);
+constructor TAPIServer.Create(const SecretKey: string);  
 begin
   inherited Create(nil);
   FSecretKey := SecretKey;
 end;
 
-function TAPIServer.ValidateJWT(const Token: string): Boolean;
+function TAPIServer.ValidateJWT(const Token: string): Boolean;  
 begin
   Result := VerifyJWT(Token, FSecretKey) and not IsJWTExpired(Token);
 end;
 
-function TAPIServer.ExtractUserID(const Token: string): string;
+function TAPIServer.ExtractUserID(const Token: string): string;  
 var
   Payload: TJWTPayload;
 begin
@@ -2167,7 +2167,7 @@ program JWTAPIClient;
 uses
   SysUtils, httpsend, ssl_openssl, fpjson, jsonparser;
 
-function Login(const Email, Password: string): string;
+function Login(const Email, Password: string): string;  
 var
   HTTP: THTTPSend;
   PostData, Response: string;
@@ -2200,7 +2200,7 @@ begin
   end;
 end;
 
-function GetProfile(const Token: string): string;
+function GetProfile(const Token: string): string;  
 var
   HTTP: THTTPSend;
 begin
@@ -2304,7 +2304,7 @@ type
     SessionID: string;     // Pour la révocation
   end;
 
-function THybridAuthService.CreateSession(const UserID: string): TSessionPair;
+function THybridAuthService.CreateSession(const UserID: string): TSessionPair;  
 var
   Payload: TJWTPayload;
 begin
@@ -2323,7 +2323,7 @@ begin
   StoreActiveSession(Result.SessionID, UserID, Payload.Exp);
 end;
 
-function THybridAuthService.ValidateRequest(const Token: string): Boolean;
+function THybridAuthService.ValidateRequest(const Token: string): Boolean;  
 var
   Payload: TJWTPayload;
 begin
@@ -2339,7 +2339,7 @@ begin
   Result := IsSessionActive(Payload.Jti);
 end;
 
-procedure THybridAuthService.RevokeSession(const SessionID: string);
+procedure THybridAuthService.RevokeSession(const SessionID: string);  
 begin
   // Supprimer de la liste des sessions actives
   RemoveActiveSession(SessionID);
@@ -2360,7 +2360,7 @@ type
     class function SupportBothMethods(Request: TRequest): Boolean;
   end;
 
-class function TMigrationHelper.ConvertSessionToJWT(const SessionID: string): string;
+class function TMigrationHelper.ConvertSessionToJWT(const SessionID: string): string;  
 var
   Session: TSession;
   Payload: TJWTPayload;
@@ -2384,7 +2384,7 @@ begin
   MarkSessionAsMigrated(SessionID);
 end;
 
-class function TMigrationHelper.SupportBothMethods(Request: TRequest): Boolean;
+class function TMigrationHelper.SupportBothMethods(Request: TRequest): Boolean;  
 var
   SessionID, JWT: string;
 begin
@@ -2430,7 +2430,7 @@ type
     jeMissingClaims
   );
 
-procedure LogJWTEvent(const Event: TJWTEvent; const Details: string);
+procedure LogJWTEvent(const Event: TJWTEvent; const Details: string);  
 var
   EventName: string;
 begin
@@ -2452,7 +2452,7 @@ begin
 end;
 
 // Utilisation
-function VerifyJWTWithLogging(const Token: string): Boolean;
+function VerifyJWTWithLogging(const Token: string): Boolean;  
 begin
   Result := VerifyJWT(Token, SECRET_KEY);
 
@@ -2488,12 +2488,12 @@ type
     function GetStats: TJSONObject;
   end;
 
-procedure TJWTMetrics.IncrementCreated;
+procedure TJWTMetrics.IncrementCreated;  
 begin
   InterlockedIncrement(FTokensCreated);
 end;
 
-function TJWTMetrics.GetStats: TJSONObject;
+function TJWTMetrics.GetStats: TJSONObject;  
 begin
   Result := TJSONObject.Create;
   Result.Add('tokens_created', FTokensCreated);
@@ -2506,7 +2506,7 @@ begin
 end;
 
 // Exposition via endpoint
-procedure HandleMetrics(Request: TRequest; Response: TResponse);
+procedure HandleMetrics(Request: TRequest; Response: TResponse);  
 begin
   Response.ContentType := 'application/json';
   Response.Content := GlobalJWTMetrics.GetStats.AsJSON;

@@ -64,7 +64,7 @@ type
 
 implementation
 
-function TSELinuxManager.ExecuteCommand(const Cmd: string): string;
+function TSELinuxManager.ExecuteCommand(const Cmd: string): string;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -87,7 +87,7 @@ begin
   end;
 end;
 
-function TSELinuxManager.IsInstalled: Boolean;
+function TSELinuxManager.IsInstalled: Boolean;  
 var
   Output: string;
 begin
@@ -95,7 +95,7 @@ begin
   Result := (Output <> '') and FileExists(Output);
 end;
 
-function TSELinuxManager.GetMode: TSELinuxMode;
+function TSELinuxManager.GetMode: TSELinuxMode;  
 var
   Output: string;
 begin
@@ -117,7 +117,7 @@ begin
     Result := slEnforcing;
 end;
 
-function TSELinuxManager.GetStatus: string;
+function TSELinuxManager.GetStatus: string;  
 var
   Mode: TSELinuxMode;
 begin
@@ -131,7 +131,7 @@ begin
   end;
 end;
 
-function TSELinuxManager.CheckContext(const FilePath: string): string;
+function TSELinuxManager.CheckContext(const FilePath: string): string;  
 begin
   if not FileExists(FilePath) then
   begin
@@ -224,13 +224,13 @@ type
 
 implementation
 
-constructor TSELinuxConfigurator.Create(const ApplicationPath: string);
+constructor TSELinuxConfigurator.Create(const ApplicationPath: string);  
 begin
   inherited Create;
   FAppPath := ApplicationPath;
 end;
 
-function TSELinuxConfigurator.RunCommand(const Cmd: string): Boolean;
+function TSELinuxConfigurator.RunCommand(const Cmd: string): Boolean;  
 var
   Process: TProcess;
 begin
@@ -248,7 +248,7 @@ begin
   end;
 end;
 
-function TSELinuxConfigurator.SetExecutableContext: Boolean;
+function TSELinuxConfigurator.SetExecutableContext: Boolean;  
 var
   Cmd: string;
 begin
@@ -262,7 +262,7 @@ begin
     WriteLn('Erreur : Impossible de définir le contexte (droits admin requis)');
 end;
 
-function TSELinuxConfigurator.AllowNetworkAccess: Boolean;
+function TSELinuxConfigurator.AllowNetworkAccess: Boolean;  
 var
   PolicyCmd: string;
 begin
@@ -280,7 +280,7 @@ begin
     WriteLn('Erreur configuration accès réseau');
 end;
 
-function TSELinuxConfigurator.AllowFileAccess(const Directory: string): Boolean;
+function TSELinuxConfigurator.AllowFileAccess(const Directory: string): Boolean;  
 var
   Cmd: string;
 begin
@@ -296,7 +296,7 @@ begin
   end;
 end;
 
-function TSELinuxConfigurator.CreateCustomPolicy(const PolicyName: string): Boolean;
+function TSELinuxConfigurator.CreateCustomPolicy(const PolicyName: string): Boolean;  
 var
   PolicyContent: TStringList;
   PolicyFile: string;
@@ -337,7 +337,7 @@ begin
   end;
 end;
 
-function TSELinuxConfigurator.GeneratePolicyFromDenials: string;
+function TSELinuxConfigurator.GeneratePolicyFromDenials: string;  
 var
   Output: string;
   Process: TProcess;
@@ -446,7 +446,7 @@ type
 
 implementation
 
-function TAppArmorManager.ExecuteCommand(const Cmd: string): string;
+function TAppArmorManager.ExecuteCommand(const Cmd: string): string;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -469,7 +469,7 @@ begin
   end;
 end;
 
-function TAppArmorManager.ExecuteCommandWithStatus(const Cmd: string): Boolean;
+function TAppArmorManager.ExecuteCommandWithStatus(const Cmd: string): Boolean;  
 var
   Process: TProcess;
 begin
@@ -487,7 +487,7 @@ begin
   end;
 end;
 
-function TAppArmorManager.IsInstalled: Boolean;
+function TAppArmorManager.IsInstalled: Boolean;  
 var
   Output: string;
 begin
@@ -495,7 +495,7 @@ begin
   Result := (Output <> '') and FileExists(Output);
 end;
 
-function TAppArmorManager.IsEnabled: Boolean;
+function TAppArmorManager.IsEnabled: Boolean;  
 var
   Output: string;
 begin
@@ -509,7 +509,7 @@ begin
   Result := Pos('apparmor module is loaded', LowerCase(Output)) > 0;
 end;
 
-function TAppArmorManager.GetStatus: string;
+function TAppArmorManager.GetStatus: string;  
 begin
   if not IsInstalled then
     Result := 'AppArmor n''est pas installé'
@@ -519,7 +519,7 @@ begin
     Result := 'AppArmor est installé mais désactivé';
 end;
 
-function TAppArmorManager.GetProfileMode(const ProfileName: string): TAppArmorMode;
+function TAppArmorManager.GetProfileMode(const ProfileName: string): TAppArmorMode;  
 var
   Output: string;
 begin
@@ -539,7 +539,7 @@ begin
     Result := aamEnforce;
 end;
 
-function TAppArmorManager.ListProfiles: TStringList;
+function TAppArmorManager.ListProfiles: TStringList;  
 var
   Output: string;
 begin
@@ -634,7 +634,7 @@ implementation
 uses
   Process;
 
-constructor TAppArmorProfileCreator.Create(const ApplicationPath: string);
+constructor TAppArmorProfileCreator.Create(const ApplicationPath: string);  
 begin
   inherited Create;
   FAppPath := ApplicationPath;
@@ -646,13 +646,13 @@ begin
   AddHeader;
 end;
 
-destructor TAppArmorProfileCreator.Destroy;
+destructor TAppArmorProfileCreator.Destroy;  
 begin
   FProfile.Free;
   inherited;
 end;
 
-procedure TAppArmorProfileCreator.AddHeader;
+procedure TAppArmorProfileCreator.AddHeader;  
 begin
   FProfile.Add('# AppArmor profile for ' + ExtractFileName(FAppPath));
   FProfile.Add('# Generated by FreePascal application');
@@ -664,49 +664,49 @@ begin
   FProfile.Add('');
 end;
 
-procedure TAppArmorProfileCreator.AddCapabilities;
+procedure TAppArmorProfileCreator.AddCapabilities;  
 begin
   FProfile.Add('  # Capabilities');
 end;
 
-procedure TAppArmorProfileCreator.AddFileRules;
+procedure TAppArmorProfileCreator.AddFileRules;  
 begin
   FProfile.Add('');
   FProfile.Add('  # File access rules');
 end;
 
-procedure TAppArmorProfileCreator.AddNetworkRules;
+procedure TAppArmorProfileCreator.AddNetworkRules;  
 begin
   FProfile.Add('');
   FProfile.Add('  # Network rules');
 end;
 
-procedure TAppArmorProfileCreator.AllowFileRead(const Path: string);
+procedure TAppArmorProfileCreator.AllowFileRead(const Path: string);  
 begin
   FProfile.Add(Format('  %s r,', [Path]));
 end;
 
-procedure TAppArmorProfileCreator.AllowFileWrite(const Path: string);
+procedure TAppArmorProfileCreator.AllowFileWrite(const Path: string);  
 begin
   FProfile.Add(Format('  %s w,', [Path]));
 end;
 
-procedure TAppArmorProfileCreator.AllowFileExecute(const Path: string);
+procedure TAppArmorProfileCreator.AllowFileExecute(const Path: string);  
 begin
   FProfile.Add(Format('  %s ix,', [Path]));
 end;
 
-procedure TAppArmorProfileCreator.AllowNetwork(const Protocol: string);
+procedure TAppArmorProfileCreator.AllowNetwork(const Protocol: string);  
 begin
   FProfile.Add(Format('  network %s,', [Protocol]));
 end;
 
-procedure TAppArmorProfileCreator.AllowCapability(const Capability: string);
+procedure TAppArmorProfileCreator.AllowCapability(const Capability: string);  
 begin
   FProfile.Add(Format('  capability %s,', [Capability]));
 end;
 
-function TAppArmorProfileCreator.SaveProfile: Boolean;
+function TAppArmorProfileCreator.SaveProfile: Boolean;  
 var
   ProfilePath: string;
 begin
@@ -729,7 +729,7 @@ begin
   end;
 end;
 
-function TAppArmorProfileCreator.LoadProfile: Boolean;
+function TAppArmorProfileCreator.LoadProfile: Boolean;  
 var
   Process: TProcess;
 begin
@@ -752,7 +752,7 @@ begin
   end;
 end;
 
-function TAppArmorProfileCreator.SetProfileMode(Enforce: Boolean): Boolean;
+function TAppArmorProfileCreator.SetProfileMode(Enforce: Boolean): Boolean;  
 var
   Process: TProcess;
   Cmd: string;
@@ -879,7 +879,7 @@ type
 
 implementation
 
-function TWindowsDefenderManager.GetWMIValue(const Query, Property: string): string;
+function TWindowsDefenderManager.GetWMIValue(const Query, Property: string): string;  
 var
   WMIService, WbemObject, PropValue: OleVariant;
   Enum: IEnumVaraint;
@@ -902,7 +902,7 @@ begin
   end;
 end;
 
-function TWindowsDefenderManager.IsInstalled: Boolean;
+function TWindowsDefenderManager.IsInstalled: Boolean;  
 var
   Reg: TRegistry;
 begin
@@ -919,7 +919,7 @@ begin
   end;
 end;
 
-function TWindowsDefenderManager.GetStatus: TDefenderStatus;
+function TWindowsDefenderManager.GetStatus: TDefenderStatus;  
 var
   Query: string;
 begin
@@ -961,7 +961,7 @@ begin
   end;
 end;
 
-function TWindowsDefenderManager.IsFileExcluded(const FilePath: string): Boolean;
+function TWindowsDefenderManager.IsFileExcluded(const FilePath: string): Boolean;  
 var
   Exclusions: TStringList;
   i: Integer;
@@ -985,7 +985,7 @@ begin
   end;
 end;
 
-function TWindowsDefenderManager.GetExclusionsList: TStringList;
+function TWindowsDefenderManager.GetExclusionsList: TStringList;  
 var
   Reg: TRegistry;
   Values: TStringList;
@@ -1107,7 +1107,7 @@ type
 
 implementation
 
-function TDefenderExclusionManager.AddPathExclusion(const Path: string): Boolean;
+function TDefenderExclusionManager.AddPathExclusion(const Path: string): Boolean;  
 var
   Command: string;
 begin
@@ -1126,7 +1126,7 @@ begin
     WriteLn('Erreur : Privilèges administrateur requis');
 end;
 
-function TDefenderExclusionManager.RemovePathExclusion(const Path: string): Boolean;
+function TDefenderExclusionManager.RemovePathExclusion(const Path: string): Boolean;  
 var
   Command: string;
 begin
@@ -1139,7 +1139,7 @@ begin
     PChar('/c ' + Command), nil, SW_HIDE) > 32;
 end;
 
-function TDefenderExclusionManager.AddProcessExclusion(const ProcessName: string): Boolean;
+function TDefenderExclusionManager.AddProcessExclusion(const ProcessName: string): Boolean;  
 var
   Command: string;
 begin
@@ -1152,7 +1152,7 @@ begin
     PChar('/c ' + Command), nil, SW_HIDE) > 32;
 end;
 
-function TDefenderExclusionManager.AddExtensionExclusion(const Extension: string): Boolean;
+function TDefenderExclusionManager.AddExtensionExclusion(const Extension: string): Boolean;  
 var
   Command: string;
   CleanExt: string;
@@ -1171,7 +1171,7 @@ begin
     PChar('/c ' + Command), nil, SW_HIDE) > 32;
 end;
 
-function TDefenderExclusionManager.ShowExclusionInstructions(const AppPath: string): string;
+function TDefenderExclusionManager.ShowExclusionInstructions(const AppPath: string): string;  
 var
   Instructions: TStringList;
 begin
@@ -1232,7 +1232,7 @@ implementation
 uses
   Registry;
 
-class function TSmartScreenHelper.IsSmartScreenEnabled: Boolean;
+class function TSmartScreenHelper.IsSmartScreenEnabled: Boolean;  
 var
   Reg: TRegistry;
   Value: string;
@@ -1257,7 +1257,7 @@ begin
   end;
 end;
 
-class function TSmartScreenHelper.GetApplicationReputation(const AppPath: string): string;
+class function TSmartScreenHelper.GetApplicationReputation(const AppPath: string): string;  
 begin
   // Note : L'API de réputation n'est pas publiquement accessible
   // Cette fonction retourne des conseils généraux
@@ -1275,7 +1275,7 @@ begin
     Result := 'Fichier introuvable';
 end;
 
-class function TSmartScreenHelper.ShowSigningInstructions: string;
+class function TSmartScreenHelper.ShowSigningInstructions: string;  
 var
   Instructions: TStringList;
 begin
@@ -1368,14 +1368,14 @@ type
 
 implementation
 
-constructor TCrossPlatformSecurityManager.Create;
+constructor TCrossPlatformSecurityManager.Create;  
 begin
   inherited Create;
   FSecurityInfo.Recommendations := TStringList.Create;
   DetectSecuritySystem;
 end;
 
-destructor TCrossPlatformSecurityManager.Destroy;
+destructor TCrossPlatformSecurityManager.Destroy;  
 begin
   FSecurityInfo.Recommendations.Free;
   inherited;
@@ -1462,7 +1462,7 @@ begin
     FSecurityInfo.Status := 'Aucun système de sécurité détecté';
 end;
 
-function TCrossPlatformSecurityManager.GetSecurityInfo: TSecurityInfo;
+function TCrossPlatformSecurityManager.GetSecurityInfo: TSecurityInfo;  
 begin
   Result := FSecurityInfo;
 end;
@@ -1506,7 +1506,7 @@ begin
   end;
 end;
 
-function TCrossPlatformSecurityManager.GetConfigurationInstructions: string;
+function TCrossPlatformSecurityManager.GetConfigurationInstructions: string;  
 var
   Instructions: TStringList;
   i: Integer;
@@ -1592,7 +1592,7 @@ end;
 
 ```pascal
 // ✅ Bon : Principe du moindre privilège
-procedure SafeFileOperation(const FileName: string);
+procedure SafeFileOperation(const FileName: string);  
 begin
   // Ouvrir en lecture seule si possible
   if not NeedToWrite then
@@ -1602,7 +1602,7 @@ begin
 end;
 
 // ❌ Mauvais : Toujours en lecture/écriture
-procedure UnsafeFileOperation(const FileName: string);
+procedure UnsafeFileOperation(const FileName: string);  
 begin
   OpenFile(FileName, fmOpenReadWrite);  // Trop de droits
 end;
@@ -1612,7 +1612,7 @@ end;
 
 ```pascal
 // ✅ Bon : Chemins absolus et validation
-function GetSafeDataPath: string;
+function GetSafeDataPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('APPDATA') + '\MyApp\';
@@ -1626,7 +1626,7 @@ begin
 end;
 
 // ❌ Mauvais : Chemins relatifs
-function UnsafeDataPath: string;
+function UnsafeDataPath: string;  
 begin
   Result := 'data/';  // Peut causer des problèmes avec SELinux/AppArmor
 end;
@@ -1639,7 +1639,7 @@ unit SecurityAwareLogging;
 
 interface
 
-procedure LogSecurityEvent(const Event: string);
+procedure LogSecurityEvent(const Event: string);  
 procedure LogFileAccess(const FileName: string; Success: Boolean);
 
 implementation
@@ -1647,7 +1647,7 @@ implementation
 uses
   SysUtils;
 
-procedure LogSecurityEvent(const Event: string);
+procedure LogSecurityEvent(const Event: string);  
 var
   LogFile: TextFile;
   LogPath: string;
@@ -1674,7 +1674,7 @@ begin
   end;
 end;
 
-procedure LogFileAccess(const FileName: string; Success: Boolean);
+procedure LogFileAccess(const FileName: string; Success: Boolean);  
 begin
   if Success then
     LogSecurityEvent('File access granted: ' + FileName)
@@ -1710,13 +1710,13 @@ implementation
 uses
   CrossPlatformSecurity;
 
-constructor TSecurityAwareApp.Create;
+constructor TSecurityAwareApp.Create;  
 begin
   inherited Create;
   DetectSecurityLevel;
 end;
 
-procedure TSecurityAwareApp.DetectSecurityLevel;
+procedure TSecurityAwareApp.DetectSecurityLevel;  
 var
   SecurityMgr: TCrossPlatformSecurityManager;
   Info: TSecurityInfo;
@@ -1736,7 +1736,7 @@ begin
   end;
 end;
 
-procedure TSecurityAwareApp.InitializeWithSecurity;
+procedure TSecurityAwareApp.InitializeWithSecurity;  
 begin
   if FSecurityRestrictive then
   begin
@@ -1751,7 +1751,7 @@ begin
   end;
 end;
 
-function TSecurityAwareApp.CanAccessPath(const Path: string): Boolean;
+function TSecurityAwareApp.CanAccessPath(const Path: string): Boolean;  
 begin
   // Tester l'accès avant de l'utiliser
   Result := DirectoryExists(Path) or FileExists(Path);
@@ -1760,7 +1760,7 @@ begin
     WriteLn('Accès refusé (probablement par SELinux/AppArmor) : ', Path);
 end;
 
-procedure TSecurityAwareApp.RequestPermissions;
+procedure TSecurityAwareApp.RequestPermissions;  
 begin
   {$IFDEF LINUX}
   WriteLn('Permissions requises :');
@@ -1806,7 +1806,7 @@ type
 
 implementation
 
-procedure TLinuxSecurityDiagnostic.DiagnoseSELinux;
+procedure TLinuxSecurityDiagnostic.DiagnoseSELinux;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -1850,7 +1850,7 @@ begin
   end;
 end;
 
-procedure TLinuxSecurityDiagnostic.DiagnoseAppArmor;
+procedure TLinuxSecurityDiagnostic.DiagnoseAppArmor;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -1875,7 +1875,7 @@ begin
   end;
 end;
 
-procedure TLinuxSecurityDiagnostic.CheckRecentDenials;
+procedure TLinuxSecurityDiagnostic.CheckRecentDenials;  
 begin
   WriteLn('=== Vérification des refus ===');
   WriteLn('Consultez :');
@@ -1884,7 +1884,7 @@ begin
   WriteLn('  Kernel : sudo dmesg | grep -i denied');
 end;
 
-procedure TLinuxSecurityDiagnostic.SuggestFixes;
+procedure TLinuxSecurityDiagnostic.SuggestFixes;  
 begin
   WriteLn('=== Solutions courantes ===');
   WriteLn('');
@@ -1929,7 +1929,7 @@ type
 
 implementation
 
-procedure TWindowsSecurityDiagnostic.DiagnoseDefender;
+procedure TWindowsSecurityDiagnostic.DiagnoseDefender;  
 var
   Reg: TRegistry;
   RealtimeEnabled: Boolean;
@@ -1965,7 +1965,7 @@ begin
   end;
 end;
 
-procedure TWindowsSecurityDiagnostic.CheckQuarantine;
+procedure TWindowsSecurityDiagnostic.CheckQuarantine;  
 var
   QuarantinePath: string;
 begin
@@ -1985,7 +1985,7 @@ begin
   WriteLn('  3. Historique de protection');
 end;
 
-procedure TWindowsSecurityDiagnostic.CheckThreatHistory;
+procedure TWindowsSecurityDiagnostic.CheckThreatHistory;  
 begin
   WriteLn('');
   WriteLn('=== Historique des menaces ===');
@@ -1997,7 +1997,7 @@ begin
   WriteLn('  Get-MpThreatDetection (PowerShell)');
 end;
 
-procedure TWindowsSecurityDiagnostic.SuggestFixes;
+procedure TWindowsSecurityDiagnostic.SuggestFixes;  
 begin
   WriteLn('');
   WriteLn('=== Solutions courantes ===');
@@ -2061,7 +2061,7 @@ uses
   {$IFDEF LINUX}LinuxSecurityDiagnostic{$ENDIF}
   {$IFDEF WINDOWS}WindowsSecurityDiagnostic{$ENDIF};
 
-constructor TSecurityTroubleshooter.Create(Issue: TSecurityIssue);
+constructor TSecurityTroubleshooter.Create(Issue: TSecurityIssue);  
 begin
   inherited Create;
   FIssue := Issue;
@@ -2069,13 +2069,13 @@ begin
   AnalyzeIssue;
 end;
 
-destructor TSecurityTroubleshooter.Destroy;
+destructor TSecurityTroubleshooter.Destroy;  
 begin
   FSolutions.Free;
   inherited;
 end;
 
-procedure TSecurityTroubleshooter.AnalyzeIssue;
+procedure TSecurityTroubleshooter.AnalyzeIssue;  
 begin
   FSolutions.Clear;
 
@@ -2143,7 +2143,7 @@ begin
   end;
 end;
 
-function TSecurityTroubleshooter.GetSolutions: TStringList;
+function TSecurityTroubleshooter.GetSolutions: TStringList;  
 begin
   Result := FSolutions;
 end;
@@ -2296,7 +2296,7 @@ uses
   {$IFDEF WINDOWS}, WindowsDefenderExclusions{$ENDIF}
   {$IFDEF LINUX}, AppArmorProfileCreator{$ENDIF};
 
-procedure TSecureInstaller.CheckSecurityRequirements;
+procedure TSecureInstaller.CheckSecurityRequirements;  
 begin
   WriteLn('=== Vérification de la sécurité ===');
 
@@ -2313,7 +2313,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TSecureInstaller.InstallWithSecurity;
+procedure TSecureInstaller.InstallWithSecurity;  
 begin
   WriteLn('Installation en cours...');
 
@@ -2324,7 +2324,7 @@ begin
   ConfigureSecurity;
 end;
 
-procedure TSecureInstaller.ConfigureSecurity;
+procedure TSecureInstaller.ConfigureSecurity;  
 begin
   {$IFDEF LINUX}
   WriteLn('Création du profil AppArmor...');

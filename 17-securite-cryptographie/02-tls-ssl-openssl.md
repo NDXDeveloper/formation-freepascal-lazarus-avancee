@@ -305,7 +305,7 @@ Plusieurs options existent pour utiliser OpenSSL avec FreePascal :
 uses
   httpsend, ssl_openssl;
 
-function GetHTTPS(const URL: string): string;
+function GetHTTPS(const URL: string): string;  
 var
   HTTP: THTTPSend;
 begin
@@ -371,7 +371,7 @@ Pour une sécurité accrue, vous pouvez "épingler" un certificat :
 const
   EXPECTED_CERT_HASH = 'A1B2C3D4...'; // Hash SHA-256 du certificat
 
-function VerifyCertificate(const ReceivedCertHash: string): Boolean;
+function VerifyCertificate(const ReceivedCertHash: string): Boolean;  
 begin
   Result := (ReceivedCertHash = EXPECTED_CERT_HASH);
 end;
@@ -391,7 +391,7 @@ end;
 
 ```pascal
 // Concept : configurer pour n'accepter que TLS 1.2+
-SSL.MinVersion := TLS1_2_VERSION;
+SSL.MinVersion := TLS1_2_VERSION;  
 SSL.MaxVersion := TLS1_3_VERSION;
 ```
 
@@ -426,7 +426,7 @@ const
 
 ```pascal
 // Toujours activer la validation des certificats
-SSL.VerifyMode := SSL_VERIFY_PEER;
+SSL.VerifyMode := SSL_VERIFY_PEER;  
 SSL.VerifyDepth := 9; // Profondeur de la chaîne
 
 // Ne JAMAIS ignorer les erreurs de certificat en production !
@@ -549,7 +549,7 @@ type
     CAPath: string;
   end;
 
-function InitSSL(const Config: TSSLConfig): Boolean;
+function InitSSL(const Config: TSSLConfig): Boolean;  
 begin
   {$IFDEF WINDOWS}
     Result := InitSSL_Windows(Config);

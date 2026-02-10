@@ -38,14 +38,14 @@ Hash : 509af1b7c12f8b07f772e87c43fc44f4c7a3cf59c1a06e3c2d91e956d3d8e5b3
 
 **1. Vérification d'intégrité** :
 ```
-Télécharger un fichier → Vérifier son hash
-Hash attendu : abc123...
+Télécharger un fichier → Vérifier son hash  
+Hash attendu : abc123...  
 Hash calculé : abc123... ✓ Fichier non corrompu
 ```
 
 **2. Stockage de mots de passe** :
 ```
-Mot de passe → Hash → Stockage en base de données
+Mot de passe → Hash → Stockage en base de données  
 Au login : hash(password saisi) == hash stocké ?
 ```
 
@@ -93,7 +93,7 @@ Deux fichiers ont-ils le même contenu ?
 uses
   DCPmd5, DCPcrypt2;
 
-function CalculateMD5(const Data: string): string;
+function CalculateMD5(const Data: string): string;  
 var
   Hash: TDCP_md5;
   Digest: array[0..15] of Byte;
@@ -139,7 +139,7 @@ end.
 uses
   DCPsha1, DCPcrypt2;
 
-function CalculateSHA1(const Data: string): string;
+function CalculateSHA1(const Data: string): string;  
 var
   Hash: TDCP_sha1;
   Digest: array[0..19] of Byte;
@@ -184,7 +184,7 @@ end.
 uses
   DCPsha256, DCPcrypt2;
 
-function CalculateSHA256(const Data: string): string;
+function CalculateSHA256(const Data: string): string;  
 var
   Hash: TDCP_sha256;
   Digest: array[0..31] of Byte;
@@ -225,7 +225,7 @@ end.
 uses
   DCPsha512, DCPcrypt2;
 
-function CalculateSHA512(const Data: string): string;
+function CalculateSHA512(const Data: string): string;  
 var
   Hash: TDCP_sha512;
   Digest: array[0..63] of Byte;
@@ -260,7 +260,7 @@ end.
 uses
   Classes, SysUtils, DCPsha256;
 
-function CalculateFileSHA256(const FileName: string): string;
+function CalculateFileSHA256(const FileName: string): string;  
 var
   FileStream: TFileStream;
   Hash: TDCP_sha256;
@@ -309,7 +309,7 @@ end.
 ### Vérification d'intégrité de fichier
 
 ```pascal
-function VerifyFileIntegrity(const FileName, ExpectedHash: string): Boolean;
+function VerifyFileIntegrity(const FileName, ExpectedHash: string): Boolean;  
 var
   CalculatedHash: string;
 begin
@@ -337,7 +337,7 @@ end.
 
 **Problème sans salt** :
 ```
-Utilisateur 1 : password123 → hash: abc...
+Utilisateur 1 : password123 → hash: abc...  
 Utilisateur 2 : password123 → hash: abc... (identique !)
 ```
 
@@ -345,7 +345,7 @@ Un attaquant peut utiliser des **rainbow tables** (tables pré-calculées) pour 
 
 **Solution avec salt** :
 ```
-Utilisateur 1 : password123 + salt1 → hash: abc...
+Utilisateur 1 : password123 + salt1 → hash: abc...  
 Utilisateur 2 : password123 + salt2 → hash: xyz... (différent !)
 ```
 
@@ -355,7 +355,7 @@ Utilisateur 2 : password123 + salt2 → hash: xyz... (différent !)
 uses
   DCPsha256, DCPcrypt2, SysUtils;
 
-function GenerateSalt(Length: Integer = 16): string;
+function GenerateSalt(Length: Integer = 16): string;  
 var
   Bytes: TBytes;
   i: Integer;
@@ -381,7 +381,7 @@ begin
     Result := Result + IntToHex(Bytes[i], 2);
 end;
 
-function HashPasswordWithSalt(const Password, Salt: string): string;
+function HashPasswordWithSalt(const Password, Salt: string): string;  
 var
   Hash: TDCP_sha256;
   Digest: array[0..31] of Byte;
@@ -407,7 +407,7 @@ type
     Salt: string;
   end;
 
-function CreatePasswordHash(const Password: string): TPasswordHash;
+function CreatePasswordHash(const Password: string): TPasswordHash;  
 begin
   Result.Salt := GenerateSalt(16);
   Result.Hash := HashPasswordWithSalt(Password, Result.Salt);
@@ -525,7 +525,7 @@ bcrypt est spécialement conçu pour le hashing de mots de passe.
 uses
   OpenSSL;
 
-function BCryptHash(const Password: string; Cost: Integer = 12): string;
+function BCryptHash(const Password: string; Cost: Integer = 12): string;  
 begin
   // Cost = 12 signifie 2^12 itérations = 4096
   // Augmenter le cost rend le hash plus lent mais plus sécurisé
@@ -533,7 +533,7 @@ begin
   Result := BCrypt_Create(Password, BCrypt_GenSalt(Cost));
 end;
 
-function BCryptVerify(const Password, Hash: string): Boolean;
+function BCryptVerify(const Password, Hash: string): Boolean;  
 begin
   Result := BCrypt_Verify(Password, Hash);
 end;
@@ -565,7 +565,7 @@ HMAC combine un hash et une clé secrète pour créer un **code d'authentificati
 uses
   DCPsha256, SysUtils;
 
-function HMACSHA256(const Key, Data: string): string;
+function HMACSHA256(const Key, Data: string): string;  
 var
   Hash: TDCP_sha256;
   KeyBytes: TBytes;
@@ -716,11 +716,11 @@ Une signature numérique est l'équivalent électronique d'une signature manuscr
 ### Principe de fonctionnement
 
 ```
-SIGNATURE (avec clé privée):
+SIGNATURE (avec clé privée):  
 Document → Hash → Chiffrement avec clé privée = Signature
 
-VÉRIFICATION (avec clé publique):
-Document → Hash → Déchiffrement signature avec clé publique
+VÉRIFICATION (avec clé publique):  
+Document → Hash → Déchiffrement signature avec clé publique  
 Si les hashs correspondent → Signature valide ✓
 ```
 
@@ -953,7 +953,7 @@ type
     PublicKey: string;
   end;
 
-function LoadCertificate(const CertFile: string): PX509;
+function LoadCertificate(const CertFile: string): PX509;  
 var
   BIO: PBIO;
 begin
@@ -970,7 +970,7 @@ begin
   end;
 end;
 
-function GetCertificateInfo(const CertFile: string): TCertificateInfo;
+function GetCertificateInfo(const CertFile: string): TCertificateInfo;  
 var
   Cert: PX509;
   SubjectName, IssuerName: PX509_NAME;
@@ -1179,7 +1179,7 @@ signtool verify /pa MonApp.exe
 uses
   Windows, SysUtils;
 
-function SignExecutable(const ExeFile, CertFile, Password: string): Boolean;
+function SignExecutable(const ExeFile, CertFile, Password: string): Boolean;  
 var
   Command: string;
   ExitCode: Integer;
@@ -1219,7 +1219,7 @@ gpg --verify MonApp.asc MonApp
 
 **En FreePascal** :
 ```pascal
-function SignFileWithGPG(const FileName: string): Boolean;
+function SignFileWithGPG(const FileName: string): Boolean;  
 var
   ExitCode: Integer;
 begin
@@ -1232,7 +1232,7 @@ begin
   Result := (ExitCode = 0);
 end;
 
-function VerifyGPGSignature(const FileName, SignatureFile: string): Boolean;
+function VerifyGPGSignature(const FileName, SignatureFile: string): Boolean;  
 var
   ExitCode: Integer;
 begin
@@ -1271,7 +1271,7 @@ type
     Signature: string;
   end;
 
-function DownloadUpdate(const UpdateInfo: TUpdateInfo): Boolean;
+function DownloadUpdate(const UpdateInfo: TUpdateInfo): Boolean;  
 var
   HTTP: THTTPSend;
   DownloadedFile: TFileStream;
@@ -1384,19 +1384,19 @@ type
     procedure LoadHashes(const HashFile: string);
   end;
 
-constructor TIntegrityMonitor.Create;
+constructor TIntegrityMonitor.Create;  
 begin
   inherited Create;
   FHashes := TList<TFileHash>.Create;
 end;
 
-destructor TIntegrityMonitor.Destroy;
+destructor TIntegrityMonitor.Destroy;  
 begin
   FHashes.Free;
   inherited Destroy;
 end;
 
-procedure TIntegrityMonitor.AddFile(const FileName: string);
+procedure TIntegrityMonitor.AddFile(const FileName: string);  
 var
   FileHash: TFileHash;
 begin
@@ -1407,7 +1407,7 @@ begin
   FHashes.Add(FileHash);
 end;
 
-function TIntegrityMonitor.CheckIntegrity: Boolean;
+function TIntegrityMonitor.CheckIntegrity: Boolean;  
 var
   i: Integer;
   CurrentHash: string;
@@ -1449,7 +1449,7 @@ begin
     WriteLn('✓ Tous les fichiers sont intègres');
 end;
 
-procedure TIntegrityMonitor.SaveHashes(const HashFile: string);
+procedure TIntegrityMonitor.SaveHashes(const HashFile: string);  
 var
   F: TextFile;
   i: Integer;
@@ -1464,7 +1464,7 @@ begin
   end;
 end;
 
-procedure TIntegrityMonitor.LoadHashes(const HashFile: string);
+procedure TIntegrityMonitor.LoadHashes(const HashFile: string);  
 var
   F: TextFile;
   Line: string;
@@ -1611,7 +1611,7 @@ end.
 uses
   Windows, WinCrypt;
 
-function GetSecureRandomBytes(Count: Integer): TBytes;
+function GetSecureRandomBytes(Count: Integer): TBytes;  
 var
   hProv: HCRYPTPROV;
 begin
@@ -1634,7 +1634,7 @@ end;
 **Ubuntu/Linux** :
 ```pascal
 {$IFDEF UNIX}
-function GetSecureRandomBytes(Count: Integer): TBytes;
+function GetSecureRandomBytes(Count: Integer): TBytes;  
 var
   F: File;
 begin
@@ -1685,7 +1685,7 @@ const
 
 **1. Hashing incrémental pour gros fichiers** :
 ```pascal
-function HashLargeFile(const FileName: string): string;
+function HashLargeFile(const FileName: string): string;  
 const
   BUFFER_SIZE = 1024 * 1024; // 1 MB
 var
@@ -1732,7 +1732,7 @@ type
     function GetHash(const FileName: string): string;
   end;
 
-function THashCache.GetHash(const FileName: string): string;
+function THashCache.GetHash(const FileName: string): string;  
 var
   FileTime: TDateTime;
   CacheKey: string;
@@ -1755,7 +1755,7 @@ end;
 uses
   MTProcs; // Multi-threading
 
-function HashFilesParallel(const Files: array of string): TArray<string>;
+function HashFilesParallel(const Files: array of string): TArray<string>;  
 var
   i: Integer;
 begin
@@ -1778,8 +1778,8 @@ end;
 
 ```pascal
 // ✅ RECOMMANDÉ
-Hash := CalculateSHA256(Data);        // Pour usage général
-Hash := CalculateSHA512(Data);        // Pour haute sécurité
+Hash := CalculateSHA256(Data);        // Pour usage général  
+Hash := CalculateSHA512(Data);        // Pour haute sécurité  
 Hash := PBKDF2_SHA256(Password, Salt, 100000); // Pour mots de passe
 
 // ⚠️ DÉPRÉCIÉ
@@ -1796,7 +1796,7 @@ Hash := CalculateMD5(Data);           // Jamais pour sécurité
 PasswordHash := SHA256(Password);
 
 // ✅ CORRECT
-Salt := GenerateRandomSalt(16);
+Salt := GenerateRandomSalt(16);  
 PasswordHash := PBKDF2_SHA256(Password, Salt, 100000);
 ```
 
@@ -1832,7 +1832,7 @@ uses
   DCPsha256;  // Testé et audité
 
 // ❌ Éviter d'implémenter ses propres algorithmes
-function MaFonctionHashMaison(Data: string): string;
+function MaFonctionHashMaison(Data: string): string;  
 begin
   // Non ! Utilisez des bibliothèques standard
   // La cryptographie est trop complexe pour être réinventée
@@ -1845,13 +1845,13 @@ Pour éviter les attaques par timing, comparez toujours les hashs en temps const
 
 ```pascal
 // ❌ Vulnérable aux attaques par timing
-function CompareHashUnsafe(const Hash1, Hash2: string): Boolean;
+function CompareHashUnsafe(const Hash1, Hash2: string): Boolean;  
 begin
   Result := (Hash1 = Hash2); // S'arrête dès la première différence
 end;
 
 // ✅ Comparaison en temps constant
-function CompareHashSecure(const Hash1, Hash2: string): Boolean;
+function CompareHashSecure(const Hash1, Hash2: string): Boolean;  
 var
   i: Integer;
   Diff: Byte;
@@ -1872,7 +1872,7 @@ end;
 ### 7. Logger les événements de sécurité
 
 ```pascal
-procedure LogSecurityEvent(const EventType, Details: string);
+procedure LogSecurityEvent(const EventType, Details: string);  
 begin
   WriteToLog(Format('[SECURITY] %s - %s - Time: %s - IP: %s',
     [EventType, Details, DateTimeToStr(Now), GetClientIP]));
@@ -1883,7 +1883,7 @@ begin
 end;
 
 // Utilisation
-if not VerifySignature(Document, Signature, PublicKey) then
+if not VerifySignature(Document, Signature, PublicKey) then  
 begin
   LogSecurityEvent('SIGNATURE_INVALID',
     'Document: ' + ExtractFileName(Document));
@@ -1916,7 +1916,7 @@ type
 
 // === CÔTÉ SERVEUR : Création du package ===
 
-function CreatePackage(const FileName: string): TPackageInfo;
+function CreatePackage(const FileName: string): TPackageInfo;  
 var
   FileStream: TFileStream;
 begin
@@ -1945,7 +1945,7 @@ begin
   SavePackageInfo(Result);
 end;
 
-procedure SavePackageInfo(const Info: TPackageInfo);
+procedure SavePackageInfo(const Info: TPackageInfo);  
 var
   JSON: TJSONObject;
   F: TextFile;
@@ -1975,7 +1975,7 @@ end;
 
 // === CÔTÉ CLIENT : Téléchargement et vérification ===
 
-function LoadPackageInfo(const JSONFile: string): TPackageInfo;
+function LoadPackageInfo(const JSONFile: string): TPackageInfo;  
 var
   F: TextFile;
   JSONText: string;
@@ -2005,7 +2005,7 @@ begin
   end;
 end;
 
-function DownloadAndVerifyPackage(const Info: TPackageInfo): Boolean;
+function DownloadAndVerifyPackage(const Info: TPackageInfo): Boolean;  
 var
   HTTP: THTTPSend;
   LocalFile: string;
@@ -2150,7 +2150,7 @@ type
     procedure TestHashComparison;
   end;
 
-procedure THashingTests.TestSHA256_EmptyString;
+procedure THashingTests.TestSHA256_EmptyString;  
 var
   Hash: string;
 begin
@@ -2162,7 +2162,7 @@ begin
     Hash);
 end;
 
-procedure THashingTests.TestSHA256_KnownValue;
+procedure THashingTests.TestSHA256_KnownValue;  
 var
   Hash: string;
 begin
@@ -2174,7 +2174,7 @@ begin
     Hash);
 end;
 
-procedure THashingTests.TestSHA256_Consistency;
+procedure THashingTests.TestSHA256_Consistency;  
 var
   Hash1, Hash2: string;
 begin
@@ -2184,7 +2184,7 @@ begin
   AssertEquals('Consistency check', Hash1, Hash2);
 end;
 
-procedure THashingTests.TestSaltGeneration;
+procedure THashingTests.TestSaltGeneration;  
 var
   Salt1, Salt2: string;
 begin
@@ -2198,7 +2198,7 @@ begin
   AssertEquals('Salt length', 32, Length(Salt1));
 end;
 
-procedure THashingTests.TestPasswordHashing;
+procedure THashingTests.TestPasswordHashing;  
 var
   PasswordHash: TPasswordHash;
 begin
@@ -2217,7 +2217,7 @@ begin
     VerifyPassword('WrongPassword', PasswordHash));
 end;
 
-procedure THashingTests.TestHashComparison;
+procedure THashingTests.TestHashComparison;  
 begin
   // Hashs identiques
   AssertTrue('Same hashes',
@@ -2248,7 +2248,7 @@ type
     Valid: Boolean;
   end;
 
-procedure LogSignature(const Audit: TSignatureAudit);
+procedure LogSignature(const Audit: TSignatureAudit);  
 var
   F: TextFile;
   LogLine: string;
@@ -2293,7 +2293,7 @@ end.
 
 ```pascal
 // Hashing de données personnelles pour pseudonymisation
-function PseudonymizeData(const PersonalData: string): string;
+function PseudonymizeData(const PersonalData: string): string;  
 var
   Salt: string;
 begin
@@ -2345,17 +2345,17 @@ end.
 
 ```bash
 # OpenSSL - Couteau suisse de la cryptographie
-openssl dgst -sha256 file.txt           # Hash SHA-256
-openssl dgst -sha256 -sign private.pem file.txt  # Signer
+openssl dgst -sha256 file.txt           # Hash SHA-256  
+openssl dgst -sha256 -sign private.pem file.txt  # Signer  
 openssl dgst -sha256 -verify public.pem -signature sig.bin file.txt  # Vérifier
 
 # GPG - Signatures et chiffrement
-gpg --gen-key                            # Générer une paire de clés
-gpg --sign file.txt                      # Signer
+gpg --gen-key                            # Générer une paire de clés  
+gpg --sign file.txt                      # Signer  
 gpg --verify file.txt.gpg               # Vérifier
 
 # sha256sum (Linux)
-sha256sum file.txt                       # Calculer hash
+sha256sum file.txt                       # Calculer hash  
 sha256sum -c checksums.txt              # Vérifier hashs
 ```
 

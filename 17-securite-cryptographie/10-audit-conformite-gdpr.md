@@ -113,14 +113,14 @@ type
 
 implementation
 
-constructor TGDPRDataExporter.Create(UserID: Integer; DBConnection: TConnection);
+constructor TGDPRDataExporter.Create(UserID: Integer; DBConnection: TConnection);  
 begin
   inherited Create;
   FUserID := UserID;
   FDatabaseConnection := DBConnection;
 end;
 
-function TGDPRDataExporter.ExportUserData(Format: TDataExportFormat): string;
+function TGDPRDataExporter.ExportUserData(Format: TDataExportFormat): string;  
 var
   JSONData: TJSONObject;
   Query: TSQLQuery;
@@ -179,7 +179,7 @@ begin
   end;
 end;
 
-function TGDPRDataExporter.GenerateDataPortabilityFile(const OutputPath: string): Boolean;
+function TGDPRDataExporter.GenerateDataPortabilityFile(const OutputPath: string): Boolean;  
 var
   FileStream: TFileStream;
   JSONContent: string;
@@ -242,13 +242,13 @@ type
 
 implementation
 
-constructor TGDPRRectificationManager.Create(DBConnection: TConnection);
+constructor TGDPRRectificationManager.Create(DBConnection: TConnection);  
 begin
   inherited Create;
   FDatabaseConnection := DBConnection;
 end;
 
-function TGDPRRectificationManager.ValidateField(const FieldName: string): Boolean;
+function TGDPRRectificationManager.ValidateField(const FieldName: string): Boolean;  
 const
   ALLOWED_FIELDS: array[0..4] of string = (
     'name', 'email', 'phone', 'address', 'preferences'
@@ -400,13 +400,13 @@ type
 
 implementation
 
-constructor TGDPRDataEraser.Create(DBConnection: TConnection);
+constructor TGDPRDataEraser.Create(DBConnection: TConnection);  
 begin
   inherited Create;
   FDatabaseConnection := DBConnection;
 end;
 
-function TGDPRDataEraser.CanEraseUser(UserID: Integer; out Reason: string): Boolean;
+function TGDPRDataEraser.CanEraseUser(UserID: Integer; out Reason: string): Boolean;  
 var
   Query: TSQLQuery;
   HasActiveOrders: Boolean;
@@ -500,7 +500,7 @@ begin
     LogErasure(UserID, Method);
 end;
 
-function TGDPRDataEraser.AnonymizeUser(UserID: Integer): Boolean;
+function TGDPRDataEraser.AnonymizeUser(UserID: Integer): Boolean;  
 var
   Query: TSQLQuery;
   AnonymousEmail, AnonymousName: string;
@@ -544,7 +544,7 @@ begin
   Query.Free;
 end;
 
-function TGDPRDataEraser.DeleteUserData(UserID: Integer): Boolean;
+function TGDPRDataEraser.DeleteUserData(UserID: Integer): Boolean;  
 var
   Query: TSQLQuery;
 begin
@@ -662,7 +662,7 @@ type
 
 implementation
 
-constructor TGDPRRestrictionManager.Create(DBConnection: TConnection);
+constructor TGDPRRestrictionManager.Create(DBConnection: TConnection);  
 begin
   inherited Create;
   FDatabaseConnection := DBConnection;
@@ -700,7 +700,7 @@ begin
   Query.Free;
 end;
 
-function TGDPRRestrictionManager.LiftRestriction(UserID: Integer): Boolean;
+function TGDPRRestrictionManager.LiftRestriction(UserID: Integer): Boolean;  
 var
   Query: TSQLQuery;
 begin
@@ -729,7 +729,7 @@ begin
   Query.Free;
 end;
 
-function TGDPRRestrictionManager.IsRestricted(UserID: Integer): Boolean;
+function TGDPRRestrictionManager.IsRestricted(UserID: Integer): Boolean;  
 var
   Query: TSQLQuery;
 begin
@@ -850,7 +850,7 @@ type
 
 implementation
 
-constructor TGDPRConsentManager.Create(DBConnection: TConnection);
+constructor TGDPRConsentManager.Create(DBConnection: TConnection);  
 begin
   inherited Create;
   FDatabaseConnection := DBConnection;
@@ -950,7 +950,7 @@ begin
   end;
 end;
 
-function TGDPRConsentManager.GetConsentHistory(UserID: Integer): TStringList;
+function TGDPRConsentManager.GetConsentHistory(UserID: Integer): TStringList;  
 var
   Query: TSQLQuery;
 begin
@@ -983,7 +983,7 @@ begin
   end;
 end;
 
-function TGDPRConsentManager.LogConsent(const Consent: TConsentRecord): Boolean;
+function TGDPRConsentManager.LogConsent(const Consent: TConsentRecord): Boolean;  
 var
   Query: TSQLQuery;
   PurposeStr: string;
@@ -1111,7 +1111,7 @@ type
 
 implementation
 
-constructor TGDPRAuditor.Create(DBConnection: TConnection; const LogPath: string);
+constructor TGDPRAuditor.Create(DBConnection: TConnection; const LogPath: string);  
 begin
   inherited Create;
   FDatabaseConnection := DBConnection;
@@ -1122,7 +1122,7 @@ begin
     ForceDirectories(ExtractFilePath(FLogFilePath));
 end;
 
-function TGDPRAuditor.SanitizeForLog(const Data: string): string;
+function TGDPRAuditor.SanitizeForLog(const Data: string): string;  
 begin
   // Masquer les données sensibles dans les logs
   Result := Data;
@@ -1136,7 +1136,7 @@ begin
   // etc.
 end;
 
-function TGDPRAuditor.LogEvent(const Event: TAuditEvent): Boolean;
+function TGDPRAuditor.LogEvent(const Event: TAuditEvent): Boolean;  
 var
   Query: TSQLQuery;
   EventTypeStr: string;
@@ -1189,7 +1189,7 @@ begin
   Query.Free;
 end;
 
-procedure TGDPRAuditor.WriteToLogFile(const Event: TAuditEvent);
+procedure TGDPRAuditor.WriteToLogFile(const Event: TAuditEvent);  
 var
   LogFile: TextFile;
   LogEntry: string;
@@ -1256,7 +1256,7 @@ begin
   end;
 end;
 
-function TGDPRAuditor.GenerateAuditReport(StartDate, EndDate: TDateTime): string;
+function TGDPRAuditor.GenerateAuditReport(StartDate, EndDate: TDateTime): string;  
 var
   Query: TSQLQuery;
   Report: TStringList;
@@ -1348,7 +1348,7 @@ begin
   end;
 end;
 
-function TGDPRAuditor.SearchAuditLog(const SearchTerm: string): TStringList;
+function TGDPRAuditor.SearchAuditLog(const SearchTerm: string): TStringList;  
 var
   Query: TSQLQuery;
 begin
@@ -1473,7 +1473,7 @@ type
 
 implementation
 
-constructor TGDPRBreachManager.Create(DBConnection: TConnection);
+constructor TGDPRBreachManager.Create(DBConnection: TConnection);  
 begin
   inherited Create;
   FDatabaseConnection := DBConnection;
@@ -1552,7 +1552,7 @@ begin
   Query.Free;
 end;
 
-function TGDPRBreachManager.GetBreachDetails(BreachID: Integer): TDataBreach;
+function TGDPRBreachManager.GetBreachDetails(BreachID: Integer): TDataBreach;  
 var
   Query: TSQLQuery;
 begin
@@ -1586,7 +1586,7 @@ begin
   end;
 end;
 
-function TGDPRBreachManager.IsWithin72Hours(BreachID: Integer): Boolean;
+function TGDPRBreachManager.IsWithin72Hours(BreachID: Integer): Boolean;  
 var
   Breach: TDataBreach;
   HoursSinceDetection: Int64;
@@ -1599,7 +1599,7 @@ begin
     WriteLn('ATTENTION : Délai de 72h dépassé pour la violation ', BreachID);
 end;
 
-function TGDPRBreachManager.NotifyAuthority(const Breach: TDataBreach): Boolean;
+function TGDPRBreachManager.NotifyAuthority(const Breach: TDataBreach): Boolean;  
 begin
   // Implémentation de la notification à la CNIL (France) ou autorité compétente
   // Ceci devrait inclure :
@@ -1611,7 +1611,7 @@ begin
   Result := True;
 end;
 
-function TGDPRBreachManager.NotifyAffectedUsers(const Breach: TDataBreach): Boolean;
+function TGDPRBreachManager.NotifyAffectedUsers(const Breach: TDataBreach): Boolean;  
 begin
   // Implémentation de la notification aux utilisateurs affectés
   // - Envoyer des emails individuels
@@ -1825,13 +1825,13 @@ implementation
 uses
   DateUtils;
 
-constructor TGDPRRetentionManager.Create(DBConnection: TConnection);
+constructor TGDPRRetentionManager.Create(DBConnection: TConnection);  
 begin
   inherited Create;
   FDatabaseConnection := DBConnection;
 end;
 
-procedure TGDPRRetentionManager.DefineRetentionPolicy(const Policy: TRetentionPolicy);
+procedure TGDPRRetentionManager.DefineRetentionPolicy(const Policy: TRetentionPolicy);  
 var
   Query: TSQLQuery;
 begin
@@ -1859,7 +1859,7 @@ begin
   end;
 end;
 
-function TGDPRRetentionManager.GetRetentionPolicy(const DataType: string): TRetentionPolicy;
+function TGDPRRetentionManager.GetRetentionPolicy(const DataType: string): TRetentionPolicy;  
 var
   Query: TSQLQuery;
 begin
@@ -1887,7 +1887,7 @@ begin
   end;
 end;
 
-function TGDPRRetentionManager.CleanupExpiredData: Integer;
+function TGDPRRetentionManager.CleanupExpiredData: Integer;  
 var
   Query: TSQLQuery;
   Policy: TRetentionPolicy;
@@ -1970,7 +1970,7 @@ begin
   WriteLn(Format('Nettoyage total : %d éléments traités', [Result]));
 end;
 
-function TGDPRRetentionManager.GetDataAge(UserID: Integer): Integer;
+function TGDPRRetentionManager.GetDataAge(UserID: Integer): Integer;  
 var
   Query: TSQLQuery;
 begin
@@ -1994,7 +1994,7 @@ begin
   end;
 end;
 
-procedure TGDPRRetentionManager.GenerateRetentionReport;
+procedure TGDPRRetentionManager.GenerateRetentionReport;  
 var
   Query: TSQLQuery;
   Report: TStringList;
@@ -2096,7 +2096,7 @@ type
 
 implementation
 
-constructor TGDPRComplianceChecker.Create;
+constructor TGDPRComplianceChecker.Create;  
 begin
   inherited Create;
   SetLength(FItems, 0);
@@ -2176,13 +2176,13 @@ begin
     'Analyse d''impact (PIA) pour traitements à risque');
 end;
 
-destructor TGDPRComplianceChecker.Destroy;
+destructor TGDPRComplianceChecker.Destroy;  
 begin
   SetLength(FItems, 0);
   inherited;
 end;
 
-procedure TGDPRComplianceChecker.AddItem(const ID, Category, Description: string);
+procedure TGDPRComplianceChecker.AddItem(const ID, Category, Description: string);  
 var
   Idx: Integer;
 begin
@@ -2196,7 +2196,7 @@ begin
   FItems[Idx].Notes := '';
 end;
 
-procedure TGDPRComplianceChecker.RunComplianceCheck;
+procedure TGDPRComplianceChecker.RunComplianceCheck;  
 var
   i: Integer;
 begin
@@ -2215,7 +2215,7 @@ begin
   end;
 end;
 
-function TGDPRComplianceChecker.GenerateComplianceReport: string;
+function TGDPRComplianceChecker.GenerateComplianceReport: string;  
 var
   Report: TStringList;
   i, CompliantCount, TotalCount: Integer;
@@ -2266,7 +2266,7 @@ begin
   end;
 end;
 
-function TGDPRComplianceChecker.GetComplianceScore: Double;
+function TGDPRComplianceChecker.GetComplianceScore: Double;  
 var
   i, CompliantCount: Integer;
 begin
@@ -2333,7 +2333,7 @@ begin
   {$ENDIF}
 end;
 
-class function TGDPRPlatformManager.IsEURegion: Boolean;
+class function TGDPRPlatformManager.IsEURegion: Boolean;  
 const
   EU_COUNTRIES: array[0..26] of string = (
     'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR',
@@ -2357,7 +2357,7 @@ begin
   end;
 end;
 
-class function TGDPRPlatformManager.GetDataProtectionAuthority: string;
+class function TGDPRPlatformManager.GetDataProtectionAuthority: string;  
 var
   Locale: string;
 begin
@@ -2530,7 +2530,7 @@ const
 Toujours informer l'utilisateur.
 
 ```pascal
-procedure ShowPrivacyNotice;
+procedure ShowPrivacyNotice;  
 begin
   ShowMessage(
     'Nous collectons votre adresse email pour :' + LineEnding +
@@ -2637,20 +2637,20 @@ implementation
 uses
   GDPRDataRetention, GDPRAuditSystem, GDPRConsent;
 
-constructor TGDPRScheduler.Create;
+constructor TGDPRScheduler.Create;  
 begin
   inherited Create;
   FCleanupIntervalDays := 7;  // Par défaut : hebdomadaire
   FLastCleanup := 0;
 end;
 
-procedure TGDPRScheduler.SetCleanupInterval(Days: Integer);
+procedure TGDPRScheduler.SetCleanupInterval(Days: Integer);  
 begin
   if Days > 0 then
     FCleanupIntervalDays := Days;
 end;
 
-procedure TGDPRScheduler.ExecuteCleanup;
+procedure TGDPRScheduler.ExecuteCleanup;  
 var
   RetentionManager: TGDPRRetentionManager;
   DeletedCount: Integer;
@@ -2668,7 +2668,7 @@ begin
   FLastCleanup := Now;
 end;
 
-procedure TGDPRScheduler.ExecuteAuditReport;
+procedure TGDPRScheduler.ExecuteAuditReport;  
 var
   Auditor: TGDPRAuditor;
   Report: string;
@@ -2704,7 +2704,7 @@ begin
   end;
 end;
 
-procedure TGDPRScheduler.CheckExpiredConsents;
+procedure TGDPRScheduler.CheckExpiredConsents;  
 var
   Query: TSQLQuery;
   ExpiredCount: Integer;
@@ -2733,7 +2733,7 @@ begin
   end;
 end;
 
-procedure TGDPRScheduler.RunScheduledTasks;
+procedure TGDPRScheduler.RunScheduledTasks;  
 var
   DaysSinceLastCleanup: Integer;
 begin
@@ -2765,7 +2765,7 @@ end.
 
 **Windows (Task Scheduler) :**
 ```batch
-REM Créer une tâche planifiée Windows
+REM Créer une tâche planifiée Windows  
 schtasks /create /tn "GDPR Cleanup" /tr "C:\MyApp\myapp.exe --gdpr-cleanup" /sc daily /st 02:00
 ```
 
@@ -2810,7 +2810,7 @@ implementation
 uses
   GDPRComplianceChecker, GDPRDataErasure, GDPRBreachNotification;
 
-constructor TGDPRDashboardForm.Create(AOwner: TComponent);
+constructor TGDPRDashboardForm.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -2856,14 +2856,14 @@ begin
   UpdateDashboard;
 end;
 
-procedure TGDPRDashboardForm.UpdateDashboard;
+procedure TGDPRDashboardForm.UpdateDashboard;  
 begin
   LoadStatistics;
   LoadPendingRequests;
   LoadRecentBreaches;
 end;
 
-procedure TGDPRDashboardForm.LoadStatistics;
+procedure TGDPRDashboardForm.LoadStatistics;  
 var
   Query: TSQLQuery;
   Item: TListItem;
@@ -2925,7 +2925,7 @@ begin
   end;
 end;
 
-procedure TGDPRDashboardForm.LoadPendingRequests;
+procedure TGDPRDashboardForm.LoadPendingRequests;  
 var
   Query: TSQLQuery;
   PendingCount: Integer;
@@ -2950,7 +2950,7 @@ begin
   end;
 end;
 
-procedure TGDPRDashboardForm.LoadRecentBreaches;
+procedure TGDPRDashboardForm.LoadRecentBreaches;  
 var
   Query: TSQLQuery;
 begin
@@ -2986,7 +2986,7 @@ begin
   end;
 end;
 
-procedure TGDPRDashboardForm.RefreshData;
+procedure TGDPRDashboardForm.RefreshData;  
 begin
   UpdateDashboard;
 end;
@@ -3034,7 +3034,7 @@ function CheckCommonViolations: array of TGDPRViolationCheck;
 
 implementation
 
-function CheckCommonViolations: array of TGDPRViolationCheck;
+function CheckCommonViolations: array of TGDPRViolationCheck;  
 begin
   SetLength(Result, 6);
 

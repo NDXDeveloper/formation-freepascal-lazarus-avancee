@@ -75,7 +75,7 @@ type
     Salt: string;
   end;
 
-function AuthenticateUser(const Username, Password: string): Boolean;
+function AuthenticateUser(const Username, Password: string): Boolean;  
 var
   User: TUser;
   ComputedHash: string;
@@ -116,7 +116,7 @@ type
     IPAddress: string;
   end;
 
-function CreateSession(UserID: Integer): string;
+function CreateSession(UserID: Integer): string;  
 var
   Session: TSession;
 begin
@@ -132,7 +132,7 @@ begin
   Result := Session.SessionID;
 end;
 
-function ValidateSession(const SessionID: string): Boolean;
+function ValidateSession(const SessionID: string): Boolean;  
 var
   Session: TSession;
 begin
@@ -159,7 +159,7 @@ Les JSON Web Tokens (JWT) sont des tokens auto-contenus qui portent l'informatio
 
 **Structure d'un JWT** :
 ```
-Header.Payload.Signature
+Header.Payload.Signature  
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 ```
 
@@ -205,7 +205,7 @@ type
     ExpiresAt: Int64; // exp : Timestamp d'expiration
   end;
 
-function CreateJWT(const Claims: TJWTClaims; const Secret: string): string;
+function CreateJWT(const Claims: TJWTClaims; const Secret: string): string;  
 var
   Header, Payload, Signature: string;
   ToSign: string;
@@ -226,7 +226,7 @@ begin
   Result := Header + '.' + Payload + '.' + Signature;
 end;
 
-function ValidateJWT(const Token, Secret: string): Boolean;
+function ValidateJWT(const Token, Secret: string): Boolean;  
 var
   Parts: TStringList;
   Header, Payload, Signature, ComputedSignature: string;
@@ -381,7 +381,7 @@ const
   AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
   TOKEN_URL = 'https://oauth2.googleapis.com/token';
 
-function GetAuthorizationURL(const State: string): string;
+function GetAuthorizationURL(const State: string): string;  
 begin
   Result := AUTH_URL + '?' +
     'client_id=' + CLIENT_ID +
@@ -391,7 +391,7 @@ begin
     '&state=' + State;
 end;
 
-function ExchangeCodeForToken(const Code: string): string;
+function ExchangeCodeForToken(const Code: string): string;  
 var
   HTTP: THTTPSend;
   PostData: string;
@@ -425,7 +425,7 @@ begin
   end;
 end;
 
-function MakeAuthenticatedRequest(const AccessToken, URL: string): string;
+function MakeAuthenticatedRequest(const AccessToken, URL: string): string;  
 var
   HTTP: THTTPSend;
 begin
@@ -469,7 +469,7 @@ Pour les applications qui accèdent à leurs propres ressources (pas d'utilisate
 **Flux** :
 
 ```
-Client → Authorization Server
+Client → Authorization Server  
 POST /token
 {
   "grant_type": "client_credentials",
@@ -489,7 +489,7 @@ Authorization Server → Client
 **Exemple** :
 
 ```pascal
-function GetClientCredentialsToken: string;
+function GetClientCredentialsToken: string;  
 var
   HTTP: THTTPSend;
   PostData, Response: string;
@@ -588,7 +588,7 @@ Les access tokens ont une durée de vie courte (souvent 1 heure). Les refresh to
 **Exemple** :
 
 ```pascal
-function RefreshAccessToken(const RefreshToken: string): string;
+function RefreshAccessToken(const RefreshToken: string): string;  
 var
   HTTP: THTTPSend;
   PostData, Response: string;
@@ -628,9 +628,9 @@ Les scopes définissent les permissions demandées.
 
 **Exemples de scopes** :
 ```
-read:user         → Lire les informations utilisateur
-write:repos       → Modifier les dépôts
-delete:posts      → Supprimer des posts
+read:user         → Lire les informations utilisateur  
+write:repos       → Modifier les dépôts  
+delete:posts      → Supprimer des posts  
 admin:org         → Administration de l'organisation
 ```
 
@@ -644,7 +644,7 @@ GET /authorize?
 **Vérification côté serveur** :
 
 ```pascal
-function HasScope(const Token: string; const RequiredScope: string): Boolean;
+function HasScope(const Token: string; const RequiredScope: string): Boolean;  
 var
   TokenScopes: TStringList;
 begin
@@ -658,7 +658,7 @@ begin
 end;
 
 // Utilisation
-if not HasScope(AccessToken, 'write:repos') then
+if not HasScope(AccessToken, 'write:repos') then  
 begin
   // HTTP 403 Forbidden
   Response.StatusCode := 403;
@@ -730,7 +730,7 @@ type
 ### Endpoint /authorize (simplifié)
 
 ```pascal
-procedure HandleAuthorize(Request: TRequest; Response: TResponse);
+procedure HandleAuthorize(Request: TRequest; Response: TResponse);  
 var
   ClientID, RedirectURI, Scope, State, ResponseType: string;
   Client: TOAuthClient;
@@ -789,7 +789,7 @@ end;
 ### Endpoint /token (simplifié)
 
 ```pascal
-procedure HandleToken(Request: TRequest; Response: TResponse);
+procedure HandleToken(Request: TRequest; Response: TResponse);  
 var
   GrantType, Code, ClientID, ClientSecret: string;
   AccessToken, RefreshToken: string;
@@ -937,7 +937,7 @@ const
 
 ```pascal
 // Étape 1 : Rediriger vers Google
-function GetGoogleAuthURL: string;
+function GetGoogleAuthURL: string;  
 begin
   Result := GOOGLE_AUTH_URL + '?' +
     'client_id=' + GOOGLE_CLIENT_ID +
@@ -947,7 +947,7 @@ begin
 end;
 
 // Étape 2 : Callback - Échanger le code
-procedure HandleCallback(const Code: string);
+procedure HandleCallback(const Code: string);  
 var
   AccessToken: string;
   UserInfo: string;
@@ -962,7 +962,7 @@ begin
   // {"email":"user@gmail.com","name":"John Doe","picture":"https://..."}
 end;
 
-function GetUserInfo(const AccessToken: string): string;
+function GetUserInfo(const AccessToken: string): string;  
 var
   HTTP: THTTPSend;
 begin
@@ -1000,7 +1000,7 @@ const
   GITHUB_TOKEN_URL = 'https://github.com/login/oauth/access_token';
   GITHUB_API_URL = 'https://api.github.com/user';
 
-function GetGitHubAuthURL: string;
+function GetGitHubAuthURL: string;  
 begin
   Result := GITHUB_AUTH_URL + '?' +
     'client_id=' + GITHUB_CLIENT_ID +
@@ -1008,7 +1008,7 @@ begin
     '&scope=' + UrlEncode('read:user user:email');
 end;
 
-function GetGitHubUserInfo(const AccessToken: string): string;
+function GetGitHubUserInfo(const AccessToken: string): string;  
 var
   HTTP: THTTPSend;
 begin
@@ -1041,7 +1041,7 @@ const
   MS_TOKEN_URL = 'https://login.microsoftonline.com/' + MS_TENANT_ID + '/oauth2/v2.0/token';
   MS_GRAPH_URL = 'https://graph.microsoft.com/v1.0/me';
 
-function GetMicrosoftAuthURL: string;
+function GetMicrosoftAuthURL: string;  
 begin
   Result := MS_AUTH_URL + '?' +
     'client_id=' + MS_CLIENT_ID +
@@ -1062,7 +1062,7 @@ const
   FB_TOKEN_URL = 'https://graph.facebook.com/v18.0/oauth/access_token';
   FB_GRAPH_URL = 'https://graph.facebook.com/v18.0/me';
 
-function GetFacebookAuthURL: string;
+function GetFacebookAuthURL: string;  
 begin
   Result := FB_AUTH_URL + '?' +
     'client_id=' + FB_APP_ID +
@@ -1070,7 +1070,7 @@ begin
     '&scope=' + UrlEncode('email public_profile');
 end;
 
-function GetFacebookUserInfo(const AccessToken: string): string;
+function GetFacebookUserInfo(const AccessToken: string): string;  
 var
   HTTP: THTTPSend;
   URL: string;
@@ -1107,7 +1107,7 @@ type
     Scope: string;
   end;
 
-function ParseTokenResponse(const JSONResponse: string): TTokenResponse;
+function ParseTokenResponse(const JSONResponse: string): TTokenResponse;  
 var
   JSONData: TJSONData;
   JSONObject: TJSONObject;
@@ -1152,7 +1152,7 @@ type
     EmailVerified: Boolean;
   end;
 
-function ParseUserInfo(const JSONResponse: string): TUserInfo;
+function ParseUserInfo(const JSONResponse: string): TUserInfo;  
 var
   JSONData: TJSONData;
   JSONObject: TJSONObject;
@@ -1181,13 +1181,13 @@ end;
 
 ```pascal
 // ❌ DANGEREUX - Ne JAMAIS faire
-procedure BadTokenStorage(const Token: string);
+procedure BadTokenStorage(const Token: string);  
 begin
   WriteToFile('token.txt', Token); // Token en clair !
 end;
 
 // ✅ CORRECT - Chiffrer avant stockage
-procedure SecureTokenStorage(const Token: string);
+procedure SecureTokenStorage(const Token: string);  
 var
   EncryptedToken: string;
 begin
@@ -1205,7 +1205,7 @@ end;
 uses
   Windows, WinCrypt;
 
-function ProtectData(const Data: string): string;
+function ProtectData(const Data: string): string;  
 var
   DataIn, DataOut: DATA_BLOB;
   DataBytes: TBytes;
@@ -1225,7 +1225,7 @@ begin
   end;
 end;
 
-function UnprotectData(const EncryptedData: string): string;
+function UnprotectData(const EncryptedData: string): string;  
 var
   DataIn, DataOut: DATA_BLOB;
   DataBytes: TBytes;
@@ -1251,7 +1251,7 @@ end;
 {$IFDEF UNIX}
 // Utiliser libsecret via DBus ou l'outil secret-tool
 
-procedure StoreTokenLinux(const Service, Account, Token: string);
+procedure StoreTokenLinux(const Service, Account, Token: string);  
 var
   Process: TProcess;
 begin
@@ -1275,7 +1275,7 @@ begin
   end;
 end;
 
-function RetrieveTokenLinux(const Service, Account: string): string;
+function RetrieveTokenLinux(const Service, Account: string): string;  
 var
   Process: TProcess;
   Buffer: string;
@@ -1315,7 +1315,7 @@ type
     class procedure DeleteToken(const Key: string);
   end;
 
-class procedure TSecureStorage.StoreToken(const Key, Token: string);
+class procedure TSecureStorage.StoreToken(const Key, Token: string);  
 begin
   {$IFDEF WINDOWS}
     WriteToFile(Key + '.dat', ProtectData(Token));
@@ -1325,7 +1325,7 @@ begin
   {$ENDIF}
 end;
 
-class function TSecureStorage.RetrieveToken(const Key: string): string;
+class function TSecureStorage.RetrieveToken(const Key: string): string;  
 begin
   {$IFDEF WINDOWS}
     Result := UnprotectData(ReadFromFile(Key + '.dat'));
@@ -1376,7 +1376,7 @@ begin
   SaveSession(Result);
 end;
 
-function GetOrCreateUser(const UserInfo: TUserInfo): Integer;
+function GetOrCreateUser(const UserInfo: TUserInfo): Integer;  
 var
   User: TUser;
 begin
@@ -1404,7 +1404,7 @@ end;
 ### Middleware de vérification de session
 
 ```pascal
-function RequireAuth(Request: TRequest; Response: TResponse): Boolean;
+function RequireAuth(Request: TRequest; Response: TResponse): Boolean;  
 var
   SessionID: string;
   Session: TUserSession;
@@ -1449,7 +1449,7 @@ begin
 end;
 
 // Utilisation
-procedure HandleProtectedEndpoint(Request: TRequest; Response: TResponse);
+procedure HandleProtectedEndpoint(Request: TRequest; Response: TResponse);  
 begin
   if not RequireAuth(Request, Response) then
     Exit;
@@ -1480,7 +1480,7 @@ Accède à Google Drive (pas de nouvelle connexion)
 
 ```pascal
 // Application 1 : Serveur d'authentification principal
-procedure HandleLogin(Request: TRequest; Response: TResponse);
+procedure HandleLogin(Request: TRequest; Response: TResponse);  
 var
   Session: TUserSession;
   SSOToken: string;
@@ -1501,7 +1501,7 @@ begin
 end;
 
 // Application 2 : Vérifier le SSO
-procedure CheckSSO(Request: TRequest; Response: TResponse);
+procedure CheckSSO(Request: TRequest; Response: TResponse);  
 var
   SSOToken: string;
   UserID: Integer;
@@ -1554,7 +1554,7 @@ SAML est un autre protocole SSO, souvent utilisé en entreprise.
 
 ```pascal
 // Génération du state
-function GenerateState: string;
+function GenerateState: string;  
 begin
   Result := GenerateRandomToken(32);
   // Stocker en session
@@ -1562,7 +1562,7 @@ begin
 end;
 
 // Vérification
-function ValidateState(const ReceivedState: string): Boolean;
+function ValidateState(const ReceivedState: string): Boolean;  
 var
   StoredState: string;
 begin
@@ -1577,7 +1577,7 @@ end;
 AuthURL := GetAuthURL + '&state=' + GenerateState;
 
 // Dans le callback
-if not ValidateState(Request.Query['state']) then
+if not ValidateState(Request.Query['state']) then  
 begin
   Response.StatusCode := 400;
   Response.Content := 'Invalid state parameter';
@@ -1593,7 +1593,7 @@ end;
 
 ```pascal
 // Génération du code_verifier et code_challenge
-function GeneratePKCE(out CodeVerifier, CodeChallenge: string);
+function GeneratePKCE(out CodeVerifier, CodeChallenge: string);  
 var
   RandomBytes: TBytes;
   Hash: TBytes;
@@ -1638,7 +1638,7 @@ end;
 
 ```pascal
 // Configurer un cookie sécurisé
-procedure SetSecureCookie(Response: TResponse; const Name, Value: string);
+procedure SetSecureCookie(Response: TResponse; const Name, Value: string);  
 begin
   Response.SetCookie(
     Name,
@@ -1659,7 +1659,7 @@ end;
 **Protection** : Valider le redirect_uri
 
 ```pascal
-function ValidateRedirectURI(const ClientID, RedirectURI: string): Boolean;
+function ValidateRedirectURI(const ClientID, RedirectURI: string): Boolean;  
 var
   Client: TOAuthClient;
 begin
@@ -1673,7 +1673,7 @@ begin
 end;
 
 // Ne JAMAIS accepter un redirect_uri arbitraire
-if not ValidateRedirectURI(ClientID, RedirectURI) then
+if not ValidateRedirectURI(ClientID, RedirectURI) then  
 begin
   Response.StatusCode := 400;
   Response.Content := 'Invalid redirect_uri';
@@ -1686,7 +1686,7 @@ end;
 **1. Toujours utiliser HTTPS** :
 ```pascal
 // Vérifier que la requête est en HTTPS
-if Request.Protocol <> 'https' then
+if Request.Protocol <> 'https' then  
 begin
   Response.StatusCode := 400;
   Response.Content := 'HTTPS required';
@@ -1697,7 +1697,7 @@ end;
 **2. Valider tous les paramètres** :
 ```pascal
 // Exemple de validation
-if (Length(Code) < 10) or (Length(Code) > 512) then
+if (Length(Code) < 10) or (Length(Code) > 512) then  
 begin
   Response.StatusCode := 400;
   Response.Content := '{"error":"invalid_request"}';
@@ -1708,7 +1708,7 @@ end;
 **3. Limiter les tentatives** :
 ```pascal
 // Rate limiting
-if GetFailedAttempts(ClientID) > 10 then
+if GetFailedAttempts(ClientID) > 10 then  
 begin
   Response.StatusCode := 429;
   Response.Content := '{"error":"too_many_requests"}';
@@ -1719,15 +1719,15 @@ end;
 
 **4. Logger les événements de sécurité** :
 ```pascal
-procedure LogSecurityEvent(const Event: string; const Details: string);
+procedure LogSecurityEvent(const Event: string; const Details: string);  
 begin
   WriteToLog(Format('[SECURITY] %s - %s - IP: %s - Time: %s',
     [Event, Details, GetClientIP, DateTimeToStr(Now)]));
 end;
 
 // Utilisation
-LogSecurityEvent('INVALID_TOKEN', 'Token: ' + Token);
-LogSecurityEvent('LOGIN_FAILED', 'User: ' + Email);
+LogSecurityEvent('INVALID_TOKEN', 'Token: ' + Token);  
+LogSecurityEvent('LOGIN_FAILED', 'User: ' + Email);  
 LogSecurityEvent('TOKEN_REFRESH', 'User: ' + UserID);
 ```
 
@@ -1750,7 +1750,7 @@ LogSecurityEvent('TOKEN_REFRESH', 'User: ' + UserID);
 ### Logs de débogage
 
 ```pascal
-procedure DebugOAuthFlow(const Step: string; const Data: string);
+procedure DebugOAuthFlow(const Step: string; const Data: string);  
 begin
   {$IFDEF DEBUG}
   WriteLn('=== OAuth Debug ===');
@@ -1762,8 +1762,8 @@ begin
 end;
 
 // Utilisation
-DebugOAuthFlow('AUTH_REQUEST', 'URL: ' + AuthURL);
-DebugOAuthFlow('CALLBACK', 'Code: ' + Code);
+DebugOAuthFlow('AUTH_REQUEST', 'URL: ' + AuthURL);  
+DebugOAuthFlow('CALLBACK', 'Code: ' + Code);  
 DebugOAuthFlow('TOKEN_RESPONSE', TokenJSON);
 ```
 
@@ -1803,7 +1803,7 @@ const
   TOKEN_URL = 'https://github.com/login/oauth/access_token';
   API_URL = 'https://api.github.com/user';
 
-function GetAuthURL: string;
+function GetAuthURL: string;  
 begin
   Result := AUTH_URL + '?client_id=' + CLIENT_ID +
     '&redirect_uri=' + REDIRECT_URI +
@@ -1813,7 +1813,7 @@ begin
   WriteLn;
 end;
 
-function ExchangeCode(const Code: string): string;
+function ExchangeCode(const Code: string): string;  
 var
   HTTP: THTTPSend;
   PostData, Response: string;
@@ -1848,7 +1848,7 @@ begin
   end;
 end;
 
-function GetUserInfo(const Token: string): string;
+function GetUserInfo(const Token: string): string;  
 var
   HTTP: THTTPSend;
 begin
@@ -1942,7 +1942,7 @@ const
   TOKEN_URL = 'https://github.com/login/oauth/access_token';
   API_URL = 'https://api.github.com/user';
 
-function ExchangeCodeForToken(const Code: string): string;
+function ExchangeCodeForToken(const Code: string): string;  
 var
   HTTP: THTTPSend;
   PostData, Response: string;
@@ -1975,7 +1975,7 @@ begin
   end;
 end;
 
-function GetUserInfo(const Token: string): string;
+function GetUserInfo(const Token: string): string;  
 var
   HTTP: THTTPSend;
 begin
@@ -2138,7 +2138,7 @@ const
   TOKEN_URL = 'https://oauth2.googleapis.com/token';
   USERINFO_URL = 'https://www.googleapis.com/oauth2/v2/userinfo';
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   UpdateUI(False);
 
@@ -2151,12 +2151,12 @@ begin
   end;
 end;
 
-procedure TFormMain.BtnLoginClick(Sender: TObject);
+procedure TFormMain.BtnLoginClick(Sender: TObject);  
 begin
   StartOAuthFlow;
 end;
 
-procedure TFormMain.BtnLogoutClick(Sender: TObject);
+procedure TFormMain.BtnLogoutClick(Sender: TObject);  
 begin
   FAccessToken := '';
   FRefreshToken := '';
@@ -2165,7 +2165,7 @@ begin
   UpdateUI(False);
 end;
 
-procedure TFormMain.StartOAuthFlow;
+procedure TFormMain.StartOAuthFlow;  
 var
   AuthURL: string;
   State: string;
@@ -2196,7 +2196,7 @@ begin
     HandleOAuthCallback(Code);
 end;
 
-procedure TFormMain.HandleOAuthCallback(const Code: string);
+procedure TFormMain.HandleOAuthCallback(const Code: string);  
 begin
   LabelStatus.Caption := 'Échange du code...';
   Application.ProcessMessages;
@@ -2219,7 +2219,7 @@ begin
   end;
 end;
 
-procedure TFormMain.ExchangeCodeForToken(const Code: string);
+procedure TFormMain.ExchangeCodeForToken(const Code: string);  
 var
   HTTP: THTTPSend;
   PostData, Response: string;
@@ -2259,7 +2259,7 @@ begin
   end;
 end;
 
-procedure TFormMain.LoadUserInfo;
+procedure TFormMain.LoadUserInfo;  
 var
   HTTP: THTTPSend;
   Response: string;
@@ -2299,7 +2299,7 @@ begin
   end;
 end;
 
-procedure TFormMain.UpdateUI(LoggedIn: Boolean);
+procedure TFormMain.UpdateUI(LoggedIn: Boolean);  
 begin
   BtnLogin.Visible := not LoggedIn;
   BtnLogout.Visible := LoggedIn;
@@ -2336,20 +2336,20 @@ type
     property OnTokenRefreshed: TNotifyEvent read FOnTokenRefreshed write FOnTokenRefreshed;
   end;
 
-procedure TTokenManager.RefreshTokenIfNeeded;
+procedure TTokenManager.RefreshTokenIfNeeded;  
 begin
   // Rafraîchir si le token expire dans moins de 5 minutes
   if Now > (FExpiresAt - (5 / 1440)) then
     RefreshAccessToken;
 end;
 
-function TTokenManager.GetValidAccessToken: string;
+function TTokenManager.GetValidAccessToken: string;  
 begin
   RefreshTokenIfNeeded;
   Result := FAccessToken;
 end;
 
-procedure TTokenManager.RefreshAccessToken;
+procedure TTokenManager.RefreshAccessToken;  
 var
   HTTP: THTTPSend;
   PostData, Response: string;
@@ -2441,19 +2441,19 @@ type
     procedure Clear;
   end;
 
-constructor TTokenCache.Create;
+constructor TTokenCache.Create;  
 begin
   inherited Create;
   FCache := TDictionary<string, TCachedToken>.Create;
 end;
 
-destructor TTokenCache.Destroy;
+destructor TTokenCache.Destroy;  
 begin
   FCache.Free;
   inherited Destroy;
 end;
 
-procedure TTokenCache.SetToken(const Key, Token: string; ExpiresIn: Integer);
+procedure TTokenCache.SetToken(const Key, Token: string; ExpiresIn: Integer);  
 var
   CachedToken: TCachedToken;
 begin
@@ -2462,7 +2462,7 @@ begin
   FCache.AddOrSetValue(Key, CachedToken);
 end;
 
-function TTokenCache.GetToken(const Key: string): string;
+function TTokenCache.GetToken(const Key: string): string;  
 var
   CachedToken: TCachedToken;
 begin
@@ -2477,7 +2477,7 @@ begin
   end;
 end;
 
-procedure TTokenCache.Clear;
+procedure TTokenCache.Clear;  
 begin
   FCache.Clear;
 end;
@@ -2493,7 +2493,7 @@ end;
 
 **Ouverture d'URL** :
 ```pascal
-procedure OpenURL(const URL: string);
+procedure OpenURL(const URL: string);  
 begin
   {$IFDEF WINDOWS}
     ShellExecute(0, 'open', PChar(URL), nil, nil, SW_SHOWNORMAL);

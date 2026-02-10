@@ -17,7 +17,7 @@ Dans cette section, nous allons explorer les différentes techniques et mécanis
 1. **Fichiers en clair sur le disque** :
 ```pascal
 // ❌ DANGEREUX
-procedure SavePassword(const Password: string);
+procedure SavePassword(const Password: string);  
 begin
   WriteToFile('password.txt', Password); // Lisible par n'importe qui !
 end;
@@ -121,7 +121,7 @@ Limiter l'accès aux données sensibles uniquement aux processus et utilisateurs
 Toujours valider et assainir les données avant de les stocker.
 
 ```pascal
-function ValidateAndSanitize(const Input: string): string;
+function ValidateAndSanitize(const Input: string): string;  
 begin
   // Validation
   if Length(Input) > MAX_LENGTH then
@@ -137,7 +137,7 @@ end;
 Écraser les données sensibles en mémoire après utilisation.
 
 ```pascal
-procedure SecureWipeString(var Sensitive: string);
+procedure SecureWipeString(var Sensitive: string);  
 var
   i: Integer;
 begin
@@ -401,7 +401,7 @@ type
 ### Utilisation sécurisée
 
 ```pascal
-function GetSecretFromEnv(const VarName: string): string;
+function GetSecretFromEnv(const VarName: string): string;  
 begin
   Result := GetEnvironmentVariable(VarName);
 
@@ -433,13 +433,13 @@ end;
 ```ini
 ; config.ini - Données NON sensibles
 [Application]
-Name=MonApp
-Version=1.0.0
+Name=MonApp  
+Version=1.0.0  
 LogLevel=INFO
 
 [Server]
-Host=api.example.com
-Port=443
+Host=api.example.com  
+Port=443  
 Timeout=30
 ```
 
@@ -496,7 +496,7 @@ type
     class function CreateStorage: ISecureStorage;
   end;
 
-class function TSecureStorageFactory.CreateStorage: ISecureStorage;
+class function TSecureStorageFactory.CreateStorage: ISecureStorage;  
 begin
   {$IFDEF WINDOWS}
   Result := TWindowsDPAPIStorage.Create;
@@ -551,7 +551,7 @@ type
     procedure ExpireOldVersions;
   end;
 
-procedure TSecretRotation.RotateSecret(const NewSecret: string);
+procedure TSecretRotation.RotateSecret(const NewSecret: string);  
 begin
   // Désactiver l'ancienne version (mais la garder pour transition)
   if FSecrets.Count > 0 then
@@ -584,7 +584,7 @@ end;
 ### Exemple de logging sécurisé
 
 ```pascal
-procedure LogSecretAccess(const SecretName, Action: string; Success: Boolean);
+procedure LogSecretAccess(const SecretName, Action: string; Success: Boolean);  
 begin
   WriteToLog(Format(
     '[SECURITY] %s - Secret: %s, Action: %s, Success: %s, User: %s, IP: %s',
@@ -598,7 +598,7 @@ begin
 end;
 
 // Utilisation
-procedure RetrieveSecret(const Name: string);
+procedure RetrieveSecret(const Name: string);  
 begin
   try
     Secret := Storage.Retrieve(Name);
@@ -631,7 +631,7 @@ type
     procedure Clear;
   end;
 
-function TSecretCache.Get(const Key: string): string;
+function TSecretCache.Get(const Key: string): string;  
 var
   CachedTime: TDateTime;
 begin
@@ -667,7 +667,7 @@ type
     property Value: string read GetValue;
   end;
 
-function TLazySecret.GetValue: string;
+function TLazySecret.GetValue: string;  
 begin
   if not FLoaded then
   begin

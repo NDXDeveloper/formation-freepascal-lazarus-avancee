@@ -70,7 +70,7 @@ Exemples : MD5, SHA-1, SHA-256, SHA-512
 uses
   DCPsha256, DCPcrypt2;
 
-function HashPassword(const Password: string): string;
+function HashPassword(const Password: string): string;  
 var
   Hash: TDCP_sha256;
   Digest: array[0..31] of Byte;
@@ -102,7 +102,7 @@ end;
 ### Vérifier un mot de passe
 
 ```pascal
-function VerifyPassword(const Password, StoredHash: string): Boolean;
+function VerifyPassword(const Password, StoredHash: string): Boolean;  
 var
   ComputedHash: string;
 begin
@@ -121,7 +121,7 @@ AES (Advanced Encryption Standard) est l'algorithme de chiffrement symétrique l
 uses
   DCPrijndael, DCPcrypt2, SysUtils;
 
-function EncryptString(const PlainText, Password: string): string;
+function EncryptString(const PlainText, Password: string): string;  
 var
   Cipher: TDCP_rijndael;
   KeyData: array[0..31] of Byte;
@@ -149,7 +149,7 @@ begin
   end;
 end;
 
-function DecryptString(const CipherText, Password: string): string;
+function DecryptString(const CipherText, Password: string): string;  
 var
   Cipher: TDCP_rijndael;
   KeyData: array[0..31] of Byte;
@@ -203,7 +203,7 @@ end;
 uses
   DCPrijndael, DCPcrypt2, Classes;
 
-procedure EncryptFile(const SourceFile, DestFile, Password: string);
+procedure EncryptFile(const SourceFile, DestFile, Password: string);  
 var
   Cipher: TDCP_rijndael;
   Source, Dest: TFileStream;
@@ -229,7 +229,7 @@ begin
   end;
 end;
 
-procedure DecryptFile(const SourceFile, DestFile, Password: string);
+procedure DecryptFile(const SourceFile, DestFile, Password: string);  
 var
   Cipher: TDCP_rijndael;
   Source, Dest: TFileStream;
@@ -291,7 +291,7 @@ Ne jamais utiliser directement un mot de passe comme clé de chiffrement. Utilis
 uses
   DCPsha256;
 
-function DeriveKey(const Password: string; SaltSize: Integer): string;
+function DeriveKey(const Password: string; SaltSize: Integer): string;  
 var
   Hash: TDCP_sha256;
   Salt: string;
@@ -352,7 +352,7 @@ end;
 ### 4. Protéger les mots de passe avec du salage
 
 ```pascal
-function HashPasswordWithSalt(const Password: string): string;
+function HashPasswordWithSalt(const Password: string): string;  
 var
   Hash: TDCP_sha256;
   Salt: string;
@@ -404,7 +404,7 @@ Pour la génération de sel ou d'IV, préférez utiliser les API système :
 uses
   Windows;
 
-procedure GetRandomBytes(var Buffer; Size: Integer);
+procedure GetRandomBytes(var Buffer; Size: Integer);  
 var
   hProv: THandle;
 begin
@@ -416,7 +416,7 @@ end;
 
 **Linux** :
 ```pascal
-procedure GetRandomBytes(var Buffer; Size: Integer);
+procedure GetRandomBytes(var Buffer; Size: Integer);  
 var
   F: File;
 begin
@@ -462,7 +462,7 @@ implementation
 
 {$R *.lfm}
 
-function TMainForm.DeriveKeyFromPassword(const Password: string): string;
+function TMainForm.DeriveKeyFromPassword(const Password: string): string;  
 var
   Hash: TDCP_sha256;
   Digest: array[0..31] of Byte;
@@ -481,7 +481,7 @@ begin
   end;
 end;
 
-procedure TMainForm.BtnEncryptClick(Sender: TObject);
+procedure TMainForm.BtnEncryptClick(Sender: TObject);  
 var
   Cipher: TDCP_rijndael;
   Key: string;
@@ -505,7 +505,7 @@ begin
   end;
 end;
 
-procedure TMainForm.BtnDecryptClick(Sender: TObject);
+procedure TMainForm.BtnDecryptClick(Sender: TObject);  
 var
   Cipher: TDCP_rijndael;
   Key: string;

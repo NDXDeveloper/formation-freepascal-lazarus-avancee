@@ -81,7 +81,7 @@ Query.SQL.Text := 'SELECT * FROM Users WHERE Username = ''' +
                   UserInput + '''';
 
 // ✅ SÉCURISÉ - Utilisation de paramètres
-Query.SQL.Text := 'SELECT * FROM Users WHERE Username = :Username';
+Query.SQL.Text := 'SELECT * FROM Users WHERE Username = :Username';  
 Query.ParamByName('Username').AsString := UserInput;
 ```
 
@@ -133,14 +133,14 @@ La sécurité ne repose jamais sur une seule mesure. Il faut plusieurs couches d
 
 ```pascal
 // Validation des entrées
-function ValidateEmail(const Email: string): Boolean;
+function ValidateEmail(const Email: string): Boolean;  
 begin
   Result := (Pos('@', Email) > 0) and (Pos('.', Email) > Pos('@', Email));
   // En production, utilisez une regex plus robuste
 end;
 
 // Assainissement des données
-function SanitizeInput(const Input: string): string;
+function SanitizeInput(const Input: string): string;  
 begin
   Result := StringReplace(Input, '<', '&lt;', [rfReplaceAll]);
   Result := StringReplace(Result, '>', '&gt;', [rfReplaceAll]);
@@ -237,7 +237,7 @@ type
     Algorithm: string; // L'algorithme utilisé
   end;
 
-function HashPassword(const Password: string): TPasswordHash;
+function HashPassword(const Password: string): TPasswordHash;  
 begin
   // Générer un sel aléatoire
   Result.Salt := GenerateRandomSalt();
@@ -280,7 +280,7 @@ end;
 uses
   Windows, WinCrypt;
 
-function GetSecureRandomBytes(Count: Integer): TBytes;
+function GetSecureRandomBytes(Count: Integer): TBytes;  
 var
   hProv: HCRYPTPROV;
 begin
@@ -292,7 +292,7 @@ end;
 {$ENDIF}
 
 {$IFDEF UNIX}
-function GetSecureRandomBytes(Count: Integer): TBytes;
+function GetSecureRandomBytes(Count: Integer): TBytes;  
 var
   F: File;
 begin
@@ -342,7 +342,7 @@ end;
 
 ```pascal
 // Toujours valider et assainir
-function ProcessUserInput(const Input: string): string;
+function ProcessUserInput(const Input: string): string;  
 begin
   // Validation
   if Length(Input) > 1000 then
@@ -373,7 +373,7 @@ Ne réinventez pas la roue en cryptographie. Utilisez des bibliothèques :
 ### 4. Journaliser les événements de sécurité
 
 ```pascal
-procedure LogSecurityEvent(const Event: string; Level: TSecurityLevel);
+procedure LogSecurityEvent(const Event: string; Level: TSecurityLevel);  
 begin
   // Journaliser avec horodatage, utilisateur, IP, action
   WriteToSecurityLog(

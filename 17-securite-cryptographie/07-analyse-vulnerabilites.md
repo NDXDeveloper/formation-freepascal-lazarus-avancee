@@ -29,9 +29,9 @@ Dans cette section, nous allons explorer comment identifier et corriger les vuln
 ### Le coût d'une vulnérabilité
 
 ```
-Découverte pendant le développement → Coût de correction : 1x
-Découverte en test → Coût de correction : 10x
-Découverte en production → Coût de correction : 100x
+Découverte pendant le développement → Coût de correction : 1x  
+Découverte en test → Coût de correction : 10x  
+Découverte en production → Coût de correction : 100x  
 Découverte par un attaquant → Coût : IMMENSE
 ```
 
@@ -74,7 +74,7 @@ Le CWE (Common Weakness Enumeration) catalogue plus de 600 types de faiblesses l
 **Vulnérabilité** :
 ```pascal
 // ❌ DANGEREUX - Vulnérable à l'injection SQL
-procedure SearchUser(const Username: string);
+procedure SearchUser(const Username: string);  
 var
   Query: TSQLQuery;
 begin
@@ -91,7 +91,7 @@ end;
 **Correction** :
 ```pascal
 // ✅ SÉCURISÉ - Utilisation de paramètres
-procedure SearchUserSecure(const Username: string);
+procedure SearchUserSecure(const Username: string);  
 var
   Query: TSQLQuery;
 begin
@@ -103,7 +103,7 @@ end;
 
 **Détection** :
 ```pascal
-function DetectSQLInjectionAttempt(const Input: string): Boolean;
+function DetectSQLInjectionAttempt(const Input: string): Boolean;  
 const
   DANGEROUS_PATTERNS: array[0..6] of string = (
     '''', '--', ';', '/*', '*/', 'xp_', 'sp_'
@@ -131,7 +131,7 @@ end;
 **Vulnérabilité** :
 ```pascal
 // ❌ DANGEREUX - Pas de vérification de taille
-procedure CopyUserInput(const Input: string);
+procedure CopyUserInput(const Input: string);  
 var
   Buffer: array[0..255] of Char;
 begin
@@ -142,7 +142,7 @@ end;
 **Correction** :
 ```pascal
 // ✅ SÉCURISÉ - Vérification de taille
-procedure CopyUserInputSecure(const Input: string);
+procedure CopyUserInputSecure(const Input: string);  
 var
   Buffer: array[0..255] of Char;
   CopySize: Integer;
@@ -159,7 +159,7 @@ end;
 **Vulnérabilité** :
 ```pascal
 // ❌ DANGEREUX - Permet de lire n'importe quel fichier
-function ReadUserFile(const FileName: string): string;
+function ReadUserFile(const FileName: string): string;  
 begin
   Result := ReadFileToString(DataDirectory + FileName);
 end;
@@ -172,7 +172,7 @@ end;
 **Correction** :
 ```pascal
 // ✅ SÉCURISÉ - Validation du chemin
-function ReadUserFileSecure(const FileName: string): string;
+function ReadUserFileSecure(const FileName: string): string;  
 var
   SafePath: string;
   RealPath: string;
@@ -206,7 +206,7 @@ end;
 **Vulnérabilité** :
 ```pascal
 // ❌ DANGEREUX - Injection de commandes
-procedure PingHost(const Host: string);
+procedure PingHost(const Host: string);  
 var
   Command: string;
 begin
@@ -222,7 +222,7 @@ end;
 **Correction** :
 ```pascal
 // ✅ SÉCURISÉ - Validation stricte
-procedure PingHostSecure(const Host: string);
+procedure PingHostSecure(const Host: string);  
 var
   Proc: TProcess;
 begin
@@ -246,7 +246,7 @@ begin
   end;
 end;
 
-function IsValidHostname(const Host: string): Boolean;
+function IsValidHostname(const Host: string): Boolean;  
 var
   i: Integer;
   ValidChars: set of Char;
@@ -274,7 +274,7 @@ const
   DB_PASSWORD = 'MySecretPassword123';
   API_KEY = 'sk_live_abc123def456';
 
-procedure ConnectDatabase;
+procedure ConnectDatabase;  
 begin
   Connection.Password := DB_PASSWORD; // Visible dans le binaire !
 end;
@@ -283,7 +283,7 @@ end;
 **Correction** :
 ```pascal
 // ✅ SÉCURISÉ - Credentials externes
-function GetDatabasePassword: string;
+function GetDatabasePassword: string;  
 begin
   {$IFDEF WINDOWS}
   Result := UnprotectDataDPAPI(LoadFromFile('db.enc'));
@@ -292,7 +292,7 @@ begin
   {$ENDIF}
 end;
 
-procedure ConnectDatabaseSecure;
+procedure ConnectDatabaseSecure;  
 begin
   Connection.Password := GetDatabasePassword;
 end;
@@ -303,7 +303,7 @@ end;
 **Vulnérabilité** :
 ```pascal
 // ❌ DANGEREUX - Pas de limite
-procedure ProcessUserData(const Data: string);
+procedure ProcessUserData(const Data: string);  
 var
   i: Integer;
 begin
@@ -323,7 +323,7 @@ end;
 const
   MAX_DATA_SIZE = 1024 * 1024; // 1 MB
 
-procedure ProcessUserDataSecure(const Data: string);
+procedure ProcessUserDataSecure(const Data: string);  
 var
   i: Integer;
 begin
@@ -355,7 +355,7 @@ end;
 **Vulnérabilité** :
 ```pascal
 // ❌ DANGEREUX - Messages d'erreur trop détaillés
-procedure HandleError(E: Exception);
+procedure HandleError(E: Exception);  
 begin
   ShowMessage('Erreur SQL: ' + E.Message);
   // Affiche : "Table 'users' doesn't exist in database 'myapp'"
@@ -366,7 +366,7 @@ end;
 **Correction** :
 ```pascal
 // ✅ SÉCURISÉ - Messages génériques pour l'utilisateur
-procedure HandleErrorSecure(E: Exception);
+procedure HandleErrorSecure(E: Exception);  
 begin
   // Log détaillé (interne)
   LogError('Erreur: ' + E.Message + ' - ' + E.StackTrace);
@@ -438,7 +438,7 @@ const
      Description: 'Weak Hash Algorithm')
   );
 
-procedure ScanFile(const FileName: string);
+procedure ScanFile(const FileName: string);  
 var
   Source: TStringList;
   i, j, LineNum: Integer;
@@ -471,7 +471,7 @@ begin
   end;
 end;
 
-function ContainsPattern(const Text, Pattern: string): Boolean;
+function ContainsPattern(const Text, Pattern: string): Boolean;  
 begin
   // Simplification - utilisez RegEx pour plus de précision
   Result := Pos(Pattern, Text) > 0;
@@ -493,7 +493,7 @@ type
     TestFunction: function(const Input: string): Boolean;
   end;
 
-function TestSQLInjection(const Input: string): Boolean;
+function TestSQLInjection(const Input: string): Boolean;  
 var
   Query: TSQLQuery;
 begin
@@ -517,7 +517,7 @@ begin
   end;
 end;
 
-procedure RunFuzzTests;
+procedure RunFuzzTests;  
 const
   MALICIOUS_INPUTS: array[0..9] of string = (
     ''' OR ''1''=''1',
@@ -571,7 +571,7 @@ type
     CVEs: TStringList;
   end;
 
-function CheckDependencyVulnerabilities(const DependencyName, Version: string): TDependency;
+function CheckDependencyVulnerabilities(const DependencyName, Version: string): TDependency;  
 begin
   Result.Name := DependencyName;
   Result.Version := Version;
@@ -594,7 +594,7 @@ begin
     Result.HasVulnerabilities := False;
 end;
 
-procedure AuditDependencies;
+procedure AuditDependencies;  
 var
   Deps: array of TDependency;
   i, j: Integer;
@@ -638,7 +638,7 @@ type
     class function SanitizeSQL(const Input: string): string;
   end;
 
-class function TInputValidator.ValidateEmail(const Email: string): Boolean;
+class function TInputValidator.ValidateEmail(const Email: string): Boolean;  
 const
   EMAIL_REGEX = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
 begin
@@ -649,7 +649,7 @@ begin
             (Length(Email) <= 254);
 end;
 
-class function TInputValidator.ValidateFilename(const Filename: string): Boolean;
+class function TInputValidator.ValidateFilename(const Filename: string): Boolean;  
 const
   FORBIDDEN_CHARS = ['\', '/', ':', '*', '?', '"', '<', '>', '|'];
 var
@@ -675,7 +675,7 @@ begin
   {$ENDIF}
 end;
 
-class function TInputValidator.SanitizeHTML(const HTML: string): string;
+class function TInputValidator.SanitizeHTML(const HTML: string): string;  
 begin
   Result := HTML;
 
@@ -717,7 +717,7 @@ begin
   {$ENDIF}
 end;
 
-class function TSecureErrorHandler.GetUserFriendlyMessage(E: Exception): string;
+class function TSecureErrorHandler.GetUserFriendlyMessage(E: Exception): string;  
 begin
   if E is EDatabaseError then
     Result := 'Erreur de base de données. Veuillez réessayer.'
@@ -781,7 +781,7 @@ end;
 
 **1. Test d'injection SQL** :
 ```pascal
-procedure TestSQLInjectionVulnerabilities;
+procedure TestSQLInjectionVulnerabilities;  
 const
   SQL_INJECTION_PAYLOADS: array[0..4] of string = (
     ''' OR ''1''=''1',
@@ -813,7 +813,7 @@ end;
 
 **2. Test de buffer overflow** :
 ```pascal
-procedure TestBufferOverflow;
+procedure TestBufferOverflow;  
 var
   LongString: string;
   i: Integer;
@@ -839,7 +839,7 @@ end;
 
 **3. Test de path traversal** :
 ```pascal
-procedure TestPathTraversal;
+procedure TestPathTraversal;  
 const
   PATH_PAYLOADS: array[0..3] of string = (
     '../../../etc/passwd',
@@ -912,7 +912,7 @@ end;
 
 // AVANT (vulnérable)
 {
-procedure TUserSearchForm.SearchButtonClick(Sender: TObject);
+procedure TUserSearchForm.SearchButtonClick(Sender: TObject);  
 begin
   Query.SQL.Text := 'SELECT * FROM users WHERE username = ''' +
                     EditUsername.Text + '''';
@@ -921,7 +921,7 @@ end;
 }
 
 // APRÈS (corrigé)
-procedure TUserSearchForm.SearchButtonClick(Sender: TObject);
+procedure TUserSearchForm.SearchButtonClick(Sender: TObject);  
 begin
   // Validation d'entrée
   if not IsValidUsername(EditUsername.Text) then
@@ -946,7 +946,7 @@ begin
   end;
 end;
 
-function IsValidUsername(const Username: string): Boolean;
+function IsValidUsername(const Username: string): Boolean;  
 const
   MAX_LENGTH = 50;
   VALID_CHARS = ['a'..'z', 'A'..'Z', '0'..'9', '_', '-', '.'];
@@ -1008,13 +1008,13 @@ type
     property Reports: TList read FReports;
   end;
 
-constructor TVulnerabilityScanner.Create;
+constructor TVulnerabilityScanner.Create;  
 begin
   inherited Create;
   FReports := TList.Create;
 end;
 
-destructor TVulnerabilityScanner.Destroy;
+destructor TVulnerabilityScanner.Destroy;  
 begin
   FReports.Free;
   inherited Destroy;
@@ -1141,7 +1141,7 @@ begin
   end;
 end;
 
-procedure TVulnerabilityScanner.AddReport(const Report: TVulnerabilityReport);
+procedure TVulnerabilityScanner.AddReport(const Report: TVulnerabilityReport);  
 var
   ReportPtr: ^TVulnerabilityReport;
 begin
@@ -1150,7 +1150,7 @@ begin
   FReports.Add(ReportPtr);
 end;
 
-procedure TVulnerabilityScanner.ScanFile(const FileName: string);
+procedure TVulnerabilityScanner.ScanFile(const FileName: string);  
 var
   Source: TStringList;
 begin
@@ -1170,7 +1170,7 @@ begin
   end;
 end;
 
-procedure TVulnerabilityScanner.ScanDirectory(const Directory: string);
+procedure TVulnerabilityScanner.ScanDirectory(const Directory: string);  
 var
   SearchRec: TSearchRec;
   Path: string;
@@ -1192,7 +1192,7 @@ begin
   end;
 end;
 
-procedure TVulnerabilityScanner.GenerateReport(const OutputFile: string);
+procedure TVulnerabilityScanner.GenerateReport(const OutputFile: string);  
 var
   F: TextFile;
   i: Integer;
@@ -1369,14 +1369,14 @@ type
     procedure Stop;
   end;
 
-constructor TSecurityMonitor.Create;
+constructor TSecurityMonitor.Create;  
 begin
   inherited Create;
   FAlertThreshold := 5;
   FMonitoringEnabled := False;
 end;
 
-procedure TSecurityMonitor.MonitorAuthenticationAttempts;
+procedure TSecurityMonitor.MonitorAuthenticationAttempts;  
 var
   FailedAttempts: TDictionary<string, Integer>;
   Username: string;
@@ -1398,7 +1398,7 @@ begin
   end;
 end;
 
-procedure TSecurityMonitor.MonitorDataAccess;
+procedure TSecurityMonitor.MonitorDataAccess;  
 var
   AccessCount: Integer;
   TimeWindow: TDateTime;
@@ -1414,7 +1414,7 @@ begin
   end;
 end;
 
-procedure TSecurityMonitor.SendAlert(const AlertType, Message: string);
+procedure TSecurityMonitor.SendAlert(const AlertType, Message: string);  
 begin
   // Log
   WriteLnToLog(Format('[SECURITY_ALERT] %s: %s', [AlertType, Message]));
@@ -1441,7 +1441,7 @@ type
     class procedure GenerateComplianceReport;
   end;
 
-class function TASVSCompliance.CheckLevel1Compliance: Boolean;
+class function TASVSCompliance.CheckLevel1Compliance: Boolean;  
 var
   Checks: TStringList;
   AllPassed: Boolean;
@@ -1525,7 +1525,7 @@ end;
 **Fixed**: 2024-01-16  
 
 ## Description
-The user search functionality in UserSearchForm.pas is vulnerable to SQL injection
+The user search functionality in UserSearchForm.pas is vulnerable to SQL injection  
 due to direct string concatenation in SQL query construction.
 
 ## Affected Components
@@ -1551,7 +1551,7 @@ An attacker can:
 ## Fix
 Replace string concatenation with parameterized queries:
 ```pascal
-Query.SQL.Text := 'SELECT * FROM users WHERE username = :username';
+Query.SQL.Text := 'SELECT * FROM users WHERE username = :username';  
 Query.ParamByName('username').AsString := EditUsername.Text;
 ```
 
