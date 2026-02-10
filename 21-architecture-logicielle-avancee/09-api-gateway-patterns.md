@@ -168,18 +168,19 @@ begin
 
     WriteLn(Format('[Gateway] Forwarding: %s %s', [ARoute.Method, TargetURL]));
 
-    case ARoute.Method of
-      'GET': Result := Client.Get(TargetURL);
-      'POST': Result := Client.FormPost(TargetURL, ARequest.Content);
-      'PUT':
-      begin
-        Client.RequestBody := TStringStream.Create(ARequest.Content);
-        Result := Client.Put(TargetURL);
-      end;
-      'DELETE': Result := Client.Delete(TargetURL);
+    if ARoute.Method = 'GET' then
+      Result := Client.Get(TargetURL)
+    else if ARoute.Method = 'POST' then
+      Result := Client.FormPost(TargetURL, ARequest.Content)
+    else if ARoute.Method = 'PUT' then
+    begin
+      Client.RequestBody := TStringStream.Create(ARequest.Content);
+      Result := Client.Put(TargetURL);
+    end
+    else if ARoute.Method = 'DELETE' then
+      Result := Client.Delete(TargetURL)
     else
       Result := '{"error": "Méthode non supportée"}';
-    end;
 
   finally
     Client.Free;
@@ -886,12 +887,12 @@ begin
       WriteLn(Format('[Aggregator] Appel: %s -> %s',
         [ARequest.ServiceName, ARequest.URL]));
 
-      case ARequest.Method of
-        'GET': Result.Content := Client.Get(ARequest.URL);
-        'POST': Result.Content := Client.FormPost(ARequest.URL, '');
+      if ARequest.Method = 'GET' then
+        Result.Content := Client.Get(ARequest.URL)
+      else if ARequest.Method = 'POST' then
+        Result.Content := Client.FormPost(ARequest.URL, '')
       else
         Result.Content := '{}';
-      end;
 
       Result.Success := True;
       WriteLn(Format('[Aggregator] ✓ Réponse de %s', [ARequest.ServiceName]));
@@ -1372,18 +1373,19 @@ begin
       WriteLn(Format('[CBGateway] Appel: %s (Circuit: %s)',
         [TargetURL, CircuitBreaker.GetStateString]));
 
-      case ARoute.Method of
-        'GET': Result := Client.Get(TargetURL);
-        'POST': Result := Client.FormPost(TargetURL, ARequest.Content);
-        'PUT':
-        begin
-          Client.RequestBody := TStringStream.Create(ARequest.Content);
-          Result := Client.Put(TargetURL);
-        end;
-        'DELETE': Result := Client.Delete(TargetURL);
+      if ARoute.Method = 'GET' then
+        Result := Client.Get(TargetURL)
+      else if ARoute.Method = 'POST' then
+        Result := Client.FormPost(TargetURL, ARequest.Content)
+      else if ARoute.Method = 'PUT' then
+      begin
+        Client.RequestBody := TStringStream.Create(ARequest.Content);
+        Result := Client.Put(TargetURL);
+      end
+      else if ARoute.Method = 'DELETE' then
+        Result := Client.Delete(TargetURL)
       else
         Result := '{"error": "Méthode non supportée"}';
-      end;
 
       // Succès
       CircuitBreaker.OnCallSuccess;
@@ -2491,12 +2493,12 @@ begin
     // Appeler le service
     Client := TFPHTTPClient.Create(nil);
     try
-      case Route.Method of
-        'GET': ResponseContent := Client.Get(TargetURL);
-        'POST': ResponseContent := Client.FormPost(TargetURL, ARequest.Content);
+      if Route.Method = 'GET' then
+        ResponseContent := Client.Get(TargetURL)
+      else if Route.Method = 'POST' then
+        ResponseContent := Client.FormPost(TargetURL, ARequest.Content)
       else
         ResponseContent := '{"error": "Méthode non supportée"}';
-      end;
 
       AResponse.Code := 200;
       AResponse.Content := ResponseContent;

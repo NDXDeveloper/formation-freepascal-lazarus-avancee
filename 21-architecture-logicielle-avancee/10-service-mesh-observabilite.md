@@ -73,8 +73,8 @@ Chaque service a un proxy (sidecar) qui gère :
 └────────┘  └────────┘  └────────┘
 ```
 
-**Control Plane** : Le cerveau qui configure les proxies
-**Data Plane** : Les proxies qui gèrent le trafic réel
+**Control Plane** : Le cerveau qui configure les proxies  
+**Data Plane** : Les proxies qui gèrent le trafic réel  
 
 ## Implémentation d'un Service Mesh Simple
 
@@ -223,18 +223,19 @@ begin
     Client.AddHeader('X-Forwarded-By', 'Sidecar-' + FConfig.ServiceName);
     Client.AddHeader('X-Request-ID', TGuid.NewGuid.ToString);
 
-    case ARequest.Method of
-      'GET': Result := Client.Get(ServiceURL);
-      'POST': Result := Client.FormPost(ServiceURL, ARequest.Content);
-      'PUT':
-      begin
-        Client.RequestBody := TStringStream.Create(ARequest.Content);
-        Result := Client.Put(ServiceURL);
-      end;
-      'DELETE': Result := Client.Delete(ServiceURL);
+    if ARequest.Method = 'GET' then
+      Result := Client.Get(ServiceURL)
+    else if ARequest.Method = 'POST' then
+      Result := Client.FormPost(ServiceURL, ARequest.Content)
+    else if ARequest.Method = 'PUT' then
+    begin
+      Client.RequestBody := TStringStream.Create(ARequest.Content);
+      Result := Client.Put(ServiceURL);
+    end
+    else if ARequest.Method = 'DELETE' then
+      Result := Client.Delete(ServiceURL)
     else
       raise Exception.Create('Méthode non supportée');
-    end;
 
   finally
     Client.Free;

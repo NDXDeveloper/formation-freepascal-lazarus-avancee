@@ -94,9 +94,12 @@ implementation
 
 constructor TMessage.Create(const AType: string; APayload: TJSONObject;
   APriority: TMessagePriority);
+var
+  G: TGUID;
 begin
   inherited Create;
-  FId := TGuid.NewGuid.ToString;
+  CreateGUID(G);
+  FId := GUIDToString(G);
   FType := AType;
   FPayload := APayload;
   FTimestamp := Now;
@@ -657,9 +660,12 @@ implementation
 // TEvent
 
 constructor TEvent.Create(const AEventType, ASource: string; AData: TJSONObject);
+var
+  G: TGUID;
 begin
   inherited Create;
-  FId := TGuid.NewGuid.ToString;
+  CreateGUID(G);
+  FId := GUIDToString(G);
   FEventType := AEventType;
   FSource := ASource;
   FData := AData;
@@ -754,6 +760,18 @@ type
     property Handler: TEventHandler read FHandler;
   end;
 
+  TEventBus = class;  // Forward declaration
+
+  // Thread de dispatch pour l'Event Bus
+  TDispatchThread = class(TThread)
+  private
+    FBus: TEventBus;
+  protected
+    procedure Execute; override;
+  public
+    constructor Create(ABus: TEventBus);
+  end;
+
   // Event Bus
   TEventBus = class
   private
@@ -784,6 +802,20 @@ type
   end;
 
 implementation
+
+// TDispatchThread
+
+constructor TDispatchThread.Create(ABus: TEventBus);
+begin
+  inherited Create(True);  // Créé suspendu
+  FBus := ABus;
+  FreeOnTerminate := False;
+end;
+
+procedure TDispatchThread.Execute;
+begin
+  FBus.DispatchEvents;
+end;
 
 // TSubscription
 
@@ -944,8 +976,7 @@ begin
 
   FRunning := True;
 
-  FDispatchThread := TThread.CreateAnonymousThread(@DispatchEvents);
-  FDispatchThread.FreeOnTerminate := False;
+  FDispatchThread := TDispatchThread.Create(Self);
   FDispatchThread.Start;
 
   WriteLn('[EventBus] Démarré');
@@ -1503,9 +1534,12 @@ implementation
 
 constructor TRequestMessage.Create(const AType: string; APayload: TJSONObject;
   const AReplyTo: string);
+var
+  G: TGUID;
 begin
   inherited Create(AType, APayload);
-  FCorrelationId := TGuid.NewGuid.ToString;
+  CreateGUID(G);
+  FCorrelationId := GUIDToString(G);
   FReplyTo := AReplyTo;
 end;
 
@@ -2257,8 +2291,10 @@ var
   Message: TMessage;
   Event: TOrderPlacedEvent;
   OrderId: string;
+  G: TGUID;
 begin
-  OrderId := TGuid.NewGuid.ToString;
+  CreateGUID(G);
+  OrderId := GUIDToString(G);
 
   WriteLn(Format('[ECommerce] Nouvelle commande: %s', [OrderId]));
 
@@ -2312,7 +2348,7 @@ unit MessageQueue.Batch;
 interface
 
 uses
-  Classes, SysUtils, Generics.Collections,
+  Classes, SysUtils, DateUtils, Generics.Collections,
   MessageQueue.Types, MessageQueue.Queue;
 
 type
@@ -2415,9 +2451,6 @@ type
 
 implementation
 
-uses
-  Hash;
-
 constructor TPartitionedQueue.Create(APartitionCount: Integer);
 var
   i: Integer;
@@ -2440,11 +2473,14 @@ end;
 
 function TPartitionedQueue.GetPartitionIndex(AMessage: TMessage): Integer;
 var
-  Hash: Cardinal;
+  HashValue: Cardinal;
+  i: Integer;
 begin
-  // Hash basé sur l'ID du message
-  Hash := THashFactory.GetHashString(AMessage.Id);
-  Result := Hash mod FPartitionCount;
+  // Hash simple basé sur les caractères de l'ID
+  HashValue := 0;
+  for i := 1 to Length(AMessage.Id) do
+    HashValue := HashValue * 31 + Ord(AMessage.Id[i]);
+  Result := HashValue mod Cardinal(FPartitionCount);
 end;
 
 procedure TPartitionedQueue.Enqueue(AMessage: TMessage);

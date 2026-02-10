@@ -193,8 +193,8 @@ end;
 
 ### 2. High Cohesion, Low Coupling (Forte cohésion, faible couplage)
 
-**Cohésion :** Les éléments d'un module doivent être fortement liés entre eux.
-**Couplage :** Les modules doivent être le moins dépendants possible les uns des autres.
+**Cohésion :** Les éléments d'un module doivent être fortement liés entre eux.  
+**Couplage :** Les modules doivent être le moins dépendants possible les uns des autres.  
 
 ```pascal
 // ✅ Forte cohésion : tout ce qui concerne les clients ensemble
@@ -577,14 +577,14 @@ Communiquer via des événements asynchrones pour découpler les composants.
 ### 21.8 Saga Pattern
 Coordonner des transactions distribuées à travers plusieurs services.
 
-### 21.9 Service Mesh
+### 21.9 API Gateway Patterns
+Implémenter un point d'entrée unique pour gérer le routage, l'authentification et le rate limiting.
+
+### 21.10 Service Mesh et Observabilité
 Gérer la communication inter-services, la sécurité et l'observabilité dans les architectures microservices.
 
-### 21.10 Architecture Cloud-Native
+### 21.11 Architecture Cloud-Native
 Concevoir des applications pour tirer parti des environnements cloud (scalabilité, résilience).
-
-### 21.11 Serverless Architecture
-Exécuter du code sans gérer l'infrastructure serveur.
 
 ## Choix d'architecture : critères de décision
 

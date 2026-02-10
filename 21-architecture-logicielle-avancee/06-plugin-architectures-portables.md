@@ -772,22 +772,33 @@ end;
 
 function TDependencyResolver.CompareVersions(const V1, V2: string): Integer;
 var
-  Parts1, Parts2: TStringArray;
+  Parts1, Parts2: TStringList;
   i, Val1, Val2: Integer;
 begin
-  Parts1 := V1.Split(['.']);
-  Parts2 := V2.Split(['.']);
+  Parts1 := TStringList.Create;
+  Parts2 := TStringList.Create;
+  try
+    Parts1.Delimiter := '.';
+    Parts1.StrictDelimiter := True;
+    Parts1.DelimitedText := V1;
+    Parts2.Delimiter := '.';
+    Parts2.StrictDelimiter := True;
+    Parts2.DelimitedText := V2;
 
-  for i := 0 to Min(Length(Parts1), Length(Parts2)) - 1 do
-  begin
-    Val1 := StrToIntDef(Parts1[i], 0);
-    Val2 := StrToIntDef(Parts2[i], 0);
+    for i := 0 to Min(Parts1.Count, Parts2.Count) - 1 do
+    begin
+      Val1 := StrToIntDef(Parts1[i], 0);
+      Val2 := StrToIntDef(Parts2[i], 0);
 
-    if Val1 < Val2 then Exit(-1);
-    if Val1 > Val2 then Exit(1);
+      if Val1 < Val2 then Exit(-1);
+      if Val1 > Val2 then Exit(1);
+    end;
+
+    Result := 0;
+  finally
+    Parts1.Free;
+    Parts2.Free;
   end;
-
-  Result := 0;
 end;
 
 function TDependencyResolver.CheckDependency(const ADep: TPluginDependency): Boolean;
@@ -2596,23 +2607,24 @@ var
   JSON: TJSONArray;
   Row: TJSONObject;
   i: Integer;
-  Fields: TStringArray;
-  Headers: TStringArray;
+  Fields, Headers: TStringList;
 begin
   if AData.Count < 2 then Exit;
 
+  Headers := TStringList.Create;
+  Fields := TStringList.Create;
   JSON := TJSONArray.Create;
   try
     // La première ligne contient les en-têtes
-    Headers := AData[0].Split([',']);
+    Headers.CommaText := AData[0];
 
     // Convertir les lignes en objets JSON
     for i := 1 to AData.Count - 1 do
     begin
-      Fields := AData[i].Split([',']);
+      Fields.CommaText := AData[i];
       Row := TJSONObject.Create;
 
-      if Length(Fields) = Length(Headers) then
+      if Fields.Count = Headers.Count then
       begin
         Row.Add(Headers[0], Fields[0]);
         Row.Add(Headers[1], StrToIntDef(Fields[1], 0));
@@ -2633,6 +2645,8 @@ begin
 
   finally
     JSON.Free;
+    Headers.Free;
+    Fields.Free;
   end;
 
   WriteLn('[FileExporter] Export JSON: ', AFileName);
@@ -2641,25 +2655,25 @@ end;
 procedure TFileExporterPlugin.ExportToXML(const AData: TStringList;
   const AFileName: string);
 var
-  XML: TStringList;
+  XML, Fields, Headers: TStringList;
   i: Integer;
-  Fields: TStringArray;
-  Headers: TStringArray;
 begin
   if AData.Count < 2 then Exit;
 
   XML := TStringList.Create;
+  Headers := TStringList.Create;
+  Fields := TStringList.Create;
   try
     XML.Add('<?xml version="1.0" encoding="UTF-8"?>');
     XML.Add('<data>');
 
-    Headers := AData[0].Split([',']);
+    Headers.CommaText := AData[0];
 
     for i := 1 to AData.Count - 1 do
     begin
-      Fields := AData[i].Split([',']);
+      Fields.CommaText := AData[i];
 
-      if Length(Fields) = Length(Headers) then
+      if Fields.Count = Headers.Count then
       begin
         XML.Add('  <item>');
         XML.Add(Format('    <%s>%s</%s>', [Headers[0], Fields[0], Headers[0]]));
@@ -2673,6 +2687,8 @@ begin
     XML.SaveToFile(AFileName);
   finally
     XML.Free;
+    Headers.Free;
+    Fields.Free;
   end;
 
   WriteLn('[FileExporter] Export XML: ', AFileName);

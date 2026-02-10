@@ -2846,14 +2846,18 @@ end;
 
 class function TJWTToken.Verify(const AToken, ASecret: string): TJWTToken;
 var
-  Parts: TStringArray;
+  Parts: TStringList;
   DataToSign: string;
   ExpectedSignature: string;
   HeaderJSON, PayloadJSON: string;
   Parser: TJSONParser;
 begin
-  Parts := AToken.Split(['.']);
-  if Length(Parts) <> 3 then
+  Parts := TStringList.Create;
+  try
+  Parts.Delimiter := '.';
+  Parts.StrictDelimiter := True;
+  Parts.DelimitedText := AToken;
+  if Parts.Count <> 3 then
     raise Exception.Create('Token JWT invalide');
 
   Result := TJWTToken.Create;
@@ -2893,6 +2897,9 @@ begin
   except
     Result.Free;
     raise;
+  end;
+  finally
+    Parts.Free;
   end;
 end;
 
@@ -2957,7 +2964,7 @@ begin
   end;
 
   // Vérifier le format "Bearer <token>"
-  if not AuthHeader.StartsWith('Bearer ') then
+  if Copy(AuthHeader, 1, 7) <> 'Bearer ' then
   begin
     AResponse.Code := 401;
     AResponse.Content := '{"error": "Format token invalide"}';
@@ -3208,7 +3215,7 @@ var
 begin
   // Essayer d'utiliser l'ID utilisateur du JWT
   Token := ARequest.GetCustomHeader('Authorization');
-  if Token.StartsWith('Bearer ') then
+  if Copy(Token, 1, 7) = 'Bearer ' then
   begin
     try
       JWT := TJWTToken.Verify(Copy(Token, 8, Length(Token)), FSecretKey);
@@ -3848,12 +3855,12 @@ var
 begin
   Version := ARequest.GetCustomHeader('API-Version');
 
-  case Version of
-    'v1': TraiterRequeteV1(ARequest, AResponse);
-    'v2': TraiterRequeteV2(ARequest, AResponse);
+  if Version = 'v1' then
+    TraiterRequeteV1(ARequest, AResponse)
+  else if Version = 'v2' then
+    TraiterRequeteV2(ARequest, AResponse)
   else
     TraiterRequeteV2(ARequest, AResponse); // Version par défaut
-  end;
 end;
 ```
 

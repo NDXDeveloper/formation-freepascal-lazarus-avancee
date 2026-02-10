@@ -98,6 +98,10 @@ type
   // Résultat d'une étape
   TSagaStepResult = (ssSuccess, ssFailure, ssCompensated);
 
+// Helper : NewGUID est du Delphi,
+// en FPC on utilise CreateGUID + GUIDToString
+function NewGUID: string;
+
   // Contexte partagé entre les étapes
   TSagaContext = class
   private
@@ -134,6 +138,7 @@ type
   TSagaOrchestrator = class
   private
     FSteps: TObjectList<TSagaStep>;
+  protected
     FContext: TSagaContext;
     FExecutedSteps: TList<TSagaStep>;
   public
@@ -150,6 +155,14 @@ implementation
 
 uses
   Variants;
+
+function NewGUID: string;
+var
+  G: TGUID;
+begin
+  CreateGUID(G);
+  Result := GUIDToString(G);
+end;
 
 // TSagaContext
 
@@ -376,7 +389,7 @@ begin
   // Vérifier le stock disponible (simulation)
   if Random(100) < 90 then  // 90% de succès
   begin
-    FReservationId := TGuid.NewGuid.ToString;
+    FReservationId := NewGUID;
     AContext.SetValue('reservation_id', FReservationId);
     AContext.SetValue('produit_id', FProduitId);
     AContext.SetValue('quantite', FQuantite);
@@ -425,7 +438,7 @@ begin
   // Vérifier le solde (simulation)
   if Random(100) < 85 then  // 85% de succès
   begin
-    FTransactionId := TGuid.NewGuid.ToString;
+    FTransactionId := NewGUID;
     AContext.SetValue('transaction_id', FTransactionId);
     AContext.SetValue('montant', FMontant);
 
@@ -476,7 +489,7 @@ begin
   // Créer la commande (simulation)
   if Random(100) < 95 then  // 95% de succès
   begin
-    FCommandeId := TGuid.NewGuid.ToString;
+    FCommandeId := NewGUID;
     AContext.SetValue('commande_id', FCommandeId);
 
     WriteLn(Format('  → Commande créée: %s', [FCommandeId]));
@@ -860,7 +873,7 @@ begin
 
   if Random(100) < 90 then
   begin
-    ReservationId := TGuid.NewGuid.ToString;
+    ReservationId := NewGUID;
     WriteLn(Format('[ServiceStock] ✓ Réservation: %s', [ReservationId]));
 
     FEventBus.Publish(TStockReserveEvent.Create(CommandeId, ReservationId));
@@ -908,7 +921,7 @@ begin
 
   if Random(100) < 85 then
   begin
-    TransactionId := TGuid.NewGuid.ToString;
+    TransactionId := NewGUID;
     WriteLn(Format('[ServicePaiement] ✓ Transaction: %s', [TransactionId]));
 
     FEventBus.Publish(TPaiementEffectueEvent.Create(CommandeId, TransactionId));
@@ -1037,7 +1050,7 @@ implementation
 constructor TEvent.Create(const AEventType, ASource: string; AData: TJSONObject);
 begin
   inherited Create;
-  FEventId := TGuid.NewGuid.ToString;
+  FEventId := NewGUID;
   FEventType := AEventType;
   FSource := ASource;
   FTimestamp := Now;
@@ -1237,7 +1250,7 @@ begin
       WriteLn;
 
       // Déclencher la saga
-      CommandeId := TGuid.NewGuid.ToString;
+      CommandeId := NewGUID;
       EventBus.Publish(TCommandeInitieeEvent.Create(
         CommandeId, 'CLIENT-123', 'PROD-456', 2, 99.99));
 
@@ -1288,7 +1301,7 @@ begin
       WriteLn('═══════════════════════════════════════════');
       WriteLn;
 
-      CommandeId := TGuid.NewGuid.ToString;
+      CommandeId := NewGUID;
       EventBus.Publish(TCommandeInitieeEvent.Create(
         CommandeId, 'CLIENT-789', 'PROD-999', 5, 249.99));
 
@@ -1465,7 +1478,7 @@ begin
   else
   begin
     WriteLn('  → ✓ Paiement effectué dans les temps');
-    AContext.SetValue('transaction_id', TGuid.NewGuid.ToString);
+    AContext.SetValue('transaction_id', NewGUID);
     Result := ssSuccess;
   end;
 end;
@@ -1577,7 +1590,7 @@ begin
   if Random(100) < 50 then
   begin
     WriteLn('  → ✓ Service OK');
-    AContext.SetValue('service_response', 'OK-' + TGuid.NewGuid.ToString);
+    AContext.SetValue('service_response', 'OK-' + NewGUID);
     Result := ssSuccess;
   end
   else
@@ -2181,7 +2194,7 @@ implementation
 constructor TSagaMessage.Create(const AMessageType: string; APayload: TJSONObject);
 begin
   inherited Create;
-  FMessageId := TGuid.NewGuid.ToString;
+  FMessageId := NewGUID;
   FMessageType := AMessageType;
   FPayload := APayload;
   FTimestamp := Now;
@@ -2423,7 +2436,7 @@ begin
       // Créer le contexte
       Context := TJSONObject.Create;
       try
-        Context.Add('commande_id', TGuid.NewGuid.ToString);
+        Context.Add('commande_id', NewGUID);
         Context.Add('client_id', 'CLIENT-123');
         Context.Add('montant', 99.99);
 
@@ -2613,7 +2626,7 @@ implementation
 constructor TActionRecord.Create(const AActionType: string; AData: TJSONObject);
 begin
   inherited Create;
-  FActionId := TGuid.NewGuid.ToString;
+  FActionId := NewGUID;
   FActionType := AActionType;
   FTimestamp := Now;
   FData := AData;
@@ -2805,7 +2818,5 @@ Le Saga Pattern est plus complexe que les transactions ACID classiques, mais c'e
 ---
 
 🔝 Retour au [Sommaire](/SOMMAIRE.md)
-
-⏭️ [API Gateway patterns](/21-architecture-logicielle-avancee/09-api-gateway-patterns.md)
 
 ⏭️ [API Gateway patterns](/21-architecture-logicielle-avancee/09-api-gateway-patterns.md)

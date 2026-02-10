@@ -2171,7 +2171,8 @@ end;
 procedure TProcessTransfert.TraiterEvenement(const AEvenement: TEvenementBase);
 var
   TransfertId, CompteDestination: string;
-  Parties: TStringArray;
+  InfoTransfert: string;
+  P: Integer;
   CmdDepot: TCommandeDeposerArgent;
 begin
   // Réagir aux événements de retrait pour compléter le transfert
@@ -2180,15 +2181,16 @@ begin
     // Vérifier si c'est un de nos transferts
     for TransfertId in FTransfertsEnCours.Keys do
     begin
-      if TEvenementArgentRetire(AEvenement).Description.Contains(TransfertId) then
+      if Pos(TransfertId, TEvenementArgentRetire(AEvenement).Description) > 0 then
       begin
         WriteLn(Format('[ProcessManager] Étape 1 complétée pour %s', [TransfertId]));
 
-        // Récupérer le compte destination
-        Parties := FTransfertsEnCours[TransfertId].Split([':']);
-        if Length(Parties) = 2 then
+        // Récupérer le compte destination (format: "DEBITE:CompteId")
+        InfoTransfert := FTransfertsEnCours[TransfertId];
+        P := Pos(':', InfoTransfert);
+        if P > 0 then
         begin
-          CompteDestination := Parties[1];
+          CompteDestination := Copy(InfoTransfert, P + 1, Length(InfoTransfert));
 
           // Étape 2 : Créditer le compte destination
           CmdDepot := TCommandeDeposerArgent.Create(

@@ -1197,7 +1197,7 @@ type
     destructor Destroy; override;
 
     function Validate: Boolean;
-    function GetErrors: TStringArray;
+    function GetErrors: TStringDynArray { de l'unité Types };
   end;
 
 implementation
@@ -1249,7 +1249,7 @@ begin
   end;
 end;
 
-function TContainerValidator.GetErrors: TStringArray;
+function TContainerValidator.GetErrors: TStringDynArray { de l'unité Types };
 var
   i: Integer;
 begin
@@ -1786,7 +1786,7 @@ begin
   // Vérifier
   AssertTrue('Logger utilisé', FMockLogger.Messages.Count > 0);
   AssertTrue('Message de validation',
-    FMockLogger.Messages.Text.Contains('Validation'));
+    Pos('Validation', FMockLogger.Messages.Text) > 0);
 end;
 
 initialization

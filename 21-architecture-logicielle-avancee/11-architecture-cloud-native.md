@@ -68,7 +68,7 @@ unit CloudNative.Config;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils, StrUtils;
 
 type
   // Configuration de l'application
@@ -301,7 +301,7 @@ unit CloudNative.Session;
 interface
 
 uses
-  Classes, SysUtils, fphttpclient, fpjson;
+  Classes, SysUtils, fphttpclient, fpjson, jsonparser;
 
 type
   // Gestionnaire de session avec Redis
@@ -439,9 +439,11 @@ function TSessionManager.CreateSession(const AUserId: string): string;
 var
   SessionData: TJSONObject;
   SessionId: string;
+  G: TGUID;
 begin
   // Générer un ID de session unique
-  SessionId := 'session:' + TGuid.NewGuid.ToString;
+  CreateGUID(G);
+  SessionId := 'session:' + GUIDToString(G);
 
   // Créer les données de session
   SessionData := TJSONObject.Create;
@@ -1584,6 +1586,7 @@ procedure TGracefulApp.HandleRequest(Sender: TObject;
 var
   ActiveReq: TActiveRequest;
   ProcessingTime: Integer;
+  G: TGUID;
 begin
   // Refuser nouvelles requêtes si en shutdown
   if not FAcceptingRequests then
@@ -1596,7 +1599,8 @@ begin
   end;
 
   // Enregistrer la requête active
-  ActiveReq.RequestId := TGuid.NewGuid.ToString;
+  CreateGUID(G);
+  ActiveReq.RequestId := GUIDToString(G);
   ActiveReq.StartTime := Now;
   ActiveReq.Path := ARequest.URI;
   FActiveRequests.Add(ActiveReq);
@@ -2306,6 +2310,9 @@ uses
   Classes, SysUtils, DateUtils;
 
 type
+  // Type de fonction retournant Boolean (TBooleanFunc n'existe pas en FPC)
+  TBooleanFunc = function: Boolean of object;
+
   // État du circuit breaker
   TCircuitState = (csClose, csOpen, csHalfOpen);
 
@@ -2328,7 +2335,7 @@ type
       AFailureThreshold: Integer = 5;
       ATimeoutSeconds: Integer = 60);
 
-    function Execute(AOperation: TFunc<Boolean>): Boolean;
+    function Execute(AOperation: TBooleanFunc): Boolean;
 
     property State: TCircuitState read FState;
   end;
@@ -2346,7 +2353,7 @@ type
       AInitialDelayMs: Integer = 1000;
       AMaxDelayMs: Integer = 10000);
 
-    function ExecuteWithRetry(AOperation: TFunc<Boolean>): Boolean;
+    function ExecuteWithRetry(AOperation: TBooleanFunc): Boolean;
   end;
 
 implementation
@@ -2442,7 +2449,7 @@ begin
   end;
 end;
 
-function TCircuitBreaker.Execute(AOperation: TFunc<Boolean>): Boolean;
+function TCircuitBreaker.Execute(AOperation: TBooleanFunc): Boolean;
 begin
   if not ShouldAttemptCall then
   begin
@@ -2494,7 +2501,7 @@ begin
   Result := Result + Random(Result div 5) - (Result div 10);
 end;
 
-function TRetryPolicy.ExecuteWithRetry(AOperation: TFunc<Boolean>): Boolean;
+function TRetryPolicy.ExecuteWithRetry(AOperation: TBooleanFunc): Boolean;
 var
   Attempt: Integer;
   Delay: Integer;
@@ -2546,6 +2553,9 @@ uses
   Classes, SysUtils, SyncObjs;
 
 type
+  // Procédure sans paramètre (TProc n'existe pas en FPC)
+  TSimpleProc = procedure of object;
+
   // Bulkhead : isolation des ressources
   TBulkhead = class
   private
@@ -2561,7 +2571,7 @@ type
     function TryAcquire: Boolean;
     procedure Release;
 
-    function Execute(AOperation: TProc): Boolean;
+    function Execute(AOperation: TSimpleProc): Boolean;
 
     property ActiveCount: Integer read FActiveCount;
     property RejectedCount: Integer read FRejectedCount;
@@ -2615,7 +2625,7 @@ begin
     [FName, FActiveCount, FMaxConcurrent]));
 end;
 
-function TBulkhead.Execute(AOperation: TProc): Boolean;
+function TBulkhead.Execute(AOperation: TSimpleProc): Boolean;
 begin
   Result := TryAcquire;
 
@@ -2653,7 +2663,9 @@ type
     FServer: TFPHTTPServer;
     FPort: Integer;
 
-    procedure HandleMetrics(var AResponse: TFPHTTPConnectionResponse);
+    procedure HandleRequest(Sender: TObject;
+      var ARequest: TFPHTTPConnectionRequest;
+      var AResponse: TFPHTTPConnectionResponse);
   public
     constructor Create(APort: Integer);
     destructor Destroy; override;
@@ -2673,7 +2685,7 @@ begin
 
   FServer := TFPHTTPServer.Create(nil);
   FServer.Port := FPort;
-  FServer.OnRequest := @HandleMetrics;
+  FServer.OnRequest := @HandleRequest;
 
   WriteLn('[PrometheusExporter] Créé sur le port ', FPort);
 end;
@@ -2685,7 +2697,8 @@ begin
   inherited;
 end;
 
-procedure TPrometheusExporter.HandleMetrics(
+procedure TPrometheusExporter.HandleRequest(Sender: TObject;
+  var ARequest: TFPHTTPConnectionRequest;
   var AResponse: TFPHTTPConnectionResponse);
 var
   Metrics: TStringList;
