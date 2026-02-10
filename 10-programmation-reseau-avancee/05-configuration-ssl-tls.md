@@ -347,17 +347,17 @@ openssl pkcs12 -in cert.p12 -out cert.pem -nodes
 ```
 Historique et recommandations :
 
-SSL 2.0 (1995)  → ❌ Obsolète, dangereux
-SSL 3.0 (1996)  → ❌ Vulnérable (POODLE)
-TLS 1.0 (1999)  → ❌ Déprécié
-TLS 1.1 (2006)  → ⚠️ À éviter
-TLS 1.2 (2008)  → ✅ Recommandé (minimum)
+SSL 2.0 (1995)  → ❌ Obsolète, dangereux  
+SSL 3.0 (1996)  → ❌ Vulnérable (POODLE)  
+TLS 1.0 (1999)  → ❌ Déprécié  
+TLS 1.1 (2006)  → ⚠️ À éviter  
+TLS 1.2 (2008)  → ✅ Recommandé (minimum)  
 TLS 1.3 (2018)  → ✅ Recommandé (idéal)
 ```
 
 **Configuration recommandée :**
 ```
-Minimum : TLS 1.2
+Minimum : TLS 1.2  
 Préféré : TLS 1.3
 ```
 
@@ -380,15 +380,15 @@ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 
 Pour **TLS 1.3** :
 ```
-TLS_AES_256_GCM_SHA384
-TLS_AES_128_GCM_SHA256
+TLS_AES_256_GCM_SHA384  
+TLS_AES_128_GCM_SHA256  
 TLS_CHACHA20_POLY1305_SHA256
 ```
 
 Pour **TLS 1.2** :
 ```
-TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384  
+TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256  
 TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
 ```
 
@@ -463,7 +463,7 @@ openssl s_client -connect example.com:443 -showcerts
 
 ```bash
 # Linux/Ubuntu
-chmod 600 private-key.pem    # Lecture seule par le propriétaire
+chmod 600 private-key.pem    # Lecture seule par le propriétaire  
 chmod 644 certificate.pem     # Lecture par tous
 
 # Propriétaire

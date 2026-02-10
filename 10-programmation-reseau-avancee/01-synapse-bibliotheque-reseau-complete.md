@@ -32,8 +32,8 @@ Synapse est une bibliothèque réseau complète et gratuite pour FreePascal et L
 # Recherchez "synapse" et installez-le
 
 # Méthode 2 : Installation manuelle
-cd ~/
-wget http://www.ararat.cz/synapse/dl/synapse40.zip
+cd ~/  
+wget http://www.ararat.cz/synapse/dl/synapse40.zip  
 unzip synapse40.zip
 # Puis configurez le chemin dans Lazarus comme pour Windows
 ```
@@ -251,7 +251,7 @@ end.
 ### Requête POST avec données
 
 ```pascal
-procedure EnvoyerDonneesPost;
+procedure EnvoyerDonneesPost;  
 var
   HTTP: THTTPSend;
   PostData: TStringList;
@@ -295,7 +295,7 @@ uses
   mimemess, // Pour créer le message MIME
   mimepart;
 
-function EnvoyerEmail(const Destinataire, Sujet, Corps: string): Boolean;
+function EnvoyerEmail(const Destinataire, Sujet, Corps: string): Boolean;  
 var
   SMTP: TSMTPSend;
   Msg: TMimeMess;
@@ -364,7 +364,7 @@ end.
 Synapse fournit des propriétés pour vérifier les erreurs :
 
 ```pascal
-procedure ExempleGestionErreurs;
+procedure ExempleGestionErreurs;  
 var
   Socket: TTCPBlockSocket;
 begin
@@ -397,7 +397,7 @@ end;
 Synapse permet de configurer les timeouts pour éviter que votre programme ne se bloque :
 
 ```pascal
-procedure ExempleTimeouts;
+procedure ExempleTimeouts;  
 var
   Socket: TTCPBlockSocket;
 begin
@@ -434,7 +434,7 @@ uses
   blcksock;
 
 // Émetteur UDP
-procedure EnvoyerUDP(const Host, Port, Message: string);
+procedure EnvoyerUDP(const Host, Port, Message: string);  
 var
   Socket: TUDPBlockSocket;
 begin
@@ -449,7 +449,7 @@ begin
 end;
 
 // Récepteur UDP
-procedure RecevoirUDP(const Port: string);
+procedure RecevoirUDP(const Port: string);  
 var
   Socket: TUDPBlockSocket;
   ReceivedData: string;
@@ -497,20 +497,20 @@ type
     destructor Destroy; override;
   end;
 
-constructor TClientThread.Create(ASocket: TTCPBlockSocket);
+constructor TClientThread.Create(ASocket: TTCPBlockSocket);  
 begin
   inherited Create(False);
   FreeOnTerminate := True;
   FSocket := ASocket;
 end;
 
-destructor TClientThread.Destroy;
+destructor TClientThread.Destroy;  
 begin
   FSocket.Free;
   inherited;
 end;
 
-procedure TClientThread.Execute;
+procedure TClientThread.Execute;  
 var
   Data: string;
 begin
@@ -525,7 +525,7 @@ begin
 end;
 
 // Utilisation dans un serveur multi-thread
-procedure ServeurMultiThread;
+procedure ServeurMultiThread;  
 var
   ListenSocket, ClientSocket: TTCPBlockSocket;
 begin
@@ -560,7 +560,7 @@ end;
 ### 1. Toujours libérer les ressources
 
 ```pascal
-Socket := TTCPBlockSocket.Create;
+Socket := TTCPBlockSocket.Create;  
 try
   // Votre code ici
 finally
@@ -571,8 +571,8 @@ end;
 ### 2. Vérifier les erreurs
 
 ```pascal
-Socket.Connect(Host, Port);
-if Socket.LastError <> 0 then
+Socket.Connect(Host, Port);  
+if Socket.LastError <> 0 then  
 begin
   // Gérer l'erreur
   Exit;
@@ -582,7 +582,7 @@ end;
 ### 3. Utiliser des timeouts appropriés
 
 ```pascal
-Socket.ConnectionTimeout := 10000; // 10 secondes
+Socket.ConnectionTimeout := 10000; // 10 secondes  
 Socket.ReceiveTimeout := 30000;    // 30 secondes pour les opérations longues
 ```
 

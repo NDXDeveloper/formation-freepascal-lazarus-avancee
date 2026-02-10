@@ -144,7 +144,7 @@ program SimpleTCPClient;
 uses
   SysUtils, Sockets;
 
-function CreateTCPClient(const Host: string; Port: Word): TSocket;
+function CreateTCPClient(const Host: string; Port: Word): TSocket;  
 var
   Sock: TSocket;
   Addr: TInetSockAddr;
@@ -189,7 +189,7 @@ begin
   Result := Sock;
 end;
 
-procedure SendData(Sock: TSocket; const Data: string);
+procedure SendData(Sock: TSocket; const Data: string);  
 var
   Sent: Integer;
 begin
@@ -200,7 +200,7 @@ begin
     WriteLn('Envoyé: ', Sent, ' octets');
 end;
 
-function ReceiveData(Sock: TSocket; MaxLen: Integer): string;
+function ReceiveData(Sock: TSocket; MaxLen: Integer): string;  
 var
   Buffer: array[0..4095] of Char;
   Received: Integer;
@@ -295,7 +295,7 @@ program SimpleTCPServer;
 uses
   SysUtils, Sockets;
 
-function CreateTCPServer(Port: Word): TSocket;
+function CreateTCPServer(Port: Word): TSocket;  
 var
   Sock: TSocket;
   Addr: TInetSockAddr;
@@ -344,7 +344,7 @@ begin
   Result := Sock;
 end;
 
-procedure HandleClient(ClientSock: TSocket; const ClientAddr: TInetSockAddr);
+procedure HandleClient(ClientSock: TSocket; const ClientAddr: TInetSockAddr);  
 var
   Buffer: array[0..4095] of Char;
   Received: Integer;
@@ -460,7 +460,7 @@ program SimpleUDPClient;
 uses
   SysUtils, Sockets;
 
-function CreateUDPSocket: TSocket;
+function CreateUDPSocket: TSocket;  
 var
   Sock: TSocket;
 begin
@@ -572,7 +572,7 @@ program SimpleUDPServer;
 uses
   SysUtils, Sockets;
 
-function CreateUDPServer(Port: Word): TSocket;
+function CreateUDPServer(Port: Word): TSocket;  
 var
   Sock: TSocket;
   Addr: TInetSockAddr;
@@ -606,7 +606,7 @@ begin
   Result := Sock;
 end;
 
-procedure RunUDPServer(Sock: TSocket);
+procedure RunUDPServer(Sock: TSocket);  
 var
   Buffer: array[0..4095] of Char;
   Received: Integer;
@@ -670,7 +670,7 @@ end.
 ### Définir des timeouts
 
 ```pascal
-procedure SetSocketTimeout(Sock: TSocket; TimeoutMS: Integer);
+procedure SetSocketTimeout(Sock: TSocket; TimeoutMS: Integer);  
 var
   {$IFDEF WINDOWS}
   Timeout: DWORD;
@@ -696,7 +696,7 @@ end;
 ### Socket non-bloquant
 
 ```pascal
-procedure SetNonBlocking(Sock: TSocket);
+procedure SetNonBlocking(Sock: TSocket);  
 var
   Flags: Integer;
 begin
@@ -715,7 +715,7 @@ Avec un socket non-bloquant, les fonctions `fpRecv`, `fpSend`, `fpAccept` retour
 ### Activer TCP_NODELAY (désactiver l'algorithme de Nagle)
 
 ```pascal
-procedure SetTCPNoDelay(Sock: TSocket);
+procedure SetTCPNoDelay(Sock: TSocket);  
 var
   OptVal: Integer;
 begin
@@ -729,7 +729,7 @@ L'algorithme de Nagle regroupe les petits paquets pour optimiser la bande passan
 ### Activer SO_KEEPALIVE
 
 ```pascal
-procedure SetKeepAlive(Sock: TSocket);
+procedure SetKeepAlive(Sock: TSocket);  
 var
   OptVal: Integer;
 begin
@@ -743,7 +743,7 @@ Permet de détecter les connexions mortes en envoyant périodiquement des paquet
 ### Définir la taille des buffers
 
 ```pascal
-procedure SetBufferSizes(Sock: TSocket; SendBufSize, RecvBufSize: Integer);
+procedure SetBufferSizes(Sock: TSocket; SendBufSize, RecvBufSize: Integer);  
 begin
   fpSetSockOpt(Sock, SOL_SOCKET, SO_SNDBUF, @SendBufSize, SizeOf(SendBufSize));
   fpSetSockOpt(Sock, SOL_SOCKET, SO_RCVBUF, @RecvBufSize, SizeOf(RecvBufSize));
@@ -753,7 +753,7 @@ end;
 ### Broadcast UDP
 
 ```pascal
-procedure EnableBroadcast(Sock: TSocket);
+procedure EnableBroadcast(Sock: TSocket);  
 var
   OptVal: Integer;
 begin
@@ -762,7 +762,7 @@ begin
 end;
 
 // Envoi en broadcast
-procedure SendBroadcast(Sock: TSocket; Port: Word; const Message: string);
+procedure SendBroadcast(Sock: TSocket; Port: Word; const Message: string);  
 var
   Addr: TInetSockAddr;
 begin
@@ -786,7 +786,7 @@ program SelectExample;
 uses
   SysUtils, Sockets, BaseUnix;
 
-function WaitForData(Sock: TSocket; TimeoutMS: Integer): Boolean;
+function WaitForData(Sock: TSocket; TimeoutMS: Integer): Boolean;  
 var
   ReadFDs: TFDSet;
   Timeout: TTimeVal;
@@ -806,7 +806,7 @@ begin
   Result := (Res > 0) and (fpFD_ISSET(Sock, ReadFDs) = 1);
 end;
 
-procedure MultiSocketServer(Port: Word);
+procedure MultiSocketServer(Port: Word);  
 var
   ServerSock, ClientSock: TSocket;
   ClientAddr: TInetSockAddr;
@@ -918,7 +918,7 @@ Pour des serveurs haute performance, considérez **epoll** (Linux) ou **IOCP** (
 ### Codes d'erreur communs
 
 ```pascal
-procedure DisplaySocketError(ErrorCode: Integer);
+procedure DisplaySocketError(ErrorCode: Integer);  
 begin
   case ErrorCode of
     {$IFDEF WINDOWS}
@@ -952,7 +952,7 @@ begin
 end;
 
 // Utilisation
-if fpConnect(Sock, @Addr, SizeOf(Addr)) < 0 then
+if fpConnect(Sock, @Addr, SizeOf(Addr)) < 0 then  
 begin
   DisplaySocketError(SocketError);
   CloseSocket(Sock);
@@ -962,7 +962,7 @@ end;
 ### Gestion robuste des erreurs
 
 ```pascal
-function SafeSend(Sock: TSocket; const Data: string): Boolean;
+function SafeSend(Sock: TSocket; const Data: string): Boolean;  
 var
   TotalSent, Sent: Integer;
   Remaining: Integer;
@@ -1007,7 +1007,7 @@ begin
   WriteLn('Envoyé: ', TotalSent, ' octets');
 end;
 
-function SafeRecv(Sock: TSocket; MaxLen: Integer; out Data: string): Boolean;
+function SafeRecv(Sock: TSocket; MaxLen: Integer; out Data: string): Boolean;  
 var
   Buffer: array[0..4095] of Char;
   Received: Integer;
@@ -1071,7 +1071,7 @@ type
     Checksum: Cardinal; // Somme de contrôle
   end;
 
-function CalculateChecksum(const Data: string): Cardinal;
+function CalculateChecksum(const Data: string): Cardinal;  
 var
   i: Integer;
 begin
@@ -1080,7 +1080,7 @@ begin
     Result := Result + Ord(Data[i]);
 end;
 
-function SendPacket(Sock: TSocket; Command: Byte; const Data: string): Boolean;
+function SendPacket(Sock: TSocket; Command: Byte; const Data: string): Boolean;  
 var
   Header: TPacketHeader;
   Sent: Integer;
@@ -1168,7 +1168,7 @@ begin
   Result := True;
 end;
 
-procedure HandleClientProtocol(ClientSock: TSocket);
+procedure HandleClientProtocol(ClientSock: TSocket);  
 var
   Command: Byte;
   Data, Response: string;
@@ -1257,7 +1257,7 @@ uses
 // Constantes et fonctions identiques au serveur
 // (CMD_*, RESP_*, SendPacket, ReceivePacket)
 
-procedure TestProtocol(Sock: TSocket);
+procedure TestProtocol(Sock: TSocket);  
 var
   Command: Byte;
   Response: string;
@@ -1343,7 +1343,7 @@ const
   MULTICAST_GROUP = '239.255.255.250';  // Groupe multicast
   MULTICAST_PORT = 5353;
 
-procedure SendMulticast(const Message: string);
+procedure SendMulticast(const Message: string);  
 var
   Sock: TSocket;
   Addr: TInetSockAddr;
@@ -1399,7 +1399,7 @@ type
     imr_interface: TInAddr;  // Interface locale
   end;
 
-procedure ReceiveMulticast;
+procedure ReceiveMulticast;  
 var
   Sock: TSocket;
   Addr: TInetSockAddr;
@@ -1495,7 +1495,7 @@ type
     icmp_seq: Word;       // Numéro de séquence
   end;
 
-function CalculateICMPChecksum(const Data: array of Byte; Len: Integer): Word;
+function CalculateICMPChecksum(const Data: array of Byte; Len: Integer): Word;  
 var
   Sum: Cardinal;
   i: Integer;
@@ -1521,7 +1521,7 @@ begin
   Result := not Word(Sum);
 end;
 
-function SendPing(const Host: string; Timeout: Integer): Boolean;
+function SendPing(const Host: string; Timeout: Integer): Boolean;  
 var
   Sock: TSocket;
   Addr: TInetSockAddr;
@@ -1638,7 +1638,7 @@ end.
 
 ```pascal
 {$IFDEF LINUX}
-function SendFileOptimized(Sock: TSocket; const FileName: string): Boolean;
+function SendFileOptimized(Sock: TSocket; const FileName: string): Boolean;  
 var
   FileHandle: Integer;
   FileSize, Sent: Int64;
@@ -1685,7 +1685,7 @@ end;
 ```pascal
 {$IFDEF LINUX}
 // Transfert de données entre deux sockets sans copie
-function SpliceData(SourceSock, DestSock: TSocket; Length: Integer): Integer;
+function SpliceData(SourceSock, DestSock: TSocket; Length: Integer): Integer;  
 var
   PipeFD: array[0..1] of Integer;
   Spliced: Integer;
@@ -1724,7 +1724,7 @@ end;
 Indique au kernel qu'il y aura plus de données (optimisation TCP) :
 
 ```pascal
-procedure SendMultiplePackets(Sock: TSocket);
+procedure SendMultiplePackets(Sock: TSocket);  
 var
   i: Integer;
   Data: string;
@@ -1748,7 +1748,7 @@ end;
 ### Méthode 1 : Lecture avec timeout
 
 ```pascal
-function IsSocketConnected(Sock: TSocket): Boolean;
+function IsSocketConnected(Sock: TSocket): Boolean;  
 var
   ReadFDs: TFDSet;
   Timeout: TTimeVal;
@@ -1774,7 +1774,7 @@ end;
 ### Méthode 2 : Option SO_ERROR
 
 ```pascal
-function CheckSocketError(Sock: TSocket): Integer;
+function CheckSocketError(Sock: TSocket): Integer;  
 var
   Error: Integer;
   Len: TSockLen;
@@ -1804,7 +1804,7 @@ uses
 ### Fermeture de socket
 
 ```pascal
-procedure CloseSocketPortable(var Sock: TSocket);
+procedure CloseSocketPortable(var Sock: TSocket);  
 begin
   if Sock <> INVALID_SOCKET then
   begin
@@ -1821,7 +1821,7 @@ end;
 ### Codes d'erreur
 
 ```pascal
-function GetLastSocketError: Integer;
+function GetLastSocketError: Integer;  
 begin
   {$IFDEF WINDOWS}
   Result := WSAGetLastError;
@@ -1830,7 +1830,7 @@ begin
   {$ENDIF}
 end;
 
-function SocketErrorToString(ErrorCode: Integer): string;
+function SocketErrorToString(ErrorCode: Integer): string;  
 begin
   {$IFDEF WINDOWS}
   case ErrorCode of
@@ -1863,7 +1863,7 @@ end;
 
 ```pascal
 {$IFDEF WINDOWS}
-function InitWinsock: Boolean;
+function InitWinsock: Boolean;  
 var
   WSAData: TWSAData;
 begin
@@ -1872,7 +1872,7 @@ begin
     WriteLn('Erreur initialisation Winsock');
 end;
 
-procedure CleanupWinsock;
+procedure CleanupWinsock;  
 begin
   WSACleanup;
 end;
@@ -1898,7 +1898,7 @@ end.
 ### Timeout portable
 
 ```pascal
-procedure SetSocketTimeoutPortable(Sock: TSocket; TimeoutMS: Integer);
+procedure SetSocketTimeoutPortable(Sock: TSocket; TimeoutMS: Integer);  
 var
   {$IFDEF WINDOWS}
   Timeout: DWORD;
@@ -1942,7 +1942,7 @@ type
     BufferPos: Integer;
   end;
 
-function CreateEpollServer(Port: Word): TSocket;
+function CreateEpollServer(Port: Word): TSocket;  
 var
   Sock: TSocket;
   Addr: TInetSockAddr;
@@ -1984,7 +1984,7 @@ begin
   WriteLn('Serveur époll créé sur le port ', Port);
 end;
 
-procedure RunEpollServer(ListenSock: TSocket);
+procedure RunEpollServer(ListenSock: TSocket);  
 var
   EpollFD: Integer;
   Event: TEpollEvent;
@@ -2172,7 +2172,7 @@ type
     Socket: TSocket;
   end;
 
-function CreateIOCPServer(Port: Word): TSocket;
+function CreateIOCPServer(Port: Word): TSocket;  
 var
   Sock: TSocket;
   Addr: TSockAddrIn;
@@ -2208,7 +2208,7 @@ begin
   WriteLn('Serveur IOCP créé sur le port ', Port);
 end;
 
-procedure WorkerThread(CompletionPort: THandle); stdcall;
+procedure WorkerThread(CompletionPort: THandle); stdcall;  
 var
   BytesTransferred: DWORD;
   PerHandleData: PPerHandleData;
@@ -2259,7 +2259,7 @@ begin
   end;
 end;
 
-procedure RunIOCPServer(ListenSock: TSocket);
+procedure RunIOCPServer(ListenSock: TSocket);  
 var
   CompletionPort: THandle;
   i: Integer;
@@ -2375,7 +2375,7 @@ end.
 ### 1. Toujours vérifier les valeurs de retour
 
 ```pascal
-Result := fpSend(Sock, @Data[1], Length(Data), 0);
+Result := fpSend(Sock, @Data[1], Length(Data), 0);  
 if Result < 0 then
   // Gérer l'erreur
 else if Result < Length(Data) then
@@ -2385,7 +2385,7 @@ else if Result < Length(Data) then
 ### 2. Gérer les envois partiels
 
 ```pascal
-function SendAll(Sock: TSocket; const Data: string): Boolean;
+function SendAll(Sock: TSocket; const Data: string): Boolean;  
 var
   TotalSent, Sent: Integer;
   Ptr: PChar;
@@ -2427,7 +2427,7 @@ SetSocketTimeoutPortable(Sock, 30000); // 30 secondes
 ### 5. Nettoyer les ressources
 
 ```pascal
-procedure CleanupSocket(var Sock: TSocket);
+procedure CleanupSocket(var Sock: TSocket);  
 begin
   if Sock <> INVALID_SOCKET then
   begin
@@ -2447,7 +2447,7 @@ end;
 ### 6. Valider les données reçues
 
 ```pascal
-function ValidateReceivedData(const Data: string): Boolean;
+function ValidateReceivedData(const Data: string): Boolean;  
 begin
   // Vérifications de sécurité
   Result := (Length(Data) > 0) and (Length(Data) < 1048576); // Max 1 MB
@@ -2462,7 +2462,7 @@ end;
 ### 7. Logger les erreurs réseau
 
 ```pascal
-procedure LogSocketError(const Context: string; ErrorCode: Integer);
+procedure LogSocketError(const Context: string; ErrorCode: Integer);  
 begin
   WriteLn('[', FormatDateTime('yyyy-mm-dd hh:nn:ss', Now), '] ',
           Context, ': ', SocketErrorToString(ErrorCode));
@@ -2474,7 +2474,7 @@ end;
 ### Transfert de fichiers
 
 ```pascal
-procedure SendFile(Sock: TSocket; const FileName: string);
+procedure SendFile(Sock: TSocket; const FileName: string);  
 var
   F: File of Byte;
   Buffer: array[0..8191] of Byte;
@@ -2509,7 +2509,7 @@ type
     constructor Create(ASock: TSocket; AInterval: Integer);
   end;
 
-constructor THeartbeatThread.Create(ASock: TSocket; AInterval: Integer);
+constructor THeartbeatThread.Create(ASock: TSocket; AInterval: Integer);  
 begin
   inherited Create(False);
   FSock := ASock;
@@ -2517,7 +2517,7 @@ begin
   FreeOnTerminate := True;
 end;
 
-procedure THeartbeatThread.Execute;
+procedure THeartbeatThread.Execute;  
 const
   HEARTBEAT = 'PING';
 begin
@@ -2538,7 +2538,7 @@ end;
 **Sous Linux :**
 ```bash
 # Voir les connexions actives
-netstat -an | grep 8080
+netstat -an | grep 8080  
 ss -an | grep 8080
 
 # Capturer le trafic réseau
@@ -2548,7 +2548,7 @@ sudo tcpdump -i lo port 8080
 wireshark
 
 # Tester un port
-nc -zv localhost 8080
+nc -zv localhost 8080  
 telnet localhost 8080
 ```
 
@@ -2558,7 +2558,7 @@ telnet localhost 8080
 netstat -an | findstr 8080
 
 # Tester un port
-telnet localhost 8080
+telnet localhost 8080  
 Test-NetConnection -ComputerName localhost -Port 8080
 ```
 
@@ -2567,7 +2567,7 @@ Test-NetConnection -ComputerName localhost -Port 8080
 ```pascal
 {$DEFINE DEBUG_NETWORK}
 
-procedure DebugLog(const Msg: string);
+procedure DebugLog(const Msg: string);  
 begin
   {$IFDEF DEBUG_NETWORK}
   WriteLn('[DEBUG] ', FormatDateTime('hh:nn:ss.zzz', Now), ' ', Msg);
@@ -2575,7 +2575,7 @@ begin
 end;
 
 // Utilisation
-DebugLog('Connexion établie avec ' + ClientIP);
+DebugLog('Connexion établie avec ' + ClientIP);  
 DebugLog('Envoi de ' + IntToStr(DataLen) + ' octets');
 ```
 

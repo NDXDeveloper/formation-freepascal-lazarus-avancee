@@ -89,7 +89,7 @@ choco install protobuf
 
 Cloner le projet :
 ```batch
-cd C:\Dev
+cd C:\Dev  
 git clone https://github.com/highras/fpnn-grpc-pascal.git
 ```
 
@@ -101,7 +101,7 @@ Ou utiliser une bibliothèque alternative comme **mORMot** qui inclut le support
 
 ```bash
 # Via le gestionnaire de paquets
-sudo apt update
+sudo apt update  
 sudo apt install -y protobuf-compiler
 
 # Vérifier
@@ -112,12 +112,12 @@ protoc --version
 
 ```bash
 # Télécharger la dernière version
-PROTOC_VERSION=25.1
+PROTOC_VERSION=25.1  
 wget https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip
 
 # Extraire
-unzip protoc-${PROTOC_VERSION}-linux-x86_64.zip -d protoc
-sudo mv protoc/bin/protoc /usr/local/bin/
+unzip protoc-${PROTOC_VERSION}-linux-x86_64.zip -d protoc  
+sudo mv protoc/bin/protoc /usr/local/bin/  
 sudo mv protoc/include/google /usr/local/include/
 
 # Nettoyer
@@ -393,7 +393,7 @@ function DeserialiserUtilisateur(const Data: TBytes): TUtilisateur;
 
 implementation
 
-function SerialiserUtilisateur(const User: TUtilisateur): TBytes;
+function SerialiserUtilisateur(const User: TUtilisateur): TBytes;  
 var
   Writer: TBufferWriter;
   Temp: TBytes;
@@ -428,7 +428,7 @@ begin
   end;
 end;
 
-function DeserialiserUtilisateur(const Data: TBytes): TUtilisateur;
+function DeserialiserUtilisateur(const Data: TBytes): TUtilisateur;  
 var
   Reader: TFastReader;
   Tag, WireType: Integer;
@@ -558,7 +558,7 @@ type
 
 implementation
 
-constructor TUserService.Create;
+constructor TUserService.Create;  
 begin
   inherited Create;
   FUtilisateurs := TObjectList.Create(True);
@@ -570,13 +570,13 @@ begin
   CreateUser('Charlie Dubois', 'charlie@example.com', 42);
 end;
 
-destructor TUserService.Destroy;
+destructor TUserService.Destroy;  
 begin
   FUtilisateurs.Free;
   inherited Destroy;
 end;
 
-function TUserService.GetUser(ID: Integer): TReponseUtilisateur;
+function TUserService.GetUser(ID: Integer): TReponseUtilisateur;  
 var
   i: Integer;
   User: ^TUtilisateur;
@@ -601,7 +601,7 @@ begin
   Result.Message := 'Utilisateur non trouvé';
 end;
 
-function TUserService.ListUsers(Page, PageSize: Integer): TListeUtilisateurs;
+function TUserService.ListUsers(Page, PageSize: Integer): TListeUtilisateurs;  
 var
   i, Debut, Fin: Integer;
   User: ^TUtilisateur;
@@ -619,7 +619,7 @@ begin
   end;
 end;
 
-function TUserService.CreateUser(const Nom, Email: RawUtf8; Age: Integer): TReponseUtilisateur;
+function TUserService.CreateUser(const Nom, Email: RawUtf8; Age: Integer): TReponseUtilisateur;  
 var
   User: ^TUtilisateur;
 begin
@@ -1105,9 +1105,9 @@ Protocol Buffers fournit des types standards prêts à l'emploi :
 ```protobuf
 syntax = "proto3";
 
-import "google/protobuf/timestamp.proto";
-import "google/protobuf/duration.proto";
-import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";  
+import "google/protobuf/duration.proto";  
+import "google/protobuf/empty.proto";  
 import "google/protobuf/any.proto";
 
 message Evenement {
@@ -1127,8 +1127,8 @@ service EvenementService {
 ```protobuf
 syntax = "proto3";
 
-option java_package = "com.example.proto";
-option java_outer_classname = "UserProto";
+option java_package = "com.example.proto";  
+option java_outer_classname = "UserProto";  
 option optimize_for = SPEED;  // ou CODE_SIZE, LITE_RUNTIME
 
 message User {
@@ -1223,7 +1223,7 @@ message User {
 // Conventions de nommage recommandées
 
 // Messages : PascalCase
-message UserProfile { }
+message UserProfile { }  
 message OrderDetails { }
 
 // Champs : snake_case
@@ -1333,8 +1333,8 @@ type
   end;
 
 // Fonctions helper
-function CreateError(Code: TErrorCode; const Msg: RawUtf8): TError;
-function CreateSuccess<T>(const Data: T): TResultat<T>;
+function CreateError(Code: TErrorCode; const Msg: RawUtf8): TError;  
+function CreateSuccess<T>(const Data: T): TResultat<T>;  
 function CreateFailure<T>(const Error: TError): TResultat<T>;
 
 implementation
@@ -1342,21 +1342,21 @@ implementation
 uses
   mormot.core.json;
 
-function CreateError(Code: TErrorCode; const Msg: RawUtf8): TError;
+function CreateError(Code: TErrorCode; const Msg: RawUtf8): TError;  
 begin
   Result.Code := Code;
   Result.Message := Msg;
   Result.Details := '{}';
 end;
 
-function CreateSuccess<T>(const Data: T): TResultat<T>;
+function CreateSuccess<T>(const Data: T): TResultat<T>;  
 begin
   Result.Success := True;
   Result.Data := Data;
   FillChar(Result.Error, SizeOf(TError), 0);
 end;
 
-function CreateFailure<T>(const Error: TError): TResultat<T>;
+function CreateFailure<T>(const Error: TError): TResultat<T>;  
 begin
   Result.Success := False;
   FillChar(Result.Data, SizeOf(T), 0);
@@ -1369,7 +1369,7 @@ end.
 **Utilisation :**
 
 ```pascal
-function TUserService.GetUser(ID: Integer): TResultat<TUtilisateur>;
+function TUserService.GetUser(ID: Integer): TResultat<TUtilisateur>;  
 var
   User: ^TUtilisateur;
 begin
@@ -1428,7 +1428,7 @@ end;
 
 **Résultat typique :**
 ```
-Taille Protobuf : 42 octets
+Taille Protobuf : 42 octets  
 Taille JSON : 128 octets
 Économie : 67.2%
 ```
@@ -1452,21 +1452,21 @@ type
 var
   BufferPool: TProtobufPool;
 
-constructor TProtobufPool.Create;
+constructor TProtobufPool.Create;  
 begin
   inherited Create;
   FBuffers := TList.Create;
   FLock := TCriticalSection.Create;
 end;
 
-destructor TProtobufPool.Destroy;
+destructor TProtobufPool.Destroy;  
 begin
   FBuffers.Free;
   FLock.Free;
   inherited Destroy;
 end;
 
-function TProtobufPool.Obtenir: TBytes;
+function TProtobufPool.Obtenir: TBytes;  
 begin
   FLock.Enter;
   try
@@ -1482,7 +1482,7 @@ begin
   end;
 end;
 
-procedure TProtobufPool.Liberer(var Buffer: TBytes);
+procedure TProtobufPool.Liberer(var Buffer: TBytes);  
 begin
   FLock.Enter;
   try
@@ -1503,7 +1503,7 @@ Pour les gros messages, la compression peut aider :
 uses
   mormot.core.zip;
 
-function CompresserMessage(const Data: TBytes): TBytes;
+function CompresserMessage(const Data: TBytes): TBytes;  
 var
   Compresse: RawByteString;
 begin
@@ -1511,7 +1511,7 @@ begin
   Result := StringToBytes(Compresse);
 end;
 
-function DecompresserMessage(const Data: TBytes): TBytes;
+function DecompresserMessage(const Data: TBytes): TBytes;  
 var
   Decompresse: RawByteString;
 begin
@@ -1536,16 +1536,16 @@ protoc --decode=user.User user.proto < user.bin
 
 **user.txt :**
 ```
-nom: "Jean Dupont"
-email: "jean@example.com"
-age: 30
+nom: "Jean Dupont"  
+email: "jean@example.com"  
+age: 30  
 actif: true
 ```
 
 ### 2. Inspector hexadécimal
 
 ```pascal
-procedure AfficherProtobuf(const Data: TBytes);
+procedure AfficherProtobuf(const Data: TBytes);  
 var
   i: Integer;
 begin
@@ -1584,7 +1584,7 @@ end;
 ### 3. Validation
 
 ```pascal
-function ValiderUtilisateur(const User: TUtilisateur): TError;
+function ValiderUtilisateur(const User: TUtilisateur): TError;  
 begin
   // Vérifier le nom
   if Length(User.Nom) < 2 then
@@ -1611,7 +1611,7 @@ end;
 const
   TAILLE_MAX_MESSAGE = 10 * 1024 * 1024;  // 10 MB
 
-function DeserialiserSecurise(const Data: TBytes): TUtilisateur;
+function DeserialiserSecurise(const Data: TBytes): TUtilisateur;  
 begin
   if Length(Data) > TAILLE_MAX_MESSAGE then
     raise Exception.Create('Message trop grand');
@@ -1626,7 +1626,7 @@ end;
 ### 2. Validation stricte
 
 ```pascal
-function DeserialiserAvecValidation(const Data: TBytes): TUtilisateur;
+function DeserialiserAvecValidation(const Data: TBytes): TUtilisateur;  
 var
   Erreur: TError;
 begin
@@ -1645,7 +1645,7 @@ end;
 uses
   mormot.core.text;
 
-function SanitiserUtilisateur(var User: TUtilisateur);
+function SanitiserUtilisateur(var User: TUtilisateur);  
 begin
   // Nettoyer le nom
   User.Nom := Trim(User.Nom);
@@ -1675,7 +1675,7 @@ const
   PROTO_PATH = '/usr/local/share/proto/';
   {$ENDIF}
 
-procedure ChargerDefinitionsProto;
+procedure ChargerDefinitionsProto;  
 begin
   // Charger les définitions depuis le chemin approprié
   LoadProtoFile(PROTO_PATH + 'user.proto');
@@ -1687,7 +1687,7 @@ end;
 **compile_protos.bat (Windows) :**
 ```batch
 @echo off
-set PROTO_DIR=.\proto
+set PROTO_DIR=.\proto  
 set OUT_DIR=.\generated
 
 if not exist %OUT_DIR% mkdir %OUT_DIR%
@@ -1697,7 +1697,7 @@ for %%f in (%PROTO_DIR%\*.proto) do (
     protoc --proto_path=%PROTO_DIR% --pascal_out=%OUT_DIR% %%f
 )
 
-echo Terminé !
+echo Terminé !  
 pause
 ```
 
@@ -1705,7 +1705,7 @@ pause
 ```bash
 #!/bin/bash
 
-PROTO_DIR="./proto"
+PROTO_DIR="./proto"  
 OUT_DIR="./generated"
 
 mkdir -p "$OUT_DIR"
@@ -1733,7 +1733,7 @@ uses
   mormot.core.base,
   mormot.rest.http.server;
 
-procedure ConfigurerServeur;
+procedure ConfigurerServeur;  
 begin
   WriteLn('=== Serveur Protobuf/gRPC-like ===');
 
@@ -1994,8 +1994,8 @@ brew install buf  # macOS
 go install github.com/bufbuild/buf/cmd/buf@latest
 
 # Utilisation
-buf lint
-buf generate
+buf lint  
+buf generate  
 buf breaking --against '.git#branch=main'
 ```
 
@@ -2005,7 +2005,7 @@ buf breaking --against '.git#branch=main'
 brew install grpcurl
 
 # Utilisation
-grpcurl -plaintext localhost:50051 list
+grpcurl -plaintext localhost:50051 list  
 grpcurl -plaintext localhost:50051 user.UserService/GetUser
 ```
 
@@ -2064,21 +2064,21 @@ MonProjetgRPC/
 
 set -e  # Arrêter en cas d'erreur
 
-echo "=== Build du projet gRPC ==="
+echo "=== Build du projet gRPC ==="  
 echo ""
 
 # Couleurs
-GREEN='\033[0;32m'
-RED='\033[0;31m'
+GREEN='\033[0;32m'  
+RED='\033[0;31m'  
 NC='\033[0m' # No Color
 
 # 1. Nettoyer
-echo "1. Nettoyage..."
-rm -rf generated/
+echo "1. Nettoyage..."  
+rm -rf generated/  
 mkdir -p generated/
 
 # 2. Compiler les protos
-echo "2. Compilation des fichiers .proto..."
+echo "2. Compilation des fichiers .proto..."  
 PROTO_FILES=$(find proto -name "*.proto")
 
 for proto_file in $PROTO_FILES; do
@@ -2097,7 +2097,7 @@ done
 echo -e "${GREEN}✓ Compilation des protos réussie${NC}"
 
 # 3. Compiler le serveur
-echo "3. Compilation du serveur..."
+echo "3. Compilation du serveur..."  
 fpc -Fu../mormot2/src/core \
     -Fu../mormot2/src/rest \
     -Fugenerated \
@@ -2114,7 +2114,7 @@ else
 fi
 
 # 4. Compiler le client
-echo "4. Compilation du client..."
+echo "4. Compilation du client..."  
 fpc -Fu../mormot2/src/core \
     -Fu../mormot2/src/rest \
     -Fugenerated \
@@ -2129,8 +2129,8 @@ else
     exit 1
 fi
 
-echo ""
-echo -e "${GREEN}=== Build terminé avec succès ===${NC}"
+echo ""  
+echo -e "${GREEN}=== Build terminé avec succès ===${NC}"  
 echo "Exécutables dans ./bin/"
 ```
 
@@ -2139,15 +2139,15 @@ echo "Exécutables dans ./bin/"
 @echo off
 setlocal enabledelayedexpansion
 
-echo === Build du projet gRPC ===
+echo === Build du projet gRPC ===  
 echo.
 
-REM 1. Nettoyer
-echo 1. Nettoyage...
-if exist generated rmdir /s /q generated
+REM 1. Nettoyer  
+echo 1. Nettoyage...  
+if exist generated rmdir /s /q generated  
 mkdir generated
 
-REM 2. Compiler les protos
+REM 2. Compiler les protos  
 echo 2. Compilation des fichiers .proto...
 
 for /r proto %%f in (*.proto) do (
@@ -2161,8 +2161,8 @@ for /r proto %%f in (*.proto) do (
 
 echo [OK] Compilation des protos reussie
 
-REM 3. Compiler le serveur
-echo 3. Compilation du serveur...
+REM 3. Compiler le serveur  
+echo 3. Compilation du serveur...  
 fpc -Fu..\mormot2\src\core ^
     -Fu..\mormot2\src\rest ^
     -Fugenerated ^
@@ -2177,8 +2177,8 @@ if errorlevel 1 (
 )
 echo [OK] Serveur compile
 
-REM 4. Compiler le client
-echo 4. Compilation du client...
+REM 4. Compiler le client  
+echo 4. Compilation du client...  
 fpc -Fu..\mormot2\src\core ^
     -Fu..\mormot2\src\rest ^
     -Fugenerated ^
@@ -2192,9 +2192,9 @@ if errorlevel 1 (
 )
 echo [OK] Client compile
 
-echo.
-echo === Build termine avec succes ===
-echo Executables dans .\bin\
+echo.  
+echo === Build termine avec succes ===  
+echo Executables dans .\bin\  
 pause
 ```
 
@@ -2216,8 +2216,8 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copier les sources
-COPY proto /app/proto
-COPY src /app/src
+COPY proto /app/proto  
+COPY src /app/src  
 COPY scripts /app/scripts
 
 # Cloner mORMot
@@ -2308,7 +2308,7 @@ type
 
 implementation
 
-procedure TTestProtobuf.TestSerialisation;
+procedure TTestProtobuf.TestSerialisation;  
 var
   User: TUtilisateur;
   Data: TBytes;
@@ -2325,7 +2325,7 @@ begin
   AssertTrue('Taille raisonnable', Length(Data) < 1000);
 end;
 
-procedure TTestProtobuf.TestDeserialisation;
+procedure TTestProtobuf.TestDeserialisation;  
 var
   User, UserDeserialisé: TUtilisateur;
   Data: TBytes;
@@ -2346,7 +2346,7 @@ begin
   AssertEquals('Actif identique', User.Actif, UserDeserialisé.Actif);
 end;
 
-procedure TTestProtobuf.TestRoundTrip;
+procedure TTestProtobuf.TestRoundTrip;  
 var
   i: Integer;
   User, Result: TUtilisateur;
@@ -2369,7 +2369,7 @@ begin
   end;
 end;
 
-procedure TTestProtobuf.TestChampOptionnel;
+procedure TTestProtobuf.TestChampOptionnel;  
 var
   User: TUtilisateur;
   Data: TBytes;
@@ -2387,7 +2387,7 @@ begin
   AssertTrue('Taille réduite', Length(Data) < 30);
 end;
 
-procedure TTestProtobuf.TestChampsRepetes;
+procedure TTestProtobuf.TestChampsRepetes;  
 var
   Liste: TListeUtilisateurs;
   Data: TBytes;
@@ -2409,7 +2409,7 @@ begin
   AssertTrue('Liste sérialisée', True);
 end;
 
-procedure TTestProtobuf.TestCompatibilite;
+procedure TTestProtobuf.TestCompatibilite;  
 var
   UserV1, UserV2: TUtilisateur;
   DataV1: TBytes;
@@ -2450,7 +2450,7 @@ uses
   mormot.core.perf,
   Models, ProtobufHelpers;
 
-procedure BenchmarkerSerialisation;
+procedure BenchmarkerSerialisation;  
 const
   NB_ITERATIONS = 100000;
 var
@@ -2498,7 +2498,7 @@ begin
   WriteLn('Économie : ', (1 - TailleProtobuf / TailleJSON) * 100:0:1, '%');
 end;
 
-procedure BenchmarkerDeserialisation;
+procedure BenchmarkerDeserialisation;  
 const
   NB_ITERATIONS = 100000;
 var
@@ -2617,12 +2617,12 @@ type
 
 implementation
 
-constructor TRestProxy.Create(GrpcService: IUserService);
+constructor TRestProxy.Create(GrpcService: IUserService);  
 begin
   FGrpcService := GrpcService;
 end;
 
-function TRestProxy.GetUser(Ctxt: TRestServerUriContext): Integer;
+function TRestProxy.GetUser(Ctxt: TRestServerUriContext): Integer;  
 var
   ID: Integer;
   Reponse: TReponseUtilisateur;
@@ -2648,7 +2648,7 @@ begin
   Result := 200;
 end;
 
-function TRestProxy.CreateUser(Ctxt: TRestServerUriContext): Integer;
+function TRestProxy.CreateUser(Ctxt: TRestServerUriContext): Integer;  
 var
   Nom, Email: RawUtf8;
   Age: Integer;
@@ -2788,7 +2788,7 @@ var
   Http: TRestHttpServer;
   Port: String;
 
-procedure InitialiserLogs;
+procedure InitialiserLogs;  
 begin
   TSynLog.Family.Level := LOG_VERBOSE;
   TSynLog.Family.PerThreadLog := ptIdentifiedInOneFile;
@@ -2801,7 +2801,7 @@ begin
   {$ENDIF}
 end;
 
-procedure GestionnaireSignal(Signal: cint); cdecl;
+procedure GestionnaireSignal(Signal: cint); cdecl;  
 begin
   WriteLn;
   WriteLn('Signal reçu, arrêt propre...');
@@ -3129,7 +3129,7 @@ grpcurl -plaintext -d '{"id": 42}' \
 **3. Monitoring et métriques :**
 ```pascal
 // Intercepteur pour mesurer les performances
-procedure LogRpcCall(const Method: RawUtf8; DurationMs: Integer);
+procedure LogRpcCall(const Method: RawUtf8; DurationMs: Integer);  
 begin
   TSynLog.Add.Log(sllInfo, 'RPC % completed in %ms', [Method, DurationMs]);
 

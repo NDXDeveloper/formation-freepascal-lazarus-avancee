@@ -150,7 +150,7 @@ type
     Value: array[0..19] of Byte;  // 160 bits (SHA-1)
   end;
 
-function GeneratePeerID: TPeerID;
+function GeneratePeerID: TPeerID;  
 var
   i: Integer;
 begin
@@ -159,7 +159,7 @@ begin
     Result.Value[i] := Random(256);
 end;
 
-function PeerIDToString(const ID: TPeerID): String;
+function PeerIDToString(const ID: TPeerID): String;  
 var
   i: Integer;
 begin
@@ -182,7 +182,7 @@ const
     'bootstrap3.example.com:6881'
   );
 
-procedure ConnecterBootstrap;
+procedure ConnecterBootstrap;  
 var
   i: Integer;
 begin
@@ -201,7 +201,7 @@ end;
 
 **b) Broadcasting local**
 ```pascal
-procedure BroadcastDecouverte;
+procedure BroadcastDecouverte;  
 var
   Socket: TSocket;
   Broadcast: TSockAddr;
@@ -228,7 +228,7 @@ end;
 
 **c) Peer Exchange (PEX)**
 ```pascal
-procedure DemanderPairs(Peer: TPeer);
+procedure DemanderPairs(Peer: TPeer);  
 var
   Request: String;
   Response: String;
@@ -282,13 +282,13 @@ type
 
 implementation
 
-constructor TSTUNClient.Create(const Server: String; Port: Word);
+constructor TSTUNClient.Create(const Server: String; Port: Word);  
 begin
   FStunServer := Server;
   FStunPort := Port;
 end;
 
-function TSTUNClient.GetPublicAddress(out IP: String; out Port: Word): Boolean;
+function TSTUNClient.GetPublicAddress(out IP: String; out Port: Word): Boolean;  
 var
   Socket: TSocket;
   Request: array[0..19] of Byte;
@@ -328,7 +328,7 @@ end.
 Demander au routeur d'ouvrir un port :
 
 ```pascal
-procedure OuvrirPortUPnP(Port: Word);
+procedure OuvrirPortUPnP(Port: Word);  
 var
   XML: String;
 begin
@@ -393,7 +393,7 @@ type
     Payload: array[0..1023] of Byte;
   end;
 
-function CreerMessage(MsgType: TMessageType; const Payload: String): TMessage;
+function CreerMessage(MsgType: TMessageType; const Payload: String): TMessage;  
 begin
   FillChar(Result, SizeOf(Result), 0);
   Result.Version := 1;
@@ -486,7 +486,7 @@ implementation
 
 { TPeer }
 
-constructor TPeer.Create(Socket: TSocket; const Address: String; Port: Word);
+constructor TPeer.Create(Socket: TSocket; const Address: String; Port: Word);  
 begin
   inherited Create;
   FSocket := Socket;
@@ -496,13 +496,13 @@ begin
   FLastSeen := Now;
 end;
 
-destructor TPeer.Destroy;
+destructor TPeer.Destroy;  
 begin
   Disconnect;
   inherited Destroy;
 end;
 
-procedure TPeer.Send(const Data: String);
+procedure TPeer.Send(const Data: String);  
 var
   BytesSent: Integer;
 begin
@@ -517,7 +517,7 @@ begin
   end;
 end;
 
-procedure TPeer.Disconnect;
+procedure TPeer.Disconnect;  
 begin
   if FConnected then
   begin
@@ -529,7 +529,7 @@ end;
 
 { TP2PNetwork }
 
-constructor TP2PNetwork.Create(ListenPort: Word);
+constructor TP2PNetwork.Create(ListenPort: Word);  
 begin
   inherited Create;
   FListenPort := ListenPort;
@@ -538,7 +538,7 @@ begin
   FRunning := False;
 end;
 
-destructor TP2PNetwork.Destroy;
+destructor TP2PNetwork.Destroy;  
 begin
   Stop;
   FPeers.Free;
@@ -546,7 +546,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TP2PNetwork.Start;
+procedure TP2PNetwork.Start;  
 var
   Addr: TSockAddr;
 begin
@@ -583,7 +583,7 @@ begin
   WriteLn('Réseau P2P démarré sur le port ', FListenPort);
 end;
 
-procedure TP2PNetwork.Stop;
+procedure TP2PNetwork.Stop;  
 begin
   if not FRunning then
     Exit;
@@ -613,7 +613,7 @@ begin
   WriteLn('Réseau P2P arrêté');
 end;
 
-procedure TP2PNetwork.ListenProc;
+procedure TP2PNetwork.ListenProc;  
 var
   ClientSocket: TSocket;
   ClientAddr: TSockAddr;
@@ -651,7 +651,7 @@ begin
   end;
 end;
 
-procedure TP2PNetwork.HandlePeer(Peer: TPeer);
+procedure TP2PNetwork.HandlePeer(Peer: TPeer);  
 var
   Buffer: array[0..4095] of Byte;
   BytesReceived: Integer;
@@ -688,7 +688,7 @@ begin
   end;
 end;
 
-function TP2PNetwork.ConnectToPeer(const Address: String; Port: Word): TPeer;
+function TP2PNetwork.ConnectToPeer(const Address: String; Port: Word): TPeer;  
 var
   Socket: TSocket;
   Addr: TSockAddr;
@@ -731,7 +731,7 @@ begin
   PeerThread.Start;
 end;
 
-procedure TP2PNetwork.Broadcast(const Data: String);
+procedure TP2PNetwork.Broadcast(const Data: String);  
 var
   i: Integer;
   Peer: TPeer;
@@ -752,7 +752,7 @@ begin
   end;
 end;
 
-function TP2PNetwork.GetPeerCount: Integer;
+function TP2PNetwork.GetPeerCount: Integer;  
 begin
   FLock.Enter;
   try
@@ -784,17 +784,17 @@ var
   Command: String;
   Parts: TStringList;
 
-procedure OnPeerConnected(Peer: TPeer);
+procedure OnPeerConnected(Peer: TPeer);  
 begin
   WriteLn('✓ Pair connecté : ', Peer.Address, ':', Peer.Port);
 end;
 
-procedure OnPeerDisconnected(Peer: TPeer);
+procedure OnPeerDisconnected(Peer: TPeer);  
 begin
   WriteLn('✗ Pair déconnecté : ', Peer.Address, ':', Peer.Port);
 end;
 
-procedure OnMessageReceived(Peer: TPeer; const Data: String);
+procedure OnMessageReceived(Peer: TPeer; const Data: String);  
 begin
   WriteLn('[', Peer.Address, '] ', Data);
 end;
@@ -949,7 +949,7 @@ type
     Payload: array of Byte;    // Données
   end;
 
-function CreateBTMessage(MsgType: TBTMessageType; const Payload: TBytes): TBTMessage;
+function CreateBTMessage(MsgType: TBTMessageType; const Payload: TBytes): TBTMessage;  
 begin
   Result.Length := htonl(1 + Length(Payload));
   Result.MessageType := Ord(MsgType);
@@ -979,7 +979,7 @@ type
 
 implementation
 
-constructor TBitfield.Create(PieceCount: Integer);
+constructor TBitfield.Create(PieceCount: Integer);  
 var
   ByteCount: Integer;
 begin
@@ -992,7 +992,7 @@ begin
   FillChar(FBits[0], ByteCount, 0);
 end;
 
-procedure TBitfield.SetPiece(Index: Integer; Value: Boolean);
+procedure TBitfield.SetPiece(Index: Integer; Value: Boolean);  
 var
   ByteIndex, BitIndex: Integer;
 begin
@@ -1008,7 +1008,7 @@ begin
     FBits[ByteIndex] := FBits[ByteIndex] and not (1 shl (7 - BitIndex));
 end;
 
-function TBitfield.HasPiece(Index: Integer): Boolean;
+function TBitfield.HasPiece(Index: Integer): Boolean;  
 var
   ByteIndex, BitIndex: Integer;
 begin
@@ -1021,7 +1021,7 @@ begin
   Result := (FBits[ByteIndex] and (1 shl (7 - BitIndex))) <> 0;
 end;
 
-function TBitfield.GetCompletionPercent: Double;
+function TBitfield.GetCompletionPercent: Double;  
 var
   i, Count: Integer;
 begin
@@ -1033,7 +1033,7 @@ begin
   Result := (Count * 100.0) / FPieceCount;
 end;
 
-function TBitfield.GetMissingPieces: TIntegerDynArray;
+function TBitfield.GetMissingPieces: TIntegerDynArray;  
 var
   i, Count: Integer;
 begin
@@ -1052,12 +1052,12 @@ begin
   SetLength(Result, Count);
 end;
 
-function TBitfield.ToBytes: TBytes;
+function TBitfield.ToBytes: TBytes;  
 begin
   Result := Copy(FBits, 0, Length(FBits));
 end;
 
-procedure TBitfield.FromBytes(const Data: TBytes);
+procedure TBitfield.FromBytes(const Data: TBytes);  
 begin
   FBits := Copy(Data, 0, Length(Data));
 end;
@@ -1107,7 +1107,7 @@ end;
 Au début, télécharger des morceaux aléatoires pour avoir quelque chose à partager rapidement :
 
 ```pascal
-function ChoisirMorceauAleatoire(const PeerBitfield, LocalBitfield: TBitfield): Integer;
+function ChoisirMorceauAleatoire(const PeerBitfield, LocalBitfield: TBitfield): Integer;  
 var
   MissingPieces: TIntegerDynArray;
   i: Integer;
@@ -1143,7 +1143,7 @@ end;
 À la fin, demander les derniers morceaux à plusieurs pairs :
 
 ```pascal
-procedure ActiverEndgameMode(Torrent: TTorrent);
+procedure ActiverEndgameMode(Torrent: TTorrent);  
 var
   MissingPieces: TIntegerDynArray;
   i, j: Integer;
@@ -1181,7 +1181,7 @@ La DHT remplace le tracker centralisé par un système distribué.
 La distance entre deux ID est calculée avec XOR :
 
 ```pascal
-function CalculerDistance(const ID1, ID2: TPeerID): TPeerID;
+function CalculerDistance(const ID1, ID2: TPeerID): TPeerID;  
 var
   i: Integer;
 begin
@@ -1189,7 +1189,7 @@ begin
     Result.Value[i] := ID1.Value[i] xor ID2.Value[i];
 end;
 
-function CompareDistance(const ID1, ID2: TPeerID): Integer;
+function CompareDistance(const ID1, ID2: TPeerID): Integer;  
 var
   i: Integer;
 begin
@@ -1236,7 +1236,7 @@ type
 
 implementation
 
-constructor TRoutingTable.Create(const LocalID: TPeerID);
+constructor TRoutingTable.Create(const LocalID: TPeerID);  
 var
   i: Integer;
 begin
@@ -1247,7 +1247,7 @@ begin
     FBuckets[i] := TKBucket.Create;
 end;
 
-destructor TRoutingTable.Destroy;
+destructor TRoutingTable.Destroy;  
 var
   i: Integer;
 begin
@@ -1257,7 +1257,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TRoutingTable.AddNode(const NodeID: TPeerID; const Address: String; Port: Word);
+procedure TRoutingTable.AddNode(const NodeID: TPeerID; const Address: String; Port: Word);  
 var
   Distance: TPeerID;
   BucketIndex: Integer;
@@ -1318,7 +1318,7 @@ type
     Token: String;  // Pour announce_peer
   end;
 
-function CreerRequeteFindNode(const NodeID, TargetID: TPeerID): String;
+function CreerRequeteFindNode(const NodeID, TargetID: TPeerID): String;  
 var
   Query: TDHTQuery;
 begin
@@ -1367,7 +1367,7 @@ implementation
 uses
   mormot.core.crypto;
 
-constructor TBlock.Create(Index: Integer; const Data, PreviousHash: String);
+constructor TBlock.Create(Index: Integer; const Data, PreviousHash: String);  
 begin
   inherited Create;
   FIndex := Index;
@@ -1378,7 +1378,7 @@ begin
   FHash := CalculateHash;
 end;
 
-function TBlock.CalculateHash: String;
+function TBlock.CalculateHash: String;  
 var
   Input: String;
   Hash: TSha256Digest;
@@ -1393,7 +1393,7 @@ begin
   Result := SHA256DigestToString(Hash);
 end;
 
-procedure TBlock.MineBlock(Difficulty: Integer);
+procedure TBlock.MineBlock(Difficulty: Integer);  
 var
   Target: String;
 begin
@@ -1432,7 +1432,7 @@ type
 
 implementation
 
-constructor TBlockchain.Create(Difficulty: Integer);
+constructor TBlockchain.Create(Difficulty: Integer);  
 var
   GenesisBlock: TBlock;
 begin
@@ -1445,18 +1445,18 @@ begin
   FChain.Add(GenesisBlock);
 end;
 
-destructor TBlockchain.Destroy;
+destructor TBlockchain.Destroy;  
 begin
   FChain.Free;
   inherited Destroy;
 end;
 
-function TBlockchain.GetLatestBlock: TBlock;
+function TBlockchain.GetLatestBlock: TBlock;  
 begin
   Result := TBlock(FChain[FChain.Count - 1]);
 end;
 
-procedure TBlockchain.AddBlock(const Data: String);
+procedure TBlockchain.AddBlock(const Data: String);  
 var
   NewBlock: TBlock;
   LatestBlock: TBlock;
@@ -1470,7 +1470,7 @@ begin
   FChain.Add(NewBlock);
 end;
 
-function TBlockchain.IsValid: Boolean;
+function TBlockchain.IsValid: Boolean;  
 var
   i: Integer;
   CurrentBlock, PreviousBlock: TBlock;
@@ -1556,14 +1556,14 @@ type
     class function ValidateProof(LastProof, Proof: Integer): Boolean;
   end;
 
-class function TProofOfWork.FindProof(LastProof: Integer): Integer;
+class function TProofOfWork.FindProof(LastProof: Integer): Integer;  
 begin
   Result := 0;
   while not ValidateProof(LastProof, Result) do
     Inc(Result);
 end;
 
-class function TProofOfWork.ValidateProof(LastProof, Proof: Integer): Boolean;
+class function TProofOfWork.ValidateProof(LastProof, Proof: Integer): Boolean;  
 var
   Guess: String;
   Hash: TSha256Digest;
@@ -1590,7 +1590,7 @@ type
     property Stake: Int64 read FStake;
   end;
 
-function ChoisirValidateur(Validators: TObjectList): TValidator;
+function ChoisirValidateur(Validators: TObjectList): TValidator;  
 var
   TotalStake: Int64;
   RandomValue: Int64;
@@ -1640,7 +1640,7 @@ type
     procedure BecomeLeader;
   end;
 
-procedure TRaftNode.StartElection;
+procedure TRaftNode.StartElection;  
 begin
   FState := nsCandidate;
   Inc(FCurrentTerm);
@@ -1650,7 +1650,7 @@ begin
   BroadcastVoteRequest(FCurrentTerm, MyNodeID);
 end;
 
-procedure TRaftNode.ReceiveVoteRequest(Term: Integer; CandidateID: String);
+procedure TRaftNode.ReceiveVoteRequest(Term: Integer; CandidateID: String);  
 begin
   if Term > FCurrentTerm then
   begin
@@ -1687,7 +1687,7 @@ type
     procedure UpdateReputation(const NodeID: String; GoodBehavior: Boolean);
   end;
 
-function TAntiSybil.ValidateNode(const NodeID: String): Boolean;
+function TAntiSybil.ValidateNode(const NodeID: String): Boolean;  
 var
   Reputation: Integer;
 begin
@@ -1702,7 +1702,7 @@ begin
     Result := False;  // Nouveau nœud non validé
 end;
 
-procedure TAntiSybil.UpdateReputation(const NodeID: String; GoodBehavior: Boolean);
+procedure TAntiSybil.UpdateReputation(const NodeID: String; GoodBehavior: Boolean);  
 var
   Reputation: Integer;
 begin
@@ -1725,7 +1725,7 @@ Isoler un nœud en contrôlant toutes ses connexions.
 **Défense :**
 
 ```pascal
-procedure DiversifierConnexions(Network: TP2PNetwork);
+procedure DiversifierConnexions(Network: TP2PNetwork);  
 var
   Subnets: TDictionary<String, Integer>;
   Peer: TPeer;
@@ -1776,7 +1776,7 @@ type
     function ReceiveDecrypted: String;
   end;
 
-procedure TSecureP2PPeer.EstablishEncryption;
+procedure TSecureP2PPeer.EstablishEncryption;  
 var
   MyPrivateKey, MyPublicKey: TECCPrivateKey;
   PeerPublicKey: TECCPublicKey;
@@ -1795,7 +1795,7 @@ begin
   WriteLn('Connexion chiffrée établie');
 end;
 
-procedure TSecureP2PPeer.SendEncrypted(const Data: String);
+procedure TSecureP2PPeer.SendEncrypted(const Data: String);  
 var
   Encrypted: TBytes;
 begin
@@ -1807,7 +1807,7 @@ begin
   Send(Base64Encode(Encrypted));
 end;
 
-function TSecureP2PPeer.ReceiveDecrypted: String;
+function TSecureP2PPeer.ReceiveDecrypted: String;  
 var
   Encrypted, Decrypted: TBytes;
 begin
@@ -1830,7 +1830,7 @@ end;
 uses
   WinSock2;
 
-procedure InitialiserSocketsWindows;
+procedure InitialiserSocketsWindows;  
 var
   WSAData: TWSAData;
 begin
@@ -1838,7 +1838,7 @@ begin
     raise Exception.Create('Erreur initialisation WinSock');
 end;
 
-procedure NettoyerSocketsWindows;
+procedure NettoyerSocketsWindows;  
 begin
   WSACleanup;
 end;
@@ -1853,7 +1853,7 @@ uses
 
 // Pas d'initialisation nécessaire sous Linux
 
-procedure ConfigurerSocketLinux(Socket: TSocket);
+procedure ConfigurerSocketLinux(Socket: TSocket);  
 var
   Flag: Integer;
 begin
@@ -1906,7 +1906,7 @@ end.
 
 **Windows :**
 ```batch
-REM Ouvrir le port dans le pare-feu Windows
+REM Ouvrir le port dans le pare-feu Windows  
 netsh advfirewall firewall add rule ^
   name="P2P Application" ^
   dir=in action=allow protocol=TCP localport=6881
@@ -1919,13 +1919,13 @@ netsh advfirewall firewall add rule ^
 **Linux/Ubuntu :**
 ```bash
 # Ouvrir les ports avec UFW
-sudo ufw allow 6881/tcp
-sudo ufw allow 6881/udp
+sudo ufw allow 6881/tcp  
+sudo ufw allow 6881/udp  
 sudo ufw reload
 
 # Ou avec iptables
-sudo iptables -A INPUT -p tcp --dport 6881 -j ACCEPT
-sudo iptables -A INPUT -p udp --dport 6881 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 6881 -j ACCEPT  
+sudo iptables -A INPUT -p udp --dport 6881 -j ACCEPT  
 sudo iptables-save > /etc/iptables/rules.v4
 ```
 
@@ -1996,7 +1996,7 @@ implementation
 uses
   mormot.core.json;
 
-constructor TP2PChat.Create(const Username: String; Port: Word);
+constructor TP2PChat.Create(const Username: String; Port: Word);  
 begin
   inherited Create;
   FUsername := Username;
@@ -2009,13 +2009,13 @@ begin
   WriteLn('Chat P2P démarré. Pseudo : ', FUsername);
 end;
 
-destructor TP2PChat.Destroy;
+destructor TP2PChat.Destroy;  
 begin
   FNetwork.Free;
   inherited Destroy;
 end;
 
-procedure TP2PChat.OnPeerConnected(Peer: TPeer);
+procedure TP2PChat.OnPeerConnected(Peer: TPeer);  
 var
   WelcomeMsg: String;
 begin
@@ -2026,7 +2026,7 @@ begin
   Peer.Send(WelcomeMsg);
 end;
 
-procedure TP2PChat.OnMessageReceived(Peer: TPeer; const Data: String);
+procedure TP2PChat.OnMessageReceived(Peer: TPeer; const Data: String);  
 var
   JSON: TDocVariantData;
   MsgType, Username, Message: String;
@@ -2055,7 +2055,7 @@ begin
   end;
 end;
 
-procedure TP2PChat.SendMessage(const Message: String);
+procedure TP2PChat.SendMessage(const Message: String);  
 var
   JSON: String;
 begin
@@ -2064,7 +2064,7 @@ begin
   FNetwork.Broadcast(JSON);
 end;
 
-procedure TP2PChat.ConnectToPeer(const Address: String; Port: Word);
+procedure TP2PChat.ConnectToPeer(const Address: String; Port: Word);  
 begin
   FNetwork.ConnectToPeer(Address, Port);
 end;
@@ -2196,7 +2196,7 @@ uses
   mormot.core.crypto,
   mormot.core.json;
 
-constructor TP2PFileShare.Create(const DownloadFolder: String; Port: Word);
+constructor TP2PFileShare.Create(const DownloadFolder: String; Port: Word);  
 begin
   inherited Create;
   FDownloadFolder := DownloadFolder;
@@ -2212,14 +2212,14 @@ begin
   WriteLn('Dossier de téléchargement : ', FDownloadFolder);
 end;
 
-destructor TP2PFileShare.Destroy;
+destructor TP2PFileShare.Destroy;  
 begin
   FSharedFiles.Free;
   FNetwork.Free;
   inherited Destroy;
 end;
 
-procedure TP2PFileShare.ShareFile(const Filename: String);
+procedure TP2PFileShare.ShareFile(const Filename: String);  
 var
   SharedFile: TSharedFile;
   FileStream: TFileStream;
@@ -2251,7 +2251,7 @@ begin
   WriteLn('  Taille : ', SharedFile.Size, ' octets');
 end;
 
-procedure TP2PFileShare.OnMessageReceived(Peer: TPeer; const Data: String);
+procedure TP2PFileShare.OnMessageReceived(Peer: TPeer; const Data: String);  
 var
   JSON: TDocVariantData;
   MsgType: String;
@@ -2268,7 +2268,7 @@ begin
                    Base64ToBin(JSON.U['data']));
 end;
 
-procedure TP2PFileShare.HandleFileListRequest(Peer: TPeer);
+procedure TP2PFileShare.HandleFileListRequest(Peer: TPeer);  
 var
   JSON: TDocVariantData;
   Files: TDocVariantData;
@@ -2291,7 +2291,7 @@ begin
   Peer.Send(JSON.ToJson);
 end;
 
-procedure TP2PFileShare.HandleFileRequest(Peer: TPeer; const Hash: String);
+procedure TP2PFileShare.HandleFileRequest(Peer: TPeer; const Hash: String);  
 const
   CHUNK_SIZE = 65536;  // 64 KB
 var
@@ -2370,7 +2370,7 @@ begin
   WriteLn('Chunk ', ChunkIndex, ' reçu (', Length(Data), ' octets)');
 end;
 
-procedure TP2PFileShare.RequestFile(Peer: TPeer; const Hash: String);
+procedure TP2PFileShare.RequestFile(Peer: TPeer; const Hash: String);  
 var
   JSON: TDocVariantData;
 begin
@@ -2379,7 +2379,7 @@ begin
   WriteLn('Demande de téléchargement envoyée : ', Hash);
 end;
 
-procedure TP2PFileShare.ListSharedFiles;
+procedure TP2PFileShare.ListSharedFiles;  
 var
   i: Integer;
   SharedFile: TSharedFile;
@@ -2445,7 +2445,7 @@ uses
   mormot.core.crypto,
   mormot.core.json;
 
-constructor TP2PVoting.Create(const VoterID: String; Port: Word);
+constructor TP2PVoting.Create(const VoterID: String; Port: Word);  
 begin
   inherited Create;
   FMyVoterID := VoterID;
@@ -2459,14 +2459,14 @@ begin
   WriteLn('ID votant : ', FMyVoterID);
 end;
 
-destructor TP2PVoting.Destroy;
+destructor TP2PVoting.Destroy;  
 begin
   FVotes.Free;
   FNetwork.Free;
   inherited Destroy;
 end;
 
-procedure TP2PVoting.CastVote(const Candidate: String);
+procedure TP2PVoting.CastVote(const Candidate: String);  
 var
   Vote: TVote;
   JSON: TDocVariantData;
@@ -2498,7 +2498,7 @@ begin
   WriteLn('Vote enregistré pour : ', Candidate);
 end;
 
-procedure TP2PVoting.OnMessageReceived(Peer: TPeer; const Data: String);
+procedure TP2PVoting.OnMessageReceived(Peer: TPeer; const Data: String);  
 var
   JSON: TDocVariantData;
   Vote: TVote;
@@ -2547,7 +2547,7 @@ begin
   end;
 end;
 
-function TP2PVoting.VerifyVote(Vote: TVote): Boolean;
+function TP2PVoting.VerifyVote(Vote: TVote): Boolean;  
 var
   ToVerify: String;
   Hash: TSha256Digest;
@@ -2560,7 +2560,7 @@ begin
   Result := ExpectedSignature = Vote.Signature;
 end;
 
-procedure TP2PVoting.TallyVotes;
+procedure TP2PVoting.TallyVotes;  
 var
   Tally: TDictionary<String, Integer>;
   i, Count: Integer;
@@ -2619,7 +2619,7 @@ type
     procedure ReleasePeer(Peer: TPeer);
   end;
 
-constructor TConnectionPool.Create(MaxConnections: Integer);
+constructor TConnectionPool.Create(MaxConnections: Integer);  
 begin
   inherited Create;
   FMaxConnections := MaxConnections;
@@ -2627,7 +2627,7 @@ begin
   FBusyPeers := TThreadList.Create;
 end;
 
-function TConnectionPool.AcquirePeer: TPeer;
+function TConnectionPool.AcquirePeer: TPeer;  
 var
   List: TList;
 begin
@@ -2646,7 +2646,7 @@ begin
   end;
 end;
 
-procedure TConnectionPool.ReleasePeer(Peer: TPeer);
+procedure TConnectionPool.ReleasePeer(Peer: TPeer);  
 begin
   FBusyPeers.Remove(Peer);
   FAvailablePeers.Add(Peer);
@@ -2659,7 +2659,7 @@ end;
 uses
   mormot.core.zip;
 
-function CompresserMessage(const Data: String): TBytes;
+function CompresserMessage(const Data: String): TBytes;  
 var
   Compressed: RawByteString;
 begin
@@ -2667,7 +2667,7 @@ begin
   Result := BytesOf(Compressed);
 end;
 
-function DecompresserMessage(const Data: TBytes): String;
+function DecompresserMessage(const Data: TBytes): String;  
 var
   Decompressed: RawByteString;
 begin
@@ -2691,7 +2691,7 @@ type
     function AllowRequest(const PeerID: String): Boolean;
   end;
 
-function TRateLimiter.AllowRequest(const PeerID: String): Boolean;
+function TRateLimiter.AllowRequest(const PeerID: String): Boolean;  
 var
   Timestamps: TList<TDateTime>;
   Now: TDateTime;
@@ -2747,7 +2747,7 @@ type
 
 implementation
 
-procedure TTestP2P.TestPeerID;
+procedure TTestP2P.TestPeerID;  
 var
   ID1, ID2: TPeerID;
 begin
@@ -2758,7 +2758,7 @@ begin
               CompareMem(@ID1, @ID2, SizeOf(TPeerID)));
 end;
 
-procedure TTestP2P.TestBitfield;
+procedure TTestP2P.TestBitfield;  
 var
   Bitfield: TBitfield;
 begin
@@ -2778,7 +2778,7 @@ begin
   end;
 end;
 
-procedure TTestP2P.TestMessageEncoding;
+procedure TTestP2P.TestMessageEncoding;  
 var
   Original, Decoded: String;
   Encoded: TBytes;
@@ -2794,7 +2794,7 @@ begin
             Length(Encoded) < Length(Original));
 end;
 
-procedure TTestP2P.TestBlockchain;
+procedure TTestP2P.TestBlockchain;  
 var
   Blockchain: TBlockchain;
 begin
@@ -2974,7 +2974,7 @@ begin
   FApplication := Application;
 end;
 
-procedure TP2PStack.Start;
+procedure TP2PStack.Start;  
 begin
   WriteLn('Démarrage du stack P2P...');
 
@@ -2985,7 +2985,7 @@ begin
   WriteLn('Stack P2P démarré');
 end;
 
-procedure TP2PStack.Stop;
+procedure TP2PStack.Stop;  
 begin
   WriteLn('Arrêt du stack P2P...');
   FTransport.Disconnect;
@@ -3039,20 +3039,20 @@ type
 
 implementation
 
-constructor TP2PMetrics.Create;
+constructor TP2PMetrics.Create;  
 begin
   inherited Create;
   FLock := TCriticalSection.Create;
   FStartTime := Now;
 end;
 
-destructor TP2PMetrics.Destroy;
+destructor TP2PMetrics.Destroy;  
 begin
   FLock.Free;
   inherited Destroy;
 end;
 
-procedure TP2PMetrics.IncrementPeerCount;
+procedure TP2PMetrics.IncrementPeerCount;  
 begin
   FLock.Enter;
   try
@@ -3062,7 +3062,7 @@ begin
   end;
 end;
 
-procedure TP2PMetrics.DecrementPeerCount;
+procedure TP2PMetrics.DecrementPeerCount;  
 begin
   FLock.Enter;
   try
@@ -3072,7 +3072,7 @@ begin
   end;
 end;
 
-procedure TP2PMetrics.RecordMessageSent(Size: Integer);
+procedure TP2PMetrics.RecordMessageSent(Size: Integer);  
 begin
   FLock.Enter;
   try
@@ -3083,7 +3083,7 @@ begin
   end;
 end;
 
-procedure TP2PMetrics.RecordMessageReceived(Size: Integer);
+procedure TP2PMetrics.RecordMessageReceived(Size: Integer);  
 begin
   FLock.Enter;
   try
@@ -3094,7 +3094,7 @@ begin
   end;
 end;
 
-procedure TP2PMetrics.RecordConnectionAttempt(Success: Boolean);
+procedure TP2PMetrics.RecordConnectionAttempt(Success: Boolean);  
 begin
   FLock.Enter;
   try
@@ -3106,7 +3106,7 @@ begin
   end;
 end;
 
-function TP2PMetrics.GetStats: String;
+function TP2PMetrics.GetStats: String;  
 begin
   FLock.Enter;
   try
@@ -3139,7 +3139,7 @@ begin
   end;
 end;
 
-function TP2PMetrics.GetUptime: String;
+function TP2PMetrics.GetUptime: String;  
 var
   Duration: TDateTime;
   Days, Hours, Minutes: Integer;
@@ -3157,7 +3157,7 @@ begin
     Result := Format('%d minutes', [Minutes]);
 end;
 
-function TP2PMetrics.GetUploadRate: Double;
+function TP2PMetrics.GetUploadRate: Double;  
 var
   Seconds: Double;
 begin
@@ -3168,7 +3168,7 @@ begin
     Result := 0;
 end;
 
-function TP2PMetrics.GetDownloadRate: Double;
+function TP2PMetrics.GetDownloadRate: Double;  
 var
   Seconds: Double;
 begin
@@ -3179,7 +3179,7 @@ begin
     Result := 0;
 end;
 
-function FormatBytes(Bytes: Int64): String;
+function FormatBytes(Bytes: Int64): String;  
 begin
   if Bytes < 1024 then
     Result := Format('%d B', [Bytes])
@@ -3236,7 +3236,7 @@ type
 
 implementation
 
-constructor TP2PConfig.Create(const ConfigFile: String);
+constructor TP2PConfig.Create(const ConfigFile: String);  
 var
   i: Integer;
   NodeList: String;
@@ -3279,14 +3279,14 @@ begin
   end;
 end;
 
-destructor TP2PConfig.Destroy;
+destructor TP2PConfig.Destroy;  
 begin
   FIni.Free;
   FBootstrapNodes.Free;
   inherited Destroy;
 end;
 
-procedure TP2PConfig.SaveDefault;
+procedure TP2PConfig.SaveDefault;  
 begin
   FIni := TIniFile.Create('p2p.ini');
   try
@@ -3317,27 +3317,27 @@ end.
 
 ```ini
 [Unit]
-Description=P2P Node Service
+Description=P2P Node Service  
 After=network.target
 
 [Service]
-Type=simple
-User=p2puser
-Group=p2puser
-WorkingDirectory=/opt/p2pnode
-ExecStart=/opt/p2pnode/p2pnode
-Restart=always
+Type=simple  
+User=p2puser  
+Group=p2puser  
+WorkingDirectory=/opt/p2pnode  
+ExecStart=/opt/p2pnode/p2pnode  
+Restart=always  
 RestartSec=10
 
 # Sécurité
-NoNewPrivileges=true
-PrivateTmp=true
-ProtectSystem=strict
-ProtectHome=true
+NoNewPrivileges=true  
+PrivateTmp=true  
+ProtectSystem=strict  
+ProtectHome=true  
 ReadWritePaths=/opt/p2pnode/data /var/log/p2pnode
 
 # Limites de ressources
-LimitNOFILE=65536
+LimitNOFILE=65536  
 MemoryLimit=1G
 
 [Install]
@@ -3348,11 +3348,11 @@ WantedBy=multi-user.target
 
 ```bash
 # Copier l'exécutable
-sudo cp p2pnode /opt/p2pnode/
+sudo cp p2pnode /opt/p2pnode/  
 sudo chown -R p2puser:p2puser /opt/p2pnode
 
 # Activer et démarrer le service
-sudo systemctl enable p2pnode
+sudo systemctl enable p2pnode  
 sudo systemctl start p2pnode
 
 # Vérifier le statut
@@ -3386,14 +3386,14 @@ type
     function DoStop: Boolean; override;
   end;
 
-function TP2PService.DoStart: Boolean;
+function TP2PService.DoStart: Boolean;  
 begin
   FNode := TP2PNode.Create;
   FNode.Start;
   Result := True;
 end;
 
-function TP2PService.DoStop: Boolean;
+function TP2PService.DoStop: Boolean;  
 begin
   FNode.Stop;
   FNode.Free;
@@ -3443,7 +3443,7 @@ type
     procedure InvalidateCache(const URL: String);
   end;
 
-procedure TDecentralizedCDN.PublishContent(const URL: String; const Content: TBytes);
+procedure TDecentralizedCDN.PublishContent(const URL: String; const Content: TBytes);  
 var
   Hash: String;
   Peers: TArray<TPeer>;
@@ -3466,7 +3466,7 @@ begin
   WriteLn('Contenu publié : ', URL, ' (', Length(Content), ' octets)');
 end;
 
-function TDecentralizedCDN.RetrieveContent(const URL: String): TBytes;
+function TDecentralizedCDN.RetrieveContent(const URL: String): TBytes;  
 begin
   // Vérifier le cache local
   if FCache.TryGetValue(URL, Result) then
@@ -3501,7 +3501,7 @@ type
     function Query(const Condition: String): TArray<TKeyValue>;
   end;
 
-procedure TDistributedDB.Put(const Key, Value: String);
+procedure TDistributedDB.Put(const Key, Value: String);  
 var
   Hash: TPeerID;
   Nodes: TArray<TNode>;
@@ -3523,7 +3523,7 @@ begin
   WriteLn('Donnée stockée : ', Key);
 end;
 
-function TDistributedDB.Get(const Key: String): String;
+function TDistributedDB.Get(const Key: String): String;  
 var
   Hash: TPeerID;
   Nodes: TArray<TNode>;
@@ -3589,7 +3589,7 @@ begin
   WriteLn('Message envoyé à ', Copy(RecipientPubKey, 1, 8), '...');
 end;
 
-function TDecentralizedMessaging.ReceiveMessages: TArray<TMessage>;
+function TDecentralizedMessaging.ReceiveMessages: TArray<TMessage>;  
 var
   i: Integer;
   Envelope: TMessageEnvelope;

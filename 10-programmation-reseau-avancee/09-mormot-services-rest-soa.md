@@ -49,10 +49,10 @@ REST est un style d'architecture pour les services web basé sur HTTP.
 
 **Exemple simple :**
 ```
-GET    /api/utilisateurs      -> Liste tous les utilisateurs
-GET    /api/utilisateurs/42   -> Récupère l'utilisateur 42
-POST   /api/utilisateurs      -> Crée un nouvel utilisateur
-PUT    /api/utilisateurs/42   -> Modifie l'utilisateur 42
+GET    /api/utilisateurs      -> Liste tous les utilisateurs  
+GET    /api/utilisateurs/42   -> Récupère l'utilisateur 42  
+POST   /api/utilisateurs      -> Crée un nouvel utilisateur  
+PUT    /api/utilisateurs/42   -> Modifie l'utilisateur 42  
 DELETE /api/utilisateurs/42   -> Supprime l'utilisateur 42
 ```
 
@@ -67,8 +67,8 @@ SOA est une architecture où les fonctionnalités sont exposées comme des servi
 
 **Exemple SOA :**
 ```
-POST /api/calculatrice/additionner     -> Additionner deux nombres
-POST /api/email/envoyer                -> Envoyer un email
+POST /api/calculatrice/additionner     -> Additionner deux nombres  
+POST /api/email/envoyer                -> Envoyer un email  
 POST /api/rapport/generer              -> Générer un rapport
 ```
 
@@ -78,14 +78,14 @@ L'ORM permet de manipuler la base de données avec des objets Pascal au lieu d'�
 
 **Sans ORM (SQL direct) :**
 ```pascal
-Query.SQL.Text := 'SELECT * FROM Clients WHERE ID = 42';
-Query.Open;
+Query.SQL.Text := 'SELECT * FROM Clients WHERE ID = 42';  
+Query.Open;  
 Nom := Query.FieldByName('Nom').AsString;
 ```
 
 **Avec ORM (mORMot) :**
 ```pascal
-Client := TOrmClient.Create(Database, 42);
+Client := TOrmClient.Create(Database, 42);  
 Nom := Client.Nom;
 ```
 
@@ -118,7 +118,7 @@ Nom := Client.Nom;
 **Méthode 2 : Via Git**
 
 ```batch
-cd C:\Dev
+cd C:\Dev  
 git clone https://github.com/synopse/mORMot2.git
 ```
 
@@ -127,7 +127,7 @@ git clone https://github.com/synopse/mORMot2.git
 **Via Git :**
 
 ```bash
-cd ~/Dev
+cd ~/Dev  
 git clone https://github.com/synopse/mORMot2.git
 ```
 
@@ -240,7 +240,7 @@ type
     destructor Destroy; override;
   end;
 
-constructor TMonServeurRest.Create(const Port: String);
+constructor TMonServeurRest.Create(const Port: String);  
 begin
   inherited Create;
 
@@ -259,7 +259,7 @@ begin
   WriteLn('Appuyez sur Entrée pour arrêter...');
 end;
 
-destructor TMonServeurRest.Destroy;
+destructor TMonServeurRest.Destroy;  
 begin
   FServeur.Free;
   FRest.Free;
@@ -470,29 +470,29 @@ type
 
 implementation
 
-function TCalculatrice.Additionner(A, B: Double): Double;
+function TCalculatrice.Additionner(A, B: Double): Double;  
 begin
   Result := A + B;
 end;
 
-function TCalculatrice.Soustraire(A, B: Double): Double;
+function TCalculatrice.Soustraire(A, B: Double): Double;  
 begin
   Result := A - B;
 end;
 
-function TCalculatrice.Multiplier(A, B: Double): Double;
+function TCalculatrice.Multiplier(A, B: Double): Double;  
 begin
   Result := A * B;
 end;
 
-function TCalculatrice.Diviser(A, B: Double): Double;
+function TCalculatrice.Diviser(A, B: Double): Double;  
 begin
   if B = 0 then
     raise Exception.Create('Division par zéro impossible');
   Result := A / B;
 end;
 
-function TCalculatrice.Calculer(const Expression: RawUtf8): Double;
+function TCalculatrice.Calculer(const Expression: RawUtf8): Double;  
 begin
   // Implémentation simplifiée
   // En production, utiliser un vrai parseur d'expressions
@@ -795,7 +795,7 @@ Liste := Client.RetrieveList(TOrmUtilisateur,
   'Age DESC');
 
 // Compter les résultats
-Nombre := Client.TableRowCount(TOrmUtilisateur, 'Age>?', [30]);
+Nombre := Client.TableRowCount(TOrmUtilisateur, 'Age>?', [30]);  
 WriteLn('Utilisateurs de plus de 30 ans : ', Nombre);
 ```
 
@@ -935,14 +935,14 @@ end;
 Client.CacheOrNil := TSynCache.Create;
 
 // Les requêtes seront mises en cache
-Liste1 := Client.RetrieveList(TOrmUtilisateur, '');  // Requête réelle vers le serveur
+Liste1 := Client.RetrieveList(TOrmUtilisateur, '');  // Requête réelle vers le serveur  
 Liste2 := Client.RetrieveList(TOrmUtilisateur, '');  // Récupéré du cache (instantané)
 
 // Vider le cache manuellement
 Client.CacheOrNil.Flush;
 
 // Désactiver le cache
-Client.CacheOrNil.Free;
+Client.CacheOrNil.Free;  
 Client.CacheOrNil := nil;
 ```
 
@@ -1018,7 +1018,7 @@ type
 
 implementation
 
-function TOrmUtilisateurValide.ValiderEmail(const Email: RawUtf8): Boolean;
+function TOrmUtilisateurValide.ValiderEmail(const Email: RawUtf8): Boolean;  
 begin
   // Validation simple d'email
   Result := (Pos('@', Email) > 0) and (Pos('.', Email) > Pos('@', Email));
@@ -1234,7 +1234,7 @@ end.
 **Récupérer tous les cours d'un étudiant :**
 
 ```pascal
-function ObtenirCoursEtudiant(EtudiantID: TID): TObjectList;
+function ObtenirCoursEtudiant(EtudiantID: TID): TObjectList;  
 var
   Inscriptions: TObjectList;
   i: Integer;
@@ -1363,7 +1363,7 @@ type
     function DoStop: Boolean; override;
   end;
 
-function TMonService.DoStart: Boolean;
+function TMonService.DoStart: Boolean;  
 var
   Model: TOrmModel;
   Rest: TRestServerDB;
@@ -1377,7 +1377,7 @@ begin
   Result := True;
 end;
 
-function TMonService.DoStop: Boolean;
+function TMonService.DoStop: Boolean;  
 begin
   FServeur.Free;
   Result := True;
@@ -1391,16 +1391,16 @@ end.
 **Installation du service :**
 
 ```batch
-REM Installer le service
+REM Installer le service  
 ServeurService.exe /install
 
-REM Démarrer le service
+REM Démarrer le service  
 net start MonServeurREST
 
-REM Arrêter le service
+REM Arrêter le service  
 net stop MonServeurREST
 
-REM Désinstaller le service
+REM Désinstaller le service  
 ServeurService.exe /uninstall
 ```
 
@@ -1412,23 +1412,23 @@ Créer le fichier `/etc/systemd/system/serveurrest.service` :
 
 ```ini
 [Unit]
-Description=Serveur REST mORMot
+Description=Serveur REST mORMot  
 After=network.target
 
 [Service]
-Type=simple
-User=www-data
-Group=www-data
-WorkingDirectory=/opt/monapp
-ExecStart=/opt/monapp/serveur
-Restart=always
+Type=simple  
+User=www-data  
+Group=www-data  
+WorkingDirectory=/opt/monapp  
+ExecStart=/opt/monapp/serveur  
+Restart=always  
 RestartSec=10
 
 # Limites de sécurité
-NoNewPrivileges=true
-PrivateTmp=true
-ProtectSystem=strict
-ProtectHome=true
+NoNewPrivileges=true  
+PrivateTmp=true  
+ProtectSystem=strict  
+ProtectHome=true  
 ReadWritePaths=/opt/monapp/data /var/log/monapp
 
 [Install]
@@ -1753,19 +1753,19 @@ begin
   end;
 end;
 
-function TTodoService.ObtenirTache(ID: TID): TOrmTache;
+function TTodoService.ObtenirTache(ID: TID): TOrmTache;  
 begin
   Result := TOrmTache.Create(Server, ID);
   if Result.ID = 0 then
     FreeAndNil(Result);
 end;
 
-function TTodoService.ListerTaches(Statut: TStatutTache): TObjectList;
+function TTodoService.ListerTaches(Statut: TStatutTache): TObjectList;  
 begin
   Result := Server.RetrieveList(TOrmTache, 'Statut=?', [Ord(Statut)], 'Priorite DESC');
 end;
 
-function TTodoService.MarquerTerminee(ID: TID): Boolean;
+function TTodoService.MarquerTerminee(ID: TID): Boolean;  
 var
   Tache: TOrmTache;
 begin
@@ -1784,12 +1784,12 @@ begin
   end;
 end;
 
-function TTodoService.SupprimerTache(ID: TID): Boolean;
+function TTodoService.SupprimerTache(ID: TID): Boolean;  
 begin
   Result := Server.Delete(TOrmTache, ID);
 end;
 
-function TTodoService.CompterTaches(Statut: TStatutTache): Integer;
+function TTodoService.CompterTaches(Statut: TStatutTache): Integer;  
 begin
   Result := Server.TableRowCount(TOrmTache, 'Statut=?', [Ord(Statut)]);
 end;
@@ -1883,7 +1883,7 @@ type
   end;
 
 // Dans les services
-function TTodoService.ObtenirTache(ID: TID): TOrmTache;
+function TTodoService.ObtenirTache(ID: TID): TOrmTache;  
 begin
   Result := TOrmTache.Create(Server, ID);
   if Result.ID = 0 then
@@ -1942,7 +1942,7 @@ type
 
 implementation
 
-procedure TTestTodoService.SetUp;
+procedure TTestTodoService.SetUp;  
 begin
   // Créer une base de données en mémoire pour les tests
   FModel := TOrmModel.Create([TOrmTache], 'test');
@@ -1956,14 +1956,14 @@ begin
   FRest.ServiceResolve(ITodoService, FService);
 end;
 
-procedure TTestTodoService.TearDown;
+procedure TTestTodoService.TearDown;  
 begin
   FService := nil;
   FRest.Free;
   FModel.Free;
 end;
 
-procedure TTestTodoService.TestCreerTache;
+procedure TTestTodoService.TestCreerTache;  
 var
   ID: TID;
   Tache: TOrmTache;
@@ -1985,7 +1985,7 @@ begin
   end;
 end;
 
-procedure TTestTodoService.TestObtenirTache;
+procedure TTestTodoService.TestObtenirTache;  
 var
   ID: TID;
   Tache: TOrmTache;
@@ -2008,7 +2008,7 @@ begin
   AssertNull('Tâche inexistante doit retourner nil', Tache);
 end;
 
-procedure TTestTodoService.TestMarquerTerminee;
+procedure TTestTodoService.TestMarquerTerminee;  
 var
   ID: TID;
   Tache: TOrmTache;
@@ -2029,7 +2029,7 @@ begin
   end;
 end;
 
-procedure TTestTodoService.TestListerTaches;
+procedure TTestTodoService.TestListerTaches;  
 var
   Liste: TObjectList;
   i: Integer;
@@ -2066,7 +2066,7 @@ begin
   end;
 end;
 
-procedure TTestTodoService.TestSupprimerTache;
+procedure TTestTodoService.TestSupprimerTache;  
 var
   ID: TID;
   Tache: TOrmTache;
@@ -2143,7 +2143,7 @@ type
 
 implementation
 
-constructor TConfiguration.Create(const FichierConfig: String);
+constructor TConfiguration.Create(const FichierConfig: String);  
 begin
   inherited Create;
 
@@ -2159,7 +2159,7 @@ begin
   FMaxConnections := FIni.ReadInteger('Server', 'MaxConnections', 100);
 end;
 
-destructor TConfiguration.Destroy;
+destructor TConfiguration.Destroy;  
 begin
   FIni.Free;
   inherited Destroy;
@@ -2172,22 +2172,22 @@ end.
 
 ```ini
 [Server]
-Port=8080
-MaxConnections=100
+Port=8080  
+MaxConnections=100  
 Timeout=30000
 
 [Database]
-Path=data/myapp.db
-BackupEnabled=true
+Path=data/myapp.db  
+BackupEnabled=true  
 BackupInterval=3600
 
 [Logging]
-Level=INFO
-Path=logs/
+Level=INFO  
+Path=logs/  
 MaxFileSize=10485760
 
 [Security]
-EnableAuth=true
+EnableAuth=true  
 TokenExpiration=3600
 ```
 
@@ -2253,7 +2253,7 @@ type
 
 implementation
 
-constructor TMigration.Create(Rest: TRestServer);
+constructor TMigration.Create(Rest: TRestServer);  
 begin
   inherited Create;
   FRest := Rest;
@@ -2263,7 +2263,7 @@ begin
   FVersionActuelle := 1;
 end;
 
-procedure TMigration.Migrer;
+procedure TMigration.Migrer;  
 const
   VERSION_CIBLE = 3;
 var
@@ -2288,7 +2288,7 @@ begin
   WriteLn('Migration terminée avec succès');
 end;
 
-procedure TMigration.MigrerVers(Version: Integer);
+procedure TMigration.MigrerVers(Version: Integer);  
 begin
   case Version of
     2: Migration_V1_to_V2;
@@ -2302,7 +2302,7 @@ begin
   // Sauvegarder dans la base...
 end;
 
-procedure TMigration.Migration_V1_to_V2;
+procedure TMigration.Migration_V1_to_V2;  
 begin
   WriteLn('  Ajout de la colonne DateModification...');
   FRest.ExecuteDirect('ALTER TABLE Utilisateur ADD COLUMN DateModification INTEGER');
@@ -2313,7 +2313,7 @@ begin
   WriteLn('  Migration V1->V2 terminée');
 end;
 
-procedure TMigration.Migration_V2_to_V3;
+procedure TMigration.Migration_V2_to_V3;  
 begin
   WriteLn('  Création de la table Categories...');
   FRest.ExecuteDirect(
@@ -2376,20 +2376,20 @@ var
 
 implementation
 
-constructor TMetriques.Create;
+constructor TMetriques.Create;  
 begin
   inherited Create;
   FLock := TCriticalSection.Create;
   Reinitialiser;
 end;
 
-destructor TMetriques.Destroy;
+destructor TMetriques.Destroy;  
 begin
   FLock.Free;
   inherited Destroy;
 end;
 
-procedure TMetriques.EnregistrerRequete(TempsMs: Int64; Erreur: Boolean);
+procedure TMetriques.EnregistrerRequete(TempsMs: Int64; Erreur: Boolean);  
 begin
   FLock.Enter;
   try
@@ -2402,7 +2402,7 @@ begin
   end;
 end;
 
-procedure TMetriques.Reinitialiser;
+procedure TMetriques.Reinitialiser;  
 begin
   FLock.Enter;
   try
@@ -2415,7 +2415,7 @@ begin
   end;
 end;
 
-function TMetriques.ObtenirStatistiques: RawUtf8;
+function TMetriques.ObtenirStatistiques: RawUtf8;  
 var
   Doc: TDocVariantData;
 begin
@@ -2435,7 +2435,7 @@ begin
   end;
 end;
 
-function TMetriques.RequetesParSeconde: Double;
+function TMetriques.RequetesParSeconde: Double;  
 var
   Duree: Double;
 begin
@@ -2446,7 +2446,7 @@ begin
     Result := 0;
 end;
 
-function TMetriques.TempsReponsesMoyen: Double;
+function TMetriques.TempsReponsesMoyen: Double;  
 begin
   if FNbRequetes > 0 then
     Result := FTempsTotal / FNbRequetes
@@ -2454,7 +2454,7 @@ begin
     Result := 0;
 end;
 
-function TMetriques.TauxErreur: Double;
+function TMetriques.TauxErreur: Double;  
 begin
   if FNbRequetes > 0 then
     Result := (FNbErreurs * 100.0) / FNbRequetes
@@ -2489,12 +2489,12 @@ type
     function ObtenirSante: RawUtf8;
   end;
 
-function TMonitoringService.ObtenirStatistiques: RawUtf8;
+function TMonitoringService.ObtenirStatistiques: RawUtf8;  
 begin
   Result := Metriques.ObtenirStatistiques;
 end;
 
-function TMonitoringService.ObtenirSante: RawUtf8;
+function TMonitoringService.ObtenirSante: RawUtf8;  
 var
   Doc: TDocVariantData;
   MemUsage: Int64;
@@ -2516,7 +2516,7 @@ end;
 
 **Accès :**
 ```
-GET http://localhost:8080/api/Monitoring/ObtenirStatistiques
+GET http://localhost:8080/api/Monitoring/ObtenirStatistiques  
 GET http://localhost:8080/api/Monitoring/ObtenirSante
 ```
 
@@ -2605,7 +2605,7 @@ type
 
 implementation
 
-constructor TRateLimiter.Create(LimiteParMinute: Integer);
+constructor TRateLimiter.Create(LimiteParMinute: Integer);  
 begin
   inherited Create;
   FLock := TCriticalSection.Create;
@@ -2613,14 +2613,14 @@ begin
   FLimiteParMinute := LimiteParMinute;
 end;
 
-destructor TRateLimiter.Destroy;
+destructor TRateLimiter.Destroy;  
 begin
   FRequetes.Free;
   FLock.Free;
   inherited Destroy;
 end;
 
-function TRateLimiter.EstAutorise(const IP: String): Boolean;
+function TRateLimiter.EstAutorise(const IP: String): Boolean;  
 var
   Index: Integer;
   Compteur: Integer;
@@ -2654,7 +2654,7 @@ begin
   end;
 end;
 
-procedure TRateLimiter.NettoyerAnciennesEntrees;
+procedure TRateLimiter.NettoyerAnciennesEntrees;  
 begin
   FLock.Enter;
   try
@@ -2679,7 +2679,7 @@ var
 RateLimiter := TRateLimiter.Create(60);  // 60 requêtes par minute
 
 // Dans le gestionnaire de requêtes
-function VerifierRateLimit(const Context: THttpServerRequest): Boolean;
+function VerifierRateLimit(const Context: THttpServerRequest): Boolean;  
 begin
   Result := RateLimiter.EstAutorise(Context.RemoteIP);
   if not Result then
@@ -2740,7 +2740,7 @@ begin
   FMotDePasse := MotDePasse;
 end;
 
-function TEmailService.EnvoyerEmail(const Destinataire, Sujet, Corps: RawUtf8): Boolean;
+function TEmailService.EnvoyerEmail(const Destinataire, Sujet, Corps: RawUtf8): Boolean;  
 var
   SMTP: TSMTPConnection;
 begin
@@ -2820,7 +2820,7 @@ end.
 ### Client Python
 
 ```python
-import requests
+import requests  
 import json
 
 class MormotClient:
@@ -2889,7 +2889,7 @@ user = client.create("Utilisateur", {
 print(f"Utilisateur créé avec ID: {user['ID']}")
 
 # Lire tous les utilisateurs
-users = client.get_all("Utilisateur")
+users = client.get_all("Utilisateur")  
 for u in users:
     print(f"{u['ID']}: {u['Nom']} ({u['Email']})")
 ```
@@ -2983,7 +2983,7 @@ const user = await client.create('Utilisateur', {
 console.log(`Utilisateur créé avec ID: ${user.ID}`);
 
 // Lire tous les utilisateurs
-const users = await client.getAll('Utilisateur');
+const users = await client.getAll('Utilisateur');  
 users.forEach(u => {
     console.log(`${u.ID}: ${u.Nom} (${u.Email})`);
 });
@@ -3002,10 +3002,10 @@ await client.delete('Utilisateur', 1);
 ### Client C# / .NET
 
 ```csharp
-using System;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
+using System;  
+using System.Net.Http;  
+using System.Text;  
+using System.Text.Json;  
 using System.Threading.Tasks;
 
 public class MormotClient
@@ -3104,7 +3104,7 @@ var user = await client.Create("Utilisateur", new Utilisateur
 Console.WriteLine($"Utilisateur créé avec ID: {user.ID}");
 
 // Lire tous les utilisateurs
-var users = await client.GetAll<Utilisateur>("Utilisateur");
+var users = await client.GetAll<Utilisateur>("Utilisateur");  
 foreach (var u in users)
 {
     Console.WriteLine($"{u.ID}: {u.Nom} ({u.Email})");
@@ -3135,14 +3135,14 @@ RUN mkdir -p /app/data /app/logs && \
     chown -R appuser:appuser /app
 
 # Copier l'exécutable
-COPY --chown=appuser:appuser serveur /app/serveur
+COPY --chown=appuser:appuser serveur /app/serveur  
 RUN chmod +x /app/serveur
 
 # Copier la configuration
 COPY --chown=appuser:appuser config.ini /app/config.ini
 
 # Passer à l'utilisateur non-root
-USER appuser
+USER appuser  
 WORKDIR /app
 
 # Exposer le port
@@ -3285,14 +3285,14 @@ set -e  # Arrêter en cas d'erreur
 echo "=== Déploiement de l'API mORMot ==="
 
 # Variables
-APP_NAME="mormot-api"
-APP_DIR="/opt/$APP_NAME"
-BACKUP_DIR="/backup/$APP_NAME"
+APP_NAME="mormot-api"  
+APP_DIR="/opt/$APP_NAME"  
+BACKUP_DIR="/backup/$APP_NAME"  
 BUILD_DIR="./build"
 
 # Couleurs
-GREEN='\033[0;32m'
-RED='\033[0;31m'
+GREEN='\033[0;32m'  
+RED='\033[0;31m'  
 NC='\033[0m' # No Color
 
 # Fonction d'affichage
@@ -3318,16 +3318,16 @@ if [ -d "$APP_DIR" ]; then
 fi
 
 # Arrêter le service
-log_info "Arrêt du service..."
+log_info "Arrêt du service..."  
 systemctl stop $APP_NAME || true
 
 # Créer le dossier si nécessaire
 mkdir -p "$APP_DIR"/{data,logs,config}
 
 # Copier les nouveaux fichiers
-log_info "Déploiement des nouveaux fichiers..."
-cp "$BUILD_DIR/serveur" "$APP_DIR/"
-cp "$BUILD_DIR/config.ini" "$APP_DIR/config/"
+log_info "Déploiement des nouveaux fichiers..."  
+cp "$BUILD_DIR/serveur" "$APP_DIR/"  
+cp "$BUILD_DIR/config.ini" "$APP_DIR/config/"  
 chmod +x "$APP_DIR/serveur"
 
 # Changer les permissions
@@ -3338,11 +3338,11 @@ log_info "Vérification de la base de données..."
 # Ajouter ici les commandes de migration si nécessaire
 
 # Redémarrer le service
-log_info "Démarrage du service..."
+log_info "Démarrage du service..."  
 systemctl start $APP_NAME
 
 # Vérifier que le service est bien démarré
-sleep 3
+sleep 3  
 if systemctl is-active --quiet $APP_NAME; then
     log_info "✓ Déploiement réussi !"
     log_info "  Service actif et fonctionnel"
@@ -3355,7 +3355,7 @@ fi
 # Afficher le statut
 systemctl status $APP_NAME --no-pager
 
-echo ""
+echo ""  
 log_info "=== Déploiement terminé ==="
 ```
 
@@ -3365,44 +3365,44 @@ log_info "=== Déploiement terminé ==="
 @echo off
 setlocal enabledelayedexpansion
 
-echo === Deploiement de l'API mORMot ===
+echo === Deploiement de l'API mORMot ===  
 echo.
 
-REM Variables
-set APP_NAME=mormot-api
-set APP_DIR=C:\Services\%APP_NAME%
-set BACKUP_DIR=C:\Backups\%APP_NAME%
+REM Variables  
+set APP_NAME=mormot-api  
+set APP_DIR=C:\Services\%APP_NAME%  
+set BACKUP_DIR=C:\Backups\%APP_NAME%  
 set BUILD_DIR=.\build
 
-REM Créer les dossiers
-if not exist "%APP_DIR%" mkdir "%APP_DIR%"
-if not exist "%APP_DIR%\data" mkdir "%APP_DIR%\data"
-if not exist "%APP_DIR%\logs" mkdir "%APP_DIR%\logs"
+REM Créer les dossiers  
+if not exist "%APP_DIR%" mkdir "%APP_DIR%"  
+if not exist "%APP_DIR%\data" mkdir "%APP_DIR%\data"  
+if not exist "%APP_DIR%\logs" mkdir "%APP_DIR%\logs"  
 if not exist "%BACKUP_DIR%" mkdir "%BACKUP_DIR%"
 
-REM Sauvegarder la version actuelle
+REM Sauvegarder la version actuelle  
 if exist "%APP_DIR%\serveur.exe" (
     echo [INFO] Sauvegarde de la version actuelle...
     set BACKUP_FILE=%BACKUP_DIR%\backup-%date:~-4%%date:~-7,2%%date:~-10,2%-%time:~0,2%%time:~3,2%.zip
     powershell Compress-Archive -Path "%APP_DIR%\*" -DestinationPath "!BACKUP_FILE!" -Force
 )
 
-REM Arrêter le service
-echo [INFO] Arret du service...
+REM Arrêter le service  
+echo [INFO] Arret du service...  
 net stop %APP_NAME% 2>nul
 
-REM Copier les nouveaux fichiers
-echo [INFO] Deploiement des nouveaux fichiers...
-copy /Y "%BUILD_DIR%\serveur.exe" "%APP_DIR%\"
+REM Copier les nouveaux fichiers  
+echo [INFO] Deploiement des nouveaux fichiers...  
+copy /Y "%BUILD_DIR%\serveur.exe" "%APP_DIR%\"  
 copy /Y "%BUILD_DIR%\config.ini" "%APP_DIR%\"
 
-REM Démarrer le service
-echo [INFO] Demarrage du service...
+REM Démarrer le service  
+echo [INFO] Demarrage du service...  
 net start %APP_NAME%
 
-REM Vérifier que le service est démarré
-timeout /t 3 /nobreak >nul
-sc query %APP_NAME% | find "RUNNING" >nul
+REM Vérifier que le service est démarré  
+timeout /t 3 /nobreak >nul  
+sc query %APP_NAME% | find "RUNNING" >nul  
 if %errorlevel% equ 0 (
     echo [INFO] Deploiement reussi !
     echo [INFO]   Service actif et fonctionnel
@@ -3412,8 +3412,8 @@ if %errorlevel% equ 0 (
     exit /b 1
 )
 
-echo.
-echo === Deploiement termine ===
+echo.  
+echo === Deploiement termine ===  
 pause
 ```
 
@@ -3443,7 +3443,7 @@ implementation
 uses
   Metriques;
 
-class function TMetriquesPrometheus.GenererMetriques: RawUtf8;
+class function TMetriquesPrometheus.GenererMetriques: RawUtf8;  
 var
   Liste: TStringList;
 begin
@@ -3491,7 +3491,7 @@ type
     function ObtenirMetriques: RawUtf8;
   end;
 
-function TMetriquesService.ObtenirMetriques: RawUtf8;
+function TMetriquesService.ObtenirMetriques: RawUtf8;  
 begin
   Result := TMetriquesPrometheus.GenererMetriques;
 end;
@@ -3663,7 +3663,7 @@ var
   Rest: TRestServerDB;
   Http: TRestHttpServer;
 
-procedure ConfigurerLogs;
+procedure ConfigurerLogs;  
 begin
   TSynLog.Family.Level := LOG_VERBOSE;
   TSynLog.Family.PerThreadLog := ptIdentifiedInOneFile;
@@ -3671,7 +3671,7 @@ begin
   TSynLog.Family.DestinationPath := Config.LogPath;
 end;
 
-procedure ConfigurerServeur;
+procedure ConfigurerServeur;  
 begin
   Model := TOrmModel.Create([TOrmUtilisateur], 'api');
   Rest := TRestServerDB.Create(Model, Config.DatabasePath);

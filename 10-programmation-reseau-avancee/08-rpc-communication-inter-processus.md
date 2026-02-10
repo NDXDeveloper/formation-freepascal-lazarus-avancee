@@ -149,7 +149,7 @@ Le développeur n'a pas besoin de gérer :
 #### Named Pipes (Tubes nommés)
 
 ```
-Windows : \\.\pipe\my_pipe
+Windows : \\.\pipe\my_pipe  
 Linux   : /tmp/my_pipe
 
 Caractéristiques :
@@ -469,7 +469,7 @@ Contrairement aux appels locaux, RPC peut échouer de plusieurs façons :
 #### 1. Retry (Réessayer)
 
 ```pascal
-function CallWithRetry(MaxRetries: Integer): TResult;
+function CallWithRetry(MaxRetries: Integer): TResult;  
 var
   Attempt: Integer;
 begin

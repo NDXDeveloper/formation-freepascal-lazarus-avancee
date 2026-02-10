@@ -53,7 +53,7 @@ Un port est un numéro qui identifie une application sur un ordinateur.
 **Analogie :** Si l'adresse IP est l'adresse d'un immeuble, le port est le numéro d'appartement.
 
 ```
-IP : 192.168.1.10    (l'immeuble)
+IP : 192.168.1.10    (l'immeuble)  
 Port : 8080          (l'appartement 8080)
 ```
 
@@ -174,7 +174,7 @@ netsh advfirewall firewall add rule ^
 **1. Autoriser un port TCP (entrée) :**
 
 ```batch
-REM Autoriser le port 8080 en TCP
+REM Autoriser le port 8080 en TCP  
 netsh advfirewall firewall add rule ^
   name="Serveur Web Pascal" ^
   dir=in ^
@@ -182,14 +182,14 @@ netsh advfirewall firewall add rule ^
   protocol=TCP ^
   localport=8080
 
-REM Vérifier
+REM Vérifier  
 netsh advfirewall firewall show rule name="Serveur Web Pascal"
 ```
 
 **2. Autoriser un port UDP (sortie) :**
 
 ```batch
-REM Autoriser le port 5000 en UDP
+REM Autoriser le port 5000 en UDP  
 netsh advfirewall firewall add rule ^
   name="Client UDP Pascal" ^
   dir=out ^
@@ -201,7 +201,7 @@ netsh advfirewall firewall add rule ^
 **3. Autoriser une application spécifique :**
 
 ```batch
-REM Autoriser MonServeur.exe
+REM Autoriser MonServeur.exe  
 netsh advfirewall firewall add rule ^
   name="Mon Serveur Pascal" ^
   dir=in ^
@@ -209,7 +209,7 @@ netsh advfirewall firewall add rule ^
   program="C:\Projets\MonServeur.exe" ^
   enable=yes
 
-REM Autoriser sur un port spécifique uniquement
+REM Autoriser sur un port spécifique uniquement  
 netsh advfirewall firewall add rule ^
   name="Mon Serveur Port 8080" ^
   dir=in ^
@@ -222,7 +222,7 @@ netsh advfirewall firewall add rule ^
 **4. Autoriser une plage de ports :**
 
 ```batch
-REM Autoriser les ports 8000 à 9000
+REM Autoriser les ports 8000 à 9000  
 netsh advfirewall firewall add rule ^
   name="Serveurs Pascal 8000-9000" ^
   dir=in ^
@@ -234,10 +234,10 @@ netsh advfirewall firewall add rule ^
 **5. Supprimer une règle :**
 
 ```batch
-REM Supprimer par nom
+REM Supprimer par nom  
 netsh advfirewall firewall delete rule name="Mon Serveur Pascal"
 
-REM Supprimer toutes les règles d'un programme
+REM Supprimer toutes les règles d'un programme  
 netsh advfirewall firewall delete rule ^
   program="C:\Projets\MonServeur.exe"
 ```
@@ -245,13 +245,13 @@ netsh advfirewall firewall delete rule ^
 **6. Lister les règles :**
 
 ```batch
-REM Toutes les règles
+REM Toutes les règles  
 netsh advfirewall firewall show rule name=all
 
-REM Une règle spécifique
+REM Une règle spécifique  
 netsh advfirewall firewall show rule name="Mon Serveur Pascal"
 
-REM Règles par port
+REM Règles par port  
 netsh advfirewall firewall show rule name=all | findstr "8080"
 ```
 
@@ -323,13 +323,13 @@ interface
 uses
   Classes, SysUtils, Process;
 
-function CreerReglePascal(const NomRegle, CheminExe: String; Port: Word): Boolean;
-function SupprimerReglePascal(const NomRegle: String): Boolean;
+function CreerReglePascal(const NomRegle, CheminExe: String; Port: Word): Boolean;  
+function SupprimerReglePascal(const NomRegle: String): Boolean;  
 function VerifierRegle(const NomRegle: String): Boolean;
 
 implementation
 
-function ExecuterCommande(const Commande: String): String;
+function ExecuterCommande(const Commande: String): String;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -351,7 +351,7 @@ begin
   end;
 end;
 
-function CreerReglePascal(const NomRegle, CheminExe: String; Port: Word): Boolean;
+function CreerReglePascal(const NomRegle, CheminExe: String; Port: Word): Boolean;  
 var
   Commande: String;
   Output: String;
@@ -371,7 +371,7 @@ begin
     WriteLn('✗ Erreur création règle : ', Output);
 end;
 
-function SupprimerReglePascal(const NomRegle: String): Boolean;
+function SupprimerReglePascal(const NomRegle: String): Boolean;  
 var
   Commande: String;
   Output: String;
@@ -388,7 +388,7 @@ begin
     WriteLn('✓ Règle firewall supprimée : ', NomRegle);
 end;
 
-function VerifierRegle(const NomRegle: String): Boolean;
+function VerifierRegle(const NomRegle: String): Boolean;  
 var
   Commande: String;
   Output: String;
@@ -451,7 +451,7 @@ Windows a trois profils de firewall :
 **Configurer par profil :**
 
 ```batch
-REM Autoriser uniquement sur réseau privé
+REM Autoriser uniquement sur réseau privé  
 netsh advfirewall firewall add rule ^
   name="Serveur Local" ^
   dir=in ^
@@ -460,7 +460,7 @@ netsh advfirewall firewall add rule ^
   localport=8080 ^
   profile=private
 
-REM Autoriser sur tous les profils
+REM Autoriser sur tous les profils  
 netsh advfirewall firewall add rule ^
   name="Serveur Public" ^
   dir=in ^
@@ -475,13 +475,13 @@ netsh advfirewall firewall add rule ^
 **Activer les logs :**
 
 ```batch
-REM Activer le logging des connexions bloquées
+REM Activer le logging des connexions bloquées  
 netsh advfirewall set currentprofile logging droppedconnections enable
 
-REM Activer le logging des connexions autorisées
+REM Activer le logging des connexions autorisées  
 netsh advfirewall set currentprofile logging allowedconnections enable
 
-REM Définir la taille max du fichier log (en KB)
+REM Définir la taille max du fichier log (en KB)  
 netsh advfirewall set currentprofile logging maxfilesize 4096
 ```
 
@@ -493,7 +493,7 @@ C:\Windows\System32\LogFiles\Firewall\pfirewall.log
 **Lire les logs depuis Pascal :**
 
 ```pascal
-procedure LireLogsFirewall;
+procedure LireLogsFirewall;  
 var
   Logs: TStringList;
   i: Integer;
@@ -569,7 +569,7 @@ sudo ufw allow 8080/tcp
 sudo ufw allow 5000/udp
 
 # Autoriser TCP et UDP
-sudo ufw allow 8080/tcp
+sudo ufw allow 8080/tcp  
 sudo ufw allow 8080/udp
 ```
 
@@ -613,11 +613,11 @@ sudo ufw deny from 203.0.113.100
 
 ```bash
 # Par numéro (voir avec status numbered)
-sudo ufw status numbered
+sudo ufw status numbered  
 sudo ufw delete 3
 
 # Par description
-sudo ufw delete allow 8080
+sudo ufw delete allow 8080  
 sudo ufw delete allow from 192.168.1.100
 ```
 
@@ -627,7 +627,7 @@ sudo ufw delete allow from 192.168.1.100
 
 ```bash
 # Limiter SSH (max 6 connexions en 30 secondes)
-sudo ufw limit ssh
+sudo ufw limit ssh  
 sudo ufw limit 22/tcp
 ```
 
@@ -663,14 +663,14 @@ interface
 uses
   Classes, SysUtils, Process;
 
-function AutoriserPort(Port: Word; Protocol: String = 'tcp'): Boolean;
-function BloquerPort(Port: Word): Boolean;
-function VerifierStatut: String;
+function AutoriserPort(Port: Word; Protocol: String = 'tcp'): Boolean;  
+function BloquerPort(Port: Word): Boolean;  
+function VerifierStatut: String;  
 function ObtenirRegles: TStringList;
 
 implementation
 
-function ExecuterCommandeSudo(const Commande: String): String;
+function ExecuterCommandeSudo(const Commande: String): String;  
 var
   Process: TProcess;
   Output: TStringList;
@@ -692,7 +692,7 @@ begin
   end;
 end;
 
-function AutoriserPort(Port: Word; Protocol: String): Boolean;
+function AutoriserPort(Port: Word; Protocol: String): Boolean;  
 var
   Commande: String;
   Output: String;
@@ -709,7 +709,7 @@ begin
     WriteLn('✗ Erreur : ', Output);
 end;
 
-function BloquerPort(Port: Word): Boolean;
+function BloquerPort(Port: Word): Boolean;  
 var
   Commande: String;
   Output: String;
@@ -723,12 +723,12 @@ begin
     WriteLn('✓ Port ', Port, ' bloqué');
 end;
 
-function VerifierStatut: String;
+function VerifierStatut: String;  
 begin
   Result := ExecuterCommandeSudo('ufw status verbose');
 end;
 
-function ObtenirRegles: TStringList;
+function ObtenirRegles: TStringList;  
 var
   Output: String;
 begin
@@ -797,13 +797,13 @@ sudo nano /etc/ufw/applications.d/monapp
 
 ```ini
 [MonServeurPascal]
-title=Mon Serveur Pascal
-description=Serveur HTTP développé en FreePascal
+title=Mon Serveur Pascal  
+description=Serveur HTTP développé en FreePascal  
 ports=8080/tcp
 
 [MonAppComplete]
-title=Application Complète
-description=Application avec plusieurs ports
+title=Application Complète  
+description=Application avec plusieurs ports  
 ports=8080,8443/tcp|5000/udp
 ```
 
@@ -866,14 +866,14 @@ sudo systemctl enable netfilter-persistent
 **Depuis Windows :**
 
 ```batch
-REM Tester avec telnet
+REM Tester avec telnet  
 telnet localhost 8080
 
-REM Tester avec PowerShell
+REM Tester avec PowerShell  
 Test-NetConnection -ComputerName localhost -Port 8080
 
-REM Scanner les ports ouverts
-netstat -an | findstr "8080"
+REM Scanner les ports ouverts  
+netstat -an | findstr "8080"  
 netstat -an | findstr "LISTENING"
 ```
 
@@ -887,7 +887,7 @@ telnet localhost 8080
 nc -zv localhost 8080
 
 # Scanner les ports ouverts
-netstat -tuln | grep 8080
+netstat -tuln | grep 8080  
 ss -tuln | grep 8080
 
 # Tous les ports en écoute
@@ -907,7 +907,7 @@ uses
   {$ENDIF}
   SysUtils, Sockets;
 
-function TesterPort(const Host: String; Port: Word): Boolean;
+function TesterPort(const Host: String; Port: Word): Boolean;  
 var
   Socket: TSocket;
   Addr: TSockAddr;
@@ -1059,32 +1059,32 @@ end.
 **Windows :**
 
 ```batch
-REM Afficher les connexions actives
+REM Afficher les connexions actives  
 netstat -an
 
-REM Afficher avec le nom du programme
+REM Afficher avec le nom du programme  
 netstat -anb
 
-REM Afficher les statistiques
+REM Afficher les statistiques  
 netstat -s
 
-REM Tester la connectivité
+REM Tester la connectivité  
 ping 8.8.8.8
 
-REM Tracer la route
+REM Tracer la route  
 tracert google.com
 
-REM Résolution DNS
+REM Résolution DNS  
 nslookup google.com
 
-REM Configuration IP
+REM Configuration IP  
 ipconfig /all
 
-REM Renouveler l'IP (DHCP)
-ipconfig /release
+REM Renouveler l'IP (DHCP)  
+ipconfig /release  
 ipconfig /renew
 
-REM Vider le cache DNS
+REM Vider le cache DNS  
 ipconfig /flushdns
 ```
 
@@ -1092,33 +1092,33 @@ ipconfig /flushdns
 
 ```bash
 # Afficher les connexions actives
-netstat -tuln
+netstat -tuln  
 ss -tuln
 
 # Afficher avec le processus
-sudo netstat -tulnp
+sudo netstat -tulnp  
 sudo ss -tulnp
 
 # Tester la connectivité
 ping -c 4 8.8.8.8
 
 # Tracer la route
-traceroute google.com
+traceroute google.com  
 tracepath google.com
 
 # Résolution DNS
-nslookup google.com
+nslookup google.com  
 dig google.com
 
 # Configuration IP
-ip addr show
+ip addr show  
 ifconfig
 
 # Configuration détaillée
 ip addr show dev eth0
 
 # Renouveler l'IP (DHCP)
-sudo dhclient -r
+sudo dhclient -r  
 sudo dhclient
 
 # Vider le cache DNS
@@ -1132,16 +1132,16 @@ sudo systemd-resolve --flush-caches
 **Windows - Lister les interfaces :**
 
 ```batch
-REM Lister toutes les interfaces
+REM Lister toutes les interfaces  
 ipconfig
 
-REM PowerShell - Plus d'infos
+REM PowerShell - Plus d'infos  
 Get-NetAdapter
 
-REM Informations détaillées
+REM Informations détaillées  
 Get-NetAdapter | Format-List
 
-REM Interface spécifique
+REM Interface spécifique  
 Get-NetAdapter -Name "Ethernet"
 ```
 
@@ -1179,7 +1179,7 @@ Set-DnsClientServerAddress `
   -ServerAddresses 8.8.8.8,8.8.4.4
 
 # Revenir en DHCP
-Set-NetIPInterface -InterfaceAlias "Ethernet" -Dhcp Enabled
+Set-NetIPInterface -InterfaceAlias "Ethernet" -Dhcp Enabled  
 Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ResetServerAddresses
 ```
 
@@ -1241,7 +1241,7 @@ type
     Status: String;
   end;
 
-function GetNetworkInterfaces: array of TNetworkInterface;
+function GetNetworkInterfaces: array of TNetworkInterface;  
 procedure DisplayInterfaces;
 
 implementation
@@ -1249,7 +1249,7 @@ implementation
 uses
   Process;
 
-function ExecuteCommand(const Cmd: String): String;
+function ExecuteCommand(const Cmd: String): String;  
 var
   Proc: TProcess;
   Output: TStringList;
@@ -1271,7 +1271,7 @@ begin
   end;
 end;
 
-function GetNetworkInterfaces: array of TNetworkInterface;
+function GetNetworkInterfaces: array of TNetworkInterface;  
 var
   Output: String;
   Lines: TStringList;
@@ -1313,7 +1313,7 @@ begin
   end;
 end;
 
-procedure DisplayInterfaces;
+procedure DisplayInterfaces;  
 var
   Interfaces: array of TNetworkInterface;
   i: Integer;
@@ -1344,30 +1344,30 @@ end.
 **Windows - Afficher les routes :**
 
 ```batch
-REM Afficher la table de routage
+REM Afficher la table de routage  
 route print
 
-REM Afficher seulement IPv4
+REM Afficher seulement IPv4  
 route print -4
 
-REM PowerShell
+REM PowerShell  
 Get-NetRoute
 ```
 
 **Ajouter/Supprimer des routes :**
 
 ```batch
-REM Ajouter une route
+REM Ajouter une route  
 route add 192.168.2.0 mask 255.255.255.0 192.168.1.1
 
-REM Ajouter une route persistante
+REM Ajouter une route persistante  
 route add -p 192.168.2.0 mask 255.255.255.0 192.168.1.1
 
-REM Supprimer une route
+REM Supprimer une route  
 route delete 192.168.2.0
 
-REM PowerShell
-New-NetRoute -DestinationPrefix "192.168.2.0/24" -NextHop "192.168.1.1"
+REM PowerShell  
+New-NetRoute -DestinationPrefix "192.168.2.0/24" -NextHop "192.168.1.1"  
 Remove-NetRoute -DestinationPrefix "192.168.2.0/24"
 ```
 
@@ -1375,7 +1375,7 @@ Remove-NetRoute -DestinationPrefix "192.168.2.0/24"
 
 ```bash
 # Afficher la table de routage
-ip route show
+ip route show  
 route -n
 
 # Route par défaut
@@ -1429,8 +1429,8 @@ sudo sysctl -w net.ipv4.ip_forward=1
 echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf
 
 # Configurer NAT (masquerading)
-sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-sudo iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT
+sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE  
+sudo iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT  
 sudo iptables -A FORWARD -i eth0 -o eth1 -m state --state RELATED,ESTABLISHED -j ACCEPT
 
 # Sauvegarder
@@ -1442,17 +1442,17 @@ sudo iptables-save | sudo tee /etc/iptables/rules.v4
 **Windows - netsh :**
 
 ```batch
-REM Rediriger le port 80 externe vers le port 8080 interne
+REM Rediriger le port 80 externe vers le port 8080 interne  
 netsh interface portproxy add v4tov4 ^
   listenport=80 ^
   listenaddress=0.0.0.0 ^
   connectport=8080 ^
   connectaddress=127.0.0.1
 
-REM Voir les redirections
+REM Voir les redirections  
 netsh interface portproxy show v4tov4
 
-REM Supprimer une redirection
+REM Supprimer une redirection  
 netsh interface portproxy delete v4tov4 ^
   listenport=80 ^
   listenaddress=0.0.0.0
@@ -1465,7 +1465,7 @@ netsh interface portproxy delete v4tov4 ^
 sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
 
 # Rediriger vers une autre machine
-sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination 192.168.1.100:8080
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination 192.168.1.100:8080  
 sudo iptables -A FORWARD -p tcp -d 192.168.1.100 --dport 8080 -j ACCEPT
 
 # Voir les règles NAT
@@ -1484,26 +1484,26 @@ sudo iptables -t nat -L -n -v
 
 **Linux :**
 ```bash
-sudo apt update
+sudo apt update  
 sudo apt install openvpn
 ```
 
 **Fichier de configuration client (.ovpn) :**
 
 ```
-client
-dev tun
-proto udp
-remote vpn.example.com 1194
-resolv-retry infinite
-nobind
-persist-key
-persist-tun
-ca ca.crt
-cert client.crt
-key client.key
-remote-cert-tls server
-cipher AES-256-CBC
+client  
+dev tun  
+proto udp  
+remote vpn.example.com 1194  
+resolv-retry infinite  
+nobind  
+persist-key  
+persist-tun  
+ca ca.crt  
+cert client.crt  
+key client.key  
+remote-cert-tls server  
+cipher AES-256-CBC  
 verb 3
 ```
 
@@ -1533,14 +1533,14 @@ sudo apt install wireguard
 
 ```ini
 [Interface]
-PrivateKey = VOTRE_CLÉ_PRIVÉE
-Address = 10.0.0.2/24
+PrivateKey = VOTRE_CLÉ_PRIVÉE  
+Address = 10.0.0.2/24  
 DNS = 8.8.8.8
 
 [Peer]
-PublicKey = CLÉ_PUBLIQUE_SERVEUR
-Endpoint = vpn.example.com:51820
-AllowedIPs = 0.0.0.0/0
+PublicKey = CLÉ_PUBLIQUE_SERVEUR  
+Endpoint = vpn.example.com:51820  
+AllowedIPs = 0.0.0.0/0  
 PersistentKeepalive = 25
 ```
 
@@ -1630,7 +1630,7 @@ program PortScanner;
 uses
   SysUtils, Sockets;
 
-function IsPortOpen(const Host: String; Port: Word; TimeoutSec: Integer = 2): Boolean;
+function IsPortOpen(const Host: String; Port: Word; TimeoutSec: Integer = 2): Boolean;  
 var
   Socket: TSocket;
   Addr: TSockAddr;
@@ -1662,7 +1662,7 @@ begin
   end;
 end;
 
-procedure ScanPorts(const Host: String; StartPort, EndPort: Word);
+procedure ScanPorts(const Host: String; StartPort, EndPort: Word);  
 var
   Port: Word;
   OpenPorts: Integer;
@@ -1730,22 +1730,22 @@ sudo apt install fail2ban
 
 ```ini
 [DEFAULT]
-bantime = 3600
-findtime = 600
+bantime = 3600  
+findtime = 600  
 maxretry = 5
 
 [sshd]
-enabled = true
-port = ssh
+enabled = true  
+port = ssh  
 logpath = /var/log/auth.log
 
 [http-get-dos]
-enabled = true
-port = http,https
-filter = http-get-dos
-logpath = /var/log/apache*/access.log
-maxretry = 300
-findtime = 300
+enabled = true  
+port = http,https  
+filter = http-get-dos  
+logpath = /var/log/apache*/access.log  
+maxretry = 300  
+findtime = 300  
 bantime = 600
 ```
 
@@ -1755,14 +1755,14 @@ bantime = 600
 
 ```ini
 [Definition]
-failregex = ^<HOST>.*Failed login attempt
+failregex = ^<HOST>.*Failed login attempt  
 ignoreregex =
 ```
 
 **Activer :**
 
 ```bash
-sudo systemctl enable fail2ban
+sudo systemctl enable fail2ban  
 sudo systemctl start fail2ban
 
 # Voir les statuts
@@ -1807,7 +1807,7 @@ implementation
 type
   TRequestList = class(TList);
 
-constructor TRateLimiter.Create(MaxRequests, TimeWindowSec: Integer);
+constructor TRateLimiter.Create(MaxRequests, TimeWindowSec: Integer);  
 begin
   inherited Create;
   FRequests := TFPHashList.Create;
@@ -1816,7 +1816,7 @@ begin
   FTimeWindow := TimeWindowSec;
 end;
 
-destructor TRateLimiter.Destroy;
+destructor TRateLimiter.Destroy;  
 var
   i: Integer;
 begin
@@ -1828,7 +1828,7 @@ begin
   inherited Destroy;
 end;
 
-function TRateLimiter.AllowRequest(const ClientIP: String): Boolean;
+function TRateLimiter.AllowRequest(const ClientIP: String): Boolean;  
 var
   List: TRequestList;
   Now: TDateTime;
@@ -1867,7 +1867,7 @@ begin
   end;
 end;
 
-procedure TRateLimiter.CleanOldEntries;
+procedure TRateLimiter.CleanOldEntries;  
 var
   i, j: Integer;
   List: TRequestList;
@@ -1936,7 +1936,7 @@ program NetworkMonitor;
 uses
   SysUtils, Process, Classes;
 
-procedure DisplayConnections;
+procedure DisplayConnections;  
 var
   Proc: TProcess;
   Output: TStringList;
@@ -2019,7 +2019,7 @@ type
 
 implementation
 
-constructor TConnectionLogger.Create(const Filename: String);
+constructor TConnectionLogger.Create(const Filename: String);  
 begin
   inherited Create;
   FFilename := Filename;
@@ -2031,13 +2031,13 @@ begin
     Rewrite(FLogFile);
 end;
 
-destructor TConnectionLogger.Destroy;
+destructor TConnectionLogger.Destroy;  
 begin
   CloseFile(FLogFile);
   inherited Destroy;
 end;
 
-procedure TConnectionLogger.LogConnection(const ClientIP: String; Port: Word; Accepted: Boolean);
+procedure TConnectionLogger.LogConnection(const ClientIP: String; Port: Word; Accepted: Boolean);  
 var
   Timestamp: String;
   Status: String;
@@ -2054,7 +2054,7 @@ begin
   Flush(FLogFile);
 end;
 
-procedure TConnectionLogger.LogDisconnection(const ClientIP: String);
+procedure TConnectionLogger.LogDisconnection(const ClientIP: String);  
 var
   Timestamp: String;
 begin
@@ -2063,7 +2063,7 @@ begin
   Flush(FLogFile);
 end;
 
-procedure TConnectionLogger.LogError(const ClientIP, ErrorMsg: String);
+procedure TConnectionLogger.LogError(const ClientIP, ErrorMsg: String);  
 var
   Timestamp: String;
 begin
@@ -2192,7 +2192,7 @@ end.
 uses
   Windows;
 
-function IsRunAsAdmin: Boolean;
+function IsRunAsAdmin: Boolean;  
 var
   TokenHandle: THandle;
   Elevation: TOKEN_ELEVATION;
@@ -2226,7 +2226,7 @@ end;
 uses
   BaseUnix;
 
-function IsRunAsRoot: Boolean;
+function IsRunAsRoot: Boolean;  
 begin
   Result := fpGetUID = 0;
 end;
@@ -2261,14 +2261,14 @@ interface
 uses
   SysUtils, RegExpr;
 
-function IsValidIPv4(const IP: String): Boolean;
-function IsValidPort(Port: Integer): Boolean;
-function IsValidHostname(const Hostname: String): Boolean;
+function IsValidIPv4(const IP: String): Boolean;  
+function IsValidPort(Port: Integer): Boolean;  
+function IsValidHostname(const Hostname: String): Boolean;  
 function SanitizeInput(const Input: String): String;
 
 implementation
 
-function IsValidIPv4(const IP: String): Boolean;
+function IsValidIPv4(const IP: String): Boolean;  
 var
   Regex: TRegExpr;
 begin
@@ -2282,12 +2282,12 @@ begin
   end;
 end;
 
-function IsValidPort(Port: Integer): Boolean;
+function IsValidPort(Port: Integer): Boolean;  
 begin
   Result := (Port >= 1) and (Port <= 65535);
 end;
 
-function IsValidHostname(const Hostname: String): Boolean;
+function IsValidHostname(const Hostname: String): Boolean;  
 var
   Regex: TRegExpr;
 begin
@@ -2301,7 +2301,7 @@ begin
   end;
 end;
 
-function SanitizeInput(const Input: String): String;
+function SanitizeInput(const Input: String): String;  
 var
   i: Integer;
 begin
@@ -2359,7 +2359,7 @@ end;
 netstat -an | findstr "8080"
 
 # Linux
-netstat -tuln | grep 8080
+netstat -tuln | grep 8080  
 ss -tuln | grep 8080
 ```
 
@@ -2372,7 +2372,7 @@ Si rien n'apparaît → Le serveur ne démarre pas ou n'écoute pas sur ce port.
 netsh advfirewall firewall show rule name=all | findstr "8080"
 
 # Linux
-sudo ufw status | grep 8080
+sudo ufw status | grep 8080  
 sudo iptables -L -n | grep 8080
 ```
 
@@ -2393,7 +2393,7 @@ Si ça fonctionne localement mais pas à distance → Problème de firewall ou r
 
 ```bash
 # Tester depuis une autre machine
-ping IP_DU_SERVEUR
+ping IP_DU_SERVEUR  
 telnet IP_DU_SERVEUR 8080
 ```
 
@@ -2451,7 +2451,7 @@ program DiagnosticReseau;
 uses
   SysUtils, Process;
 
-procedure TestConnectivite(const Host: String);
+procedure TestConnectivite(const Host: String);  
 var
   Proc: TProcess;
   Output: String;
@@ -2483,7 +2483,7 @@ begin
   end;
 end;
 
-procedure AfficherConfiguration;
+procedure AfficherConfiguration;  
 var
   Proc: TProcess;
   Output: String;
@@ -2512,7 +2512,7 @@ begin
   end;
 end;
 
-procedure AfficherPortsOuverts;
+procedure AfficherPortsOuverts;  
 var
   Proc: TProcess;
   Output: String;
@@ -2541,7 +2541,7 @@ begin
   end;
 end;
 
-procedure MenuPrincipal;
+procedure MenuPrincipal;  
 var
   Choix: String;
 begin
@@ -2592,25 +2592,25 @@ end.
 
 ```batch
 @echo off
-echo === Configuration automatique du firewall ===
+echo === Configuration automatique du firewall ===  
 echo.
 
-REM Variables
-set APP_NAME=MonServeurPascal
-set APP_PATH=C:\Projets\MonServeur.exe
+REM Variables  
+set APP_NAME=MonServeurPascal  
+set APP_PATH=C:\Projets\MonServeur.exe  
 set APP_PORT=8080
 
-echo Configuration pour :
-echo   Application : %APP_NAME%
-echo   Chemin : %APP_PATH%
-echo   Port : %APP_PORT%
+echo Configuration pour :  
+echo   Application : %APP_NAME%  
+echo   Chemin : %APP_PATH%  
+echo   Port : %APP_PORT%  
 echo.
 
-REM Supprimer l'ancienne règle si elle existe
+REM Supprimer l'ancienne règle si elle existe  
 netsh advfirewall firewall delete rule name="%APP_NAME%" >nul 2>&1
 
-REM Créer la nouvelle règle
-echo Creation de la regle firewall...
+REM Créer la nouvelle règle  
+echo Creation de la regle firewall...  
 netsh advfirewall firewall add rule ^
   name="%APP_NAME%" ^
   dir=in ^
@@ -2628,13 +2628,13 @@ if %errorlevel% equ 0 (
     exit /b 1
 )
 
-REM Vérifier la règle
-echo.
-echo Verification de la regle...
+REM Vérifier la règle  
+echo.  
+echo Verification de la regle...  
 netsh advfirewall firewall show rule name="%APP_NAME%"
 
-echo.
-echo === Configuration terminee ===
+echo.  
+echo === Configuration terminee ===  
 pause
 ```
 
@@ -2645,14 +2645,14 @@ pause
 
 # Configuration automatique UFW
 
-APP_NAME="MonServeurPascal"
+APP_NAME="MonServeurPascal"  
 APP_PORT=8080
 
-echo "=== Configuration automatique du firewall ==="
-echo ""
-echo "Configuration pour :"
-echo "  Application : $APP_NAME"
-echo "  Port : $APP_PORT"
+echo "=== Configuration automatique du firewall ==="  
+echo ""  
+echo "Configuration pour :"  
+echo "  Application : $APP_NAME"  
+echo "  Port : $APP_PORT"  
 echo ""
 
 # Vérifier si UFW est installé
@@ -2672,7 +2672,7 @@ fi
 ufw delete allow $APP_PORT/tcp 2>/dev/null
 
 # Créer la nouvelle règle
-echo "Création de la règle firewall..."
+echo "Création de la règle firewall..."  
 ufw allow $APP_PORT/tcp
 
 if [ $? -eq 0 ]; then
@@ -2683,8 +2683,8 @@ else
 fi
 
 # Vérifier la règle
-echo ""
-echo "Vérification de la règle..."
+echo ""  
+echo "Vérification de la règle..."  
 ufw status | grep $APP_PORT
 
 # Activer UFW si nécessaire
@@ -2698,7 +2698,7 @@ if ! ufw status | grep -q "Status: active"; then
     fi
 fi
 
-echo ""
+echo ""  
 echo "=== Configuration terminée ==="
 ```
 
@@ -2712,7 +2712,7 @@ program ConfigReseau;
 uses
   SysUtils, Process;
 
-function ExecuterCommande(const Cmd: String): Boolean;
+function ExecuterCommande(const Cmd: String): Boolean;  
 var
   Proc: TProcess;
   ExitCode: Integer;
@@ -2738,7 +2738,7 @@ begin
   end;
 end;
 
-procedure ConfigurerFirewall(const AppPath: String; Port: Word);
+procedure ConfigurerFirewall(const AppPath: String; Port: Word);  
 var
   Commande: String;
 begin
@@ -2765,7 +2765,7 @@ begin
     WriteLn('✗ Erreur de configuration');
 end;
 
-procedure VerifierConfiguration(Port: Word);
+procedure VerifierConfiguration(Port: Word);  
 var
   Commande: String;
 begin
@@ -2827,16 +2827,16 @@ Dans ce tutoriel, nous avons couvert :
 
 **Windows :**
 ```batch
-netsh advfirewall firewall add rule name="..." dir=in action=allow protocol=TCP localport=8080
-netstat -an | findstr "8080"
+netsh advfirewall firewall add rule name="..." dir=in action=allow protocol=TCP localport=8080  
+netstat -an | findstr "8080"  
 ipconfig /all
 ```
 
 **Linux :**
 ```bash
-sudo ufw allow 8080/tcp
-sudo ufw status
-netstat -tuln | grep 8080
+sudo ufw allow 8080/tcp  
+sudo ufw status  
+netstat -tuln | grep 8080  
 ip addr show
 ```
 

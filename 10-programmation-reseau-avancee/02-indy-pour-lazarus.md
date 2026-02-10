@@ -64,8 +64,8 @@ https://github.com/IndySockets/Indy
 sudo apt-get install lazarus-indy
 
 # Méthode 2 : Compilation depuis les sources
-cd ~/
-git clone https://github.com/IndySockets/Indy.git
+cd ~/  
+git clone https://github.com/IndySockets/Indy.git  
 cd Indy/Lib/Protocols
 
 # Ouvrez Lazarus
@@ -188,7 +188,7 @@ implementation
 
 {$R *.lfm}
 
-constructor TForm1.Create(TheOwner: TComponent);
+constructor TForm1.Create(TheOwner: TComponent);  
 begin
   inherited Create(TheOwner);
 
@@ -196,13 +196,13 @@ begin
   IdHTTP1 := TIdHTTP.Create(Self);
 end;
 
-destructor TForm1.Destroy;
+destructor TForm1.Destroy;  
 begin
   IdHTTP1.Free;
   inherited Destroy;
 end;
 
-procedure TForm1.ButtonTelechargerClick(Sender: TObject);
+procedure TForm1.ButtonTelechargerClick(Sender: TObject);  
 var
   Response: string;
 begin
@@ -239,7 +239,7 @@ Vous pouvez également déposer un composant `TIdHTTP` directement sur votre for
 3. Utilisez-le directement sans créer d'instance
 
 ```pascal
-procedure TForm1.ButtonClick(Sender: TObject);
+procedure TForm1.ButtonClick(Sender: TObject);  
 begin
   // Le composant IdHTTP1 existe déjà sur le formulaire
   Memo1.Text := IdHTTP1.Get('http://www.example.com');
@@ -251,7 +251,7 @@ end;
 ### GET avec paramètres
 
 ```pascal
-procedure RequeteGETAvecParametres;
+procedure RequeteGETAvecParametres;  
 var
   HTTP: TIdHTTP;
   URL: string;
@@ -273,7 +273,7 @@ end;
 ### POST avec données
 
 ```pascal
-procedure RequetePOST;
+procedure RequetePOST;  
 var
   HTTP: TIdHTTP;
   PostData, Response: TStringStream;
@@ -305,7 +305,7 @@ end;
 ### POST JSON
 
 ```pascal
-procedure EnvoyerJSON;
+procedure EnvoyerJSON;  
 var
   HTTP: TIdHTTP;
   JSONData, Response: TStringStream;
@@ -337,7 +337,7 @@ end;
 ### Téléchargement de fichiers
 
 ```pascal
-procedure TelechargerFichier(const URL, CheminLocal: string);
+procedure TelechargerFichier(const URL, CheminLocal: string);  
 var
   HTTP: TIdHTTP;
   FileStream: TFileStream;
@@ -368,7 +368,7 @@ end;
 ### En-têtes HTTP personnalisés
 
 ```pascal
-procedure RequeteAvecEnTetes;
+procedure RequeteAvecEnTetes;  
 var
   HTTP: TIdHTTP;
 begin
@@ -398,7 +398,7 @@ uses
   SysUtils, Classes,
   IdFTP;
 
-procedure ExempleFTP;
+procedure ExempleFTP;  
 var
   FTP: TIdFTP;
   FilesList: TStringList;
@@ -480,7 +480,7 @@ begin
   Application.ProcessMessages; // Rafraîchir l'interface
 end;
 
-procedure TFTPForm.IdFTP1WorkEnd(ASender: TObject; AWorkMode: TWorkMode);
+procedure TFTPForm.IdFTP1WorkEnd(ASender: TObject; AWorkMode: TWorkMode);  
 begin
   ProgressBar1.Position := ProgressBar1.Max;
   StatusBar1.SimpleText := 'Téléchargement terminé';
@@ -501,7 +501,7 @@ uses
   IdAttachmentFile, // Pièces jointes
   IdSSLOpenSSL;     // Support SSL/TLS
 
-procedure EnvoyerEmail;
+procedure EnvoyerEmail;  
 var
   SMTP: TIdSMTP;
   Message: TIdMessage;
@@ -604,7 +604,7 @@ type
     procedure Arreter;
   end;
 
-constructor TMonServeur.Create;
+constructor TMonServeur.Create;  
 begin
   FServer := TIdTCPServer.Create(nil);
   FServer.OnExecute := @OnExecute;
@@ -612,23 +612,23 @@ begin
   FServer.OnDisconnect := @OnDisconnect;
 end;
 
-destructor TMonServeur.Destroy;
+destructor TMonServeur.Destroy;  
 begin
   FServer.Free;
   inherited;
 end;
 
-procedure TMonServeur.OnConnect(AContext: TIdContext);
+procedure TMonServeur.OnConnect(AContext: TIdContext);  
 begin
   WriteLn('Client connecté : ', AContext.Binding.PeerIP);
 end;
 
-procedure TMonServeur.OnDisconnect(AContext: TIdContext);
+procedure TMonServeur.OnDisconnect(AContext: TIdContext);  
 begin
   WriteLn('Client déconnecté : ', AContext.Binding.PeerIP);
 end;
 
-procedure TMonServeur.OnExecute(AContext: TIdContext);
+procedure TMonServeur.OnExecute(AContext: TIdContext);  
 var
   ReceivedData, Response: string;
 begin
@@ -651,14 +651,14 @@ begin
   end;
 end;
 
-procedure TMonServeur.Demarrer(Port: Integer);
+procedure TMonServeur.Demarrer(Port: Integer);  
 begin
   FServer.DefaultPort := Port;
   FServer.Active := True;
   WriteLn('Serveur démarré sur le port ', Port);
 end;
 
-procedure TMonServeur.Arreter;
+procedure TMonServeur.Arreter;  
 begin
   FServer.Active := False;
   WriteLn('Serveur arrêté');
@@ -689,7 +689,7 @@ uses
   IdHTTP,
   IdSSLOpenSSL;
 
-procedure RequeteHTTPS;
+procedure RequeteHTTPS;  
 var
   HTTP: TIdHTTP;
   SSLHandler: TIdSSLIOHandlerSocketOpenSSL;
@@ -730,7 +730,7 @@ sudo apt-get install libssl-dev
 ## Gestion des erreurs et exceptions
 
 ```pascal
-procedure RequeteAvecGestionErreurs;
+procedure RequeteAvecGestionErreurs;  
 var
   HTTP: TIdHTTP;
 begin
@@ -774,7 +774,7 @@ end;
 ## Timeouts et configuration
 
 ```pascal
-procedure ConfigurerTimeouts;
+procedure ConfigurerTimeouts;  
 var
   HTTP: TIdHTTP;
 begin
@@ -826,13 +826,13 @@ type
     procedure Demarrer(Port: Integer);
   end;
 
-constructor TMonServeurHTTP.Create;
+constructor TMonServeurHTTP.Create;  
 begin
   FServer := TIdHTTPServer.Create(nil);
   FServer.OnCommandGet := @OnCommandGet;
 end;
 
-destructor TMonServeurHTTP.Destroy;
+destructor TMonServeurHTTP.Destroy;  
 begin
   FServer.Free;
   inherited;
@@ -858,7 +858,7 @@ begin
   AResponseInfo.ResponseNo := 200; // Code HTTP 200 OK
 end;
 
-procedure TMonServeurHTTP.Demarrer(Port: Integer);
+procedure TMonServeurHTTP.Demarrer(Port: Integer);  
 begin
   FServer.DefaultPort := Port;
   FServer.Active := True;
@@ -890,7 +890,7 @@ uses
   IdWebSocketClient;
 
 // Client WebSocket
-procedure ClientWebSocket;
+procedure ClientWebSocket;  
 var
   WS: TIdWebSocketClient;
 begin
@@ -947,7 +947,7 @@ netsh advfirewall firewall add rule name="Mon Serveur" dir=in action=allow proto
 
 **Ubuntu :**
 ```bash
-sudo ufw allow 8080/tcp
+sudo ufw allow 8080/tcp  
 sudo ufw reload
 ```
 
@@ -956,7 +956,7 @@ sudo ufw reload
 ### 1. Toujours libérer les ressources
 
 ```pascal
-HTTP := TIdHTTP.Create(nil);
+HTTP := TIdHTTP.Create(nil);  
 try
   // Votre code
 finally
@@ -979,14 +979,14 @@ type
     constructor Create(AForm: TForm1);
   end;
 
-constructor TDownloadThread.Create(AForm: TForm1);
+constructor TDownloadThread.Create(AForm: TForm1);  
 begin
   inherited Create(False); // Démarrage immédiat
   FreeOnTerminate := True;
   FForm := AForm;
 end;
 
-procedure TDownloadThread.Execute;
+procedure TDownloadThread.Execute;  
 var
   HTTP: TIdHTTP;
 begin
@@ -1001,12 +1001,12 @@ begin
   end;
 end;
 
-procedure TDownloadThread.MettreAJourInterface;
+procedure TDownloadThread.MettreAJourInterface;  
 begin
   FForm.Memo1.Text := FResultat;
 end;
 
-procedure TForm1.ButtonClick(Sender: TObject);
+procedure TForm1.ButtonClick(Sender: TObject);  
 begin
   TDownloadThread.Create(Self);
 end;
@@ -1043,7 +1043,7 @@ type
     procedure Configurer;
   end;
 
-procedure TServeurAvecTimeout.OnExecute(AContext: TIdContext);
+procedure TServeurAvecTimeout.OnExecute(AContext: TIdContext);  
 begin
   // Configuration du timeout par connexion
   AContext.Connection.IOHandler.ReadTimeout := 30000; // 30 secondes
@@ -1051,7 +1051,7 @@ begin
   // ... traitement des données ...
 end;
 
-procedure TServeurAvecTimeout.Configurer;
+procedure TServeurAvecTimeout.Configurer;  
 begin
   FServer := TIdTCPServer.Create(nil);
 
@@ -1082,13 +1082,13 @@ type
     procedure ReleaseConnection(AConnection: TIdHTTP);
   end;
 
-constructor TConnectionPool.Create(AMaxConnections: Integer);
+constructor TConnectionPool.Create(AMaxConnections: Integer);  
 begin
   FConnections := TThreadList.Create;
   FMaxConnections := AMaxConnections;
 end;
 
-destructor TConnectionPool.Destroy;
+destructor TConnectionPool.Destroy;  
 var
   List: TList;
   i: Integer;
@@ -1105,7 +1105,7 @@ begin
   inherited;
 end;
 
-function TConnectionPool.AcquireConnection: TIdHTTP;
+function TConnectionPool.AcquireConnection: TIdHTTP;  
 var
   List: TList;
 begin
@@ -1123,7 +1123,7 @@ begin
   end;
 end;
 
-procedure TConnectionPool.ReleaseConnection(AConnection: TIdHTTP);
+procedure TConnectionPool.ReleaseConnection(AConnection: TIdHTTP);  
 var
   List: TList;
 begin
@@ -1151,7 +1151,7 @@ uses
   IdMessage,        // Message email
   IdSSLOpenSSL;     // Support SSL/TLS
 
-procedure RecevoirEmails;
+procedure RecevoirEmails;  
 var
   POP3: TIdPOP3;
   SSLHandler: TIdSSLIOHandlerSocketOpenSSL;
@@ -1226,7 +1226,7 @@ end.
 ### Gestion des pièces jointes
 
 ```pascal
-procedure TraiterPiecesJointes(Message: TIdMessage);
+procedure TraiterPiecesJointes(Message: TIdMessage);  
 var
   i: Integer;
   Attachment: TIdAttachment;
@@ -1259,7 +1259,7 @@ uses
   IdMessage,
   IdSSLOpenSSL;
 
-procedure ExempleIMAP;
+procedure ExempleIMAP;  
 var
   IMAP: TIdIMAP4;
   SSLHandler: TIdSSLIOHandlerSocketOpenSSL;
@@ -1352,7 +1352,7 @@ uses
   IdGlobal;
 
 // Émetteur UDP
-procedure EnvoyerUDP;
+procedure EnvoyerUDP;  
 var
   UDP: TIdUDPClient;
 begin
@@ -1383,13 +1383,13 @@ type
     procedure Arreter;
   end;
 
-constructor TMonServeurUDP.Create;
+constructor TMonServeurUDP.Create;  
 begin
   FServer := TIdUDPServer.Create(nil);
   FServer.OnUDPRead := @OnUDPRead;
 end;
 
-destructor TMonServeurUDP.Destroy;
+destructor TMonServeurUDP.Destroy;  
 begin
   FServer.Free;
   inherited;
@@ -1408,14 +1408,14 @@ begin
     ToBytes('Accusé de réception'));
 end;
 
-procedure TMonServeurUDP.Demarrer(Port: Integer);
+procedure TMonServeurUDP.Demarrer(Port: Integer);  
 begin
   FServer.DefaultPort := Port;
   FServer.Active := True;
   WriteLn('Serveur UDP démarré sur le port ', Port);
 end;
 
-procedure TMonServeurUDP.Arreter;
+procedure TMonServeurUDP.Arreter;  
 begin
   FServer.Active := False;
 end;
@@ -1446,7 +1446,7 @@ Indy fournit des outils pour encoder/décoder différents formats :
 uses
   IdCoderMIME;
 
-procedure ExempleBase64;
+procedure ExempleBase64;  
 var
   Encoder: TIdEncoderMIME;
   Decoder: TIdDecoderMIME;
@@ -1478,7 +1478,7 @@ end;
 uses
   IdURI;
 
-procedure ExempleURLEncoding;
+procedure ExempleURLEncoding;  
 var
   Original, Encoded, Decoded: string;
 begin
@@ -1502,7 +1502,7 @@ uses
   IdHashMessageDigest,
   IdHashSHA;
 
-procedure ExempleHachage;
+procedure ExempleHachage;  
 var
   MD5: TIdHashMessageDigest5;
   SHA1: TIdHashSHA1;
@@ -1569,20 +1569,20 @@ type
     procedure Start(Port: Integer);
   end;
 
-constructor TRESTServer.Create;
+constructor TRESTServer.Create;  
 begin
   FServer := TIdHTTPServer.Create(nil);
   FServer.OnCommandGet := @OnCommandGet;
   FServer.OnCommandPost := @OnCommandPost;
 end;
 
-destructor TRESTServer.Destroy;
+destructor TRESTServer.Destroy;  
 begin
   FServer.Free;
   inherited;
 end;
 
-function TRESTServer.GetUsers: TJSONObject;
+function TRESTServer.GetUsers: TJSONObject;  
 var
   Response, UsersArray: TJSONObject;
   User: TJSONObject;
@@ -1608,7 +1608,7 @@ begin
   end;
 end;
 
-function TRESTServer.CreateUser(const AName, AEmail: string): TJSONObject;
+function TRESTServer.CreateUser(const AName, AEmail: string): TJSONObject;  
 var
   Response, User: TJSONObject;
 begin
@@ -1709,7 +1709,7 @@ begin
   end;
 end;
 
-procedure TRESTServer.Start(Port: Integer);
+procedure TRESTServer.Start(Port: Integer);  
 begin
   FServer.DefaultPort := Port;
   FServer.Active := True;
@@ -1738,7 +1738,7 @@ end.
 ### Client pour tester l'API
 
 ```pascal
-procedure TesterAPIREST;
+procedure TesterAPIREST;  
 var
   HTTP: TIdHTTP;
   JSONData: TStringStream;
@@ -1789,7 +1789,7 @@ type
     property ActiveConnections: Integer read FActiveConnections;
   end;
 
-constructor TMonServeurMultiThread.Create;
+constructor TMonServeurMultiThread.Create;  
 begin
   FServer := TIdTCPServer.Create(nil);
   FServer.OnConnect := @OnConnect;
@@ -1799,7 +1799,7 @@ begin
   FActiveConnections := 0;
 end;
 
-destructor TMonServeurMultiThread.Destroy;
+destructor TMonServeurMultiThread.Destroy;  
 begin
   if FServer.Active then
     FServer.Active := False;
@@ -1807,21 +1807,21 @@ begin
   inherited;
 end;
 
-procedure TMonServeurMultiThread.OnConnect(AContext: TIdContext);
+procedure TMonServeurMultiThread.OnConnect(AContext: TIdContext);  
 begin
   InterlockedIncrement(FActiveConnections);
   WriteLn('Client connecté : ', AContext.Binding.PeerIP,
           ' (Total: ', FActiveConnections, ')');
 end;
 
-procedure TMonServeurMultiThread.OnDisconnect(AContext: TIdContext);
+procedure TMonServeurMultiThread.OnDisconnect(AContext: TIdContext);  
 begin
   InterlockedDecrement(FActiveConnections);
   WriteLn('Client déconnecté : ', AContext.Binding.PeerIP,
           ' (Total: ', FActiveConnections, ')');
 end;
 
-procedure TMonServeurMultiThread.OnExecute(AContext: TIdContext);
+procedure TMonServeurMultiThread.OnExecute(AContext: TIdContext);  
 var
   Command: string;
 begin
@@ -1863,7 +1863,7 @@ begin
   WriteLn('Exception pour ', AContext.Binding.PeerIP, ' : ', AException.Message);
 end;
 
-procedure TMonServeurMultiThread.Start(Port: Integer; MaxConnections: Integer);
+procedure TMonServeurMultiThread.Start(Port: Integer; MaxConnections: Integer);  
 begin
   FServer.DefaultPort := Port;
   FServer.MaxConnections := MaxConnections;
@@ -1899,7 +1899,7 @@ type
     function GetStats: string;
   end;
 
-constructor TMonitoredServer.Create;
+constructor TMonitoredServer.Create;  
 begin
   FServer := TIdTCPServer.Create(nil);
   FServer.OnExecute := @OnExecute;
@@ -1912,7 +1912,7 @@ begin
   FStats.ActiveConnections := 0;
 end;
 
-procedure TMonitoredServer.OnExecute(AContext: TIdContext);
+procedure TMonitoredServer.OnExecute(AContext: TIdContext);  
 var
   Data: string;
   BytesReceived, BytesSent: Int64;
@@ -1929,7 +1929,7 @@ begin
   InterlockedExchangeAdd64(FStats.TotalBytesSent, BytesSent);
 end;
 
-function TMonitoredServer.GetStats: string;
+function TMonitoredServer.GetStats: string;  
 var
   Uptime: TDateTime;
 begin
@@ -1951,7 +1951,7 @@ begin
     ]);
 end;
 
-procedure TMonitoredServer.Start(Port: Integer);
+procedure TMonitoredServer.Start(Port: Integer);  
 begin
   FServer.DefaultPort := Port;
   FServer.Active := True;
@@ -2037,7 +2037,7 @@ type
     procedure Stop;
   end;
 
-constructor TChatServer.Create;
+constructor TChatServer.Create;  
 begin
   FServer := TIdTCPServer.Create(nil);
   FServer.OnConnect := @OnConnect;
@@ -2048,7 +2048,7 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TChatServer.Destroy;
+destructor TChatServer.Destroy;  
 begin
   Stop;
   FLock.Free;
@@ -2057,7 +2057,7 @@ begin
   inherited;
 end;
 
-procedure TChatServer.OnConnect(AContext: TIdContext);
+procedure TChatServer.OnConnect(AContext: TIdContext);  
 var
   List: TList;
 begin
@@ -2080,7 +2080,7 @@ begin
   end;
 end;
 
-procedure TChatServer.OnDisconnect(AContext: TIdContext);
+procedure TChatServer.OnDisconnect(AContext: TIdContext);  
 var
   List: TList;
   Username: string;
@@ -2105,7 +2105,7 @@ begin
   end;
 end;
 
-procedure TChatServer.OnExecute(AContext: TIdContext);
+procedure TChatServer.OnExecute(AContext: TIdContext);  
 var
   Message, Username: string;
 begin
@@ -2145,7 +2145,7 @@ begin
   end;
 end;
 
-procedure TChatServer.BroadcastMessage(const AMessage: string; ASender: TIdContext);
+procedure TChatServer.BroadcastMessage(const AMessage: string; ASender: TIdContext);  
 var
   List: TList;
   i: Integer;
@@ -2178,7 +2178,7 @@ begin
   end;
 end;
 
-procedure TChatServer.Start(Port: Integer);
+procedure TChatServer.Start(Port: Integer);  
 begin
   FServer.DefaultPort := Port;
   FServer.Active := True;
@@ -2188,7 +2188,7 @@ begin
   WriteLn;
 end;
 
-procedure TChatServer.Stop;
+procedure TChatServer.Stop;  
 begin
   if FServer.Active then
   begin
@@ -2233,14 +2233,14 @@ type
     constructor Create(AClient: TIdTCPClient);
   end;
 
-constructor TReaderThread.Create(AClient: TIdTCPClient);
+constructor TReaderThread.Create(AClient: TIdTCPClient);  
 begin
   inherited Create(False);
   FreeOnTerminate := True;
   FClient := AClient;
 end;
 
-procedure TReaderThread.Execute;
+procedure TReaderThread.Execute;  
 var
   Message: string;
 begin
@@ -2263,7 +2263,7 @@ begin
   end;
 end;
 
-procedure ChatClient;
+procedure ChatClient;  
 var
   Client: TIdTCPClient;
   ReaderThread: TReaderThread;
@@ -2356,14 +2356,14 @@ type
     procedure Start(Port: Integer);
   end;
 
-constructor TProxyServer.Create;
+constructor TProxyServer.Create;  
 begin
   FServer := TIdHTTPServer.Create(nil);
   FServer.OnCommandGet := @OnCommandGet;
   FHTTPClient := TIdHTTP.Create(nil);
 end;
 
-destructor TProxyServer.Destroy;
+destructor TProxyServer.Destroy;  
 begin
   FHTTPClient.Free;
   FServer.Free;
@@ -2423,7 +2423,7 @@ begin
   end;
 end;
 
-procedure TProxyServer.Start(Port: Integer);
+procedure TProxyServer.Start(Port: Integer);  
 begin
   FServer.DefaultPort := Port;
   FServer.Active := True;
@@ -2489,7 +2489,7 @@ implementation
 
 {$R *.lfm}
 
-constructor TFormDownload.Create(TheOwner: TComponent);
+constructor TFormDownload.Create(TheOwner: TComponent);  
 begin
   inherited Create(TheOwner);
 
@@ -2508,7 +2508,7 @@ begin
   IdHTTP.OnWorkEnd := @OnWorkEnd;
 end;
 
-destructor TFormDownload.Destroy;
+destructor TFormDownload.Destroy;  
 begin
   SSLHandler.Free;
   IdHTTP.Free;
@@ -2549,7 +2549,7 @@ begin
   end;
 end;
 
-procedure TFormDownload.OnWorkEnd(ASender: TObject; AWorkMode: TWorkMode);
+procedure TFormDownload.OnWorkEnd(ASender: TObject; AWorkMode: TWorkMode);  
 begin
   if AWorkMode = wmRead then
   begin
@@ -2559,7 +2559,7 @@ begin
   end;
 end;
 
-procedure TFormDownload.ButtonDownloadClick(Sender: TObject);
+procedure TFormDownload.ButtonDownloadClick(Sender: TObject);  
 var
   FileStream: TFileStream;
   URL: string;
@@ -2616,7 +2616,7 @@ uses
   SysUtils, Classes,
   IdDNSResolver;
 
-procedure ResoudreDNS(const Hostname: string);
+procedure ResoudreDNS(const Hostname: string);  
 var
   DNS: TIdDNSResolver;
   i: Integer;
@@ -2717,20 +2717,20 @@ type
     procedure Start(Port: Integer);
   end;
 
-constructor TFileServer.Create(const ARootDir: string);
+constructor TFileServer.Create(const ARootDir: string);  
 begin
   FRootDir := IncludeTrailingPathDelimiter(ARootDir);
   FServer := TIdHTTPServer.Create(nil);
   FServer.OnCommandGet := @OnCommandGet;
 end;
 
-destructor TFileServer.Destroy;
+destructor TFileServer.Destroy;  
 begin
   FServer.Free;
   inherited;
 end;
 
-function TFileServer.GetContentType(const FileName: string): string;
+function TFileServer.GetContentType(const FileName: string): string;  
 var
   Ext: string;
 begin
@@ -2769,7 +2769,7 @@ begin
     Result := 'application/octet-stream';
 end;
 
-function TFileServer.GenerateDirectoryListing(const Path: string): string;
+function TFileServer.GenerateDirectoryListing(const Path: string): string;  
 var
   SearchRec: TSearchRec;
   HTML: TStringList;
@@ -2885,7 +2885,7 @@ begin
   end;
 end;
 
-procedure TFileServer.Start(Port: Integer);
+procedure TFileServer.Start(Port: Integer);  
 begin
   FServer.DefaultPort := Port;
   FServer.Active := True;

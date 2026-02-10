@@ -73,13 +73,13 @@ Quand un nombre prend plusieurs octets, dans quel ordre les envoyer ?
 
 **Big Endian (ordre naturel) :**
 ```
-Octet 1: 04
+Octet 1: 04  
 Octet 2: D2
 ```
 
 **Little Endian (inversé) :**
 ```
-Octet 1: D2
+Octet 1: D2  
 Octet 2: 04
 ```
 
@@ -204,7 +204,7 @@ type
 
 implementation
 
-class function TProtocoleChat.CreerMessageTexte(const Texte: String): TMessageChat;
+class function TProtocoleChat.CreerMessageTexte(const Texte: String): TMessageChat;  
 var
   i: Integer;
   Octets: TBytes;
@@ -223,21 +223,21 @@ begin
   Result.Checksum := CalculerChecksum(Result);
 end;
 
-class function TProtocoleChat.CreerPing: TMessageChat;
+class function TProtocoleChat.CreerPing: TMessageChat;  
 begin
   Result.TypeMessage := MSG_PING;
   Result.TailleDonnees := 0;
   Result.Checksum := CalculerChecksum(Result);
 end;
 
-class function TProtocoleChat.CreerPong: TMessageChat;
+class function TProtocoleChat.CreerPong: TMessageChat;  
 begin
   Result.TypeMessage := MSG_PONG;
   Result.TailleDonnees := 0;
   Result.Checksum := CalculerChecksum(Result);
 end;
 
-class function TProtocoleChat.EncoderMessage(const Msg: TMessageChat): TBytes;
+class function TProtocoleChat.EncoderMessage(const Msg: TMessageChat): TBytes;  
 var
   i, Position: Integer;
 begin
@@ -267,7 +267,7 @@ begin
   Result[Position] := Msg.Checksum;
 end;
 
-class function TProtocoleChat.DecoderMessage(const Octets: TBytes): TMessageChat;
+class function TProtocoleChat.DecoderMessage(const Octets: TBytes): TMessageChat;  
 var
   i, Position: Integer;
 begin
@@ -303,7 +303,7 @@ begin
     raise Exception.Create('Checksum invalide');
 end;
 
-class function TProtocoleChat.CalculerChecksum(const Msg: TMessageChat): Byte;
+class function TProtocoleChat.CalculerChecksum(const Msg: TMessageChat): Byte;  
 var
   i: Integer;
 begin
@@ -316,7 +316,7 @@ begin
     Result := Result xor Msg.Donnees[i];
 end;
 
-class function TProtocoleChat.VerifierMessage(const Msg: TMessageChat): Boolean;
+class function TProtocoleChat.VerifierMessage(const Msg: TMessageChat): Boolean;  
 begin
   Result := Msg.Checksum = CalculerChecksum(Msg);
 end;
@@ -498,7 +498,7 @@ begin
   Move(Pos, Result[0], SizeOf(TPositionJoueur));
 end;
 
-class function TProtocoleJeu.DecoderPosition(const Octets: TBytes): TPositionJoueur;
+class function TProtocoleJeu.DecoderPosition(const Octets: TBytes): TPositionJoueur;  
 var
   CRCCalcule: Word;
 begin
@@ -514,7 +514,7 @@ begin
     raise Exception.Create('CRC invalide');
 end;
 
-class function TProtocoleJeu.CalculerCRC16(const Data; Taille: Integer): Word;
+class function TProtocoleJeu.CalculerCRC16(const Data; Taille: Integer): Word;  
 var
   i, j: Integer;
   Octet: Byte;
@@ -593,7 +593,7 @@ Pour des données répétitives, on peut utiliser la compression :
 uses
   zstream;
 
-function CompresserDonnees(const Donnees: TBytes): TBytes;
+function CompresserDonnees(const Donnees: TBytes): TBytes;  
 var
   InputStream, OutputStream: TBytesStream;
   Compresseur: TCompressionStream;
@@ -616,7 +616,7 @@ begin
   end;
 end;
 
-function DecompresserDonnees(const Donnees: TBytes): TBytes;
+function DecompresserDonnees(const Donnees: TBytes): TBytes;  
 var
   InputStream, OutputStream: TBytesStream;
   Decompresseur: TDecompressionStream;
@@ -712,7 +712,7 @@ type
 var
   DernierNumeroRecu: LongWord = 0;
 
-procedure TraiterMessage(const Msg: TMessageAvecSequence);
+procedure TraiterMessage(const Msg: TMessageAvecSequence);  
 begin
   if Msg.NumeroSequence <= DernierNumeroRecu then
   begin
@@ -742,12 +742,12 @@ type
     // ... autres données
   end;
 
-function ObtenirTimestamp: Int64;
+function ObtenirTimestamp: Int64;  
 begin
   Result := DateTimeToUnix(Now) * 1000 + MilliSecondOf(Now);
 end;
 
-function CalculerLatence(const Msg: TMessageHorodate): Integer;
+function CalculerLatence(const Msg: TMessageHorodate): Integer;  
 begin
   Result := ObtenirTimestamp - Msg.Timestamp;
   WriteLn('Latence : ', Result, ' ms');
@@ -771,7 +771,7 @@ type
     function ExtraireMessage: TBytes;  // nil si message incomplet
   end;
 
-procedure TRecepteurMessages.AjouterDonnees(const Nouvelles: TBytes);
+procedure TRecepteurMessages.AjouterDonnees(const Nouvelles: TBytes);  
 var
   AncienneTaille: Integer;
 begin
@@ -780,7 +780,7 @@ begin
   Move(Nouvelles[0], FBuffer[AncienneTaille], Length(Nouvelles));
 end;
 
-function TRecepteurMessages.ExtraireMessage: TBytes;
+function TRecepteurMessages.ExtraireMessage: TBytes;  
 var
   TailleMessage: Word;
 begin
@@ -894,24 +894,24 @@ type
 
 implementation
 
-constructor TSerializeur.Create;
+constructor TSerializeur.Create;  
 begin
   inherited Create;
   FStream := TMemoryStream.Create;
 end;
 
-destructor TSerializeur.Destroy;
+destructor TSerializeur.Destroy;  
 begin
   FStream.Free;
   inherited Destroy;
 end;
 
-procedure TSerializeur.EcrireByte(Valeur: Byte);
+procedure TSerializeur.EcrireByte(Valeur: Byte);  
 begin
   FStream.WriteByte(Valeur);
 end;
 
-procedure TSerializeur.EcrireWord(Valeur: Word);
+procedure TSerializeur.EcrireWord(Valeur: Word);  
 var
   ValeurReseau: Word;
 begin
@@ -920,7 +920,7 @@ begin
   FStream.Write(ValeurReseau, SizeOf(Word));
 end;
 
-procedure TSerializeur.EcrireLongWord(Valeur: LongWord);
+procedure TSerializeur.EcrireLongWord(Valeur: LongWord);  
 var
   ValeurReseau: LongWord;
 begin
@@ -928,18 +928,18 @@ begin
   FStream.Write(ValeurReseau, SizeOf(LongWord));
 end;
 
-procedure TSerializeur.EcrireSingle(Valeur: Single);
+procedure TSerializeur.EcrireSingle(Valeur: Single);  
 begin
   // Les floats sont écrits directement (attention à l'endianness si nécessaire)
   FStream.Write(Valeur, SizeOf(Single));
 end;
 
-procedure TSerializeur.EcrireDouble(Valeur: Double);
+procedure TSerializeur.EcrireDouble(Valeur: Double);  
 begin
   FStream.Write(Valeur, SizeOf(Double));
 end;
 
-procedure TSerializeur.EcrireString(const Valeur: String);
+procedure TSerializeur.EcrireString(const Valeur: String);  
 var
   Octets: TBytes;
   Longueur: Word;
@@ -956,7 +956,7 @@ begin
     FStream.Write(Octets[0], Longueur);
 end;
 
-procedure TSerializeur.EcrireBoolean(Valeur: Boolean);
+procedure TSerializeur.EcrireBoolean(Valeur: Boolean);  
 begin
   if Valeur then
     EcrireByte(1)
@@ -964,12 +964,12 @@ begin
     EcrireByte(0);
 end;
 
-function TSerializeur.LireByte: Byte;
+function TSerializeur.LireByte: Byte;  
 begin
   Result := FStream.ReadByte;
 end;
 
-function TSerializeur.LireWord: Word;
+function TSerializeur.LireWord: Word;  
 var
   ValeurReseau: Word;
 begin
@@ -977,7 +977,7 @@ begin
   Result := ntohs(ValeurReseau);
 end;
 
-function TSerializeur.LireLongWord: LongWord;
+function TSerializeur.LireLongWord: LongWord;  
 var
   ValeurReseau: LongWord;
 begin
@@ -985,17 +985,17 @@ begin
   Result := ntohl(ValeurReseau);
 end;
 
-function TSerializeur.LireSingle: Single;
+function TSerializeur.LireSingle: Single;  
 begin
   FStream.Read(Result, SizeOf(Single));
 end;
 
-function TSerializeur.LireDouble: Double;
+function TSerializeur.LireDouble: Double;  
 begin
   FStream.Read(Result, SizeOf(Double));
 end;
 
-function TSerializeur.LireString: String;
+function TSerializeur.LireString: String;  
 var
   Longueur: Word;
   Octets: TBytes;
@@ -1012,12 +1012,12 @@ begin
     Result := '';
 end;
 
-function TSerializeur.LireBoolean: Boolean;
+function TSerializeur.LireBoolean: Boolean;  
 begin
   Result := LireByte <> 0;
 end;
 
-function TSerializeur.ObtenirDonnees: TBytes;
+function TSerializeur.ObtenirDonnees: TBytes;  
 begin
   SetLength(Result, FStream.Size);
   if FStream.Size > 0 then
@@ -1027,7 +1027,7 @@ begin
   end;
 end;
 
-procedure TSerializeur.ChargerDonnees(const Donnees: TBytes);
+procedure TSerializeur.ChargerDonnees(const Donnees: TBytes);  
 begin
   FStream.Clear;
   if Length(Donnees) > 0 then
@@ -1035,7 +1035,7 @@ begin
   FStream.Position := 0;
 end;
 
-procedure TSerializeur.Reinitialiser;
+procedure TSerializeur.Reinitialiser;  
 begin
   FStream.Clear;
 end;
@@ -1058,7 +1058,7 @@ type
     EstActif: Boolean;
   end;
 
-procedure SerialiserJoueur(const Joueur: TJoueur; out Donnees: TBytes);
+procedure SerialiserJoueur(const Joueur: TJoueur; out Donnees: TBytes);  
 var
   S: TSerializeur;
 begin
@@ -1078,7 +1078,7 @@ begin
   end;
 end;
 
-function DeserialiserJoueur(const Donnees: TBytes): TJoueur;
+function DeserialiserJoueur(const Donnees: TBytes): TJoueur;  
 var
   S: TSerializeur;
 begin
@@ -1177,7 +1177,7 @@ begin
   Result.Valeur := Valeur;
 end;
 
-class function TProtocoleTLV.EncoderChamp(const Champ: TTLVChamp): TBytes;
+class function TProtocoleTLV.EncoderChamp(const Champ: TTLVChamp): TBytes;  
 var
   Position: Integer;
 begin
@@ -1225,7 +1225,7 @@ begin
   end;
 end;
 
-class function TProtocoleTLV.EncoderMessage(const Champs: array of TTLVChamp): TBytes;
+class function TProtocoleTLV.EncoderMessage(const Champs: array of TTLVChamp): TBytes;  
 var
   i, Position, TailleTotal: Integer;
   ChampEncode: TBytes;
@@ -1247,7 +1247,7 @@ begin
   end;
 end;
 
-class function TProtocoleTLV.DecoderMessage(const Octets: TBytes): TArray<TTLVChamp>;
+class function TProtocoleTLV.DecoderMessage(const Octets: TBytes): TArray<TTLVChamp>;  
 var
   Position: Integer;
   Champ: TTLVChamp;
@@ -1343,7 +1343,7 @@ type
     procedure Liberer(var Buffer: TBytes);
   end;
 
-constructor TBufferPool.Create(TailleBuffer: Integer; NbBuffersInitial: Integer);
+constructor TBufferPool.Create(TailleBuffer: Integer; NbBuffersInitial: Integer);  
 var
   i: Integer;
   Buffer: TBytes;
@@ -1360,13 +1360,13 @@ begin
   end;
 end;
 
-destructor TBufferPool.Destroy;
+destructor TBufferPool.Destroy;  
 begin
   FBuffersDisponibles.Free;
   inherited Destroy;
 end;
 
-function TBufferPool.Obtenir: TBytes;
+function TBufferPool.Obtenir: TBytes;  
 begin
   if FBuffersDisponibles.Count > 0 then
   begin
@@ -1380,7 +1380,7 @@ begin
   end;
 end;
 
-procedure TBufferPool.Liberer(var Buffer: TBytes);
+procedure TBufferPool.Liberer(var Buffer: TBytes);  
 begin
   FBuffersDisponibles.Add(Pointer(Buffer));
   Buffer := nil;
@@ -1410,7 +1410,7 @@ type
     property Taille: Integer read FTaille;
   end;
 
-constructor TLecteurBinaireDirect.Create(Donnees: PByte; Taille: Integer);
+constructor TLecteurBinaireDirect.Create(Donnees: PByte; Taille: Integer);  
 begin
   inherited Create;
   FDonnees := Donnees;
@@ -1418,7 +1418,7 @@ begin
   FPosition := 0;
 end;
 
-function TLecteurBinaireDirect.LireByte: Byte;
+function TLecteurBinaireDirect.LireByte: Byte;  
 begin
   if FPosition >= FTaille then
     raise Exception.Create('Lecture au-delà de la fin des données');
@@ -1427,7 +1427,7 @@ begin
   Inc(FPosition);
 end;
 
-function TLecteurBinaireDirect.LireWord: Word;
+function TLecteurBinaireDirect.LireWord: Word;  
 var
   P: PWord;
 begin
@@ -1439,7 +1439,7 @@ begin
   Inc(FPosition, 2);
 end;
 
-function TLecteurBinaireDirect.LireLongWord: LongWord;
+function TLecteurBinaireDirect.LireLongWord: LongWord;  
 var
   P: PLongWord;
 begin
@@ -1451,7 +1451,7 @@ begin
   Inc(FPosition, 4);
 end;
 
-procedure TLecteurBinaireDirect.Sauter(NbOctets: Integer);
+procedure TLecteurBinaireDirect.Sauter(NbOctets: Integer);  
 begin
   Inc(FPosition, NbOctets);
   if FPosition > FTaille then
@@ -1500,7 +1500,7 @@ type
     // ... autres champs
   end;
 
-function VerifierCompatibilite(VersionRecue: Word): Boolean;
+function VerifierCompatibilite(VersionRecue: Word): Boolean;  
 var
   MajeurRecue, MineurRecue: Byte;
   MajeurActuelle, MineurActuelle: Byte;
@@ -1523,7 +1523,7 @@ end;
 ### Migration entre versions
 
 ```pascal
-function LireMessageV1(const Octets: TBytes): TMessage;
+function LireMessageV1(const Octets: TBytes): TMessage;  
 begin
   // Lecture format version 1
   Result.X := ReadSingle(Octets, 0);
@@ -1531,7 +1531,7 @@ begin
   Result.Z := 0;  // Pas de Z en v1
 end;
 
-function LireMessageV2(const Octets: TBytes): TMessage;
+function LireMessageV2(const Octets: TBytes): TMessage;  
 begin
   // Lecture format version 2
   Result.X := ReadSingle(Octets, 0);
@@ -1539,7 +1539,7 @@ begin
   Result.Z := ReadSingle(Octets, 8);  // Z ajouté en v2
 end;
 
-function LireMessage(Version: Word; const Octets: TBytes): TMessage;
+function LireMessage(Version: Word; const Octets: TBytes): TMessage;  
 begin
   case Version of
     $0100: Result := LireMessageV1(Octets);
@@ -1555,7 +1555,7 @@ end;
 ### Dump hexadécimal
 
 ```pascal
-procedure AfficherHexDump(const Donnees: TBytes);
+procedure AfficherHexDump(const Donnees: TBytes);  
 var
   i, j: Integer;
   Ligne: String;
@@ -1605,7 +1605,7 @@ end;
 
 **Exemple de sortie :**
 ```
-Hex Dump (26 octets):
+Hex Dump (26 octets):  
 Offset    00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F  ASCII
 ------------------------------------------------------------------------------
 00000000  10 00 00 30 39 42 C8 00  00 48 43 00 00 C8 42 00  ...09B...HC...B.
@@ -1621,7 +1621,7 @@ type
     class procedure AnalyserMessage(const Donnees: TBytes);
   end;
 
-class procedure TAnalyseurProtocole.AnalyserMessage(const Donnees: TBytes);
+class procedure TAnalyseurProtocole.AnalyserMessage(const Donnees: TBytes);  
 var
   Position: Integer;
 begin
@@ -1683,7 +1683,7 @@ begin
     Result[3 + Taille] := Result[3 + Taille] xor Result[i];
 end;
 
-class function TGenerateurTest.GenererSequenceTest: TArray<TBytes>;
+class function TGenerateurTest.GenererSequenceTest: TArray<TBytes>;  
 begin
   SetLength(Result, 5);
   Result[0] := GenererMessageAleatoire($01, 10);
@@ -1731,7 +1731,7 @@ begin
   Move(Msg, Result[0], SizeOf(TMessageCapteur));
 end;
 
-function DecoderMessageCapteur(const Octets: TBytes): TMessageCapteur;
+function DecoderMessageCapteur(const Octets: TBytes): TMessageCapteur;  
 var
   CRCCalcule: Word;
 begin
@@ -1749,7 +1749,7 @@ begin
   Result.IDCapteur := ntohl(Result.IDCapteur);
 end;
 
-procedure AfficherDonneesCapteur(const Msg: TMessageCapteur);
+procedure AfficherDonneesCapteur(const Msg: TMessageCapteur);  
 var
   TypeStr: String;
   UniteStr: String;
@@ -1864,7 +1864,7 @@ type
     Hash: array[0..31] of Byte;  // SHA-256
   end;
 
-function CreerCommandeListeFichiers(NumSeq: LongWord): TBytes;
+function CreerCommandeListeFichiers(NumSeq: LongWord): TBytes;  
 var
   EnTete: TEnTeteSync;
 begin
@@ -1932,7 +1932,7 @@ begin
   Move(EnTete.CRC32, Result[SizeOf(TEnTeteSync) - SizeOf(LongWord)], SizeOf(LongWord));
 end;
 
-procedure TraiterCommandeSync(const Octets: TBytes);
+procedure TraiterCommandeSync(const Octets: TBytes);  
 var
   EnTete: TEnTeteSync;
   CRCCalcule: LongWord;
@@ -1980,14 +1980,14 @@ end;
 uses
   WinSock2;
 
-function InitialiserReseau: Boolean;
+function InitialiserReseau: Boolean;  
 var
   WSAData: TWSAData;
 begin
   Result := WSAStartup(MakeWord(2, 2), WSAData) = 0;
 end;
 
-procedure TerminerReseau;
+procedure TerminerReseau;  
 begin
   WSACleanup;
 end;
@@ -2000,13 +2000,13 @@ end;
 uses
   Sockets, BaseUnix;
 
-function InitialiserReseau: Boolean;
+function InitialiserReseau: Boolean;  
 begin
   // Pas d'initialisation nécessaire sous Linux
   Result := True;
 end;
 
-procedure TerminerReseau;
+procedure TerminerReseau;  
 begin
   // Pas de nettoyage nécessaire sous Linux
 end;
@@ -2017,7 +2017,7 @@ end;
 
 **Code multi-plateforme :**
 ```pascal
-function EnvoyerDonnees(Socket: TSocket; const Donnees: TBytes): Boolean;
+function EnvoyerDonnees(Socket: TSocket; const Donnees: TBytes): Boolean;  
 var
   BytesEnvoyes: Integer;
 begin
@@ -2056,7 +2056,7 @@ end;
 ### Chemins de fichiers dans les protocoles
 
 ```pascal
-function NormaliserChemin(const Chemin: String): String;
+function NormaliserChemin(const Chemin: String): String;  
 begin
   Result := Chemin;
 
@@ -2071,13 +2071,13 @@ begin
   {$ENDIF}
 end;
 
-function CodifierCheminPourProtocole(const Chemin: String): String;
+function CodifierCheminPourProtocole(const Chemin: String): String;  
 begin
   // Dans le protocole, toujours utiliser / (convention Unix)
   Result := StringReplace(Chemin, '\', '/', [rfReplaceAll]);
 end;
 
-function DecodifierCheminDepuisProtocole(const Chemin: String): String;
+function DecodifierCheminDepuisProtocole(const Chemin: String): String;  
 begin
   {$IFDEF WINDOWS}
   Result := StringReplace(Chemin, '/', '\', [rfReplaceAll]);
@@ -2092,12 +2092,12 @@ end;
 
 ```pascal
 // Fonctions de conversion multi-plateformes
-function SwapEndian16(Value: Word): Word; inline;
+function SwapEndian16(Value: Word): Word; inline;  
 begin
   Result := (Value shr 8) or (Value shl 8);
 end;
 
-function SwapEndian32(Value: LongWord): LongWord; inline;
+function SwapEndian32(Value: LongWord): LongWord; inline;  
 begin
   Result := (Value shr 24) or
             ((Value and $00FF0000) shr 8) or
@@ -2105,7 +2105,7 @@ begin
             (Value shl 24);
 end;
 
-function SwapEndian64(Value: Int64): Int64;
+function SwapEndian64(Value: Int64): Int64;  
 var
   Bytes: array[0..7] of Byte absolute Value;
   ResultBytes: array[0..7] of Byte absolute Result;
@@ -2121,7 +2121,7 @@ begin
 end;
 
 // Conversion automatique selon la plateforme
-function ToNetworkOrder16(Value: Word): Word; inline;
+function ToNetworkOrder16(Value: Word): Word; inline;  
 begin
   {$IFDEF ENDIAN_LITTLE}
   Result := SwapEndian16(Value);
@@ -2130,7 +2130,7 @@ begin
   {$ENDIF}
 end;
 
-function ToNetworkOrder32(Value: LongWord): LongWord; inline;
+function ToNetworkOrder32(Value: LongWord): LongWord; inline;  
 begin
   {$IFDEF ENDIAN_LITTLE}
   Result := SwapEndian32(Value);
@@ -2139,7 +2139,7 @@ begin
   {$ENDIF}
 end;
 
-function FromNetworkOrder16(Value: Word): Word; inline;
+function FromNetworkOrder16(Value: Word): Word; inline;  
 begin
   {$IFDEF ENDIAN_LITTLE}
   Result := SwapEndian16(Value);
@@ -2148,7 +2148,7 @@ begin
   {$ENDIF}
 end;
 
-function FromNetworkOrder32(Value: LongWord): LongWord; inline;
+function FromNetworkOrder32(Value: LongWord): LongWord; inline;  
 begin
   {$IFDEF ENDIAN_LITTLE}
   Result := SwapEndian32(Value);
@@ -2187,7 +2187,7 @@ implementation
 uses
   ProtocoleChat;
 
-procedure TTestProtocole.TestEncodageDecodage;
+procedure TTestProtocole.TestEncodageDecodage;  
 var
   MsgOriginal, MsgDecode: TMessageChat;
   Octets: TBytes;
@@ -2207,7 +2207,7 @@ begin
   AssertEquals('Checksum incorrect', MsgOriginal.Checksum, MsgDecode.Checksum);
 end;
 
-procedure TTestProtocole.TestIntegrite;
+procedure TTestProtocole.TestIntegrite;  
 var
   Msg: TMessageChat;
   Octets: TBytes;
@@ -2228,14 +2228,14 @@ begin
   end;
 end;
 
-procedure TTestProtocole.TestVersions;
+procedure TTestProtocole.TestVersions;  
 begin
   // Tester différentes versions du protocole
   // À implémenter selon vos besoins
   AssertTrue('Test de versions', True);
 end;
 
-procedure TTestProtocole.TestMessagesInvalides;
+procedure TTestProtocole.TestMessagesInvalides;  
 var
   OctetsTropCourts: TBytes;
 begin
@@ -2250,7 +2250,7 @@ begin
   end;
 end;
 
-procedure TTestProtocole.TestPerformance;
+procedure TTestProtocole.TestPerformance;  
 var
   i: Integer;
   Debut, Fin: TDateTime;
@@ -2290,7 +2290,7 @@ program FuzzingProtocole;
 uses
   SysUtils, ProtocoleChat;
 
-procedure FuzzTest(NbIterations: Integer);
+procedure FuzzTest(NbIterations: Integer);  
 var
   i, j, Taille: Integer;
   Octets: TBytes;
@@ -2342,7 +2342,7 @@ end.
 ### 1. Toujours valider les entrées
 
 ```pascal
-function DecoderMessageSecurise(const Octets: TBytes): TMessage;
+function DecoderMessageSecurise(const Octets: TBytes): TMessage;  
 begin
   // Vérifier la taille minimale
   if Length(Octets) < TAILLE_MIN_MESSAGE then
@@ -2368,7 +2368,7 @@ end;
 ### 2. Logger pour le debugging
 
 ```pascal
-procedure LoggerMessage(Direction: String; const Octets: TBytes);
+procedure LoggerMessage(Direction: String; const Octets: TBytes);  
 var
   Timestamp: String;
   LogFile: TextFile;
@@ -2391,7 +2391,7 @@ begin
 end;
 
 // Utilisation
-procedure EnvoyerMessage(Socket: TSocket; const Msg: TBytes);
+procedure EnvoyerMessage(Socket: TSocket; const Msg: TBytes);  
 begin
   LoggerMessage('ENVOI', Msg);
   fpSend(Socket, @Msg[0], Length(Msg), 0);
@@ -2469,7 +2469,7 @@ Taille totale: 4 + N octets
 
 3. CALCUL DU CHECKSUM
 ───────────────────────────────────────────────────────────────
-Le checksum est le XOR de tous les octets du message (type,
+Le checksum est le XOR de tous les octets du message (type,  
 taille, et données), mais pas du checksum lui-même.
 
 Exemple:
@@ -2502,8 +2502,8 @@ Décodage:
 
 6. COMPATIBILITÉ
 ───────────────────────────────────────────────────────────────
-Windows: OK (testé sur Windows 10/11)
-Linux: OK (testé sur Ubuntu 20.04/22.04)
+Windows: OK (testé sur Windows 10/11)  
+Linux: OK (testé sur Ubuntu 20.04/22.04)  
 macOS: OK (testé sur macOS 12+)
 ═══════════════════════════════════════════════════════════════
 ```

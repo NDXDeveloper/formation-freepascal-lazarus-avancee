@@ -109,14 +109,14 @@ type
     procedure DoHandleDisconnect; override;
   end;
 
-procedure TMonWebSocketHandler.DoHandleConnect;
+procedure TMonWebSocketHandler.DoHandleConnect;  
 begin
   WriteLn('Nouveau client connecté !');
   // Envoyer un message de bienvenue
   Send('Bienvenue sur le serveur WebSocket !');
 end;
 
-procedure TMonWebSocketHandler.DoHandleMessage;
+procedure TMonWebSocketHandler.DoHandleMessage;  
 var
   MessageRecu: String;
 begin
@@ -128,7 +128,7 @@ begin
   Send('Serveur dit : J''ai reçu votre message "' + MessageRecu + '"');
 end;
 
-procedure TMonWebSocketHandler.DoHandleDisconnect;
+procedure TMonWebSocketHandler.DoHandleDisconnect;  
 begin
   WriteLn('Client déconnecté');
 end;
@@ -191,7 +191,7 @@ Contient le contenu du dernier message reçu du client.
 **4. Configuration du serveur**
 
 ```pascal
-Serveur.Port := 8080;
+Serveur.Port := 8080;  
 Serveur.RegisterWebSocketHandler('/ws', TMonWebSocketHandler);
 ```
 
@@ -314,7 +314,7 @@ type
     procedure DoHandleMessage; override;
   end;
 
-procedure TMonClientWebSocket.DoHandleMessage;
+procedure TMonClientWebSocket.DoHandleMessage;  
 begin
   WriteLn('Message du serveur : ', Message);
 end;
@@ -379,7 +379,7 @@ var
   // Liste globale de tous les clients connectés
   ClientsConnectes: TObjectList;
 
-procedure DiffuserMessage(const Expediteur, Message: String);
+procedure DiffuserMessage(const Expediteur, Message: String);  
 var
   i: Integer;
   Client: TChatHandler;
@@ -392,7 +392,7 @@ begin
   end;
 end;
 
-procedure TChatHandler.DoHandleConnect;
+procedure TChatHandler.DoHandleConnect;  
 begin
   // Ajouter ce client à la liste
   ClientsConnectes.Add(Self);
@@ -403,7 +403,7 @@ begin
   Send('Bienvenue ! Quel est votre pseudo ?');
 end;
 
-procedure TChatHandler.DoHandleMessage;
+procedure TChatHandler.DoHandleMessage;  
 var
   Msg: String;
 begin
@@ -424,7 +424,7 @@ begin
   end;
 end;
 
-procedure TChatHandler.DoHandleDisconnect;
+procedure TChatHandler.DoHandleDisconnect;  
 begin
   // Retirer ce client de la liste
   ClientsConnectes.Remove(Self);
@@ -512,7 +512,7 @@ JSON (JavaScript Object Notation) est un format de données structuré très pra
 uses
   fpjson, jsonparser;
 
-procedure TChatHandler.DoHandleMessage;
+procedure TChatHandler.DoHandleMessage;  
 var
   MsgJSON: TJSONObject;
   TypeMsg, Contenu: String;
@@ -588,7 +588,7 @@ ws.onmessage = function(event) {
 ### Gestion côté serveur
 
 ```pascal
-procedure TChatHandler.DoHandleMessage;
+procedure TChatHandler.DoHandleMessage;  
 begin
   try
     // Traitement du message
@@ -607,7 +607,7 @@ end;
 ### Reconnexion automatique (client JavaScript)
 
 ```javascript
-let ws;
+let ws;  
 let reconnectInterval = 1000; // 1 seconde
 
 function connecter() {
@@ -643,8 +643,8 @@ Pour utiliser WebSocket sur SSL/TLS (wss:// au lieu de ws://), vous devez :
 3. Les WebSockets utiliseront automatiquement SSL
 
 ```pascal
-Serveur.UseSSL := True;
-Serveur.CertificateFile := '/chemin/vers/certificat.pem';
+Serveur.UseSSL := True;  
+Serveur.CertificateFile := '/chemin/vers/certificat.pem';  
 Serveur.PrivateKeyFile := '/chemin/vers/cle.pem';
 ```
 
@@ -654,13 +654,13 @@ Serveur.PrivateKeyFile := '/chemin/vers/cle.pem';
 
 ```javascript
 // Client
-const token = 'mon_token_secret';
+const token = 'mon_token_secret';  
 ws = new WebSocket(`ws://localhost:8080/ws?token=${token}`);
 ```
 
 ```pascal
 // Serveur
-procedure TChatHandler.DoHandleConnect;
+procedure TChatHandler.DoHandleConnect;  
 var
   Token: String;
 begin
@@ -690,7 +690,7 @@ type
     procedure DoHandleMessage; override;
   end;
 
-procedure TChatHandler.DoHandleMessage;
+procedure TChatHandler.DoHandleMessage;  
 var
   Maintenant: TDateTime;
   DeltaSecondes: Double;
@@ -742,14 +742,14 @@ end;
 
 **Windows :**
 ```batch
-REM Ouvrir le port 8080 dans le pare-feu Windows
+REM Ouvrir le port 8080 dans le pare-feu Windows  
 netsh advfirewall firewall add rule name="WebSocket Server" dir=in action=allow protocol=TCP localport=8080
 ```
 
 **Ubuntu :**
 ```bash
 # Ouvrir le port avec UFW
-sudo ufw allow 8080/tcp
+sudo ufw allow 8080/tcp  
 sudo ufw reload
 ```
 
@@ -759,7 +759,7 @@ Pour exécuter votre serveur WebSocket comme service :
 
 **Windows (avec NSSM) :**
 ```batch
-nssm install MonServeurWS "C:\chemin\vers\serveur.exe"
+nssm install MonServeurWS "C:\chemin\vers\serveur.exe"  
 nssm start MonServeurWS
 ```
 
@@ -767,13 +767,13 @@ nssm start MonServeurWS
 ```ini
 # /etc/systemd/system/serveurws.service
 [Unit]
-Description=Serveur WebSocket
+Description=Serveur WebSocket  
 After=network.target
 
 [Service]
-Type=simple
-User=www-data
-ExecStart=/usr/local/bin/serveur
+Type=simple  
+User=www-data  
+ExecStart=/usr/local/bin/serveur  
 Restart=always
 
 [Install]
@@ -781,7 +781,7 @@ WantedBy=multi-user.target
 ```
 
 ```bash
-sudo systemctl enable serveurws
+sudo systemctl enable serveurws  
 sudo systemctl start serveurws
 ```
 
@@ -805,7 +805,7 @@ wscat -c ws://localhost:8080/ws
 **3. Logs détaillés :**
 
 ```pascal
-procedure TChatHandler.DoHandleMessage;
+procedure TChatHandler.DoHandleMessage;  
 begin
   WriteLn('[', FormatDateTime('yyyy-mm-dd hh:nn:ss', Now), '] ',
           'Message de ', FPseudo, ' : ', Message);
@@ -826,7 +826,7 @@ end;
 
 ```pascal
 // Serveur - envoyer un ping toutes les 30 secondes
-procedure TMonServeur.TimerPing(Sender: TObject);
+procedure TMonServeur.TimerPing(Sender: TObject);  
 var
   i: Integer;
 begin
@@ -840,7 +840,7 @@ end;
 ### Limiter la taille des messages
 
 ```pascal
-procedure TChatHandler.DoHandleMessage;
+procedure TChatHandler.DoHandleMessage;  
 const
   TAILLE_MAX = 10240; // 10 KB
 begin

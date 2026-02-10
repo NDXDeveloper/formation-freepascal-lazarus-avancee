@@ -31,10 +31,10 @@ Client                          Serveur
 Une requête HTTP ressemble à ceci :
 
 ```http
-GET /index.html HTTP/1.1
-Host: www.example.com
-User-Agent: Mozilla/5.0
-Accept: text/html
+GET /index.html HTTP/1.1  
+Host: www.example.com  
+User-Agent: Mozilla/5.0  
+Accept: text/html  
 Connection: keep-alive
 
 ```
@@ -42,9 +42,9 @@ Connection: keep-alive
 Une réponse HTTP ressemble à ceci :
 
 ```http
-HTTP/1.1 200 OK
-Content-Type: text/html
-Content-Length: 138
+HTTP/1.1 200 OK  
+Content-Type: text/html  
+Content-Length: 138  
 Date: Mon, 27 Jul 2024 12:28:53 GMT
 
 <!DOCTYPE html>
@@ -65,7 +65,7 @@ program MinimalHTTPServer;
 uses
   SysUtils, Classes, StrUtils, Sockets;
 
-function ParseHTTPRequest(const Request: string; out Method, Path, Version: string): Boolean;
+function ParseHTTPRequest(const Request: string; out Method, Path, Version: string): Boolean;  
 var
   FirstLine: string;
   SpacePos1, SpacePos2: Integer;
@@ -90,7 +90,7 @@ begin
   Result := True;
 end;
 
-procedure HandleClient(ClientSocket: TSocket);
+procedure HandleClient(ClientSocket: TSocket);  
 var
   Request: string;
   Response: string;
@@ -268,24 +268,24 @@ implementation
 
 { THTTPHeaders }
 
-constructor THTTPHeaders.Create;
+constructor THTTPHeaders.Create;  
 begin
   FHeaders := TStringList.Create;
   FHeaders.NameValueSeparator := ':';
 end;
 
-destructor THTTPHeaders.Destroy;
+destructor THTTPHeaders.Destroy;  
 begin
   FHeaders.Free;
   inherited;
 end;
 
-procedure THTTPHeaders.Add(const Name, Value: string);
+procedure THTTPHeaders.Add(const Name, Value: string);  
 begin
   FHeaders.Add(Name + ':' + Trim(Value));
 end;
 
-function THTTPHeaders.Get(const Name: string): string;
+function THTTPHeaders.Get(const Name: string): string;  
 var
   Index: Integer;
 begin
@@ -296,31 +296,31 @@ begin
     Result := '';
 end;
 
-function THTTPHeaders.Has(const Name: string): Boolean;
+function THTTPHeaders.Has(const Name: string): Boolean;  
 begin
   Result := FHeaders.IndexOfName(Name) >= 0;
 end;
 
-procedure THTTPHeaders.Clear;
+procedure THTTPHeaders.Clear;  
 begin
   FHeaders.Clear;
 end;
 
 { THTTPRequest }
 
-constructor THTTPRequest.Create;
+constructor THTTPRequest.Create;  
 begin
   FHeaders := THTTPHeaders.Create;
   FMethod := hmUnknown;
 end;
 
-destructor THTTPRequest.Destroy;
+destructor THTTPRequest.Destroy;  
 begin
   FHeaders.Free;
   inherited;
 end;
 
-function THTTPRequest.Parse(const RawRequest: string): Boolean;
+function THTTPRequest.Parse(const RawRequest: string): Boolean;  
 var
   Lines: TStringList;
   i, QueryPos: Integer;
@@ -455,14 +455,14 @@ type
 
 { THTTPServer }
 
-constructor THTTPServer.Create(APort: Word);
+constructor THTTPServer.Create(APort: Word);  
 begin
   FPort := APort;
   FSocket := INVALID_SOCKET;
   SetLength(FRoutes, 0);
 end;
 
-destructor THTTPServer.Destroy;
+destructor THTTPServer.Destroy;  
 begin
   Stop;
   inherited;
@@ -482,7 +482,7 @@ begin
   WriteLn('Route ajoutée: ', Path);
 end;
 
-function THTTPServer.FindRoute(Method: THTTPMethod; const Path: string): Integer;
+function THTTPServer.FindRoute(Method: THTTPMethod; const Path: string): Integer;  
 var
   i: Integer;
 begin
@@ -498,7 +498,7 @@ begin
   end;
 end;
 
-procedure THTTPServer.HandleClient(ClientSocket: TSocket);
+procedure THTTPServer.HandleClient(ClientSocket: TSocket);  
 var
   Buffer: array[0..8191] of Char;
   Received: Integer;
@@ -567,7 +567,7 @@ begin
   CloseSocket(ClientSocket);
 end;
 
-procedure THTTPServer.Start;
+procedure THTTPServer.Start;  
 var
   ServerAddr, ClientAddr: TInetSockAddr;
   ClientSocket: TSocket;
@@ -618,7 +618,7 @@ begin
   end;
 end;
 
-procedure THTTPServer.Stop;
+procedure THTTPServer.Stop;  
 begin
   if FSocket <> INVALID_SOCKET then
   begin
@@ -629,7 +629,7 @@ end;
 
 // ========== Handlers ==========
 
-procedure HandleHome(Request: THTTPRequest; out Response: string);
+procedure HandleHome(Request: THTTPRequest; out Response: string);  
 begin
   Response :=
     '<!DOCTYPE html>'#13#10 +
@@ -647,7 +647,7 @@ begin
     '</html>';
 end;
 
-procedure HandleAbout(Request: THTTPRequest; out Response: string);
+procedure HandleAbout(Request: THTTPRequest; out Response: string);  
 begin
   Response :=
     '<!DOCTYPE html>'#13#10 +
@@ -661,7 +661,7 @@ begin
     '</html>';
 end;
 
-procedure HandleContact(Request: THTTPRequest; out Response: string);
+procedure HandleContact(Request: THTTPRequest; out Response: string);  
 begin
   Response :=
     '<!DOCTYPE html>'#13#10 +
@@ -675,7 +675,7 @@ begin
     '</html>';
 end;
 
-procedure HandleAPITime(Request: THTTPRequest; out Response: string);
+procedure HandleAPITime(Request: THTTPRequest; out Response: string);  
 begin
   Response :=
     '{"time":"' + FormatDateTime('yyyy-mm-dd hh:nn:ss', Now) + '",' +
@@ -742,7 +742,7 @@ uses
 
 { TFileServer }
 
-constructor TFileServer.Create(const ARootDirectory: string);
+constructor TFileServer.Create(const ARootDirectory: string);  
 begin
   FRootDirectory := IncludeTrailingPathDelimiter(ExpandFileName(ARootDirectory));
 
@@ -750,7 +750,7 @@ begin
     raise Exception.Create('Répertoire inexistant: ' + FRootDirectory);
 end;
 
-function TFileServer.GetContentType(const FileName: string): string;
+function TFileServer.GetContentType(const FileName: string): string;  
 var
   Ext: string;
 begin
@@ -789,7 +789,7 @@ begin
   else Result := 'application/octet-stream';
 end;
 
-function TFileServer.IsPathSafe(const Path: string): Boolean;
+function TFileServer.IsPathSafe(const Path: string): Boolean;  
 begin
   // Empêcher les attaques de type "directory traversal"
   Result := (Pos('..', Path) = 0) and
@@ -797,7 +797,7 @@ begin
             (Copy(Path, 1, 1) <> '/');
 end;
 
-function TFileServer.GetFullPath(const Path: string): string;
+function TFileServer.GetFullPath(const Path: string): string;  
 var
   CleanPath: string;
 begin
@@ -811,7 +811,7 @@ begin
   Result := FRootDirectory + CleanPath;
 end;
 
-function TFileServer.FileExistsInRoot(const Path: string): Boolean;
+function TFileServer.FileExistsInRoot(const Path: string): Boolean;  
 var
   FullPath: string;
 begin
@@ -873,7 +873,7 @@ begin
   end;
 end;
 
-function TFileServer.GenerateDirectoryListing(const Path: string): string;
+function TFileServer.GenerateDirectoryListing(const Path: string): string;  
 var
   FullPath: string;
   SearchRec: TSearchRec;
@@ -988,7 +988,7 @@ program StaticFileServer;
 uses
   SysUtils, Classes, Sockets, HTTPParser, HTTPFileServer;
 
-procedure HandleRequest(ClientSocket: TSocket; const RootDir: string);
+procedure HandleRequest(ClientSocket: TSocket; const RootDir: string);  
 var
   Buffer: array[0..8191] of Char;
   Received: Integer;
@@ -1162,21 +1162,21 @@ type
     Body: string;
   end;
 
-function CreateResponse(StatusCode: Integer; const Body: string = ''): THTTPResponse;
-function ResponseToString(const Response: THTTPResponse): string;
+function CreateResponse(StatusCode: Integer; const Body: string = ''): THTTPResponse;  
+function ResponseToString(const Response: THTTPResponse): string;  
 procedure SetResponseHeader(var Response: THTTPResponse; const Name, Value: string);
 
 // Handlers pour différentes méthodes
-procedure HandleGET(Request: THTTPRequest; var Response: THTTPResponse);
-procedure HandlePOST(Request: THTTPRequest; var Response: THTTPResponse);
-procedure HandlePUT(Request: THTTPRequest; var Response: THTTPResponse);
-procedure HandleDELETE(Request: THTTPRequest; var Response: THTTPResponse);
-procedure HandleHEAD(Request: THTTPRequest; var Response: THTTPResponse);
+procedure HandleGET(Request: THTTPRequest; var Response: THTTPResponse);  
+procedure HandlePOST(Request: THTTPRequest; var Response: THTTPResponse);  
+procedure HandlePUT(Request: THTTPRequest; var Response: THTTPResponse);  
+procedure HandleDELETE(Request: THTTPRequest; var Response: THTTPResponse);  
+procedure HandleHEAD(Request: THTTPRequest; var Response: THTTPResponse);  
 procedure HandleOPTIONS(Request: THTTPRequest; var Response: THTTPResponse);
 
 implementation
 
-function GetStatusText(StatusCode: Integer): string;
+function GetStatusText(StatusCode: Integer): string;  
 begin
   case StatusCode of
     200: Result := 'OK';
@@ -1198,7 +1198,7 @@ begin
   end;
 end;
 
-function CreateResponse(StatusCode: Integer; const Body: string = ''): THTTPResponse;
+function CreateResponse(StatusCode: Integer; const Body: string = ''): THTTPResponse;  
 begin
   Result.StatusCode := StatusCode;
   Result.StatusText := GetStatusText(StatusCode);
@@ -1218,7 +1218,7 @@ begin
   end;
 end;
 
-procedure SetResponseHeader(var Response: THTTPResponse; const Name, Value: string);
+procedure SetResponseHeader(var Response: THTTPResponse; const Name, Value: string);  
 var
   Index: Integer;
 begin
@@ -1229,7 +1229,7 @@ begin
     Response.Headers.Add(Name + ':' + Value);
 end;
 
-function ResponseToString(const Response: THTTPResponse): string;
+function ResponseToString(const Response: THTTPResponse): string;  
 var
   i: Integer;
 begin
@@ -1248,14 +1248,14 @@ begin
     Result := Result + Response.Body;
 end;
 
-procedure HandleGET(Request: THTTPRequest; var Response: THTTPResponse);
+procedure HandleGET(Request: THTTPRequest; var Response: THTTPResponse);  
 begin
   Response := CreateResponse(200,
     '<html><body><h1>Méthode GET</h1>' +
     '<p>Chemin: ' + Request.Path + '</p></body></html>');
 end;
 
-procedure HandlePOST(Request: THTTPRequest; var Response: THTTPResponse);
+procedure HandlePOST(Request: THTTPRequest; var Response: THTTPResponse);  
 var
   Body: string;
 begin
@@ -1269,28 +1269,28 @@ begin
   Response := CreateResponse(200, Body);
 end;
 
-procedure HandlePUT(Request: THTTPRequest; var Response: THTTPResponse);
+procedure HandlePUT(Request: THTTPRequest; var Response: THTTPResponse);  
 begin
   Response := CreateResponse(201,
     '<html><body><h1>Méthode PUT</h1>' +
     '<p>Ressource créée/mise à jour: ' + Request.Path + '</p></body></html>');
 end;
 
-procedure HandleDELETE(Request: THTTPRequest; var Response: THTTPResponse);
+procedure HandleDELETE(Request: THTTPRequest; var Response: THTTPResponse);  
 begin
   Response := CreateResponse(200,
     '<html><body><h1>Méthode DELETE</h1>' +
     '<p>Ressource supprimée: ' + Request.Path + '</p></body></html>');
 end;
 
-procedure HandleHEAD(Request: THTTPRequest; var Response: THTTPResponse);
+procedure HandleHEAD(Request: THTTPRequest; var Response: THTTPResponse);  
 begin
   // HEAD est comme GET mais sans corps
   Response := CreateResponse(200);
   Response.Body := ''; // Pas de corps pour HEAD
 end;
 
-procedure HandleOPTIONS(Request: THTTPRequest; var Response: THTTPResponse);
+procedure HandleOPTIONS(Request: THTTPRequest; var Response: THTTPResponse);  
 begin
   Response := CreateResponse(200);
   SetResponseHeader(Response, 'Allow', 'GET, POST, PUT, DELETE, HEAD, OPTIONS');
@@ -1325,7 +1325,7 @@ var
   NextID: Integer = 1;
 
 // Fonctions utilitaires JSON
-function UserToJSON(const User: TUser): TJSONObject;
+function UserToJSON(const User: TUser): TJSONObject;  
 begin
   Result := TJSONObject.Create;
   Result.Add('id', User.ID);
@@ -1333,7 +1333,7 @@ begin
   Result.Add('email', User.Email);
 end;
 
-function UsersArrayToJSON: TJSONArray;
+function UsersArrayToJSON: TJSONArray;  
 var
   i: Integer;
 begin
@@ -1342,7 +1342,7 @@ begin
     Result.Add(UserToJSON(Users[i]));
 end;
 
-function FindUserByID(ID: Integer): Integer;
+function FindUserByID(ID: Integer): Integer;  
 var
   i: Integer;
 begin
@@ -1356,7 +1356,7 @@ begin
 end;
 
 // Handlers API
-procedure HandleGetUsers(Request: THTTPRequest; var Response: THTTPResponse);
+procedure HandleGetUsers(Request: THTTPRequest; var Response: THTTPResponse);  
 var
   JSONArray: TJSONArray;
   JSONResponse: TJSONObject;
@@ -1380,7 +1380,7 @@ begin
   end;
 end;
 
-procedure HandleGetUser(Request: THTTPRequest; var Response: THTTPResponse);
+procedure HandleGetUser(Request: THTTPRequest; var Response: THTTPResponse);  
 var
   IDStr: string;
   ID, Index: Integer;
@@ -1417,7 +1417,7 @@ begin
   end;
 end;
 
-procedure HandleCreateUser(Request: THTTPRequest; var Response: THTTPResponse);
+procedure HandleCreateUser(Request: THTTPRequest; var Response: THTTPResponse);  
 var
   JSONData: TJSONData;
   JSONObj: TJSONObject;
@@ -1468,7 +1468,7 @@ begin
   end;
 end;
 
-procedure HandleUpdateUser(Request: THTTPRequest; var Response: THTTPResponse);
+procedure HandleUpdateUser(Request: THTTPRequest; var Response: THTTPResponse);  
 var
   IDStr: string;
   ID, Index: Integer;
@@ -1531,7 +1531,7 @@ begin
   end;
 end;
 
-procedure HandleDeleteUser(Request: THTTPRequest; var Response: THTTPResponse);
+procedure HandleDeleteUser(Request: THTTPRequest; var Response: THTTPResponse);  
 var
   IDStr: string;
   ID, Index, i: Integer;
@@ -1572,7 +1572,7 @@ begin
   end;
 end;
 
-procedure HandleAPIRequest(ClientSocket: TSocket);
+procedure HandleAPIRequest(ClientSocket: TSocket);  
 var
   Buffer: array[0..8191] of Char;
   Received: Integer;
@@ -1749,7 +1749,7 @@ implementation
 
 { THTTPSServer }
 
-constructor THTTPSServer.Create(APort: Word; const ACertFile, AKeyFile: string);
+constructor THTTPSServer.Create(APort: Word; const ACertFile, AKeyFile: string);  
 begin
   FPort := APort;
   FCertFile := ACertFile;
@@ -1758,13 +1758,13 @@ begin
   FSSLContext := nil;
 end;
 
-destructor THTTPSServer.Destroy;
+destructor THTTPSServer.Destroy;  
 begin
   Stop;
   inherited;
 end;
 
-function THTTPSServer.InitSSL: Boolean;
+function THTTPSServer.InitSSL: Boolean;  
 begin
   Result := False;
 
@@ -1809,7 +1809,7 @@ begin
   Result := True;
 end;
 
-procedure THTTPSServer.CleanupSSL;
+procedure THTTPSServer.CleanupSSL;  
 begin
   if FSSLContext <> nil then
   begin
@@ -1820,7 +1820,7 @@ begin
   EVP_cleanup;
 end;
 
-function THTTPSServer.AcceptSSLConnection(ClientSocket: TSocket): PSSL;
+function THTTPSServer.AcceptSSLConnection(ClientSocket: TSocket): PSSL;  
 var
   SSL: PSSL;
 begin
@@ -1846,7 +1846,7 @@ begin
   WriteLn('Connexion SSL établie');
 end;
 
-procedure THTTPSServer.Start;
+procedure THTTPSServer.Start;  
 var
   ServerAddr, ClientAddr: TInetSockAddr;
   ClientSocket: TSocket;
@@ -1951,7 +1951,7 @@ begin
   end;
 end;
 
-procedure THTTPSServer.Stop;
+procedure THTTPSServer.Stop;  
 begin
   if FSocket <> INVALID_SOCKET then
   begin
@@ -2029,13 +2029,13 @@ uses
 
 { TSessionManager }
 
-constructor TSessionManager.Create(ATimeout: Integer);
+constructor TSessionManager.Create(ATimeout: Integer);  
 begin
   FTimeout := ATimeout;
   SetLength(FSessions, 0);
 end;
 
-destructor TSessionManager.Destroy;
+destructor TSessionManager.Destroy;  
 var
   i: Integer;
 begin
@@ -2044,7 +2044,7 @@ begin
   inherited;
 end;
 
-function TSessionManager.GenerateSessionID: string;
+function TSessionManager.GenerateSessionID: string;  
 var
   GUIDStr: string;
 begin
@@ -2052,7 +2052,7 @@ begin
   Result := MD5Print(MD5String(GUIDStr + DateTimeToStr(Now)));
 end;
 
-function TSessionManager.FindSession(const SessionID: string): Integer;
+function TSessionManager.FindSession(const SessionID: string): Integer;  
 var
   i: Integer;
 begin
@@ -2065,7 +2065,7 @@ begin
     end;
 end;
 
-function TSessionManager.CreateSession: string;
+function TSessionManager.CreateSession: string;  
 var
   Index: Integer;
 begin
@@ -2098,7 +2098,7 @@ begin
   end;
 end;
 
-procedure TSessionManager.SetSessionData(const SessionID, Key, Value: string);
+procedure TSessionManager.SetSessionData(const SessionID, Key, Value: string);  
 var
   Index: Integer;
 begin
@@ -2110,7 +2110,7 @@ begin
   end;
 end;
 
-function TSessionManager.GetSessionData(const SessionID, Key: string): string;
+function TSessionManager.GetSessionData(const SessionID, Key: string): string;  
 var
   Index: Integer;
 begin
@@ -2124,7 +2124,7 @@ begin
   end;
 end;
 
-procedure TSessionManager.DestroySession(const SessionID: string);
+procedure TSessionManager.DestroySession(const SessionID: string);  
 var
   Index, i: Integer;
 begin
@@ -2142,7 +2142,7 @@ begin
   end;
 end;
 
-procedure TSessionManager.CleanupExpiredSessions;
+procedure TSessionManager.CleanupExpiredSessions;  
 var
   i: Integer;
   ExpiredTime: TDateTime;
@@ -2201,7 +2201,7 @@ begin
   end;
 end;
 
-function ExtractSessionIDFromCookie(const CookieHeader: string): string;
+function ExtractSessionIDFromCookie(const CookieHeader: string): string;  
 var
   StartPos, EndPos: Integer;
 begin
@@ -2243,14 +2243,14 @@ type
 
 { TClientThread }
 
-constructor TClientThread.Create(AClientSocket: TSocket);
+constructor TClientThread.Create(AClientSocket: TSocket);  
 begin
   inherited Create(False);
   FreeOnTerminate := True;
   FClientSocket := AClientSocket;
 end;
 
-procedure TClientThread.Execute;
+procedure TClientThread.Execute;  
 var
   Buffer: array[0..8191] of Char;
   Received: Integer;
@@ -2383,13 +2383,13 @@ type
     procedure AddTask(ClientSocket: TSocket);
   end;
 
-constructor TWorkerThread.Create(AQueue: TThreadList);
+constructor TWorkerThread.Create(AQueue: TThreadList);  
 begin
   inherited Create(False);
   FQueue := AQueue;
 end;
 
-procedure TWorkerThread.Execute;
+procedure TWorkerThread.Execute;  
 var
   List: TList;
   ClientSocket: TSocket;
@@ -2420,7 +2420,7 @@ begin
   end;
 end;
 
-constructor TThreadPool.Create(AMaxThreads: Integer);
+constructor TThreadPool.Create(AMaxThreads: Integer);  
 var
   i: Integer;
 begin
@@ -2434,7 +2434,7 @@ begin
   WriteLn('Thread pool créé avec ', FMaxThreads, ' threads');
 end;
 
-destructor TThreadPool.Destroy;
+destructor TThreadPool.Destroy;  
 var
   i: Integer;
 begin
@@ -2449,7 +2449,7 @@ begin
   inherited;
 end;
 
-procedure TThreadPool.AddTask(ClientSocket: TSocket);
+procedure TThreadPool.AddTask(ClientSocket: TSocket);  
 var
   List: TList;
 begin
@@ -2479,7 +2479,7 @@ type
     procedure Execute(Request: THTTPRequest; var Response: THTTPResponse);
   end;
 
-procedure TMiddlewareChain.Add(Middleware: TMiddleware);
+procedure TMiddlewareChain.Add(Middleware: TMiddleware);  
 begin
   SetLength(FMiddlewares, Length(FMiddlewares) + 1);
   FMiddlewares[High(FMiddlewares)] := Middleware;
@@ -2547,7 +2547,7 @@ end;
 
 ```pascal
 // Validation des entrées
-function SanitizeInput(const Input: string): string;
+function SanitizeInput(const Input: string): string;  
 begin
   Result := StringReplace(Input, '<', '&lt;', [rfReplaceAll]);
   Result := StringReplace(Result, '>', '&gt;', [rfReplaceAll]);
@@ -2556,7 +2556,7 @@ begin
 end;
 
 // Protection contre les injections SQL
-function EscapeSQL(const Input: string): string;
+function EscapeSQL(const Input: string): string;  
 begin
   Result := StringReplace(Input, '''', '''''', [rfReplaceAll]);
 end;
@@ -2565,7 +2565,7 @@ end;
 const
   MAX_REQUEST_SIZE = 1024 * 1024; // 1 MB
 
-procedure ValidateRequestSize(Size: Integer);
+procedure ValidateRequestSize(Size: Integer);  
 begin
   if Size > MAX_REQUEST_SIZE then
     raise Exception.Create('Request too large');
@@ -2592,7 +2592,7 @@ type
 var
   Cache: array of TCacheEntry;
 
-function FindInCache(const Path: string; MaxAge: Integer): Integer;
+function FindInCache(const Path: string; MaxAge: Integer): Integer;  
 var
   i: Integer;
   ExpireTime: TDateTime;
@@ -2610,7 +2610,7 @@ begin
   end;
 end;
 
-procedure AddToCache(const Path, Content, ContentType: string);
+procedure AddToCache(const Path, Content, ContentType: string);  
 var
   Index: Integer;
   ETag: string;
@@ -2629,7 +2629,7 @@ begin
 end;
 
 // Keep-Alive
-procedure SetKeepAlive(var Response: THTTPResponse; Timeout, MaxRequests: Integer);
+procedure SetKeepAlive(var Response: THTTPResponse; Timeout, MaxRequests: Integer);  
 begin
   SetResponseHeader(Response, 'Connection', 'keep-alive');
   SetResponseHeader(Response, 'Keep-Alive',
@@ -2637,7 +2637,7 @@ begin
 end;
 
 // Chunked Transfer Encoding (pour les réponses volumineuses)
-function CreateChunkedResponse(const Data: string): string;
+function CreateChunkedResponse(const Data: string): string;  
 var
   ChunkSize: Integer;
   Pos, Remaining: Integer;
@@ -2701,7 +2701,7 @@ implementation
 
 { THTTPLogger }
 
-constructor THTTPLogger.Create(const ALogFilePath: string; AMinLevel: TLogLevel);
+constructor THTTPLogger.Create(const ALogFilePath: string; AMinLevel: TLogLevel);  
 begin
   FLogFilePath := ALogFilePath;
   FMinLevel := AMinLevel;
@@ -2713,19 +2713,19 @@ begin
     Rewrite(FLogFile);
 end;
 
-destructor THTTPLogger.Destroy;
+destructor THTTPLogger.Destroy;  
 begin
   CloseFile(FLogFile);
   inherited;
 end;
 
-procedure THTTPLogger.WriteToFile(const Line: string);
+procedure THTTPLogger.WriteToFile(const Line: string);  
 begin
   WriteLn(FLogFile, Line);
   Flush(FLogFile);
 end;
 
-procedure THTTPLogger.Log(Level: TLogLevel; const Message: string);
+procedure THTTPLogger.Log(Level: TLogLevel; const Message: string);  
 var
   LevelStr: string;
   Line: string;
@@ -2747,22 +2747,22 @@ begin
   WriteLn(Line); // Aussi dans la console
 end;
 
-procedure THTTPLogger.Debug(const Message: string);
+procedure THTTPLogger.Debug(const Message: string);  
 begin
   Log(llDebug, Message);
 end;
 
-procedure THTTPLogger.Info(const Message: string);
+procedure THTTPLogger.Info(const Message: string);  
 begin
   Log(llInfo, Message);
 end;
 
-procedure THTTPLogger.Warning(const Message: string);
+procedure THTTPLogger.Warning(const Message: string);  
 begin
   Log(llWarning, Message);
 end;
 
-procedure THTTPLogger.Error(const Message: string);
+procedure THTTPLogger.Error(const Message: string);  
 begin
   Log(llError, Message);
 end;
@@ -2823,7 +2823,7 @@ implementation
 
 { TServerConfig }
 
-constructor TServerConfig.Create(const ConfigFile: string);
+constructor TServerConfig.Create(const ConfigFile: string);  
 begin
   FIniFile := TIniFile.Create(ConfigFile);
 
@@ -2840,13 +2840,13 @@ begin
   FLogFile := 'server.log';
 end;
 
-destructor TServerConfig.Destroy;
+destructor TServerConfig.Destroy;  
 begin
   FIniFile.Free;
   inherited;
 end;
 
-procedure TServerConfig.LoadFromFile;
+procedure TServerConfig.LoadFromFile;  
 begin
   FPort := FIniFile.ReadInteger('Server', 'Port', FPort);
   FMaxConnections := FIniFile.ReadInteger('Server', 'MaxConnections', FMaxConnections);
@@ -2862,7 +2862,7 @@ begin
   FLogFile := FIniFile.ReadString('Logging', 'LogFile', FLogFile);
 end;
 
-procedure TServerConfig.SaveToFile;
+procedure TServerConfig.SaveToFile;  
 begin
   FIniFile.WriteInteger('Server', 'Port', FPort);
   FIniFile.WriteInteger('Server', 'MaxConnections', FMaxConnections);
@@ -2887,19 +2887,19 @@ end.
 
 ```ini
 [Server]
-Port=8080
-MaxConnections=100
-ThreadPoolSize=4
-Timeout=30
+Port=8080  
+MaxConnections=100  
+ThreadPoolSize=4  
+Timeout=30  
 RootDirectory=/var/www/html
 
 [SSL]
-Enable=false
-CertFile=cert.pem
+Enable=false  
+CertFile=cert.pem  
 KeyFile=key.pem
 
 [Logging]
-Enable=true
+Enable=true  
 LogFile=server.log
 ```
 
@@ -2933,7 +2933,7 @@ type
 
 { TAdvancedServer }
 
-constructor TAdvancedServer.Create(const ConfigFile: string);
+constructor TAdvancedServer.Create(const ConfigFile: string);  
 begin
   FConfig := TServerConfig.Create(ConfigFile);
   FConfig.LoadFromFile;
@@ -2950,7 +2950,7 @@ begin
   FRunning := False;
 end;
 
-destructor TAdvancedServer.Destroy;
+destructor TAdvancedServer.Destroy;  
 begin
   Stop;
   FFileServer.Free;
@@ -3070,7 +3070,7 @@ begin
   CloseSocket(ClientSocket);
 end;
 
-procedure TAdvancedServer.Start;
+procedure TAdvancedServer.Start;  
 var
   ServerAddr, ClientAddr: TInetSockAddr;
   ClientSocket: TSocket;
@@ -3147,7 +3147,7 @@ begin
   end;
 end;
 
-procedure TAdvancedServer.Stop;
+procedure TAdvancedServer.Stop;  
 begin
   FRunning := False;
 
@@ -3233,16 +3233,16 @@ Contenu du fichier `myhttp.service` :
 
 ```ini
 [Unit]
-Description=Mon Serveur HTTP FreePascal
+Description=Mon Serveur HTTP FreePascal  
 After=network.target
 
 [Service]
-Type=simple
-User=www-data
-Group=www-data
-WorkingDirectory=/opt/myserver
-ExecStart=/opt/myserver/AdvancedHTTPServer
-Restart=always
+Type=simple  
+User=www-data  
+Group=www-data  
+WorkingDirectory=/opt/myserver  
+ExecStart=/opt/myserver/AdvancedHTTPServer  
+Restart=always  
 RestartSec=5
 
 [Install]
@@ -3251,8 +3251,8 @@ WantedBy=multi-user.target
 
 ```bash
 # 3. Activation et démarrage
-sudo systemctl daemon-reload
-sudo systemctl enable myhttp.service
+sudo systemctl daemon-reload  
+sudo systemctl enable myhttp.service  
 sudo systemctl start myhttp.service
 
 # 4. Vérification du statut
@@ -3271,8 +3271,8 @@ fpc -O3 AdvancedHTTPServer.pas
 # 2. Installation comme service Windows (nécessite NSSM)
 # Télécharger NSSM: https://nssm.cc/download
 
-nssm install MyHTTPServer "C:\Server\AdvancedHTTPServer.exe"
-nssm set MyHTTPServer AppDirectory "C:\Server"
+nssm install MyHTTPServer "C:\Server\AdvancedHTTPServer.exe"  
+nssm set MyHTTPServer AppDirectory "C:\Server"  
 nssm start MyHTTPServer
 
 # Vérification
@@ -3283,7 +3283,7 @@ nssm status MyHTTPServer
 
 **Ubuntu :**
 ```bash
-sudo ufw allow 8080/tcp
+sudo ufw allow 8080/tcp  
 sudo ufw reload
 ```
 
@@ -3314,8 +3314,8 @@ server {
 
 ```bash
 # Activation
-sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/
-sudo nginx -t
+sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/  
+sudo nginx -t  
 sudo systemctl reload nginx
 ```
 

@@ -396,11 +396,11 @@ Client 2 ─┘
 Le protocole du web :
 
 ```http
-GET /api/users HTTP/1.1
-Host: example.com
+GET /api/users HTTP/1.1  
+Host: example.com  
 Accept: application/json
 
-HTTP/1.1 200 OK
+HTTP/1.1 200 OK  
 Content-Type: application/json
 
 {"users": [...]}
@@ -417,7 +417,7 @@ Content-Type: application/json
 Transfert de fichiers :
 
 ```
-Control Connection (port 21) : Commandes
+Control Connection (port 21) : Commandes  
 Data Connection (port 20)    : Transfert
 ```
 
@@ -452,8 +452,8 @@ Client <══════════> Serveur
 Chiffrement des communications :
 
 ```
-HTTP  + SSL/TLS = HTTPS
-SMTP  + SSL/TLS = SMTPS
+HTTP  + SSL/TLS = HTTPS  
+SMTP  + SSL/TLS = SMTPS  
 FTP   + SSL/TLS = FTPS
 ```
 
@@ -509,14 +509,14 @@ sudo tcpdump -i eth0 port 8080
 **3. netstat / ss**
 ```bash
 # Voir les connexions actives
-netstat -an | grep 8080
+netstat -an | grep 8080  
 ss -an | grep 8080
 ```
 
 **4. telnet / nc (netcat)**
 ```bash
 # Tester une connexion TCP
-telnet localhost 8080
+telnet localhost 8080  
 nc -v localhost 8080
 ```
 
@@ -612,7 +612,7 @@ netsh advfirewall firewall add rule name="MyApp" dir=in action=allow protocol=TC
 
 **Linux :**
 ```bash
-sudo ufw allow 8080/tcp
+sudo ufw allow 8080/tcp  
 sudo firewall-cmd --add-port=8080/tcp --permanent
 ```
 
