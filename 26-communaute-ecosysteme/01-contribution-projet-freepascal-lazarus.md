@@ -174,14 +174,14 @@ lazarus/
 Avant de commencer, configurez votre identité Git :
 
 ```bash
-git config --global user.name "Votre Nom"
+git config --global user.name "Votre Nom"  
 git config --global user.email "votre.email@example.com"
 
 # Configuration optionnelle mais recommandée
-git config --global core.autocrlf input  # Linux/Mac
+git config --global core.autocrlf input  # Linux/Mac  
 git config --global core.autocrlf true   # Windows
 
-git config --global pull.rebase false
+git config --global pull.rebase false  
 git config --global init.defaultBranch main
 ```
 
@@ -303,7 +303,7 @@ make compiler
 make rtl
 
 # Compiler un package spécifique
-cd packages/fcl-base
+cd packages/fcl-base  
 make clean all
 ```
 
@@ -318,13 +318,13 @@ make clean all
 ```cmd
 cd fpc-source
 
-REM Nettoyer et compiler tout
+REM Nettoyer et compiler tout  
 make clean all
 
-REM Installer localement
+REM Installer localement  
 make install PREFIX=C:\fpc-dev
 
-REM Compiler juste le compilateur
+REM Compiler juste le compilateur  
 make compiler
 ```
 
@@ -334,7 +334,7 @@ make compiler
 # Dans MSYS2
 pacman -S make mingw-w64-x86_64-gcc
 
-cd /c/dev/fpc-source
+cd /c/dev/fpc-source  
 make clean all
 ```
 
@@ -352,7 +352,7 @@ echo 'begin writeln("Hello FPC!"); end.' > test.pas
 ./test
 
 # Exécuter la suite de tests
-cd tests
+cd tests  
 make clean all
 ```
 
@@ -386,7 +386,7 @@ make clean all OPT="-g -gl -O1"
 make clean all OPT="-O3 -Xs"
 
 # Compiler un widgetset spécifique
-make clean all LCL_PLATFORM=gtk2
+make clean all LCL_PLATFORM=gtk2  
 make clean all LCL_PLATFORM=qt5
 ```
 
@@ -395,13 +395,13 @@ make clean all LCL_PLATFORM=qt5
 ```cmd
 cd lazarus-source
 
-REM Définir le FPC à utiliser
+REM Définir le FPC à utiliser  
 set PATH=C:\fpc\bin\i386-win32;%PATH%
 
-REM Compiler
+REM Compiler  
 make clean bigide
 
-REM Lancer
+REM Lancer  
 lazarus.exe
 ```
 
@@ -414,11 +414,11 @@ Vous pouvez compiler des parties spécifiques :
 make cleanide ideintf
 
 # Compiler la LCL uniquement
-cd lcl
+cd lcl  
 make clean all
 
 # Compiler un package spécifique
-cd components/synedit
+cd components/synedit  
 lazbuild synedit.lpk
 ```
 
@@ -454,7 +454,7 @@ Le processus de contribution suit ce schéma classique :
 
 ```bash
 # Cloner VOTRE fork (remplacer 'votrecompte')
-git clone git@gitlab.com:votrecompte/fpc-source.git
+git clone git@gitlab.com:votrecompte/fpc-source.git  
 cd fpc-source
 
 # Ajouter le dépôt officiel comme "upstream"
@@ -473,8 +473,8 @@ git remote -v
 
 ```bash
 # 1. Synchroniser avec upstream
-git fetch upstream
-git checkout main
+git fetch upstream  
+git checkout main  
 git merge upstream/main
 
 # 2. Créer une branche pour votre correction
@@ -489,7 +489,7 @@ make rtl
 ./tests/test-format
 
 # 5. Vérifier les modifications
-git status
+git status  
 git diff
 
 # 6. Ajouter les fichiers modifiés
@@ -523,7 +523,7 @@ git push origin fix-sysutils-format-bug
 Fixes a memory leak in TStringList.Delete when the list contains objects.
 
 ## Problem
-When calling TStringList.Delete with OwnsObjects=True, the object
+When calling TStringList.Delete with OwnsObjects=True, the object  
 was not freed properly if an exception occurred during deletion.
 
 ## Solution
@@ -551,7 +551,7 @@ Les mainteneurs vont probablement demander des modifications :
 nano rtl/objpas/sysutils/sysstr.inc
 
 # 2. Commiter les changements
-git add rtl/objpas/sysutils/sysstr.inc
+git add rtl/objpas/sysutils/sysstr.inc  
 git commit -m "Address review comments: improve error message"
 
 # 3. Pousser les modifications
@@ -609,7 +609,7 @@ unit fcl.db.sqldb;
 
 ```pascal
 // Utiliser 2 espaces d'indentation
-procedure Example;
+procedure Example;  
 var
   i: Integer;
 begin
@@ -624,15 +624,15 @@ begin
 end;
 
 // Espaces autour des opérateurs
-x := y + z;
+x := y + z;  
 Result := (a * b) + c;
 
 // Pas d'espace avant les parenthèses de fonction
-WriteLn('Hello');  // ✅
+WriteLn('Hello');  // ✅  
 WriteLn ('Hello'); // ❌
 
 // Mais espace après les mots-clés
-if x > 0 then     // ✅
+if x > 0 then     // ✅  
 if(x > 0)then     // ❌
 ```
 
@@ -646,7 +646,7 @@ if Condition then begin
 end;
 
 // Pour les fonctions/procédures
-function GetValue: Integer;
+function GetValue: Integer;  
 begin
   Result := FValue;
 end;
@@ -689,7 +689,7 @@ x := x + 1; // Incrémenter le compteur
   end;
   #)
 }
-function Add(AValue1, AValue2: Integer): Integer;
+function Add(AValue1, AValue2: Integer): Integer;  
 begin
   Result := AValue1 + AValue2;
 end;
@@ -758,7 +758,7 @@ The application crashes with Access Violation
 
 ## Code Sample
 ```pascal
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 var
   List: TStringList;
 begin
@@ -798,7 +798,7 @@ end;
 grep -r "TStringList.Delete" rtl/
 
 # 4. Écrire un test qui échoue
-cd tests/test/units/sysutils
+cd tests/test/units/sysutils  
 nano tstringlist_test.pas
 
 # 5. Corriger le bug
@@ -816,7 +816,7 @@ git commit -m "Classes: Fix TStringList.Delete memory leak"
 
 ```pascal
 // AVANT (buggy)
-procedure TStringList.Delete(Index: Integer);
+procedure TStringList.Delete(Index: Integer);  
 begin
   if (Index < 0) or (Index >= FCount) then
     Error(SListIndexError, Index);
@@ -828,7 +828,7 @@ begin
 end;
 
 // APRÈS (corrigé)
-procedure TStringList.Delete(Index: Integer);
+procedure TStringList.Delete(Index: Integer);  
 begin
   if (Index < 0) or (Index >= FCount) then
     Error(SListIndexError, Index);
@@ -859,7 +859,7 @@ La documentation utilise le format **PasDoc** (similaire à JavaDoc) :
   @created(15 Mars 2000)
   @lastmod(10 Janvier 2024)
 }
-TCustomList = class(TPersistent)
+TCustomList = class(TPersistent)  
 private
   FList: Pointer;      //<! Pointeur vers le tableau d'éléments
   FCount: Integer;     //<! Nombre d'éléments dans la liste
@@ -898,7 +898,7 @@ Chaque package devrait avoir un fichier README :
 # FCL-DB - Free Component Library Database
 
 ## Description
-FCL-DB provides database connectivity components for FreePascal,
+FCL-DB provides database connectivity components for FreePascal,  
 similar to Delphi's DBX and ADO components.
 
 ## Supported Databases
@@ -967,12 +967,12 @@ type
 
 implementation
 
-procedure TTestSysUtils.TestFormatSimple;
+procedure TTestSysUtils.TestFormatSimple;  
 begin
   AssertEquals('Hello World', Format('Hello %s', ['World']));
 end;
 
-procedure TTestSysUtils.TestFormatWithArgs;
+procedure TTestSysUtils.TestFormatWithArgs;  
 var
   S: string;
 begin
@@ -980,12 +980,12 @@ begin
   AssertEquals('John has 5 apples', S);
 end;
 
-procedure TTestSysUtils.DoFormatInvalid;
+procedure TTestSysUtils.DoFormatInvalid;  
 begin
   Format('%z', []); // Format spécifier invalide
 end;
 
-procedure TTestSysUtils.TestFormatInvalid;
+procedure TTestSysUtils.TestFormatInvalid;  
 begin
   // Doit lever une exception
   AssertException(EConvertError, @DoFormatInvalid);
@@ -1028,7 +1028,7 @@ type
 
 implementation
 
-procedure TTestButton.SetUp;
+procedure TTestButton.SetUp;  
 begin
   Application.CreateForm(TForm, FForm);
   FButton := TButton.Create(FForm);
@@ -1036,24 +1036,24 @@ begin
   FClickCount := 0;
 end;
 
-procedure TTestButton.TearDown;
+procedure TTestButton.TearDown;  
 begin
   FForm.Free;
 end;
 
-procedure TTestButton.ButtonClickHandler(Sender: TObject);
+procedure TTestButton.ButtonClickHandler(Sender: TObject);  
 begin
   Inc(FClickCount);
 end;
 
-procedure TTestButton.TestButtonClick;
+procedure TTestButton.TestButtonClick;  
 begin
   FButton.OnClick := @ButtonClickHandler;
   FButton.Click;
   AssertEquals('Click should increment counter', 1, FClickCount);
 end;
 
-procedure TTestButton.TestButtonEnabled;
+procedure TTestButton.TestButtonEnabled;  
 begin
   FButton.Enabled := False;
   AssertFalse('Button should be disabled', FButton.Enabled);
@@ -1112,7 +1112,7 @@ type
   end;
 
 // Implémentation
-function TStringList.Join(const Separator: string): string;
+function TStringList.Join(const Separator: string): string;  
 var
   i: Integer;
 begin
@@ -1126,7 +1126,7 @@ begin
 end;
 
 // Test associé (dans tests/)
-procedure TTestStringList.TestJoin;
+procedure TTestStringList.TestJoin;  
 var
   List: TStringList;
 begin
@@ -1237,7 +1237,7 @@ Exemple : ajouter un warning pour variables non utilisées :
 ```pascal
 // Dans compiler/symtable.pas
 
-procedure TWarnUnusedVariables;
+procedure TWarnUnusedVariables;  
 var
   sym: TSymbol;
 begin
@@ -1262,7 +1262,7 @@ type
   TToken = (..., _POWER, ...);
 
 // Dans le scanner
-if c = '*' then
+if c = '*' then  
 begin
   c := current_scanner.readnextchar;
   if c = '*' then
@@ -1346,7 +1346,7 @@ procedure Register;
 
 implementation
 
-procedure Register;
+procedure Register;  
 begin
   RegisterComponents('MyTab', [TMyButton]);
 end;
@@ -1376,12 +1376,12 @@ procedure Register;
 
 implementation
 
-procedure MyMenuItemClick(Sender: TObject);
+procedure MyMenuItemClick(Sender: TObject);  
 begin
   ShowMessage('Hello from my menu extension!');
 end;
 
-procedure Register;
+procedure Register;  
 var
   Key: TIDEShortCut;
   Cmd: TIDECommand;

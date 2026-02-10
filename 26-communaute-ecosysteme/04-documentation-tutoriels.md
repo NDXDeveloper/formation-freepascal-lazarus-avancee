@@ -197,7 +197,7 @@ type
 
 implementation
 
-class function TStringHelper.IsBlank(const AText: string): Boolean;
+class function TStringHelper.IsBlank(const AText: string): Boolean;  
 begin
   Result := Trim(AText) = '';
 end;
@@ -482,8 +482,8 @@ Un guide utilisateur complet devrait contenir :
 
 ## Introduction
 
-StringHelpers est une bibliothèque Pascal qui étend les capacités
-de manipulation de chaînes de caractères avec des méthodes intuitives
+StringHelpers est une bibliothèque Pascal qui étend les capacités  
+de manipulation de chaînes de caractères avec des méthodes intuitives  
 et puissantes.
 
 ### Public cible
@@ -530,7 +530,7 @@ et puissantes.
 Testez l'installation avec ce code :
 
 ```pascal
-program TestInstall;
+program TestInstall;  
 uses
   StringHelpers;
 begin
@@ -576,10 +576,10 @@ end.
 
 **Résultat attendu :**
 ````
-Chaîne vide
-Fruit 1: pomme
-Fruit 2: banane
-Fruit 3: cerise
+Chaîne vide  
+Fruit 1: pomme  
+Fruit 2: banane  
+Fruit 3: cerise  
 Banane trouvée!
 ```
 
@@ -587,7 +587,7 @@ Banane trouvée!
 
 ### Architecture
 
-StringHelpers utilise des méthodes de classe (class methods) qui
+StringHelpers utilise des méthodes de classe (class methods) qui  
 ne nécessitent pas d'instanciation :
 
 ```pascal
@@ -622,9 +622,9 @@ function IsBlank(const AText: string): Boolean;
 **Exemples :**
 
 ```pascal
-TStringHelper.IsBlank('');        // True
-TStringHelper.IsBlank('   ');     // True
-TStringHelper.IsBlank('Hello');   // False
+TStringHelper.IsBlank('');        // True  
+TStringHelper.IsBlank('   ');     // True  
+TStringHelper.IsBlank('Hello');   // False  
 TStringHelper.IsBlank('  x  ');   // False
 ```
 
@@ -632,7 +632,7 @@ TStringHelper.IsBlank('  x  ');   // False
 
 ```pascal
 // Valider une entrée utilisateur
-if TStringHelper.IsBlank(EditNom.Text) then
+if TStringHelper.IsBlank(EditNom.Text) then  
 begin
   ShowMessage('Le nom est obligatoire');
   Exit;
@@ -650,8 +650,8 @@ function Contains(const AText, ASubStr: string): Boolean;
 **Exemples :**
 
 ```pascal
-TStringHelper.Contains('Hello World', 'World');  // True
-TStringHelper.Contains('Hello World', 'world');  // False (sensible à la casse)
+TStringHelper.Contains('Hello World', 'World');  // True  
+TStringHelper.Contains('Hello World', 'world');  // False (sensible à la casse)  
 TStringHelper.Contains('test', '');              // True (chaîne vide toujours trouvée)
 ```
 
@@ -689,7 +689,7 @@ end;
 
 ```pascal
 // Parser un fichier CSV
-procedure ParseCSV(const AFileName: string);
+procedure ParseCSV(const AFileName: string);  
 var
   Lines: TStringList;
   Line: string;
@@ -733,11 +733,11 @@ end;
 
 ```pascal
 // ❌ Mauvais
-Parts := TStringHelper.Split(Text, ',');
+Parts := TStringHelper.Split(Text, ',');  
 WriteLn(Parts[0]);  // Crash si Text est vide
 
 // ✅ Bon
-Parts := TStringHelper.Split(Text, ',');
+Parts := TStringHelper.Split(Text, ',');  
 if Length(Parts) > 0 then
   WriteLn(Parts[0]);
 ```
@@ -859,8 +859,8 @@ Ce que vous avez appris...
 
 ## Introduction
 
-Dans ce tutoriel, nous allons créer une calculatrice simple mais
-fonctionnelle avec Lazarus. Cette application illustrera les concepts
+Dans ce tutoriel, nous allons créer une calculatrice simple mais  
+fonctionnelle avec Lazarus. Cette application illustrera les concepts  
 de base de la programmation d'interface graphique.
 
 ### Ce que vous allez apprendre
@@ -976,13 +976,13 @@ type
 2. **Initialiser dans le constructeur :**
 
 ```pascal
-constructor TForm1.Create(AOwner: TComponent);
+constructor TForm1.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   ClearCalculator;
 end;
 
-procedure TForm1.ClearCalculator;
+procedure TForm1.ClearCalculator;  
 begin
   FCurrentValue := 0;
   FPreviousValue := 0;
@@ -995,7 +995,7 @@ end;
 3. **Implémenter l'ajout de chiffres :**
 
 ```pascal
-procedure TForm1.AppendDigit(ADigit: Char);
+procedure TForm1.AppendDigit(ADigit: Char);  
 begin
   if FNewNumber then
   begin
@@ -1017,7 +1017,7 @@ end;
 Double-cliquer sur Btn1 et ajouter :
 
 ```pascal
-procedure TForm1.Btn1Click(Sender: TObject);
+procedure TForm1.Btn1Click(Sender: TObject);  
 begin
   AppendDigit('1');
 end;
@@ -1032,7 +1032,7 @@ Répéter pour tous les boutons chiffres.
 // Btn0.Tag := 0, Btn1.Tag := 1, etc.
 
 // Puis une seule procédure pour tous :
-procedure TForm1.BtnDigitClick(Sender: TObject);
+procedure TForm1.BtnDigitClick(Sender: TObject);  
 begin
   AppendDigit(Chr(Ord('0') + (Sender as TButton).Tag));
 end;
@@ -1047,7 +1047,7 @@ end;
 1. **Implémenter SetOperation :**
 
 ```pascal
-procedure TForm1.SetOperation(AOp: Char);
+procedure TForm1.SetOperation(AOp: Char);  
 begin
   if not FNewNumber then
   begin
@@ -1063,7 +1063,7 @@ end;
 2. **Implémenter Calculate :**
 
 ```pascal
-procedure TForm1.Calculate;
+procedure TForm1.Calculate;  
 var
   Result: Double;
 begin
@@ -1097,33 +1097,33 @@ end;
 3. **Connecter les boutons opérateurs :**
 
 ```pascal
-procedure TForm1.BtnPlusClick(Sender: TObject);
+procedure TForm1.BtnPlusClick(Sender: TObject);  
 begin
   SetOperation('+');
 end;
 
-procedure TForm1.BtnMinusClick(Sender: TObject);
+procedure TForm1.BtnMinusClick(Sender: TObject);  
 begin
   SetOperation('-');
 end;
 
-procedure TForm1.BtnMultiplyClick(Sender: TObject);
+procedure TForm1.BtnMultiplyClick(Sender: TObject);  
 begin
   SetOperation('×');
 end;
 
-procedure TForm1.BtnDivideClick(Sender: TObject);
+procedure TForm1.BtnDivideClick(Sender: TObject);  
 begin
   SetOperation('÷');
 end;
 
-procedure TForm1.BtnEqualsClick(Sender: TObject);
+procedure TForm1.BtnEqualsClick(Sender: TObject);  
 begin
   Calculate;
   FOperation := #0;
 end;
 
-procedure TForm1.BtnClearClick(Sender: TObject);
+procedure TForm1.BtnClearClick(Sender: TObject);  
 begin
   ClearCalculator;
 end;
@@ -1138,7 +1138,7 @@ end;
 ```pascal
 // Ajouter un bouton BtnDecimal (Caption: '.')
 
-procedure TForm1.BtnDecimalClick(Sender: TObject);
+procedure TForm1.BtnDecimalClick(Sender: TObject);  
 begin
   if Pos('.', EditDisplay.Text) = 0 then
   begin
@@ -1166,7 +1166,7 @@ EditDisplay.Text := FloatToStrF(Result, ffGeneral, 10, 2);
 3. **Ajouter le support du clavier :**
 
 ```pascal
-procedure TForm1.FormKeyPress(Sender: TObject; var Key: char);
+procedure TForm1.FormKeyPress(Sender: TObject; var Key: char);  
 begin
   case Key of
     '0'..'9': AppendDigit(Key);
@@ -1221,7 +1221,7 @@ Vous avez appris à :
 
 ### Code complet
 
-Le code source complet est disponible sur GitHub :
+Le code source complet est disponible sur GitHub :  
 https://github.com/username/lazarus-calculator
 
 ### Améliorations possibles
@@ -1281,7 +1281,7 @@ Vous pouvez améliorer cette calculatrice avec :
 
 ```pascal
 // Bloc de code
-procedure Example;
+procedure Example;  
 begin
   WriteLn('Hello');
 end;
@@ -1341,7 +1341,7 @@ This is *bold* and _italic_.
 
 [source,pascal]
 ----
-procedure Example;
+procedure Example;  
 begin
   WriteLn('Hello');
 end;
@@ -1379,14 +1379,14 @@ sudo apt install doxygen graphviz
 **Fichier Doxyfile :**
 
 ```
-PROJECT_NAME           = "Ma Bibliothèque"
-OUTPUT_DIRECTORY       = docs
-INPUT                  = src
-FILE_PATTERNS          = *.pas *.pp *.inc
-RECURSIVE              = YES
-EXTRACT_ALL            = YES
-OPTIMIZE_OUTPUT_JAVA   = YES
-GENERATE_HTML          = YES
+PROJECT_NAME           = "Ma Bibliothèque"  
+OUTPUT_DIRECTORY       = docs  
+INPUT                  = src  
+FILE_PATTERNS          = *.pas *.pp *.inc  
+RECURSIVE              = YES  
+EXTRACT_ALL            = YES  
+OPTIMIZE_OUTPUT_JAVA   = YES  
+GENERATE_HTML          = YES  
 GENERATE_LATEX         = NO
 ```
 
@@ -1420,7 +1420,7 @@ pip install mkdocs mkdocs-material
 **Créer un projet :**
 
 ```bash
-mkdocs new mon-projet
+mkdocs new mon-projet  
 cd mon-projet
 ```
 
@@ -1439,8 +1439,8 @@ mon-projet/
 **Configuration (mkdocs.yml) :**
 
 ```yaml
-site_name: Ma Documentation
-site_description: Documentation complète de Ma Bibliothèque
+site_name: Ma Documentation  
+site_description: Documentation complète de Ma Bibliothèque  
 site_author: Votre Nom
 
 theme:

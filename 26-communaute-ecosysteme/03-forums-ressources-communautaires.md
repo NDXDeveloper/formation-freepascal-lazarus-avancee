@@ -156,7 +156,7 @@ Poster dans la section appropriée augmente vos chances d'obtenir une réponse r
 ## [Titre explicite]
 
 ### Description du problème
-Explication claire et concise de ce que vous essayez de faire
+Explication claire et concise de ce que vous essayez de faire  
 et du problème rencontré.
 
 ### Environnement
@@ -167,7 +167,7 @@ et du problème rencontré.
 
 ### Code pour reproduire
 [code=pascal]
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 begin
   // Code minimal reproduisant le problème
 end;
@@ -193,7 +193,7 @@ Quelle est la bonne approche pour résoudre ce problème ?
 Titre : [Beginner] TStringList causes Access Violation on Free
 
 ## Description
-I'm creating a TStringList in a button click event, but I get an
+I'm creating a TStringList in a button click event, but I get an  
 Access Violation when trying to free it.
 
 ## Environment
@@ -203,7 +203,7 @@ Access Violation when trying to free it.
 
 ## Code
 [code=pascal]
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 var
   List: TStringList;
 begin
@@ -286,7 +286,7 @@ Le forum utilise BBCode pour la mise en forme :
 **Code :**
 ```
 [code=pascal]
-procedure Test;
+procedure Test;  
 begin
   WriteLn('Hello');
 end;
@@ -367,7 +367,7 @@ Les **listes de diffusion** sont des canaux de communication par email, plus for
 **Par email :**
 ```
 À : fpc-pascal-request@lists.freepascal.org
-Sujet : subscribe
+Sujet : subscribe  
 Corps : [vide ou "subscribe"]
 ```
 
@@ -381,14 +381,14 @@ Sujet : [Question] How to use Generics with TList
 
 Hello,
 
-I'm trying to create a generic list for my custom type but
+I'm trying to create a generic list for my custom type but  
 I'm getting compilation errors.
 
 Environment:
 - FPC 3.2.2
 - Windows 10
 
-Code:
+Code:  
 type
   TMyRecord = record
     Name: string;
@@ -402,7 +402,7 @@ Error:
 
 What am I missing?
 
-Thanks,
+Thanks,  
 John
 ```
 
@@ -520,7 +520,7 @@ Focalisé sur l'IDE et la LCL.
 
 Pour rechercher spécifiquement dans un wiki :
 ```
-site:wiki.freepascal.org TStringList example
+site:wiki.freepascal.org TStringList example  
 site:wiki.lazarus.freepascal.org database tutorial
 ```
 
@@ -558,7 +558,7 @@ site:wiki.lazarus.freepascal.org database tutorial
 [https://example.com Lien externe]
 
 <syntaxhighlight lang="pascal">
-procedure Example;
+procedure Example;  
 begin
   WriteLn('Hello');
 end;
@@ -687,7 +687,7 @@ Plusieurs serveurs Discord dédiés à Pascal/Lazarus :
 
 Canaux sur Libera.Chat :
 ```
-Serveur : irc.libera.chat
+Serveur : irc.libera.chat  
 Canaux : #fpc, #lazarus-ide
 ```
 
@@ -840,19 +840,19 @@ Liste curatée de ressources :
 Recherche exacte :
 "TStringList.Create"
 
-Exclure des termes :
+Exclure des termes :  
 lazarus database -delphi
 
-Site spécifique :
+Site spécifique :  
 site:forum.lazarus.freepascal.org sqlite
 
-Type de fichier :
+Type de fichier :  
 filetype:pdf freepascal tutorial
 
-Période récente :
+Période récente :  
 lazarus tutorial after:2022
 
-Combine :
+Combine :  
 site:wiki.freepascal.org "database" filetype:html
 ```
 
@@ -928,7 +928,7 @@ Le problème vient du fait que vous libérez la liste deux fois.
 Voici le code corrigé :
 
 [code=pascal]
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Button1Click(Sender: TObject);  
 var
   List: TStringList;
 begin
@@ -942,10 +942,10 @@ begin
 end;
 [/code]
 
-L'utilisation de try..finally garantit que la liste sera toujours
+L'utilisation de try..finally garantit que la liste sera toujours  
 libérée, même si une exception se produit.
 
-Pour en savoir plus sur la gestion mémoire, voir :
+Pour en savoir plus sur la gestion mémoire, voir :  
 https://wiki.freepascal.org/Memory_management
 
 Bon courage !

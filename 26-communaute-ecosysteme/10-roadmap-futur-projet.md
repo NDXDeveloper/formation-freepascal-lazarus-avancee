@@ -163,7 +163,7 @@ Support natif de programmation asynchrone :
 
 ```pascal
 // Syntaxe proposée
-async function DownloadData(URL: string): Promise<TBytes>;
+async function DownloadData(URL: string): Promise<TBytes>;  
 begin
   Result := await HttpClient.GetAsync(URL);
 end;
@@ -561,7 +561,7 @@ Le scénario réaliste est le plus probable. Le projet est trop mature et utilis
 git clone https://gitlab.com/freepascal.org/fpc/source.git
 
 # 2. Compiler FPC depuis les sources
-cd source
+cd source  
 make clean all
 
 # 3. Soumettre une merge request pour vos modifications

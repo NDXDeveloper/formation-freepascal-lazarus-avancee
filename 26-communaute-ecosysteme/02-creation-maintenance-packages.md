@@ -50,7 +50,7 @@ unit MyCryptoUnit;
 
 interface
 
-function EncryptData(const AData: string; AKey: string): string;
+function EncryptData(const AData: string; AKey: string): string;  
 function DecryptData(const AData: string; AKey: string): string;
 
 implementation
@@ -199,7 +199,7 @@ implementation
 uses
   StrUtils;
 
-class function TStringHelper.Reverse(const AText: string): string;
+class function TStringHelper.Reverse(const AText: string): string;  
 var
   i: Integer;
 begin
@@ -208,7 +208,7 @@ begin
     Result := Result + AText[i];
 end;
 
-class function TStringHelper.CountWords(const AText: string): Integer;
+class function TStringHelper.CountWords(const AText: string): Integer;  
 var
   InWord: Boolean;
   i: Integer;
@@ -228,14 +228,14 @@ begin
   end;
 end;
 
-class function TStringHelper.Capitalize(const AText: string): string;
+class function TStringHelper.Capitalize(const AText: string): string;  
 begin
   if Length(AText) = 0 then
     Exit('');
   Result := UpperCase(AText[1]) + LowerCase(Copy(AText, 2, Length(AText)));
 end;
 
-class function TStringHelper.RemoveSpaces(const AText: string): string;
+class function TStringHelper.RemoveSpaces(const AText: string): string;  
 var
   i: Integer;
 begin
@@ -362,7 +362,7 @@ implementation
 uses
   LCLIntf;
 
-constructor TEnhancedLabel.Create(AOwner: TComponent);
+constructor TEnhancedLabel.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FShadowColor := clGray;
@@ -373,35 +373,35 @@ begin
   Height := 20;
 end;
 
-procedure TEnhancedLabel.SetShadowColor(AValue: TColor);
+procedure TEnhancedLabel.SetShadowColor(AValue: TColor);  
 begin
   if FShadowColor = AValue then Exit;
   FShadowColor := AValue;
   Invalidate;
 end;
 
-procedure TEnhancedLabel.SetShadowOffset(AValue: Integer);
+procedure TEnhancedLabel.SetShadowOffset(AValue: Integer);  
 begin
   if FShadowOffset = AValue then Exit;
   FShadowOffset := AValue;
   Invalidate;
 end;
 
-procedure TEnhancedLabel.SetShowShadow(AValue: Boolean);
+procedure TEnhancedLabel.SetShowShadow(AValue: Boolean);  
 begin
   if FShowShadow = AValue then Exit;
   FShowShadow := AValue;
   Invalidate;
 end;
 
-procedure TEnhancedLabel.SetRotationAngle(AValue: Integer);
+procedure TEnhancedLabel.SetRotationAngle(AValue: Integer);  
 begin
   if FRotationAngle = AValue then Exit;
   FRotationAngle := AValue mod 360;
   Invalidate;
 end;
 
-procedure TEnhancedLabel.Paint;
+procedure TEnhancedLabel.Paint;  
 var
   TextStyle: TTextStyle;
   R: TRect;
@@ -463,7 +463,7 @@ procedure Register;
 
 implementation
 
-procedure Register;
+procedure Register;  
 begin
   // Enregistrer le composant dans la palette
   RegisterComponents('Custom', [TEnhancedLabel]);
@@ -492,7 +492,7 @@ lazres enhancedlabel_icon.lrs enhancedlabel_icon.png
 **Étape 3 : Utiliser dans l'enregistrement**
 
 ```pascal
-procedure Register;
+procedure Register;  
 begin
   RegisterComponents('Custom', [TEnhancedLabel]);
 end;
@@ -584,7 +584,7 @@ Brève description de votre package et de ses fonctionnalités principales.
 uses
   MyComponent;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 var
   MyComp: TMyComponent;
 begin
@@ -688,7 +688,7 @@ type
 
 implementation
 
-constructor TMyComponent.Create(AOwner: TComponent);
+constructor TMyComponent.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   {$IFDEF USE_SYNEDI}
@@ -719,12 +719,12 @@ uses
   , BaseUnix, Unix
   {$ENDIF};
 
-function GetUserConfigDir: string;
+function GetUserConfigDir: string;  
 function GetTempDir: string;
 
 implementation
 
-function GetUserConfigDir: string;
+function GetUserConfigDir: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('APPDATA');
@@ -739,7 +739,7 @@ begin
   {$ENDIF}
 end;
 
-function GetTempDir: string;
+function GetTempDir: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('TEMP');
@@ -758,7 +758,7 @@ end.
 Pour les composants LCL, gérer les différences entre widgetsets :
 
 ```pascal
-procedure TMyComponent.Paint;
+procedure TMyComponent.Paint;  
 begin
   {$IFDEF LCLWin32}
   // Code spécifique Windows
@@ -817,7 +817,7 @@ lazbuild --build-mode=Release --os=darwin --cpu=x86_64 mypackage.lpk
   @seealso(TRelatedComponent)
   @author(Votre Nom)
 }
-TMyComponent = class(TComponent)
+TMyComponent = class(TComponent)  
 private
   FProperty1: string;  //<! Description courte de la propriété
 
@@ -888,8 +888,8 @@ Créer un guide utilisateur complet dans `docs/manual.md` :
 ### Configuration de base
 
 ```pascal
-MyComponent.Property1 := 'valeur';
-MyComponent.Property2 := 42;
+MyComponent.Property1 := 'valeur';  
+MyComponent.Property2 := 42;  
 MyComponent.Active := True;
 ```
 
@@ -960,29 +960,29 @@ type
 
 implementation
 
-procedure TTestMyComponent.SetUp;
+procedure TTestMyComponent.SetUp;  
 begin
   FComponent := TMyComponent.Create(nil);
 end;
 
-procedure TTestMyComponent.TearDown;
+procedure TTestMyComponent.TearDown;  
 begin
   FComponent.Free;
 end;
 
-procedure TTestMyComponent.TestCreate;
+procedure TTestMyComponent.TestCreate;  
 begin
   AssertNotNull('Component should be created', FComponent);
   AssertEquals('Default value', '', FComponent.Property1);
 end;
 
-procedure TTestMyComponent.TestProperty1;
+procedure TTestMyComponent.TestProperty1;  
 begin
   FComponent.Property1 := 'Test';
   AssertEquals('Property1 should be set', 'Test', FComponent.Property1);
 end;
 
-procedure TTestMyComponent.TestDoSomething;
+procedure TTestMyComponent.TestDoSomething;  
 var
   Result: Boolean;
 begin
@@ -990,7 +990,7 @@ begin
   AssertTrue('DoSomething should succeed', Result);
 end;
 
-procedure TTestMyComponent.TestEdgeCases;
+procedure TTestMyComponent.TestEdgeCases;  
 begin
   // Tester les cas limites
   FComponent.Property1 := '';
@@ -1043,7 +1043,7 @@ end.
 #!/bin/bash
 # test_package.sh
 
-echo "Compilation des tests..."
+echo "Compilation des tests..."  
 lazbuild tests/runtests.lpi
 
 echo "Exécution des tests..."
@@ -1081,7 +1081,7 @@ Utiliser le **Semantic Versioning** (SemVer) : `MAJOR.MINOR.PATCH`
 
 Toutes les modifications notables de ce projet sont documentées ici.
 
-Le format est basé sur [Keep a Changelog](https://keepachangelog.com/)
+Le format est basé sur [Keep a Changelog](https://keepachangelog.com/)  
 et ce projet adhère au [Semantic Versioning](https://semver.org/).
 
 ## [Non publié]
@@ -1174,7 +1174,7 @@ monpackage/
 *.ppu
 *.o
 *.rst
-backup/
+backup/  
 lib/
 *.res
 
@@ -1256,7 +1256,7 @@ Pour une distribution hors OPM :
 #!/bin/bash
 # install.sh
 
-PACKAGE_NAME="monpackage"
+PACKAGE_NAME="monpackage"  
 LAZARUS_DIR="$HOME/.lazarus"
 
 echo "Installation de $PACKAGE_NAME..."
@@ -1267,13 +1267,13 @@ mkdir -p "$LAZARUS_DIR/packages"
 # Copier les fichiers
 cp -r . "$LAZARUS_DIR/packages/$PACKAGE_NAME"
 
-echo "Fichiers copiés."
-echo ""
-echo "Pour terminer l'installation :"
-echo "1. Ouvrir Lazarus"
-echo "2. Package → Open Package File"
-echo "3. Naviguer vers $LAZARUS_DIR/packages/$PACKAGE_NAME/$PACKAGE_NAME.lpk"
-echo "4. Cliquer sur Compile puis Install"
+echo "Fichiers copiés."  
+echo ""  
+echo "Pour terminer l'installation :"  
+echo "1. Ouvrir Lazarus"  
+echo "2. Package → Open Package File"  
+echo "3. Naviguer vers $LAZARUS_DIR/packages/$PACKAGE_NAME/$PACKAGE_NAME.lpk"  
+echo "4. Cliquer sur Compile puis Install"  
 echo "5. Redémarrer Lazarus"
 ```
 
@@ -1293,13 +1293,13 @@ New-Item -ItemType Directory -Force -Path "$LazarusDir\packages" | Out-Null
 # Copier les fichiers
 Copy-Item -Path ".\*" -Destination "$LazarusDir\packages\$PackageName" -Recurse -Force
 
-Write-Host "Fichiers copiés."
-Write-Host ""
-Write-Host "Pour terminer l'installation :"
-Write-Host "1. Ouvrir Lazarus"
-Write-Host "2. Package → Open Package File"
-Write-Host "3. Naviguer vers $LazarusDir\packages\$PackageName\$PackageName.lpk"
-Write-Host "4. Cliquer sur Compile puis Install"
+Write-Host "Fichiers copiés."  
+Write-Host ""  
+Write-Host "Pour terminer l'installation :"  
+Write-Host "1. Ouvrir Lazarus"  
+Write-Host "2. Package → Open Package File"  
+Write-Host "3. Naviguer vers $LazarusDir\packages\$PackageName\$PackageName.lpk"  
+Write-Host "4. Cliquer sur Compile puis Install"  
 Write-Host "5. Redémarrer Lazarus"
 ```
 
@@ -1321,9 +1321,9 @@ Write-Host "5. Redémarrer Lazarus"
 ````markdown
 <!-- .github/ISSUE_TEMPLATE/bug_report.md -->
 ---
-name: Bug Report
-about: Signaler un bug
-title: '[BUG] '
+name: Bug Report  
+about: Signaler un bug  
+title: '[BUG] '  
 labels: bug
 ---
 
@@ -1371,7 +1371,7 @@ Captures d'écran, messages d'erreur, etc.
 ````markdown
 Merci pour ce rapport détaillé !
 
-Le problème vient de la méthode `X` qui ne gère pas correctement
+Le problème vient de la méthode `X` qui ne gère pas correctement  
 le cas Y. Voici un workaround temporaire :
 
 ```pascal
@@ -1416,27 +1416,27 @@ fi
 echo "Preparing release $VERSION..."
 
 # 1. Mettre à jour CHANGELOG
-echo "Please update CHANGELOG.md"
+echo "Please update CHANGELOG.md"  
 read -p "Press enter when done..."
 
 # 2. Mettre à jour version dans .lpk
 # (nécessite édition manuelle ou script XML)
 
 # 3. Commit
-git add .
+git add .  
 git commit -m "Release v$VERSION"
 
 # 4. Tag
 git tag -a "v$VERSION" -m "Release v$VERSION"
 
 # 5. Push
-git push origin main
+git push origin main  
 git push origin "v$VERSION"
 
-echo "✓ Release $VERSION created!"
-echo "Don't forget to:"
-echo "- Create GitHub release with changelog"
-echo "- Update OPM repository if applicable"
+echo "✓ Release $VERSION created!"  
+echo "Don't forget to:"  
+echo "- Create GitHub release with changelog"  
+echo "- Update OPM repository if applicable"  
 echo "- Announce on forums/social media"
 ```
 
@@ -1450,7 +1450,7 @@ const
   BufferSize = 4096;
 
 // ❌ MAUVAIS : Réallouer à chaque fois
-procedure ProcessData(const AData: array of Byte);
+procedure ProcessData(const AData: array of Byte);  
 var
   Buffer: array of Byte;
 begin
@@ -1468,7 +1468,7 @@ type
     procedure ProcessData(const AData: array of Byte);
   end;
 
-constructor TMyComponent.Create(AOwner: TComponent);
+constructor TMyComponent.Create(AOwner: TComponent);  
 begin
   inherited;
   SetLength(FBuffer, BufferSize);  // Une seule fois
@@ -1479,7 +1479,7 @@ end;
 
 ```pascal
 // ✅ BON : Libération explicite
-procedure TMyComponent.DoSomething;
+procedure TMyComponent.DoSomething;  
 var
   List: TStringList;
 begin
@@ -1493,13 +1493,13 @@ begin
 end;
 
 // ✅ BON : Éviter les fuites avec les objets owned
-constructor TMyComponent.Create(AOwner: TComponent);
+constructor TMyComponent.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FInternalList := TStringList.Create;  // Créé
 end;
 
-destructor TMyComponent.Destroy;
+destructor TMyComponent.Destroy;  
 begin
   FInternalList.Free;  // Libéré
   inherited Destroy;
@@ -1525,21 +1525,21 @@ type
     function GetItem(AIndex: Integer): string;
   end;
 
-constructor TThreadSafeComponent.Create(AOwner: TComponent);
+constructor TThreadSafeComponent.Create(AOwner: TComponent);  
 begin
   inherited;
   FLock := TCriticalSection.Create;
   FData := TStringList.Create;
 end;
 
-destructor TThreadSafeComponent.Destroy;
+destructor TThreadSafeComponent.Destroy;  
 begin
   FData.Free;
   FLock.Free;
   inherited;
 end;
 
-procedure TThreadSafeComponent.AddItem(const AItem: string);
+procedure TThreadSafeComponent.AddItem(const AItem: string);  
 begin
   FLock.Enter;
   try
@@ -1581,7 +1581,7 @@ type
       read FNewProperty write FNewProperty;
   end;
 
-function TMyComponent.GetOldProperty: string;
+function TMyComponent.GetOldProperty: string;  
 begin
   Result := FNewProperty;  // Rediriger vers nouvelle propriété
 end;
@@ -1622,12 +1622,12 @@ implementation
 uses
   StrUtils;
 
-class function TStringUtils.IsEmpty(const S: string): Boolean;
+class function TStringUtils.IsEmpty(const S: string): Boolean;  
 begin
   Result := Trim(S) = '';
 end;
 
-class function TStringUtils.IsNumeric(const S: string): Boolean;
+class function TStringUtils.IsNumeric(const S: string): Boolean;  
 var
   i: Integer;
   HasDigit: Boolean;
@@ -1646,7 +1646,7 @@ begin
   Result := HasDigit;
 end;
 
-class function TStringUtils.Contains(const S, SubStr: string): Boolean;
+class function TStringUtils.Contains(const S, SubStr: string): Boolean;  
 begin
   Result := Pos(SubStr, S) > 0;
 end;
@@ -1707,12 +1707,12 @@ procedure Register;
 
 implementation
 
-procedure Register;
+procedure Register;  
 begin
   RegisterComponents('Utilities', [TLogger]);
 end;
 
-constructor TLogger.Create(AOwner: TComponent);
+constructor TLogger.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FLock := TCriticalSection.Create;
@@ -1720,7 +1720,7 @@ begin
   FActive := True;
 end;
 
-destructor TLogger.Destroy;
+destructor TLogger.Destroy;  
 begin
   if FFileName <> '' then
     CloseFile(FLogFile);
@@ -1728,7 +1728,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TLogger.Log(ALevel: TLogLevel; const AMessage: string);
+procedure TLogger.Log(ALevel: TLogLevel; const AMessage: string);  
 const
   LevelStr: array[TLogLevel] of string = (
     'DEBUG', 'INFO', 'WARNING', 'ERROR', 'FATAL'
@@ -1757,12 +1757,12 @@ begin
   end;
 end;
 
-procedure TLogger.Debug(const AMessage: string);
+procedure TLogger.Debug(const AMessage: string);  
 begin
   Log(llDebug, AMessage);
 end;
 
-procedure TLogger.Info(const AMessage: string);
+procedure TLogger.Info(const AMessage: string);  
 begin
   Log(llInfo, AMessage);
 end;

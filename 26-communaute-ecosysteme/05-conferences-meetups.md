@@ -170,9 +170,9 @@ FreePascal Bug Fixing Weekend
 🌐 En ligne (Discord + GitLab)
 🎯 Objectif : Corriger 50 bugs pour la release 3.4.0
 
-Programme :
-Vendredi 18h : Kick-off meeting, attribution des bugs
-Samedi : Sprint intensif, code reviews
+Programme :  
+Vendredi 18h : Kick-off meeting, attribution des bugs  
+Samedi : Sprint intensif, code reviews  
 Dimanche : Finalisation, merge des MR, rétrospective
 
 Niveaux :
@@ -671,21 +671,21 @@ Titre : Créer une application e-commerce complète avec Lazarus
 
 Format : Talk (45 min)
 
-Résumé court (1 paragraphe) :
-Découvrez comment créer une application de vente en ligne
-professionnelle avec Lazarus : interface utilisateur moderne,
-connexion base de données PostgreSQL, paiement en ligne, et
-génération de rapports PDF. Retour d'expérience sur un projet
+Résumé court (1 paragraphe) :  
+Découvrez comment créer une application de vente en ligne  
+professionnelle avec Lazarus : interface utilisateur moderne,  
+connexion base de données PostgreSQL, paiement en ligne, et  
+génération de rapports PDF. Retour d'expérience sur un projet  
 réel en production depuis 2 ans.
 
-Description longue (3-5 paragraphes) :
-Dans cette présentation, je partagerai mon expérience de
-développement d'une application e-commerce complète utilisée
+Description longue (3-5 paragraphes) :  
+Dans cette présentation, je partagerai mon expérience de  
+développement d'une application e-commerce complète utilisée  
 par 500+ clients quotidiennement...
 
 [Détails sur l'architecture, les défis, les solutions]
 
-Public cible : Développeurs intermédiaires à avancés
+Public cible : Développeurs intermédiaires à avancés  
 Niveau : Intermédiaire
 
 Prérequis :
@@ -793,7 +793,7 @@ du package [X], et contributeur régulier à Lazarus...
 
 ```pascal
 // ✅ BON : Code simple et lisible
-procedure Example;
+procedure Example;  
 begin
   WriteLn('Clear and concise');
 end;
@@ -804,7 +804,7 @@ end;
 procedure VeryComplexProcedureWithLongNameAndManyParameters(
   AParameter1: Integer; AParameter2: string;
   AParameter3: TComplexType; ...); // Trop long !
-var LocalVar1, LocalVar2, LocalVar3: Integer;
+var LocalVar1, LocalVar2, LocalVar3: Integer;  
 begin
   // Trop de code sur une slide
   if (Condition1 and Condition2) or
@@ -923,9 +923,9 @@ Si vous faites une démonstration live :
 ```
 Exemple tweet :
 "Merci @EventName pour l'accueil !
-Voici mes slides sur 'Lazarus E-commerce' 🎯
-Slides : [URL]
-Code : [GitHub]
+Voici mes slides sur 'Lazarus E-commerce' 🎯  
+Slides : [URL]  
+Code : [GitHub]  
 Questions? DM open!
 #FreePascal #Lazarus"
 ```
@@ -1124,18 +1124,18 @@ Inscription (gratuite) : [URL]
 ```
 Bonjour [Nom],
 
-Je suis l'organisateur du meetup FreePascal/Lazarus de [Ville].
+Je suis l'organisateur du meetup FreePascal/Lazarus de [Ville].  
 J'ai beaucoup apprécié ton travail sur [Projet/Package].
 
-Nous organisons notre prochain meetup le [Date] et j'aimerais
+Nous organisons notre prochain meetup le [Date] et j'aimerais  
 beaucoup que tu viennes présenter [Sujet]. Le format serait
 30-45 minutes de présentation + Q&A.
 
-Audience : ~20 développeurs Pascal, tous niveaux
-Lieu : [Lieu]
+Audience : ~20 développeurs Pascal, tous niveaux  
+Lieu : [Lieu]  
 Timing : [Horaire]
 
-Nous pourrions couvrir tes frais de déplacement si tu viens
+Nous pourrions couvrir tes frais de déplacement si tu viens  
 de loin.
 
 Est-ce que ça t'intéresserait ?
@@ -1156,9 +1156,9 @@ Merci !
 
 **Budget exemple pour 20 personnes :**
 ```
-Lieu : 0€ (coworking partenaire)
-Pizza : 10€ × 20 = 200€
-Boissons : 3€ × 20 = 60€
+Lieu : 0€ (coworking partenaire)  
+Pizza : 10€ × 20 = 200€  
+Boissons : 3€ × 20 = 60€  
 Divers : 40€
 ────────────────────
 Total : 300€
@@ -1404,8 +1404,8 @@ Les gens ADORENT aider les débutants motivés !
 **Approche suggérée :**
 ```
 "Bonjour, je suis [Nom] de [Entreprise].
-On recrute des développeurs Pascal.
-Si ça t'intéresse, voici ma carte.
+On recrute des développeurs Pascal.  
+Si ça t'intéresse, voici ma carte.  
 Sinon, profite bien de l'événement ! 😊"
 ```
 

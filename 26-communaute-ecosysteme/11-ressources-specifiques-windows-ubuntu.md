@@ -71,8 +71,8 @@ Le développement multi-plateforme avec FreePascal et Lazarus nécessite une bon
 **Man Pages (manuels système) :**
 ```bash
 # Dans le terminal Ubuntu
-man 2 syscall_name    # Appels système (ex: man 2 open)
-man 3 function_name   # Fonctions bibliothèque C (ex: man 3 printf)
+man 2 syscall_name    # Appels système (ex: man 2 open)  
+man 3 function_name   # Fonctions bibliothèque C (ex: man 3 printf)  
 man 7 topic          # Conventions et protocoles
 ```
 
@@ -214,8 +214,8 @@ wsl --install -d Ubuntu
 - Installation automatisée logiciels
 ```powershell
 # Exemples
-choco install lazarus
-choco install git
+choco install lazarus  
+choco install git  
 choco install vscode
 ```
 
@@ -231,14 +231,14 @@ choco install vscode
 **1. Lazarus pour Ubuntu**
 - **APT (Ubuntu officiel - souvent ancien)** :
 ```bash
-sudo apt update
+sudo apt update  
 sudo apt install lazarus
 ```
 
 - **PPA (version plus récente)** :
 ```bash
-sudo add-apt-repository ppa:lazarus-team/lazarus
-sudo apt update
+sudo add-apt-repository ppa:lazarus-team/lazarus  
+sudo apt update  
 sudo apt install lazarus
 ```
 
@@ -254,7 +254,7 @@ sudo apt install lazarus
 sudo snap install code --classic
 
 # Ou via .deb
-wget https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64
+wget https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64  
 sudo apt install ./code_*.deb
 ```
 
@@ -275,21 +275,21 @@ sudo apt install geany
 
 **1. Make et build tools**
 ```bash
-sudo apt install build-essential
+sudo apt install build-essential  
 sudo apt install make cmake
 ```
 
 **2. FPC depuis source**
 ```bash
 # Dépendances
-sudo apt install subversion git
-sudo apt install binutils
+sudo apt install subversion git  
+sudo apt install binutils  
 sudo apt install libgtk-3-dev
 
 # Compilation FPC
-svn checkout https://svn.freepascal.org/svn/fpc/trunk fpc
-cd fpc
-make clean all
+svn checkout https://svn.freepascal.org/svn/fpc/trunk fpc  
+cd fpc  
+make clean all  
 sudo make install
 ```
 
@@ -313,7 +313,7 @@ valgrind --leak-check=full ./mon_programme
 ```bash
 sudo apt install linux-tools-common linux-tools-generic
 # Profiling performance
-perf record ./mon_programme
+perf record ./mon_programme  
 perf report
 ```
 
@@ -321,7 +321,7 @@ perf report
 ```bash
 sudo apt install heaptrack
 # Analyse allocation mémoire
-heaptrack ./mon_programme
+heaptrack ./mon_programme  
 heaptrack_gui heaptrack.mon_programme.*.gz
 ```
 
@@ -366,10 +366,10 @@ curl -X GET https://api.example.com/data
 
 **1. Docker**
 ```bash
-sudo apt update
-sudo apt install docker.io
-sudo systemctl start docker
-sudo systemctl enable docker
+sudo apt update  
+sudo apt install docker.io  
+sudo systemctl start docker  
+sudo systemctl enable docker  
 sudo usermod -aG docker $USER
 ```
 
@@ -382,20 +382,20 @@ sudo apt install podman
 
 **1. APT (natif)**
 ```bash
-sudo apt install [package]
-sudo apt search [terme]
+sudo apt install [package]  
+sudo apt search [terme]  
 sudo apt update && sudo apt upgrade
 ```
 
 **2. Snap**
 ```bash
-sudo snap install [package]
+sudo snap install [package]  
 sudo snap find [terme]
 ```
 
 **3. Flatpak**
 ```bash
-sudo apt install flatpak
+sudo apt install flatpak  
 flatpak install flathub [app-id]
 ```
 
@@ -993,8 +993,8 @@ Dans Lazarus :
 **1. GitHub Actions**
 ```yaml
 # Exemple workflow Windows
-name: Windows Build
-on: [push]
+name: Windows Build  
+on: [push]  
 jobs:
   build:
     runs-on: windows-latest
@@ -1020,8 +1020,8 @@ jobs:
 **1. GitHub Actions**
 ```yaml
 # Exemple workflow Ubuntu
-name: Ubuntu Build
-on: [push]
+name: Ubuntu Build  
+on: [push]  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -1056,10 +1056,10 @@ RUN apt-get update && apt-get install -y \
     lazarus \
     lcl
 
-WORKDIR /app
+WORKDIR /app  
 COPY . /app
 
-RUN lazbuild projet.lpi
+RUN lazbuild projet.lpi  
 CMD ["./projet"]
 ```
 
@@ -1097,17 +1097,17 @@ CMD ["./projet"]
 **1. DEB (Debian/Ubuntu)**
 ```bash
 # Structure basique
-mkdir -p monapp-1.0/DEBIAN
-mkdir -p monapp-1.0/usr/bin
+mkdir -p monapp-1.0/DEBIAN  
+mkdir -p monapp-1.0/usr/bin  
 mkdir -p monapp-1.0/usr/share/applications
 
 # Fichier control
-cat > monapp-1.0/DEBIAN/control << EOF
-Package: monapp
-Version: 1.0
-Architecture: amd64
-Maintainer: Votre Nom
-Description: Description de l'application
+cat > monapp-1.0/DEBIAN/control << EOF  
+Package: monapp  
+Version: 1.0  
+Architecture: amd64  
+Maintainer: Votre Nom  
+Description: Description de l'application  
 EOF
 
 # Construire le paquet
@@ -1123,12 +1123,12 @@ dpkg-deb --build monapp-1.0
 **3. Snap**
 ```yaml
 # snapcraft.yaml
-name: monapp
-version: '1.0'
-summary: Résumé
-description: Description complète
-base: core22
-confinement: strict
+name: monapp  
+version: '1.0'  
+summary: Résumé  
+description: Description complète  
+base: core22  
+confinement: strict  
 apps:
   monapp:
     command: bin/monapp

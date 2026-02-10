@@ -181,9 +181,9 @@ De nombreux développeurs ont marqué l'histoire de FreePascal/Lazarus par leurs
 **Listes de diffusion :**
 
 ```
-fpc-pascal@lists.freepascal.org      # Questions générales FPC
-fpc-devel@lists.freepascal.org       # Développement FPC
-lazarus@lists.lazarus.freepascal.org # Lazarus général
+fpc-pascal@lists.freepascal.org      # Questions générales FPC  
+fpc-devel@lists.freepascal.org       # Développement FPC  
+lazarus@lists.lazarus.freepascal.org # Lazarus général  
 lazarus-dev@lists.lazarus.freepascal.org # Développement Lazarus
 ```
 

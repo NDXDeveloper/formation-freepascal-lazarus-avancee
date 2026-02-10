@@ -143,7 +143,7 @@ type
     property Age: Integer read FAge write FAge;
   end;
 
-constructor TPerson.Create(const AName: String; AAge: Integer);
+constructor TPerson.Create(const AName: String; AAge: Integer);  
 begin
   FName := AName;
   FAge := AAge;
@@ -185,17 +185,17 @@ La LCL (Lazarus Component Library) est inspirée de la VCL mais n'est pas un clo
 
 ```pascal
 // Ces composants sont quasi-identiques VCL ↔ LCL
-TForm, TButton, TEdit, TLabel, TMemo, TListBox, TComboBox,
-TCheckBox, TRadioButton, TPanel, TGroupBox, TScrollBox,
-TImage, TBitmap, TCanvas, TTimer, TMainMenu, TPopupMenu,
-TToolBar, TStatusBar, TProgressBar, TTrackBar, TListView,
+TForm, TButton, TEdit, TLabel, TMemo, TListBox, TComboBox,  
+TCheckBox, TRadioButton, TPanel, TGroupBox, TScrollBox,  
+TImage, TBitmap, TCanvas, TTimer, TMainMenu, TPopupMenu,  
+TToolBar, TStatusBar, TProgressBar, TTrackBar, TListView,  
 TTreeView, TStringGrid, TTabControl, TPageControl, TSplitter
 ```
 
 **Exemple de code portable VCL/LCL :**
 
 ```pascal
-procedure TMainForm.Button1Click(Sender: TObject);
+procedure TMainForm.Button1Click(Sender: TObject);  
 begin
   Edit1.Text := 'Hello';
   Memo1.Lines.Add('New line');
@@ -240,11 +240,11 @@ Ce code fonctionne **sans modification** en Delphi et Lazarus.
 
 ```pascal
 // Composants data-aware identiques VCL ↔ LCL
-TDBEdit, TDBMemo, TDBListBox, TDBComboBox, TDBCheckBox,
+TDBEdit, TDBMemo, TDBListBox, TDBComboBox, TDBCheckBox,  
 TDBRadioGroup, TDBGrid, TDBImage, TDBNavigator, TDBLookupComboBox
 
 // Utilisation identique
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   DataSource1.DataSet := Query1;
   DBGrid1.DataSource := DataSource1;
@@ -300,11 +300,11 @@ Lazarus Project
 **Processus :**
 
 ```
-Semaine 1-2 : Évaluation et planification
-Semaine 3-4 : Conversion automatique
-Semaine 5-6 : Correction des erreurs de compilation
-Semaine 7-8 : Adaptation des composants
-Semaine 9-12 : Tests et corrections
+Semaine 1-2 : Évaluation et planification  
+Semaine 3-4 : Conversion automatique  
+Semaine 5-6 : Correction des erreurs de compilation  
+Semaine 7-8 : Adaptation des composants  
+Semaine 9-12 : Tests et corrections  
 Semaine 13+ : Déploiement progressif
 ```
 
@@ -341,10 +341,10 @@ Delphi Project                Lazarus Project
 **Processus :**
 
 ```
-Mois 1 : Module indépendant (ex: utilitaires)
-Mois 2 : Module avec peu de dépendances
-Mois 3-4 : Modules métier
-Mois 5-6 : Module principal et interface
+Mois 1 : Module indépendant (ex: utilitaires)  
+Mois 2 : Module avec peu de dépendances  
+Mois 3-4 : Modules métier  
+Mois 5-6 : Module principal et interface  
 Mois 7+ : Finalisation et bascule
 ```
 
@@ -419,7 +419,7 @@ type
 
 implementation
 
-procedure TMyClass.DoSomething;
+procedure TMyClass.DoSomething;  
 begin
   {$IFDEF FPC}
   // Code spécifique Lazarus
@@ -562,8 +562,8 @@ Projet MyERP :
 - ADO (BDD propriétaire) : 2 points
 - Tests unitaires présents : 0 point
 
-Total : 84 points → Complexité très élevée
-Recommandation : Migration incrémentale + réécriture partielle
+Total : 84 points → Complexité très élevée  
+Recommandation : Migration incrémentale + réécriture partielle  
 Durée estimée : 12-18 mois
 ```
 
@@ -581,7 +581,7 @@ Durée estimée : 12-18 mois
 # Installer lazarus-X.X.X-fpc-X.X.X-win64.exe
 
 # Linux Ubuntu/Debian
-sudo apt update
+sudo apt update  
 sudo apt install lazarus lcl lcl-gtk2 lcl-qt5
 
 # macOS

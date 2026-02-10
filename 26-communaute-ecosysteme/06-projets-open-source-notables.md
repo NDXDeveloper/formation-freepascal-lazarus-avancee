@@ -225,7 +225,7 @@ type
     procedure Post; override;
   end;
 
-procedure TUserRoute.Get;
+procedure TUserRoute.Get;  
 begin
   Response
     .Json('{"users": [{"id": 1, "name": "John"}]}')
@@ -233,7 +233,7 @@ begin
     .Send;
 end;
 
-procedure TUserRoute.Post;
+procedure TUserRoute.Post;  
 var
   Name: string;
 begin
@@ -298,7 +298,7 @@ BGRABitmap est une bibliothèque de graphiques 2D offrant des fonctionnalités a
 uses
   BGRABitmap, BGRABitmapTypes;
 
-procedure DrawExample;
+procedure DrawExample;  
 var
   Bmp: TBGRABitmap;
 begin
@@ -370,7 +370,7 @@ TAChart est une bibliothèque de création de graphiques et diagrammes intégré
 uses
   TAGraph, TASeries, TATools;
 
-procedure CreateChart(Chart: TChart);
+procedure CreateChart(Chart: TChart);  
 var
   Series: TLineSeries;
   i: Integer;
@@ -439,7 +439,7 @@ Synapse est une bibliothèque réseau complète supportant de nombreux protocole
 uses
   httpsend, ssl_openssl;
 
-function DownloadPage(const URL: string): string;
+function DownloadPage(const URL: string): string;  
 var
   HTTP: THTTPSend;
 begin
@@ -470,7 +470,7 @@ end;
 uses
   smtpsend, ssl_openssl, mimemess, mimepart;
 
-procedure SendEmail(const ToAddr, Subject, Body: string);
+procedure SendEmail(const ToAddr, Subject, Body: string);  
 var
   Msg: TMimeMess;
   Part: TMimePart;
@@ -547,14 +547,14 @@ type
     procedure Start;
   end;
 
-constructor TMyServer.Create;
+constructor TMyServer.Create;  
 begin
   FServer := TIdTCPServer.Create(nil);
   FServer.DefaultPort := 8080;
   FServer.OnExecute := @OnExecute;
 end;
 
-procedure TMyServer.OnExecute(AContext: TIdContext);
+procedure TMyServer.OnExecute(AContext: TIdContext);  
 var
   Line: string;
 begin
@@ -562,7 +562,7 @@ begin
   AContext.Connection.IOHandler.WriteLn('Echo: ' + Line);
 end;
 
-procedure TMyServer.Start;
+procedure TMyServer.Start;  
 begin
   FServer.Active := True;
   WriteLn('Server listening on port 8080');
@@ -771,7 +771,7 @@ program WebApp;
 uses
   JS, Web;
 
-procedure ButtonClick(Event: TJSMouseEvent);
+procedure ButtonClick(Event: TJSMouseEvent);  
 begin
   document.getElementById('output').innerHTML :=
     'Hello from Pascal!';
@@ -883,19 +883,19 @@ type
 
 implementation
 
-procedure TTestCalculator.TestAddition;
+procedure TTestCalculator.TestAddition;  
 begin
   AssertEquals('2 + 3 = 5', 5, Add(2, 3));
   AssertEquals('0 + 0 = 0', 0, Add(0, 0));
   AssertEquals('-5 + 3 = -2', -2, Add(-5, 3));
 end;
 
-procedure TTestCalculator.TestDivision;
+procedure TTestCalculator.TestDivision;  
 begin
   AssertEquals('10 / 2 = 5', 5.0, Divide(10, 2), 0.001);
 end;
 
-procedure TTestCalculator.TestDivisionByZero;
+procedure TTestCalculator.TestDivisionByZero;  
 begin
   try
     Divide(10, 0);
@@ -1021,7 +1021,7 @@ type
     constructor Create(AOwner: TComponent); override;
   end;
 
-constructor TMainForm.Create(AOwner: TComponent);
+constructor TMainForm.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   Title := 'fpGUI Example';
@@ -1033,7 +1033,7 @@ begin
   Button.OnClick := @ButtonClicked;
 end;
 
-procedure TMainForm.ButtonClicked(Sender: TObject);
+procedure TMainForm.ButtonClicked(Sender: TObject);  
 begin
   ShowMessage('Hello from fpGUI!');
 end;
@@ -1075,8 +1075,8 @@ end.
 
 Recherche avancée :
 ```
-language:Pascal stars:>50
-language:Pascal topic:lazarus
+language:Pascal stars:>50  
+language:Pascal topic:lazarus  
 language:Pascal topic:freepascal
 ```
 
@@ -1182,7 +1182,7 @@ git clone https://github.com/username/project.git
 
 ```bash
 # Télécharger ZIP
-wget https://github.com/user/project/archive/main.zip
+wget https://github.com/user/project/archive/main.zip  
 unzip main.zip
 
 # Copier dans répertoire Lazarus
@@ -1216,7 +1216,7 @@ uses
   Classes, SysUtils,
   BGRABitmap, BGRABitmapTypes;
 
-procedure ProcessImage(const InputFile, OutputFile: string);
+procedure ProcessImage(const InputFile, OutputFile: string);  
 var
   Bmp: TBGRABitmap;
 begin
@@ -1267,7 +1267,7 @@ lazbuild imageprocessor.lpi
 
 ```bash
 # Cloner
-git clone https://github.com/user/project.git
+git clone https://github.com/user/project.git  
 cd project
 
 # Lister les versions
@@ -1322,7 +1322,7 @@ When I call `Function X` with parameter Y, I get error Z.
 **To Reproduce**
 ```pascal
 // Minimal code to reproduce
-procedure Test;
+procedure Test;  
 begin
   MyFunction(InvalidParam);  // Crash here
 end;
@@ -1624,7 +1624,7 @@ type
 {$ENDIF}
 
 // Code partagé
-procedure SendAlert(const Message: string);
+procedure SendAlert(const Message: string);  
 var
   HTTP: THTTPSend;
 begin
@@ -1680,7 +1680,7 @@ Pour monitoring complexe avec métriques, logs structurés, considérer l'intég
 uses
   Registry, Windows;
 
-procedure SaveSetting(const Key, Value: string);
+procedure SaveSetting(const Key, Value: string);  
 var
   Reg: TRegistry;
 begin
@@ -1701,7 +1701,7 @@ end;
 uses
   IniFiles, SysUtils;
 
-procedure SaveSetting(const Key, Value: string);
+procedure SaveSetting(const Key, Value: string);  
 var
   Ini: TIniFile;
 begin
@@ -1777,14 +1777,14 @@ type
     FBuffer: TBGRABitmap;
   end;
 
-procedure TGameForm.TimerTimer(Sender: TObject);
+procedure TGameForm.TimerTimer(Sender: TObject);  
 begin
   // Logique du jeu
   FPlayerX := FPlayerX + 5;
   Invalidate; // Déclenche FormPaint
 end;
 
-procedure TGameForm.FormPaint(Sender: TObject);
+procedure TGameForm.FormPaint(Sender: TObject);  
 begin
   // Dessiner dans FBuffer
   FBuffer.Rectangle(FPlayerX, FPlayerY, FPlayerX+32, FPlayerY+32,
@@ -1833,7 +1833,7 @@ Utiliser **Brook Framework** + **JavaScript frontend** (React/Vue) si l'équipe 
 
 ```pascal
 // Brook endpoint
-procedure TMetricsRoute.Get;
+procedure TMetricsRoute.Get;  
 var
   Metrics: TJSONArray;
 begin
@@ -2097,7 +2097,7 @@ Pour tester en production sans tout casser :
 const
   USE_NEW_HTTP_LIBRARY = {$IFDEF DEBUG}True{$ELSE}False{$ENDIF};
 
-procedure SendRequest(const URL: string);
+procedure SendRequest(const URL: string);  
 begin
   if USE_NEW_HTTP_LIBRARY then
   begin
@@ -2157,7 +2157,7 @@ Si vous voulez contribuer mais ne savez pas par où commencer :
 This PR adds French translation to README.md
 
 **Motivation**
-As a French developer, I found the documentation hard to follow.
+As a French developer, I found the documentation hard to follow.  
 This translation will help French-speaking users.
 
 **Checklist**

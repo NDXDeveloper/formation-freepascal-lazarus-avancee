@@ -374,7 +374,7 @@ Les offres "FreePascal" étant rares, adoptez une stratégie proactive :
 ✓ Bon exemple :
 "Développement d'applications desktop natives multi-plateformes
 (Windows/Linux) en Object Pascal avec FreePascal/Lazarus.
-Migration d'applications Delphi, optimisation de performances,
+Migration d'applications Delphi, optimisation de performances,  
 intégration bases de données (PostgreSQL, SQLite)."
 ```
 
