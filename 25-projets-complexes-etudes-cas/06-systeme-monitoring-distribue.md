@@ -1652,16 +1652,19 @@ var
   JSONArray: TJSONArray;
   JSONObj: TJSONObject;
   i: Integer;
-  Parts: TStringArray;
+  Parts: TStringList;
 begin
   Agents := FDatabase.GetAllAgents;
+  Parts := TStringList.Create;
   try
+    Parts.Delimiter := '|';
+    Parts.StrictDelimiter := True;
     JSONArray := TJSONArray.Create;
 
     for i := 0 to Agents.Count - 1 do
     begin
-      Parts := Agents[i].Split('|');
-      if Length(Parts) >= 4 then
+      Parts.DelimitedText := Agents[i];
+      if Parts.Count >= 4 then
       begin
         JSONObj := TJSONObject.Create;
         JSONObj.Add('agent_id', Parts[0]);
@@ -1677,6 +1680,7 @@ begin
     AResponse.Code := 200;
   finally
     Agents.Free;
+    Parts.Free;
     JSONArray.Free;
   end;
 end;
@@ -1688,18 +1692,21 @@ var
   JSONArray: TJSONArray;
   JSONObj: TJSONObject;
   i: Integer;
-  Parts: TStringArray;
+  Parts: TStringList;
 begin
   AgentID := ARequest.RouteParams['agentid'];
 
   Metrics := FDatabase.GetLatestMetrics(AgentID, 100);
+  Parts := TStringList.Create;
   try
+    Parts.Delimiter := '|';
+    Parts.StrictDelimiter := True;
     JSONArray := TJSONArray.Create;
 
     for i := 0 to Metrics.Count - 1 do
     begin
-      Parts := Metrics[i].Split('|');
-      if Length(Parts) >= 4 then
+      Parts.DelimitedText := Metrics[i];
+      if Parts.Count >= 4 then
       begin
         JSONObj := TJSONObject.Create;
         JSONObj.Add('timestamp', Parts[0]);
@@ -1715,6 +1722,7 @@ begin
     AResponse.Code := 200;
   finally
     Metrics.Free;
+    Parts.Free;
     JSONArray.Free;
   end;
 end;

@@ -552,6 +552,8 @@ L'interpréteur parcourt l'AST et exécute les instructions.
 
 ### Implémentation de l'Interpréteur
 
+> **Note :** Les extraits suivants utilisent `TDictionary<K,V>` et `TList<T>` de `Generics.Collections`, qui nécessitent `{$mode delphi}`.
+
 ```pascal
 type
   TInterpreter = class
@@ -1331,7 +1333,7 @@ end;
 ```pascal
 program SimpleCompiler;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 uses
   SysUtils, Classes, Generics.Collections;

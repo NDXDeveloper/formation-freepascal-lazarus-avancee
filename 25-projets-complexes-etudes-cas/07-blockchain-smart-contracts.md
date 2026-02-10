@@ -2923,14 +2923,15 @@ type
     destructor Destroy; override;
   end;
 
-  TStringList = specialize TFPGList<string>;
+  // Liste de hashes (ne pas confondre avec Classes.TStringList)
+  THashList = specialize TFPGList<string>;
 
   TMerkleTree = class
   private
     FRoot: TMerkleNode;
-    FLeaves: TStringList;
+    FLeaves: THashList;
 
-    function BuildTree(Hashes: TStringList): TMerkleNode;
+    function BuildTree(Hashes: THashList): TMerkleNode;
     function CombineHashes(const Left, Right: string): string;
   public
     constructor Create(const TransactionHashes: array of string);
@@ -2938,7 +2939,7 @@ type
 
     function GetRootHash: string;
     function VerifyTransaction(const TxHash: string; const Proof: array of string): Boolean;
-    function GenerateProof(const TxHash: string): TStringList;
+    function GenerateProof(const TxHash: string): THashList;
 
     property RootHash: string read GetRootHash;
   end;
@@ -2972,7 +2973,7 @@ var
 begin
   inherited Create;
 
-  FLeaves := TStringList.Create;
+  FLeaves := THashList.Create;
 
   // Ajouter tous les hashes de transactions
   for i := 0 to High(TransactionHashes) do
@@ -3002,9 +3003,9 @@ begin
   Result := SHA256Print(SHA256String(Combined));
 end;
 
-function TMerkleTree.BuildTree(Hashes: TStringList): TMerkleNode;
+function TMerkleTree.BuildTree(Hashes: THashList): TMerkleNode;
 var
-  NewLevel: TStringList;
+  NewLevel: THashList;
   i: Integer;
   Node: TMerkleNode;
 begin
@@ -3015,7 +3016,7 @@ begin
     Exit;
   end;
 
-  NewLevel := TStringList.Create;
+  NewLevel := THashList.Create;
   try
     // Combiner les hashes par paires
     i := 0;
@@ -3044,11 +3045,11 @@ begin
     Result := '';
 end;
 
-function TMerkleTree.GenerateProof(const TxHash: string): TStringList;
+function TMerkleTree.GenerateProof(const TxHash: string): THashList;
 var
   Index: Integer;
 begin
-  Result := TStringList.Create;
+  Result := THashList.Create;
 
   // Trouver l'index de la transaction
   Index := FLeaves.IndexOf(TxHash);
@@ -4534,9 +4535,9 @@ Nous avons construit un système blockchain fonctionnel avec FreePascal/Lazarus,
 
 **Points clés à retenir :**
 
-✓ **Blockchain = Structure de données + Cryptographie + Consensus**
-✓ **Smart contracts = Code auto-exécutable sur la blockchain**
-✓ **P2P = Décentralisation et résilience**
+✓ **Blockchain = Structure de données + Cryptographie + Consensus**  
+✓ **Smart contracts = Code auto-exécutable sur la blockchain**  
+✓ **P2P = Décentralisation et résilience**  
 ✓ **FreePascal = Performance + Portabilité + Simplicité**
 
 **Prochaines étapes suggérées :**

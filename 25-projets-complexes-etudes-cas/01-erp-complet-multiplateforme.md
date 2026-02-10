@@ -922,7 +922,7 @@ echo "Lancez MonERP depuis le menu des applications"
 ```pascal
 unit DataCache;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -1740,9 +1740,9 @@ procedure TBaseReport.Generate(Format: TReportFormat; const FileName: string);
 begin
   case Format of
     rfPrint: Print;
-    rfPDF: GeneratePDF(FileName);
-    rfHTML: GenerateHTML(FileName);
-    rfExcel: GenerateExcel(FileName);
+    rfPDF: ; // À implémenter dans les sous-classes
+    rfHTML: ; // À implémenter dans les sous-classes
+    rfExcel: ; // À implémenter dans les sous-classes
   end;
 end;
 
@@ -1817,6 +1817,7 @@ procedure TCustomerListReport.LoadCustomers(Connection: TSQLConnection);
 var
   Query: TSQLQuery;
   Customer: TCustomer;
+  i: Integer;
 begin
   // Vider la liste actuelle
   for i := 0 to FCustomers.Count - 1 do
@@ -2243,7 +2244,7 @@ unit Permissions;
 interface
 
 uses
-  Classes, SysUtils, sqldb, Generics.Collections;
+  Classes, SysUtils, sqldb;
 
 type
   TPermission = (
@@ -2440,6 +2441,7 @@ procedure TUserPermissions.LoadRoles(Connection: TSQLConnection);
 var
   Query: TSQLQuery;
   Role: TRole;
+  i: Integer;
 begin
   // Vider les rôles actuels
   for i := 0 to FRoles.Count - 1 do
@@ -2872,7 +2874,7 @@ begin
   begin
     repeat
       FilePath := FBackupPath + SearchRec.Name;
-      FileAge := FileDateToDateTime(FileGetDate(FilePath));
+      FileAge := FileDateToDateTime(SysUtils.FileAge(FilePath));
 
       if FileAge < CutoffDate then
       begin
@@ -2957,20 +2959,16 @@ end;
 
 procedure TScheduledBackup.OnTimerTick(Sender: TObject);
 var
-  CurrentHour, CurrentMinute: Word;
-  Year, Month, Day: Word;
+  CurrentHour, CurrentMinute, CurrentSecond, CurrentMS: Word;
 begin
   if not FEnabled then
     Exit;
 
-  DecodeTime(Now, CurrentHour, CurrentMinute, Year, Month);
+  DecodeTime(Now, CurrentHour, CurrentMinute, CurrentSecond, CurrentMS);
 
   // Vérifier si c'est l'heure de la sauvegarde
   if (CurrentHour = FBackupHour) and (CurrentMinute = FBackupMinute) then
   begin
-    DecodeDate(Now, Year, Month, Day);
-    DecodeDate(FLastBackup, Year, Month, Day);
-
     // Ne faire qu'une sauvegarde par jour
     if Trunc(FLastBackup) < Trunc(Now) then
     begin
@@ -3441,7 +3439,7 @@ unit Notifications;
 interface
 
 uses
-  Classes, SysUtils, sqldb, Generics.Collections;
+  Classes, SysUtils, sqldb;
 
 type
   TNotificationType = (ntInfo, ntWarning, ntError, ntSuccess);
@@ -3779,6 +3777,6 @@ Voici les points essentiels à vérifier lors du développement d'un ERP multi-p
 
 ### Le mot de la fin
 
-Développer un ERP complet est un projet ambitieux qui demande du temps et de la rigueur. FreePascal et Lazarus offrent tous les outils nécessaires pour créer une solution professionnelle, performante et véritab
+Développer un ERP complet est un projet ambitieux qui demande du temps et de la rigueur. FreePascal et Lazarus offrent tous les outils nécessaires pour créer une solution professionnelle, performante et véritablement multi-plateforme. En suivant les bonnes pratiques présentées dans ce chapitre, vous avez les bases pour construire un système de gestion d'entreprise solide et évolutif.
 
 ⏭️ [Plateforme SaaS multi-tenant](/25-projets-complexes-etudes-cas/02-plateforme-saas-multi-tenant.md)

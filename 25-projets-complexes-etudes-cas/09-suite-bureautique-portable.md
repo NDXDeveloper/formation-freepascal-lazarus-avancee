@@ -65,6 +65,8 @@ SuiteBureautique/
 
 Tous les composants de la suite partagent une classe de base pour les documents :
 
+> **Note :** Les extraits de code de ce chapitre utilisent `TDictionary<K,V>` et `TList<T>` de `Generics.Collections`, qui nécessitent `{$mode delphi}` et `uses Generics.Collections`.
+
 ```pascal
 type
   TDocumentFormat = (dfNative, dfODF, dfMSOffice, dfPDF, dfHTML);
@@ -2636,13 +2638,14 @@ type
   IFileFormatHandler = interface
     ['{23456789-2345-2345-2345-234567890123}']
     function GetFormatName: string;
-    function GetExtensions: TStringArray;
+    function GetExtensions: TStringDynArray; // uses Types
     function CanImport: Boolean;
     function CanExport: Boolean;
     function Import(const FileName: string): TBaseDocument;
     function Export(Document: TBaseDocument; const FileName: string): Boolean;
   end;
 
+  // Note : nécessite {$mode delphi} et uses Generics.Collections
   TFormatHandlerRegistry = class
   private
     FHandlers: TList<IFileFormatHandler>;
@@ -2659,7 +2662,7 @@ type
   TDOCXHandler = class(TInterfacedObject, IFileFormatHandler)
   public
     function GetFormatName: string;
-    function GetExtensions: TStringArray;
+    function GetExtensions: TStringDynArray; // uses Types
     function CanImport: Boolean;
     function CanExport: Boolean;
     function Import(const FileName: string): TBaseDocument;
@@ -2671,7 +2674,7 @@ begin
   Result := 'Microsoft Word Document';
 end;
 
-function TDOCXHandler.GetExtensions: TStringArray;
+function TDOCXHandler.GetExtensions: TStringDynArray;
 begin
   SetLength(Result, 1);
   Result[0] := '.docx';
@@ -2728,7 +2731,7 @@ type
   TODTHandler = class(TInterfacedObject, IFileFormatHandler)
   public
     function GetFormatName: string;
-    function GetExtensions: TStringArray;
+    function GetExtensions: TStringDynArray; // uses Types
     function CanImport: Boolean;
     function CanExport: Boolean;
     function Import(const FileName: string): TBaseDocument;
@@ -3126,31 +3129,43 @@ end;
 
 function TUpdateChecker.CompareVersions(V1, V2: string): Integer;
 var
-  Parts1, Parts2: TStringArray;
+  Parts1, Parts2: TStringList;
   i, Num1, Num2: Integer;
 begin
-  Parts1 := V1.Split(['.']);
-  Parts2 := V2.Split(['.']);
+  Parts1 := TStringList.Create;
+  Parts2 := TStringList.Create;
+  try
+    Parts1.Delimiter := '.';
+    Parts1.StrictDelimiter := True;
+    Parts1.DelimitedText := V1;
 
-  for i := 0 to Max(Length(Parts1), Length(Parts2)) - 1 do
-  begin
-    if i < Length(Parts1) then
-      Num1 := StrToIntDef(Parts1[i], 0)
-    else
-      Num1 := 0;
+    Parts2.Delimiter := '.';
+    Parts2.StrictDelimiter := True;
+    Parts2.DelimitedText := V2;
 
-    if i < Length(Parts2) then
-      Num2 := StrToIntDef(Parts2[i], 0)
-    else
-      Num2 := 0;
+    for i := 0 to Max(Parts1.Count, Parts2.Count) - 1 do
+    begin
+      if i < Parts1.Count then
+        Num1 := StrToIntDef(Parts1[i], 0)
+      else
+        Num1 := 0;
 
-    if Num1 > Num2 then
-      Exit(1)
-    else if Num1 < Num2 then
-      Exit(-1);
+      if i < Parts2.Count then
+        Num2 := StrToIntDef(Parts2[i], 0)
+      else
+        Num2 := 0;
+
+      if Num1 > Num2 then
+        Exit(1)
+      else if Num1 < Num2 then
+        Exit(-1);
+    end;
+
+    Result := 0; // Versions identiques
+  finally
+    Parts1.Free;
+    Parts2.Free;
   end;
-
-  Result := 0; // Versions identiques
 end;
 ```
 
@@ -3413,30 +3428,38 @@ end;
 
 function TLicenseManager.ValidateLicenseKey(const Key: string): Boolean;
 var
-  Parts: TStringArray;
+  Parts: TStringList;
   CheckSum: Integer;
   i: Integer;
 begin
   Result := False;
 
   // Format attendu : XXXX-XXXX-XXXX-XXXX
-  Parts := Key.Split(['-']);
-  if Length(Parts) <> 4 then
-    Exit;
+  Parts := TStringList.Create;
+  try
+    Parts.Delimiter := '-';
+    Parts.StrictDelimiter := True;
+    Parts.DelimitedText := Key;
 
-  // Vérifier chaque partie
-  for i := 0 to High(Parts) do
-  begin
-    if Length(Parts[i]) <> 4 then
+    if Parts.Count <> 4 then
       Exit;
+
+    // Vérifier chaque partie
+    for i := 0 to Parts.Count - 1 do
+    begin
+      if Length(Parts[i]) <> 4 then
+        Exit;
+    end;
+
+    // Calculer et vérifier le checksum (dernière partie)
+    CheckSum := 0;
+    for i := 0 to 2 do
+      CheckSum := CheckSum + StrToIntDef('$' + Parts[i], 0);
+
+    Result := IntToHex(CheckSum mod 65536, 4) = Parts[3];
+  finally
+    Parts.Free;
   end;
-
-  // Calculer et vérifier le checksum (dernière partie)
-  CheckSum := 0;
-  for i := 0 to 2 do
-    CheckSum := CheckSum + StrToIntDef('$' + Parts[i], 0);
-
-  Result := IntToHex(CheckSum mod 65536, 4) = Parts[3];
 end;
 
 function TLicenseManager.ActivateLicense(const Key, Name,
@@ -5132,7 +5155,7 @@ end.
 
 ### Manuel Utilisateur (Markdown)
 
-```markdown
+````markdown
 # Manuel Utilisateur - Suite Bureautique
 
 ## Table des Matières
@@ -5265,7 +5288,7 @@ sudo ./install.sh
 
 #### Formules de Base
 
-```
+````
 =A1+B1          Addition
 =A1-B1          Soustraction
 =A1*B1          Multiplication

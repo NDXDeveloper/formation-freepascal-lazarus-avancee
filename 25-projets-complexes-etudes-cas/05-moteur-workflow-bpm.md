@@ -79,7 +79,7 @@ Commençons par définir les structures de données fondamentales :
 ```pascal
 unit WorkflowModel;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -337,7 +337,7 @@ Le moteur d'exécution gère l'avancement des instances de workflow :
 ```pascal
 unit WorkflowEngine;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -2387,7 +2387,7 @@ procedure TWorkflowAPIServer.HandleRequest(Sender: TObject;
   var AResponse: TFPHTTPConnectionResponse);
 var
   Path: string;
-  Parts: TStringArray;
+  Parts: TStringList;
 begin
   Path := ARequest.PathInfo;
   AResponse.ContentType := 'application/json';
@@ -2399,26 +2399,42 @@ begin
       if ARequest.Method = 'GET' then
         HandleGetProcesses(AResponse);
     end
-    else if Path.StartsWith('/api/processes/') then
+    else if Copy(Path, 1, 15) = '/api/processes/' then
     begin
-      Parts := Path.Split('/');
-      if Length(Parts) >= 4 then
-      begin
-        if ARequest.Method = 'GET' then
-          HandleGetProcess(Parts[3], AResponse)
-        else if (ARequest.Method = 'POST') and (Path.EndsWith('/instances')) then
-          HandleCreateInstance(Parts[3], ARequest, AResponse);
+      Parts := TStringList.Create;
+      try
+        Parts.Delimiter := '/';
+        Parts.StrictDelimiter := True;
+        Parts.DelimitedText := Path;
+        if Parts.Count >= 4 then
+        begin
+          if ARequest.Method = 'GET' then
+            HandleGetProcess(Parts[3], AResponse)
+          else if (ARequest.Method = 'POST') and
+                  (Copy(Path, Length(Path) - 9, 10) = '/instances') then
+            HandleCreateInstance(Parts[3], ARequest, AResponse);
+        end;
+      finally
+        Parts.Free;
       end;
     end
-    else if Path.StartsWith('/api/instances/') then
+    else if Copy(Path, 1, 15) = '/api/instances/' then
     begin
-      Parts := Path.Split('/');
-      if Length(Parts) >= 4 then
-      begin
-        if ARequest.Method = 'GET' then
-          HandleGetInstance(Parts[3], AResponse)
-        else if (ARequest.Method = 'POST') and (Path.EndsWith('/complete')) then
-          HandleCompleteActivity(Parts[3], ARequest, AResponse);
+      Parts := TStringList.Create;
+      try
+        Parts.Delimiter := '/';
+        Parts.StrictDelimiter := True;
+        Parts.DelimitedText := Path;
+        if Parts.Count >= 4 then
+        begin
+          if ARequest.Method = 'GET' then
+            HandleGetInstance(Parts[3], AResponse)
+          else if (ARequest.Method = 'POST') and
+                  (Copy(Path, Length(Path) - 8, 9) = '/complete') then
+            HandleCompleteActivity(Parts[3], ARequest, AResponse);
+        end;
+      finally
+        Parts.Free;
       end;
     end
     else
@@ -3701,7 +3717,7 @@ ON workflow_transitions(target_activity_id);
 ```pascal
 unit WorkflowCache;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -4004,7 +4020,7 @@ end.
 ```pascal
 unit WorkflowMetrics;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -4183,7 +4199,7 @@ end.
 
 ### Guide de démarrage rapide
 
-```markdown
+````markdown
 # Guide de démarrage rapide - Moteur de workflow BPM
 
 ## Installation
@@ -4291,7 +4307,7 @@ Le fichier `workflow.conf` contient tous les paramètres:
 - Documentation complète: `docs/manual.pdf`
 - Forum communautaire: https://forum.workflow-bpm.example.com
 - Issues GitHub: https://github.com/username/workflow-bpm/issues
-```
+````
 
 ---
 

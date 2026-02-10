@@ -1593,6 +1593,8 @@ end.
 ```pascal
 unit TenantPermissions;
 
+{$mode delphi}{$H+}
+
 interface
 
 uses
@@ -2632,6 +2634,7 @@ var
   BackupPath, BackupFile, Command: string;
   Process: TProcess;
   BackupID: Integer;
+  SearchRec: TSearchRec;
 begin
   Result := TBackupJob.Create;
   Result.TenantID := ATenantID;
@@ -2694,7 +2697,12 @@ begin
 
           Result.Status := bsCompleted;
           Result.FilePath := BackupFile;
-          Result.FileSize := FileSize(BackupFile);
+          // FileSize() FPC prend un fichier ouvert, pas un chemin
+          if FindFirst(BackupFile, faAnyFile, SearchRec) = 0 then
+          begin
+            Result.FileSize := SearchRec.Size;
+            FindClose(SearchRec);
+          end;
         end
         else
         begin
@@ -2899,6 +2907,7 @@ function TBackupService.VerifyBackup(ABackupID: Integer): Boolean;
 var
   Query: TSQLQuery;
   FilePath: string;
+  SearchRec: TSearchRec;
 begin
   Result := False;
   Query := TSQLQuery.Create(nil);
@@ -2915,8 +2924,12 @@ begin
       FilePath := Query.FieldByName('FilePath').AsString;
 
       // Vérifier l'existence et la taille du fichier
-      if FileExists(FilePath) then
-        Result := FileSize(FilePath) = Query.FieldByName('FileSize').AsLargeInt;
+      // FileSize() FPC prend un fichier ouvert, pas un chemin
+      if FileExists(FilePath) and (FindFirst(FilePath, faAnyFile, SearchRec) = 0) then
+      begin
+        Result := SearchRec.Size = Query.FieldByName('FileSize').AsLargeInt;
+        FindClose(SearchRec);
+      end;
     end;
   finally
     Query.Free;
@@ -3366,6 +3379,8 @@ end.
 
 ```pascal
 unit TenantConfiguration;
+
+{$mode delphi}{$H+}
 
 interface
 

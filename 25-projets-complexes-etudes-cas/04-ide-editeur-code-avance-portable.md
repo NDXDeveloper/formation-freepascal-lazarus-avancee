@@ -510,8 +510,8 @@ end;
 
 Pour détecter les modifications externes (fichier modifié par un autre éditeur), nous utilisons :
 
-**Sous Windows** : l'API `FindFirstChangeNotification`
-**Sous Linux** : inotify
+**Sous Windows** : l'API `FindFirstChangeNotification`  
+**Sous Linux** : inotify  
 
 ```pascal
 {$IFDEF WINDOWS}
@@ -564,8 +564,8 @@ type
 
 Un terminal intégré améliore grandement la productivité. Les approches diffèrent selon l'OS :
 
-**Windows** : utilisation d'un contrôle qui encapsule cmd.exe ou PowerShell
-**Linux** : utilisation de VTE (Virtual Terminal Emulator) via GTK
+**Windows** : utilisation d'un contrôle qui encapsule cmd.exe ou PowerShell  
+**Linux** : utilisation de VTE (Virtual Terminal Emulator) via GTK  
 
 ### Approche portable avec redirection de processus
 
@@ -722,7 +722,7 @@ begin
 
       // Charger la bibliothèque
       LibHandle := LoadLibrary(PChar(PluginPath));
-      if LibHandle <> 0 then
+      if LibHandle <> NilHandle then
       begin
         // Obtenir la fonction d'export
         GetPluginProc := GetProcAddress(LibHandle, 'GetPlugin');
@@ -868,10 +868,10 @@ begin
   begin
     Line := FDiffEditor.Lines[i];
 
-    if Line.StartsWith('+') then
+    if (Length(Line) > 0) and (Line[1] = '+') then
       // Ligne ajoutée - couleur verte
       FDiffEditor.Lines.Objects[i] := TObject(clGreen)
-    else if Line.StartsWith('-') then
+    else if (Length(Line) > 0) and (Line[1] = '-') then
       // Ligne supprimée - couleur rouge
       FDiffEditor.Lines.Objects[i] := TObject(clRed)
     else
@@ -2855,9 +2855,14 @@ BadPath := 'C:\Program Files\MonApp\file.txt';  // Windows only!
 
 **5. Encodage des fichiers**
 ```pascal
-// Toujours spécifier l'encodage
-MyList.LoadFromFile(FileName, TEncoding.UTF8);
-MyList.SaveToFile(FileName, TEncoding.UTF8);
+// En FreePascal, l'encodage UTF-8 est géré par défaut
+// avec {$H+} et les unités LazUTF8/LazFileUtils
+uses
+  LazUTF8;
+
+// Charger et sauvegarder en UTF-8
+MyList.LoadFromFile(FileName);  // UTF-8 par défaut avec {$H+}
+MyList.SaveToFile(FileName);
 ```
 
 **6. Fins de ligne**
@@ -3037,12 +3042,12 @@ type
 ```pascal
 unit LSPExtension;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, EditorExtensionAPI, LSPClient;
+  Classes, SysUtils, Generics.Collections, EditorExtensionAPI, LSPClient;
 
 type
   TLSPExtension = class(TInterfacedObject, IEditorExtension)

@@ -46,11 +46,11 @@ Un système HFT complet comprend plusieurs modules interconnectés :
 └─────────────────────────────────────────────────────┘
 ```
 
-**1. Market Data Feed** : Réception des données de marché en temps réel
-**2. Strategy Engine** : Algorithmes de décision de trading
-**3. Execution Engine** : Envoi des ordres au marché
-**4. Risk Management** : Contrôle des risques et limites
-**5. Logging & Monitoring** : Surveillance et audit
+**1. Market Data Feed** : Réception des données de marché en temps réel  
+**2. Strategy Engine** : Algorithmes de décision de trading  
+**3. Execution Engine** : Envoi des ordres au marché  
+**4. Risk Management** : Contrôle des risques et limites  
+**5. Logging & Monitoring** : Surveillance et audit  
 
 ## Structures de données optimisées
 
@@ -243,24 +243,30 @@ end;
 
 procedure TFIXMessage.ParseFromString(const AMessage: string);
 var
-  Parts: TStringArray;
-  Part: string;
-  EqualPos: Integer;
-  Tag: string;
-  Value: string;
+  Parts: TStringList;
+  i, EqualPos: Integer;
+  Tag, Value, Part: string;
 begin
   Clear;
-  Parts := AMessage.Split(['|']);
+  Parts := TStringList.Create;
+  try
+    Parts.Delimiter := '|';
+    Parts.StrictDelimiter := True;
+    Parts.DelimitedText := AMessage;
 
-  for Part in Parts do
-  begin
-    EqualPos := Pos('=', Part);
-    if EqualPos > 0 then
+    for i := 0 to Parts.Count - 1 do
     begin
-      Tag := Copy(Part, 1, EqualPos - 1);
-      Value := Copy(Part, EqualPos + 1, Length(Part));
-      FTags.Values[Tag] := Value;
+      Part := Parts[i];
+      EqualPos := Pos('=', Part);
+      if EqualPos > 0 then
+      begin
+        Tag := Copy(Part, 1, EqualPos - 1);
+        Value := Copy(Part, EqualPos + 1, Length(Part));
+        FTags.Values[Tag] := Value;
+      end;
     end;
+  finally
+    Parts.Free;
   end;
 end;
 
@@ -425,15 +431,18 @@ end;
 type
   // Mauvaise pratique : allocation dynamique
   TBadOrderList = class
-    Orders: TList<TOrder>;  // Allocation à chaque ajout
+    Orders: TFPList;  // Allocation à chaque ajout
   end;
+
+  POrder = ^TOrder;
 
   // Bonne pratique : pool pré-alloué
   TOrderPool = class
   private
     FOrders: array[0..9999] of TOrder;
     FUsedMask: array[0..9999] of Boolean;
-    FFreeList: TList<Integer>;
+    FFreeCount: Integer;
+    FFreeList: array[0..9999] of Integer;
   public
     constructor Create;
     destructor Destroy; override;
@@ -447,11 +456,11 @@ var
   i: Integer;
 begin
   inherited;
-  FFreeList := TList<Integer>.Create;
+  FFreeCount := Length(FOrders);
   for i := 0 to High(FOrders) do
   begin
     FUsedMask[i] := False;
-    FFreeList.Add(i);
+    FFreeList[i] := i;
   end;
 end;
 
@@ -459,14 +468,14 @@ function TOrderPool.AllocateOrder: POrder;
 var
   Index: Integer;
 begin
-  if FFreeList.Count = 0 then
+  if FFreeCount = 0 then
   begin
     Result := nil;
     Exit;
   end;
 
-  Index := FFreeList[FFreeList.Count - 1];
-  FFreeList.Delete(FFreeList.Count - 1);
+  Dec(FFreeCount);
+  Index := FFreeList[FFreeCount];
 
   FUsedMask[Index] := True;
   Result := @FOrders[Index];
@@ -481,7 +490,8 @@ begin
   if (Index >= 0) and (Index <= High(FOrders)) and FUsedMask[Index] then
   begin
     FUsedMask[Index] := False;
-    FFreeList.Add(Index);
+    FFreeList[FFreeCount] := Index;
+    Inc(FFreeCount);
   end;
 end;
 ```
@@ -549,6 +559,8 @@ end;
 ### Thread dédié par tâche
 
 ```pascal
+// Note : TThreadedQueue<T> nécessite {$mode delphi} et uses Generics.Collections
+// En alternative, implémenter une queue thread-safe avec TRTLCriticalSection
 type
   // Thread de réception des données de marché
   TMarketDataThread = class(TThread)
@@ -666,6 +678,8 @@ Chaque thread est dédié à une tâche spécifique, minimisant les contentions 
 ### Risk Manager en temps réel
 
 ```pascal
+// Note : nécessite {$mode delphi} et uses Generics.Collections
+// pour TDictionary<>
 type
   TRiskManager = class
   private
@@ -1283,6 +1297,8 @@ end;
 Le backtesting permet de tester les stratégies sur des données historiques.
 
 ```pascal
+// Note : nécessite {$mode delphi} et uses Generics.Collections
+// pour TList<TOrder>
 type
   THistoricalTick = record
     Tick: TMarketTick;
@@ -1593,6 +1609,8 @@ HealthCheckInterval=5000
 ### Déploiement multi-plateforme
 
 #### Windows : Service Windows
+
+> **Note :** `SvcMgr` est une unité Delphi. En FreePascal, utilisez `DaemonApp` et `lazdaemon` pour créer des services Windows ou des daemons Linux. L'exemple ci-dessous illustre le concept avec la syntaxe Delphi.
 
 ```pascal
 program HFTService;
@@ -1948,13 +1966,13 @@ groups:
 ```pascal
 program HFTTradingSystem;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 uses
   {$IFDEF UNIX}
   cthreads,
   {$ENDIF}
-  Classes, SysUtils, IniFiles;
+  Classes, SysUtils, IniFiles, Generics.Collections;
 
 type
   TTradingSystem = class
