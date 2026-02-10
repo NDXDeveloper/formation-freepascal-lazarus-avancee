@@ -2066,12 +2066,13 @@ end;
 procedure TTestClient.TestListe;
 var
   Clients: TClientList;
+  Client: TClient;
   i: Integer;
 begin
   // Créer plusieurs clients
   for i := 1 to 5 do
   begin
-    var Client := TClient.Create;
+    Client := TClient.Create;
     try
       Client.Nom := 'Client' + IntToStr(i);
       Client.Prenom := 'Test';
@@ -3041,22 +3042,22 @@ end;
 
 ### Avantages
 
-✅ **Framework mature** - Plus de 20 ans de développement
-✅ **Architecture MVC complète** - Séparation claire des responsabilités
-✅ **Multi-SGBD** - Support de nombreuses bases de données
-✅ **Multi-plateforme** - Windows, Linux, macOS
-✅ **Pattern Observer intégré** - Notification automatique des changements
-✅ **Validation robuste** - Système de validation complet
-✅ **Gestion des transactions** - Support complet
-✅ **Communauté active** - Documentation et support
+✅ **Framework mature** - Plus de 20 ans de développement  
+✅ **Architecture MVC complète** - Séparation claire des responsabilités  
+✅ **Multi-SGBD** - Support de nombreuses bases de données  
+✅ **Multi-plateforme** - Windows, Linux, macOS  
+✅ **Pattern Observer intégré** - Notification automatique des changements  
+✅ **Validation robuste** - Système de validation complet  
+✅ **Gestion des transactions** - Support complet  
+✅ **Communauté active** - Documentation et support  
 ✅ **Open source** - Code source disponible et modifiable
 
 ### Inconvénients
 
-⚠️ **Courbe d'apprentissage** - Plus complexe qu'un ORM simple
-⚠️ **Verbosité** - Nécessite plus de code initial (mappings, visitors)
-⚠️ **Performance** - Peut être moins rapide que du SQL direct pour certaines opérations
-⚠️ **Documentation** - Moins abondante que pour des frameworks plus récents
+⚠️ **Courbe d'apprentissage** - Plus complexe qu'un ORM simple  
+⚠️ **Verbosité** - Nécessite plus de code initial (mappings, visitors)  
+⚠️ **Performance** - Peut être moins rapide que du SQL direct pour certaines opérations  
+⚠️ **Documentation** - Moins abondante que pour des frameworks plus récents  
 ⚠️ **OID obligatoire** - Utilisation de GUID plutôt qu'ID auto-incrémenté
 
 ## Comparaison avec d'autres solutions

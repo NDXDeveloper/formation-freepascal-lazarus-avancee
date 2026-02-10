@@ -14,9 +14,9 @@ Dans ce chapitre, nous allons explorer comment créer et consommer des API Graph
 
 Imaginez un restaurant :
 
-**Vous (le client)** = Votre application
-**Le serveur** = L'API
-**La cuisine** = Le serveur/base de données
+**Vous (le client)** = Votre application  
+**Le serveur** = L'API  
+**La cuisine** = Le serveur/base de données  
 
 Vous ne pouvez pas aller directement en cuisine prendre votre plat. Vous devez passer par le serveur (l'API) qui prend votre commande, va en cuisine, et vous rapporte votre plat.
 
@@ -442,6 +442,8 @@ function TGraphQLServer.ExecuteQuery(const Query: String;
   const Variables: TJSONObject): TJSONObject;
 var
   DataObj, UserObj, PostsArray, PostObj: TJSONObject;
+  UsersArray: TJSONArray;
+  i: Integer;
 begin
   Result := TJSONObject.Create;
 
@@ -480,9 +482,9 @@ begin
   // Requête "users" (liste)
   else if Pos('users', LowerCase(Query)) > 0 then
   begin
-    var UsersArray := TJSONArray.Create;
+    UsersArray := TJSONArray.Create;
 
-    for var i := 1 to 3 do
+    for i := 1 to 3 do
     begin
       UserObj := TJSONObject.Create;
       UserObj.Add('id', i);
@@ -504,6 +506,7 @@ function TGraphQLServer.ExecuteMutation(const Query: String;
   const Variables: TJSONObject): TJSONObject;
 var
   UserObj: TJSONObject;
+  DeleteResult: TJSONObject;
 begin
   Result := TJSONObject.Create;
 
@@ -540,7 +543,7 @@ begin
   begin
     WriteLn('✅ Suppression d''un utilisateur');
 
-    var DeleteResult := TJSONObject.Create;
+    DeleteResult := TJSONObject.Create;
     DeleteResult.Add('success', True);
     DeleteResult.Add('message', 'User deleted successfully');
 
@@ -746,6 +749,7 @@ var
   Client: TGraphQLClient;
   Response: TJSONObject;
   User: TJSONObject;
+  Variables: TJSONObject;
 
 begin
   WriteLn('=== Client GraphQL FreePascal ===');
@@ -791,7 +795,7 @@ begin
 
     // === 3. Query avec variables ===
     WriteLn('3. Query avec variables:');
-    var Variables := TJSONObject.Create;
+    Variables := TJSONObject.Create;
     try
       Variables.Add('userId', 123);
 
@@ -1542,6 +1546,7 @@ var
   UserObj: TJSONObject;
   PageInfo: TJSONObject;
   LastID: Integer;
+  Count: Integer;
 begin
   Result := TJSONObject.Create;
   Users := TJSONArray.Create;
@@ -1569,7 +1574,7 @@ begin
     Query.Open;
 
     LastID := 0;
-    var Count := 0;
+    Count := 0;
 
     while not Query.EOF and (Count < First) do
     begin
@@ -2132,8 +2137,9 @@ type UserError {
 ```pascal
 function CreateUser(Input: TCreateUserInput): TJSONObject;
 var
-  Result, Errors: TJSONObject;
+  Errors, Error: TJSONObject;
   ErrorsArray: TJSONArray;
+  User: TJSONObject;
 begin
   Result := TJSONObject.Create;
   ErrorsArray := TJSONArray.Create;
@@ -2141,7 +2147,7 @@ begin
   // Validation
   if Input.Email = '' then
   begin
-    var Error := TJSONObject.Create;
+    Error := TJSONObject.Create;
     Error.Add('field', 'email');
     Error.Add('message', 'Email requis');
     ErrorsArray.Add(Error);
@@ -2155,7 +2161,7 @@ begin
   else
   begin
     // Créer l'utilisateur
-    var User := CreateUserInDatabase(Input);
+    User := CreateUserInDatabase(Input);
     Result.Add('user', User);
     Result.Add('userErrors', TJSONArray.Create);
   end;
@@ -2170,13 +2176,14 @@ end;
 function GetUsers: TJSONArray;
 var
   Query: TSQLQuery;
+  User: TJSONObject;
 begin
   Query.SQL.Text := 'SELECT * FROM users';
   Query.Open;
 
   while not Query.EOF do
   begin
-    var User := CreateUserJSON(Query);
+    User := CreateUserJSON(Query);
 
     // Requête supplémentaire pour CHAQUE utilisateur !
     User.Add('posts', GetUserPosts(Query.FieldByName('id').AsInteger));
@@ -2195,12 +2202,14 @@ var
   UsersQuery, PostsQuery: TSQLQuery;
   PostsByUser: TDictionary;
   UserID: Integer;
+  UserIDs: String;
+  User: TJSONObject;
 begin
   // 1. Récupérer tous les utilisateurs
   UsersQuery.SQL.Text := 'SELECT * FROM users';
   UsersQuery.Open;
 
-  var UserIDs := CollectUserIDs(UsersQuery);
+  UserIDs := CollectUserIDs(UsersQuery);
 
   // 2. Récupérer tous les posts en une seule requête
   PostsQuery.SQL.Text :=
@@ -2215,7 +2224,7 @@ begin
   UsersQuery.First;
   while not UsersQuery.EOF do
   begin
-    var User := CreateUserJSON(UsersQuery);
+    User := CreateUserJSON(UsersQuery);
     UserID := UsersQuery.FieldByName('id').AsInteger;
 
     if PostsByUser.ContainsKey(UserID) then
@@ -2475,6 +2484,8 @@ var
   Line: String;
   TotalQueries, SuccessCount, ErrorCount: Integer;
   TotalDuration, MaxDuration: Integer;
+  DurationStr: String;
+  Duration: Integer;
 begin
   AssignFile(F, FLogFile);
   try
@@ -2495,8 +2506,8 @@ begin
         Inc(TotalQueries);
 
         // Parser la durée
-        var DurationStr := Copy(Line, Pos('Duration:', Line) + 9, 10);
-        var Duration := StrToIntDef(Copy(DurationStr, 1, Pos('ms', DurationStr) - 1), 0);
+        DurationStr := Copy(Line, Pos('Duration:', Line) + 9, 10);
+        Duration := StrToIntDef(Copy(DurationStr, 1, Pos('ms', DurationStr) - 1), 0);
 
         TotalDuration := TotalDuration + Duration;
         if Duration > MaxDuration then

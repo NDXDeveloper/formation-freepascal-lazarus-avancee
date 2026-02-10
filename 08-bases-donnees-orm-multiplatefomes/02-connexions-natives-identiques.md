@@ -204,14 +204,16 @@ end;
 
 function CreateConnection(AType: string): TSQLConnection;
 begin
-  case AType of
-    'postgresql': Result := TPQConnection.Create(nil);
-    'mysql': Result := TMySQL57Connection.Create(nil);
-    'sqlite': Result := TSQLite3Connection.Create(nil);
-    'firebird': Result := TIBConnection.Create(nil);
+  if AType = 'postgresql' then
+    Result := TPQConnection.Create(nil)
+  else if AType = 'mysql' then
+    Result := TMySQL57Connection.Create(nil)
+  else if AType = 'sqlite' then
+    Result := TSQLite3Connection.Create(nil)
+  else if AType = 'firebird' then
+    Result := TIBConnection.Create(nil)
   else
     raise Exception.Create('Type de base non supporté');
-  end;
 end;
 ```
 

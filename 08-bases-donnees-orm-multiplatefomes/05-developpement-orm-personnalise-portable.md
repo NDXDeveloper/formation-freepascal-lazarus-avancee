@@ -25,11 +25,11 @@ Email := Client.Email;
 
 ### Avantages d'un ORM
 
-✅ **Code plus lisible** - Manipulation orientée objet
-✅ **Moins de SQL à écrire** - L'ORM génère les requêtes
-✅ **Sécurité** - Protection automatique contre les injections SQL
-✅ **Portabilité** - Changez de SGBD sans modifier le code métier
-✅ **Maintenance** - Modifications centralisées
+✅ **Code plus lisible** - Manipulation orientée objet  
+✅ **Moins de SQL à écrire** - L'ORM génère les requêtes  
+✅ **Sécurité** - Protection automatique contre les injections SQL  
+✅ **Portabilité** - Changez de SGBD sans modifier le code métier  
+✅ **Maintenance** - Modifications centralisées  
 ✅ **Validation** - Règles métier intégrées aux objets
 
 ### Pourquoi développer son propre ORM ?
@@ -3044,11 +3044,11 @@ end;
 
 Développer son propre ORM est un excellent exercice d'apprentissage qui offre :
 
-✅ **Compréhension profonde** des mécanismes de persistance
-✅ **Contrôle total** sur le comportement et les performances
-✅ **Adaptation** aux besoins spécifiques de votre projet
-✅ **Légèreté** - Seulement les fonctionnalités nécessaires
-✅ **Portabilité** - Conçu pour Windows et Linux dès le départ
+✅ **Compréhension profonde** des mécanismes de persistance  
+✅ **Contrôle total** sur le comportement et les performances  
+✅ **Adaptation** aux besoins spécifiques de votre projet  
+✅ **Légèreté** - Seulement les fonctionnalités nécessaires  
+✅ **Portabilité** - Conçu pour Windows et Linux dès le départ  
 ✅ **Maintenance** - Code que vous maîtrisez complètement
 
 ### Points clés à retenir

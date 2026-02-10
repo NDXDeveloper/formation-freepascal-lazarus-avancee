@@ -964,11 +964,11 @@ mORMot inclut des dizaines d'exemples dans le dossier `ex/` :
 
 mORMot est un framework extrêmement puissant qui vous permet de :
 
-✓ Développer des applications bases de données rapides sans écrire de SQL
-✓ Créer des API REST performantes en quelques lignes
-✓ Implémenter une architecture SOA professionnelle
-✓ Travailler de manière identique sur Windows et Ubuntu
-✓ Gérer la persistance, la sérialisation et les services dans un seul framework
+✓ Développer des applications bases de données rapides sans écrire de SQL  
+✓ Créer des API REST performantes en quelques lignes  
+✓ Implémenter une architecture SOA professionnelle  
+✓ Travailler de manière identique sur Windows et Ubuntu  
+✓ Gérer la persistance, la sérialisation et les services dans un seul framework  
 ✓ Atteindre des performances exceptionnelles (parmi les meilleures du marché)
 
 ### Points clés à retenir
@@ -3364,13 +3364,13 @@ Dans ce tutoriel complet sur mORMot, vous avez découvert :
 
 **Points forts indéniables :**
 
-✓ **Performance exceptionnelle** : Parmi les meilleurs frameworks du marché
-✓ **Complet** : ORM + REST + SOA + JSON dans un seul package
-✓ **Multi-plateforme** : Windows, Linux, macOS, mobile, embarqué
-✓ **Production-ready** : Utilisé dans des applications critiques
-✓ **Bien maintenu** : Développement actif depuis plus de 10 ans
-✓ **Documentation exhaustive** : Plus de 1000 pages + exemples
-✓ **Communauté active** : Forum réactif, support de l'auteur
+✓ **Performance exceptionnelle** : Parmi les meilleurs frameworks du marché  
+✓ **Complet** : ORM + REST + SOA + JSON dans un seul package  
+✓ **Multi-plateforme** : Windows, Linux, macOS, mobile, embarqué  
+✓ **Production-ready** : Utilisé dans des applications critiques  
+✓ **Bien maintenu** : Développement actif depuis plus de 10 ans  
+✓ **Documentation exhaustive** : Plus de 1000 pages + exemples  
+✓ **Communauté active** : Forum réactif, support de l'auteur  
 ✓ **Gratuit et open source** : Aucune limitation commerciale
 
 ### Prochaines étapes

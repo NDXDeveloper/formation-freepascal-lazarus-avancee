@@ -414,13 +414,14 @@ end;
 function TReplicationMonitor.IsReplicaHealthy: Boolean;
 var
   Lag: Integer;
+  Status: string;
 begin
   Result := False;
 
   if IsMaster then
   begin
     // Vérifier que les esclaves sont connectés
-    var Status := GetReplicationStatus;
+    Status := GetReplicationStatus;
     Result := Length(Status) > 0;
   end
   else

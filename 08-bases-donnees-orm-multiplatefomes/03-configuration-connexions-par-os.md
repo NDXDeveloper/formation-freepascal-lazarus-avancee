@@ -393,10 +393,9 @@ begin
   PathActuel := GetEnvironmentVariable('LD_LIBRARY_PATH');
 
   if PathActuel <> '' then
-    SetEnvironmentVariable('LD_LIBRARY_PATH',
-      PChar(CheminSO + ':' + PathActuel))
+    fpSetEnv(PChar('LD_LIBRARY_PATH'), PChar(CheminSO + ':' + PathActuel), 1)
   else
-    SetEnvironmentVariable('LD_LIBRARY_PATH', PChar(CheminSO));
+    fpSetEnv(PChar('LD_LIBRARY_PATH'), PChar(CheminSO), 1);
 end;
 ```
 

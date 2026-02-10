@@ -1652,13 +1652,13 @@ end.
 
 ZEOS DBO est une solution puissante et universelle pour l'accès aux bases de données dans vos applications FreePascal/Lazarus. Ses points forts :
 
-✅ **Interface unifiée** pour de nombreux SGBD
-✅ **Multi-plateforme** natif (Windows, Linux, macOS)
-✅ **Hautes performances** avec optimisations natives
-✅ **Open source** et bien maintenu
-✅ **API simple et intuitive**
-✅ **Intégration parfaite** avec les composants Lazarus
-✅ **Support complet** des transactions et prepared statements
+✅ **Interface unifiée** pour de nombreux SGBD  
+✅ **Multi-plateforme** natif (Windows, Linux, macOS)  
+✅ **Hautes performances** avec optimisations natives  
+✅ **Open source** et bien maintenu  
+✅ **API simple et intuitive**  
+✅ **Intégration parfaite** avec les composants Lazarus  
+✅ **Support complet** des transactions et prepared statements  
 ✅ **Communauté active** et documentation riche
 
 Avec ZEOS, vous pouvez développer des applications professionnelles de gestion de bases de données qui fonctionnent de manière identique sur Windows et Linux, sans vous soucier des différences de bas niveau entre les systèmes.
