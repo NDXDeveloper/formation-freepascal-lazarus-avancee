@@ -8,11 +8,11 @@ SIMD (Single Instruction, Multiple Data) est une technique qui permet au process
 
 **Exemple simple** :
 ```
-Addition classique (scalaire) :
-A[0] + B[0] = C[0]  ← 1 cycle
-A[1] + B[1] = C[1]  ← 1 cycle
-A[2] + B[2] = C[2]  ← 1 cycle
-A[3] + B[3] = C[3]  ← 1 cycle
+Addition classique (scalaire) :  
+A[0] + B[0] = C[0]  ← 1 cycle  
+A[1] + B[1] = C[1]  ← 1 cycle  
+A[2] + B[2] = C[2]  ← 1 cycle  
+A[3] + B[3] = C[3]  ← 1 cycle  
 Total : 4 cycles
 
 Addition SIMD (vectorielle) :
@@ -37,15 +37,15 @@ Les processeurs modernes possèdent des registres spéciaux pour SIMD :
 
 **Intel/AMD (x86/x64)** :
 ```
-MMX      : 64 bits   (obsolète)
-SSE      : 128 bits  → 4 × float (32 bits) ou 2 × double (64 bits)
-AVX      : 256 bits  → 8 × float ou 4 × double
+MMX      : 64 bits   (obsolète)  
+SSE      : 128 bits  → 4 × float (32 bits) ou 2 × double (64 bits)  
+AVX      : 256 bits  → 8 × float ou 4 × double  
 AVX-512  : 512 bits  → 16 × float ou 8 × double
 ```
 
 **ARM (processeurs mobiles, Raspberry Pi)** :
 ```
-NEON     : 128 bits  → 4 × float
+NEON     : 128 bits  → 4 × float  
 SVE      : Variable  → Jusqu'à 2048 bits
 ```
 
@@ -98,7 +98,7 @@ Registre AVX (256 bits) :
 {$IFDEF WINDOWS}
 uses Windows;
 
-function CPUSupportsSSE: Boolean;
+function CPUSupportsSSE: Boolean;  
 var
   Info: array[0..3] of Cardinal;
 begin
@@ -115,7 +115,7 @@ begin
   Result := (Info[3] and (1 shl 25)) <> 0;  // Bit 25 = SSE
 end;
 
-function CPUSupportsAVX: Boolean;
+function CPUSupportsAVX: Boolean;  
 var
   Info: array[0..3] of Cardinal;
 begin
@@ -239,7 +239,7 @@ fpc -O3 -CpARMV7A programme.pas
 
 **Code source** :
 ```pascal
-procedure AddArrays(A, B, C: PSingle; Count: Integer);
+procedure AddArrays(A, B, C: PSingle; Count: Integer);  
 var
   i: Integer;
 begin
@@ -297,8 +297,8 @@ for i := 0 to N - 1 do
   C[i] := A[i] + B[i];
 
 // ❌ Difficile à vectoriser
-i := 0;
-while i < N do
+i := 0;  
+while i < N do  
 begin
   C[i] := A[i] + B[i];
   Inc(i);
@@ -325,7 +325,7 @@ Pour un contrôle total, utilisez l'assembleur inline.
 ```pascal
 {$ASMMODE INTEL}  // Syntaxe Intel (plus lisible)
 
-procedure MaFonction;
+procedure MaFonction;  
 asm
   // Code assembleur ici
 end;
@@ -430,26 +430,26 @@ end;
 
 **Chargement/stockage** :
 ```asm
-movaps  xmm0, [addr]  ; Aligned load (16-byte aligned)
-movups  xmm0, [addr]  ; Unaligned load
-movaps  [addr], xmm0  ; Aligned store
+movaps  xmm0, [addr]  ; Aligned load (16-byte aligned)  
+movups  xmm0, [addr]  ; Unaligned load  
+movaps  [addr], xmm0  ; Aligned store  
 movups  [addr], xmm0  ; Unaligned store
 ```
 
 **Arithmétique (float)** :
 ```asm
-addps   xmm0, xmm1    ; Addition : xmm0 += xmm1 (4 floats)
-subps   xmm0, xmm1    ; Soustraction
-mulps   xmm0, xmm1    ; Multiplication
-divps   xmm0, xmm1    ; Division
+addps   xmm0, xmm1    ; Addition : xmm0 += xmm1 (4 floats)  
+subps   xmm0, xmm1    ; Soustraction  
+mulps   xmm0, xmm1    ; Multiplication  
+divps   xmm0, xmm1    ; Division  
 sqrtps  xmm0, xmm1    ; Racine carrée
 ```
 
 **Arithmétique (double)** :
 ```asm
-addpd   xmm0, xmm1    ; Addition : xmm0 += xmm1 (2 doubles)
-subpd   xmm0, xmm1    ; Soustraction
-mulpd   xmm0, xmm1    ; Multiplication
+addpd   xmm0, xmm1    ; Addition : xmm0 += xmm1 (2 doubles)  
+subpd   xmm0, xmm1    ; Soustraction  
+mulpd   xmm0, xmm1    ; Multiplication  
 divpd   xmm0, xmm1    ; Division
 ```
 
@@ -461,8 +461,8 @@ cmpps   xmm0, xmm1, imm8  ; Comparer (imm8 = type de comparaison)
 
 **Logique** :
 ```asm
-andps   xmm0, xmm1    ; AND bit à bit
-orps    xmm0, xmm1    ; OR
+andps   xmm0, xmm1    ; AND bit à bit  
+orps    xmm0, xmm1    ; OR  
 xorps   xmm0, xmm1    ; XOR
 ```
 
@@ -470,15 +470,15 @@ xorps   xmm0, xmm1    ; XOR
 
 **Chargement/stockage** :
 ```asm
-vmovups ymm0, [addr]       ; Unaligned load (8 floats)
+vmovups ymm0, [addr]       ; Unaligned load (8 floats)  
 vmovups [addr], ymm0       ; Unaligned store
 ```
 
 **Arithmétique** :
 ```asm
-vaddps  ymm0, ymm1, ymm2   ; ymm0 = ymm1 + ymm2 (8 floats)
-vsubps  ymm0, ymm1, ymm2   ; Soustraction
-vmulps  ymm0, ymm1, ymm2   ; Multiplication
+vaddps  ymm0, ymm1, ymm2   ; ymm0 = ymm1 + ymm2 (8 floats)  
+vsubps  ymm0, ymm1, ymm2   ; Soustraction  
+vmulps  ymm0, ymm1, ymm2   ; Multiplication  
 vdivps  ymm0, ymm1, ymm2   ; Division
 ```
 
@@ -490,7 +490,7 @@ vdivps  ymm0, ymm1, ymm2   ; Division
 
 **Version scalaire** :
 ```pascal
-function DotProduct(A, B: PSingle; N: Integer): Single;
+function DotProduct(A, B: PSingle; N: Integer): Single;  
 var
   i: Integer;
   Sum: Single;
@@ -507,7 +507,7 @@ end;
 ```pascal
 {$ASMMODE INTEL}
 
-function DotProductSSE(A, B: PSingle; N: Integer): Single;
+function DotProductSSE(A, B: PSingle; N: Integer): Single;  
 var
   i, Count: Integer;
   Sum: Single;
@@ -555,7 +555,7 @@ end;
 ```pascal
 {$ASMMODE INTEL}
 
-function DotProductAVX(A, B: PSingle; N: Integer): Single;
+function DotProductAVX(A, B: PSingle; N: Integer): Single;  
 var
   i, Count: Integer;
   Sum: Single;
@@ -612,7 +612,7 @@ type
   PRGBArray = ^TRGBArray;
   TRGBArray = array[0..0] of TRGB;
 
-procedure RGBToGrayScalar(Pixels: PRGBArray; Count: Integer);
+procedure RGBToGrayScalar(Pixels: PRGBArray; Count: Integer);  
 var
   i: Integer;
   Gray: Byte;
@@ -634,7 +634,7 @@ end;
 ```pascal
 {$ASMMODE INTEL}
 
-procedure RGBToGraySSE(Pixels: PRGBArray; Count: Integer);
+procedure RGBToGraySSE(Pixels: PRGBArray; Count: Integer);  
 var
   i, VectorCount: Integer;
   R, G, B, Gray: Byte;
@@ -691,7 +691,7 @@ end;
 ```pascal
 {$ASMMODE INTEL}
 
-procedure MatrixMultiplySSE(A, B, C: PSingle; N: Integer);
+procedure MatrixMultiplySSE(A, B, C: PSingle; N: Integer);  
 var
   i, j, k: Integer;
   Sum: array[0..3] of Single;
@@ -750,7 +750,7 @@ end;
 Les instructions SIMD **alignées** (`movaps`, `vmovaps`) sont plus rapides que les **non alignées** (`movups`, `vmovups`) :
 
 ```
-movaps (aligned)   : 1 cycle
+movaps (aligned)   : 1 cycle  
 movups (unaligned) : 3-7 cycles (selon le CPU)
 ```
 
@@ -767,7 +767,7 @@ var
 
 **Allocation dynamique** :
 ```pascal
-function GetAlignedMem(Size, Alignment: NativeUInt): Pointer;
+function GetAlignedMem(Size, Alignment: NativeUInt): Pointer;  
 var
   Original: Pointer;
   Aligned: NativeUInt;
@@ -784,7 +784,7 @@ begin
   Result := Pointer(Aligned);
 end;
 
-procedure FreeAlignedMem(P: Pointer);
+procedure FreeAlignedMem(P: Pointer);  
 var
   Original: Pointer;
 begin
@@ -808,7 +808,7 @@ end;
 
 **Vérifier l'alignement** :
 ```pascal
-function IsAligned(P: Pointer; Alignment: NativeUInt): Boolean;
+function IsAligned(P: Pointer; Alignment: NativeUInt): Boolean;  
 begin
   Result := (NativeUInt(P) mod Alignment) = 0;
 end;
@@ -882,19 +882,19 @@ type
   TVector8f = array[0..7] of Single;  // 8 floats (AVX)
 
 // Opérations SSE
-function Vec4Add(const A, B: TVector4f): TVector4f;
-function Vec4Sub(const A, B: TVector4f): TVector4f;
-function Vec4Mul(const A, B: TVector4f): TVector4f;
+function Vec4Add(const A, B: TVector4f): TVector4f;  
+function Vec4Sub(const A, B: TVector4f): TVector4f;  
+function Vec4Mul(const A, B: TVector4f): TVector4f;  
 function Vec4Dot(const A, B: TVector4f): Single;
 
 // Opérations AVX
-function Vec8Add(const A, B: TVector8f): TVector8f;
-function Vec8Sub(const A, B: TVector8f): TVector8f;
+function Vec8Add(const A, B: TVector8f): TVector8f;  
+function Vec8Sub(const A, B: TVector8f): TVector8f;  
 function Vec8Mul(const A, B: TVector8f): TVector8f;
 
 implementation
 
-function Vec4Add(const A, B: TVector4f): TVector4f;
+function Vec4Add(const A, B: TVector4f): TVector4f;  
 asm
   movups xmm0, [A]
   movups xmm1, [B]
@@ -902,7 +902,7 @@ asm
   movups [Result], xmm0
 end;
 
-function Vec4Sub(const A, B: TVector4f): TVector4f;
+function Vec4Sub(const A, B: TVector4f): TVector4f;  
 asm
   movups xmm0, [A]
   movups xmm1, [B]
@@ -910,7 +910,7 @@ asm
   movups [Result], xmm0
 end;
 
-function Vec4Mul(const A, B: TVector4f): TVector4f;
+function Vec4Mul(const A, B: TVector4f): TVector4f;  
 asm
   movups xmm0, [A]
   movups xmm1, [B]
@@ -918,7 +918,7 @@ asm
   movups [Result], xmm0
 end;
 
-function Vec4Dot(const A, B: TVector4f): Single;
+function Vec4Dot(const A, B: TVector4f): Single;  
 var
   Temp: TVector4f;
 begin
@@ -933,7 +933,7 @@ begin
   Result := Temp[0] + Temp[1] + Temp[2] + Temp[3];
 end;
 
-function Vec8Add(const A, B: TVector8f): TVector8f;
+function Vec8Add(const A, B: TVector8f): TVector8f;  
 asm
   vmovups ymm0, [A]
   vmovups ymm1, [B]
@@ -942,7 +942,7 @@ asm
   vzeroupper
 end;
 
-function Vec8Sub(const A, B: TVector8f): TVector8f;
+function Vec8Sub(const A, B: TVector8f): TVector8f;  
 asm
   vmovups ymm0, [A]
   vmovups ymm1, [B]
@@ -951,7 +951,7 @@ asm
   vzeroupper
 end;
 
-function Vec8Mul(const A, B: TVector8f): TVector8f;
+function Vec8Mul(const A, B: TVector8f): TVector8f;  
 asm
   vmovups ymm0, [A]
   vmovups ymm1, [B]
@@ -1015,7 +1015,7 @@ implementation
 
 {$ASMMODE INTEL}
 
-function DetectCPUFeatures: TCPUFeatures;
+function DetectCPUFeatures: TCPUFeatures;  
 var
   Info1, Info7: array[0..3] of Cardinal;
 begin
@@ -1104,16 +1104,16 @@ var
   ProcessOptimal: TProcessFunc;
   Features: TCPUFeatures;
 
-procedure ProcessScalar(Data: PSingle; Count: Integer);
-var i: Integer;
+procedure ProcessScalar(Data: PSingle; Count: Integer);  
+var i: Integer;  
 begin
   for i := 0 to Count - 1 do
     Data[i] := Data[i] * 2.0;
 end;
 
 {$ASMMODE INTEL}
-procedure ProcessSSE(Data: PSingle; Count: Integer);
-var i, VectorCount: Integer;
+procedure ProcessSSE(Data: PSingle; Count: Integer);  
+var i, VectorCount: Integer;  
 begin
   VectorCount := Count div 4;
   asm
@@ -1133,8 +1133,8 @@ begin
     Data[i] := Data[i] * 2.0;
 end;
 
-procedure ProcessAVX(Data: PSingle; Count: Integer);
-var i, VectorCount: Integer;
+procedure ProcessAVX(Data: PSingle; Count: Integer);  
+var i, VectorCount: Integer;  
 begin
   VectorCount := Count div 8;
   asm
@@ -1190,7 +1190,7 @@ end;
 ```pascal
 {$ASMMODE INTEL}
 
-procedure AddArraysUnrolled(A, B, C: PSingle; Count: Integer);
+procedure AddArraysUnrolled(A, B, C: PSingle; Count: Integer);  
 var
   VectorCount, RemainCount, i: Integer;
 begin
@@ -1247,7 +1247,7 @@ end;
 ```pascal
 {$ASMMODE INTEL}
 
-procedure ProcessWithPrefetch(Data: PSingle; Count: Integer);
+procedure ProcessWithPrefetch(Data: PSingle; Count: Integer);  
 const
   PrefetchDistance = 64;  // Prefetch 64 floats à l'avance
 var
@@ -1513,7 +1513,7 @@ end;
 
 ```pascal
 {$IFDEF CPUARM}
-function HasNEON: Boolean;
+function HasNEON: Boolean;  
 begin
   // Sur ARM Linux, vérifier /proc/cpuinfo
   Result := False;  // Implémentation simplifiée
@@ -1530,7 +1530,7 @@ end;
 
 ```pascal
 // ❌ Mauvais
-procedure ProcessAVX(Data: PSingle; Count: Integer);
+procedure ProcessAVX(Data: PSingle; Count: Integer);  
 asm
   vmovups ymm0, [Data]
   // ... traitement ...
@@ -1542,7 +1542,7 @@ end;
 // Pénalité : ~70 cycles à chaque transition
 
 // ✅ Bon
-procedure ProcessAVX(Data: PSingle; Count: Integer);
+procedure ProcessAVX(Data: PSingle; Count: Integer);  
 asm
   vmovups ymm0, [Data]
   // ... traitement ...
@@ -1569,14 +1569,14 @@ end;
 
 ```pascal
 // ❌ Mauvais : perd des données
-procedure Process;
+procedure Process;  
 asm
   movaps xmm0, [Data]
   // xmm0 est utilisé par le compilateur, on peut perdre des données
 end;
 
 // ✅ Bon : utiliser des registres locaux ou sauvegarder
-procedure Process;
+procedure Process;  
 var
   TempXMM: array[0..3] of Single;
 asm
@@ -1590,7 +1590,7 @@ end;
 
 ```pascal
 // ❌ Inefficace : passer de SIMD à scalaire constamment
-for i := 0 to Count - 1 do
+for i := 0 to Count - 1 do  
 begin
   if i mod 4 = 0 then
     ProcessVectorSSE(@Data[i])  // SIMD
@@ -1599,7 +1599,7 @@ begin
 end;
 
 // ✅ Traiter par blocs homogènes
-VectorCount := Count div 4;
+VectorCount := Count div 4;  
 for i := 0 to VectorCount - 1 do
   ProcessVectorSSE(@Data[i * 4]);  // Tout en SIMD
 
@@ -1627,8 +1627,8 @@ var
   StartTime: TDateTime;
   TimeScalar, TimeSSE, TimeAVX: Int64;
 
-procedure InitData;
-var i: Integer;
+procedure InitData;  
+var i: Integer;  
 begin
   SetLength(A, N);
   SetLength(B, N);
@@ -1641,7 +1641,7 @@ begin
   end;
 end;
 
-procedure ValidateResults(const C1, C2: array of Single);
+procedure ValidateResults(const C1, C2: array of Single);  
 var
   i: Integer;
   MaxError: Single;
@@ -1659,8 +1659,8 @@ begin
     WriteLn('Validation OK (erreur max = ', MaxError:0:6, ')');
 end;
 
-procedure BenchScalar;
-var i, j: Integer;
+procedure BenchScalar;  
+var i, j: Integer;  
 begin
   for j := 1 to Iterations do
     for i := 0 to N - 1 do
@@ -1756,7 +1756,7 @@ end.
 ```pascal
 {$ASMMODE INTEL}
 
-procedure CrossPlatformSIMD(Data: PSingle; Count: Integer);
+procedure CrossPlatformSIMD(Data: PSingle; Count: Integer);  
 asm
   {$IFDEF WINDOWS}
   // Windows: Data dans RCX, Count dans RDX
@@ -1851,7 +1851,7 @@ Créer une DLL C++ avec les intrinsics Intel :
 // fichier: simd_ops.cpp
 #include <immintrin.h>
 
-extern "C" __declspec(dllexport)
+extern "C" __declspec(dllexport)  
 void add_arrays_avx(float* a, float* b, float* c, int n) {
     int i;
     for(i = 0; i < n; i += 8) {
@@ -2012,7 +2012,7 @@ var
   CPUSupportsAVX: Boolean = False;
 
 // Détection CPU
-procedure DetectCPU;
+procedure DetectCPU;  
 var
   Info: array[0..3] of Cardinal;
 begin
@@ -2030,7 +2030,7 @@ begin
 end;
 
 // Chargement image (simplifié - en réalité utiliser FPImage ou autre)
-function LoadImage(const FileName: string): TImage;
+function LoadImage(const FileName: string): TImage;  
 var
   i: Integer;
 begin
@@ -2049,7 +2049,7 @@ begin
 end;
 
 // Conversion RGB → Grayscale (version scalaire)
-procedure ConvertToGrayscaleScalar(var Img: TImage);
+procedure ConvertToGrayscaleScalar(var Img: TImage);  
 var
   i: Integer;
   Gray: Byte;
@@ -2066,7 +2066,7 @@ begin
 end;
 
 // Conversion RGB → Grayscale (version SIMD optimisée)
-procedure ConvertToGrayscaleSIMD(var Img: TImage);
+procedure ConvertToGrayscaleSIMD(var Img: TImage);  
 var
   i: Integer;
   P: PPixelRGB;
@@ -2093,7 +2093,7 @@ begin
 end;
 
 // Augmentation de luminosité (version SSE)
-procedure BrightenSSE(var Img: TImage; Amount: Single);
+procedure BrightenSSE(var Img: TImage; Amount: Single);  
 var
   i, Count: Integer;
   Pixels: PByte;
@@ -2132,7 +2132,7 @@ begin
 end;
 
 // Traiter un lot d'images
-procedure ProcessBatch(const Files: TStringList);
+procedure ProcessBatch(const Files: TStringList);  
 var
   i: Integer;
   Img: TImage;

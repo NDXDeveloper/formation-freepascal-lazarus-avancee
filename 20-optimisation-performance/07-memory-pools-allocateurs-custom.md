@@ -79,7 +79,7 @@ type
     function Available: Integer;
   end;
 
-constructor TMemoryPool.Create(BlockSize, BlockCount: Integer);
+constructor TMemoryPool.Create(BlockSize, BlockCount: Integer);  
 begin
   inherited Create;
   FBlockSize := BlockSize;
@@ -91,13 +91,13 @@ begin
   InitializePool;
 end;
 
-destructor TMemoryPool.Destroy;
+destructor TMemoryPool.Destroy;  
 begin
   FreeMem(FMemory);
   inherited;
 end;
 
-procedure TMemoryPool.InitializePool;
+procedure TMemoryPool.InitializePool;  
 var
   i: Integer;
   Current: PPointer;
@@ -117,7 +117,7 @@ begin
   Current^ := nil;
 end;
 
-function TMemoryPool.Allocate: Pointer;
+function TMemoryPool.Allocate: Pointer;  
 begin
   if FFreeList = nil then
     raise Exception.Create('Pool épuisé');
@@ -129,7 +129,7 @@ begin
   FFreeList := PPointer(FFreeList)^;
 end;
 
-procedure TMemoryPool.Deallocate(P: Pointer);
+procedure TMemoryPool.Deallocate(P: Pointer);  
 begin
   if P = nil then Exit;
 
@@ -138,7 +138,7 @@ begin
   FFreeList := P;
 end;
 
-function TMemoryPool.Available: Integer;
+function TMemoryPool.Available: Integer;  
 var
   Current: PByte;
 begin
@@ -225,7 +225,7 @@ type
     property Reused: Integer read FReused;
   end;
 
-constructor TObjectPool<T>.Create(MaxSize: Integer);
+constructor TObjectPool<T>.Create(MaxSize: Integer);  
 begin
   inherited Create;
   FMaxSize := MaxSize;
@@ -234,7 +234,7 @@ begin
   FReused := 0;
 end;
 
-destructor TObjectPool<T>.Destroy;
+destructor TObjectPool<T>.Destroy;  
 var
   Obj: T;
 begin
@@ -249,7 +249,7 @@ begin
   inherited;
 end;
 
-function TObjectPool<T>.Acquire: T;
+function TObjectPool<T>.Acquire: T;  
 begin
   if FPool.Count > 0 then
   begin
@@ -263,7 +263,7 @@ begin
   end;
 end;
 
-procedure TObjectPool<T>.Release(Obj: T);
+procedure TObjectPool<T>.Release(Obj: T);  
 begin
   if Obj = nil then Exit;
 
@@ -292,19 +292,19 @@ type
     property Path: String read FPath write FPath;
   end;
 
-constructor THTTPRequest.Create;
+constructor THTTPRequest.Create;  
 begin
   inherited;
   FHeaders := TStringList.Create;
 end;
 
-destructor THTTPRequest.Destroy;
+destructor THTTPRequest.Destroy;  
 begin
   FHeaders.Free;
   inherited;
 end;
 
-procedure THTTPRequest.Reset;
+procedure THTTPRequest.Reset;  
 begin
   FMethod := '';
   FPath := '';
@@ -316,7 +316,7 @@ var
   RequestPool: TObjectPool<THTTPRequest>;
 
 // Traiter une requête
-procedure HandleRequest;
+procedure HandleRequest;  
 var
   Request: THTTPRequest;
 begin
@@ -379,7 +379,7 @@ type
     property Available: NativeUInt read GetAvailable;
   end;
 
-constructor TArena.Create(Size: NativeUInt);
+constructor TArena.Create(Size: NativeUInt);  
 begin
   inherited Create;
   FSize := Size;
@@ -387,13 +387,13 @@ begin
   FOffset := 0;
 end;
 
-destructor TArena.Destroy;
+destructor TArena.Destroy;  
 begin
   FreeMem(FBuffer);
   inherited;
 end;
 
-function TArena.Alloc(Size: NativeUInt): Pointer;
+function TArena.Alloc(Size: NativeUInt): Pointer;  
 begin
   // Aligner sur 8 bytes
   Size := (Size + 7) and not 7;
@@ -405,12 +405,12 @@ begin
   Inc(FOffset, Size);
 end;
 
-procedure TArena.Reset;
+procedure TArena.Reset;  
 begin
   FOffset := 0;  // Tout réinitialiser en O(1) !
 end;
 
-function TArena.GetAvailable: NativeUInt;
+function TArena.GetAvailable: NativeUInt;  
 begin
   Result := FSize - FOffset;
 end;
@@ -427,7 +427,7 @@ type
   end;
   PToken = ^TToken;
 
-procedure ParseFile(const FileName: string);
+procedure ParseFile(const FileName: string);  
 var
   Arena: TArena;
   Token: PToken;
@@ -494,7 +494,7 @@ type
     procedure FreeToMarker(Marker: NativeUInt);
   end;
 
-constructor TStackAllocator.Create(Size: NativeUInt);
+constructor TStackAllocator.Create(Size: NativeUInt);  
 begin
   inherited Create;
   FSize := Size;
@@ -502,13 +502,13 @@ begin
   FTop := 0;
 end;
 
-destructor TStackAllocator.Destroy;
+destructor TStackAllocator.Destroy;  
 begin
   FreeMem(FBuffer);
   inherited;
 end;
 
-function TStackAllocator.Push(Size: NativeUInt): Pointer;
+function TStackAllocator.Push(Size: NativeUInt): Pointer;  
 begin
   Size := (Size + 7) and not 7;  // Alignement
 
@@ -519,7 +519,7 @@ begin
   Inc(FTop, Size);
 end;
 
-procedure TStackAllocator.Pop(P: Pointer);
+procedure TStackAllocator.Pop(P: Pointer);  
 var
   Offset: NativeUInt;
 begin
@@ -530,12 +530,12 @@ begin
     FTop := Offset;
 end;
 
-function TStackAllocator.GetMarker: NativeUInt;
+function TStackAllocator.GetMarker: NativeUInt;  
 begin
   Result := FTop;
 end;
 
-procedure TStackAllocator.FreeToMarker(Marker: NativeUInt);
+procedure TStackAllocator.FreeToMarker(Marker: NativeUInt);  
 begin
   if Marker <= FTop then
     FTop := Marker;
@@ -545,7 +545,7 @@ end;
 ### Utilisation : Calculs imbriqués
 
 ```pascal
-procedure ProcessRecursive(Stack: TStackAllocator; Depth: Integer);
+procedure ProcessRecursive(Stack: TStackAllocator; Depth: Integer);  
 var
   Marker: NativeUInt;
   TempData: PByte;
@@ -610,7 +610,7 @@ type
     procedure Deallocate(P: Pointer; Size: NativeUInt);
   end;
 
-constructor TFreeListAllocator.Create(Size: NativeUInt);
+constructor TFreeListAllocator.Create(Size: NativeUInt);  
 begin
   inherited Create;
   FSize := Size;
@@ -622,13 +622,13 @@ begin
   FFreeList^.Next := nil;
 end;
 
-destructor TFreeListAllocator.Destroy;
+destructor TFreeListAllocator.Destroy;  
 begin
   FreeMem(FBuffer);
   inherited;
 end;
 
-function TFreeListAllocator.Allocate(Size: NativeUInt): Pointer;
+function TFreeListAllocator.Allocate(Size: NativeUInt): Pointer;  
 var
   Current, Prev: PFreeBlock;
   NewBlock: PFreeBlock;
@@ -681,7 +681,7 @@ begin
   raise Exception.Create('Pas assez de mémoire');
 end;
 
-procedure TFreeListAllocator.Deallocate(P: Pointer; Size: NativeUInt);
+procedure TFreeListAllocator.Deallocate(P: Pointer; Size: NativeUInt);  
 var
   Block: PFreeBlock;
   BlockSize: NativeUInt;
@@ -733,7 +733,7 @@ type
     property ObjectSize: Integer read FObjectSize;
   end;
 
-constructor TSlab.Create(ObjectSize, ObjectsPerSlab: Integer);
+constructor TSlab.Create(ObjectSize, ObjectsPerSlab: Integer);  
 begin
   inherited Create;
   FObjectSize := ObjectSize;
@@ -744,7 +744,7 @@ begin
   AllocateSlab;  // Première slab
 end;
 
-destructor TSlab.Destroy;
+destructor TSlab.Destroy;  
 var
   i: Integer;
 begin
@@ -755,7 +755,7 @@ begin
   inherited;
 end;
 
-procedure TSlab.AllocateSlab;
+procedure TSlab.AllocateSlab;  
 var
   SlabMem: PByte;
   i: Integer;
@@ -769,7 +769,7 @@ begin
     FFreeObjects.Add(SlabMem + (i * FObjectSize));
 end;
 
-function TSlab.Allocate: Pointer;
+function TSlab.Allocate: Pointer;  
 begin
   if FFreeObjects.Count = 0 then
     AllocateSlab;  // Allouer une nouvelle slab si nécessaire
@@ -778,7 +778,7 @@ begin
   FFreeObjects.Delete(FFreeObjects.Count - 1);
 end;
 
-procedure TSlab.Deallocate(P: Pointer);
+procedure TSlab.Deallocate(P: Pointer);  
 begin
   if P <> nil then
     FFreeObjects.Add(P);
@@ -798,7 +798,7 @@ type
 var
   NodeAllocator: TSlab;
 
-procedure CreateTree(Depth: Integer): PTreeNode;
+procedure CreateTree(Depth: Integer): PTreeNode;  
 begin
   if Depth = 0 then Exit(nil);
 
@@ -808,7 +808,7 @@ begin
   Result^.Right := CreateTree(Depth - 1);
 end;
 
-procedure FreeTree(Node: PTreeNode);
+procedure FreeTree(Node: PTreeNode);  
 begin
   if Node = nil then Exit;
 
@@ -863,7 +863,7 @@ type
   end;
   PData = ^TData;
 
-procedure BenchmarkSystem;
+procedure BenchmarkSystem;  
 var
   i: Integer;
   Data: PData;
@@ -878,7 +878,7 @@ begin
   WriteLn('System (New/Dispose): ', MilliSecondsBetween(Now, StartTime), ' ms');
 end;
 
-procedure BenchmarkPool;
+procedure BenchmarkPool;  
 var
   i: Integer;
   Data: PData;
@@ -899,7 +899,7 @@ begin
   end;
 end;
 
-procedure BenchmarkArena;
+procedure BenchmarkArena;  
 var
   i: Integer;
   Data: PData;
@@ -1010,7 +1010,7 @@ type
     procedure Deallocate(P: Pointer);
   end;
 
-constructor TThreadLocalPool.Create(BlockSize, BlocksPerPool: Integer);
+constructor TThreadLocalPool.Create(BlockSize, BlocksPerPool: Integer);  
 begin
   inherited Create;
   FBlockSize := BlockSize;
@@ -1018,7 +1018,7 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-function TThreadLocalPool.Allocate: Pointer;
+function TThreadLocalPool.Allocate: Pointer;  
 var
   ThreadID: TThreadID;
   i: Integer;
@@ -1046,7 +1046,7 @@ end;
 ### 2. Alignement pour SIMD
 
 ```pascal
-function TArena.AllocAligned(Size, Alignment: NativeUInt): Pointer;
+function TArena.AllocAligned(Size, Alignment: NativeUInt): Pointer;  
 var
   Offset, Padding: NativeUInt;
 begin
@@ -1104,7 +1104,7 @@ type
     property Statistics: TPoolStatistics read FStats;
   end;
 
-function TMemoryPoolWithStats.Allocate: Pointer;
+function TMemoryPoolWithStats.Allocate: Pointer;  
 begin
   Result := inherited Allocate;
 
@@ -1116,7 +1116,7 @@ begin
     FStats.PeakAllocations := FStats.CurrentAllocations;
 end;
 
-procedure TMemoryPoolWithStats.Deallocate(P: Pointer);
+procedure TMemoryPoolWithStats.Deallocate(P: Pointer);  
 begin
   inherited Deallocate(P);
 
@@ -1125,7 +1125,7 @@ begin
   Inc(FStats.BytesDeallocated, FBlockSize);
 end;
 
-procedure TMemoryPoolWithStats.PrintStatistics;
+procedure TMemoryPoolWithStats.PrintStatistics;  
 begin
   WriteLn('=== Pool Statistics ===');
   WriteLn('Total allocations:    ', FStats.TotalAllocations);
@@ -1157,26 +1157,26 @@ type
     procedure CheckLeaks;
   end;
 
-constructor TTrackedMemoryPool.Create(BlockSize, BlockCount: Integer);
+constructor TTrackedMemoryPool.Create(BlockSize, BlockCount: Integer);  
 begin
   inherited Create(BlockSize, BlockCount);
   FAllocatedBlocks := TDictionary<Pointer, string>.Create;
 end;
 
-destructor TTrackedMemoryPool.Destroy;
+destructor TTrackedMemoryPool.Destroy;  
 begin
   CheckLeaks;
   FAllocatedBlocks.Free;
   inherited;
 end;
 
-function TTrackedMemoryPool.AllocateWithInfo(const Info: string): Pointer;
+function TTrackedMemoryPool.AllocateWithInfo(const Info: string): Pointer;  
 begin
   Result := inherited Allocate;
   FAllocatedBlocks.Add(Result, Info);
 end;
 
-procedure TTrackedMemoryPool.DeallocateWithCheck(P: Pointer);
+procedure TTrackedMemoryPool.DeallocateWithCheck(P: Pointer);  
 begin
   if not FAllocatedBlocks.ContainsKey(P) then
     raise Exception.Create('Double free détecté!');
@@ -1185,7 +1185,7 @@ begin
   inherited Deallocate(P);
 end;
 
-procedure TTrackedMemoryPool.CheckLeaks;
+procedure TTrackedMemoryPool.CheckLeaks;  
 var
   Pair: TPair<Pointer, string>;
 begin
@@ -1246,21 +1246,21 @@ type
     procedure ProcessConnections;
   end;
 
-constructor TWebServer.Create;
+constructor TWebServer.Create;  
 begin
   inherited;
   FConnectionPool := TObjectPool<TConnection>.Create(1000);
   FActiveConnections := TList<TConnection>.Create;
 end;
 
-destructor TWebServer.Destroy;
+destructor TWebServer.Destroy;  
 begin
   FActiveConnections.Free;
   FConnectionPool.Free;
   inherited;
 end;
 
-procedure TWebServer.AcceptConnection(ClientSocket: TSocket);
+procedure TWebServer.AcceptConnection(ClientSocket: TSocket);  
 var
   Conn: TConnection;
 begin
@@ -1270,7 +1270,7 @@ begin
   FActiveConnections.Add(Conn);
 end;
 
-procedure TWebServer.ProcessConnections;
+procedure TWebServer.ProcessConnections;  
 var
   i: Integer;
   Conn: TConnection;
@@ -1321,21 +1321,21 @@ type
     procedure Render;
   end;
 
-constructor TParticleSystem.Create(MaxParticles: Integer);
+constructor TParticleSystem.Create(MaxParticles: Integer);  
 begin
   inherited Create;
   FPool := TObjectPool<TParticle>.Create(MaxParticles);
   FActiveParticles := TList<TParticle>.Create;
 end;
 
-destructor TParticleSystem.Destroy;
+destructor TParticleSystem.Destroy;  
 begin
   FActiveParticles.Free;
   FPool.Free;
   inherited;
 end;
 
-procedure TParticleSystem.Emit(X, Y, Z: Single; Count: Integer);
+procedure TParticleSystem.Emit(X, Y, Z: Single; Count: Integer);  
 var
   i: Integer;
   P: TParticle;
@@ -1356,7 +1356,7 @@ begin
   end;
 end;
 
-procedure TParticleSystem.Update(DeltaTime: Single);
+procedure TParticleSystem.Update(DeltaTime: Single);  
 var
   i: Integer;
   P: TParticle;
@@ -1396,19 +1396,19 @@ type
     procedure Reset;  // Réutiliser l'arena
   end;
 
-constructor TJSONParserWithArena.Create;
+constructor TJSONParserWithArena.Create;  
 begin
   inherited;
   FArena := TArena.Create(10 * 1024 * 1024);  // 10 MB
 end;
 
-destructor TJSONParserWithArena.Destroy;
+destructor TJSONParserWithArena.Destroy;  
 begin
   FArena.Free;
   inherited;
 end;
 
-function TJSONParserWithArena.ParseFile(const FileName: string): TJSONData;
+function TJSONParserWithArena.ParseFile(const FileName: string): TJSONData;  
 var
   JSONString: String;
   Parser: TJSONParser;
@@ -1424,7 +1424,7 @@ begin
   end;
 end;
 
-procedure TJSONParserWithArena.Reset;
+procedure TJSONParserWithArena.Reset;  
 begin
   FArena.Reset;  // Libération instantanée
 end;
@@ -1485,19 +1485,19 @@ type
     procedure Reset;
   end;
 
-procedure TRequest.Reset;
+procedure TRequest.Reset;  
 begin
   Headers.Clear;  // Important !
   Body := '';
 end;
 
 // ❌ Mauvais : pas de reset
-Req := Pool.Acquire;
+Req := Pool.Acquire;  
 Req.Process;  // Contient encore les anciennes données !
 
 // ✅ Bon : reset systématique
-Req := Pool.Acquire;
-Req.Reset;
+Req := Pool.Acquire;  
+Req.Reset;  
 Req.Process;
 ```
 
@@ -1576,7 +1576,7 @@ end;
 {$IFDEF WINDOWS}
 uses Windows;
 
-function AllocLargePages(Size: SIZE_T): Pointer;
+function AllocLargePages(Size: SIZE_T): Pointer;  
 begin
   Result := VirtualAlloc(nil, Size,
     MEM_COMMIT or MEM_RESERVE or MEM_LARGE_PAGES,
@@ -1590,7 +1590,7 @@ end;
 {$IFDEF LINUX}
 uses BaseUnix;
 
-function AllocHugePages(Size: csize_t): Pointer;
+function AllocHugePages(Size: csize_t): Pointer;  
 begin
   Result := fpmmap(nil, Size,
     PROT_READ or PROT_WRITE,
@@ -1655,7 +1655,7 @@ type
     Values: array[0..15] of Integer;
   end;
 
-procedure BenchAll;
+procedure BenchAll;  
 var
   StartTime: TDateTime;
   i: Integer;

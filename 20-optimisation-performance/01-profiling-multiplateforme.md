@@ -65,8 +65,8 @@ Il existe plusieurs approches pour profiler un programme, chacune avec ses avant
 ```
 Fonction                    Échantillons    % Total
 --------------------------------------------------
-TForm1.CalculComplexe       4,523          45.2%
-System.Move                 1,645          16.4%
+TForm1.CalculComplexe       4,523          45.2%  
+System.Move                 1,645          16.4%  
 TDatabase.Query             987            9.8%
 ```
 
@@ -162,7 +162,7 @@ Un **hotspot** est une fonction ou une portion de code qui consomme une part sig
 
 **Exemple** :
 ```
-Si votre programme prend 10 secondes, et qu'une fonction prend 6 secondes,
+Si votre programme prend 10 secondes, et qu'une fonction prend 6 secondes,  
 c'est un hotspot de 60% → TRÈS haute priorité d'optimisation
 ```
 
@@ -203,13 +203,13 @@ Deux métriques fondamentales pour chaque fonction :
 
 **Exemple** :
 ```pascal
-procedure Externe;       // Total: 10s, Self: 1s
+procedure Externe;       // Total: 10s, Self: 1s  
 begin
   // 1s de travail propre
   Interne();            // 9s
 end;
 
-procedure Interne;       // Total: 9s, Self: 9s
+procedure Interne;       // Total: 9s, Self: 9s  
 begin
   // 9s de travail propre
 end;
@@ -252,8 +252,8 @@ Avant toute optimisation, établissez une **baseline** (référence) :
 ```bash
 # Exemple : temps d'exécution initial
 $ time ./monprogramme
-real    0m5.234s
-user    0m5.123s
+real    0m5.234s  
+user    0m5.123s  
 sys     0m0.089s
 ```
 
@@ -319,8 +319,8 @@ real    0m2.987s    # Avant : 5.234s → Gain de 43% ✓
 Répétez le processus jusqu'à atteindre vos objectifs de performance :
 
 ```
-Cycle 1: 5.2s → 3.0s (optimisation parsing CSV)
-Cycle 2: 3.0s → 2.1s (optimisation requêtes DB)
+Cycle 1: 5.2s → 3.0s (optimisation parsing CSV)  
+Cycle 2: 3.0s → 2.1s (optimisation requêtes DB)  
 Cycle 3: 2.1s → 1.8s (cache des résultats)
 → Performance finale : 1.8s (65% plus rapide)
 ```
@@ -431,7 +431,7 @@ Certains patterns de code peuvent donner des résultats trompeurs :
 ```pascal
 // Code qui s'exécute en 0.001s
 // Le profiler peut le manquer en mode sampling
-procedure TresCourte;
+procedure TresCourte;  
 begin
   X := X + 1;
 end;
@@ -440,8 +440,8 @@ end;
 **✓ Bon** : Code représentatif
 ```pascal
 // Pour profiler du code très court, l'exécuter en boucle
-procedure TestPerformance;
-var i: Integer;
+procedure TestPerformance;  
+var i: Integer;  
 begin
   for i := 1 to 1000000 do
     TresCourte();  // Maintenant mesurable
@@ -528,7 +528,7 @@ Le simple fait de profiler peut changer le comportement du programme :
 ### 4. Comparer des exécutions différentes
 
 ```
-Test 1 : Programme seul → 5.2s
+Test 1 : Programme seul → 5.2s  
 Test 2 : Programme + Chrome + 10 tabs → 8.7s
 ```
 
@@ -597,7 +597,7 @@ Pour des micro-benchmarks reproductibles :
 ```pascal
 uses fpcunit, testutils, SysUtils, DateUtils;
 
-procedure TTestPerformance.TestOptimisation;
+procedure TTestPerformance.TestOptimisation;  
 var
   StartTime: TDateTime;
   i: Integer;
@@ -649,13 +649,13 @@ Définissez des objectifs mesurables avant d'optimiser :
 **Loi d'Amdahl** : Si une portion du code représente 50% du temps et que vous la rendez infiniment rapide, le gain maximal est de 50%.
 
 ```
-Exemple :
+Exemple :  
 Programme : 10s total
 - Partie A : 8s (80%)
 - Partie B : 2s (20%)
 
-Si on rend A infiniment rapide (0s) :
-Nouveau temps = 0s + 2s = 2s
+Si on rend A infiniment rapide (0s) :  
+Nouveau temps = 0s + 2s = 2s  
 Gain maximal = 80% (même si A est infiniment optimisé)
 ```
 

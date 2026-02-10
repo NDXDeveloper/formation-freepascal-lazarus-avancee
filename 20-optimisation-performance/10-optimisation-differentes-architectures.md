@@ -130,7 +130,7 @@ type
   TNative = NativeInt;  // 32 bits sur x86, 64 bits sur x64
   TSize   = SizeUInt;   // Même taille qu'un pointeur
 
-procedure DemonstrateNativeTypes;
+procedure DemonstrateNativeTypes;  
 var
   N: NativeInt;
   P: PByte;
@@ -222,7 +222,7 @@ begin
   {$ENDIF}
 end;
 
-procedure PrintCPUFeatures;
+procedure PrintCPUFeatures;  
 var
   Features: TCPUFeatures;
 begin
@@ -263,7 +263,7 @@ type
     // Le compilateur ajoutera du padding automatiquement
   end;
 
-procedure DemonstrateAlignment;
+procedure DemonstrateAlignment;  
 begin
   WriteLn('=== Alignement mémoire ===');
   WriteLn('TDataNonAligned : ', SizeOf(TDataNonAligned), ' octets');
@@ -285,7 +285,7 @@ type
 Choisissez les types selon l'architecture :
 
 ```pascal
-procedure OptimalTypes;
+procedure OptimalTypes;  
 var
   // Pour l'indexation de tableaux
   Index: NativeInt;  // 32 bits sur x86, 64 bits sur x64
@@ -316,7 +316,7 @@ end;
 Les boucles doivent être optimisées différemment selon l'architecture :
 
 ```pascal
-procedure OptimizeLoops;
+procedure OptimizeLoops;  
 var
   Data: array[0..999] of Integer;
   i: Integer;
@@ -376,7 +376,7 @@ uses
   Math;
 
 // Addition de 4 floats en parallèle avec SSE
-procedure AddArraysSSE(const A, B: array of Single; var Result: array of Single);
+procedure AddArraysSSE(const A, B: array of Single; var Result: array of Single);  
 var
   i: Integer;
 begin
@@ -398,7 +398,7 @@ begin
 end;
 
 // Version avec assembleur inline SSE (avancé)
-procedure AddArraysSSE_ASM(const A, B: array of Single; var Result: array of Single);
+procedure AddArraysSSE_ASM(const A, B: array of Single; var Result: array of Single);  
 var
   Count: Integer;
 begin
@@ -433,7 +433,7 @@ end;
 ```pascal
 {$IFDEF CPUARM}
 // Addition de 4 floats en parallèle avec NEON
-procedure AddArraysNEON(const A, B: array of Single; var Result: array of Single);
+procedure AddArraysNEON(const A, B: array of Single; var Result: array of Single);  
 var
   i: Integer;
 begin
@@ -473,7 +473,7 @@ type
 var
   VectorAdd: TVectorAddProc;
 
-procedure VectorAdd_Generic(const A, B: array of Single; var Result: array of Single);
+procedure VectorAdd_Generic(const A, B: array of Single; var Result: array of Single);  
 var
   i: Integer;
 begin
@@ -481,7 +481,7 @@ begin
     Result[i] := A[i] + B[i];
 end;
 
-procedure InitializeVectorOperations;
+procedure InitializeVectorOperations;  
 var
   Features: TCPUFeatures;
 begin
@@ -530,13 +530,13 @@ function FastDivideBy10(Value: Integer): Integer; inline;
 
 implementation
 
-function FastMultiply64(A, B: Int64): Int64; inline;
+function FastMultiply64(A, B: Int64): Int64; inline;  
 begin
   // Sur x64, la multiplication 64 bits est native et rapide
   Result := A * B;
 end;
 
-function FastDivideBy10(Value: Integer): Integer; inline;
+function FastDivideBy10(Value: Integer): Integer; inline;  
 begin
   // Remplacer la division par une multiplication + shift (plus rapide)
   // 1/10 ≈ 0.1 = 0.000110011... en binaire
@@ -564,7 +564,7 @@ function OptimizedSum(const Data: array of Integer): Int64;
 
 implementation
 
-function OptimizedSum(const Data: array of Integer): Int64;
+function OptimizedSum(const Data: array of Integer): Int64;  
 var
   i: Integer;
   Sum1, Sum2, Sum3, Sum4: Int64;
@@ -612,7 +612,7 @@ function OptimalHashCode(const S: string): NativeUInt;
 
 implementation
 
-function OptimalHashCode(const S: string): NativeUInt;
+function OptimalHashCode(const S: string): NativeUInt;  
 var
   i: Integer;
 begin
@@ -668,13 +668,13 @@ program OptimizedProgram;
 {$mode objfpc}{$H+}
 
 // Inline pour petites fonctions critiques
-function Square(X: Integer): Integer; inline;
+function Square(X: Integer): Integer; inline;  
 begin
   Result := X * X;
 end;
 
 // Register pour variables très utilisées
-procedure HotLoop;
+procedure HotLoop;  
 var
   i: Integer register;  // Suggère de garder en registre
   Sum: Int64 register;
@@ -695,13 +695,13 @@ end.
 **Depuis Windows vers ARM (Raspberry Pi) :**
 
 ```batch
-REM Installer le cross-compiler ARM
+REM Installer le cross-compiler ARM  
 REM Télécharger depuis https://www.freepascal.org/down/arm/
 
-REM Compiler pour ARM Linux
+REM Compiler pour ARM Linux  
 fpc -Tlinux -Parm -CpARMV7A -O3 program.pas
 
-REM Transférer vers Raspberry Pi
+REM Transférer vers Raspberry Pi  
 scp program pi@192.168.1.100:~/
 ```
 
@@ -737,7 +737,7 @@ type
     PointerSize: Integer;
   end;
 
-procedure RunArchBenchmark;
+procedure RunArchBenchmark;  
 function GetArchInfo: TArchInfo;
 
 implementation
@@ -745,7 +745,7 @@ implementation
 uses
   SysUtils, DateUtils;
 
-function GetArchInfo: TArchInfo;
+function GetArchInfo: TArchInfo;  
 begin
   Result.PointerSize := SizeOf(Pointer);
   Result.Is64Bit := Result.PointerSize = 8;
@@ -771,7 +771,7 @@ begin
   {$ENDIF}
 end;
 
-procedure BenchmarkIntegerOperations;
+procedure BenchmarkIntegerOperations;  
 var
   i: Integer;
   Sum: Int64;
@@ -787,7 +787,7 @@ begin
   WriteLn('Résultat : ', Sum);
 end;
 
-procedure BenchmarkFloatOperations;
+procedure BenchmarkFloatOperations;  
 var
   i: Integer;
   Sum: Double;
@@ -803,7 +803,7 @@ begin
   WriteLn('Résultat : ', Sum:0:2);
 end;
 
-procedure RunArchBenchmark;
+procedure RunArchBenchmark;  
 var
   Info: TArchInfo;
 begin
@@ -875,13 +875,13 @@ type
 ```pascal
 {$IFDEF CPU64}
 // Sur 64 bits, Int64 est natif
-function ProcessLarge(Value: Int64): Int64;
+function ProcessLarge(Value: Int64): Int64;  
 begin
   Result := Value * 2;
 end;
 {$ELSE}
 // Sur 32 bits, préférer Integer
-function ProcessLarge(Value: Integer): Integer;
+function ProcessLarge(Value: Integer): Integer;  
 begin
   Result := Value * 2;
 end;
@@ -948,13 +948,13 @@ type
 3. **Utiliser des inline assembleur non portable**
 ```pascal
 // ❌ Mauvais : fonctionne uniquement sur x86
-function GetValue: Integer;
+function GetValue: Integer;  
 asm
   mov eax, 42
 end;
 
 // ✅ Bon : version conditionnelle
-function GetValue: Integer;
+function GetValue: Integer;  
 begin
   {$IFDEF CPUX86_64}
   asm
@@ -1007,7 +1007,7 @@ implementation
 
 {$IFDEF CPUX86_64}
 // Version optimisée SSE pour x86_64
-procedure ConvertToGrayscale_SSE(var Image: TImageData);
+procedure ConvertToGrayscale_SSE(var Image: TImageData);  
 var
   i, j: Integer;
   Gray: Byte;
@@ -1030,7 +1030,7 @@ end;
 
 {$IFDEF CPUARM}
 // Version optimisée pour ARM
-procedure ConvertToGrayscale_ARM(var Image: TImageData);
+procedure ConvertToGrayscale_ARM(var Image: TImageData);  
 var
   i, j: Integer;
   Gray: Byte;
@@ -1048,7 +1048,7 @@ end;
 {$ENDIF}
 
 // Version générique portable
-procedure ConvertToGrayscale_Generic(var Image: TImageData);
+procedure ConvertToGrayscale_Generic(var Image: TImageData);  
 var
   i, j: Integer;
   Gray: Byte;
@@ -1066,7 +1066,7 @@ begin
     end;
 end;
 
-procedure ConvertToGrayscale(var Image: TImageData);
+procedure ConvertToGrayscale(var Image: TImageData);  
 begin
   {$IFDEF CPUX86_64}
   ConvertToGrayscale_SSE(Image);
@@ -1100,7 +1100,7 @@ procedure MultiplyMatrices(const A, B: TMatrix; var Result: TMatrix);
 implementation
 
 // Version optimisée pour cache (tiling/blocking)
-procedure MultiplyMatrices_Tiled(const A, B: TMatrix; var Result: TMatrix);
+procedure MultiplyMatrices_Tiled(const A, B: TMatrix; var Result: TMatrix);  
 const
   BLOCK_SIZE = 64;  // Optimisé pour le cache L1
 var
@@ -1133,7 +1133,7 @@ end;
 
 // Version SIMD pour x86_64
 {$IFDEF CPUX86_64}
-procedure MultiplyMatrices_SIMD(const A, B: TMatrix; var Result: TMatrix);
+procedure MultiplyMatrices_SIMD(const A, B: TMatrix; var Result: TMatrix);  
 var
   i, j, k: Integer;
   N: Integer;
@@ -1152,7 +1152,7 @@ begin
 end;
 {$ENDIF}
 
-procedure MultiplyMatrices(const A, B: TMatrix; var Result: TMatrix);
+procedure MultiplyMatrices(const A, B: TMatrix; var Result: TMatrix);  
 begin
   {$IFDEF CPUX86_64}
   // Sur x86_64, la version SIMD + tiling est la plus rapide
@@ -1181,7 +1181,7 @@ function CompressRLE(const Data: TByteArray): TByteArray;
 
 implementation
 
-function CompressRLE(const Data: TByteArray): TByteArray;
+function CompressRLE(const Data: TByteArray): TByteArray;  
 var
   i, OutPos: Integer;
   Count: Byte;
@@ -1260,17 +1260,17 @@ type
 
 implementation
 
-constructor TWindowsProfiler.Create;
+constructor TWindowsProfiler.Create;  
 begin
   QueryPerformanceFrequency(FFrequency);
 end;
 
-procedure TWindowsProfiler.Start;
+procedure TWindowsProfiler.Start;  
 begin
   QueryPerformanceCounter(FStartCounter);
 end;
 
-function TWindowsProfiler.ElapsedMicroseconds: Int64;
+function TWindowsProfiler.ElapsedMicroseconds: Int64;  
 var
   Counter: Int64;
 begin
@@ -1286,7 +1286,7 @@ end.
 
 ```bash
 # Profiling avec perf sur ARM
-sudo perf record -g ./myprogram
+sudo perf record -g ./myprogram  
 sudo perf report
 
 # Profiling des cycles CPU
@@ -1316,7 +1316,7 @@ type
 var
   Results: array of TBenchmarkResult;
 
-procedure AddResult(const Name: string; TimeMs: Int64);
+procedure AddResult(const Name: string; TimeMs: Int64);  
 var
   Idx: Integer;
 begin
@@ -1336,7 +1336,7 @@ begin
   {$ENDIF}
 end;
 
-procedure BenchmarkIntegerMath;
+procedure BenchmarkIntegerMath;  
 var
   i: Integer;
   Sum: Int64;
@@ -1351,7 +1351,7 @@ begin
   AddResult('Integer Math', MilliSecondsBetween(Now, Start));
 end;
 
-procedure BenchmarkFloatingPoint;
+procedure BenchmarkFloatingPoint;  
 var
   i: Integer;
   Sum: Double;
@@ -1366,7 +1366,7 @@ begin
   AddResult('Floating Point', MilliSecondsBetween(Now, Start));
 end;
 
-procedure BenchmarkMemoryAccess;
+procedure BenchmarkMemoryAccess;  
 var
   Data: array[0..999999] of Integer;
   i: Integer;
@@ -1387,7 +1387,7 @@ begin
   AddResult('Memory Access', MilliSecondsBetween(Now, Start));
 end;
 
-procedure BenchmarkStringOperations;
+procedure BenchmarkStringOperations;  
 var
   S: string;
   i: Integer;
@@ -1402,7 +1402,7 @@ begin
   AddResult('String Concat', MilliSecondsBetween(Now, Start));
 end;
 
-procedure PrintResults;
+procedure PrintResults;  
 var
   i: Integer;
 begin
@@ -1427,7 +1427,7 @@ begin
   WriteLn;
 end;
 
-procedure SaveResultsToFile;
+procedure SaveResultsToFile;  
 var
   F: TextFile;
   i: Integer;
@@ -1489,7 +1489,7 @@ Les processeurs modernes tentent de prédire les branchements. Aidez-les !
 
 ```pascal
 // ❌ Mauvais : branchements imprévisibles
-procedure ProcessData_Bad(const Data: array of Integer);
+procedure ProcessData_Bad(const Data: array of Integer);  
 var
   i: Integer;
 begin
@@ -1503,7 +1503,7 @@ begin
 end;
 
 // ✅ Bon : branchements prévisibles
-procedure ProcessData_Good(const Data: array of Integer);
+procedure ProcessData_Good(const Data: array of Integer);  
 var
   i: Integer;
 begin
@@ -1519,7 +1519,7 @@ begin
 end;
 
 // ✅ Meilleur : sans branchement (branchless)
-function Max_Branchless(A, B: Integer): Integer; inline;
+function Max_Branchless(A, B: Integer): Integer; inline;  
 var
   Diff: Integer;
 begin
@@ -1570,12 +1570,12 @@ type
 ```pascal
 // Suggérer au CPU de précharger des données
 {$IFDEF CPUX86_64}
-procedure PrefetchData(P: Pointer); inline;
+procedure PrefetchData(P: Pointer); inline;  
 asm
   prefetchnta [P]  // Précharger sans polluer le cache
 end;
 
-procedure ProcessLargeArray(const Data: array of Integer);
+procedure ProcessLargeArray(const Data: array of Integer);  
 var
   i: Integer;
 begin
@@ -1606,22 +1606,22 @@ end;
 echo "=== Build Multi-Architecture ==="
 
 # Configuration
-PROJECT="myprogram"
+PROJECT="myprogram"  
 FPC_FLAGS="-O3 -CX -XX"
 
 # x86_64 Linux
-echo "Building for x86_64 Linux..."
+echo "Building for x86_64 Linux..."  
 fpc $FPC_FLAGS -Tlinux -Px86_64 $PROJECT.pas -o${PROJECT}_x64
 
 # ARM Linux (Raspberry Pi)
-echo "Building for ARM Linux..."
+echo "Building for ARM Linux..."  
 fpc $FPC_FLAGS -Tlinux -Parm -CpARMV7A $PROJECT.pas -o${PROJECT}_armv7
 
 # ARM64 Linux
-echo "Building for ARM64 Linux..."
+echo "Building for ARM64 Linux..."  
 fpc $FPC_FLAGS -Tlinux -Paarch64 $PROJECT.pas -o${PROJECT}_arm64
 
-echo "Build terminé!"
+echo "Build terminé!"  
 ls -lh ${PROJECT}_*
 ```
 
@@ -1631,19 +1631,19 @@ ls -lh ${PROJECT}_*
 @echo off
 echo === Build Multi-Architecture ===
 
-set PROJECT=myprogram
+set PROJECT=myprogram  
 set FPC_FLAGS=-O3 -CX -XX
 
-echo Building for Windows x64...
+echo Building for Windows x64...  
 fpc %FPC_FLAGS% -Twin64 -Px86_64 %PROJECT%.pas -o%PROJECT%_win64.exe
 
-echo Building for Windows x86...
+echo Building for Windows x86...  
 fpc %FPC_FLAGS% -Twin32 -Pi386 %PROJECT%.pas -o%PROJECT%_win32.exe
 
-echo Building for ARM Linux (cross-compile)...
+echo Building for ARM Linux (cross-compile)...  
 fpc %FPC_FLAGS% -Tlinux -Parm %PROJECT%.pas -o%PROJECT%_armv7
 
-echo Build terminé!
+echo Build terminé!  
 dir %PROJECT%_*
 ```
 
@@ -1652,8 +1652,8 @@ dir %PROJECT%_*
 ```makefile
 # Makefile pour compilation multi-architecture
 
-PROJECT = myprogram
-FPC = fpc
+PROJECT = myprogram  
+FPC = fpc  
 FPC_FLAGS = -O3 -CX -XX -Sd
 
 .PHONY: all clean x64 arm arm64 windows
@@ -1704,7 +1704,7 @@ implementation
 uses
   SysUtils;
 
-procedure TestPointerSize;
+procedure TestPointerSize;  
 begin
   WriteLn('Test : Taille des pointeurs');
 
@@ -1717,7 +1717,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TestIntegerOperations;
+procedure TestIntegerOperations;  
 var
   A, B, C: NativeInt;
 begin
@@ -1735,7 +1735,7 @@ begin
   WriteLn('  ✓ Soustraction OK');
 end;
 
-procedure TestAlignment;
+procedure TestAlignment;  
 type
   TAlignedRec = record
     A: Int64;
@@ -1751,7 +1751,7 @@ begin
   WriteLn('  ✓ Alignement OK');
 end;
 
-procedure RunAllTests;
+procedure RunAllTests;  
 begin
   WriteLn('╔════════════════════════════════════════════════════════╗');
   WriteLn('║          SUITE DE TESTS MULTI-ARCHITECTURE             ║');
@@ -1893,7 +1893,7 @@ type
 
 implementation
 
-constructor TOptimizedWebServer.Create(APort: Word);
+constructor TOptimizedWebServer.Create(APort: Word);  
 begin
   FPort := APort;
 
@@ -1915,13 +1915,13 @@ begin
   WriteLn('  Buffer   : ', FBufferSize div 1024, ' KB');
 end;
 
-procedure TOptimizedWebServer.Start;
+procedure TOptimizedWebServer.Start;  
 begin
   WriteLn('Démarrage du serveur sur le port ', FPort);
   // Implémentation du serveur...
 end;
 
-procedure TOptimizedWebServer.Stop;
+procedure TOptimizedWebServer.Stop;  
 begin
   WriteLn('Arrêt du serveur');
 end;
@@ -1950,7 +1950,7 @@ implementation
 
 {$IFDEF CPUX86_64}
 // Version optimisée SSE pour x64
-procedure ProcessFrame_SSE(var Frame: TVideoFrame);
+procedure ProcessFrame_SSE(var Frame: TVideoFrame);  
 var
   i, PixelCount: Integer;
   P: PByte;
@@ -1980,7 +1980,7 @@ end;
 
 {$IFDEF CPUARM}
 // Version optimisée NEON pour ARM
-procedure ProcessFrame_NEON(var Frame: TVideoFrame);
+procedure ProcessFrame_NEON(var Frame: TVideoFrame);  
 var
   i, PixelCount: Integer;
   P: PByte;
@@ -2007,7 +2007,7 @@ end;
 {$ENDIF}
 
 // Version générique
-procedure ProcessFrame_Generic(var Frame: TVideoFrame);
+procedure ProcessFrame_Generic(var Frame: TVideoFrame);  
 var
   i, PixelCount: Integer;
   P: PByte;
@@ -2022,7 +2022,7 @@ begin
   end;
 end;
 
-procedure ProcessFrame(var Frame: TVideoFrame);
+procedure ProcessFrame(var Frame: TVideoFrame);  
 begin
   {$IFDEF CPUX86_64}
   ProcessFrame_SSE(Frame);
@@ -2069,7 +2069,7 @@ type
 
 implementation
 
-constructor TTradingEngine.Create;
+constructor TTradingEngine.Create;  
 begin
   {$IFDEF CPU64}
   FOrderBookSize := 100000;
@@ -2080,14 +2080,14 @@ begin
   {$ENDIF}
 end;
 
-function TTradingEngine.CalculateSpread(Bid, Ask: TPrice): TPrice; inline;
+function TTradingEngine.CalculateSpread(Bid, Ask: TPrice): TPrice; inline;  
 begin
   // Calcul ultra-rapide du spread
   // Sur x64, soustraction 64 bits en une instruction
   Result := Ask - Bid;
 end;
 
-function TTradingEngine.ExecuteTrade(Volume: Int64; Price: TPrice): Boolean;
+function TTradingEngine.ExecuteTrade(Volume: Int64; Price: TPrice): Boolean;  
 begin
   // Vérifications rapides
   if (Volume <= 0) or (Price <= 0) then
@@ -2147,14 +2147,14 @@ type
 
 ```pascal
 // ❌ ERREUR : Assembleur x86 uniquement
-function GetCPUCycle: Int64;
+function GetCPUCycle: Int64;  
 asm
   rdtsc           // Instruction x86 uniquement !
   mov @Result, rax
 end;
 
 // ✅ SOLUTION : Versions conditionnelles
-function GetCPUCycle: Int64;
+function GetCPUCycle: Int64;  
 begin
   {$IFDEF CPUX86_64}
   asm
@@ -2174,7 +2174,7 @@ end;
 
 ```pascal
 // ❌ ERREUR : Suppose que Integer = 4 octets partout
-procedure BadFunction;
+procedure BadFunction;  
 var
   Arr: array[0..3] of Byte;
   I: Integer;
@@ -2184,7 +2184,7 @@ begin
 end;
 
 // ✅ SOLUTION : Utiliser SizeOf
-procedure GoodFunction;
+procedure GoodFunction;  
 var
   Arr: array[0..3] of Byte;
   I: Int32;  // Toujours 4 octets
@@ -2198,13 +2198,13 @@ end;
 
 ```pascal
 // ❌ ERREUR : Suppose Little Endian
-function ReadInt32(Stream: TStream): Int32;
+function ReadInt32(Stream: TStream): Int32;  
 begin
   Stream.Read(Result, 4);  // Problème sur Big Endian !
 end;
 
 // ✅ SOLUTION : Fonctions de conversion
-function ReadInt32(Stream: TStream): Int32;
+function ReadInt32(Stream: TStream): Int32;  
 begin
   Stream.Read(Result, 4);
   {$IFDEF ENDIAN_BIG}
@@ -2213,7 +2213,7 @@ begin
 end;
 
 // Fonction universelle
-function SwapEndian32(Value: LongWord): LongWord; inline;
+function SwapEndian32(Value: LongWord): LongWord; inline;  
 begin
   Result := ((Value and $FF) shl 24) or
             ((Value and $FF00) shl 8) or
@@ -2234,22 +2234,22 @@ Créer des profils de build pour chaque architecture :
 
 **Profil "x86_64 Linux" :**
 ```
-Target OS: Linux
-Target CPU: x86_64
+Target OS: Linux  
+Target CPU: x86_64  
 Custom Options: -O3 -CX -XX -CpCOREAVX
 ```
 
 **Profil "ARM Raspberry Pi" :**
 ```
-Target OS: Linux
-Target CPU: ARM
+Target OS: Linux  
+Target CPU: ARM  
 Custom Options: -O3 -CpARMV7A -CfVFPV3
 ```
 
 **Profil "Windows x64" :**
 ```
-Target OS: Win64
-Target CPU: x86_64
+Target OS: Win64  
+Target CPU: x86_64  
 Custom Options: -O3 -CX -XX
 ```
 
@@ -2282,16 +2282,16 @@ test_binary() {
 }
 
 # Compiler pour toutes les architectures
-echo "Building for all architectures..."
-make clean
+echo "Building for all architectures..."  
+make clean  
 make all
 
 # Tester chaque binaire
-test_binary "x86_64" "myprogram_x64"
-test_binary "ARM" "myprogram_arm"
+test_binary "x86_64" "myprogram_x64"  
+test_binary "ARM" "myprogram_arm"  
 test_binary "ARM64" "myprogram_arm64"
 
-echo ""
+echo ""  
 echo "=== Tests terminés ==="
 ```
 
@@ -2503,12 +2503,12 @@ type
     procedure PrintInfo;
   end;
 
-constructor TArchOptimizer.Create;
+constructor TArchOptimizer.Create;  
 begin
   FArchitecture := DetectArchitecture;
 end;
 
-function TArchOptimizer.DetectArchitecture: string;
+function TArchOptimizer.DetectArchitecture: string;  
 begin
   {$IFDEF CPUX86_64}
   Result := 'x86_64 (Intel/AMD 64 bits)';
@@ -2524,7 +2524,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TArchOptimizer.PrintInfo;
+procedure TArchOptimizer.PrintInfo;  
 begin
   WriteLn('╔════════════════════════════════════════════════════════╗');
   WriteLn('║     APPLICATION OPTIMISÉE MULTI-ARCHITECTURE           ║');
@@ -2538,7 +2538,7 @@ begin
   WriteLn;
 end;
 
-procedure TArchOptimizer.RunOptimizedCode;
+procedure TArchOptimizer.RunOptimizedCode;  
 var
   i: Integer;
   Sum: Int64;

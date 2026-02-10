@@ -18,11 +18,11 @@ La notation Big-O décrit comment le temps d'exécution évolue avec la taille d
 
 **Comparaison visuelle** (pour n = 1,000,000) :
 ```
-O(1)        : 1 opération                    ⚡ Instantané
-O(log n)    : 20 opérations                  ⚡ Très rapide
-O(n)        : 1,000,000 opérations          ✅ Acceptable
-O(n log n)  : 20,000,000 opérations         ✅ Bon
-O(n²)       : 1,000,000,000,000 opérations  ❌ Inacceptable (1 trillion!)
+O(1)        : 1 opération                    ⚡ Instantané  
+O(log n)    : 20 opérations                  ⚡ Très rapide  
+O(n)        : 1,000,000 opérations          ✅ Acceptable  
+O(n log n)  : 20,000,000 opérations         ✅ Bon  
+O(n²)       : 1,000,000,000,000 opérations  ❌ Inacceptable (1 trillion!)  
 O(2ⁿ)       : Impossible à calculer         ❌ Catastrophique
 ```
 
@@ -48,7 +48,7 @@ for i := 0 to High(A) do
     Matrix[i, j] := A[i] * A[j];
 
 // O(2ⁿ) - Exponentiel (à éviter absolument!)
-function Fibonacci(n: Integer): Integer;
+function Fibonacci(n: Integer): Integer;  
 begin
   if n <= 1 then Exit(n);
   Result := Fibonacci(n-1) + Fibonacci(n-2);  // Très inefficace
@@ -63,7 +63,7 @@ end;
 **Usage** : Tri général, le plus utilisé  
 
 ```pascal
-procedure QuickSort(var A: array of Integer; Left, Right: Integer);
+procedure QuickSort(var A: array of Integer; Left, Right: Integer);  
 var
   I, J, Pivot, Temp: Integer;
 begin
@@ -107,7 +107,7 @@ end;
 Pivot := A[(Left + Right) div 2];
 
 // ✅ Bon : médiane de trois
-function MedianOfThree(var A: array of Integer; Left, Mid, Right: Integer): Integer;
+function MedianOfThree(var A: array of Integer; Left, Mid, Right: Integer): Integer;  
 begin
   if A[Left] > A[Mid] then Swap(A[Left], A[Mid]);
   if A[Left] > A[Right] then Swap(A[Left], A[Right]);
@@ -122,7 +122,7 @@ Pivot := MedianOfThree(A, Left, (Left + Right) div 2, Right);
 **Optimisation : Insertion sort pour petits tableaux**
 
 ```pascal
-procedure QuickSortOptimized(var A: array of Integer; Left, Right: Integer);
+procedure QuickSortOptimized(var A: array of Integer; Left, Right: Integer);  
 const
   InsertionThreshold = 10;  // Seuil empirique
 begin
@@ -143,7 +143,7 @@ end;
 **Usage** : Quand la stabilité est importante, ou pour garantir O(n log n)  
 
 ```pascal
-procedure Merge(var A: array of Integer; Left, Mid, Right: Integer);
+procedure Merge(var A: array of Integer; Left, Mid, Right: Integer);  
 var
   Temp: array of Integer;
   I, J, K: Integer;
@@ -189,7 +189,7 @@ begin
     A[Left + I] := Temp[I];
 end;
 
-procedure MergeSort(var A: array of Integer; Left, Right: Integer);
+procedure MergeSort(var A: array of Integer; Left, Right: Integer);  
 var
   Mid: Integer;
 begin
@@ -210,7 +210,7 @@ end;
 **Usage** : Tri en place (pas de mémoire supplémentaire)  
 
 ```pascal
-procedure Heapify(var A: array of Integer; N, I: Integer);
+procedure Heapify(var A: array of Integer; N, I: Integer);  
 var
   Largest, Left, Right, Temp: Integer;
 begin
@@ -233,7 +233,7 @@ begin
   end;
 end;
 
-procedure HeapSort(var A: array of Integer);
+procedure HeapSort(var A: array of Integer);  
 var
   N, I, Temp: Integer;
 begin
@@ -286,8 +286,8 @@ var
   StartTime: TDateTime;
   i: Integer;
 
-procedure InitData;
-var i: Integer;
+procedure InitData;  
+var i: Integer;  
 begin
   SetLength(Data, N);
   Randomize;
@@ -295,14 +295,14 @@ begin
     Data[i] := Random(N * 10);
 end;
 
-procedure CopyData;
+procedure CopyData;  
 begin
   SetLength(DataCopy, Length(Data));
   Move(Data[0], DataCopy[0], Length(Data) * SizeOf(Integer));
 end;
 
-procedure BenchSort(const Name: string; SortProc: procedure(var A: array of Integer));
-var Ms: Int64;
+procedure BenchSort(const Name: string; SortProc: procedure(var A: array of Integer));  
+var Ms: Int64;  
 begin
   CopyData;
   StartTime := Now;
@@ -340,7 +340,7 @@ end.
 **Usage** : Tableau non trié, ou petit tableau  
 
 ```pascal
-function LinearSearch(const A: array of Integer; Value: Integer): Integer;
+function LinearSearch(const A: array of Integer; Value: Integer): Integer;  
 var
   i: Integer;
 begin
@@ -359,7 +359,7 @@ end;
 **Usage** : Tableau **trié**  
 
 ```pascal
-function BinarySearch(const A: array of Integer; Value: Integer): Integer;
+function BinarySearch(const A: array of Integer; Value: Integer): Integer;  
 var
   Left, Right, Mid: Integer;
 begin
@@ -390,7 +390,7 @@ end;
 Pour données uniformément distribuées :
 
 ```pascal
-function InterpolationSearch(const A: array of Integer; Value: Integer): Integer;
+function InterpolationSearch(const A: array of Integer; Value: Integer): Integer;  
 var
   Low, High, Pos: Integer;
 begin
@@ -459,7 +459,7 @@ end;
 ### 1. Recherche naïve
 
 ```pascal
-function NaiveStringSearch(const Text, Pattern: string): Integer;
+function NaiveStringSearch(const Text, Pattern: string): Integer;  
 var
   i, j: Integer;
   Match: Boolean;
@@ -487,7 +487,7 @@ end;
 ### 2. Boyer-Moore (algorithme optimisé)
 
 ```pascal
-function BoyerMooreSearch(const Text, Pattern: string): Integer;
+function BoyerMooreSearch(const Text, Pattern: string): Integer;  
 var
   BadChar: array[Char] of Integer;
   i, j, Shift: Integer;
@@ -526,14 +526,14 @@ end;
 ```
 Recherche de "NEEDLE" dans un texte de 1,000,000 caractères :
 
-Naïve (Pos)     : ~150 ms
+Naïve (Pos)     : ~150 ms  
 Boyer-Moore     : ~30 ms (5x plus rapide)
 ```
 
 ### 3. Knuth-Morris-Pratt (KMP)
 
 ```pascal
-procedure ComputeLPSArray(const Pattern: string; var LPS: array of Integer);
+procedure ComputeLPSArray(const Pattern: string; var LPS: array of Integer);  
 var
   Len, i: Integer;
 begin
@@ -562,7 +562,7 @@ begin
   end;
 end;
 
-function KMPSearch(const Text, Pattern: string): Integer;
+function KMPSearch(const Text, Pattern: string): Integer;  
 var
   LPS: array of Integer;
   i, j: Integer;
@@ -610,7 +610,7 @@ uses Generics.Collections;
 type
   TGraph = TDictionary<Integer, TList<Integer>>;
 
-function BFS(Graph: TGraph; Start, Target: Integer): Boolean;
+function BFS(Graph: TGraph; Start, Target: Integer): Boolean;  
 var
   Queue: TQueue<Integer>;
   Visited: THashSet<Integer>;
@@ -653,7 +653,7 @@ end;
 ### 2. Parcours en profondeur (DFS - Depth-First Search)
 
 ```pascal
-function DFS(Graph: TGraph; Start, Target: Integer; Visited: THashSet<Integer>): Boolean;
+function DFS(Graph: TGraph; Start, Target: Integer; Visited: THashSet<Integer>): Boolean;  
 var
   Neighbors: TList<Integer>;
   Neighbor: Integer;
@@ -699,7 +699,7 @@ type
   end;
   TWeightedGraph = TDictionary<Integer, TList<TEdge>>;
 
-function Dijkstra(Graph: TWeightedGraph; Start, Target: Integer): Integer;
+function Dijkstra(Graph: TWeightedGraph; Start, Target: Integer): Integer;  
 type
   TNode = record
     Vertex: Integer;
@@ -766,7 +766,7 @@ end;
 
 ```pascal
 // ❌ Version récursive naïve (O(2ⁿ))
-function FibonacciSlow(N: Integer): Int64;
+function FibonacciSlow(N: Integer): Int64;  
 begin
   if N <= 1 then Exit(N);
   Result := FibonacciSlow(N - 1) + FibonacciSlow(N - 2);
@@ -777,7 +777,7 @@ end;
 var
   FibCache: array[0..100] of Int64;
 
-function FibonacciFast(N: Integer): Int64;
+function FibonacciFast(N: Integer): Int64;  
 begin
   if N <= 1 then
   begin
@@ -794,7 +794,7 @@ end;
 // Fib(40) = < 0.001 secondes (2000x plus rapide!)
 
 // ✅✅ Version itérative (O(n), pas de récursion)
-function FibonacciIterative(N: Integer): Int64;
+function FibonacciIterative(N: Integer): Int64;  
 var
   A, B, i: Int64;
 begin
@@ -815,7 +815,7 @@ end;
 ### 2. Plus longue sous-séquence commune (LCS)
 
 ```pascal
-function LCS(const S1, S2: string): Integer;
+function LCS(const S1, S2: string): Integer;  
 var
   DP: array of array of Integer;
   i, j: Integer;
@@ -848,7 +848,7 @@ type
     Value: Integer;
   end;
 
-function Knapsack(Items: array of TItem; Capacity: Integer): Integer;
+function Knapsack(Items: array of TItem; Capacity: Integer): Integer;  
 var
   DP: array of Integer;
   i, w: Integer;
@@ -883,8 +883,8 @@ end;
 
 ```pascal
 // ❌ Naïf : O(n)
-function PowerSlow(Base, Exp: Int64): Int64;
-var i: Integer;
+function PowerSlow(Base, Exp: Int64): Int64;  
+var i: Integer;  
 begin
   Result := 1;
   for i := 1 to Exp do
@@ -892,7 +892,7 @@ begin
 end;
 
 // ✅ Exponentiation rapide : O(log n)
-function PowerFast(Base, Exp: Int64): Int64;
+function PowerFast(Base, Exp: Int64): Int64;  
 begin
   if Exp = 0 then Exit(1);
   if Exp = 1 then Exit(Base);
@@ -909,7 +909,7 @@ end;
 ### 2. PGCD (Plus Grand Commun Diviseur) - Euclide
 
 ```pascal
-function GCD(A, B: Integer): Integer;
+function GCD(A, B: Integer): Integer;  
 begin
   while B <> 0 do
   begin
@@ -927,7 +927,7 @@ end;
 ### 3. Crible d'Ératosthène (Nombres premiers)
 
 ```pascal
-function SieveOfEratosthenes(N: Integer): TList<Integer>;
+function SieveOfEratosthenes(N: Integer): TList<Integer>;  
 var
   IsPrime: array of Boolean;
   i, j: Integer;
@@ -952,7 +952,7 @@ begin
 end;
 
 // Trouver tous les premiers jusqu'à 1,000,000
-var Primes: TList<Integer>;
+var Primes: TList<Integer>;  
 begin
   Primes := SieveOfEratosthenes(1000000);
   WriteLn('Nombres premiers trouvés: ', Primes.Count);  // 78,498
@@ -994,7 +994,7 @@ end;
 
 ```pascal
 // ❌ Toujours parcourir tout
-function ContainsDuplicate(const A: array of Integer): Boolean;
+function ContainsDuplicate(const A: array of Integer): Boolean;  
 var
   i, j: Integer;
   HasDuplicate: Boolean;
@@ -1008,7 +1008,7 @@ begin
 end;
 
 // ✅ Sortir dès qu'on trouve
-function ContainsDuplicateFast(const A: array of Integer): Boolean;
+function ContainsDuplicateFast(const A: array of Integer): Boolean;  
 var
   i, j: Integer;
 begin
@@ -1022,7 +1022,7 @@ end;
 // ✅✅ Encore mieux : HashSet O(n) au lieu de O(n²)
 uses Generics.Collections;
 
-function ContainsDuplicateBest(const A: array of Integer): Boolean;
+function ContainsDuplicateBest(const A: array of Integer): Boolean;  
 var
   Seen: THashSet<Integer>;
   i: Integer;
@@ -1084,8 +1084,8 @@ for i := 0 to 999 do
   A[i] := A[i] + 1;
 
 // ✅ Déroulé (moins d'overhead)
-i := 0;
-while i <= 996 do
+i := 0;  
+while i <= 996 do  
 begin
   A[i] := A[i] + 1;
   A[i+1] := A[i+1] + 1;
@@ -1094,7 +1094,7 @@ begin
   Inc(i, 4);
 end;
 // Traiter les éléments restants
-while i <= 999 do
+while i <= 999 do  
 begin
   A[i] := A[i] + 1;
   Inc(i);
@@ -1111,7 +1111,7 @@ end;
 ```pascal
 uses SysUtils, Classes;
 
-procedure ParallelMergeSort(var A: array of Integer; Left, Right: Integer);
+procedure ParallelMergeSort(var A: array of Integer; Left, Right: Integer);  
 var
   Mid: Integer;
   Thread1, Thread2: TThread;
@@ -1225,7 +1225,7 @@ end;
 ### 1. Monte Carlo (Calcul de π)
 
 ```pascal
-function EstimatePi(Iterations: Integer): Double;
+function EstimatePi(Iterations: Integer): Double;  
 var
   InsideCircle, i: Integer;
   X, Y: Double;
@@ -1258,7 +1258,7 @@ type
     Ratio: Double;  // Value/Weight
   end;
 
-function GreedyKnapsack(Items: array of TItem; Capacity: Integer): Integer;
+function GreedyKnapsack(Items: array of TItem; Capacity: Integer): Integer;  
 var
   i, CurrentWeight: Integer;
 begin
@@ -1300,8 +1300,8 @@ const
 var
   TestData: array of Integer;
 
-procedure InitData(Size: Integer);
-var i: Integer;
+procedure InitData(Size: Integer);  
+var i: Integer;  
 begin
   SetLength(TestData, Size);
   Randomize;
@@ -1309,7 +1309,7 @@ begin
     TestData[i] := Random(Size * 10);
 end;
 
-procedure BenchmarkAlgorithm(const Name: string; Algo: TAlgorithmProc; Size: Integer);
+procedure BenchmarkAlgorithm(const Name: string; Algo: TAlgorithmProc; Size: Integer);  
 var
   StartTime: TDateTime;
   Ms: Int64;
@@ -1371,8 +1371,8 @@ end.
 ### Validation des résultats
 
 ```pascal
-function IsSorted(const A: array of Integer): Boolean;
-var i: Integer;
+function IsSorted(const A: array of Integer): Boolean;  
+var i: Integer;  
 begin
   for i := 0 to High(A) - 1 do
     if A[i] > A[i + 1] then
@@ -1380,8 +1380,8 @@ begin
   Result := True;
 end;
 
-function ArraysEqual(const A, B: array of Integer): Boolean;
-var i: Integer;
+function ArraysEqual(const A, B: array of Integer): Boolean;  
+var i: Integer;  
 begin
   if Length(A) <> Length(B) then Exit(False);
   for i := 0 to High(A) do
@@ -1391,7 +1391,7 @@ begin
 end;
 
 // Valider qu'un algorithme de tri est correct
-procedure ValidateSort(SortProc: TAlgorithmProc);
+procedure ValidateSort(SortProc: TAlgorithmProc);  
 var
   Original, Sorted1, Sorted2: array of Integer;
   i: Integer;
@@ -1432,7 +1432,7 @@ end;
 
 uses Generics.Collections;
 
-function HasDuplicates(const A: array of Integer): Boolean;
+function HasDuplicates(const A: array of Integer): Boolean;  
 var
   Seen: THashSet<Integer>;
   i: Integer;
@@ -1461,7 +1461,7 @@ end;
 // Problème : Trouver les K plus grands éléments
 // Solution : Tri partiel avec Quick Select
 
-function QuickSelect(var A: array of Integer; Left, Right, K: Integer): Integer;
+function QuickSelect(var A: array of Integer; Left, Right, K: Integer): Integer;  
 var
   Pivot, i, j, Temp: Integer;
 begin
@@ -1494,7 +1494,7 @@ begin
     Result := A[K];
 end;
 
-function FindTopK(const A: array of Integer; K: Integer): TArray<Integer>;
+function FindTopK(const A: array of Integer; K: Integer): TArray<Integer>;  
 var
   ACopy: array of Integer;
   i: Integer;
@@ -1523,7 +1523,7 @@ type
   end;
 
 // Algorithme de Floyd (Tortue et Lièvre)
-function HasCycle(Head: PNode): Boolean;
+function HasCycle(Head: PNode): Boolean;  
 var
   Slow, Fast: PNode;
 begin
@@ -1555,7 +1555,7 @@ end;
 
 uses Generics.Collections;
 
-function SlidingWindowMaximum(const A: array of Integer; K: Integer): TArray<Integer>;
+function SlidingWindowMaximum(const A: array of Integer; K: Integer): TArray<Integer>;  
 var
   Deque: TList<Integer>;  // Index des candidats
   i, Count: Integer;
@@ -1661,15 +1661,15 @@ if HashSet.Contains(Item) then ...
 
 ```pascal
 // ❌ Fibonacci récursif O(2ⁿ)
-function Fib(n: Integer): Integer;
+function Fib(n: Integer): Integer;  
 begin
   if n <= 1 then Exit(n);
   Result := Fib(n-1) + Fib(n-2);
 end;
 
 // ✅ Avec cache O(n)
-var Cache: array[0..100] of Integer;
-function FibMemo(n: Integer): Integer;
+var Cache: array[0..100] of Integer;  
+function FibMemo(n: Integer): Integer;  
 begin
   if n <= 1 then Exit(n);
   if Cache[n] <> 0 then Exit(Cache[n]);

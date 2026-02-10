@@ -23,10 +23,10 @@ Un processeur moderne ne traite pas les instructions une par une. Il utilise un 
 
 **Exemple de pipeline en action** :
 ```
-Cycle 1:  [Instr1: FETCH]
-Cycle 2:  [Instr1: DECODE] [Instr2: FETCH]
-Cycle 3:  [Instr1: EXEC  ] [Instr2: DECODE] [Instr3: FETCH]
-Cycle 4:  [Instr1: MEMORY] [Instr2: EXEC  ] [Instr3: DECODE] [Instr4: FETCH]
+Cycle 1:  [Instr1: FETCH]  
+Cycle 2:  [Instr1: DECODE] [Instr2: FETCH]  
+Cycle 3:  [Instr1: EXEC  ] [Instr2: DECODE] [Instr3: FETCH]  
+Cycle 4:  [Instr1: MEMORY] [Instr2: EXEC  ] [Instr3: DECODE] [Instr4: FETCH]  
 Cycle 5:  [Instr1: WRITE ] [Instr2: MEMORY] [Instr3: EXEC  ] [Instr4: DECODE] [Instr5: FETCH]
 ```
 
@@ -56,9 +56,9 @@ Peut exécuter jusqu'à 4-6 instructions par cycle
 **Exemple** :
 ```pascal
 // Ces 4 instructions peuvent s'exécuter en parallèle
-A := B + C;    // ALU #1
-D := E + F;    // ALU #2
-X := Y * 2.0;  // FPU #1
+A := B + C;    // ALU #1  
+D := E + F;    // ALU #2  
+X := Y * 2.0;  // FPU #1  
 Load(Z);       // Load/Store
 ```
 
@@ -68,8 +68,8 @@ Le CPU peut réorganiser les instructions pour maximiser l'utilisation du pipeli
 
 ```pascal
 // Code écrit :
-A := LoadFromMemory();  // 200 cycles (lent)
-B := C + D;             // 1 cycle (rapide)
+A := LoadFromMemory();  // 200 cycles (lent)  
+B := C + D;             // 1 cycle (rapide)  
 E := A + 1;             // Dépend de A
 
 // Exécution réelle par le CPU :
@@ -99,9 +99,9 @@ else
 Le CPU ne sait pas quel chemin sera pris avant d'évaluer la condition. En attendant, le pipeline se vide :
 
 ```
-Sans prédiction :
-Cycle 1-5  : Évaluer condition (X > 10)
-Cycle 6    : Pipeline vide (stall)
+Sans prédiction :  
+Cycle 1-5  : Évaluer condition (X > 10)  
+Cycle 6    : Pipeline vide (stall)  
 Cycle 7    : Commencer DoA() ou DoB()
 
 Perte : ~10-20 cycles par branchement raté
@@ -112,14 +112,14 @@ Perte : ~10-20 cycles par branchement raté
 Le CPU **devine** quel chemin sera pris et commence à l'exécuter de manière spéculative :
 
 ```
-Avec prédiction correcte :
-Cycle 1-5  : Évaluer condition + exécuter DoA() (spéculatif)
-Cycle 6    : Confirmer prédiction → Continuer
+Avec prédiction correcte :  
+Cycle 1-5  : Évaluer condition + exécuter DoA() (spéculatif)  
+Cycle 6    : Confirmer prédiction → Continuer  
 Perte : 0 cycle
 
-Avec prédiction incorrecte :
-Cycle 1-5  : Évaluer condition + exécuter DoA() (spéculatif)
-Cycle 6    : Prédiction fausse → Annuler + démarrer DoB()
+Avec prédiction incorrecte :  
+Cycle 1-5  : Évaluer condition + exécuter DoA() (spéculatif)  
+Cycle 6    : Prédiction fausse → Annuler + démarrer DoB()  
 Perte : ~15-20 cycles
 ```
 
@@ -146,7 +146,7 @@ if RareCondition then  // Presque toujours false
 
 ```pascal
 // Pattern prévisible
-for i := 1 to 100 do
+for i := 1 to 100 do  
 begin
   if i mod 2 = 0 then  // Alterne vrai/faux
     DoEven()
@@ -179,7 +179,7 @@ perf stat -e branches,branch-misses ./programme
 
 ```pascal
 // Pattern aléatoire → 50% de mispredictions
-for i := 0 to 1000000 do
+for i := 0 to 1000000 do  
 begin
   if Random(2) = 0 then
     ProcessA(Data[i])
@@ -196,7 +196,7 @@ end;
 **Technique 1 : Éliminer le branchement**
 ```pascal
 // Utiliser des opérations arithmétiques au lieu de if
-function Max(A, B: Integer): Integer;
+function Max(A, B: Integer): Integer;  
 begin
   // ❌ Avec branchement
   if A > B then
@@ -205,7 +205,7 @@ begin
     Result := B;
 end;
 
-function MaxOptimized(A, B: Integer): Integer;
+function MaxOptimized(A, B: Integer): Integer;  
 begin
   // ✅ Sans branchement (branchless)
   Result := A + ((B - A) and (Integer(B > A) - 1));
@@ -231,7 +231,7 @@ for i := 0 to High(Items) do
     Process(Items[i]);
 
 // ✅ Trier d'abord, puis traiter
-SortItemsByShouldProcess(Items);  // Tous les True ensemble
+SortItemsByShouldProcess(Items);  // Tous les True ensemble  
 for i := 0 to High(Items) do
   if Items[i].ShouldProcess then  // Pattern prévisible
     Process(Items[i])
@@ -244,7 +244,7 @@ for i := 0 to High(Items) do
 **Technique 3 : Utiliser des tables de lookup**
 ```pascal
 // ❌ Beaucoup de branchements
-function GetCategory(Value: Integer): string;
+function GetCategory(Value: Integer): string;  
 begin
   if Value < 10 then
     Result := 'Low'
@@ -269,7 +269,7 @@ const
     'Very High'
   );
 
-function GetCategoryOptimized(Value: Integer): string;
+function GetCategoryOptimized(Value: Integer): string;  
 begin
   if Value > 100 then Value := 100;
   if Value < 0 then Value := 0;
@@ -281,7 +281,7 @@ end;
 ```pascal
 {$ASMMODE INTEL}
 
-function MinBranchless(A, B: Integer): Integer;
+function MinBranchless(A, B: Integer): Integer;  
 asm
   mov eax, A
   mov edx, B
@@ -334,7 +334,7 @@ var
 
 // Accéder à Data.A charge toute la ligne de cache (64 bytes)
 // → Data.B est déjà en cache (gratuit)
-X := Data.A;
+X := Data.A;  
 Y := Data.B;  // Presque instantané (cache hit)
 ```
 
@@ -386,8 +386,8 @@ for i := 0 to 1000000 do
 ```pascal
 {$ASMMODE INTEL}
 
-procedure ProcessWithPrefetch(Data: PInteger; Count: Integer);
-var i: Integer;
+procedure ProcessWithPrefetch(Data: PInteger; Count: Integer);  
+var i: Integer;  
 begin
   for i := 0 to Count - 1 do
   begin
@@ -418,16 +418,16 @@ end;
 
 **Registres 64-bit** :
 ```
-RAX, RBX, RCX, RDX : Registres généraux
-RSI, RDI           : Source/Destination
-RBP, RSP           : Base/Stack pointer
+RAX, RBX, RCX, RDX : Registres généraux  
+RSI, RDI           : Source/Destination  
+RBP, RSP           : Base/Stack pointer  
 R8-R15             : Registres additionnels (x64)
 ```
 
 **Registres SIMD** :
 ```
-XMM0-XMM15 : 128 bits (SSE)
-YMM0-YMM15 : 256 bits (AVX)
+XMM0-XMM15 : 128 bits (SSE)  
+YMM0-YMM15 : 256 bits (AVX)  
 ZMM0-ZMM31 : 512 bits (AVX-512)
 ```
 
@@ -450,7 +450,7 @@ end;
 
 **POPCNT** : Population Count (nombre de bits à 1)
 ```pascal
-function CountBits(Value: QWord): Integer;
+function CountBits(Value: QWord): Integer;  
 asm
   popcnt rax, Value
 end;
@@ -459,7 +459,7 @@ end;
 
 **LZCNT** : Leading Zero Count
 ```pascal
-function LeadingZeros(Value: QWord): Integer;
+function LeadingZeros(Value: QWord): Integer;  
 asm
   lzcnt rax, Value
 end;
@@ -468,14 +468,14 @@ end;
 **BMI/BMI2** : Bit Manipulation Instructions
 ```pascal
 // ANDN: AND NOT
-function AndNot(A, B: QWord): QWord;
+function AndNot(A, B: QWord): QWord;  
 asm
   mov rax, A
   andn rax, rax, B  // rax = A AND (NOT B)
 end;
 
 // BZHI: Zero high bits
-function ZeroHighBits(Value: QWord; Index: Byte): QWord;
+function ZeroHighBits(Value: QWord; Index: Byte): QWord;  
 asm
   mov rax, Value
   mov cl, Index
@@ -507,10 +507,10 @@ for i := 0 to 999 do
 #### Registres ARM64
 
 ```
-X0-X30  : Registres généraux 64-bit
-W0-W30  : Registres 32-bit (moitié basse de X0-X30)
-SP      : Stack Pointer
-PC      : Program Counter
+X0-X30  : Registres généraux 64-bit  
+W0-W30  : Registres 32-bit (moitié basse de X0-X30)  
+SP      : Stack Pointer  
+PC      : Program Counter  
 V0-V31  : Registres NEON/FPU (128-bit)
 ```
 
@@ -527,7 +527,7 @@ A := B + (C shl 2);  // 1 cycle (décalage gratuit)
 
 **Conditional Execution** : Presque toutes les instructions peuvent être conditionnelles
 ```asm
-CMP X0, X1
+CMP X0, X1  
 ADDGT X2, X3, X4  // ADD si Greater Than (pas de branchement!)
 ```
 
@@ -613,7 +613,7 @@ fpc -O3 -CpARMV8 -CfVFPV4 programme.pas
 
 **Inline de fonctions** :
 ```pascal
-function Square(X: Integer): Integer; inline;
+function Square(X: Integer): Integer; inline;  
 begin
   Result := X * X;
 end;
@@ -629,8 +629,8 @@ for i := 0 to 99 do
   A[i] := i;
 
 // Code généré avec -O3 (loop unrolling)
-i := 0;
-while i <= 96 do
+i := 0;  
+while i <= 96 do  
 begin
   A[i] := i;
   A[i+1] := i+1;
@@ -639,7 +639,7 @@ begin
   Inc(i, 4);
 end;
 // Traiter les 3 derniers éléments
-while i <= 99 do
+while i <= 99 do  
 begin
   A[i] := i;
   Inc(i);
@@ -659,7 +659,7 @@ Réorganiser le code pour maximiser le parallélisme :
 
 ```pascal
 // ❌ Version non optimisée
-for i := 0 to N - 1 do
+for i := 0 to N - 1 do  
 begin
   A := Load(i);      // 200 cycles
   B := Process(A);   // 10 cycles (attend A)
@@ -668,15 +668,15 @@ end;
 // Total : N × 215 cycles
 
 // ✅ Version avec software pipelining
-A0 := Load(0);  // Précharger
-for i := 0 to N - 2 do
+A0 := Load(0);  // Précharger  
+for i := 0 to N - 2 do  
 begin
   A1 := Load(i + 1);     // Charger le suivant
   B0 := Process(A0);     // Traiter le courant (pendant que A1 charge)
   Store(i, B0);          // Stocker le courant
   A0 := A1;              // Préparer l'itération suivante
-end;
-B0 := Process(A0);
+end;  
+B0 := Process(A0);  
 Store(N - 1, B0);
 // Total : N × 200 cycles (10% plus rapide)
 ```
@@ -694,7 +694,7 @@ for i := 0 to N - 1 do
   C[i] := A[i] * 2;
 
 // ✅ Boucle fusionnée
-for i := 0 to N - 1 do
+for i := 0 to N - 1 do  
 begin
   A[i] := B[i] + 1;
   C[i] := A[i] * 2;
@@ -753,8 +753,8 @@ for i := 0 to N - 1 do
   A[i] := i * 7;
 
 // ✅ Addition incrémentale
-Value := 0;
-for i := 0 to N - 1 do
+Value := 0;  
+for i := 0 to N - 1 do  
 begin
   A[i] := Value;
   Value := Value + 7;  // Addition au lieu de multiplication
@@ -836,22 +836,22 @@ uses
 var
   Features: TCPUFeatures;
 
-procedure ProcessScalar(Data: Pointer; Size: Integer);
+procedure ProcessScalar(Data: Pointer; Size: Integer);  
 begin
   // Implémentation de base
 end;
 
-procedure ProcessSSE(Data: Pointer; Size: Integer);
+procedure ProcessSSE(Data: Pointer; Size: Integer);  
 begin
   // Implémentation SSE
 end;
 
-procedure ProcessAVX2(Data: Pointer; Size: Integer);
+procedure ProcessAVX2(Data: Pointer; Size: Integer);  
 begin
   // Implémentation AVX2
 end;
 
-procedure ProcessNEON(Data: Pointer; Size: Integer);
+procedure ProcessNEON(Data: Pointer; Size: Integer);  
 begin
   // Implémentation ARM NEON
 end;
@@ -885,7 +885,7 @@ end.
 ### Directives de compilation conditionnelle
 
 ```pascal
-procedure OptimizedFunction;
+procedure OptimizedFunction;  
 begin
   {$IFDEF CPUX64}
     {$IF DEFINED(CPUAVX2)}
@@ -943,7 +943,7 @@ end;
 // Utilisation dans le code
 {$I platform_macros.inc}
 
-procedure AlignedAlloc;
+procedure AlignedAlloc;  
 var
   Data: Pointer;
 begin
@@ -988,7 +988,7 @@ end;
 {$ASMMODE INTEL}
 
 // ❌ Mauvais : écriture partielle (pénalité)
-procedure BadPartialWrite;
+procedure BadPartialWrite;  
 asm
   mov eax, [Data]   // Écrit 32-bit
   mov al, 5         // Écrit 8-bit bas → pénalité!
@@ -997,7 +997,7 @@ end;
 // Pénalité : ~5 cycles de stall
 
 // ✅ Bon : écriture complète
-procedure GoodFullWrite;
+procedure GoodFullWrite;  
 asm
   xor eax, eax      // Mettre à zéro d'abord
   mov al, 5         // Maintenant OK
@@ -1048,12 +1048,12 @@ Result := Value div 10;  // Avec -O3, optimisé automatiquement
 // Throughput = 0.05 ops/cycle (1 divider)
 
 // ❌ Dépendance de latence
-A := X div Y;  // 30 cycles
+A := X div Y;  // 30 cycles  
 B := A + 1;    // Attend A (stall de 30 cycles)
 
 // ✅ Pas de dépendance
-A := X div Y;  // 30 cycles
-B := Z + 1;    // Exécute en parallèle (pas de dépendance)
+A := X div Y;  // 30 cycles  
+B := Z + 1;    // Exécute en parallèle (pas de dépendance)  
 C := A + 1;    // Attend A, mais B est déjà fait
 ```
 
@@ -1127,7 +1127,7 @@ end;
 {$ASMMODE INTEL}
 
 // Recherche de caractère avec SSE2
-function FindCharSSE2(const S: String; C: Char): Integer;
+function FindCharSSE2(const S: String; C: Char): Integer;  
 var
   P: PChar;
   Len, i: Integer;
@@ -1197,7 +1197,7 @@ end;
 
 ```pascal
 // Comptage de bits avec POPCNT
-function CountSetBits(Value: QWord): Integer;
+function CountSetBits(Value: QWord): Integer;  
 asm
   {$IFDEF CPUPOPCNT}
   popcnt rax, Value
@@ -1235,7 +1235,7 @@ end;
 {$ASMMODE INTEL}
 
 // AES avec instructions AES-NI
-procedure AESEncryptBlockNI(const Key, Input: array of Byte; var Output: array of Byte);
+procedure AESEncryptBlockNI(const Key, Input: array of Byte; var Output: array of Byte);  
 asm
   mov rax, Key
   mov rdx, Input
@@ -1284,8 +1284,8 @@ var
   ElapsedMs: Int64;
   A, B, C: Int64;
 
-procedure BenchmarkAddition;
-var i: Integer;
+procedure BenchmarkAddition;  
+var i: Integer;  
 begin
   StartTime := Now;
   for i := 1 to Iterations do
@@ -1294,8 +1294,8 @@ begin
   WriteLn('Addition:         ', ElapsedMs, ' ms');
 end;
 
-procedure BenchmarkMultiplication;
-var i: Integer;
+procedure BenchmarkMultiplication;  
+var i: Integer;  
 begin
   StartTime := Now;
   for i := 1 to Iterations do
@@ -1304,8 +1304,8 @@ begin
   WriteLn('Multiplication:   ', ElapsedMs, ' ms');
 end;
 
-procedure BenchmarkDivision;
-var i: Integer;
+procedure BenchmarkDivision;  
+var i: Integer;  
 begin
   StartTime := Now;
   for i := 1 to Iterations do
@@ -1314,8 +1314,8 @@ begin
   WriteLn('Division:         ', ElapsedMs, ' ms');
 end;
 
-procedure BenchmarkBitShift;
-var i: Integer;
+procedure BenchmarkBitShift;  
+var i: Integer;  
 begin
   StartTime := Now;
   for i := 1 to Iterations do
@@ -1324,8 +1324,8 @@ begin
   WriteLn('Bit Shift:        ', ElapsedMs, ' ms');
 end;
 
-procedure BenchmarkBranchPredictable;
-var i: Integer;
+procedure BenchmarkBranchPredictable;  
+var i: Integer;  
 begin
   StartTime := Now;
   for i := 1 to Iterations do
@@ -1339,8 +1339,8 @@ begin
   WriteLn('Branch (pred.):   ', ElapsedMs, ' ms');
 end;
 
-procedure BenchmarkBranchUnpredictable;
-var i: Integer;
+procedure BenchmarkBranchUnpredictable;  
+var i: Integer;  
 begin
   StartTime := Now;
   for i := 1 to Iterations do
@@ -1410,7 +1410,7 @@ perf stat -e cycles,instructions,cache-misses,branch-misses ./programme
 uses
   Linux, BaseUnix;
 
-procedure MeasurePerformance;
+procedure MeasurePerformance;  
 var
   PerfFD: Integer;
   Counter: Int64;
@@ -1455,7 +1455,7 @@ nice -n -20 ./programme  # Priorité maximale
 {$IFDEF WINDOWS}
 uses Windows;
 
-procedure SetCPUAffinity(Mask: DWORD_PTR);
+procedure SetCPUAffinity(Mask: DWORD_PTR);  
 begin
   SetThreadAffinityMask(GetCurrentThread, Mask);
 end;

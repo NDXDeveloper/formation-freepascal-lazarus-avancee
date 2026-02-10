@@ -25,10 +25,10 @@ Avant de choisir une structure, il faut comprendre la **notation Big-O** :
 ```
 Pour n = 1,000,000 éléments :
 
-O(1)      : 1 opération
-O(log n)  : 20 opérations
-O(n)      : 1,000,000 opérations
-O(n log n): 20,000,000 opérations
+O(1)      : 1 opération  
+O(log n)  : 20 opérations  
+O(n)      : 1,000,000 opérations  
+O(n log n): 20,000,000 opérations  
 O(n²)     : 1,000,000,000,000 opérations (1 trillion!)
 ```
 
@@ -188,7 +188,7 @@ const
   N = 100000;
 
 // Test 1 : Ajout à la fin
-procedure TestArrayAppend;
+procedure TestArrayAppend;  
 var
   List: TList;
   i: Integer;
@@ -207,7 +207,7 @@ begin
 end;
 
 // Test 2 : Insertion au début
-procedure TestArrayPrepend;
+procedure TestArrayPrepend;  
 var
   List: TList;
   i: Integer;
@@ -225,7 +225,7 @@ begin
 end;
 
 // Test 3 : Linked list prepend
-procedure TestLinkedListPrepend;
+procedure TestLinkedListPrepend;  
 type
   PNode = ^TNode;
   TNode = record
@@ -362,7 +362,7 @@ end;
 
 ```pascal
 // ❌ Avec TStringList (O(n²))
-procedure CountWordsWithStringList(const Words: TStringList);
+procedure CountWordsWithStringList(const Words: TStringList);  
 var
   Counts: TStringList;
   i, Index: Integer;
@@ -386,7 +386,7 @@ end;
 // ✅ Avec TDictionary (O(n))
 uses Generics.Collections;
 
-procedure CountWordsWithDictionary(const Words: TStringList);
+procedure CountWordsWithDictionary(const Words: TStringList);  
 var
   Counts: TDictionary<string, Integer>;
   i, Count: Integer;
@@ -456,7 +456,7 @@ end;
 
 ```pascal
 // ❌ Avec TList + recherche linéaire (O(n²))
-procedure RemoveDuplicatesSlow(var List: TList);
+procedure RemoveDuplicatesSlow(var List: TList);  
 var
   i, j: Integer;
 begin
@@ -473,7 +473,7 @@ end;
 // ✅ Avec THashSet (O(n))
 uses Generics.Collections;
 
-procedure RemoveDuplicatesFast(var List: TList);
+procedure RemoveDuplicatesFast(var List: TList);  
 var
   Seen: THashSet<Pointer>;
   i: Integer;
@@ -511,7 +511,7 @@ type
     function Compare(Item1, Item2: Pointer): Integer; override;
   end;
 
-function TIntegerTree.Compare(Item1, Item2: Pointer): Integer;
+function TIntegerTree.Compare(Item1, Item2: Pointer): Integer;  
 begin
   Result := Integer(Item1) - Integer(Item2);
 end;
@@ -675,26 +675,26 @@ type
     function Count: Integer;
   end;
 
-constructor TPriorityQueue<T>.Create(AComparer: IComparer<T>);
+constructor TPriorityQueue<T>.Create(AComparer: IComparer<T>);  
 begin
   inherited Create;
   FList := TList<T>.Create;
   FComparer := AComparer;
 end;
 
-destructor TPriorityQueue<T>.Destroy;
+destructor TPriorityQueue<T>.Destroy;  
 begin
   FList.Free;
   inherited;
 end;
 
-procedure TPriorityQueue<T>.Enqueue(const Item: T);
+procedure TPriorityQueue<T>.Enqueue(const Item: T);  
 begin
   FList.Add(Item);
   FList.Sort(FComparer);  // Maintenir l'ordre
 end;
 
-function TPriorityQueue<T>.Dequeue: T;
+function TPriorityQueue<T>.Dequeue: T;  
 begin
   if FList.Count = 0 then
     raise Exception.Create('Queue vide');
@@ -702,7 +702,7 @@ begin
   FList.Delete(0);
 end;
 
-function TPriorityQueue<T>.Count: Integer;
+function TPriorityQueue<T>.Count: Integer;  
 begin
   Result := FList.Count;
 end;
@@ -775,7 +775,7 @@ type
     function MightContain(const S: string): Boolean;
   end;
 
-constructor TBloomFilter.Create(Size, HashCount: Integer);
+constructor TBloomFilter.Create(Size, HashCount: Integer);  
 begin
   inherited Create;
   FSize := Size;
@@ -783,13 +783,13 @@ begin
   FBits := TBits.Create(Size);
 end;
 
-destructor TBloomFilter.Destroy;
+destructor TBloomFilter.Destroy;  
 begin
   FBits.Free;
   inherited;
 end;
 
-function TBloomFilter.Hash(const S: string; Seed: Integer): Integer;
+function TBloomFilter.Hash(const S: string; Seed: Integer): Integer;  
 var
   i: Integer;
 begin
@@ -799,7 +799,7 @@ begin
   Result := Abs(Result) mod FSize;
 end;
 
-procedure TBloomFilter.Add(const S: string);
+procedure TBloomFilter.Add(const S: string);  
 var
   i: Integer;
 begin
@@ -807,7 +807,7 @@ begin
     FBits[Hash(S, i)] := True;
 end;
 
-function TBloomFilter.MightContain(const S: string): Boolean;
+function TBloomFilter.MightContain(const S: string): Boolean;  
 var
   i: Integer;
 begin
@@ -872,7 +872,7 @@ type
     function Get(const Key: TKey; out Value: TValue): Boolean;
   end;
 
-constructor TLRUCache<TKey, TValue>.Create(Capacity: Integer);
+constructor TLRUCache<TKey, TValue>.Create(Capacity: Integer);  
 begin
   inherited Create;
   FCapacity := Capacity;
@@ -880,14 +880,14 @@ begin
   FList := TList<TCacheNode>.Create;
 end;
 
-destructor TLRUCache<TKey, TValue>.Destroy;
+destructor TLRUCache<TKey, TValue>.Destroy;  
 begin
   FMap.Free;
   FList.Free;
   inherited;
 end;
 
-procedure TLRUCache<TKey, TValue>.MoveToFront(Index: Integer);
+procedure TLRUCache<TKey, TValue>.MoveToFront(Index: Integer);  
 var
   Node: TCacheNode;
 begin
@@ -899,7 +899,7 @@ begin
   FMap[Node.Key] := 0;
 end;
 
-procedure TLRUCache<TKey, TValue>.Put(const Key: TKey; const Value: TValue);
+procedure TLRUCache<TKey, TValue>.Put(const Key: TKey; const Value: TValue);  
 var
   Node: TCacheNode;
   Index: Integer;
@@ -930,7 +930,7 @@ begin
   end;
 end;
 
-function TLRUCache<TKey, TValue>.Get(const Key: TKey; out Value: TValue): Boolean;
+function TLRUCache<TKey, TValue>.Get(const Key: TKey; out Value: TValue): Boolean;  
 var
   Index: Integer;
 begin
@@ -1042,19 +1042,19 @@ type
     function ExpensiveCalculation(N: Integer): Double;
   end;
 
-constructor TCalculator.Create;
+constructor TCalculator.Create;  
 begin
   inherited;
   FCache := TDictionary<Integer, Double>.Create;
 end;
 
-destructor TCalculator.Destroy;
+destructor TCalculator.Destroy;  
 begin
   FCache.Free;
   inherited;
 end;
 
-function TCalculator.ExpensiveCalculation(N: Integer): Double;
+function TCalculator.ExpensiveCalculation(N: Integer): Double;  
 var
   CachedResult: Double;
   i: Integer;
@@ -1127,19 +1127,19 @@ type
     function ProcessNextTask: Boolean;
   end;
 
-constructor TTaskQueue.Create;
+constructor TTaskQueue.Create;  
 begin
   inherited;
   FQueue := TQueue<TTask>.Create;
 end;
 
-destructor TTaskQueue.Destroy;
+destructor TTaskQueue.Destroy;  
 begin
   FQueue.Free;
   inherited;
 end;
 
-procedure TTaskQueue.AddTask(ID: Integer; const Description: string);
+procedure TTaskQueue.AddTask(ID: Integer; const Description: string);  
 var
   Task: TTask;
 begin
@@ -1149,7 +1149,7 @@ begin
   WriteLn('Tâche ajoutée: ', Description);
 end;
 
-function TTaskQueue.ProcessNextTask: Boolean;
+function TTaskQueue.ProcessNextTask: Boolean;  
 var
   Task: TTask;
 begin
@@ -1221,19 +1221,19 @@ type
     function Count: Integer;
   end;
 
-constructor TAddressBook.Create;
+constructor TAddressBook.Create;  
 begin
   inherited;
   FContacts := TDictionary<string, TContact>.Create;
 end;
 
-destructor TAddressBook.Destroy;
+destructor TAddressBook.Destroy;  
 begin
   FContacts.Free;
   inherited;
 end;
 
-procedure TAddressBook.AddContact(const Name, Email, Phone: string);
+procedure TAddressBook.AddContact(const Name, Email, Phone: string);  
 var
   Contact: TContact;
 begin
@@ -1243,12 +1243,12 @@ begin
   FContacts.AddOrSetValue(Name, Contact);
 end;
 
-function TAddressBook.FindContact(const Name: string; out Contact: TContact): Boolean;
+function TAddressBook.FindContact(const Name: string; out Contact: TContact): Boolean;  
 begin
   Result := FContacts.TryGetValue(Name, Contact);
 end;
 
-function TAddressBook.Count: Integer;
+function TAddressBook.Count: Integer;  
 begin
   Result := FContacts.Count;
 end;
@@ -1325,21 +1325,21 @@ type
     function CanRedo: Boolean;
   end;
 
-constructor TCommandHistory.Create;
+constructor TCommandHistory.Create;  
 begin
   inherited;
   FUndoStack := TStack<TCommand>.Create;
   FRedoStack := TStack<TCommand>.Create;
 end;
 
-destructor TCommandHistory.Destroy;
+destructor TCommandHistory.Destroy;  
 begin
   FUndoStack.Free;
   FRedoStack.Free;
   inherited;
 end;
 
-procedure TCommandHistory.Execute(const Action, Data: string);
+procedure TCommandHistory.Execute(const Action, Data: string);  
 var
   Cmd: TCommand;
 begin
@@ -1350,7 +1350,7 @@ begin
   WriteLn('Exécuté: ', Action, ' (', Data, ')');
 end;
 
-function TCommandHistory.Undo: Boolean;
+function TCommandHistory.Undo: Boolean;  
 var
   Cmd: TCommand;
 begin
@@ -1363,7 +1363,7 @@ begin
   end;
 end;
 
-function TCommandHistory.Redo: Boolean;
+function TCommandHistory.Redo: Boolean;  
 var
   Cmd: TCommand;
 begin
@@ -1376,12 +1376,12 @@ begin
   end;
 end;
 
-function TCommandHistory.CanUndo: Boolean;
+function TCommandHistory.CanUndo: Boolean;  
 begin
   Result := FUndoStack.Count > 0;
 end;
 
-function TCommandHistory.CanRedo: Boolean;
+function TCommandHistory.CanRedo: Boolean;  
 begin
   Result := FRedoStack.Count > 0;
 end;
@@ -1435,13 +1435,13 @@ type
     function Search(const Word: string): TList<Integer>;
   end;
 
-constructor TDocumentIndex.Create;
+constructor TDocumentIndex.Create;  
 begin
   inherited;
   FIndex := TDictionary<string, TList<Integer>>.Create;
 end;
 
-destructor TDocumentIndex.Destroy;
+destructor TDocumentIndex.Destroy;  
 var
   DocList: TList<Integer>;
 begin
@@ -1452,7 +1452,7 @@ begin
   inherited;
 end;
 
-procedure TDocumentIndex.AddDocument(DocID: Integer; const Content: string);
+procedure TDocumentIndex.AddDocument(DocID: Integer; const Content: string);  
 var
   Words: TStringList;
   i: Integer;
@@ -1486,7 +1486,7 @@ begin
   end;
 end;
 
-function TDocumentIndex.Search(const Word: string): TList<Integer>;
+function TDocumentIndex.Search(const Word: string): TList<Integer>;  
 begin
   if not FIndex.TryGetValue(LowerCase(Word), Result) then
     Result := nil;
@@ -1634,7 +1634,7 @@ var
   Particles: array[0..9999] of TParticle;
 
 // Mise à jour positions
-for i := 0 to 9999 do
+for i := 0 to 9999 do  
 begin
   Particles[i].X := Particles[i].X + Particles[i].VelX;
   Particles[i].Y := Particles[i].Y + Particles[i].VelY;
@@ -1654,7 +1654,7 @@ var
   System: TParticleSystem;
 
 // Mise à jour positions
-for i := 0 to 9999 do
+for i := 0 to 9999 do  
 begin
   System.X[i] := System.X[i] + System.VelX[i];
   System.Y[i] := System.Y[i] + System.VelY[i];
@@ -1681,14 +1681,14 @@ type
     procedure Release(Obj: T);
   end;
 
-constructor TObjectPool<T>.Create(MaxSize: Integer);
+constructor TObjectPool<T>.Create(MaxSize: Integer);  
 begin
   inherited Create;
   FMaxSize := MaxSize;
   FPool := TStack<T>.Create;
 end;
 
-destructor TObjectPool<T>.Destroy;
+destructor TObjectPool<T>.Destroy;  
 var
   Obj: T;
 begin
@@ -1701,7 +1701,7 @@ begin
   inherited;
 end;
 
-function TObjectPool<T>.Acquire: T;
+function TObjectPool<T>.Acquire: T;  
 begin
   if FPool.Count > 0 then
     Result := FPool.Pop
@@ -1709,7 +1709,7 @@ begin
     Result := T.Create;
 end;
 
-procedure TObjectPool<T>.Release(Obj: T);
+procedure TObjectPool<T>.Release(Obj: T);  
 begin
   if FPool.Count < FMaxSize then
     FPool.Push(Obj)
@@ -1770,7 +1770,7 @@ type
     property Count: Integer read FCount;
   end;
 
-constructor TCircularBuffer<T>.Create(Capacity: Integer);
+constructor TCircularBuffer<T>.Create(Capacity: Integer);  
 begin
   inherited Create;
   FCapacity := Capacity;
@@ -1780,7 +1780,7 @@ begin
   FCount := 0;
 end;
 
-function TCircularBuffer<T>.Push(const Item: T): Boolean;
+function TCircularBuffer<T>.Push(const Item: T): Boolean;  
 begin
   Result := not IsFull;
   if Result then
@@ -1791,7 +1791,7 @@ begin
   end;
 end;
 
-function TCircularBuffer<T>.Pop(out Item: T): Boolean;
+function TCircularBuffer<T>.Pop(out Item: T): Boolean;  
 begin
   Result := not IsEmpty;
   if Result then
@@ -1802,12 +1802,12 @@ begin
   end;
 end;
 
-function TCircularBuffer<T>.IsFull: Boolean;
+function TCircularBuffer<T>.IsFull: Boolean;  
 begin
   Result := FCount = FCapacity;
 end;
 
-function TCircularBuffer<T>.IsEmpty: Boolean;
+function TCircularBuffer<T>.IsEmpty: Boolean;  
 begin
   Result := FCount = 0;
 end;
@@ -1891,7 +1891,7 @@ end;
 ### Comparer les performances
 
 ```pascal
-procedure BenchmarkStructure(const Name: string; Proc: TProcedure);
+procedure BenchmarkStructure(const Name: string; Proc: TProcedure);  
 var
   StartTime: TDateTime;
   ElapsedMs: Int64;
@@ -2040,7 +2040,7 @@ Les structures de données génériques (TList, TDictionary) ont des performance
 {$IFDEF WINDOWS}
 uses Registry;
 
-procedure ReadFromRegistry;
+procedure ReadFromRegistry;  
 var
   Reg: TRegistry;
 begin
@@ -2064,7 +2064,7 @@ end;
 {$IFDEF LINUX}
 uses IniFiles;
 
-procedure ReadFromConfig;
+procedure ReadFromConfig;  
 var
   Ini: TIniFile;
 begin
@@ -2114,7 +2114,7 @@ type
     function QueryRange(MinX, MinY, MaxX, MaxY: Double): TList;
   end;
 
-constructor TQuadTree.Create(MinX, MinY, MaxX, MaxY: Double; MaxPoints: Integer);
+constructor TQuadTree.Create(MinX, MinY, MaxX, MaxY: Double; MaxPoints: Integer);  
 begin
   inherited Create;
   FMaxPoints := MaxPoints;
@@ -2131,7 +2131,7 @@ begin
   FRoot^.IsLeaf := True;
 end;
 
-procedure TQuadTree.Split(Node: PQuadNode);
+procedure TQuadTree.Split(Node: PQuadNode);  
 var
   MidX, MidY: Double;
 begin
@@ -2154,7 +2154,7 @@ begin
   Node^.IsLeaf := False;
 end;
 
-procedure TQuadTree.Insert(const Point: TPoint2D);
+procedure TQuadTree.Insert(const Point: TPoint2D);  
 begin
   InsertIntoNode(FRoot, Point);
 end;
@@ -2206,13 +2206,13 @@ type
     function BFS(const Start, Target: T): Boolean;  // Breadth-First Search
   end;
 
-constructor TGraph<T>.Create;
+constructor TGraph<T>.Create;  
 begin
   inherited;
   FAdjacencyList := TDictionary<T, TList<T>>.Create;
 end;
 
-destructor TGraph<T>.Destroy;
+destructor TGraph<T>.Destroy;  
 var
   List: TList<T>;
 begin
@@ -2222,13 +2222,13 @@ begin
   inherited;
 end;
 
-procedure TGraph<T>.AddVertex(const Vertex: T);
+procedure TGraph<T>.AddVertex(const Vertex: T);  
 begin
   if not FAdjacencyList.ContainsKey(Vertex) then
     FAdjacencyList.Add(Vertex, TList<T>.Create);
 end;
 
-procedure TGraph<T>.AddEdge(const From, ToVertex: T);
+procedure TGraph<T>.AddEdge(const From, ToVertex: T);  
 var
   List: TList<T>;
 begin
@@ -2240,7 +2240,7 @@ begin
     List.Add(ToVertex);
 end;
 
-function TGraph<T>.BFS(const Start, Target: T): Boolean;
+function TGraph<T>.BFS(const Start, Target: T): Boolean;  
 var
   Queue: TQueue<T>;
   Visited: THashSet<T>;
@@ -2322,13 +2322,13 @@ type
     function StartsWith(const Prefix: string): Boolean;
   end;
 
-constructor TTrie.Create;
+constructor TTrie.Create;  
 begin
   inherited;
   FRoot := CreateNode;
 end;
 
-function TTrie.CreateNode: PTrieNode;
+function TTrie.CreateNode: PTrieNode;  
 var
   C: Char;
 begin
@@ -2338,7 +2338,7 @@ begin
   Result^.IsEndOfWord := False;
 end;
 
-procedure TTrie.Insert(const Word: string);
+procedure TTrie.Insert(const Word: string);  
 var
   Node: PTrieNode;
   i: Integer;
@@ -2358,7 +2358,7 @@ begin
   Node^.IsEndOfWord := True;
 end;
 
-function TTrie.Search(const Word: string): Boolean;
+function TTrie.Search(const Word: string): Boolean;  
 var
   Node: PTrieNode;
   i: Integer;
@@ -2376,7 +2376,7 @@ begin
   Result := Node^.IsEndOfWord;
 end;
 
-function TTrie.StartsWith(const Prefix: string): Boolean;
+function TTrie.StartsWith(const Prefix: string): Boolean;  
 var
   Node: PTrieNode;
   i: Integer;
@@ -2507,8 +2507,8 @@ type
     Data: array[0..9999] of Double;
   end;
 
-function ProcessData(D: TBigData): Double;  // Copie 80 KB !
-var i: Integer;
+function ProcessData(D: TBigData): Double;  // Copie 80 KB !  
+var i: Integer;  
 begin
   Result := 0;
   for i := 0 to 9999 do
@@ -2516,8 +2516,8 @@ begin
 end;
 
 // ✅ Passage par référence
-function ProcessDataFast(const D: TBigData): Double;  // Pas de copie
-var i: Integer;
+function ProcessDataFast(const D: TBigData): Double;  // Pas de copie  
+var i: Integer;  
 begin
   Result := 0;
   for i := 0 to 9999 do
@@ -2530,7 +2530,7 @@ end;
 
 ```pascal
 // ❌ Créer/détruire en boucle
-for i := 1 to 10000 do
+for i := 1 to 10000 do  
 begin
   List := TList.Create;
   try
@@ -2542,7 +2542,7 @@ end;
 // 10,000 allocations/libérations
 
 // ✅ Réutiliser
-List := TList.Create;
+List := TList.Create;  
 try
   for i := 1 to 10000 do
   begin
@@ -2568,7 +2568,7 @@ type
 var
   Groups: TList;  // Liste de TUserGroup
 
-function IsUserInGroup(const UserName, GroupName: string): Boolean;
+function IsUserInGroup(const UserName, GroupName: string): Boolean;  
 var
   i, j: Integer;
   Group: TUserGroup;
@@ -2591,7 +2591,7 @@ end;
 var
   GroupIndex: TDictionary<string, THashSet<string>>;
 
-function IsUserInGroupFast(const UserName, GroupName: string): Boolean;
+function IsUserInGroupFast(const UserName, GroupName: string): Boolean;  
 var
   Users: THashSet<string>;
 begin
@@ -2607,7 +2607,7 @@ end;
 
 ```pascal
 // Afficher le contenu d'une TDictionary
-procedure PrintDictionary(Dict: TDictionary<string, Integer>);
+procedure PrintDictionary(Dict: TDictionary<string, Integer>);  
 var
   Pair: TPair<string, Integer>;
 begin
@@ -2618,7 +2618,7 @@ begin
 end;
 
 // Afficher les statistiques d'une THashSet
-procedure PrintHashSetStats(HashSet: THashSet<Integer>);
+procedure PrintHashSetStats(HashSet: THashSet<Integer>);  
 begin
   WriteLn('=== HashSet Statistics ===');
   WriteLn('  Count: ', HashSet.Count);

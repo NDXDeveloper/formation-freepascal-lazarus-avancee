@@ -32,8 +32,8 @@ Un développement logiciel mature suit généralement ces phases :
 #### Phase 1 : Faire fonctionner le code ✅
 ```pascal
 // Objectif : Correction et fonctionnalité
-procedure TraiterDonnees(Liste: TStringList);
-var i: Integer;
+procedure TraiterDonnees(Liste: TStringList);  
+var i: Integer;  
 begin
   for i := 0 to Liste.Count - 1 do
   begin
@@ -48,7 +48,7 @@ end;
 #### Phase 2 : Rendre le code propre 🧹
 ```pascal
 // Objectif : Qualité et maintenabilité
-procedure TraiterDonnees(Liste: TStringList);
+procedure TraiterDonnees(Liste: TStringList);  
 var
   i: Integer;
   Donnee: String;
@@ -69,7 +69,7 @@ end;
 #### Phase 3 : Rendre le code rapide ⚡
 ```pascal
 // Objectif : Performance (si nécessaire)
-procedure TraiterDonnees(Liste: TStringList);
+procedure TraiterDonnees(Liste: TStringList);  
 var
   i, Count: Integer;
   Donnee: String;
@@ -95,7 +95,7 @@ end;
 
 ✅ **Temps de réponse inacceptable**
 ```
-L'utilisateur attend 30 secondes pour une opération
+L'utilisateur attend 30 secondes pour une opération  
 qui devrait prendre 2 secondes
 → Optimisation nécessaire
 ```
@@ -122,14 +122,14 @@ Le serveur nécessite 10 cœurs CPU pour gérer la charge
 
 ❌ **Code exécuté rarement**
 ```
-Une fonction d'initialisation exécutée une fois au démarrage
+Une fonction d'initialisation exécutée une fois au démarrage  
 qui prend 50ms au lieu de 10ms
 → Gain négligeable, ne pas optimiser
 ```
 
 ❌ **Sections non critiques**
 ```
-Dialogue de configuration ouvert par l'utilisateur
+Dialogue de configuration ouvert par l'utilisateur  
 qui prend 200ms à s'afficher
 → Perçu comme instantané, ne pas optimiser
 ```
@@ -137,7 +137,7 @@ qui prend 200ms à s'afficher
 ❌ **Micro-optimisations inutiles**
 ```pascal
 // ❌ Temps perdu à optimiser ça
-Result := X * 2;      // vs
+Result := X * 2;      // vs  
 Result := X shl 1;    // Gain : 0.00001%
 ```
 
@@ -147,7 +147,7 @@ Result := X shl 1;    // Gain : 0.00001%
 procedure X(a:PA;c:I);var i:I;p:P;begin for i:=0 to c-1 do begin p:=a;Inc(p,i*4);v:=p^;end;end;
 
 // ✅ Code clair et presque aussi rapide
-procedure TraiterTableau(Donnees: PByte; Taille: Integer);
+procedure TraiterTableau(Donnees: PByte; Taille: Integer);  
 var
   i: Integer;
   Pointeur: PByte;
@@ -229,13 +229,13 @@ Où :
 
 **Exemple** :
 ```
-Si 60% du code est optimisé et rendu 10x plus rapide :
+Si 60% du code est optimisé et rendu 10x plus rapide :  
 Speedup = 1 / ((1 - 0.6) + 0.6/10)
         = 1 / (0.4 + 0.06)
         = 1 / 0.46
         = 2.17x plus rapide
 
-Même si la portion optimisée est 10x plus rapide,
+Même si la portion optimisée est 10x plus rapide,  
 le programme global n'est que 2.17x plus rapide.
 ```
 
@@ -267,7 +267,7 @@ L'optimisation peut se faire à différents niveaux :
 
 #### Niveau 1 : Architecture (impact majeur ⭐⭐⭐⭐⭐)
 ```
-Choisir le bon algorithme et la bonne structure de données
+Choisir le bon algorithme et la bonne structure de données  
 Exemple : O(n²) → O(n log n)
 ```
 
@@ -304,8 +304,8 @@ Remplacer * 2 par shl 1
 **Exemple : Recherche dans une liste**
 ```pascal
 // ❌ Recherche linéaire : O(n)
-function RechercheLineaire(Liste: TStringList; Valeur: String): Integer;
-var i: Integer;
+function RechercheLineaire(Liste: TStringList; Valeur: String): Integer;  
+var i: Integer;  
 begin
   Result := -1;
   for i := 0 to Liste.Count - 1 do
@@ -318,7 +318,7 @@ end;
 // Pour 1,000,000 éléments : ~500,000 comparaisons en moyenne
 
 // ✅ Liste triée + recherche binaire : O(log n)
-function RechercheBinaire(Liste: TStringList; Valeur: String): Integer;
+function RechercheBinaire(Liste: TStringList; Valeur: String): Integer;  
 begin
   Result := Liste.IndexOf(Valeur);  // Utilise recherche binaire si triée
 end;
@@ -349,7 +349,7 @@ end;
 **Exemple : Pooling d'objets**
 ```pascal
 // ❌ Allocation/libération constante
-for i := 1 to 10000 do
+for i := 1 to 10000 do  
 begin
   Obj := TMonObjet.Create;
   try
@@ -361,7 +361,7 @@ end;
 // 10,000 allocations + 10,000 libérations (lent)
 
 // ✅ Réutilisation d'un objet
-Obj := TMonObjet.Create;
+Obj := TMonObjet.Create;  
 try
   for i := 1 to 10000 do
   begin
@@ -394,7 +394,7 @@ for i := 1 to 10000 do
 // 10,000 appels système (très lent)
 
 // ✅ Buffering
-Buffer := TStringList.Create;
+Buffer := TStringList.Create;  
 try
   for i := 1 to 10000 do
     Buffer.Add(Ligne[i]);
@@ -477,7 +477,7 @@ Programme de traitement de 10,000 fichiers :
 - Windows 10 : 8.5 secondes
 - Ubuntu 22.04 : 4.2 secondes (2x plus rapide)
 
-Raison : Système de fichiers ext4 plus rapide que NTFS
+Raison : Système de fichiers ext4 plus rapide que NTFS  
 pour de nombreuses petites opérations
 ```
 
@@ -494,8 +494,8 @@ pour de nombreuses petites opérations
 ```pascal
 {$IFDEF WINDOWS}
 // Utiliser les API Windows natives pour I/O
-uses Windows;
-procedure LectureFichierOptimisee;
+uses Windows;  
+procedure LectureFichierOptimisee;  
 var
   Handle: THandle;
   BytesRead: DWORD;
@@ -517,8 +517,8 @@ end;
 ```pascal
 {$IFDEF LINUX}
 // Utiliser les appels système Linux pour performance
-uses BaseUnix;
-procedure LectureFichierOptimisee;
+uses BaseUnix;  
+procedure LectureFichierOptimisee;  
 var
   fd: cint;
 begin
@@ -531,7 +531,7 @@ end;
 ### Compilation conditionnelle pour optimisations
 
 ```pascal
-procedure TraiterGrandeQuantiteDonnees;
+procedure TraiterGrandeQuantiteDonnees;  
 begin
   {$IFDEF WINDOWS}
   // Windows : privilégier la mémoire (plus disponible)
@@ -606,7 +606,7 @@ end;
 ```pascal
 uses Windows; // ou BaseUnix pour Linux
 
-function GetMemoryUsage: Int64;
+function GetMemoryUsage: Int64;  
 var
   {$IFDEF WINDOWS}
   ProcessMemoryCounters: TProcessMemoryCounters;
@@ -662,7 +662,7 @@ Le profiling identifie où le temps est passé :
 Comparer différentes implémentations :
 
 ```pascal
-procedure BenchmarkImplementations;
+procedure BenchmarkImplementations;  
 var
   i, Iterations: Integer;
   StartTime: TDateTime;
@@ -693,7 +693,7 @@ end;
 Simuler une charge réaliste :
 
 ```pascal
-procedure TestCharge;
+procedure TestCharge;  
 var
   i, NbUtilisateurs: Integer;
   Threads: array of TThread;
@@ -744,14 +744,14 @@ Avant de commencer toute optimisation :
 
 ### 2. Optimiser le mauvais endroit
 ```
-Optimiser une fonction appelée 1 fois
+Optimiser une fonction appelée 1 fois  
 Ignorer une fonction appelée 1,000,000 fois
 ```
 
 ### 3. Sacrifier la correction pour la performance
 ```pascal
 // ❌ Code "optimisé" mais incorrect
-function Diviser(a, b: Integer): Integer;
+function Diviser(a, b: Integer): Integer;  
 begin
   Result := a div b;  // Pas de vérification de b = 0
 end;
@@ -759,13 +759,13 @@ end;
 
 ### 4. Micro-optimiser sans vision globale
 ```
-Gagner 1ms sur une fonction
+Gagner 1ms sur une fonction  
 Alors que l'architecture globale pourrait gagner 5 secondes
 ```
 
 ### 5. Ignorer les différences de plateformes
 ```
-Optimiser uniquement pour Windows
+Optimiser uniquement pour Windows  
 Déployer sur Linux → Performances médiocres
 ```
 

@@ -41,14 +41,14 @@ type
     property ProcessedData: string read GetProcessedData;
   end;
 
-constructor TDataProcessor.Create(const ARawData: string);
+constructor TDataProcessor.Create(const ARawData: string);  
 begin
   FRawData := ARawData;
   FIsProcessed := False;
   // On ne traite PAS les données ici !
 end;
 
-function TDataProcessor.GetProcessedData: string;
+function TDataProcessor.GetProcessedData: string;  
 begin
   // On ne calcule que si nécessaire
   if not FIsProcessed then
@@ -100,13 +100,13 @@ type
     procedure Reset;
   end;
 
-constructor TLazyValue<T>.Create(ACalculator: TFunc<T>);
+constructor TLazyValue<T>.Create(ACalculator: TFunc<T>);  
 begin
   FCalculator := ACalculator;
   FIsCalculated := False;
 end;
 
-function TLazyValue<T>.GetValue: T;
+function TLazyValue<T>.GetValue: T;  
 begin
   if not FIsCalculated then
   begin
@@ -116,7 +116,7 @@ begin
   Result := FValue;
 end;
 
-procedure TLazyValue<T>.Reset;
+procedure TLazyValue<T>.Reset;  
 begin
   FIsCalculated := False;
 end;
@@ -172,7 +172,7 @@ Voici un exemple classique : le calcul de la suite de Fibonacci.
 **Sans memoization (très lent) :**
 
 ```pascal
-function FibonacciNaif(n: Integer): Int64;
+function FibonacciNaif(n: Integer): Int64;  
 begin
   if n <= 1 then
     Result := n
@@ -198,18 +198,18 @@ type
     function Calculate(n: Integer): Int64;
   end;
 
-constructor TFibonacciMemo.Create;
+constructor TFibonacciMemo.Create;  
 begin
   FCache := TDictionary<Integer, Int64>.Create;
 end;
 
-destructor TFibonacciMemo.Destroy;
+destructor TFibonacciMemo.Destroy;  
 begin
   FCache.Free;
   inherited;
 end;
 
-function TFibonacciMemo.Calculate(n: Integer): Int64;
+function TFibonacciMemo.Calculate(n: Integer): Int64;  
 begin
   // Vérifier si déjà calculé
   if FCache.ContainsKey(n) then
@@ -271,31 +271,31 @@ type
     function IsCached(const Key: TKey): Boolean;
   end;
 
-constructor TMemoizer<TKey, TValue>.Create(ACalculator: TFunc<TKey, TValue>);
+constructor TMemoizer<TKey, TValue>.Create(ACalculator: TFunc<TKey, TValue>);  
 begin
   FCache := TDictionary<TKey, TValue>.Create;
   FCalculator := ACalculator;
 end;
 
-destructor TMemoizer<TKey, TValue>.Destroy;
+destructor TMemoizer<TKey, TValue>.Destroy;  
 begin
   FCache.Free;
   inherited;
 end;
 
-function TMemoizer<TKey, TValue>.Get(const Key: TKey): TValue;
+function TMemoizer<TKey, TValue>.Get(const Key: TKey): TValue;  
 begin
   if not FCache.ContainsKey(Key) then
     FCache.Add(Key, FCalculator(Key));
   Result := FCache[Key];
 end;
 
-procedure TMemoizer<TKey, TValue>.Clear;
+procedure TMemoizer<TKey, TValue>.Clear;  
 begin
   FCache.Clear;
 end;
 
-function TMemoizer<TKey, TValue>.IsCached(const Key: TKey): Boolean;
+function TMemoizer<TKey, TValue>.IsCached(const Key: TKey): Boolean;  
 begin
   Result := FCache.ContainsKey(Key);
 end;
@@ -360,13 +360,13 @@ begin
   FCacheDuration := ACacheDuration;
 end;
 
-destructor TTimedMemoizer<TKey, TValue>.Destroy;
+destructor TTimedMemoizer<TKey, TValue>.Destroy;  
 begin
   FCache.Free;
   inherited;
 end;
 
-function TTimedMemoizer<TKey, TValue>.Get(const Key: TKey): TValue;
+function TTimedMemoizer<TKey, TValue>.Get(const Key: TKey): TValue;  
 var
   CachedVal: TCachedValue<TValue>;
   NewVal: TCachedValue<TValue>;
@@ -390,7 +390,7 @@ begin
   Result := NewVal.Value;
 end;
 
-procedure TTimedMemoizer<TKey, TValue>.CleanExpired;
+procedure TTimedMemoizer<TKey, TValue>.CleanExpired;  
 var
   KeysToRemove: TList<TKey>;
   Pair: TPair<TKey, TCachedValue<TValue>>;
@@ -428,7 +428,7 @@ type
     function GetImage(const FileName: string): TBitmap;
   end;
 
-function TImageManager.GetImage(const FileName: string): TBitmap;
+function TImageManager.GetImage(const FileName: string): TBitmap;  
 begin
   if not FImageCache.ContainsKey(FileName) then
     FImageCache.Add(FileName, LoadImage(FileName));
@@ -450,7 +450,7 @@ type
     function IsPrime(n: Integer): Boolean;
   end;
 
-function TPrimeChecker.IsPrimeCalculation(n: Integer): Boolean;
+function TPrimeChecker.IsPrimeCalculation(n: Integer): Boolean;  
 var
   i: Integer;
 begin
@@ -464,12 +464,12 @@ begin
   Result := True;
 end;
 
-constructor TPrimeChecker.Create;
+constructor TPrimeChecker.Create;  
 begin
   FPrimeCache := TMemoizer<Integer, Boolean>.Create(IsPrimeCalculation);
 end;
 
-function TPrimeChecker.IsPrime(n: Integer): Boolean;
+function TPrimeChecker.IsPrime(n: Integer): Boolean;  
 begin
   Result := FPrimeCache.Get(n);
 end;
@@ -491,7 +491,7 @@ type
     procedure InvalidateCache;
   end;
 
-function TUserRepository.GetUser(UserID: Integer): TUser;
+function TUserRepository.GetUser(UserID: Integer): TUser;  
 begin
   // Cache de 5 minutes
   Result := FUserCache.Get(UserID);
@@ -538,7 +538,7 @@ type
     function Get(const Key: TKey): TValue;
   end;
 
-function TThreadSafeMemoizer<TKey, TValue>.Get(const Key: TKey): TValue;
+function TThreadSafeMemoizer<TKey, TValue>.Get(const Key: TKey): TValue;  
 begin
   FLock.Enter;
   try
@@ -576,7 +576,7 @@ end;
 Utilisez toujours des benchmarks pour valider vos optimisations :
 
 ```pascal
-procedure BenchmarkMemoization;
+procedure BenchmarkMemoization;  
 var
   StartTime: TDateTime;
   i: Integer;

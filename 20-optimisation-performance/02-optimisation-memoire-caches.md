@@ -60,7 +60,7 @@ for i := 0 to 1000000 do
 **Utilisation** :
 ```pascal
 // Code qui tient dans L1 (très rapide)
-procedure CalculRapide;
+procedure CalculRapide;  
 var
   i: Integer;
   temp: array[0..1023] of Integer;  // 4 KB, tient dans L1
@@ -179,8 +179,8 @@ for i := 0 to 9999 do
 
 **Performance** :
 ```
-Version dispersée : 45 ms
-Version compacte : 12 ms
+Version dispersée : 45 ms  
+Version compacte : 12 ms  
 Gain : 3.75x plus rapide
 ```
 
@@ -203,7 +203,7 @@ for i := 0 to 10000 do
 **✅ Bon : Cache et réutilisation**
 ```pascal
 // Calculer une fois, utiliser deux fois
-for i := 0 to 10000 do
+for i := 0 to 10000 do  
 begin
   Temp := CalculComplexe(Data[i]);
   ResultatA[i] := Temp;
@@ -247,8 +247,8 @@ var
 
 **Performance** :
 ```
-Version 772 bytes : 150 ms
-Version 204 bytes : 40 ms
+Version 772 bytes : 150 ms  
+Version 204 bytes : 40 ms  
 Gain : 3.75x plus rapide (même algorithme !)
 ```
 
@@ -258,7 +258,7 @@ Gain : 3.75x plus rapide (même algorithme !)
 
 **❌ Mauvais : Allocations répétées**
 ```pascal
-procedure TraiterFichiers(Fichiers: TStringList);
+procedure TraiterFichiers(Fichiers: TStringList);  
 var
   i: Integer;
   Buffer: PByte;
@@ -279,7 +279,7 @@ end;
 
 **✅ Bon : Pré-allocation et réutilisation**
 ```pascal
-procedure TraiterFichiers(Fichiers: TStringList);
+procedure TraiterFichiers(Fichiers: TStringList);  
 var
   i: Integer;
   Buffer: PByte;
@@ -305,7 +305,7 @@ end;
 
 **❌ Mauvais : Création/destruction répétée**
 ```pascal
-for i := 1 to 10000 do
+for i := 1 to 10000 do  
 begin
   Obj := TMonObjet.Create;
   try
@@ -358,7 +358,7 @@ end;
 
 **Stack (rapide)** :
 ```pascal
-procedure Rapide;
+procedure Rapide;  
 var
   Buffer: array[0..1023] of Byte;  // Sur la pile
 begin
@@ -371,7 +371,7 @@ end;
 
 **Heap (lent)** :
 ```pascal
-procedure Lent;
+procedure Lent;  
 var
   Buffer: PByte;
 begin
@@ -490,10 +490,10 @@ end;
 ```
 Opération         | Array    | Linked List
 ------------------|----------|-------------
-Accès séquentiel  | O(1)     | O(1) mais 5x plus lent
-Accès aléatoire   | O(1)     | O(n)
-Insertion début   | O(n)     | O(1)
-Insertion fin     | O(1)     | O(1) ou O(n)
+Accès séquentiel  | O(1)     | O(1) mais 5x plus lent  
+Accès aléatoire   | O(1)     | O(n)  
+Insertion début   | O(n)     | O(1)  
+Insertion fin     | O(1)     | O(1) ou O(n)  
 Cache-friendly    | Oui ✅   | Non ❌
 ```
 
@@ -514,7 +514,7 @@ var
   Particules: array[0..9999] of TParticule;
 
 // Mise à jour des positions
-for i := 0 to High(Particules) do
+for i := 0 to High(Particules) do  
 begin
   Particules[i].PosX := Particules[i].PosX + Particules[i].VelX;
   Particules[i].PosY := Particules[i].PosY + Particules[i].VelY;
@@ -537,7 +537,7 @@ var
   Particules: TParticules;
 
 // Mise à jour des positions
-for i := 0 to 9999 do
+for i := 0 to 9999 do  
 begin
   Particules.PosX[i] := Particules.PosX[i] + Particules.VelX[i];
   Particules.PosY[i] := Particules.PosY[i] + Particules.VelY[i];
@@ -679,7 +679,7 @@ Call trace for block $00401234 size 100
 **Prévention** :
 ```pascal
 // ✅ Toujours utiliser try-finally
-Obj := TMonObjet.Create;
+Obj := TMonObjet.Create;  
 try
   // Code
 finally
@@ -696,13 +696,13 @@ end;
 {$IFDEF WINDOWS}
 uses Windows;
 
-function AllocGrande(Size: NativeUInt): Pointer;
+function AllocGrande(Size: NativeUInt): Pointer;  
 begin
   // VirtualAlloc pour grandes allocations (> 1 MB)
   Result := VirtualAlloc(nil, Size, MEM_COMMIT or MEM_RESERVE, PAGE_READWRITE);
 end;
 
-procedure FreeGrande(P: Pointer);
+procedure FreeGrande(P: Pointer);  
 begin
   VirtualFree(P, 0, MEM_RELEASE);
 end;
@@ -713,7 +713,7 @@ end;
 ```pascal
 {$IFDEF WINDOWS}
 // Nécessite privilèges administrateur
-function AllocLargePages(Size: NativeUInt): Pointer;
+function AllocLargePages(Size: NativeUInt): Pointer;  
 begin
   Result := VirtualAlloc(nil, Size, MEM_COMMIT or MEM_RESERVE or MEM_LARGE_PAGES,
                          PAGE_READWRITE);
@@ -730,13 +730,13 @@ end;
 {$IFDEF LINUX}
 uses BaseUnix;
 
-function AllocGrande(Size: csize_t): Pointer;
+function AllocGrande(Size: csize_t): Pointer;  
 begin
   Result := fpmmap(nil, Size, PROT_READ or PROT_WRITE,
                    MAP_PRIVATE or MAP_ANONYMOUS, -1, 0);
 end;
 
-procedure FreeGrande(P: Pointer; Size: csize_t);
+procedure FreeGrande(P: Pointer; Size: csize_t);  
 begin
   fpmunmap(P, Size);
 end;
@@ -749,7 +749,7 @@ end;
 // Nécessite configuration système
 // echo 20 > /proc/sys/vm/nr_hugepages
 
-function AllocHugePages(Size: csize_t): Pointer;
+function AllocHugePages(Size: csize_t): Pointer;  
 begin
   Result := fpmmap(nil, Size, PROT_READ or PROT_WRITE,
                    MAP_PRIVATE or MAP_ANONYMOUS or MAP_HUGETLB, -1, 0);
@@ -766,7 +766,7 @@ FreePascal supporte les intrinsics de prefetch sur x86/x64 :
 ```pascal
 {$ASMMODE INTEL}
 
-procedure TraiterAvecPrefetch(Data: PInteger; Count: Integer);
+procedure TraiterAvecPrefetch(Data: PInteger; Count: Integer);  
 var
   i: Integer;
 begin
@@ -946,7 +946,7 @@ type
 ### 2. Fragmentation mémoire
 ```pascal
 // ❌ Cause de la fragmentation
-for i := 1 to 10000 do
+for i := 1 to 10000 do  
 begin
   if Random(2) = 0 then
     Liste.Add(GetMem(Random(1000)));
@@ -979,14 +979,14 @@ type
     Data: array[0..9999] of Integer;  // 40 KB
   end;
 
-function Traiter(R: TGrosRecord): Integer;  // Passage par valeur
+function Traiter(R: TGrosRecord): Integer;  // Passage par valeur  
 begin
   Result := R.Data[0];
 end;
 // Copie de 40 KB à chaque appel !
 
 // ✅ Passage par référence
-function Traiter(const R: TGrosRecord): Integer;
+function Traiter(const R: TGrosRecord): Integer;  
 begin
   Result := R.Data[0];
 end;
@@ -1006,7 +1006,7 @@ begin
 end;
 
 // ✅ Utiliser TStringBuilder
-uses SysUtils;
+uses SysUtils;  
 var
   SB: TStringBuilder;
   i: Integer;
@@ -1048,7 +1048,7 @@ type
     property Size: Int64 read FSize;
   end;
 
-constructor TMappedFile.Create(const FileName: string);
+constructor TMappedFile.Create(const FileName: string);  
 begin
   inherited Create;
 
@@ -1083,7 +1083,7 @@ begin
   end;
 end;
 
-destructor TMappedFile.Destroy;
+destructor TMappedFile.Destroy;  
 begin
   if FData <> nil then
     UnmapViewOfFile(FData);
@@ -1130,7 +1130,7 @@ type
     property Size: csize_t read FSize;
   end;
 
-constructor TMappedFile.Create(const FileName: string);
+constructor TMappedFile.Create(const FileName: string);  
 var
   StatBuf: stat;
 begin
@@ -1159,7 +1159,7 @@ begin
   end;
 end;
 
-destructor TMappedFile.Destroy;
+destructor TMappedFile.Destroy;  
 begin
   if FData <> MAP_FAILED then
     fpmunmap(FData, FSize);
@@ -1193,7 +1193,7 @@ type
     procedure Reset;  // Réinitialiser sans libérer
   end;
 
-constructor TArena.Create(Size: NativeUInt);
+constructor TArena.Create(Size: NativeUInt);  
 begin
   inherited Create;
   FSize := Size;
@@ -1201,13 +1201,13 @@ begin
   FOffset := 0;
 end;
 
-destructor TArena.Destroy;
+destructor TArena.Destroy;  
 begin
   FreeMem(FBuffer);
   inherited;
 end;
 
-function TArena.Alloc(Size: NativeUInt): Pointer;
+function TArena.Alloc(Size: NativeUInt): Pointer;  
 begin
   if FOffset + Size > FSize then
     raise Exception.Create('Arena full');
@@ -1216,7 +1216,7 @@ begin
   Inc(FOffset, Size);
 end;
 
-procedure TArena.Reset;
+procedure TArena.Reset;  
 begin
   FOffset := 0;  // Réutiliser la mémoire
 end;
@@ -1302,7 +1302,7 @@ type
     property Data: Pointer read FData;
   end;
 
-constructor TSharedMemory.Create(const Name: string; Size: Cardinal);
+constructor TSharedMemory.Create(const Name: string; Size: Cardinal);  
 begin
   inherited Create;
   FSize := Size;
@@ -1322,7 +1322,7 @@ begin
   end;
 end;
 
-destructor TSharedMemory.Destroy;
+destructor TSharedMemory.Destroy;  
 begin
   if FData <> nil then
     UnmapViewOfFile(FData);
@@ -1350,7 +1350,7 @@ type
     property Data: Pointer read FData;
   end;
 
-constructor TSharedMemory.Create(Key: key_t; Size: csize_t);
+constructor TSharedMemory.Create(Key: key_t; Size: csize_t);  
 begin
   inherited Create;
   FSize := Size;
@@ -1371,7 +1371,7 @@ begin
   end;
 end;
 
-destructor TSharedMemory.Destroy;
+destructor TSharedMemory.Destroy;  
 begin
   if FData <> Pointer(-1) then
     shmdt(FData);
@@ -1394,7 +1394,7 @@ type
   end;
   TImage = array of array of TPixel;
 
-procedure ConvertToGrayscale(var Img: TImage);
+procedure ConvertToGrayscale(var Img: TImage);  
 var
   x, y: Integer;
   Gray: Byte;
@@ -1422,7 +1422,7 @@ type
   end;
   TImageFlat = array of TPixel;  // Array 1D
 
-procedure ConvertToGrayscaleFast(var Img: TImageFlat);
+procedure ConvertToGrayscaleFast(var Img: TImageFlat);  
 var
   i: Integer;
   P: ^TPixel;
@@ -1459,7 +1459,7 @@ type
   end;
   TUserList = array of TUser;
 
-function FindUserByID(const Users: TUserList; ID: Integer): Integer;
+function FindUserByID(const Users: TUserList; ID: Integer): Integer;  
 var
   i: Integer;
 begin
@@ -1491,7 +1491,7 @@ type
 var
   Users: TUserDict;
 
-function FindUserByID(ID: Integer): Boolean;
+function FindUserByID(ID: Integer): Boolean;  
 var
   User: TUser;
 begin
@@ -1506,7 +1506,7 @@ end;
 
 **❌ Version sans cache** :
 ```pascal
-function Fibonacci(N: Integer): Int64;
+function Fibonacci(N: Integer): Int64;  
 begin
   if N <= 1 then
     Result := N
@@ -1524,7 +1524,7 @@ var
   FibCache: array[0..100] of Int64;
   CacheInit: Boolean = False;
 
-function FibonacciFast(N: Integer): Int64;
+function FibonacciFast(N: Integer): Int64;  
 begin
   if not CacheInit then
   begin

@@ -57,7 +57,7 @@ program PlatformDetection;
 uses
   SysUtils;
 
-procedure PrintPlatformInfo;
+procedure PrintPlatformInfo;  
 begin
   WriteLn('╔════════════════════════════════════════════════════════╗');
   WriteLn('║          DÉTECTION DE PLATEFORME                       ║');
@@ -127,7 +127,7 @@ type
 
 implementation
 
-constructor TPlatformTimer.Create;
+constructor TPlatformTimer.Create;  
 begin
   {$IFDEF WINDOWS}
   QueryPerformanceFrequency(FFrequency);
@@ -151,17 +151,17 @@ begin
 end;
 {$ENDIF}
 
-procedure TPlatformTimer.Start;
+procedure TPlatformTimer.Start;  
 begin
   FStartTime := GetCurrentTicks;
 end;
 
-function TPlatformTimer.ElapsedMilliseconds: QWord;
+function TPlatformTimer.ElapsedMilliseconds: QWord;  
 begin
   Result := (GetCurrentTicks - FStartTime) div 1000;
 end;
 
-function TPlatformTimer.ElapsedMicroseconds: QWord;
+function TPlatformTimer.ElapsedMicroseconds: QWord;  
 begin
   Result := GetCurrentTicks - FStartTime;
 end;
@@ -223,7 +223,7 @@ begin
     FResults[Idx].Throughput := 0;
 end;
 
-procedure TComparativeBenchmark.RunAllBenchmarks;
+procedure TComparativeBenchmark.RunAllBenchmarks;  
 begin
   WriteLn('╔════════════════════════════════════════════════════════╗');
   WriteLn('║     BENCHMARKS COMPARATIFS WINDOWS/LINUX               ║');
@@ -231,7 +231,7 @@ begin
   WriteLn;
 end;
 
-procedure TComparativeBenchmark.PrintResults;
+procedure TComparativeBenchmark.PrintResults;  
 var
   i: Integer;
 begin
@@ -248,7 +248,7 @@ begin
   end;
 end;
 
-procedure TComparativeBenchmark.ExportToCSV(const FileName: string);
+procedure TComparativeBenchmark.ExportToCSV(const FileName: string);  
 var
   F: TextFile;
   i: Integer;
@@ -288,8 +288,8 @@ unit CPUBenchmarks;
 
 interface
 
-procedure BenchmarkIntegerMath;
-procedure BenchmarkFloatingPoint;
+procedure BenchmarkIntegerMath;  
+procedure BenchmarkFloatingPoint;  
 procedure BenchmarkBranching;
 
 implementation
@@ -297,7 +297,7 @@ implementation
 uses
   SysUtils, CrossPlatformTimer;
 
-procedure BenchmarkIntegerMath;
+procedure BenchmarkIntegerMath;  
 var
   Timer: TPlatformTimer;
   i: Integer;
@@ -325,7 +325,7 @@ begin
   end;
 end;
 
-procedure BenchmarkFloatingPoint;
+procedure BenchmarkFloatingPoint;  
 var
   Timer: TPlatformTimer;
   i: Integer;
@@ -353,7 +353,7 @@ begin
   end;
 end;
 
-procedure BenchmarkBranching;
+procedure BenchmarkBranching;  
 var
   Timer: TPlatformTimer;
   i, Count: Integer;
@@ -390,8 +390,8 @@ unit FileBenchmarks;
 
 interface
 
-procedure BenchmarkFileWrite;
-procedure BenchmarkFileRead;
+procedure BenchmarkFileWrite;  
+procedure BenchmarkFileRead;  
 procedure BenchmarkRandomAccess;
 
 implementation
@@ -399,7 +399,7 @@ implementation
 uses
   SysUtils, Classes, CrossPlatformTimer;
 
-function FileSize(const FileName: string): Int64;
+function FileSize(const FileName: string): Int64;  
 var
   SR: TSearchRec;
 begin
@@ -412,7 +412,7 @@ begin
     Result := 0;
 end;
 
-procedure BenchmarkFileWrite;
+procedure BenchmarkFileWrite;  
 var
   Timer: TPlatformTimer;
   F: TextFile;
@@ -449,7 +449,7 @@ begin
   end;
 end;
 
-procedure BenchmarkFileRead;
+procedure BenchmarkFileRead;  
 var
   Timer: TPlatformTimer;
   F: TextFile;
@@ -498,7 +498,7 @@ begin
   end;
 end;
 
-procedure BenchmarkRandomAccess;
+procedure BenchmarkRandomAccess;  
 var
   Timer: TPlatformTimer;
   F: File of Integer;
@@ -557,8 +557,8 @@ unit MemoryBenchmarks;
 
 interface
 
-procedure BenchmarkMemoryAllocation;
-procedure BenchmarkMemoryAccess;
+procedure BenchmarkMemoryAllocation;  
+procedure BenchmarkMemoryAccess;  
 procedure BenchmarkStringOperations;
 
 implementation
@@ -566,7 +566,7 @@ implementation
 uses
   SysUtils, Classes, CrossPlatformTimer;
 
-procedure BenchmarkMemoryAllocation;
+procedure BenchmarkMemoryAllocation;  
 var
   Timer: TPlatformTimer;
   i: Integer;
@@ -598,7 +598,7 @@ begin
   end;
 end;
 
-procedure BenchmarkMemoryAccess;
+procedure BenchmarkMemoryAccess;  
 var
   Timer: TPlatformTimer;
   Data: array[0..999999] of Integer;
@@ -633,7 +633,7 @@ begin
   end;
 end;
 
-procedure BenchmarkStringOperations;
+procedure BenchmarkStringOperations;  
 var
   Timer: TPlatformTimer;
   S: string;
@@ -672,7 +672,7 @@ unit NetworkBenchmarks;
 
 interface
 
-procedure BenchmarkSocketCreation;
+procedure BenchmarkSocketCreation;  
 procedure BenchmarkLocalConnection;
 
 implementation
@@ -680,7 +680,7 @@ implementation
 uses
   SysUtils, Sockets, CrossPlatformTimer;
 
-procedure BenchmarkSocketCreation;
+procedure BenchmarkSocketCreation;  
 var
   Timer: TPlatformTimer;
   Sock: TSocket;
@@ -711,7 +711,7 @@ begin
   end;
 end;
 
-procedure BenchmarkLocalConnection;
+procedure BenchmarkLocalConnection;  
 begin
   WriteLn('Test : Connexions locales');
   WriteLn('  (Nécessite un serveur en écoute)');
@@ -821,7 +821,7 @@ procedure OptimizeForPerformance;
 
 implementation
 
-procedure EnableWindowsOptimizations;
+procedure EnableWindowsOptimizations;  
 begin
   // Activer le mode haute performance
   SetPriorityClass(GetCurrentProcess, ABOVE_NORMAL_PRIORITY_CLASS);
@@ -832,7 +832,7 @@ begin
   WriteLn('[Windows] Optimisations activées');
 end;
 
-procedure SetHighPriority;
+procedure SetHighPriority;  
 begin
   if not SetPriorityClass(GetCurrentProcess, HIGH_PRIORITY_CLASS) then
     WriteLn('[Windows] Erreur: impossible d''augmenter la priorité')
@@ -840,7 +840,7 @@ begin
     WriteLn('[Windows] Priorité élevée activée');
 end;
 
-procedure OptimizeForPerformance;
+procedure OptimizeForPerformance;  
 begin
   // Désactiver le DWM (Desktop Window Manager) throttling
   // Note: nécessite des permissions administrateur
@@ -879,7 +879,7 @@ procedure OptimizeScheduler;
 
 implementation
 
-procedure EnableLinuxOptimizations;
+procedure EnableLinuxOptimizations;  
 begin
   // Augmenter la priorité nice
   fpNice(-10);  // Valeur négative = priorité plus élevée
@@ -887,7 +887,7 @@ begin
   WriteLn('[Linux] Optimisations activées');
 end;
 
-procedure SetHighPriority;
+procedure SetHighPriority;  
 var
   Param: sched_param;
 begin
@@ -900,7 +900,7 @@ begin
     WriteLn('[Linux] Pas de privilèges pour l''ordonnanceur TR');
 end;
 
-procedure OptimizeScheduler;
+procedure OptimizeScheduler;  
 begin
   // Conseils pour l'utilisateur
   WriteLn('[Linux] Pour meilleures performances:');
@@ -943,7 +943,7 @@ uses
   , LinuxOptimizations
   {$ENDIF};
 
-procedure PrintHeader;
+procedure PrintHeader;  
 begin
   WriteLn;
   WriteLn('╔════════════════════════════════════════════════════════╗');
@@ -963,7 +963,7 @@ begin
   WriteLn;
 end;
 
-procedure RunAllBenchmarks;
+procedure RunAllBenchmarks;  
 begin
   WriteLn('=== TESTS CPU ===');
   WriteLn;
@@ -1000,7 +1000,7 @@ begin
   WriteLn;
 end;
 
-procedure SaveReport;
+procedure SaveReport;  
 var
   F: TextFile;
   FileName: string;
@@ -1112,13 +1112,13 @@ type
 
 implementation
 
-constructor TAdaptiveForm.Create(AOwner: TComponent);
+constructor TAdaptiveForm.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   OptimizeForPlatform;
 end;
 
-procedure TAdaptiveForm.OptimizeForPlatform;
+procedure TAdaptiveForm.OptimizeForPlatform;  
 begin
   {$IFDEF WINDOWS}
   // Windows : Activer double buffering
@@ -1190,7 +1190,7 @@ function GetOptimalServerConfig: TServerConfig;
 
 implementation
 
-function GetOptimalServerConfig: TServerConfig;
+function GetOptimalServerConfig: TServerConfig;  
 begin
   {$IFDEF WINDOWS}
   // Configuration optimale pour Windows Server
@@ -1260,7 +1260,7 @@ procedure GetDiskPerformance;
 
 implementation
 
-procedure GetCPUInfo;
+procedure GetCPUInfo;  
 var
   SysInfo: SYSTEM_INFO;
 begin
@@ -1272,7 +1272,7 @@ begin
   WriteLn('Architecture          : ', SysInfo.wProcessorArchitecture);
 end;
 
-function GetMemoryUsage: Int64;
+function GetMemoryUsage: Int64;  
 var
   MemStatus: MEMORYSTATUSEX;
 begin
@@ -1288,7 +1288,7 @@ begin
   WriteLn('Pourcentage       : ', MemStatus.dwMemoryLoad, '%');
 end;
 
-procedure GetDiskPerformance;
+procedure GetDiskPerformance;  
 begin
   WriteLn('=== Performance Disque (Windows) ===');
   WriteLn('Utilisez "Performance Monitor" (perfmon) pour des détails');
@@ -1321,7 +1321,7 @@ procedure GetDiskPerformance;
 
 implementation
 
-function ExtractNumber(const S: string): string;
+function ExtractNumber(const S: string): string;  
 var
   i: Integer;
 begin
@@ -1331,7 +1331,7 @@ begin
       Result := Result + S[i];
 end;
 
-procedure GetCPUInfo;
+procedure GetCPUInfo;  
 var
   F: TextFile;
   Line: string;
@@ -1362,7 +1362,7 @@ begin
   WriteLn('Pour plus de détails: lscpu');
 end;
 
-function GetMemoryUsage: Int64;
+function GetMemoryUsage: Int64;  
 var
   F: TextFile;
   Line: string;
@@ -1398,7 +1398,7 @@ begin
   end;
 end;
 
-procedure GetDiskPerformance;
+procedure GetDiskPerformance;  
 begin
   WriteLn('=== Performance Disque (Linux) ===');
   WriteLn('Utilisez ces commandes:');
@@ -1455,7 +1455,7 @@ uses
   {$ENDIF}
   SysUtils, Classes;
 
-procedure DemonstrateScheduling;
+procedure DemonstrateScheduling;  
 var
   i: Integer;
   StartTime, EndTime: TDateTime;
@@ -1624,7 +1624,7 @@ uses
   , BaseUnix, Unix
   {$ENDIF};
 
-procedure OptimizeForPlatform;
+procedure OptimizeForPlatform;  
 begin
   WriteLn('=== Optimisation Automatique ===');
   WriteLn;
@@ -1781,12 +1781,12 @@ PERFORMANCES MÉMOIRE:
   Linux:   190ms
   Gagnant: Windows (5% plus rapide)
 
-CONCLUSION:
-Linux offre de meilleures performances globales,
-particulièrement pour les opérations I/O et réseau.
+CONCLUSION:  
+Linux offre de meilleures performances globales,  
+particulièrement pour les opérations I/O et réseau.  
 Windows reste compétitif pour les opérations mémoire.
 
-RECOMMANDATION:
+RECOMMANDATION:  
 Pour cette application serveur, Linux est recommandé.
 
 ⏭️ [Architecture Logicielle Avancée](/21-architecture-logicielle-avancee/README.md)

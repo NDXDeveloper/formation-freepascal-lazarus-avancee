@@ -30,7 +30,7 @@ La méthode la plus basique pour mesurer le temps :
 uses
   SysUtils, DateUtils;
 
-procedure BenchmarkSimple;
+procedure BenchmarkSimple;  
 var
   StartTime, EndTime: TDateTime;
   i, Sum: Integer;
@@ -69,7 +69,7 @@ uses
 uses
   Unix, BaseUnix;
 
-function GetTickCount64: QWord;
+function GetTickCount64: QWord;  
 var
   ts: TTimeSpec;
 begin
@@ -78,7 +78,7 @@ begin
 end;
 {$ENDIF}
 
-procedure BenchmarkPrecis;
+procedure BenchmarkPrecis;  
 var
   StartTicks, EndTicks: QWord;
   i: Integer;
@@ -104,7 +104,7 @@ Pour des mesures extrêmement précises sur Windows :
 uses
   Windows;
 
-function GetPreciseTime: Double;
+function GetPreciseTime: Double;  
 var
   Frequency, Counter: Int64;
 begin
@@ -114,7 +114,7 @@ begin
 end;
 {$ENDIF}
 
-procedure BenchmarkHautePrecision;
+procedure BenchmarkHautePrecision;  
 var
   StartTime, EndTime: Double;
 begin
@@ -153,13 +153,13 @@ type
     property IsRunning: Boolean read FIsRunning;
   end;
 
-constructor TStopwatch.Create;
+constructor TStopwatch.Create;  
 begin
   FIsRunning := False;
   FElapsedTime := 0;
 end;
 
-function TStopwatch.GetCurrentTicks: QWord;
+function TStopwatch.GetCurrentTicks: QWord;  
 begin
   {$IFDEF WINDOWS}
   Result := GetTickCount64;
@@ -170,7 +170,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TStopwatch.Start;
+procedure TStopwatch.Start;  
 begin
   if not FIsRunning then
   begin
@@ -179,7 +179,7 @@ begin
   end;
 end;
 
-procedure TStopwatch.Stop;
+procedure TStopwatch.Stop;  
 begin
   if FIsRunning then
   begin
@@ -188,20 +188,20 @@ begin
   end;
 end;
 
-procedure TStopwatch.Reset;
+procedure TStopwatch.Reset;  
 begin
   FElapsedTime := 0;
   FIsRunning := False;
 end;
 
-function TStopwatch.ElapsedMilliseconds: QWord;
+function TStopwatch.ElapsedMilliseconds: QWord;  
 begin
   Result := FElapsedTime;
   if FIsRunning then
     Result := Result + (GetCurrentTicks - FStartTime);
 end;
 
-function TStopwatch.ElapsedSeconds: Double;
+function TStopwatch.ElapsedSeconds: Double;  
 begin
   Result := ElapsedMilliseconds / 1000.0;
 end;
@@ -264,14 +264,14 @@ type
     procedure PrintComparison;
   end;
 
-constructor TBenchmarkSuite.Create(AIterations, AWarmupRuns: Integer);
+constructor TBenchmarkSuite.Create(AIterations, AWarmupRuns: Integer);  
 begin
   FIterations := AIterations;
   FWarmupRuns := AWarmupRuns;
   SetLength(FResults, 0);
 end;
 
-procedure TBenchmarkSuite.AddBenchmark(const AName: string; AProc: TBenchmarkProc);
+procedure TBenchmarkSuite.AddBenchmark(const AName: string; AProc: TBenchmarkProc);  
 var
   SW: TStopwatch;
   i: Integer;
@@ -305,7 +305,7 @@ begin
   end;
 end;
 
-procedure TBenchmarkSuite.Run;
+procedure TBenchmarkSuite.Run;  
 begin
   WriteLn('=== Démarrage de la suite de benchmarks ===');
   WriteLn('Itérations par test : ', FIterations);
@@ -313,7 +313,7 @@ begin
   WriteLn;
 end;
 
-procedure TBenchmarkSuite.PrintResults;
+procedure TBenchmarkSuite.PrintResults;  
 var
   i: Integer;
 begin
@@ -330,7 +330,7 @@ begin
   end;
 end;
 
-procedure TBenchmarkSuite.PrintComparison;
+procedure TBenchmarkSuite.PrintComparison;  
 var
   i: Integer;
   BestTime: QWord;
@@ -371,7 +371,7 @@ const
 var
   TestArray: array[0..ARRAY_SIZE-1] of Integer;
 
-procedure InitTestArray;
+procedure InitTestArray;  
 var
   i: Integer;
 begin
@@ -379,7 +379,7 @@ begin
     TestArray[i] := i + 1;
 end;
 
-procedure SumWithForLoop;
+procedure SumWithForLoop;  
 var
   i, Sum: Integer;
 begin
@@ -388,7 +388,7 @@ begin
     Sum := Sum + TestArray[i];
 end;
 
-procedure SumWithWhileLoop;
+procedure SumWithWhileLoop;  
 var
   i, Sum: Integer;
 begin
@@ -401,7 +401,7 @@ begin
   end;
 end;
 
-procedure SumWithPointer;
+procedure SumWithPointer;  
 var
   P: PInteger;
   PEnd: PInteger;
@@ -417,7 +417,7 @@ begin
   end;
 end;
 
-procedure RunSumBenchmark;
+procedure RunSumBenchmark;  
 var
   Suite: TBenchmarkSuite;
 begin
@@ -459,12 +459,12 @@ type
     procedure RunAll;
   end;
 
-constructor TDataStructureBenchmark.Create(AItemCount: Integer);
+constructor TDataStructureBenchmark.Create(AItemCount: Integer);  
 begin
   FItemCount := AItemCount;
 end;
 
-procedure TDataStructureBenchmark.BenchmarkTList;
+procedure TDataStructureBenchmark.BenchmarkTList;  
 var
   List: TList;
   i: Integer;
@@ -494,7 +494,7 @@ begin
   end;
 end;
 
-procedure TDataStructureBenchmark.BenchmarkTDictionary;
+procedure TDataStructureBenchmark.BenchmarkTDictionary;  
 var
   Dict: TDictionary<Integer, Integer>;
   i, Val: Integer;
@@ -524,7 +524,7 @@ begin
   end;
 end;
 
-procedure TDataStructureBenchmark.RunAll;
+procedure TDataStructureBenchmark.RunAll;  
 begin
   WriteLn('=== Benchmark des structures de données ===');
   WriteLn('Nombre d''éléments : ', FItemCount);
@@ -576,7 +576,7 @@ begin
   {$ENDIF}
 end;
 
-procedure BenchmarkMemory;
+procedure BenchmarkMemory;  
 var
   MemBefore, MemAfter: Int64;
   List: TList;
@@ -648,7 +648,7 @@ Le fichier `heap.trc` contiendra un rapport détaillé des fuites.
 Les performances peuvent varier entre les plateformes :
 
 ```pascal
-procedure BenchmarkPlatformDifferences;
+procedure BenchmarkPlatformDifferences;  
 var
   SW: TStopwatch;
   i: Integer;
@@ -692,16 +692,16 @@ Créez un script pour lancer les benchmarks sur les deux OS :
 **Windows (benchmark.bat) :**
 ```batch
 @echo off
-echo === Benchmarks Windows ===
-fpc -O3 benchmark.pas
-benchmark.exe > results_windows.txt
+echo === Benchmarks Windows ===  
+fpc -O3 benchmark.pas  
+benchmark.exe > results_windows.txt  
 echo Résultats sauvegardés dans results_windows.txt
 ```
 
 **Ubuntu (benchmark.sh) :**
 ```bash
 #!/bin/bash
-echo "=== Benchmarks Ubuntu ==="
+echo "=== Benchmarks Ubuntu ==="  
 fpc -O3 benchmark.pas
 ./benchmark > results_ubuntu.txt
 echo "Résultats sauvegardés dans results_ubuntu.txt"
@@ -755,7 +755,7 @@ end;
 uses
   TAGraph, TASeries, TAChartUtils;
 
-procedure GenerateBenchmarkChart(const Results: array of TBenchmarkResult);
+procedure GenerateBenchmarkChart(const Results: array of TBenchmarkResult);  
 var
   Chart: TChart;
   Series: TBarSeries;
@@ -806,7 +806,7 @@ end;
 
 7. **Documenter l'environnement** :
 ```pascal
-procedure PrintEnvironment;
+procedure PrintEnvironment;  
 begin
   WriteLn('=== Environnement ===');
   WriteLn('OS : ', {$I %FPCTARGETOS%});
@@ -844,7 +844,7 @@ type
 var
   TestArray: TIntArray;
 
-procedure GenerateRandomArray(var Arr: TIntArray; Size: Integer);
+procedure GenerateRandomArray(var Arr: TIntArray; Size: Integer);  
 var
   i: Integer;
 begin
@@ -854,7 +854,7 @@ begin
     Arr[i] := Random(100000);
 end;
 
-procedure BubbleSort(var Arr: TIntArray);
+procedure BubbleSort(var Arr: TIntArray);  
 var
   i, j, Temp: Integer;
 begin
@@ -868,7 +868,7 @@ begin
       end;
 end;
 
-procedure QuickSort(var Arr: TIntArray; Left, Right: Integer);
+procedure QuickSort(var Arr: TIntArray; Left, Right: Integer);  
 var
   i, j, Pivot, Temp: Integer;
 begin
@@ -895,7 +895,7 @@ begin
   end;
 end;
 
-procedure RunSortBenchmarks;
+procedure RunSortBenchmarks;  
 var
   Suite: TBenchmarkSuite;
   TempArray: TIntArray;
@@ -998,9 +998,9 @@ gprof benchmark gmon.out > analysis.txt
 #!/bin/bash
 # benchmark_ci.sh
 
-echo "=== Benchmark CI ==="
-echo "Date: $(date)"
-echo "Commit: $(git rev-parse --short HEAD)"
+echo "=== Benchmark CI ==="  
+echo "Date: $(date)"  
+echo "Commit: $(git rev-parse --short HEAD)"  
 echo ""
 
 # Compiler
@@ -1017,7 +1017,7 @@ if [ -f "baseline_results.txt" ]; then
 fi
 
 # Archiver les résultats
-mkdir -p benchmark_history
+mkdir -p benchmark_history  
 cp benchmark_results.txt "benchmark_history/bench_$(date +%Y%m%d_%H%M%S).txt"
 ```
 
@@ -1091,7 +1091,7 @@ Ne perdez pas de temps à optimiser du code qui n'est pas un goulot d'étranglem
 ## Annexe A : Template de Rapport de Benchmark
 
 ```pascal
-procedure GenerateBenchmarkReport(const Results: array of TBenchmarkResult);
+procedure GenerateBenchmarkReport(const Results: array of TBenchmarkResult);  
 var
   F: TextFile;
   i: Integer;
@@ -1182,7 +1182,7 @@ type
     StdDev: Double;
   end;
 
-function CalculateStats(const Timings: array of QWord): TBenchmarkStats;
+function CalculateStats(const Timings: array of QWord): TBenchmarkStats;  
 var
   i, j: Integer;
   Sum, SumSquares: Double;
@@ -1366,7 +1366,7 @@ uses
   {$IFDEF WINDOWS}, Windows{$ENDIF}
   {$IFDEF UNIX}, Unix, BaseUnix{$ENDIF};
 
-procedure PrintPlatformInfo;
+procedure PrintPlatformInfo;  
 begin
   WriteLn('╔════════════════════════════════════════════════════════╗');
   WriteLn('║     BENCHMARK MULTI-PLATEFORME                         ║');
@@ -1387,7 +1387,7 @@ begin
   WriteLn;
 end;
 
-procedure BenchmarkStringOperations;
+procedure BenchmarkStringOperations;  
 var
   SW: TStopwatch;
   i: Integer;
@@ -1409,7 +1409,7 @@ begin
   end;
 end;
 
-procedure BenchmarkMathOperations;
+procedure BenchmarkMathOperations;  
 var
   SW: TStopwatch;
   i: Integer;
