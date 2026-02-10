@@ -81,7 +81,7 @@ type
     procedure SetCoordinates(AX, AY: T);
   end;
 
-procedure TPoint<T>.SetCoordinates(AX, AY: T);
+procedure TPoint<T>.SetCoordinates(AX, AY: T);  
 begin
   X := AX;
   Y := AY;
@@ -116,7 +116,7 @@ type
     property Count: Integer read FCount;
   end;
 
-procedure TFlexibleArray<T>.Add(const Item: T);
+procedure TFlexibleArray<T>.Add(const Item: T);  
 begin
   SetLength(FItems, FCount + 1);
   FItems[FCount] := Item;
@@ -143,7 +143,7 @@ type
     procedure FreeAll;  // Possible car on sait que T est une classe
   end;
 
-procedure TObjectList<T>.FreeAll;
+procedure TObjectList<T>.FreeAll;  
 var
   I: Integer;
 begin
@@ -185,7 +185,7 @@ type
     function CreateNew: T;
   end;
 
-function TFactory<T>.CreateNew: T;
+function TFactory<T>.CreateNew: T;  
 begin
   Result := T.Create;  // Possible grâce à la contrainte
 end;
@@ -218,7 +218,7 @@ type
     class function Max<T>(const A, B: T): T;
   end;
 
-class procedure TUtility.Swap<T>(var A, B: T);
+class procedure TUtility.Swap<T>(var A, B: T);  
 var
   Temp: T;
 begin
@@ -246,7 +246,7 @@ FreePascal permet aussi de créer des fonctions génériques en dehors des class
 
 ```pascal
 // Fonction générique pour créer un tableau
-generic function CreateArray<T>(Size: Integer; DefaultValue: T): array of T;
+generic function CreateArray<T>(Size: Integer; DefaultValue: T): array of T;  
 var
   I: Integer;
 begin
@@ -362,7 +362,7 @@ type
     function IsPositive: Boolean;
   end;
 
-function TIntegerContainer.IsPositive: Boolean;
+function TIntegerContainer.IsPositive: Boolean;  
 begin
   Result := FItem > 0;
 end;
@@ -454,7 +454,7 @@ type
     property Item: T read FItem write FItem;
   end;
 
-destructor TSmartContainer<T>.Destroy;
+destructor TSmartContainer<T>.Destroy;  
 begin
   // Libération conditionnelle si T est un objet
   // Nécessite : uses TypInfo;
@@ -478,7 +478,7 @@ type
     class function AreEqual(const A, B: T): Boolean;
   end;
 
-class function TComparer<T>.AreEqual(const A, B: T): Boolean;
+class function TComparer<T>.AreEqual(const A, B: T): Boolean;  
 begin
   // Nécessite une implémentation spécifique selon le type
   // ou l'utilisation d'interfaces de comparaison

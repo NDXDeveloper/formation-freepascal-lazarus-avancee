@@ -10,10 +10,10 @@ Imaginez que vous voulez trier une liste. Au lieu de créer une fonction de comp
 
 ```pascal
 // Méthode traditionnelle
-function CompareNumbers(A, B: Integer): Integer;
+function CompareNumbers(A, B: Integer): Integer;  
 begin
   Result := A - B;
-end;
+end;  
 List.Sort(@CompareNumbers);
 
 // Avec méthode anonyme
@@ -55,7 +55,7 @@ type
 ### Création et utilisation simple
 
 ```pascal
-procedure SimpleAnonymousExample;
+procedure SimpleAnonymousExample;  
 var
   MyProc: TSimpleProc;
   MyFunc: TSimpleFunc;
@@ -88,7 +88,7 @@ begin
 end;
 
 // Passage de méthodes anonymes en paramètres
-procedure RepeatAction(Count: Integer; Action: TSimpleProc);
+procedure RepeatAction(Count: Integer; Action: TSimpleProc);  
 var
   I: Integer;
 begin
@@ -96,7 +96,7 @@ begin
     Action();
 end;
 
-procedure UseRepeatAction;
+procedure UseRepeatAction;  
 var
   Counter: Integer;
 begin
@@ -117,7 +117,7 @@ end;
 ### Comprendre la capture de variables
 
 ```pascal
-procedure ClosureBasicExample;
+procedure ClosureBasicExample;  
 var
   OuterValue: Integer;
   MyFunc: TIntegerFunc;
@@ -138,7 +138,7 @@ begin
 end;
 
 // Exemple plus complexe de closure
-function CreateMultiplier(Factor: Integer): TIntegerFunc;
+function CreateMultiplier(Factor: Integer): TIntegerFunc;  
 begin
   // La closure capture 'Factor'
   Result := function(Value: Integer): Integer
@@ -147,7 +147,7 @@ begin
             end;
 end;
 
-procedure UseMultiplier;
+procedure UseMultiplier;  
 var
   Double, Triple: TIntegerFunc;
 begin
@@ -161,7 +161,7 @@ begin
 end;
 
 // Closure avec plusieurs variables capturées
-procedure MultipleCaptures;
+procedure MultipleCaptures;  
 var
   Name: string;
   Age: Integer;
@@ -191,7 +191,7 @@ end;
 ### Piège des closures en boucles
 
 ```pascal
-procedure LoopClosureProblem;
+procedure LoopClosureProblem;  
 var
   Funcs: array[0..4] of TIntegerFunc;
   I, J: Integer;
@@ -210,7 +210,7 @@ begin
     WriteLn('Func[', J, '](10) = ', Funcs[J](10));  // Tous affichent 15
 end;
 
-procedure LoopClosureSolution;
+procedure LoopClosureSolution;  
 var
   Funcs: array[0..4] of TIntegerFunc;
   I, J: Integer;
@@ -260,7 +260,7 @@ type
     property Count: Integer read FCount;
   end;
 
-procedure TIntegerList.Add(Value: Integer);
+procedure TIntegerList.Add(Value: Integer);  
 begin
   if FCount = Length(FItems) then
     SetLength(FItems, FCount * 2 + 4);
@@ -268,13 +268,13 @@ begin
   Inc(FCount);
 end;
 
-procedure TIntegerList.Clear;
+procedure TIntegerList.Clear;  
 begin
   FCount := 0;
   SetLength(FItems, 0);
 end;
 
-procedure TIntegerList.ForEach(Action: TIntegerProc);
+procedure TIntegerList.ForEach(Action: TIntegerProc);  
 var
   I: Integer;
 begin
@@ -282,7 +282,7 @@ begin
     Action(FItems[I]);
 end;
 
-function TIntegerList.Find(Predicate: TPredicateFunc): Integer;
+function TIntegerList.Find(Predicate: TPredicateFunc): Integer;  
 var
   I: Integer;
 begin
@@ -295,7 +295,7 @@ begin
     end;
 end;
 
-function TIntegerList.FindAll(Predicate: TPredicateFunc): TIntegerList;
+function TIntegerList.FindAll(Predicate: TPredicateFunc): TIntegerList;  
 var
   I: Integer;
 begin
@@ -305,7 +305,7 @@ begin
       Result.Add(FItems[I]);
 end;
 
-function TIntegerList.Map(Transform: TIntegerFunc): TIntegerList;
+function TIntegerList.Map(Transform: TIntegerFunc): TIntegerList;  
 var
   I: Integer;
 begin
@@ -314,7 +314,7 @@ begin
     Result.Add(Transform(FItems[I]));
 end;
 
-function TIntegerList.Reduce(Accumulator: TCompareFunc; Initial: Integer): Integer;
+function TIntegerList.Reduce(Accumulator: TCompareFunc; Initial: Integer): Integer;  
 var
   I: Integer;
 begin
@@ -323,7 +323,7 @@ begin
     Result := Accumulator(Result, FItems[I]);
 end;
 
-procedure TIntegerList.Sort(Compare: TCompareFunc);
+procedure TIntegerList.Sort(Compare: TCompareFunc);  
 var
   I, J, Temp: Integer;
 begin
@@ -339,7 +339,7 @@ begin
 end;
 
 // Utilisation
-procedure UseListWithClosures;
+procedure UseListWithClosures;  
 var
   List, Evens, Doubled: TIntegerList;
   Sum, Product: Integer;
@@ -472,13 +472,13 @@ type
     property Enabled: Boolean read FEnabled write FEnabled;
   end;
 
-constructor TButton.Create(const ACaption: string);
+constructor TButton.Create(const ACaption: string);  
 begin
   FCaption := ACaption;
   FEnabled := True;
 end;
 
-procedure TButton.Click;
+procedure TButton.Click;  
 begin
   if FEnabled and Assigned(FOnClick) then
   begin
@@ -499,7 +499,7 @@ type
     procedure Trigger(Sender: TObject);
   end;
 
-procedure TMulticastEvent.Add(Handler: TEventHandler);
+procedure TMulticastEvent.Add(Handler: TEventHandler);  
 var
   Len: Integer;
 begin
@@ -508,12 +508,12 @@ begin
   FHandlers[Len] := Handler;
 end;
 
-procedure TMulticastEvent.Clear;
+procedure TMulticastEvent.Clear;  
 begin
   SetLength(FHandlers, 0);
 end;
 
-procedure TMulticastEvent.Trigger(Sender: TObject);
+procedure TMulticastEvent.Trigger(Sender: TObject);  
 var
   Handler: TEventHandler;
 begin
@@ -523,7 +523,7 @@ begin
 end;
 
 // Utilisation
-procedure UseEventHandlers;
+procedure UseEventHandlers;  
 var
   Button1, Button2: TButton;
   ClickCount: Integer;
@@ -602,23 +602,23 @@ type
     procedure Error(const Msg: string);
   end;
 
-procedure TAsyncTask.Then_(Callback: TAsyncCallback);
+procedure TAsyncTask.Then_(Callback: TAsyncCallback);  
 begin
   FOnComplete := Callback;
 end;
 
-procedure TAsyncTask.Catch(ErrorCallback: TAsyncErrorCallback);
+procedure TAsyncTask.Catch(ErrorCallback: TAsyncErrorCallback);  
 begin
   FOnError := ErrorCallback;
 end;
 
-procedure TAsyncTask.Complete(Result: Variant);
+procedure TAsyncTask.Complete(Result: Variant);  
 begin
   if Assigned(FOnComplete) then
     FOnComplete(Result);
 end;
 
-procedure TAsyncTask.Error(const Msg: string);
+procedure TAsyncTask.Error(const Msg: string);  
 begin
   if Assigned(FOnError) then
     FOnError(Msg);
@@ -634,12 +634,12 @@ type
     procedure Execute; override;
   end;
 
-constructor TLoadDataTask.Create(const AUrl: string);
+constructor TLoadDataTask.Create(const AUrl: string);  
 begin
   FUrl := AUrl;
 end;
 
-procedure TLoadDataTask.Execute;
+procedure TLoadDataTask.Execute;  
 begin
   WriteLn('Chargement depuis ', FUrl, '...');
 
@@ -669,7 +669,7 @@ type
     function Catch(ErrorCallback: TAsyncErrorCallback): TPromise;
   end;
 
-procedure TPromise.Resolve(Value: Variant);
+procedure TPromise.Resolve(Value: Variant);  
 var
   Callback: TAsyncCallback;
 begin
@@ -684,7 +684,7 @@ begin
       Callback(FValue);
 end;
 
-procedure TPromise.Reject(const Error: string);
+procedure TPromise.Reject(const Error: string);  
 var
   ErrorCallback: TAsyncErrorCallback;
 begin
@@ -699,7 +699,7 @@ begin
       ErrorCallback(FError);
 end;
 
-function TPromise.Then_(Callback: TAsyncCallback): TPromise;
+function TPromise.Then_(Callback: TAsyncCallback): TPromise;  
 var
   Len: Integer;
 begin
@@ -715,7 +715,7 @@ begin
   end;
 end;
 
-function TPromise.Catch(ErrorCallback: TAsyncErrorCallback): TPromise;
+function TPromise.Catch(ErrorCallback: TAsyncErrorCallback): TPromise;  
 var
   Len: Integer;
 begin
@@ -732,7 +732,7 @@ begin
 end;
 
 // Utilisation
-procedure UseAsyncPatterns;
+procedure UseAsyncPatterns;  
 var
   Task: TLoadDataTask;
   Promise: TPromise;
@@ -794,7 +794,7 @@ type
   TGeneratorState = reference to function(out Value: Integer): Boolean;
 
 // Générateur de séquence
-function CreateRangeGenerator(Start, Stop, Step: Integer): TGeneratorState;
+function CreateRangeGenerator(Start, Stop, Step: Integer): TGeneratorState;  
 var
   Current: Integer;
 begin
@@ -820,7 +820,7 @@ begin
 end;
 
 // Générateur de Fibonacci
-function CreateFibonacciGenerator(MaxValue: Integer): TGeneratorState;
+function CreateFibonacciGenerator(MaxValue: Integer): TGeneratorState;  
 var
   Prev, Curr: Integer;
 begin
@@ -877,7 +877,7 @@ begin
 end;
 
 // Utilisation
-procedure UseGenerators;
+procedure UseGenerators;  
 var
   Gen: TGeneratorState;
   Value: Integer;
@@ -954,7 +954,7 @@ type
   TIntToIntFunc = reference to function(N: Integer): Integer;
 
 // Créer une version mémoïsée d'une fonction
-function Memoize(Func: TIntToIntFunc): TIntToIntFunc;
+function Memoize(Func: TIntToIntFunc): TIntToIntFunc;  
 var
   Cache: array of record
     Key: Integer;
@@ -989,7 +989,7 @@ begin
 end;
 
 // Fibonacci avec mémoïsation
-function CreateMemoizedFibonacci: TIntToIntFunc;
+function CreateMemoizedFibonacci: TIntToIntFunc;  
 var
   FibFunc: TIntToIntFunc;
 begin
@@ -1007,7 +1007,7 @@ begin
 end;
 
 // Factorielle avec mémoïsation
-function CreateMemoizedFactorial: TIntToIntFunc;
+function CreateMemoizedFactorial: TIntToIntFunc;  
 var
   FactFunc: TIntToIntFunc;
 begin
@@ -1024,7 +1024,7 @@ begin
 end;
 
 // Utilisation
-procedure UseMemoization;
+procedure UseMemoization;  
 var
   Fib, Fact: TIntToIntFunc;
 begin
@@ -1058,7 +1058,7 @@ type
   TCurriedOp = reference to function(A: Integer): TUnaryOp;
 
 // Transformer une fonction binaire en fonction curryfiée
-function Curry(Op: TBinaryOp): TCurriedOp;
+function Curry(Op: TBinaryOp): TCurriedOp;  
 begin
   Result := function(A: Integer): TUnaryOp
             begin
@@ -1070,7 +1070,7 @@ begin
 end;
 
 // Application partielle
-function PartialApply(Op: TBinaryOp; FirstArg: Integer): TUnaryOp;
+function PartialApply(Op: TBinaryOp; FirstArg: Integer): TUnaryOp;  
 begin
   Result := function(SecondArg: Integer): Integer
             begin
@@ -1079,7 +1079,7 @@ begin
 end;
 
 // Composition de fonctions
-function Compose(F, G: TUnaryOp): TUnaryOp;
+function Compose(F, G: TUnaryOp): TUnaryOp;  
 begin
   Result := function(X: Integer): Integer
             begin
@@ -1098,7 +1098,7 @@ type
     function ToPipeline: TUnaryOp;
   end;
 
-procedure TPipeline.Add(Op: TUnaryOp);
+procedure TPipeline.Add(Op: TUnaryOp);  
 var
   Len: Integer;
 begin
@@ -1107,7 +1107,7 @@ begin
   FOperations[Len] := Op;
 end;
 
-function TPipeline.Execute(Value: Integer): Integer;
+function TPipeline.Execute(Value: Integer): Integer;  
 var
   Op: TUnaryOp;
 begin
@@ -1116,7 +1116,7 @@ begin
     Result := Op(Result);
 end;
 
-function TPipeline.ToPipeline: TUnaryOp;
+function TPipeline.ToPipeline: TUnaryOp;  
 var
   Ops: array of TUnaryOp;
   I: Integer;
@@ -1137,7 +1137,7 @@ begin
 end;
 
 // Utilisation
-procedure UseFunctionalPatterns;
+procedure UseFunctionalPatterns;  
 var
   Add, Multiply: TBinaryOp;
   CurriedAdd: TCurriedOp;
@@ -1212,19 +1212,19 @@ type
   TMaybeInt = specialize TMaybe<Integer>;
   TIntToMaybeInt = reference to function(X: Integer): TMaybeInt;
 
-class function TMaybe<T>.Some(Value: T): TMaybe<T>;
+class function TMaybe<T>.Some(Value: T): TMaybe<T>;  
 begin
   Result.FHasValue := True;
   Result.FValue := Value;
 end;
 
-class function TMaybe<T>.None: TMaybe<T>;
+class function TMaybe<T>.None: TMaybe<T>;  
 begin
   Result.FHasValue := False;
   Result.FValue := Default(T);
 end;
 
-function TMaybe<T>.Map<U>(Transform: specialize TFunc<T, U>): specialize TMaybe<U>;
+function TMaybe<T>.Map<U>(Transform: specialize TFunc<T, U>): specialize TMaybe<U>;  
 begin
   if FHasValue then
     Result := specialize TMaybe<U>.Some(Transform(FValue))
@@ -1232,7 +1232,7 @@ begin
     Result := specialize TMaybe<U>.None;
 end;
 
-function TMaybe<T>.OrElse(DefaultValue: T): T;
+function TMaybe<T>.OrElse(DefaultValue: T): T;  
 begin
   if FHasValue then
     Result := FValue
@@ -1241,7 +1241,7 @@ begin
 end;
 
 // Exemple d'utilisation avec division sûre
-function SafeDivide(A, B: Integer): TMaybeInt;
+function SafeDivide(A, B: Integer): TMaybeInt;  
 begin
   if B <> 0 then
     Result := TMaybeInt.Some(A div B)
@@ -1250,7 +1250,7 @@ begin
 end;
 
 // Chaînage d'opérations
-procedure UseMaybeMonad;
+procedure UseMaybeMonad;  
 var
   Result: TMaybeInt;
   Value: Integer;
@@ -1293,7 +1293,7 @@ type
   end;
 
 // Factory pour créer un compteur encapsulé
-function CreateCounter(InitialValue: Integer = 0): TCounterInterface;
+function CreateCounter(InitialValue: Integer = 0): TCounterInterface;  
 var
   Value: Integer;
 begin
@@ -1330,7 +1330,7 @@ type
   end;
 
 // Nécessite : uses Classes;  (pour TStringList)
-function CreateBankAccount(InitialBalance: Integer): TBankAccount;
+function CreateBankAccount(InitialBalance: Integer): TBankAccount;  
 var
   Balance: Integer;
   History: TStringList;
@@ -1378,7 +1378,7 @@ begin
 end;
 
 // Utilisation
-procedure UseStatefulClosures;
+procedure UseStatefulClosures;  
 var
   Counter1, Counter2: TCounterInterface;
   Account: TBankAccount;
@@ -1428,7 +1428,7 @@ type
   TRequestHandler = reference to function(const Request: string): string;
 
 // Décorateur de logging
-function WithLogging(Handler: TRequestHandler): TRequestHandler;
+function WithLogging(Handler: TRequestHandler): TRequestHandler;  
 begin
   Result := function(const Request: string): string
             begin
@@ -1439,7 +1439,7 @@ begin
 end;
 
 // Décorateur d'authentification
-function WithAuth(Handler: TRequestHandler; const Token: string): TRequestHandler;
+function WithAuth(Handler: TRequestHandler; const Token: string): TRequestHandler;  
 begin
   Result := function(const Request: string): string
             begin
@@ -1451,7 +1451,7 @@ begin
 end;
 
 // Décorateur de cache
-function WithCache(Handler: TRequestHandler): TRequestHandler;
+function WithCache(Handler: TRequestHandler): TRequestHandler;  
 var
   Cache: TStringList;
 begin
@@ -1477,7 +1477,7 @@ begin
 end;
 
 // Décorateur de limitation de débit
-function WithRateLimit(Handler: TRequestHandler; MaxCalls: Integer): TRequestHandler;
+function WithRateLimit(Handler: TRequestHandler; MaxCalls: Integer): TRequestHandler;  
 var
   CallCount: Integer;
 begin
@@ -1504,24 +1504,24 @@ type
     function Build: TRequestHandler;
   end;
 
-constructor TMiddlewareChain.Create(Handler: TRequestHandler);
+constructor TMiddlewareChain.Create(Handler: TRequestHandler);  
 begin
   FHandler := Handler;
 end;
 
-function TMiddlewareChain.Use(Middleware: reference to function(Handler: TRequestHandler): TRequestHandler): TMiddlewareChain;
+function TMiddlewareChain.Use(Middleware: reference to function(Handler: TRequestHandler): TRequestHandler): TMiddlewareChain;  
 begin
   FHandler := Middleware(FHandler);
   Result := Self;
 end;
 
-function TMiddlewareChain.Build: TRequestHandler;
+function TMiddlewareChain.Build: TRequestHandler;  
 begin
   Result := FHandler;
 end;
 
 // Utilisation
-procedure UseDecorators;
+procedure UseDecorators;  
 var
   BaseHandler, DecoratedHandler: TRequestHandler;
   Chain: TMiddlewareChain;
@@ -1595,7 +1595,7 @@ type
   TFileAction = reference to procedure(F: TextFile);
 
 // Gestion automatique de ressources
-procedure WithResource(ResourceClass: TClass; Action: TResourceAction);
+procedure WithResource(ResourceClass: TClass; Action: TResourceAction);  
 var
   Resource: TObject;
 begin
@@ -1608,7 +1608,7 @@ begin
 end;
 
 // Gestion de fichiers
-procedure WithFile(const FileName: string; Action: TFileAction);
+procedure WithFile(const FileName: string; Action: TFileAction);  
 var
   F: TextFile;
 begin
@@ -1633,13 +1633,13 @@ type
     procedure Commit;
   end;
 
-constructor TTransaction.Create(RollbackAction: TSimpleProc);
+constructor TTransaction.Create(RollbackAction: TSimpleProc);  
 begin
   FCommitted := False;
   FRollbackAction := RollbackAction;
 end;
 
-destructor TTransaction.Destroy;
+destructor TTransaction.Destroy;  
 begin
   if not FCommitted and Assigned(FRollbackAction) then
   begin
@@ -1649,13 +1649,13 @@ begin
   inherited;
 end;
 
-procedure TTransaction.Commit;
+procedure TTransaction.Commit;  
 begin
   FCommitted := True;
   WriteLn('Transaction committed');
 end;
 
-procedure WithTransaction(Action: reference to procedure(Trans: TTransaction));
+procedure WithTransaction(Action: reference to procedure(Trans: TTransaction));  
 var
   Trans: TTransaction;
   OriginalData: string;
@@ -1677,7 +1677,7 @@ begin
 end;
 
 // Utilisation
-procedure UseResourceManagement;
+procedure UseResourceManagement;  
 begin
   // Gestion automatique de TStringList
   WithResource(TStringList,
@@ -1743,7 +1743,7 @@ type
     property OnProcess: TSimpleProc read FOnProcess write FOnProcess;
   end;
 
-procedure MemoryLeakExample;
+procedure MemoryLeakExample;  
 var
   Node: TNode;
 begin
@@ -1766,7 +1766,7 @@ begin
 end;
 
 // SOLUTION : Utiliser une référence faible ou éviter la capture
-procedure MemoryLeakSolution;
+procedure MemoryLeakSolution;  
 var
   Node: TNode;
   NodeValue: Integer;
@@ -1791,7 +1791,7 @@ end;
 
 ```pascal
 // Les closures ont un coût en performance
-procedure PerformanceConsiderations;
+procedure PerformanceConsiderations;  
 var
   DirectCall, ClosureCall: Int64;  // Nécessite : uses DateUtils;  (pour MilliSecondsBetween)
   StartTime: TDateTime;

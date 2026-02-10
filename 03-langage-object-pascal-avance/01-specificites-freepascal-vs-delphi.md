@@ -138,26 +138,26 @@ type
 
 // En ObjFPC, les opérateurs sur records sont déclarés globalement
 // FreePascal supporte plus d'opérateurs que Delphi
-operator + (A, B: TVector): TVector;
-operator ** (A: TVector; B: Double): TVector;  // Puissance - pas en Delphi
+operator + (A, B: TVector): TVector;  
+operator ** (A: TVector; B: Double): TVector;  // Puissance - pas en Delphi  
 operator >< (A, B: TVector): Boolean;          // Symétrique - spécifique FPC
 
 implementation
 
-operator +(A, B: TVector): TVector;
+operator +(A, B: TVector): TVector;  
 begin
   Result.X := A.X + B.X;
   Result.Y := A.Y + B.Y;
 end;
 
-operator **(A: TVector; B: Double): TVector;
+operator **(A: TVector; B: Double): TVector;  
 begin
   // Élévation à la puissance
   Result.X := Power(A.X, B);
   Result.Y := Power(A.Y, B);
 end;
 
-operator ><(A, B: TVector): Boolean;
+operator ><(A, B: TVector): Boolean;  
 begin
   // Test de différence symétrique (exemple personnalisé)
   Result := (A.X <> B.X) or (A.Y <> B.Y);
@@ -172,7 +172,7 @@ L'assembleur inline permet d'écrire du code machine directement. C'est comme po
 
 ```pascal
 // FreePascal - syntaxe AT&T par défaut sur Linux
-function AddFPC(a, b: Integer): Integer; assembler;
+function AddFPC(a, b: Integer): Integer; assembler;  
 asm
   {$ifdef CPUX86_64}
     // Syntaxe AT&T (source, destination)
@@ -185,7 +185,7 @@ asm
 end;
 
 // Delphi - syntaxe Intel
-function AddDelphi(a, b: Integer): Integer;
+function AddDelphi(a, b: Integer): Integer;  
 asm
   // Syntaxe Intel (destination, source)
   mov eax, a
@@ -194,7 +194,7 @@ end;
 
 // FreePascal peut aussi utiliser la syntaxe Intel
 {$asmmode intel}
-function AddIntel(a, b: Integer): Integer; assembler;
+function AddIntel(a, b: Integer): Integer; assembler;  
 asm
   mov eax, a
   add eax, b
@@ -210,7 +210,7 @@ end;
 FreePascal brille par son support natif de nombreuses plateformes :
 
 ```pascal
-program PlatformDemo;
+program PlatformDemo;  
 begin
   {$IFDEF WINDOWS}
     WriteLn('Compilation pour Windows');
@@ -298,7 +298,7 @@ type
 
 implementation
 
-function TIntegerHelper.ToBinary: string;
+function TIntegerHelper.ToBinary: string;  
 var
   I: Integer;
 begin
@@ -311,7 +311,7 @@ begin
   if Result = '' then Result := '0';
 end;
 
-function TIntegerHelper.IsPrime: Boolean;
+function TIntegerHelper.IsPrime: Boolean;  
 var
   I: Integer;
 begin
@@ -395,7 +395,7 @@ FreePascal offre des directives d'optimisation fines :
 {$OPTIMIZATION ASMCSE}         // CSE pour assembleur
 {$OPTIMIZATION LOOPUNROLL}     // Déroulement de boucles
 
-procedure OptimizedLoop;
+procedure OptimizedLoop;  
 var
   I: Integer;
   Sum: Int64;
@@ -412,7 +412,7 @@ end;
 
 ```pascal
 // FreePascal permet un contrôle plus fin de l'inlining
-function FastAdd(A, B: Integer): Integer; inline;
+function FastAdd(A, B: Integer): Integer; inline;  
 begin
   Result := A + B;
 end;
@@ -614,12 +614,12 @@ type
   TFileSize = Int64;   // Pas Integer pour grandes tailles
 
 // Définir des fonctions wrapper pour les différences
-function GetApplicationPath: string;
+function GetApplicationPath: string;  
 function FileExists(const FileName: string): Boolean;
 
 implementation
 
-function GetApplicationPath: string;
+function GetApplicationPath: string;  
 begin
   {$IFDEF FPC}
   Result := ExtractFilePath(ParamStr(0));
@@ -628,7 +628,7 @@ begin
   {$ENDIF}
 end;
 
-function FileExists(const FileName: string): Boolean;
+function FileExists(const FileName: string): Boolean;  
 begin
   {$IFDEF FPC}
   Result := FileUtil.FileExists(FileName);

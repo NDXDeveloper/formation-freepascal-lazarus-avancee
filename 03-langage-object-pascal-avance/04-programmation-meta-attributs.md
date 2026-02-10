@@ -30,7 +30,7 @@ type
     property Text: String read FText;
   end;
 
-constructor DescriptionAttribute.Create(const AText: String);
+constructor DescriptionAttribute.Create(const AText: String);  
 begin
   inherited Create;
   FText := AText;
@@ -53,7 +53,7 @@ type
 Pour lire les attributs attachés à une classe ou propriété :
 
 ```pascal
-procedure ReadClassAttributes(AClass: TClass);
+procedure ReadClassAttributes(AClass: TClass);  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -128,25 +128,25 @@ type
   end;
 
 // Implémentations
-function RequiredAttribute.Validate(const Value: TValue): Boolean;
+function RequiredAttribute.Validate(const Value: TValue): Boolean;  
 begin
   Result := not Value.IsEmpty;
   if Value.Kind in [tkString, tkUString] then
     Result := Result and (Trim(Value.AsString) <> '');
 end;
 
-function RequiredAttribute.GetErrorMessage: String;
+function RequiredAttribute.GetErrorMessage: String;  
 begin
   Result := 'Cette valeur est obligatoire';
 end;
 
-constructor MaxLengthAttribute.Create(AMaxLength: Integer);
+constructor MaxLengthAttribute.Create(AMaxLength: Integer);  
 begin
   inherited Create;
   FMaxLength := AMaxLength;
 end;
 
-function MaxLengthAttribute.Validate(const Value: TValue): Boolean;
+function MaxLengthAttribute.Validate(const Value: TValue): Boolean;  
 begin
   if Value.Kind in [tkString, tkUString] then
     Result := Length(Value.AsString) <= FMaxLength
@@ -154,19 +154,19 @@ begin
     Result := True;
 end;
 
-function MaxLengthAttribute.GetErrorMessage: String;
+function MaxLengthAttribute.GetErrorMessage: String;  
 begin
   Result := Format('La longueur maximale est de %d caractères', [FMaxLength]);
 end;
 
-constructor RangeAttribute.Create(AMin, AMax: Double);
+constructor RangeAttribute.Create(AMin, AMax: Double);  
 begin
   inherited Create;
   FMin := AMin;
   FMax := AMax;
 end;
 
-function RangeAttribute.Validate(const Value: TValue): Boolean;
+function RangeAttribute.Validate(const Value: TValue): Boolean;  
 var
   NumValue: Double;
 begin
@@ -176,7 +176,7 @@ begin
     Result := True; // Pas un nombre, on laisse passer
 end;
 
-function RangeAttribute.GetErrorMessage: String;
+function RangeAttribute.GetErrorMessage: String;  
 begin
   Result := Format('La valeur doit être entre %g et %g', [FMin, FMax]);
 end;
@@ -316,13 +316,13 @@ type
     property Format: String read FFormat;
   end;
 
-constructor JsonPropertyAttribute.Create(const AName: String);
+constructor JsonPropertyAttribute.Create(const AName: String);  
 begin
   inherited Create;
   FName := AName;
 end;
 
-constructor DateFormatAttribute.Create(const AFormat: String);
+constructor DateFormatAttribute.Create(const AFormat: String);  
 begin
   inherited Create;
   FFormat := AFormat;
@@ -381,7 +381,7 @@ type
     class function SerializeToString(AObject: TObject): String;
   end;
 
-class function TJsonSerializer.GetJsonPropertyName(AProp: TRttiProperty): String;
+class function TJsonSerializer.GetJsonPropertyName(AProp: TRttiProperty): String;  
 var
   Attr: TCustomAttribute;
 begin
@@ -397,7 +397,7 @@ begin
   end;
 end;
 
-class function TJsonSerializer.ShouldSerialize(AProp: TRttiProperty): Boolean;
+class function TJsonSerializer.ShouldSerialize(AProp: TRttiProperty): Boolean;  
 var
   Attr: TCustomAttribute;
 begin
@@ -460,7 +460,7 @@ begin
   end;
 end;
 
-class function TJsonSerializer.Serialize(AObject: TObject): TJSONObject;
+class function TJsonSerializer.Serialize(AObject: TObject): TJSONObject;  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -492,7 +492,7 @@ begin
   end;
 end;
 
-class function TJsonSerializer.SerializeToString(AObject: TObject): String;
+class function TJsonSerializer.SerializeToString(AObject: TObject): String;  
 var
   Json: TJSONObject;
 begin
@@ -591,7 +591,7 @@ type
   end;
 
 // Implémentations des constructeurs
-constructor TableAttribute.Create(const ATableName: String);
+constructor TableAttribute.Create(const ATableName: String);  
 begin
   inherited Create;
   FTableName := ATableName;
@@ -606,7 +606,7 @@ begin
   FSize := ASize;
 end;
 
-constructor PrimaryKeyAttribute.Create(AAutoIncrement: Boolean);
+constructor PrimaryKeyAttribute.Create(AAutoIncrement: Boolean);  
 begin
   inherited Create;
   FAutoIncrement := AAutoIncrement;
@@ -620,7 +620,7 @@ begin
   FReferenceColumn := AReferenceColumn;
 end;
 
-constructor IndexAttribute.Create(const AIndexName: String; AUnique: Boolean);
+constructor IndexAttribute.Create(const AIndexName: String; AUnique: Boolean);  
 begin
   inherited Create;
   FIndexName := AIndexName;
@@ -702,7 +702,7 @@ type
                                   const WhereClause: String = ''): String;
   end;
 
-class function TSQLGenerator.GetTableName(AClass: TClass): String;
+class function TSQLGenerator.GetTableName(AClass: TClass): String;  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -727,7 +727,7 @@ begin
   end;
 end;
 
-class function TSQLGenerator.GenerateColumnDefinition(AProp: TRttiProperty): String;
+class function TSQLGenerator.GenerateColumnDefinition(AProp: TRttiProperty): String;  
 var
   Attr: TCustomAttribute;
   ColumnName, ColumnType: String;
@@ -766,7 +766,7 @@ begin
   end;
 end;
 
-class function TSQLGenerator.GenerateCreateTable(AClass: TClass): String;
+class function TSQLGenerator.GenerateCreateTable(AClass: TClass): String;  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -1023,7 +1023,7 @@ begin
   end;
 end;
 
-class procedure TConfigLoader.LoadFromEnvironment(AObject: TObject);
+class procedure TConfigLoader.LoadFromEnvironment(AObject: TObject);  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -1181,13 +1181,13 @@ type
     property TimeWindow: Integer read FTimeWindow;
   end;
 
-constructor RequireRoleAttribute.Create(const ARole: String);
+constructor RequireRoleAttribute.Create(const ARole: String);  
 begin
   inherited Create;
   FRole := ARole;
 end;
 
-constructor RequirePermissionAttribute.Create(const APermission: String);
+constructor RequirePermissionAttribute.Create(const APermission: String);  
 begin
   inherited Create;
   FPermission := APermission;
@@ -1248,42 +1248,42 @@ type
     function IsAuthenticated: Boolean;
   end;
 
-constructor TSecurityContext.Create;
+constructor TSecurityContext.Create;  
 begin
   FRoles := TStringList.Create;
   FPermissions := TStringList.Create;
 end;
 
-destructor TSecurityContext.Destroy;
+destructor TSecurityContext.Destroy;  
 begin
   FRoles.Free;
   FPermissions.Free;
   inherited;
 end;
 
-procedure TSecurityContext.AddRole(const Role: String);
+procedure TSecurityContext.AddRole(const Role: String);  
 begin
   if FRoles.IndexOf(Role) < 0 then
     FRoles.Add(Role);
 end;
 
-procedure TSecurityContext.AddPermission(const Permission: String);
+procedure TSecurityContext.AddPermission(const Permission: String);  
 begin
   if FPermissions.IndexOf(Permission) < 0 then
     FPermissions.Add(Permission);
 end;
 
-function TSecurityContext.HasRole(const Role: String): Boolean;
+function TSecurityContext.HasRole(const Role: String): Boolean;  
 begin
   Result := FRoles.IndexOf(Role) >= 0;
 end;
 
-function TSecurityContext.HasPermission(const Permission: String): Boolean;
+function TSecurityContext.HasPermission(const Permission: String): Boolean;  
 begin
   Result := FPermissions.IndexOf(Permission) >= 0;
 end;
 
-function TSecurityContext.IsAuthenticated: Boolean;
+function TSecurityContext.IsAuthenticated: Boolean;  
 begin
   Result := FCurrentUser <> '';
 end;
@@ -1439,19 +1439,19 @@ type
     property Pattern: String read FPattern;
   end;
 
-constructor CacheableAttribute.Create(ADuration: Integer);
+constructor CacheableAttribute.Create(ADuration: Integer);  
 begin
   inherited Create;
   FDuration := ADuration;
 end;
 
-constructor CacheKeyAttribute.Create(const AKeyPattern: String);
+constructor CacheKeyAttribute.Create(const AKeyPattern: String);  
 begin
   inherited Create;
   FKeyPattern := AKeyPattern;
 end;
 
-constructor InvalidateCacheAttribute.Create(const APattern: String);
+constructor InvalidateCacheAttribute.Create(const APattern: String);  
 begin
   inherited Create;
   FPattern := APattern;
@@ -1496,17 +1496,17 @@ type
     class procedure Clear;
   end;
 
-class constructor TCacheManager.Create;
+class constructor TCacheManager.Create;  
 begin
   FCache := TDictionary<String, TCacheEntry>.Create;
 end;
 
-class destructor TCacheManager.Destroy;
+class destructor TCacheManager.Destroy;  
 begin
   FCache.Free;
 end;
 
-class function TCacheManager.Get(const Key: String; out Value: TValue): Boolean;
+class function TCacheManager.Get(const Key: String; out Value: TValue): Boolean;  
 var
   Entry: TCacheEntry;
 begin
@@ -1541,7 +1541,7 @@ begin
   WriteLn('[CACHE PUT] ', Key, ' (expires in ', Duration, 's)');
 end;
 
-class procedure TCacheManager.Invalidate(const Pattern: String);
+class procedure TCacheManager.Invalidate(const Pattern: String);  
 var
   Key: String;
   KeysToDelete: TStringList;
@@ -1566,7 +1566,7 @@ begin
   end;
 end;
 
-class procedure TCacheManager.Clear;
+class procedure TCacheManager.Clear;  
 begin
   FCache.Clear;
   WriteLn('[CACHE CLEAR] All cache cleared');
@@ -1741,13 +1741,13 @@ type
   end;
 
 // Implémentations
-constructor DocumentationAttribute.Create(const ADescription: String);
+constructor DocumentationAttribute.Create(const ADescription: String);  
 begin
   inherited Create;
   FDescription := ADescription;
 end;
 
-constructor ExampleAttribute.Create(const ACode: String);
+constructor ExampleAttribute.Create(const ACode: String);  
 begin
   inherited Create;
   FCode := ACode;
@@ -1761,14 +1761,14 @@ begin
   FAlternative := AAlternative;
 end;
 
-constructor AuthorAttribute.Create(const AName, AEmail: String);
+constructor AuthorAttribute.Create(const AName, AEmail: String);  
 begin
   inherited Create;
   FName := AName;
   FEmail := AEmail;
 end;
 
-constructor VersionAttribute.Create(const AVersion: String; ADate: TDateTime);
+constructor VersionAttribute.Create(const AVersion: String; ADate: TDateTime);  
 begin
   inherited Create;
   FVersion := AVersion;
@@ -1784,7 +1784,7 @@ begin
   FRequired := ARequired;
 end;
 
-constructor ReturnAttribute.Create(const ADescription: String);
+constructor ReturnAttribute.Create(const ADescription: String);  
 begin
   inherited Create;
   FDescription := ADescription;
@@ -1910,7 +1910,7 @@ begin
   end;
 end;
 
-class function TDocumentationGenerator.GenerateMarkdown(AClass: TClass): String;
+class function TDocumentationGenerator.GenerateMarkdown(AClass: TClass): String;  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -2035,13 +2035,13 @@ type
   end;
 
 // Implémentations
-constructor TestFixtureAttribute.Create(const ADescription: String);
+constructor TestFixtureAttribute.Create(const ADescription: String);  
 begin
   inherited Create;
   FDescription := ADescription;
 end;
 
-constructor TestAttribute.Create(const ATestName: String);
+constructor TestAttribute.Create(const ATestName: String);  
 begin
   inherited Create;
   FTestName := ATestName;
@@ -2055,19 +2055,19 @@ begin
   FMessage := AMessage;
 end;
 
-constructor IgnoreAttribute.Create(const AReason: String);
+constructor IgnoreAttribute.Create(const AReason: String);  
 begin
   inherited Create;
   FReason := AReason;
 end;
 
-constructor TimeoutAttribute.Create(AMilliseconds: Integer);
+constructor TimeoutAttribute.Create(AMilliseconds: Integer);  
 begin
   inherited Create;
   FMilliseconds := AMilliseconds;
 end;
 
-constructor DataSourceAttribute.Create(const ASourceMethod: String);
+constructor DataSourceAttribute.Create(const ASourceMethod: String);  
 begin
   inherited Create;
   FSourceMethod := ASourceMethod;
@@ -2114,38 +2114,38 @@ type
     function GetTestData: TArray<TArray<Integer>>;
   end;
 
-procedure TCalculatorTests.Setup;
+procedure TCalculatorTests.Setup;  
 begin
   // Initialisation avant chaque test
   FCalculator := TObject.Create; // Remplacer par votre classe
   WriteLn('Setup exécuté');
 end;
 
-procedure TCalculatorTests.TearDown;
+procedure TCalculatorTests.TearDown;  
 begin
   // Nettoyage après chaque test
   FCalculator.Free;
   WriteLn('TearDown exécuté');
 end;
 
-procedure TCalculatorTests.TestAddition;
+procedure TCalculatorTests.TestAddition;  
 begin
   // Vos assertions ici
   Assert(2 + 2 = 4, 'L''addition devrait fonctionner');
 end;
 
-procedure TCalculatorTests.TestSubtraction;
+procedure TCalculatorTests.TestSubtraction;  
 begin
   Assert(5 - 3 = 2, 'La soustraction devrait fonctionner');
 end;
 
-procedure TCalculatorTests.TestDivisionByZero;
+procedure TCalculatorTests.TestDivisionByZero;  
 begin
   // Ce test doit lever une exception EDivByZero
   raise EDivByZero.Create('Division par zéro');
 end;
 
-procedure TCalculatorTests.TestPerformance;
+procedure TCalculatorTests.TestPerformance;  
 var
   I: Integer;
 begin
@@ -2154,19 +2154,19 @@ begin
     ; // Simulation de calcul
 end;
 
-procedure TCalculatorTests.TestNewFeature;
+procedure TCalculatorTests.TestNewFeature;  
 begin
   // Ce test sera ignoré
   Assert(False, 'Pas encore implémenté');
 end;
 
-procedure TCalculatorTests.TestWithMultipleInputs(Value1, Value2, Expected: Integer);
+procedure TCalculatorTests.TestWithMultipleInputs(Value1, Value2, Expected: Integer);  
 begin
   Assert(Value1 + Value2 = Expected,
          Format('%d + %d devrait égaler %d', [Value1, Value2, Expected]));
 end;
 
-function TCalculatorTests.GetTestData: TArray<TArray<Integer>>;
+function TCalculatorTests.GetTestData: TArray<TArray<Integer>>;  
 begin
   SetLength(Result, 3);
   Result[0] := [1, 2, 3];    // 1 + 2 = 3
@@ -2206,7 +2206,7 @@ type
     procedure PrintResults(const Results: TArray<TTestResult>);
   end;
 
-procedure TTestRunner.RunSetup;
+procedure TTestRunner.RunSetup;  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -2233,7 +2233,7 @@ begin
   end;
 end;
 
-procedure TTestRunner.RunTearDown;
+procedure TTestRunner.RunTearDown;  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -2283,7 +2283,7 @@ begin
   end;
 end;
 
-function TTestRunner.RunSingleTest(Method: TRttiMethod): TTestResult;
+function TTestRunner.RunSingleTest(Method: TRttiMethod): TTestResult;  
 var
   Attr: TCustomAttribute;
   StartTime: TDateTime;
@@ -2371,7 +2371,7 @@ begin
   end;
 end;
 
-function TTestRunner.RunTests(TestClass: TClass): TArray<TTestResult>;
+function TTestRunner.RunTests(TestClass: TClass): TArray<TTestResult>;  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -2422,7 +2422,7 @@ begin
   end;
 end;
 
-procedure TTestRunner.PrintResults(const Results: TArray<TTestResult>);
+procedure TTestRunner.PrintResults(const Results: TArray<TTestResult>);  
 var
   TestResult: TTestResult;
   TotalTests, PassedTests, FailedTests, SkippedTests: Integer;
@@ -2525,13 +2525,13 @@ type
     property MetricName: String read FMetricName;
   end;
 
-constructor TraceAttribute.Create(ALevel: Integer);
+constructor TraceAttribute.Create(ALevel: Integer);  
 begin
   inherited Create;
   FLevel := ALevel;
 end;
 
-constructor MetricAttribute.Create(const AMetricName: String);
+constructor MetricAttribute.Create(const AMetricName: String);  
 begin
   inherited Create;
   FMetricName := AMetricName;
@@ -2585,13 +2585,13 @@ type
     class procedure PrintMetrics;
   end;
 
-class constructor TTraceInterceptor.Create;
+class constructor TTraceInterceptor.Create;  
 begin
   FTraceLevel := 1;
   FMetrics := TDictionary<String, Integer>.Create;
 end;
 
-class destructor TTraceInterceptor.Destroy;
+class destructor TTraceInterceptor.Destroy;  
 begin
   FMetrics.Free;
 end;
@@ -2627,7 +2627,7 @@ begin
                  [MethodName, Duration]));
 end;
 
-class procedure TTraceInterceptor.UpdateMetric(const MetricName: String);
+class procedure TTraceInterceptor.UpdateMetric(const MetricName: String);  
 var
   Count: Integer;
 begin
@@ -2716,7 +2716,7 @@ begin
   end;
 end;
 
-class procedure TTraceInterceptor.PrintMetrics;
+class procedure TTraceInterceptor.PrintMetrics;  
 var
   Pair: TPair<String, Integer>;
 begin
@@ -2890,19 +2890,19 @@ type
     class procedure SetMaxCacheSize(Size: Integer);
   end;
 
-class constructor TAttributeCache.Create;
+class constructor TAttributeCache.Create;  
 begin
   FCache := TDictionary<String, TAttributeInfo>.Create;
   FMaxCacheSize := 100;
   FCacheSize := 0;
 end;
 
-class destructor TAttributeCache.Destroy;
+class destructor TAttributeCache.Destroy;  
 begin
   FCache.Free;
 end;
 
-class procedure TAttributeCache.CleanupCache;
+class procedure TAttributeCache.CleanupCache;  
 var
   Key: String;
   OldestKey: String;
@@ -2985,7 +2985,7 @@ begin
   end;
 end;
 
-class procedure TAttributeCache.SetMaxCacheSize(Size: Integer);
+class procedure TAttributeCache.SetMaxCacheSize(Size: Integer);  
 begin
   FMaxCacheSize := Size;
   CleanupCache;
@@ -3133,7 +3133,7 @@ type
                           SecurityContext: TSecurityContext): TValue;
   end;
 
-constructor TApplicationFramework.Create;
+constructor TApplicationFramework.Create;  
 begin
   FValidator := TValidator.Create;
   FSerializer := TJsonSerializer.Create;
@@ -3143,7 +3143,7 @@ begin
   FConfig := TConfigLoader.Create;
 end;
 
-destructor TApplicationFramework.Destroy;
+destructor TApplicationFramework.Destroy;  
 begin
   FConfig.Free;
   FLogger.Free;

@@ -46,7 +46,7 @@ type
   end;
 
 // Implémentation du helper
-procedure TStringListHelper.AddLines(const Lines: array of string);
+procedure TStringListHelper.AddLines(const Lines: array of string);  
 var
   Line: string;
 begin
@@ -54,7 +54,7 @@ begin
     Self.Add(Line);  // Self fait référence à l'instance TStringList
 end;
 
-function TStringListHelper.GetReversedText: string;
+function TStringListHelper.GetReversedText: string;  
 var
   I: Integer;
   TempList: TStringList;
@@ -69,7 +69,7 @@ begin
   end;
 end;
 
-function TStringListHelper.GetFirstLine: string;
+function TStringListHelper.GetFirstLine: string;  
 begin
   if Self.Count > 0 then
     Result := Self[0]
@@ -77,7 +77,7 @@ begin
     Result := '';
 end;
 
-procedure TStringListHelper.SetFirstLine(const Value: string);
+procedure TStringListHelper.SetFirstLine(const Value: string);  
 begin
   if Self.Count > 0 then
     Self[0] := Value
@@ -85,7 +85,7 @@ begin
     Self.Add(Value);
 end;
 
-function TStringListHelper.GetLastLine: string;
+function TStringListHelper.GetLastLine: string;  
 begin
   if Self.Count > 0 then
     Result := Self[Self.Count - 1]
@@ -93,7 +93,7 @@ begin
     Result := '';
 end;
 
-procedure TStringListHelper.SetLastLine(const Value: string);
+procedure TStringListHelper.SetLastLine(const Value: string);  
 begin
   if Self.Count > 0 then
     Self[Self.Count - 1] := Value
@@ -102,7 +102,7 @@ begin
 end;
 
 // Utilisation
-procedure UseStringListHelper;
+procedure UseStringListHelper;  
 var
   List: TStringList;
 begin
@@ -164,13 +164,13 @@ type
   end;
 
 // Implémentation
-procedure TPointHelper.Init(AX, AY: Integer);
+procedure TPointHelper.Init(AX, AY: Integer);  
 begin
   Self.X := AX;
   Self.Y := AY;
 end;
 
-function TPointHelper.Distance(const Other: TPoint): Double;
+function TPointHelper.Distance(const Other: TPoint): Double;  
 var
   DX, DY: Integer;
 begin
@@ -179,18 +179,18 @@ begin
   Result := Sqrt(DX * DX + DY * DY);
 end;
 
-function TPointHelper.ManhattanDistance(const Other: TPoint): Integer;
+function TPointHelper.ManhattanDistance(const Other: TPoint): Integer;  
 begin
   Result := Abs(Self.X - Other.X) + Abs(Self.Y - Other.Y);
 end;
 
-procedure TPointHelper.Offset(DX, DY: Integer);
+procedure TPointHelper.Offset(DX, DY: Integer);  
 begin
   Inc(Self.X, DX);
   Inc(Self.Y, DY);
 end;
 
-procedure TPointHelper.Rotate90;
+procedure TPointHelper.Rotate90;  
 var
   Temp: Integer;
 begin
@@ -199,33 +199,33 @@ begin
   Self.Y := Temp;
 end;
 
-procedure TPointHelper.Scale(Factor: Integer);
+procedure TPointHelper.Scale(Factor: Integer);  
 begin
   Self.X := Self.X * Factor;
   Self.Y := Self.Y * Factor;
 end;
 
-function TPointHelper.ToString: string;
+function TPointHelper.ToString: string;  
 begin
   Result := Format('(%d, %d)', [Self.X, Self.Y]);
 end;
 
-function TPointHelper.IsZero: Boolean;
+function TPointHelper.IsZero: Boolean;  
 begin
   Result := (Self.X = 0) and (Self.Y = 0);
 end;
 
-function TPointHelper.IsPositive: Boolean;
+function TPointHelper.IsPositive: Boolean;  
 begin
   Result := (Self.X >= 0) and (Self.Y >= 0);
 end;
 
-function TPointHelper.GetLength: Double;
+function TPointHelper.GetLength: Double;  
 begin
   Result := Sqrt(Self.X * Self.X + Self.Y * Self.Y);
 end;
 
-function TPointHelper.GetQuadrant: Integer;
+function TPointHelper.GetQuadrant: Integer;  
 begin
   if (X > 0) and (Y > 0) then Result := 1
   else if (X < 0) and (Y > 0) then Result := 2
@@ -235,7 +235,7 @@ begin
 end;
 
 // Utilisation
-procedure UsePointHelper;
+procedure UsePointHelper;  
 var
   P1, P2: TPoint;
 begin
@@ -292,7 +292,7 @@ type
   end;
 
 // Implémentations
-function TIntegerHelper.ToBinary: string;
+function TIntegerHelper.ToBinary: string;  
 var
   Value: Integer;
 begin
@@ -313,12 +313,12 @@ begin
   end;
 end;
 
-function TIntegerHelper.ToHex: string;
+function TIntegerHelper.ToHex: string;  
 begin
   Result := IntToHex(Self, 0);
 end;
 
-function TIntegerHelper.ToRoman: string;
+function TIntegerHelper.ToRoman: string;  
 const
   Romans: array[1..13] of string =
     ('M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I');
@@ -339,17 +339,17 @@ begin
   end;
 end;
 
-function TIntegerHelper.IsEven: Boolean;
+function TIntegerHelper.IsEven: Boolean;  
 begin
   Result := (Self mod 2) = 0;
 end;
 
-function TIntegerHelper.IsOdd: Boolean;
+function TIntegerHelper.IsOdd: Boolean;  
 begin
   Result := (Self mod 2) <> 0;
 end;
 
-function TIntegerHelper.IsPrime: Boolean;
+function TIntegerHelper.IsPrime: Boolean;  
 var
   I: Integer;
 begin
@@ -370,12 +370,12 @@ begin
   Result := True;
 end;
 
-function TIntegerHelper.IsPowerOfTwo: Boolean;
+function TIntegerHelper.IsPowerOfTwo: Boolean;  
 begin
   Result := (Self > 0) and ((Self and (Self - 1)) = 0);
 end;
 
-function TIntegerHelper.Factorial: Int64;
+function TIntegerHelper.Factorial: Int64;  
 var
   I: Integer;
 begin
@@ -384,7 +384,7 @@ begin
     Result := Result * I;
 end;
 
-function TIntegerHelper.Power(Exponent: Integer): Int64;
+function TIntegerHelper.Power(Exponent: Integer): Int64;  
 var
   I: Integer;
 begin
@@ -393,7 +393,7 @@ begin
     Result := Result * Self;
 end;
 
-function TIntegerHelper.DigitSum: Integer;
+function TIntegerHelper.DigitSum: Integer;  
 var
   Value: Integer;
 begin
@@ -406,7 +406,7 @@ begin
   end;
 end;
 
-function TIntegerHelper.ReverseDigits: Integer;
+function TIntegerHelper.ReverseDigits: Integer;  
 var
   Value: Integer;
 begin
@@ -421,7 +421,7 @@ begin
     Result := -Result;
 end;
 
-function TIntegerHelper.Clamp(Min, Max: Integer): Integer;
+function TIntegerHelper.Clamp(Min, Max: Integer): Integer;  
 begin
   if Self < Min then
     Result := Min
@@ -431,7 +431,7 @@ begin
     Result := Self;
 end;
 
-function TIntegerHelper.WrapAround(Min, Max: Integer): Integer;
+function TIntegerHelper.WrapAround(Min, Max: Integer): Integer;  
 var
   Range: Integer;
 begin
@@ -444,7 +444,7 @@ begin
 end;
 
 // Utilisation
-procedure UseIntegerHelper;
+procedure UseIntegerHelper;  
 var
   Number: Integer;
 begin
@@ -516,12 +516,12 @@ type
   end;
 
 // Implémentations principales
-function TStringHelper.IsEmpty: Boolean;
+function TStringHelper.IsEmpty: Boolean;  
 begin
   Result := Trim(Self) = '';
 end;
 
-function TStringHelper.IsNumeric: Boolean;
+function TStringHelper.IsNumeric: Boolean;  
 var
   I: Integer;
   DecimalFound: Boolean;
@@ -543,7 +543,7 @@ begin
   Result := True;
 end;
 
-function TStringHelper.IsAlpha: Boolean;
+function TStringHelper.IsAlpha: Boolean;  
 var
   I: Integer;
 begin
@@ -556,7 +556,7 @@ begin
   Result := True;
 end;
 
-function TStringHelper.IsPalindrome: Boolean;
+function TStringHelper.IsPalindrome: Boolean;  
 var
   I: Integer;
   Cleaned: string;
@@ -577,7 +577,7 @@ begin
     end;
 end;
 
-function TStringHelper.Reverse: string;
+function TStringHelper.Reverse: string;  
 var
   I: Integer;
 begin
@@ -586,7 +586,7 @@ begin
     Result := Result + Self[I];
 end;
 
-function TStringHelper.Capitalize: string;
+function TStringHelper.Capitalize: string;  
 var
   I: Integer;
   NewWord: Boolean;
@@ -608,7 +608,7 @@ begin
   end;
 end;
 
-function TStringHelper.CountOccurrences(const SubStr: string): Integer;
+function TStringHelper.CountOccurrences(const SubStr: string): Integer;  
 var
   P: Integer;
   S: string;
@@ -624,46 +624,46 @@ begin
   end;
 end;
 
-function TStringHelper.Contains(const SubStr: string): Boolean;
+function TStringHelper.Contains(const SubStr: string): Boolean;  
 begin
   Result := Pos(SubStr, Self) > 0;
 end;
 
-function TStringHelper.StartsWith(const Prefix: string): Boolean;
+function TStringHelper.StartsWith(const Prefix: string): Boolean;  
 begin
   Result := Copy(Self, 1, Length(Prefix)) = Prefix;
 end;
 
-function TStringHelper.EndsWith(const Suffix: string): Boolean;
+function TStringHelper.EndsWith(const Suffix: string): Boolean;  
 begin
   Result := Copy(Self, Length(Self) - Length(Suffix) + 1, Length(Suffix)) = Suffix;
 end;
 
-function TStringHelper.Left(Count: Integer): string;
+function TStringHelper.Left(Count: Integer): string;  
 begin
   Result := Copy(Self, 1, Count);
 end;
 
-function TStringHelper.Right(Count: Integer): string;
+function TStringHelper.Right(Count: Integer): string;  
 begin
   Result := Copy(Self, Length(Self) - Count + 1, Count);
 end;
 
-function TStringHelper.PadLeft(TotalWidth: Integer; PadChar: Char): string;
+function TStringHelper.PadLeft(TotalWidth: Integer; PadChar: Char): string;  
 begin
   Result := Self;
   while Length(Result) < TotalWidth do
     Result := PadChar + Result;
 end;
 
-function TStringHelper.PadRight(TotalWidth: Integer; PadChar: Char): string;
+function TStringHelper.PadRight(TotalWidth: Integer; PadChar: Char): string;  
 begin
   Result := Self;
   while Length(Result) < TotalWidth do
     Result := Result + PadChar;
 end;
 
-function TStringHelper.Repeat(Count: Integer): string;
+function TStringHelper.Repeat(Count: Integer): string;  
 var
   I: Integer;
 begin
@@ -673,7 +673,7 @@ begin
 end;
 
 // Utilisation
-procedure UseStringHelper;
+procedure UseStringHelper;  
 var
   S: string;
 begin
@@ -750,7 +750,7 @@ type
   end;
 
 // Implémentations
-procedure TIntArrayHelper.Init(Size: Integer; DefaultValue: Integer);
+procedure TIntArrayHelper.Init(Size: Integer; DefaultValue: Integer);  
 var
   I: Integer;
 begin
@@ -759,7 +759,7 @@ begin
     Self[I] := DefaultValue;
 end;
 
-procedure TIntArrayHelper.FromArray(const Values: array of Integer);
+procedure TIntArrayHelper.FromArray(const Values: array of Integer);  
 var
   I: Integer;
 begin
@@ -768,13 +768,13 @@ begin
     Self[I] := Values[I];
 end;
 
-procedure TIntArrayHelper.Add(Value: Integer);
+procedure TIntArrayHelper.Add(Value: Integer);  
 begin
   SetLength(Self, Length(Self) + 1);
   Self[High(Self)] := Value;
 end;
 
-procedure TIntArrayHelper.AddRange(const Values: array of Integer);
+procedure TIntArrayHelper.AddRange(const Values: array of Integer);  
 var
   I, OldLen: Integer;
 begin
@@ -784,7 +784,7 @@ begin
     Self[OldLen + I] := Values[I];
 end;
 
-procedure TIntArrayHelper.Insert(Index: Integer; Value: Integer);
+procedure TIntArrayHelper.Insert(Index: Integer; Value: Integer);  
 var
   I: Integer;
 begin
@@ -794,7 +794,7 @@ begin
   Self[Index] := Value;
 end;
 
-procedure TIntArrayHelper.Delete(Index: Integer);
+procedure TIntArrayHelper.Delete(Index: Integer);  
 var
   I: Integer;
 begin
@@ -806,7 +806,7 @@ begin
   end;
 end;
 
-procedure TIntArrayHelper.Remove(Value: Integer);
+procedure TIntArrayHelper.Remove(Value: Integer);  
 var
   Index: Integer;
 begin
@@ -815,12 +815,12 @@ begin
     Delete(Index);
 end;
 
-procedure TIntArrayHelper.Clear;
+procedure TIntArrayHelper.Clear;  
 begin
   SetLength(Self, 0);
 end;
 
-function TIntArrayHelper.IndexOf(Value: Integer): Integer;
+function TIntArrayHelper.IndexOf(Value: Integer): Integer;  
 var
   I: Integer;
 begin
@@ -833,12 +833,12 @@ begin
     end;
 end;
 
-function TIntArrayHelper.Contains(Value: Integer): Boolean;
+function TIntArrayHelper.Contains(Value: Integer): Boolean;  
 begin
   Result := IndexOf(Value) >= 0;
 end;
 
-procedure TIntArrayHelper.Sort;
+procedure TIntArrayHelper.Sort;  
 var
   I, J, Temp: Integer;
 begin
@@ -853,7 +853,7 @@ begin
       end;
 end;
 
-procedure TIntArrayHelper.Reverse;
+procedure TIntArrayHelper.Reverse;  
 var
   I, Temp: Integer;
 begin
@@ -865,7 +865,7 @@ begin
   end;
 end;
 
-procedure TIntArrayHelper.Shuffle;
+procedure TIntArrayHelper.Shuffle;  
 var
   I, J, Temp: Integer;
 begin
@@ -879,7 +879,7 @@ begin
   end;
 end;
 
-function TIntArrayHelper.Sum: Int64;
+function TIntArrayHelper.Sum: Int64;  
 var
   I: Integer;
 begin
@@ -888,7 +888,7 @@ begin
     Result := Result + Self[I];
 end;
 
-function TIntArrayHelper.Average: Double;
+function TIntArrayHelper.Average: Double;  
 begin
   if Length(Self) > 0 then
     Result := Sum / Length(Self)
@@ -896,7 +896,7 @@ begin
     Result := 0;
 end;
 
-function TIntArrayHelper.Min: Integer;
+function TIntArrayHelper.Min: Integer;  
 var
   I: Integer;
 begin
@@ -908,7 +908,7 @@ begin
       Result := Self[I];
 end;
 
-function TIntArrayHelper.Max: Integer;
+function TIntArrayHelper.Max: Integer;  
 var
   I: Integer;
 begin
@@ -920,7 +920,7 @@ begin
       Result := Self[I];
 end;
 
-function TIntArrayHelper.ToString: string;
+function TIntArrayHelper.ToString: string;  
 var
   I: Integer;
 begin
@@ -935,7 +935,7 @@ begin
 end;
 
 // Utilisation
-procedure UseIntArrayHelper;
+procedure UseIntArrayHelper;  
 var
   Arr: TIntArray;
 begin
@@ -1007,38 +1007,38 @@ type
   end;
 
 // Implémentations
-constructor TAnimal.Create(const AName: string);
+constructor TAnimal.Create(const AName: string);  
 begin
   FName := AName;
 end;
 
-function TAnimalHelper.GetDescription: string;
+function TAnimalHelper.GetDescription: string;  
 begin
   Result := Format('Animal nommé %s', [Self.Name]);
 end;
 
-procedure TAnimalHelper.Speak;
+procedure TAnimalHelper.Speak;  
 begin
   WriteLn(Self.Name, ' fait un bruit');
 end;
 
-procedure TDogHelper.Speak;
+procedure TDogHelper.Speak;  
 begin
   WriteLn(Self.Name, ' aboie');
 end;
 
-procedure TDogHelper.Bark;
+procedure TDogHelper.Bark;  
 begin
   WriteLn('Wouaf! Wouaf!');
 end;
 
-function TDogHelper.GetFullDescription: string;
+function TDogHelper.GetFullDescription: string;  
 begin
   Result := Format('Chien nommé %s, race : %s', [Self.Name, Self.Breed]);
 end;
 
 // Utilisation des helpers avec héritage
-procedure UseAnimalHelpers;
+procedure UseAnimalHelpers;  
 var
   Animal: TAnimal;
   Dog: TDog;
@@ -1097,7 +1097,7 @@ type
   end;
 
 // Implémentations
-function TListHelper<T>.FindAll(const Match: TPredicate<T>): TList<T>;
+function TListHelper<T>.FindAll(const Match: TPredicate<T>): TList<T>;  
 var
   Item: T;
 begin
@@ -1107,7 +1107,7 @@ begin
       Result.Add(Item);
 end;
 
-function TListHelper<T>.FindFirst(const Match: TPredicate<T>; out Item: T): Boolean;
+function TListHelper<T>.FindFirst(const Match: TPredicate<T>; out Item: T): Boolean;  
 var
   I: Integer;
 begin
@@ -1121,7 +1121,7 @@ begin
     end;
 end;
 
-function TListHelper<T>.FindLast(const Match: TPredicate<T>; out Item: T): Boolean;
+function TListHelper<T>.FindLast(const Match: TPredicate<T>; out Item: T): Boolean;  
 var
   I: Integer;
 begin
@@ -1135,7 +1135,7 @@ begin
     end;
 end;
 
-procedure TListHelper<T>.ForEach(const Action: TProc<T>);
+procedure TListHelper<T>.ForEach(const Action: TProc<T>);  
 var
   Item: T;
 begin
@@ -1143,7 +1143,7 @@ begin
     Action(Item);
 end;
 
-function TListHelper<T>.Map<TResult>(const Transform: TFunc<T, TResult>): TList<TResult>;
+function TListHelper<T>.Map<TResult>(const Transform: TFunc<T, TResult>): TList<TResult>;  
 var
   Item: T;
 begin
@@ -1152,12 +1152,12 @@ begin
     Result.Add(Transform(Item));
 end;
 
-function TListHelper<T>.Where(const Predicate: TPredicate<T>): TList<T>;
+function TListHelper<T>.Where(const Predicate: TPredicate<T>): TList<T>;  
 begin
   Result := FindAll(Predicate);
 end;
 
-function TListHelper<T>.ToArray: TArray<T>;
+function TListHelper<T>.ToArray: TArray<T>;  
 var
   I: Integer;
 begin
@@ -1166,7 +1166,7 @@ begin
     Result[I] := Self[I];
 end;
 
-procedure TListHelper<T>.Shuffle;
+procedure TListHelper<T>.Shuffle;  
 var
   I, J: Integer;
   Temp: T;
@@ -1181,7 +1181,7 @@ begin
   end;
 end;
 
-procedure TListHelper<T>.RemoveDuplicates;
+procedure TListHelper<T>.RemoveDuplicates;  
 var
   UniqueList: TList<T>;
   Item: T;
@@ -1199,7 +1199,7 @@ begin
   end;
 end;
 
-function TListHelper<T>.GetRandom: T;
+function TListHelper<T>.GetRandom: T;  
 begin
   if Self.Count > 0 then
     Result := Self[Random(Self.Count)]
@@ -1207,7 +1207,7 @@ begin
     Result := Default(T);
 end;
 
-function TListHelper<T>.All(const Predicate: TPredicate<T>): Boolean;
+function TListHelper<T>.All(const Predicate: TPredicate<T>): Boolean;  
 var
   Item: T;
 begin
@@ -1220,7 +1220,7 @@ begin
     end;
 end;
 
-function TListHelper<T>.Any(const Predicate: TPredicate<T>): Boolean;
+function TListHelper<T>.Any(const Predicate: TPredicate<T>): Boolean;  
 var
   Item: T;
 begin
@@ -1241,13 +1241,13 @@ type
     constructor Create(const AName: string; AAge: Integer);
   end;
 
-constructor TPerson.Create(const AName: string; AAge: Integer);
+constructor TPerson.Create(const AName: string; AAge: Integer);  
 begin
   Name := AName;
   Age := AAge;
 end;
 
-procedure UseGenericListHelper;
+procedure UseGenericListHelper;  
 var
   People: TList<TPerson>;
   Adults: TList<TPerson>;
@@ -1370,38 +1370,38 @@ type
   end;
 
 // Implémentations
-constructor TCircle.Create(ARadius: Double);
+constructor TCircle.Create(ARadius: Double);  
 begin
   FRadius := ARadius;
 end;
 
-function TCircle.GetArea: Double;
+function TCircle.GetArea: Double;  
 begin
   Result := Pi * FRadius * FRadius;
 end;
 
-function TCircle.GetPerimeter: Double;
+function TCircle.GetPerimeter: Double;  
 begin
   Result := 2 * Pi * FRadius;
 end;
 
-constructor TSquare.Create(ASide: Double);
+constructor TSquare.Create(ASide: Double);  
 begin
   FSide := ASide;
 end;
 
-function TSquare.GetArea: Double;
+function TSquare.GetArea: Double;  
 begin
   Result := FSide * FSide;
 end;
 
-function TSquare.GetPerimeter: Double;
+function TSquare.GetPerimeter: Double;  
 begin
   Result := 4 * FSide;
 end;
 
 // Utilisation
-procedure UseInterfaceHelper;
+procedure UseInterfaceHelper;  
 var
   Circle: IShape;
   Square: IShape;
@@ -1467,24 +1467,24 @@ type
   end;
 
 // Implémentations
-constructor TMatrix.Create(ARows, ACols: Integer);
+constructor TMatrix.Create(ARows, ACols: Integer);  
 begin
   FRows := ARows;
   FCols := ACols;
   SetLength(FData, FRows, FCols);
 end;
 
-function TMatrixHelper.GetElement(Row, Col: Integer): Double;
+function TMatrixHelper.GetElement(Row, Col: Integer): Double;  
 begin
   Result := FData[Row, Col];
 end;
 
-procedure TMatrixHelper.SetElement(Row, Col: Integer; Value: Double);
+procedure TMatrixHelper.SetElement(Row, Col: Integer; Value: Double);  
 begin
   FData[Row, Col] := Value;
 end;
 
-function TMatrixHelper.GetRow(Index: Integer): TArray<Double>;
+function TMatrixHelper.GetRow(Index: Integer): TArray<Double>;  
 var
   J: Integer;
 begin
@@ -1493,7 +1493,7 @@ begin
     Result[J] := FData[Index, J];
 end;
 
-procedure TMatrixHelper.SetRow(Index: Integer; const Values: TArray<Double>);
+procedure TMatrixHelper.SetRow(Index: Integer; const Values: TArray<Double>);  
 var
   J: Integer;
 begin
@@ -1501,7 +1501,7 @@ begin
     FData[Index, J] := Values[J];
 end;
 
-function TMatrixHelper.GetColumn(Index: Integer): TArray<Double>;
+function TMatrixHelper.GetColumn(Index: Integer): TArray<Double>;  
 var
   I: Integer;
 begin
@@ -1510,7 +1510,7 @@ begin
     Result[I] := FData[I, Index];
 end;
 
-procedure TMatrixHelper.SetColumn(Index: Integer; const Values: TArray<Double>);
+procedure TMatrixHelper.SetColumn(Index: Integer; const Values: TArray<Double>);  
 var
   I: Integer;
 begin
@@ -1518,7 +1518,7 @@ begin
     FData[I, Index] := Values[I];
 end;
 
-procedure TMatrixHelper.Fill(Value: Double);
+procedure TMatrixHelper.Fill(Value: Double);  
 var
   I, J: Integer;
 begin
@@ -1527,7 +1527,7 @@ begin
       FData[I, J] := Value;
 end;
 
-procedure TMatrixHelper.Identity;
+procedure TMatrixHelper.Identity;  
 var
   I, J: Integer;
 begin
@@ -1536,7 +1536,7 @@ begin
     FData[I, I] := 1;
 end;
 
-function TMatrixHelper.Transpose: TMatrix;
+function TMatrixHelper.Transpose: TMatrix;  
 var
   I, J: Integer;
 begin
@@ -1546,7 +1546,7 @@ begin
       Result[J, I] := Self[I, J];
 end;
 
-function TMatrixHelper.ToString: string;
+function TMatrixHelper.ToString: string;  
 var
   I, J: Integer;
 begin
@@ -1567,7 +1567,7 @@ begin
 end;
 
 // Utilisation
-procedure UseMatrixHelper;
+procedure UseMatrixHelper;  
 var
   M1, M2: TMatrix;
 begin
@@ -1624,7 +1624,7 @@ type
   end;
 
 // Seul TMyClassHelper2 est actif ici
-procedure TestHelperScope;
+procedure TestHelperScope;  
 var
   Obj: TMyClass;
 begin
@@ -1652,7 +1652,7 @@ type
     property ItemCount: Integer read GetItemCount;
   end;
 
-function TGoodHelper.GetItemCount: Integer;
+function TGoodHelper.GetItemCount: Integer;  
 begin
   Result := Self.Count; // Utilise les champs existants
 end;
@@ -1686,7 +1686,7 @@ type
 
 implementation
 
-procedure TMyClassHelper.PublicMethod;
+procedure TMyClassHelper.PublicMethod;  
 begin
   WriteLn('Méthode publique');
 end;
@@ -1705,7 +1705,7 @@ procedure UseHelper;
 
 implementation
 
-procedure UseHelper;
+procedure UseHelper;  
 var
   Obj: TMyClass;
 begin
@@ -1737,17 +1737,17 @@ type
     function GetDescription: string;
   end;
 
-function TPerformanceHelper.GetDouble: Integer;
+function TPerformanceHelper.GetDouble: Integer;  
 begin
   Result := Self.Value * 2; // Inline = pas d'appel de fonction
 end;
 
-procedure TPerformanceHelper.SetDouble(AValue: Integer);
+procedure TPerformanceHelper.SetDouble(AValue: Integer);  
 begin
   Self.Value := AValue div 2;
 end;
 
-function TPerformanceHelper.GetDescription: string;
+function TPerformanceHelper.GetDescription: string;  
 begin
   // Éviter les allocations répétées
   Result := Format('Value = %d', [Self.Value]);
@@ -1785,13 +1785,13 @@ type
   end;
 
 // Implémentations
-procedure TFormHelper.CenterOnScreen;
+procedure TFormHelper.CenterOnScreen;  
 begin
   Self.Left := (Screen.Width - Self.Width) div 2;
   Self.Top := (Screen.Height - Self.Height) div 2;
 end;
 
-procedure TFormHelper.FadeIn(Duration: Integer);
+procedure TFormHelper.FadeIn(Duration: Integer);  
 var
   I: Integer;
   Steps: Integer;
@@ -1807,7 +1807,7 @@ begin
   Self.AlphaBlendValue := 255;
 end;
 
-function TFormHelper.FindComponentByName<T>(const Name: string): T;
+function TFormHelper.FindComponentByName<T>(const Name: string): T;  
 var
   Comp: TComponent;
 begin
@@ -1817,7 +1817,7 @@ begin
     Result := T(Comp);
 end;
 
-procedure TFormHelper.EnableAllControls(Enable: Boolean);
+procedure TFormHelper.EnableAllControls(Enable: Boolean);  
 var
   I: Integer;
 begin
@@ -1826,12 +1826,12 @@ begin
       TControl(Self.Components[I]).Enabled := Enable;
 end;
 
-function TEditHelper.IsEmpty: Boolean;
+function TEditHelper.IsEmpty: Boolean;  
 begin
   Result := Trim(Self.Text) = '';
 end;
 
-function TEditHelper.IsValidEmail: Boolean;
+function TEditHelper.IsValidEmail: Boolean;  
 var
   AtPos, DotPos: Integer;
 begin
@@ -1841,14 +1841,14 @@ begin
             (DotPos < Length(Self.Text));
 end;
 
-procedure TEditHelper.SelectAll;
+procedure TEditHelper.SelectAll;  
 begin
   Self.SelectAll;
   Self.SetFocus;
 end;
 
 // Utilisation dans un formulaire
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   Self.CenterOnScreen;
   Self.FadeIn;
@@ -1882,18 +1882,18 @@ type
     procedure Log(Level: TLogLevel; const Msg: string);
   end;
 
-class constructor TLogHelper.Create;
+class constructor TLogHelper.Create;  
 begin
   FLogOpened := False;
 end;
 
-class destructor TLogHelper.Destroy;
+class destructor TLogHelper.Destroy;  
 begin
   if FLogOpened then
     CloseFile(FLogFile);
 end;
 
-procedure TLogHelper.Log(Level: TLogLevel; const Msg: string);
+procedure TLogHelper.Log(Level: TLogLevel; const Msg: string);  
 const
   LevelStr: array[TLogLevel] of string =
     ('DEBUG', 'INFO', 'WARNING', 'ERROR');
@@ -1916,12 +1916,12 @@ begin
   Flush(FLogFile);
 end;
 
-procedure TLogHelper.LogDebug(const Msg: string);
+procedure TLogHelper.LogDebug(const Msg: string);  
 begin
   Log(llDebug, Msg);
 end;
 
-procedure TLogHelper.LogInfo(const Msg: string);
+procedure TLogHelper.LogInfo(const Msg: string);  
 begin
   Log(llInfo, Msg);
 end;
@@ -1932,7 +1932,7 @@ type
     procedure DoWork;
   end;
 
-procedure TMyService.DoWork;
+procedure TMyService.DoWork;  
 begin
   Self.LogInfo('Début du traitement');
   try

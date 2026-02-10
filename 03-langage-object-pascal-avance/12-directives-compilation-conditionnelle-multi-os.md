@@ -36,7 +36,7 @@ Les systèmes d'exploitation ont des différences fondamentales :
 // ❌ PROBLÈME : Ce code ne fonctionne QUE sur Windows
 uses Windows;  // Unité Windows n'existe pas sur Linux !
 
-procedure LireRegistre;
+procedure LireRegistre;  
 var
   Reg: TRegistry;
 begin
@@ -48,7 +48,7 @@ end;
 
 ```pascal
 // ✅ SOLUTION : Compilation conditionnelle
-procedure SauverConfiguration(const Cle, Valeur: string);
+procedure SauverConfiguration(const Cle, Valeur: string);  
 begin
   {$IFDEF WINDOWS}
     // Code pour Windows : utilise le registre
@@ -290,14 +290,14 @@ unit OSDetection;
 
 interface
 
-function GetOSName: string;
-function IsWindows: Boolean;
-function IsLinux: Boolean;
+function GetOSName: string;  
+function IsWindows: Boolean;  
+function IsLinux: Boolean;  
 function IsUnix: Boolean;
 
 implementation
 
-function GetOSName: string;
+function GetOSName: string;  
 begin
   {$IFDEF WINDOWS}
     Result := 'Windows';
@@ -324,7 +324,7 @@ begin
   {$ENDIF}{$ENDIF}{$ENDIF}{$ENDIF}{$ENDIF}
 end;
 
-function IsWindows: Boolean;
+function IsWindows: Boolean;  
 begin
   {$IFDEF WINDOWS}
     Result := True;
@@ -333,7 +333,7 @@ begin
   {$ENDIF}
 end;
 
-function IsLinux: Boolean;
+function IsLinux: Boolean;  
 begin
   {$IFDEF LINUX}
     Result := True;
@@ -342,7 +342,7 @@ begin
   {$ENDIF}
 end;
 
-function IsUnix: Boolean;
+function IsUnix: Boolean;  
 begin
   {$IFDEF UNIX}
     Result := True;
@@ -500,12 +500,12 @@ type
     HasAVX2: Boolean;
   end;
 
-function GetCPUInfo: TCPUInfo;
+function GetCPUInfo: TCPUInfo;  
 function IsLittleEndian: Boolean;
 
 implementation
 
-function IsLittleEndian: Boolean;
+function IsLittleEndian: Boolean;  
 var
   n: Integer;
 begin
@@ -513,7 +513,7 @@ begin
   Result := PByte(@n)^ = 1;
 end;
 
-function GetCPUInfo: TCPUInfo;
+function GetCPUInfo: TCPUInfo;  
 begin
   // Bits du processeur
   {$IFDEF CPU32}
@@ -594,12 +594,12 @@ unit OptimizedFunctions;
 
 interface
 
-function FastMemCopy(Dest, Source: Pointer; Size: NativeInt): Boolean;
+function FastMemCopy(Dest, Source: Pointer; Size: NativeInt): Boolean;  
 function FastSum(const Values: array of Single): Single;
 
 implementation
 
-function FastMemCopy(Dest, Source: Pointer; Size: NativeInt): Boolean;
+function FastMemCopy(Dest, Source: Pointer; Size: NativeInt): Boolean;  
 begin
   {$IF DEFINED(CPUX86_64) AND DEFINED(HASAVX)}
     // Version optimisée AVX pour x86-64
@@ -617,7 +617,7 @@ begin
   {$ENDIF}
 end;
 
-function FastSum(const Values: array of Single): Single;
+function FastSum(const Values: array of Single): Single;  
 var
   i: Integer;
 begin
@@ -683,11 +683,11 @@ const
   // - PathSeparator  : séparateur de PATH (;  ou :)
   // - LineEnding     : fin de ligne (#13#10 ou #10)
 
-function GetConfigPath: string;
-function GetDataPath: string;
-function GetTempPath: string;
-function GetExecutablePath: string;
-function BuildPath(const Parts: array of string): string;
+function GetConfigPath: string;  
+function GetDataPath: string;  
+function GetTempPath: string;  
+function GetExecutablePath: string;  
+function BuildPath(const Parts: array of string): string;  
 function NormalizePath(const Path: string): string;
 
 implementation
@@ -695,7 +695,7 @@ implementation
 uses
   SysUtils;
 
-function GetConfigPath: string;
+function GetConfigPath: string;  
 begin
   {$IFDEF WINDOWS}
     // Windows : %APPDATA%\MonApp
@@ -723,7 +723,7 @@ begin
     ForceDirectories(Result);
 end;
 
-function GetDataPath: string;
+function GetDataPath: string;  
 begin
   {$IFDEF WINDOWS}
     // Windows : %LOCALAPPDATA%\MonApp
@@ -750,7 +750,7 @@ begin
     ForceDirectories(Result);
 end;
 
-function GetTempPath: string;
+function GetTempPath: string;  
 begin
   {$IFDEF WINDOWS}
     Result := GetEnvironmentVariable('TEMP');
@@ -769,12 +769,12 @@ begin
   Result := IncludeTrailingPathDelimiter(Result);
 end;
 
-function GetExecutablePath: string;
+function GetExecutablePath: string;  
 begin
   Result := ExtractFilePath(ParamStr(0));
 end;
 
-function BuildPath(const Parts: array of string): string;
+function BuildPath(const Parts: array of string): string;  
 var
   i: Integer;
 begin
@@ -787,7 +787,7 @@ begin
   end;
 end;
 
-function NormalizePath(const Path: string): string;
+function NormalizePath(const Path: string): string;  
 begin
   Result := Path;
 
@@ -868,9 +868,9 @@ unit CrossPlatformDialogs;
 
 interface
 
-function ShowMessage(const Msg: string): Boolean;
-function ShowError(const Msg: string): Boolean;
-function ShowQuestion(const Question: string): Boolean;
+function ShowMessage(const Msg: string): Boolean;  
+function ShowError(const Msg: string): Boolean;  
+function ShowQuestion(const Question: string): Boolean;  
 function InputBox(const Caption, Prompt, Default: string): string;
 
 implementation
@@ -1059,8 +1059,8 @@ unit SystemNotifications;
 
 interface
 
-procedure ShowNotification(const Title, Message: string);
-procedure ShowTrayIcon(const Hint: string);
+procedure ShowNotification(const Title, Message: string);  
+procedure ShowTrayIcon(const Hint: string);  
 procedure PlaySystemSound(const SoundType: string);
 
 implementation
@@ -1225,9 +1225,9 @@ type
 function ExecuteProcess(const Command: string;
                         const Args: array of string;
                         WaitForExit: Boolean = True): Integer;
-function GetProcessList: TProcessInfoArray;
-function IsProcessRunning(const ProcessName: string): Boolean;
-function KillProcess(PID: Integer): Boolean;
+function GetProcessList: TProcessInfoArray;  
+function IsProcessRunning(const ProcessName: string): Boolean;  
+function KillProcess(PID: Integer): Boolean;  
 function GetCurrentProcessID: Integer;
 
 implementation
@@ -1377,7 +1377,7 @@ begin
   {$ENDIF}
 end;
 
-function IsProcessRunning(const ProcessName: string): Boolean;
+function IsProcessRunning(const ProcessName: string): Boolean;  
 var
   ProcessList: TProcessInfoArray;
   Process: TProcessInfo;
@@ -1419,7 +1419,7 @@ begin
   {$ENDIF}
 end;
 
-function GetCurrentProcessID: Integer;
+function GetCurrentProcessID: Integer;  
 begin
   {$IFDEF WINDOWS}
     Result := GetCurrentProcessId;
@@ -1443,10 +1443,10 @@ interface
 type
   TServiceStatus = (ssStopped, ssStarting, ssRunning, ssStopping);
 
-function InstallService(const ServiceName, DisplayName, ExePath: string): Boolean;
-function UninstallService(const ServiceName: string): Boolean;
-function StartService(const ServiceName: string): Boolean;
-function StopService(const ServiceName: string): Boolean;
+function InstallService(const ServiceName, DisplayName, ExePath: string): Boolean;  
+function UninstallService(const ServiceName: string): Boolean;  
+function StartService(const ServiceName: string): Boolean;  
+function StopService(const ServiceName: string): Boolean;  
 function GetServiceStatus(const ServiceName: string): TServiceStatus;
 
 implementation
@@ -1457,7 +1457,7 @@ uses
   {$IFDEF LINUX}, Process{$ENDIF};
 
 {$IFDEF WINDOWS}
-function InstallService(const ServiceName, DisplayName, ExePath: string): Boolean;
+function InstallService(const ServiceName, DisplayName, ExePath: string): Boolean;  
 var
   SCManager, Service: SC_HANDLE;
 begin
@@ -1476,7 +1476,7 @@ begin
   end;
 end;
 
-function UninstallService(const ServiceName: string): Boolean;
+function UninstallService(const ServiceName: string): Boolean;  
 var
   SCManager, Service: SC_HANDLE;
 begin
@@ -1496,7 +1496,7 @@ end;
 {$ENDIF}
 
 {$IFDEF LINUX}
-function InstallService(const ServiceName, DisplayName, ExePath: string): Boolean;
+function InstallService(const ServiceName, DisplayName, ExePath: string): Boolean;  
 var
   ServiceFile: TStringList;
   ServicePath: string;
@@ -1533,7 +1533,7 @@ begin
   end;
 end;
 
-function UninstallService(const ServiceName: string): Boolean;
+function UninstallService(const ServiceName: string): Boolean;  
 var
   Output: string;
 begin
@@ -1698,11 +1698,11 @@ type
     {$ENDIF}
   end;
 
-function GetFilePermissions(const FileName: string): TFilePermissions;
+function GetFilePermissions(const FileName: string): TFilePermissions;  
 function SetFilePermissions(const FileName: string;
                            const Permissions: TFilePermissions): Boolean;
-function IsFileHidden(const FileName: string): Boolean;
-function SetFileHidden(const FileName: string; Hidden: Boolean): Boolean;
+function IsFileHidden(const FileName: string): Boolean;  
+function SetFileHidden(const FileName: string; Hidden: Boolean): Boolean;  
 function GetFileOwner(const FileName: string): string;
 
 implementation
@@ -1952,9 +1952,9 @@ type
     property LibraryName: string read FLibraryName;
   end;
 
-function GetSystemLibraryPath: string;
-function GetLibraryExtension: string;
-function LibraryExists(const LibraryName: string): Boolean;
+function GetSystemLibraryPath: string;  
+function GetLibraryExtension: string;  
+function LibraryExists(const LibraryName: string): Boolean;  
 function FindLibrary(const LibraryName: string): string;
 
 implementation
@@ -1964,7 +1964,7 @@ uses
   {$IFDEF WINDOWS}, Windows{$ENDIF}
   {$IFDEF UNIX}, dl, dynlibs{$ENDIF};
 
-function GetSystemLibraryPath: string;
+function GetSystemLibraryPath: string;  
 begin
   {$IFDEF WINDOWS}
     // Windows : dossier système
@@ -1989,7 +1989,7 @@ begin
   {$ENDIF}
 end;
 
-function GetLibraryExtension: string;
+function GetLibraryExtension: string;  
 begin
   {$IFDEF WINDOWS}
     Result := '.dll';
@@ -2008,7 +2008,7 @@ begin
   {$ENDIF}
 end;
 
-function LibraryExists(const LibraryName: string): Boolean;
+function LibraryExists(const LibraryName: string): Boolean;  
 var
   FullPath: string;
 begin
@@ -2027,7 +2027,7 @@ begin
   end;
 end;
 
-function FindLibrary(const LibraryName: string): string;
+function FindLibrary(const LibraryName: string): string;  
 const
   {$IFDEF WINDOWS}
   SearchPaths: array[0..3] of string = (
@@ -2099,7 +2099,7 @@ end;
 
 { TDynamicLibrary }
 
-constructor TDynamicLibrary.Create(const LibraryName: string);
+constructor TDynamicLibrary.Create(const LibraryName: string);  
 begin
   inherited Create;
   FLibraryName := LibraryName;
@@ -2107,14 +2107,14 @@ begin
   FLoaded := False;
 end;
 
-destructor TDynamicLibrary.Destroy;
+destructor TDynamicLibrary.Destroy;  
 begin
   if FLoaded then
     UnloadLibrary;
   inherited;
 end;
 
-function TDynamicLibrary.LoadLibrary: Boolean;
+function TDynamicLibrary.LoadLibrary: Boolean;  
 var
   LibPath: string;
 begin
@@ -2142,7 +2142,7 @@ begin
   Result := FLoaded;
 end;
 
-procedure TDynamicLibrary.UnloadLibrary;
+procedure TDynamicLibrary.UnloadLibrary;  
 begin
   if not FLoaded then
     Exit;
@@ -2159,7 +2159,7 @@ begin
   FLoaded := False;
 end;
 
-function TDynamicLibrary.GetProcAddress(const ProcName: string): Pointer;
+function TDynamicLibrary.GetProcAddress(const ProcName: string): Pointer;  
 begin
   Result := nil;
   if not FLoaded then
@@ -2260,10 +2260,10 @@ const
     SystemLineEndingSize = 1;  // LF (#10)
   {$ENDIF}
 
-function NormalizeLineEndings(const Text: string): string;
-function ConvertToSystemLineEndings(const Text: string): string;
-function ConvertToUnixLineEndings(const Text: string): string;
-function ConvertToWindowsLineEndings(const Text: string): string;
+function NormalizeLineEndings(const Text: string): string;  
+function ConvertToSystemLineEndings(const Text: string): string;  
+function ConvertToUnixLineEndings(const Text: string): string;  
+function ConvertToWindowsLineEndings(const Text: string): string;  
 function DetectLineEndingStyle(const Text: string): string;
 
 implementation
@@ -2271,7 +2271,7 @@ implementation
 uses
   SysUtils, StrUtils;
 
-function DetectLineEndingStyle(const Text: string): string;
+function DetectLineEndingStyle(const Text: string): string;  
 var
   HasCRLF, HasLF, HasCR: Boolean;
 begin
@@ -2289,13 +2289,13 @@ begin
     Result := 'No line endings detected';
 end;
 
-function NormalizeLineEndings(const Text: string): string;
+function NormalizeLineEndings(const Text: string): string;  
 begin
   // Convertir tout vers le format système actuel
   Result := ConvertToSystemLineEndings(Text);
 end;
 
-function ConvertToSystemLineEndings(const Text: string): string;
+function ConvertToSystemLineEndings(const Text: string): string;  
 begin
   {$IFDEF WINDOWS}
     Result := ConvertToWindowsLineEndings(Text);
@@ -2305,7 +2305,7 @@ begin
   {$ENDIF}
 end;
 
-function ConvertToUnixLineEndings(const Text: string): string;
+function ConvertToUnixLineEndings(const Text: string): string;  
 begin
   // D'abord remplacer CRLF par LF
   Result := StringReplace(Text, #13#10, #10, [rfReplaceAll]);
@@ -2313,7 +2313,7 @@ begin
   Result := StringReplace(Result, #13, #10, [rfReplaceAll]);
 end;
 
-function ConvertToWindowsLineEndings(const Text: string): string;
+function ConvertToWindowsLineEndings(const Text: string): string;  
 begin
   // D'abord convertir en Unix
   Result := ConvertToUnixLineEndings(Text);
@@ -2331,9 +2331,9 @@ unit CaseSensitivity;
 
 interface
 
-function CompareFilenames(const File1, File2: string): Integer;
-function SameFilename(const File1, File2: string): Boolean;
-function FindFileIgnoreCase(const Directory, FileName: string): string;
+function CompareFilenames(const File1, File2: string): Integer;  
+function SameFilename(const File1, File2: string): Boolean;  
+function FindFileIgnoreCase(const Directory, FileName: string): string;  
 function NormalizeFilename(const FileName: string): string;
 
 implementation
@@ -2341,7 +2341,7 @@ implementation
 uses
   SysUtils, Classes;
 
-function CompareFilenames(const File1, File2: string): Integer;
+function CompareFilenames(const File1, File2: string): Integer;  
 begin
   {$IFDEF WINDOWS}
     // Windows : insensible à la casse
@@ -2354,12 +2354,12 @@ begin
   {$ENDIF}
 end;
 
-function SameFilename(const File1, File2: string): Boolean;
+function SameFilename(const File1, File2: string): Boolean;  
 begin
   Result := CompareFilenames(File1, File2) = 0;
 end;
 
-function FindFileIgnoreCase(const Directory, FileName: string): string;
+function FindFileIgnoreCase(const Directory, FileName: string): string;  
 var
   SearchRec: TSearchRec;
   SearchPath: string;
@@ -2393,7 +2393,7 @@ begin
   {$ENDIF}
 end;
 
-function NormalizeFilename(const FileName: string): string;
+function NormalizeFilename(const FileName: string): string;  
 begin
   Result := FileName;
 
@@ -2420,10 +2420,10 @@ unit CharacterEncoding;
 
 interface
 
-function GetSystemEncoding: string;
-function ConvertToUTF8(const Text: string): string;
-function ConvertFromUTF8(const Text: string): string;
-function IsUTF8Valid(const Text: string): Boolean;
+function GetSystemEncoding: string;  
+function ConvertToUTF8(const Text: string): string;  
+function ConvertFromUTF8(const Text: string): string;  
+function IsUTF8Valid(const Text: string): Boolean;  
 function GetBOMType(const Buffer: array of Byte): string;
 
 implementation
@@ -2470,7 +2470,7 @@ begin
   {$ENDIF}
 end;
 
-function ConvertToUTF8(const Text: string): string;
+function ConvertToUTF8(const Text: string): string;  
 begin
   {$IFDEF FPC_HAS_CPSTRING}
     Result := UTF8Encode(Text);
@@ -2479,7 +2479,7 @@ begin
   {$ENDIF}
 end;
 
-function ConvertFromUTF8(const Text: string): string;
+function ConvertFromUTF8(const Text: string): string;  
 begin
   {$IFDEF FPC_HAS_CPSTRING}
     Result := UTF8Decode(Text);
@@ -2488,7 +2488,7 @@ begin
   {$ENDIF}
 end;
 
-function IsUTF8Valid(const Text: string): Boolean;
+function IsUTF8Valid(const Text: string): Boolean;  
 var
   i, Len: Integer;
   c: Byte;
@@ -2544,7 +2544,7 @@ begin
   end;
 end;
 
-function GetBOMType(const Buffer: array of Byte): string;
+function GetBOMType(const Buffer: array of Byte): string;  
 begin
   Result := 'No BOM';
 
@@ -2718,7 +2718,7 @@ uses
   {$IFDEF LINUX}Process, BaseUnix{$ENDIF}
   {$IFDEF DARWIN}MacOSAll{$ENDIF};
 
-function CreatePlatformService: IPlatformService;
+function CreatePlatformService: IPlatformService;  
 begin
   {$IFDEF WINDOWS}
     Result := TWindowsPlatformService.Create;
@@ -2740,24 +2740,24 @@ end;
 {$IFDEF WINDOWS}
 { TWindowsPlatformService }
 
-function TWindowsPlatformService.GetPlatformName: string;
+function TWindowsPlatformService.GetPlatformName: string;  
 begin
   Result := 'Windows';
 end;
 
-function TWindowsPlatformService.GetUserDataPath: string;
+function TWindowsPlatformService.GetUserDataPath: string;  
 begin
   Result := GetEnvironmentVariable('LOCALAPPDATA');
   if Result = '' then
     Result := GetEnvironmentVariable('APPDATA');
 end;
 
-function TWindowsPlatformService.GetConfigPath: string;
+function TWindowsPlatformService.GetConfigPath: string;  
 begin
   Result := GetEnvironmentVariable('APPDATA');
 end;
 
-function TWindowsPlatformService.GetTempPath: string;
+function TWindowsPlatformService.GetTempPath: string;  
 begin
   Result := GetEnvironmentVariable('TEMP');
   if Result = '' then
@@ -2777,13 +2777,13 @@ begin
   Result := WinExec(PChar(CmdLine), SW_HIDE);
 end;
 
-function TWindowsPlatformService.ShowMessage(const Msg: string): Boolean;
+function TWindowsPlatformService.ShowMessage(const Msg: string): Boolean;  
 begin
   MessageBox(0, PChar(Msg), 'Information', MB_OK);
   Result := True;
 end;
 
-function TWindowsPlatformService.GetSystemInfo: string;
+function TWindowsPlatformService.GetSystemInfo: string;  
 var
   VersionInfo: TOSVersionInfo;
 begin
@@ -2800,26 +2800,26 @@ end;
 {$IFDEF LINUX}
 { TLinuxPlatformService }
 
-function TLinuxPlatformService.GetPlatformName: string;
+function TLinuxPlatformService.GetPlatformName: string;  
 begin
   Result := 'Linux';
 end;
 
-function TLinuxPlatformService.GetUserDataPath: string;
+function TLinuxPlatformService.GetUserDataPath: string;  
 begin
   Result := GetEnvironmentVariable('XDG_DATA_HOME');
   if Result = '' then
     Result := GetEnvironmentVariable('HOME') + '/.local/share';
 end;
 
-function TLinuxPlatformService.GetConfigPath: string;
+function TLinuxPlatformService.GetConfigPath: string;  
 begin
   Result := GetEnvironmentVariable('XDG_CONFIG_HOME');
   if Result = '' then
     Result := GetEnvironmentVariable('HOME') + '/.config';
 end;
 
-function TLinuxPlatformService.GetTempPath: string;
+function TLinuxPlatformService.GetTempPath: string;  
 begin
   Result := '/tmp';
 end;
@@ -2843,7 +2843,7 @@ begin
   end;
 end;
 
-function TLinuxPlatformService.ShowMessage(const Msg: string): Boolean;
+function TLinuxPlatformService.ShowMessage(const Msg: string): Boolean;  
 var
   Output: string;
 begin
@@ -2855,7 +2855,7 @@ begin
   end;
 end;
 
-function TLinuxPlatformService.GetSystemInfo: string;
+function TLinuxPlatformService.GetSystemInfo: string;  
 var
   Output: string;
 begin
@@ -2869,22 +2869,22 @@ end;
 {$IFDEF DARWIN}
 { TMacOSPlatformService }
 
-function TMacOSPlatformService.GetPlatformName: string;
+function TMacOSPlatformService.GetPlatformName: string;  
 begin
   Result := 'macOS';
 end;
 
-function TMacOSPlatformService.GetUserDataPath: string;
+function TMacOSPlatformService.GetUserDataPath: string;  
 begin
   Result := GetEnvironmentVariable('HOME') + '/Library/Application Support';
 end;
 
-function TMacOSPlatformService.GetConfigPath: string;
+function TMacOSPlatformService.GetConfigPath: string;  
 begin
   Result := GetEnvironmentVariable('HOME') + '/Library/Preferences';
 end;
 
-function TMacOSPlatformService.GetTempPath: string;
+function TMacOSPlatformService.GetTempPath: string;  
 begin
   Result := GetEnvironmentVariable('TMPDIR');
   if Result = '' then
@@ -2902,7 +2902,7 @@ begin
     Result := -1;
 end;
 
-function TMacOSPlatformService.ShowMessage(const Msg: string): Boolean;
+function TMacOSPlatformService.ShowMessage(const Msg: string): Boolean;  
 var
   Output: string;
 begin
@@ -2910,7 +2910,7 @@ begin
     ['-e', 'display dialog "' + Msg + '"'], Output);
 end;
 
-function TMacOSPlatformService.GetSystemInfo: string;
+function TMacOSPlatformService.GetSystemInfo: string;  
 var
   Output: string;
 begin
@@ -3010,7 +3010,7 @@ type
 
 implementation
 
-constructor TAdvancedLogger.Create;
+constructor TAdvancedLogger.Create;  
 begin
   inherited;
   {$IF DECLARED(LOG_LEVEL)}
@@ -3020,7 +3020,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TAdvancedLogger.Log(Level: TLogLevel; const Msg: string);
+procedure TAdvancedLogger.Log(Level: TLogLevel; const Msg: string);  
 begin
   if Level <= FLogLevel then
   begin
@@ -3035,7 +3035,7 @@ begin
 end;
 
 {$IF DECLARED(LOG_LEVEL)}
-procedure TAdvancedLogger.LogDebug(const Msg: string);
+procedure TAdvancedLogger.LogDebug(const Msg: string);  
 begin
   {$IF LOG_LEVEL >= 3}
     Log(llDebug, Msg);
@@ -3152,11 +3152,11 @@ unit CrossPlatformDebug;
 
 interface
 
-procedure DebugOutput(const Msg: string);
-procedure DebugBreak;
-procedure AssertWithMessage(Condition: Boolean; const Msg: string);
-procedure DumpMemory(P: Pointer; Size: Integer);
-procedure TraceCall(const ProcName: string);
+procedure DebugOutput(const Msg: string);  
+procedure DebugBreak;  
+procedure AssertWithMessage(Condition: Boolean; const Msg: string);  
+procedure DumpMemory(P: Pointer; Size: Integer);  
+procedure TraceCall(const ProcName: string);  
 procedure CheckHeap;
 
 implementation
@@ -3203,7 +3203,7 @@ begin
   {$ENDIF}
 end;
 
-procedure DebugBreak;
+procedure DebugBreak;  
 begin
   {$IFDEF DEBUG}
     {$IFDEF WINDOWS}
@@ -3224,7 +3224,7 @@ begin
   {$ENDIF}
 end;
 
-procedure AssertWithMessage(Condition: Boolean; const Msg: string);
+procedure AssertWithMessage(Condition: Boolean; const Msg: string);  
 begin
   if not Condition then
   begin
@@ -3237,7 +3237,7 @@ begin
   end;
 end;
 
-procedure DumpMemory(P: Pointer; Size: Integer);
+procedure DumpMemory(P: Pointer; Size: Integer);  
 var
   i, j: Integer;
   Line: string;
@@ -3286,7 +3286,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TraceCall(const ProcName: string);
+procedure TraceCall(const ProcName: string);  
 begin
   {$IFDEF TRACE_CALLS}
     DebugOutput(StringOfChar(' ', TraceIndent * 2) + '-> ' + ProcName);
@@ -3294,7 +3294,7 @@ begin
   {$ENDIF}
 end;
 
-procedure CheckHeap;
+procedure CheckHeap;  
 begin
   {$IFDEF HEAPTRC}
     {$IFDEF WINDOWS}
@@ -3337,7 +3337,7 @@ implementation
 uses
   SysUtils, Classes;
 
-procedure TCrossPlatformTest.TestPathSeparator;
+procedure TCrossPlatformTest.TestPathSeparator;  
 var
   Path: string;
 begin
@@ -3354,7 +3354,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TCrossPlatformTest.TestFilePermissions;
+procedure TCrossPlatformTest.TestFilePermissions;  
 var
   TestFile: string;
 begin
@@ -3387,7 +3387,7 @@ begin
   end;
 end;
 
-procedure TCrossPlatformTest.TestProcessExecution;
+procedure TCrossPlatformTest.TestProcessExecution;  
 var
   Output: string;
   ExitCode: Integer;
@@ -3436,7 +3436,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TCrossPlatformTest.TestEncoding;
+procedure TCrossPlatformTest.TestEncoding;  
 var
   TestStr: string;
   UTF8Str: UTF8String;
@@ -3474,7 +3474,7 @@ const
   {$ENDIF}
 
 // ❌ MAUVAIS
-procedure LoadConfig;
+procedure LoadConfig;  
 begin
   {$IFDEF WINDOWS}
   LoadFromFile('config.ini');
@@ -3487,15 +3487,15 @@ end;
 2. **Centraliser les différences dans des unités séparées**
 ```pascal
 // ✅ BON : Unit PlatformSpecific.pas
-unit PlatformSpecific;
-interface
-function GetConfigPath: string;
+unit PlatformSpecific;  
+interface  
+function GetConfigPath: string;  
 implementation
 // Toute la logique conditionnelle ici
 end.
 
 // Utilisation simple dans le code principal
-uses PlatformSpecific;
+uses PlatformSpecific;  
 begin
   ConfigPath := GetConfigPath;  // Pas de IFDEF ici
 end;
@@ -3554,7 +3554,7 @@ FileName := GetDataPath + PathDelim + Name;
 3. **Mélanger la logique métier et le code plateforme**
 ```pascal
 // ❌ MAUVAIS
-procedure CalculateTotal;
+procedure CalculateTotal;  
 begin
   Total := Price * Quantity;
   {$IFDEF WINDOWS}
@@ -3565,7 +3565,7 @@ begin
 end;
 
 // ✅ BON
-procedure CalculateTotal;
+procedure CalculateTotal;  
 begin
   Total := Price * Quantity;
   SaveTotal(Total);  // Déléguer à une fonction spécifique
@@ -3601,7 +3601,7 @@ procedure ValidatePlatformCode;
 
 implementation
 
-procedure ValidatePlatformCode;
+procedure ValidatePlatformCode;  
 var
   TestStr: string;
   {$IFDEF WINDOWS}
@@ -3723,7 +3723,7 @@ type
 
 { TCrossPlatformApp }
 
-constructor TCrossPlatformApp.Create;
+constructor TCrossPlatformApp.Create;  
 begin
   inherited Create;
 
@@ -3740,7 +3740,7 @@ begin
   LoadConfiguration;
 end;
 
-destructor TCrossPlatformApp.Destroy;
+destructor TCrossPlatformApp.Destroy;  
 begin
   SaveConfiguration;
 
@@ -3752,7 +3752,7 @@ begin
   inherited;
 end;
 
-procedure TCrossPlatformApp.InitializePaths;
+procedure TCrossPlatformApp.InitializePaths;  
 begin
   // Obtenir les chemins selon l'OS
   {$IFDEF WINDOWS}
@@ -3793,7 +3793,7 @@ begin
     ForceDirectories(FDataPath);
 end;
 
-procedure TCrossPlatformApp.InitializeLogging;
+procedure TCrossPlatformApp.InitializeLogging;  
 var
   LogFileName: string;
 begin
@@ -3820,7 +3820,7 @@ begin
   end;
 end;
 
-procedure TCrossPlatformApp.LoadConfiguration;
+procedure TCrossPlatformApp.LoadConfiguration;  
 var
   ConfigFile: string;
   Ini: TStringList;
@@ -3855,7 +3855,7 @@ begin
   end;
 end;
 
-procedure TCrossPlatformApp.SaveConfiguration;
+procedure TCrossPlatformApp.SaveConfiguration;  
 var
   ConfigFile: string;
   Ini: TStringList;
@@ -3886,7 +3886,7 @@ begin
   end;
 end;
 
-procedure TCrossPlatformApp.ShowSystemInfo;
+procedure TCrossPlatformApp.ShowSystemInfo;  
 begin
   WriteLn('=== System Information ===');
   WriteLn('Platform: ', FPlatform.GetPlatformName);
@@ -3920,7 +3920,7 @@ begin
   WriteLn;
 end;
 
-procedure TCrossPlatformApp.RunPlatformTests;
+procedure TCrossPlatformApp.RunPlatformTests;  
 var
   TestFile: string;
   ExitCode: Integer;
@@ -3972,7 +3972,7 @@ begin
   WriteLn;
 end;
 
-procedure TCrossPlatformApp.Run;
+procedure TCrossPlatformApp.Run;  
 begin
   WriteLn('========================================');
   WriteLn('   ', APP_NAME, ' v', APP_VERSION);

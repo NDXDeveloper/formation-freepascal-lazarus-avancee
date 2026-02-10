@@ -64,7 +64,7 @@ type
     property Age: Integer read FAge write FAge;
   end;
 
-constructor TPerson.Create(const AName: String; AAge: Integer);
+constructor TPerson.Create(const AName: String; AAge: Integer);  
 begin
   inherited Create;
   FName := AName;
@@ -72,7 +72,7 @@ begin
   WriteLn('Personne créée : ', FName);
 end;
 
-destructor TPerson.Destroy;
+destructor TPerson.Destroy;  
 begin
   WriteLn('Personne détruite : ', FName);
   inherited Destroy;
@@ -98,7 +98,7 @@ end;
 C'est LE pattern fondamental pour une gestion sûre de la mémoire :
 
 ```pascal
-procedure SafeMemoryPattern;
+procedure SafeMemoryPattern;  
 var
   Obj1, Obj2, Obj3: TObject;
 begin
@@ -122,7 +122,7 @@ begin
 end;
 
 // Version plus robuste avec vérifications
-procedure RobustMemoryPattern;
+procedure RobustMemoryPattern;  
 var
   List: TStringList;
   Stream: TFileStream;
@@ -167,26 +167,26 @@ type
     property OwnsObjects: Boolean read FOwnsObjects;
   end;
 
-constructor TPersonList.Create(AOwnsObjects: Boolean);
+constructor TPersonList.Create(AOwnsObjects: Boolean);  
 begin
   inherited Create;
   FItems := TList.Create;
   FOwnsObjects := AOwnsObjects;
 end;
 
-destructor TPersonList.Destroy;
+destructor TPersonList.Destroy;  
 begin
   Clear;
   FItems.Free;
   inherited;
 end;
 
-procedure TPersonList.Add(Person: TPerson);
+procedure TPersonList.Add(Person: TPerson);  
 begin
   FItems.Add(Person);
 end;
 
-procedure TPersonList.Clear;
+procedure TPersonList.Clear;  
 var
   I: Integer;
 begin
@@ -260,7 +260,7 @@ type
     destructor Destroy; override;
   end;
 
-constructor TPersonRef.Create(const AName: String; AAge: Integer);
+constructor TPersonRef.Create(const AName: String; AAge: Integer);  
 begin
   inherited Create;
   FName := AName;
@@ -268,34 +268,34 @@ begin
   WriteLn('TPersonRef créé : ', FName, ' (RefCount=1)');
 end;
 
-destructor TPersonRef.Destroy;
+destructor TPersonRef.Destroy;  
 begin
   WriteLn('TPersonRef détruit : ', FName);
   inherited;
 end;
 
-function TPersonRef.GetName: String;
+function TPersonRef.GetName: String;  
 begin
   Result := FName;
 end;
 
-procedure TPersonRef.SetName(const Value: String);
+procedure TPersonRef.SetName(const Value: String);  
 begin
   FName := Value;
 end;
 
-function TPersonRef.GetAge: Integer;
+function TPersonRef.GetAge: Integer;  
 begin
   Result := FAge;
 end;
 
-procedure TPersonRef.SetAge(Value: Integer);
+procedure TPersonRef.SetAge(Value: Integer);  
 begin
   FAge := Value;
 end;
 
 // Utilisation : pas de Free nécessaire !
-procedure UseInterfaces;
+procedure UseInterfaces;  
 var
   Person1, Person2: IPerson;
 begin
@@ -328,13 +328,13 @@ type
     destructor Destroy; override;
   end;
 
-function TRefCountedObject._AddRef: Integer;
+function TRefCountedObject._AddRef: Integer;  
 begin
   Result := inherited _AddRef;
   WriteLn('AddRef appelé, nouveau compte : ', Result);
 end;
 
-function TRefCountedObject._Release: Integer;
+function TRefCountedObject._Release: Integer;  
 begin
   Result := inherited _Release;
   WriteLn('Release appelé, nouveau compte : ', Result);
@@ -342,20 +342,20 @@ begin
     WriteLn('L''objet va être détruit');
 end;
 
-constructor TRefCountedObject.Create;
+constructor TRefCountedObject.Create;  
 begin
   inherited Create;
   WriteLn('Objet créé, RefCount initial : 1');
 end;
 
-destructor TRefCountedObject.Destroy;
+destructor TRefCountedObject.Destroy;  
 begin
   WriteLn('Destructeur appelé');
   inherited;
 end;
 
 // Démonstration du mécanisme
-procedure DemoRefCounting;
+procedure DemoRefCounting;  
 var
   Intf1, Intf2: IInterface;
 begin
@@ -401,13 +401,13 @@ type
     property Value: T read Get;
   end;
 
-class operator TSmartPtr<T>.Initialize(var SP: TSmartPtr<T>);
+class operator TSmartPtr<T>.Initialize(var SP: TSmartPtr<T>);  
 begin
   SP.FObject := nil;
   SP.FRefCount := nil;
 end;
 
-class operator TSmartPtr<T>.Finalize(var SP: TSmartPtr<T>);
+class operator TSmartPtr<T>.Finalize(var SP: TSmartPtr<T>);  
 begin
   SP.Release;
 end;
@@ -424,13 +424,13 @@ begin
   end;
 end;
 
-procedure TSmartPtr<T>.AddRef;
+procedure TSmartPtr<T>.AddRef;  
 begin
   if Assigned(FRefCount) then
     Inc(FRefCount^);
 end;
 
-procedure TSmartPtr<T>.Release;
+procedure TSmartPtr<T>.Release;  
 begin
   if Assigned(FRefCount) then
   begin
@@ -445,7 +445,7 @@ begin
   end;
 end;
 
-procedure TSmartPtr<T>.Create(AObject: T);
+procedure TSmartPtr<T>.Create(AObject: T);  
 begin
   Release;
   if Assigned(AObject) then
@@ -456,17 +456,17 @@ begin
   end;
 end;
 
-function TSmartPtr<T>.Get: T;
+function TSmartPtr<T>.Get: T;  
 begin
   Result := FObject;
 end;
 
-function TSmartPtr<T>.IsAssigned: Boolean;
+function TSmartPtr<T>.IsAssigned: Boolean;  
 begin
   Result := Assigned(FObject);
 end;
 
-procedure TSmartPtr<T>.Reset;
+procedure TSmartPtr<T>.Reset;  
 begin
   Release;
   FObject := nil;
@@ -474,7 +474,7 @@ begin
 end;
 
 // Utilisation du smart pointer
-procedure UseSmartPointer;
+procedure UseSmartPointer;  
 var
   SmartPerson1, SmartPerson2: specialize TSmartPtr<TPerson>;
 begin
@@ -514,26 +514,26 @@ type
     class function Instance: TMemoryManager;
   end;
 
-constructor TMemoryManager.Create;
+constructor TMemoryManager.Create;  
 begin
   inherited;
   FAllocations := TStringList.Create;
   FAllocations.OwnsObjects := False;
 end;
 
-destructor TMemoryManager.Destroy;
+destructor TMemoryManager.Destroy;  
 begin
   ReportLeaks;
   FAllocations.Free;
   inherited;
 end;
 
-procedure TMemoryManager.RegisterAllocation(Obj: TObject; const Info: String);
+procedure TMemoryManager.RegisterAllocation(Obj: TObject; const Info: String);  
 begin
   FAllocations.AddObject(Info, Obj);
 end;
 
-procedure TMemoryManager.UnregisterAllocation(Obj: TObject);
+procedure TMemoryManager.UnregisterAllocation(Obj: TObject);  
 var
   Index: Integer;
 begin
@@ -542,7 +542,7 @@ begin
     FAllocations.Delete(Index);
 end;
 
-procedure TMemoryManager.ReportLeaks;
+procedure TMemoryManager.ReportLeaks;  
 var
   I: Integer;
 begin
@@ -557,7 +557,7 @@ begin
     WriteLn('Aucune fuite mémoire détectée');
 end;
 
-class function TMemoryManager.Instance: TMemoryManager;
+class function TMemoryManager.Instance: TMemoryManager;  
 begin
   if not Assigned(FInstance) then
     FInstance := TMemoryManager.Create;
@@ -572,14 +572,14 @@ type
     destructor Destroy; override;
   end;
 
-constructor TTrackedObject.Create;
+constructor TTrackedObject.Create;  
 begin
   inherited;
   TMemoryManager.Instance.RegisterAllocation(Self,
     Format('%s créé à %s', [ClassName, DateTimeToStr(Now)]));
 end;
 
-destructor TTrackedObject.Destroy;
+destructor TTrackedObject.Destroy;  
 begin
   TMemoryManager.Instance.UnregisterAllocation(Self);
   inherited;
@@ -604,18 +604,18 @@ type
     class operator Finalize(var AF: TAutoFile);
   end;
 
-class operator TAutoFile.Initialize(var AF: TAutoFile);
+class operator TAutoFile.Initialize(var AF: TAutoFile);  
 begin
   AF.FHandle := INVALID_HANDLE_VALUE;
   AF.FFileName := '';
 end;
 
-class operator TAutoFile.Finalize(var AF: TAutoFile);
+class operator TAutoFile.Finalize(var AF: TAutoFile);  
 begin
   AF.Close;
 end;
 
-procedure TAutoFile.Open(const FileName: String);
+procedure TAutoFile.Open(const FileName: String);  
 begin
   Close; // Fermer si déjà ouvert
   FFileName := FileName;
@@ -624,7 +624,7 @@ begin
     raise Exception.Create('Impossible d''ouvrir le fichier');
 end;
 
-procedure TAutoFile.Close;
+procedure TAutoFile.Close;  
 begin
   if FHandle <> INVALID_HANDLE_VALUE then
   begin
@@ -634,7 +634,7 @@ begin
   end;
 end;
 
-function TAutoFile.Read(var Buffer; Count: Integer): Integer;
+function TAutoFile.Read(var Buffer; Count: Integer): Integer;  
 begin
   if FHandle = INVALID_HANDLE_VALUE then
     raise Exception.Create('Fichier non ouvert');
@@ -642,7 +642,7 @@ begin
 end;
 
 // Utilisation : le fichier est automatiquement fermé
-procedure UseAutoFile;
+procedure UseAutoFile;  
 var
   AF: TAutoFile;
   Buffer: array[0..255] of Byte;
@@ -658,7 +658,7 @@ end;
 ### Chaînes avec comptage de références
 
 ```pascal
-procedure StringMemoryManagement;
+procedure StringMemoryManagement;  
 var
   S1, S2, S3: String;
   P: PChar;
@@ -687,7 +687,7 @@ begin
 end;
 
 // Optimisation des chaînes
-procedure StringOptimization;
+procedure StringOptimization;  
 var
   S: String;
   SB: TStringBuilder;
@@ -716,7 +716,7 @@ end;
 ### Tableaux dynamiques
 
 ```pascal
-procedure DynamicArrayManagement;
+procedure DynamicArrayManagement;  
 var
   IntArray: array of Integer;
   ObjectArray: array of TObject;
@@ -746,7 +746,7 @@ begin
 end;
 
 // Copie de tableaux
-procedure ArrayCopying;
+procedure ArrayCopying;  
 var
   Source, Dest: array of Integer;
   I: Integer;
@@ -789,7 +789,7 @@ type
     procedure Clear;
   end;
 
-constructor TObjectPool<T>.Create(AMaxSize: Integer);
+constructor TObjectPool<T>.Create(AMaxSize: Integer);  
 begin
   inherited Create;
   FAvailable := TStack.Create;
@@ -797,7 +797,7 @@ begin
   FMaxSize := AMaxSize;
 end;
 
-destructor TObjectPool<T>.Destroy;
+destructor TObjectPool<T>.Destroy;  
 begin
   Clear;
   FAvailable.Free;
@@ -805,7 +805,7 @@ begin
   inherited;
 end;
 
-function TObjectPool<T>.Acquire: T;
+function TObjectPool<T>.Acquire: T;  
 begin
   if FAvailable.Count > 0 then
     Result := T(FAvailable.Pop)
@@ -816,7 +816,7 @@ begin
   end;
 end;
 
-procedure TObjectPool<T>.Release(Obj: T);
+procedure TObjectPool<T>.Release(Obj: T);  
 begin
   if Assigned(Obj) and (FAvailable.Count < FMaxSize) then
   begin
@@ -827,7 +827,7 @@ begin
     Obj.Free;
 end;
 
-procedure TObjectPool<T>.Clear;
+procedure TObjectPool<T>.Clear;  
 var
   I: Integer;
 begin
@@ -845,18 +845,18 @@ type
     procedure Reset;
   end;
 
-constructor TExpensiveObject.Create;
+constructor TExpensiveObject.Create;  
 begin
   inherited;
   WriteLn('TExpensiveObject créé (coûteux!)');
 end;
 
-procedure TExpensiveObject.Reset;
+procedure TExpensiveObject.Reset;  
 begin
   FillChar(Data, SizeOf(Data), 0);
 end;
 
-procedure UseObjectPool;
+procedure UseObjectPool;  
 var
   Pool: specialize TObjectPool<TExpensiveObject>;
   Obj1, Obj2: TExpensiveObject;
@@ -902,14 +902,14 @@ type
     function GetTarget: TObject;
   end;
 
-constructor TWeakReference.Create(ATarget: TObject);
+constructor TWeakReference.Create(ATarget: TObject);  
 begin
   inherited Create;
   FTarget := ATarget;
   FTargetClass := ATarget.ClassType;
 end;
 
-function TWeakReference.IsAlive: Boolean;
+function TWeakReference.IsAlive: Boolean;  
 begin
   // Vérification basique - en production, utilisez une méthode plus robuste
   Result := Assigned(FTarget);
@@ -924,7 +924,7 @@ begin
   end;
 end;
 
-function TWeakReference.GetTarget: TObject;
+function TWeakReference.GetTarget: TObject;  
 begin
   if IsAlive then
     Result := TObject(FTarget)
@@ -953,13 +953,13 @@ type
     procedure AddChild(Child: TChild);
   end;
 
-constructor TChild.Create(AParent: TParent);
+constructor TChild.Create(AParent: TParent);  
 begin
   inherited Create;
   FParentRef := TWeakReference.Create(AParent);
 end;
 
-function TChild.GetParent: TParent;
+function TChild.GetParent: TParent;  
 var
   Obj: TObject;
 begin
@@ -975,13 +975,13 @@ begin
     Result := nil;
 end;
 
-constructor TParent.Create;
+constructor TParent.Create;  
 begin
   inherited;
   FChildren := TList.Create;
 end;
 
-destructor TParent.Destroy;
+destructor TParent.Destroy;  
 var
   I: Integer;
 begin
@@ -991,7 +991,7 @@ begin
   inherited;
 end;
 
-procedure TParent.AddChild(Child: TChild);
+procedure TParent.AddChild(Child: TChild);  
 begin
   FChildren.Add(Child);
 end;
@@ -1003,7 +1003,7 @@ end;
 
 ```pascal
 // 1. TOUJOURS utiliser try-finally
-procedure Rule1_TryFinally;
+procedure Rule1_TryFinally;  
 var
   Obj: TObject;
 begin
@@ -1016,7 +1016,7 @@ begin
 end;
 
 // 2. Initialiser les pointeurs à nil
-procedure Rule2_InitializeNil;
+procedure Rule2_InitializeNil;  
 var
   Obj1, Obj2: TObject;
 begin
@@ -1044,14 +1044,14 @@ type
     destructor Destroy; override;
   end;
 
-constructor TOwnershipDemo.Create(AOwned: TObject; AReferenced: TObject);
+constructor TOwnershipDemo.Create(AOwned: TObject; AReferenced: TObject);  
 begin
   inherited Create;
   FOwnedObject := AOwned; // Nous possédons cet objet
   FReferencedObject := AReferenced; // Nous ne faisons que référencer
 end;
 
-destructor TOwnershipDemo.Destroy;
+destructor TOwnershipDemo.Destroy;  
 begin
   FOwnedObject.Free; // Libérer ce qu'on possède
   // Ne PAS libérer FReferencedObject !
@@ -1059,7 +1059,7 @@ begin
 end;
 
 // 4. FreeAndNil pour éviter les pointeurs pendants
-procedure Rule4_FreeAndNil;
+procedure Rule4_FreeAndNil;  
 var
   Obj: TObject;
 begin
@@ -1087,7 +1087,7 @@ type
     procedure AddChild(Child: TNode);
   end;
 
-constructor TNode.Create(AParent: TNode);
+constructor TNode.Create(AParent: TNode);  
 begin
   inherited Create;
   FParent := AParent;
@@ -1096,7 +1096,7 @@ begin
     FParent.AddChild(Self);
 end;
 
-destructor TNode.Destroy;
+destructor TNode.Destroy;  
 var
   I: Integer;
 begin
@@ -1107,13 +1107,13 @@ begin
   inherited;
 end;
 
-procedure TNode.AddChild(Child: TNode);
+procedure TNode.AddChild(Child: TNode);  
 begin
   FChildren.Add(Child);
 end;
 
 // 6. Gérer correctement les exceptions
-procedure Rule6_ExceptionHandling;
+procedure Rule6_ExceptionHandling;  
 var
   Obj1, Obj2, Obj3: TObject;
 begin
@@ -1155,19 +1155,19 @@ type
     property Obj: TObject read FObject;
   end;
 
-constructor TGuard.Create(AObject: TObject);
+constructor TGuard.Create(AObject: TObject);  
 begin
   inherited Create;
   FObject := AObject;
 end;
 
-destructor TGuard.Destroy;
+destructor TGuard.Destroy;  
 begin
   FObject.Free;
   inherited;
 end;
 
-procedure UseGuard;
+procedure UseGuard;  
 var
   Guard: TGuard;
 begin
@@ -1195,26 +1195,26 @@ type
     procedure ReleaseAll;
   end;
 
-constructor TObjectFactory.Create;
+constructor TObjectFactory.Create;  
 begin
   inherited;
   FCreatedObjects := TList.Create;
 end;
 
-destructor TObjectFactory.Destroy;
+destructor TObjectFactory.Destroy;  
 begin
   ReleaseAll;
   FCreatedObjects.Free;
   inherited;
 end;
 
-function TObjectFactory.CreateObject<T>: T;
+function TObjectFactory.CreateObject<T>: T;  
 begin
   Result := T.Create;
   FCreatedObjects.Add(Result);
 end;
 
-procedure TObjectFactory.ReleaseObject(Obj: TObject);
+procedure TObjectFactory.ReleaseObject(Obj: TObject);  
 var
   Index: Integer;
 begin
@@ -1226,7 +1226,7 @@ begin
   end;
 end;
 
-procedure TObjectFactory.ReleaseAll;
+procedure TObjectFactory.ReleaseAll;  
 var
   I: Integer;
 begin
@@ -1287,7 +1287,7 @@ type
     function GetLeaks: TStringList;
   end;
 
-constructor TMemoryTracker.Create;
+constructor TMemoryTracker.Create;  
 begin
   inherited;
   FAllocations := TDictionary<Pointer, TAllocationInfo>.Create;
@@ -1295,7 +1295,7 @@ begin
   FPeakMemory := 0;
 end;
 
-destructor TMemoryTracker.Destroy;
+destructor TMemoryTracker.Destroy;  
 var
   Leaks: TStringList;
 begin
@@ -1314,7 +1314,7 @@ begin
   inherited;
 end;
 
-procedure TMemoryTracker.TrackAllocation(P: Pointer; Size: Integer);
+procedure TMemoryTracker.TrackAllocation(P: Pointer; Size: Integer);  
 var
   Info: TAllocationInfo;
 begin
@@ -1329,7 +1329,7 @@ begin
     FPeakMemory := FTotalAllocated;
 end;
 
-procedure TMemoryTracker.TrackDeallocation(P: Pointer);
+procedure TMemoryTracker.TrackDeallocation(P: Pointer);  
 var
   Info: TAllocationInfo;
 begin
@@ -1340,7 +1340,7 @@ begin
   end;
 end;
 
-procedure TMemoryTracker.PrintStatistics;
+procedure TMemoryTracker.PrintStatistics;  
 begin
   WriteLn('=== Statistiques Mémoire ===');
   WriteLn('Mémoire actuellement allouée : ', FTotalAllocated, ' octets');
@@ -1348,7 +1348,7 @@ begin
   WriteLn('Nombre d''allocations actives : ', FAllocations.Count);
 end;
 
-function TMemoryTracker.GetLeaks: TStringList;
+function TMemoryTracker.GetLeaks: TStringList;  
 var
   Pair: TPair<Pointer, TAllocationInfo>;
 begin
@@ -1365,7 +1365,7 @@ end;
 
 ```pascal
 // Test de stress pour détecter les fuites
-procedure MemoryStressTest;
+procedure MemoryStressTest;  
 var
   I: Integer;
   Objects: array of TObject;
@@ -1406,7 +1406,7 @@ begin
 end;
 
 // Fonction pour surveiller l'utilisation mémoire
-function GetMemoryInfo: String;
+function GetMemoryInfo: String;  
 var
   Status: THeapStatus;
 begin
@@ -1455,7 +1455,7 @@ type
     procedure Append(const S: String);
   end;
 
-procedure TCowString.MakeUnique;
+procedure TCowString.MakeUnique;  
 begin
   if not FIsUnique then
   begin
@@ -1465,7 +1465,7 @@ begin
   end;
 end;
 
-constructor TCowString.Create(const S: String);
+constructor TCowString.Create(const S: String);  
 begin
   inherited Create;
   FData := S;
@@ -1473,18 +1473,18 @@ begin
   FIsUnique := True;
 end;
 
-function TCowString.GetData: String;
+function TCowString.GetData: String;  
 begin
   Result := FData; // Lecture sans copie
 end;
 
-procedure TCowString.SetData(const S: String);
+procedure TCowString.SetData(const S: String);  
 begin
   MakeUnique; // Copie seulement si nécessaire
   FData := S;
 end;
 
-procedure TCowString.Append(const S: String);
+procedure TCowString.Append(const S: String);  
 begin
   MakeUnique; // Copie avant modification
   FData := FData + S;
@@ -1502,7 +1502,7 @@ type
     property Instance: T read GetInstance;
   end;
 
-function TLazyLoader<T>.GetInstance: T;
+function TLazyLoader<T>.GetInstance: T;  
 begin
   if not FLoaded then
   begin
@@ -1513,7 +1513,7 @@ begin
   Result := FInstance;
 end;
 
-destructor TLazyLoader<T>.Destroy;
+destructor TLazyLoader<T>.Destroy;  
 begin
   if FLoaded then
     FInstance.Free;
@@ -1536,13 +1536,13 @@ type
     property Bits[Index: Integer]: Boolean read GetBit write SetBit; default;
   end;
 
-constructor TBitFlags.Create(BitCount: Integer);
+constructor TBitFlags.Create(BitCount: Integer);  
 begin
   inherited Create;
   SetLength(FData, (BitCount + 7) div 8);
 end;
 
-function TBitFlags.GetBit(Index: Integer): Boolean;
+function TBitFlags.GetBit(Index: Integer): Boolean;  
 var
   ByteIndex, BitIndex: Integer;
 begin
@@ -1551,7 +1551,7 @@ begin
   Result := (FData[ByteIndex] and (1 shl BitIndex)) <> 0;
 end;
 
-procedure TBitFlags.SetBit(Index: Integer; Value: Boolean);
+procedure TBitFlags.SetBit(Index: Integer; Value: Boolean);  
 var
   ByteIndex, BitIndex: Integer;
 begin
@@ -1565,7 +1565,7 @@ begin
 end;
 
 // Comparaison d'utilisation mémoire
-procedure CompareMemoryUsage;
+procedure CompareMemoryUsage;  
 var
   BoolArray: array[0..999] of Boolean; // 1000 octets
   BitFlags: TBitFlags;                 // 125 octets seulement !
@@ -1606,7 +1606,7 @@ type
     procedure Release(Item: T);
   end;
 
-constructor TThreadSafePool<T>.Create(AMaxSize: Integer);
+constructor TThreadSafePool<T>.Create(AMaxSize: Integer);  
 begin
   inherited Create;
   FPool := TStack.Create;
@@ -1615,7 +1615,7 @@ begin
   FSemaphore := TSemaphore.Create(nil, AMaxSize, AMaxSize, '');
 end;
 
-destructor TThreadSafePool<T>.Destroy;
+destructor TThreadSafePool<T>.Destroy;  
 var
   Item: T;
 begin
@@ -1636,7 +1636,7 @@ begin
   inherited;
 end;
 
-function TThreadSafePool<T>.Acquire: T;
+function TThreadSafePool<T>.Acquire: T;  
 begin
   FSemaphore.WaitFor(INFINITE);
 
@@ -1651,7 +1651,7 @@ begin
   end;
 end;
 
-procedure TThreadSafePool<T>.Release(Item: T);
+procedure TThreadSafePool<T>.Release(Item: T);  
 begin
   if not Assigned(Item) then
     Exit;
@@ -1675,7 +1675,7 @@ threadvar
   ThreadLocalBuffer: array[0..1023] of Byte;
   ThreadLocalOffset: Integer;
 
-function ThreadLocalAlloc(Size: Integer): Pointer;
+function ThreadLocalAlloc(Size: Integer): Pointer;  
 begin
   if ThreadLocalOffset + Size > Length(ThreadLocalBuffer) then
     ThreadLocalOffset := 0; // Réinitialiser (simple exemple)
@@ -1684,7 +1684,7 @@ begin
   Inc(ThreadLocalOffset, Size);
 end;
 
-procedure ThreadLocalReset;
+procedure ThreadLocalReset;  
 begin
   ThreadLocalOffset := 0;
 end;
@@ -1714,20 +1714,20 @@ type
     function GetTotal: Int64;
   end;
 
-constructor TPerThreadCounter.Create(AThreadCount: Integer);
+constructor TPerThreadCounter.Create(AThreadCount: Integer);  
 begin
   inherited Create;
   FThreadCount := AThreadCount;
   SetLength(FCounters, AThreadCount);
 end;
 
-function TPerThreadCounter.GetThreadIndex: Integer;
+function TPerThreadCounter.GetThreadIndex: Integer;  
 begin
   // Simplification : utiliser l'ID du thread modulo le nombre de threads
   Result := GetCurrentThreadId mod FThreadCount;
 end;
 
-procedure TPerThreadCounter.Increment;
+procedure TPerThreadCounter.Increment;  
 var
   Index: Integer;
 begin
@@ -1735,7 +1735,7 @@ begin
   InterlockedIncrement(FCounters[Index].Value);
 end;
 
-function TPerThreadCounter.GetTotal: Int64;
+function TPerThreadCounter.GetTotal: Int64;  
 var
   I: Integer;
 begin
@@ -1775,7 +1775,7 @@ type
     procedure Clear;
   end;
 
-constructor TSmartCache<TKey, TValue>.Create(AMaxSize: Integer; ATTL: Integer);
+constructor TSmartCache<TKey, TValue>.Create(AMaxSize: Integer; ATTL: Integer);  
 begin
   inherited Create;
   FItems := TDictionary<TKey, TCacheItem<TValue>>.Create;
@@ -1784,7 +1784,7 @@ begin
   FLock := TMultiReadExclusiveWriteSynchronizer.Create;
 end;
 
-destructor TSmartCache<TKey, TValue>.Destroy;
+destructor TSmartCache<TKey, TValue>.Destroy;  
 begin
   Clear;
   FItems.Free;
@@ -1792,7 +1792,7 @@ begin
   inherited;
 end;
 
-procedure TSmartCache<TKey, TValue>.Put(const Key: TKey; const Value: TValue);
+procedure TSmartCache<TKey, TValue>.Put(const Key: TKey; const Value: TValue);  
 var
   Item: TCacheItem<TValue>;
 begin
@@ -1849,7 +1849,7 @@ begin
   end;
 end;
 
-procedure TSmartCache<TKey, TValue>.EvictLRU;
+procedure TSmartCache<TKey, TValue>.EvictLRU;  
 var
   MinHits: Integer;
   KeyToRemove: TKey;
@@ -1873,7 +1873,7 @@ begin
     FItems.Remove(KeyToRemove);
 end;
 
-procedure TSmartCache<TKey, TValue>.CleanExpired;
+procedure TSmartCache<TKey, TValue>.CleanExpired;  
 var
   KeysToRemove: TList<TKey>;
   Pair: TPair<TKey, TCacheItem<TValue>>;
@@ -1894,7 +1894,7 @@ begin
   end;
 end;
 
-procedure TSmartCache<TKey, TValue>.Clear;
+procedure TSmartCache<TKey, TValue>.Clear;  
 begin
   FLock.BeginWrite;
   try
@@ -1938,7 +1938,7 @@ type
     procedure PrintStatistics;
   end;
 
-constructor TResourceManager.Create(AMaxResources: Integer);
+constructor TResourceManager.Create(AMaxResources: Integer);  
 begin
   inherited Create;
   FResources := TDictionary<String, TResourceInfo>.Create;
@@ -1946,7 +1946,7 @@ begin
   FMaxResources := AMaxResources;
 end;
 
-destructor TResourceManager.Destroy;
+destructor TResourceManager.Destroy;  
 var
   Info: TResourceInfo;
 begin
@@ -2001,7 +2001,7 @@ begin
   end;
 end;
 
-procedure TResourceManager.ReleaseResource(const Name: String);
+procedure TResourceManager.ReleaseResource(const Name: String);  
 var
   Info: TResourceInfo;
 begin
@@ -2027,7 +2027,7 @@ begin
   end;
 end;
 
-procedure TResourceManager.CleanupUnused;
+procedure TResourceManager.CleanupUnused;  
 var
   Pair: TPair<String, TResourceInfo>;
   ToRemove: TStringList;
@@ -2055,7 +2055,7 @@ begin
   end;
 end;
 
-procedure TResourceManager.PrintStatistics;
+procedure TResourceManager.PrintStatistics;  
 var
   Pair: TPair<String, TResourceInfo>;
   TotalRefs: Integer;
@@ -2080,7 +2080,7 @@ begin
 end;
 
 // Utilisation
-procedure UseResourceManager;
+procedure UseResourceManager;  
 var
   Manager: TResourceManager;
   Res1, Res2: TObject;
@@ -2202,7 +2202,7 @@ Avant de valider votre code, vérifiez :
 
 ```pascal
 // ❌ MAUVAIS : Fuite mémoire
-procedure Bad1;
+procedure Bad1;  
 var
   List: TStringList;
 begin
@@ -2212,7 +2212,7 @@ begin
 end;
 
 // ✅ BON : Libération garantie
-procedure Good1;
+procedure Good1;  
 var
   List: TStringList;
 begin
@@ -2225,7 +2225,7 @@ begin
 end;
 
 // ❌ MAUVAIS : Double libération
-procedure Bad2;
+procedure Bad2;  
 var
   Obj: TObject;
   List: TObjectList;
@@ -2241,7 +2241,7 @@ begin
 end;
 
 // ✅ BON : Propriétaire unique
-procedure Good2;
+procedure Good2;  
 var
   Obj: TObject;
   List: TObjectList;
@@ -2256,7 +2256,7 @@ begin
 end;
 
 // ❌ MAUVAIS : Utilisation après libération
-procedure Bad3;
+procedure Bad3;  
 var
   Obj: TObject;
 begin
@@ -2266,7 +2266,7 @@ begin
 end;
 
 // ✅ BON : FreeAndNil
-procedure Good3;
+procedure Good3;  
 var
   Obj: TObject;
 begin

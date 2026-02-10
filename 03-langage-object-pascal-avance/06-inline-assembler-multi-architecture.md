@@ -31,7 +31,7 @@ Nous allons apprendre à gérer ces différences proprement.
 ### Structure fondamentale
 
 ```pascal
-procedure SimpleAsmExample;
+procedure SimpleAsmExample;  
 begin
   // Code Pascal normal
   WriteLn('Avant assembleur');
@@ -47,7 +47,7 @@ begin
 end;
 
 // Fonction entièrement en assembleur
-function AddTwoNumbers(A, B: Integer): Integer; assembler;
+function AddTwoNumbers(A, B: Integer): Integer; assembler;  
 asm
   // Le code assembleur dépend de l'architecture
   {$IFDEF CPUX86}
@@ -72,7 +72,7 @@ FreePascal supporte deux syntaxes d'assembleur :
 ```pascal
 // Syntaxe Intel (par défaut dans FreePascal)
 {$ASMMODE INTEL}
-procedure IntelSyntax;
+procedure IntelSyntax;  
 asm
   mov eax, ebx      // destination, source
   add eax, 10       // ajoute 10 à eax
@@ -81,7 +81,7 @@ end;
 
 // Syntaxe AT&T (utilisée sous Unix/Linux)
 {$ASMMODE ATT}
-procedure ATTSyntax;
+procedure ATTSyntax;  
 asm
   movl %ebx, %eax   // source, destination (inversé!)
   addl $10, %eax    // $ pour les constantes
@@ -94,7 +94,7 @@ end;
 ### Registres x86
 
 ```pascal
-procedure X86Registers;
+procedure X86Registers;  
 begin
   asm
     // Registres généraux 32 bits
@@ -117,7 +117,7 @@ begin
 end;
 
 // Convention d'appel x86 standard (cdecl)
-function MultiplyX86(A, B: Integer): Integer;
+function MultiplyX86(A, B: Integer): Integer;  
 asm
   // Les paramètres sont sur la pile
   mov eax, [ebp+8]   // Premier paramètre (A)
@@ -130,7 +130,7 @@ end;
 ### Instructions communes x86
 
 ```pascal
-procedure CommonX86Instructions;
+procedure CommonX86Instructions;  
 var
   Value: Integer;
   Arr: array[0..9] of Integer;
@@ -190,7 +190,7 @@ end;
 
 ```pascal
 // Exemple d'optimisation : copie rapide de mémoire
-procedure FastMemCopyX86(Dest, Source: Pointer; Size: Integer);
+procedure FastMemCopyX86(Dest, Source: Pointer; Size: Integer);  
 asm
   push esi
   push edi
@@ -213,7 +213,7 @@ asm
 end;
 
 // Recherche rapide d'un octet
-function FindByteX86(Buffer: PByte; Size: Integer; Value: Byte): Integer;
+function FindByteX86(Buffer: PByte; Size: Integer; Value: Byte): Integer;  
 asm
   push edi
 
@@ -243,7 +243,7 @@ end;
 ### Registres x64
 
 ```pascal
-procedure X64Registers;
+procedure X64Registers;  
 begin
   asm
     // Registres 64 bits étendus
@@ -281,7 +281,7 @@ end;
 ```pascal
 // Windows x64 (Microsoft ABI)
 {$IFDEF WINDOWS}
-function AddFourNumbersWin64(A, B, C, D: Int64): Int64;
+function AddFourNumbersWin64(A, B, C, D: Int64): Int64;  
 asm
   // Paramètres dans : RCX, RDX, R8, R9
   mov rax, rcx    // A dans RCX
@@ -294,7 +294,7 @@ end;
 
 // Linux/Unix x64 (System V ABI)
 {$IFDEF UNIX}
-function AddFourNumbersUnix64(A, B, C, D: Int64): Int64;
+function AddFourNumbersUnix64(A, B, C, D: Int64): Int64;  
 asm
   // Paramètres dans : RDI, RSI, RDX, RCX
   mov rax, rdi    // A dans RDI
@@ -306,7 +306,7 @@ end;
 {$ENDIF}
 
 // Gestion multi-plateforme
-function AddNumbersPortable(A, B: Int64): Int64;
+function AddNumbersPortable(A, B: Int64): Int64;  
 asm
   {$IFDEF WINDOWS}
     mov rax, rcx
@@ -321,7 +321,7 @@ end;
 ### Instructions spécifiques x64
 
 ```pascal
-procedure X64SpecificInstructions;
+procedure X64SpecificInstructions;  
 var
   Value64: Int64;
 begin
@@ -355,7 +355,7 @@ begin
 end;
 
 // Utilisation des instructions SSE en x64
-procedure SSEExample;
+procedure SSEExample;  
 var
   AlignedData: array[0..3] of Single;
 begin
@@ -380,7 +380,7 @@ end;
 
 ```pascal
 {$IFDEF CPUARM}
-procedure ARMRegisters;
+procedure ARMRegisters;  
 begin
   asm
     // Registres généraux R0-R15
@@ -412,7 +412,7 @@ end;
 
 ```pascal
 {$IFDEF CPUARM}
-procedure ARMInstructions;
+procedure ARMInstructions;  
 var
   Value: Integer;
 begin
@@ -474,7 +474,7 @@ Une caractéristique unique d'ARM est l'exécution conditionnelle :
 
 ```pascal
 {$IFDEF CPUARM}
-procedure ARMConditionalExecution;
+procedure ARMConditionalExecution;  
 var
   A, B, Max: Integer;
 begin
@@ -515,7 +515,7 @@ end;
 ```pascal
 {$IFDEF CPUARM}
 // Thumb est un mode 16 bits plus compact
-procedure ThumbMode;
+procedure ThumbMode;  
 begin
   asm
     .thumb               // Passe en mode Thumb
@@ -537,7 +537,7 @@ end;
 
 ```pascal
 {$IFDEF CPUX64}
-procedure SIMDVectorAddSSE(const A, B: array of Single; var Result: array of Single);
+procedure SIMDVectorAddSSE(const A, B: array of Single; var Result: array of Single);  
 var
   I: Integer;
 begin
@@ -580,7 +580,7 @@ end;
 
 // Version AVX pour processeurs plus récents
 {$IFDEF CPUX64}
-procedure SIMDVectorAddAVX(const A, B: array of Single; var Result: array of Single);
+procedure SIMDVectorAddAVX(const A, B: array of Single; var Result: array of Single);  
 begin
   {$IFDEF HASAVX}
   asm
@@ -598,7 +598,7 @@ end;
 
 ```pascal
 {$IFDEF CPUARM}
-procedure SIMDVectorAddNEON(const A, B: array of Single; var Result: array of Single);
+procedure SIMDVectorAddNEON(const A, B: array of Single; var Result: array of Single);  
 begin
   {$IFDEF HASNEON}
   asm
@@ -619,7 +619,7 @@ end;
 
 ```pascal
 // Fonction optimisée multi-architecture
-function FastSquareRoot(Value: Single): Single;
+function FastSquareRoot(Value: Single): Single;  
 begin
   {$IFDEF CPUX64}
     {$IFDEF HASSSE}
@@ -656,7 +656,7 @@ begin
 end;
 
 // Détection des capacités du CPU au runtime
-function GetCPUCapabilities: TCPUFeatures;
+function GetCPUCapabilities: TCPUFeatures;  
 begin
   Result := [];
 
@@ -734,7 +734,7 @@ end;
 {$ENDIF}
 
 // Utilisation des macros
-function AddTwo(A, B: NativeInt): NativeInt; assembler;
+function AddTwo(A, B: NativeInt): NativeInt; assembler;  
 asm
   {$IFDEF CPUX86}
   mov RESULT_REG, PARAM1
@@ -752,7 +752,7 @@ end;
 
 ```pascal
 // 1. Toujours sauvegarder les registres préservés
-procedure SaveRegisters;
+procedure SaveRegisters;  
 asm
   {$IFDEF CPUX64}
   push rbx
@@ -783,7 +783,7 @@ type
   end;
 
 // 3. Éviter les dépendances de données
-procedure AvoidDependencies;
+procedure AvoidDependencies;  
 asm
   {$IFDEF CPUX64}
   // MAUVAIS : dépendances en chaîne
@@ -802,7 +802,7 @@ asm
 end;
 
 // 4. Utiliser les instructions appropriées
-function CountBits(Value: Cardinal): Integer;
+function CountBits(Value: Cardinal): Integer;  
 begin
   {$IFDEF HASPOPCNT}
   asm
@@ -824,7 +824,7 @@ end;
 
 ```pascal
 // Multiplication par constantes
-function MultiplyBy10(Value: Integer): Integer;
+function MultiplyBy10(Value: Integer): Integer;  
 asm
   {$IFDEF CPUX64}
   mov eax, ecx        // Windows x64
@@ -834,7 +834,7 @@ asm
 end;
 
 // Division par puissance de 2
-function DivideBy8(Value: Integer): Integer;
+function DivideBy8(Value: Integer): Integer;  
 asm
   {$IFDEF CPUX64}
   mov eax, ecx
@@ -847,7 +847,7 @@ asm
 end;
 
 // Mise à zéro rapide
-procedure FastZero(var Buffer; Size: Integer);
+procedure FastZero(var Buffer; Size: Integer);  
 asm
   {$IFDEF CPUX64}
   mov rcx, QWORD PTR Buffer
@@ -883,7 +883,7 @@ end;
 
 ```pascal
 // Utilisation de breakpoints en assembleur
-procedure DebugAssembly;
+procedure DebugAssembly;  
 var
   TestValue: Integer;
 begin
@@ -909,7 +909,7 @@ begin
 end;
 
 // Vérification des résultats
-function TestAssemblyCode: Boolean;
+function TestAssemblyCode: Boolean;  
 var
   Input, Output, Expected: Integer;
 begin
@@ -933,7 +933,7 @@ end;
 
 ```pascal
 // Mesure de cycles CPU
-function MeasureCycles: Int64;
+function MeasureCycles: Int64;  
 asm
   {$IFDEF CPUX64}
   rdtsc               // Read Time Stamp Counter
@@ -945,7 +945,7 @@ asm
   {$ENDIF}
 end;
 
-procedure BenchmarkCode;
+procedure BenchmarkCode;  
 var
   StartCycles, EndCycles: Int64;
   Iterations: Integer;
@@ -1016,12 +1016,12 @@ asm
 end;
 
 // Appel de fonctions Pascal depuis l'assembleur
-function PascalHelper(Value: Integer): Integer;
+function PascalHelper(Value: Integer): Integer;  
 begin
   Result := Value * 2 + 10;
 end;
 
-procedure CallFromAssembly;
+procedure CallFromAssembly;  
 var
   Input, Output: Integer;
 begin
@@ -1049,7 +1049,7 @@ end;
 
 ```pascal
 // Protection contre les erreurs en assembleur
-procedure SafeAssemblyOperation;
+procedure SafeAssemblyOperation;  
 begin
   try
     asm
@@ -1066,7 +1066,7 @@ begin
 end;
 
 // Vérification avant opérations dangereuses
-function SafeDivide(Dividend, Divisor: Integer): Integer;
+function SafeDivide(Dividend, Divisor: Integer): Integer;  
 asm
   {$IFDEF CPUX64}
   mov eax, ecx          // Dividend
@@ -1091,7 +1091,7 @@ end;
 
 ```pascal
 // XOR cipher rapide
-procedure XORCipher(var Data; Size: Integer; Key: Byte);
+procedure XORCipher(var Data; Size: Integer; Key: Byte);  
 asm
   {$IFDEF CPUX64}
   mov rcx, QWORD PTR Data
@@ -1188,7 +1188,7 @@ end;
 
 ```pascal
 // Recherche rapide d'un motif de 4 octets
-function FindPattern(const Buffer; Size: Integer; Pattern: Cardinal): Integer;
+function FindPattern(const Buffer; Size: Integer; Pattern: Cardinal): Integer;  
 asm
   {$IFDEF CPUX64}
   mov r8, rcx           // Buffer
@@ -1226,7 +1226,7 @@ end;
 
 ```pascal
 // 1. Oublier de préserver les registres
-procedure BadExample1;
+procedure BadExample1;  
 asm
   {$IFDEF CPUX64}
   // ❌ MAUVAIS : RBX doit être préservé
@@ -1236,7 +1236,7 @@ asm
   {$ENDIF}
 end;
 
-procedure GoodExample1;
+procedure GoodExample1;  
 asm
   {$IFDEF CPUX64}
   // ✅ BON : Sauvegarde et restauration
@@ -1248,7 +1248,7 @@ asm
 end;
 
 // 2. Mauvais alignement de pile
-procedure BadExample2;
+procedure BadExample2;  
 asm
   {$IFDEF CPUX64}
   // ❌ MAUVAIS : Pile non alignée sur 16 octets
@@ -1258,7 +1258,7 @@ asm
   {$ENDIF}
 end;
 
-procedure GoodExample2;
+procedure GoodExample2;  
 asm
   {$IFDEF CPUX64}
   // ✅ BON : Maintenir l'alignement
@@ -1269,7 +1269,7 @@ asm
 end;
 
 // 3. Confusion entre tailles de registres
-procedure BadExample3;
+procedure BadExample3;  
 asm
   {$IFDEF CPUX64}
   // ❌ MAUVAIS : Efface les 32 bits hauts
@@ -1278,7 +1278,7 @@ asm
   {$ENDIF}
 end;
 
-procedure GoodExample3;
+procedure GoodExample3;  
 asm
   {$IFDEF CPUX64}
   // ✅ BON : Utiliser la bonne taille
@@ -1300,7 +1300,7 @@ type
   NativeUInt = {$IFDEF CPU64}UInt64{$ELSE}Cardinal{$ENDIF};
 
 // Fonction portable avec fallback
-function PortableFunction(Value: NativeInt): NativeInt;
+function PortableFunction(Value: NativeInt): NativeInt;  
 begin
   {$IF DEFINED(CPUX64) AND DEFINED(HASSSE4)}
     // Version SSE4 optimisée
@@ -1335,7 +1335,7 @@ end;
   - Ubuntu 20.04 x64 (AMD Ryzen)
   - Raspbian (ARM Cortex-A53)
 }
-procedure DocumentedAssemblyFunction;
+procedure DocumentedAssemblyFunction;  
 begin
   // ...
 end;

@@ -106,17 +106,17 @@ type
   TAnonymousFunc = reference to function(Value: Integer): String;
 
 // Utilisation
-procedure ExecuteCallback(Callback: TCalculation);
+procedure ExecuteCallback(Callback: TCalculation);  
 begin
   WriteLn('Résultat: ', Callback(10, 5));
 end;
 
-function Add(A, B: Integer): Integer;
+function Add(A, B: Integer): Integer;  
 begin
   Result := A + B;
 end;
 
-function Multiply(A, B: Integer): Integer;
+function Multiply(A, B: Integer): Integer;  
 begin
   Result := A * B;
 end;
@@ -166,7 +166,7 @@ end;
 uses
   TypInfo;
 
-procedure ShowTypeInfo(ATypeInfo: PTypeInfo);
+procedure ShowTypeInfo(ATypeInfo: PTypeInfo);  
 begin
   WriteLn('Nom du type: ', ATypeInfo^.Name);
 
@@ -220,7 +220,7 @@ type
     property Quantity: Integer read FQuantity write FQuantity;
   end;
 
-procedure SetPropertyValue(Obj: TObject; const PropName: String; const Value: Variant);
+procedure SetPropertyValue(Obj: TObject; const PropName: String; const Value: Variant);  
 var
   PropInfo: PPropInfo;
 begin
@@ -240,7 +240,7 @@ begin
     WriteLn('Propriété "', PropName, '" non trouvée');
 end;
 
-function GetPropertyValue(Obj: TObject; const PropName: String): Variant;
+function GetPropertyValue(Obj: TObject; const PropName: String): Variant;  
 var
   PropInfo: PPropInfo;
 begin
@@ -286,7 +286,7 @@ end;
 uses
   TypInfo;
 
-procedure ListProperties(Obj: TObject);
+procedure ListProperties(Obj: TObject);  
 var
   TypeInfo: PTypeInfo;
   TypeData: PTypeData;
@@ -333,17 +333,17 @@ type
     procedure ShowResult(Value: Integer);
   end;
 
-function TCalculator.Add(A, B: Integer): Integer;
+function TCalculator.Add(A, B: Integer): Integer;  
 begin
   Result := A + B;
 end;
 
-function TCalculator.Multiply(A, B: Integer): Integer;
+function TCalculator.Multiply(A, B: Integer): Integer;  
 begin
   Result := A * B;
 end;
 
-procedure TCalculator.ShowResult(Value: Integer);
+procedure TCalculator.ShowResult(Value: Integer);  
 begin
   WriteLn('Résultat: ', Value);
 end;
@@ -392,18 +392,18 @@ type
     property Department: String read FDepartment write FDepartment;
   end;
 
-constructor TEmployee.Create(const AName: String; ASalary: Double);
+constructor TEmployee.Create(const AName: String; ASalary: Double);  
 begin
   FName := AName;
   FSalary := ASalary;
 end;
 
-function TEmployee.GetAnnualSalary: Double;
+function TEmployee.GetAnnualSalary: Double;  
 begin
   Result := FSalary * 12;
 end;
 
-procedure ExploreWithRtti(Obj: TObject);
+procedure ExploreWithRtti(Obj: TObject);  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -466,7 +466,7 @@ end;
 uses
   Rtti;
 
-procedure DemoTValue;
+procedure DemoTValue;  
 var
   V1, V2, V3: TValue;
   IntVal: Integer;
@@ -521,12 +521,12 @@ type
     procedure Draw; override;
   end;
 
-procedure TCircle.Draw;
+procedure TCircle.Draw;  
 begin
   WriteLn('Dessin d''un cercle');
 end;
 
-procedure TSquare.Draw;
+procedure TSquare.Draw;  
 begin
   WriteLn('Dessin d''un carré');
 end;
@@ -535,14 +535,14 @@ end;
 var
   RegisteredClasses: TStringList;
 
-procedure RegisterClass(AClass: TClass; const ClassName: String);
+procedure RegisterClass(AClass: TClass; const ClassName: String);  
 begin
   if not Assigned(RegisteredClasses) then
     RegisteredClasses := TStringList.Create;
   RegisteredClasses.AddObject(ClassName, TObject(AClass));
 end;
 
-function CreateInstanceByName(const ClassName: String): TObject;
+function CreateInstanceByName(const ClassName: String): TObject;  
 var
   Index: Integer;
   AClass: TClass;
@@ -599,7 +599,7 @@ type
     procedure LoadFromStream(Stream: TStream);
   end;
 
-procedure TSerializable.SaveToStream(Stream: TStream);
+procedure TSerializable.SaveToStream(Stream: TStream);  
 var
   Writer: TWriter;
   PropList: PPropList;
@@ -643,7 +643,7 @@ begin
   end;
 end;
 
-procedure TSerializable.LoadFromStream(Stream: TStream);
+procedure TSerializable.LoadFromStream(Stream: TStream);  
 var
   Reader: TReader;
   ClassName: String;
@@ -695,7 +695,7 @@ type
   TColor = (clRed, clGreen, clBlue, clYellow, clBlack, clWhite);
   TColors = set of TColor;
 
-procedure ShowEnumInfo;
+procedure ShowEnumInfo;  
 var
   TypeData: PTypeData;
   I: Integer;
@@ -720,7 +720,7 @@ begin
   WriteLn('clBlue correspond à la valeur: ', Ord(ColorValue));
 end;
 
-procedure ShowSetInfo;
+procedure ShowSetInfo;  
 var
   Colors: TColors;
   SetString: String;
@@ -770,12 +770,12 @@ type
     property MaxValue: Integer read FMaxValue;
   end;
 
-constructor DescriptionAttribute.Create(const AText: String);
+constructor DescriptionAttribute.Create(const AText: String);  
 begin
   FText := AText;
 end;
 
-constructor ValidationAttribute.Create(AMin, AMax: Integer);
+constructor ValidationAttribute.Create(AMin, AMax: Integer);  
 begin
   FMinValue := AMin;
   FMaxValue := AMax;
@@ -796,7 +796,7 @@ type
     property Stock: Integer read FStock write FStock;
   end;
 
-procedure ReadAttributes(Obj: TObject);
+procedure ReadAttributes(Obj: TObject);  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -863,7 +863,7 @@ type
   end;
 
 [Table('users')]
-TUser = class
+TUser = class  
 private
   FId: Integer;
   FName: String;
@@ -879,7 +879,7 @@ published
   property Email: String read FEmail write FEmail;
 end;
 
-function GenerateInsertSQL(Obj: TObject): String;
+function GenerateInsertSQL(Obj: TObject): String;  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -980,12 +980,12 @@ type
                                      const PropName: String): PPropInfo;
   end;
 
-class constructor TOptimizedRTTI.Create;
+class constructor TOptimizedRTTI.Create;  
 begin
   FPropCache := TDictionary<String, PPropInfo>.Create;
 end;
 
-class destructor TOptimizedRTTI.Destroy;
+class destructor TOptimizedRTTI.Destroy;  
 begin
   FPropCache.Free;
 end;
@@ -1089,7 +1089,7 @@ type
     function IsPropertyAllowed(const PropName: String): Boolean;
   end;
 
-constructor TSecurePropertyFilter.Create;
+constructor TSecurePropertyFilter.Create;  
 begin
   FAllowedProperties := TStringList.Create;
   FDeniedProperties := TStringList.Create;
@@ -1101,24 +1101,24 @@ begin
   FDeniedProperties.Add('ClassInfo');
 end;
 
-destructor TSecurePropertyFilter.Destroy;
+destructor TSecurePropertyFilter.Destroy;  
 begin
   FAllowedProperties.Free;
   FDeniedProperties.Free;
   inherited;
 end;
 
-procedure TSecurePropertyFilter.AllowProperty(const PropName: String);
+procedure TSecurePropertyFilter.AllowProperty(const PropName: String);  
 begin
   FAllowedProperties.Add(PropName);
 end;
 
-procedure TSecurePropertyFilter.DenyProperty(const PropName: String);
+procedure TSecurePropertyFilter.DenyProperty(const PropName: String);  
 begin
   FDeniedProperties.Add(PropName);
 end;
 
-function TSecurePropertyFilter.IsPropertyAllowed(const PropName: String): Boolean;
+function TSecurePropertyFilter.IsPropertyAllowed(const PropName: String): Boolean;  
 begin
   // Si une liste blanche existe, seules ces propriétés sont autorisées
   if FAllowedProperties.Count > 0 then
@@ -1166,7 +1166,7 @@ type
     destructor Destroy; override;
   end;
 
-procedure TResourceManager.FreeAutoProperties;
+procedure TResourceManager.FreeAutoProperties;  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -1202,7 +1202,7 @@ begin
   end;
 end;
 
-destructor TResourceManager.Destroy;
+destructor TResourceManager.Destroy;  
 begin
   FreeAutoProperties;
   inherited;
@@ -1221,7 +1221,7 @@ type
     class function DeepClone<T: class>(Source: T): T;
   end;
 
-class function TObjectCloner.DeepClone<T>(Source: T): T;
+class function TObjectCloner.DeepClone<T>(Source: T): T;  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -1287,12 +1287,12 @@ type
     destructor Destroy; override;
   end;
 
-constructor TPerson.Create;
+constructor TPerson.Create;  
 begin
   Address := TAddress.Create;
 end;
 
-destructor TPerson.Destroy;
+destructor TPerson.Destroy;  
 begin
   Address.Free;
   inherited;
@@ -1344,17 +1344,17 @@ type
     procedure SaveToFile(const FileName: String);
   end;
 
-procedure TDocument.Print;
+procedure TDocument.Print;  
 begin
   WriteLn('Impression du document...');
 end;
 
-procedure TDocument.SaveToFile(const FileName: String);
+procedure TDocument.SaveToFile(const FileName: String);  
 begin
   WriteLn('Sauvegarde dans ', FileName);
 end;
 
-procedure DiscoverInterfaces(Obj: TObject);
+procedure DiscoverInterfaces(Obj: TObject);  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -1399,7 +1399,7 @@ begin
 end;
 
 // Test d'interface dynamique
-procedure TestInterface(Obj: TObject; const IID: TGUID);
+procedure TestInterface(Obj: TObject; const IID: TGUID);  
 var
   Intf: IInterface;
 begin
@@ -1439,13 +1439,13 @@ type
     procedure PrintObjectState(Obj: TObject);
   end;
 
-constructor TObjectInspector.Create;
+constructor TObjectInspector.Create;  
 begin
   FWatchedObjects := TList.Create;
   FSnapshots := TDictionary<TObject, TStringList>.Create;
 end;
 
-destructor TObjectInspector.Destroy;
+destructor TObjectInspector.Destroy;  
 var
   Snapshot: TStringList;
 begin
@@ -1456,7 +1456,7 @@ begin
   inherited;
 end;
 
-procedure TObjectInspector.WatchObject(Obj: TObject);
+procedure TObjectInspector.WatchObject(Obj: TObject);  
 begin
   if FWatchedObjects.IndexOf(Obj) < 0 then
   begin
@@ -1465,7 +1465,7 @@ begin
   end;
 end;
 
-procedure TObjectInspector.TakeSnapshot(Obj: TObject);
+procedure TObjectInspector.TakeSnapshot(Obj: TObject);  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -1511,7 +1511,7 @@ begin
   end;
 end;
 
-function TObjectInspector.DetectChanges(Obj: TObject): TStringList;
+function TObjectInspector.DetectChanges(Obj: TObject): TStringList;  
 var
   OldSnapshot, NewSnapshot: TStringList;
   PropName, OldValue, NewValue: String;
@@ -1551,7 +1551,7 @@ begin
   end;
 end;
 
-procedure TObjectInspector.PrintObjectState(Obj: TObject);
+procedure TObjectInspector.PrintObjectState(Obj: TObject);  
 var
   Context: TRttiContext;
   RttiType: TRttiType;
@@ -1641,7 +1641,7 @@ type
     class procedure ClearCache;
   end;
 
-class constructor TRttiCache.Create;
+class constructor TRttiCache.Create;  
 begin
   FContext := TRttiContext.Create;
   FTypeCache := TDictionary<PTypeInfo, TRttiType>.Create;
@@ -1649,7 +1649,7 @@ begin
   FMethodCaches := TObjectDictionary<TClass, TMethodCache>.Create([doOwnsValues]);
 end;
 
-class destructor TRttiCache.Destroy;
+class destructor TRttiCache.Destroy;  
 begin
   FMethodCaches.Free;
   FPropertyCaches.Free;
@@ -1657,7 +1657,7 @@ begin
   FContext.Free;
 end;
 
-class function TRttiCache.GetRttiType(AClass: TClass): TRttiType;
+class function TRttiCache.GetRttiType(AClass: TClass): TRttiType;  
 begin
   if not FTypeCache.TryGetValue(AClass.ClassInfo, Result) then
   begin
@@ -1708,7 +1708,7 @@ begin
   end;
 end;
 
-class procedure TRttiCache.ClearCache;
+class procedure TRttiCache.ClearCache;  
 begin
   FTypeCache.Clear;
   FPropertyCaches.Clear;
@@ -1716,7 +1716,7 @@ begin
 end;
 
 // Utilisation avec cache
-procedure FastPropertyAccess(Obj: TObject; const PropName: String);
+procedure FastPropertyAccess(Obj: TObject; const PropName: String);  
 var
   Prop: TRttiProperty;
   Value: TValue;

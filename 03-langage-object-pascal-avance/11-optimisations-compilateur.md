@@ -49,7 +49,7 @@ Le compilateur applique des optimisations simples qui ne ralentissent pas trop l
 x := 5 + 3;  // Devient directement : x := 8;
 
 // Ou éliminer du code inutile :
-y := 10;
+y := 10;  
 y := 20;  // La première ligne est supprimée
 ```
 
@@ -120,7 +120,7 @@ Le compilateur remplace les appels de petites fonctions par leur code directemen
 
 ```pascal
 // Sans inline : chaque appel est un saut dans le programme
-function Double(x: Integer): Integer; inline;
+function Double(x: Integer): Integer; inline;  
 begin
   Result := x * 2;
 end;
@@ -219,7 +219,7 @@ Vous pouvez activer/désactiver les optimisations directement dans votre code :
 
 ```pascal
 {$OPTIMIZATION OFF}  // Désactive l'optimisation
-procedure CodeCritiquePourDebug;
+procedure CodeCritiquePourDebug;  
 begin
   // Code qui doit rester exactement comme écrit
   // pour le débogage
@@ -227,7 +227,7 @@ end;
 {$OPTIMIZATION ON}  // Réactive l'optimisation
 
 {$OPTIMIZATION LEVEL2}  // Force le niveau 2
-procedure CodeOptimise;
+procedure CodeOptimise;  
 begin
   // Code qui sera optimisé niveau 2
 end;
@@ -239,7 +239,7 @@ end;
 ### Code de test simple
 
 ```pascal
-program TestOptimisation;
+program TestOptimisation;  
 uses SysUtils;
 
 var
@@ -357,7 +357,7 @@ const
   PI_TIMES_2 = 6.28318;  // Au lieu de calculer PI * 2 à chaque fois
 
 // Évitez les divisions (lentes)
-x := y div 2;   // Lent
+x := y div 2;   // Lent  
 x := y shr 1;   // Rapide (division par 2 en décalant les bits)
 ```
 
@@ -402,7 +402,7 @@ Prenons un exemple concret :
 
 ```pascal
 // Code original écrit par le développeur
-function CalculerSomme: Integer;
+function CalculerSomme: Integer;  
 var
   i, total: Integer;
 begin
@@ -415,7 +415,7 @@ begin
 end;
 
 // Après optimisation, le compilateur pourrait générer l'équivalent de :
-function CalculerSomme: Integer;
+function CalculerSomme: Integer;  
 begin
   Result := 15;  // Le compilateur a calculé 1+2+3+4+5 = 15 à la compilation
 end;
@@ -493,7 +493,7 @@ end;
 
 ```pascal
 // Exemple : Élimination de code inaccessible
-procedure Test(x: Integer);
+procedure Test(x: Integer);  
 begin
   if x > 0 then
     WriteLn('Positif')
@@ -534,15 +534,15 @@ FreePascal utilise une représentation intermédiaire (IR) pour faciliter les op
 x := y + z * 2;
 
 // Représentation intermédiaire (simplifié)
-LOAD  y, R1
-LOAD  z, R2
-MUL   R2, 2, R3
-ADD   R1, R3, R4
+LOAD  y, R1  
+LOAD  z, R2  
+MUL   R2, 2, R3  
+ADD   R1, R3, R4  
 STORE R4, x
 
 // Après optimisation (si z est constant = 5)
-LOAD  y, R1
-ADD   R1, 10, R2  // z*2 = 5*2 = 10 calculé à la compilation
+LOAD  y, R1  
+ADD   R1, 10, R2  // z*2 = 5*2 = 10 calculé à la compilation  
 STORE R2, x
 ```
 
@@ -553,7 +553,7 @@ STORE R2, x
 C'est le mode de compilation le plus basique, utilisé principalement pour le débogage.
 
 ```pascal
-program TestO0;
+program TestO0;  
 var
   a, b, c: Integer;
 begin
@@ -579,10 +579,10 @@ fpc -O0 -al test.pas  # -al génère le fichier assembleur
 
 **Assembleur généré (extrait simplifié) :**
 ```asm
-movl $10, -4(%rbp)   # a := 10
-movl $20, -8(%rbp)   # b := 20
-movl -4(%rbp), %eax  # Charge a
-addl -8(%rbp), %eax  # Ajoute b
+movl $10, -4(%rbp)   # a := 10  
+movl $20, -8(%rbp)   # b := 20  
+movl -4(%rbp), %eax  # Charge a  
+addl -8(%rbp), %eax  # Ajoute b  
 movl %eax, -12(%rbp) # Stocke dans c
 ```
 
@@ -595,18 +595,18 @@ Premier niveau d'optimisation, bon compromis compilation/performance.
 1. **Constant folding (pliage de constantes)**
 ```pascal
 // Avant
-x := 2 + 3 * 4;
+x := 2 + 3 * 4;  
 y := 100 div 5;
 
 // Après optimisation O1
-x := 14;  // Calculé à la compilation
+x := 14;  // Calculé à la compilation  
 y := 20;  // Calculé à la compilation
 ```
 
 2. **Dead code elimination (élimination du code mort)**
 ```pascal
 // Avant
-procedure Test;
+procedure Test;  
 var
   unused: Integer;
 begin
@@ -615,7 +615,7 @@ begin
 end;
 
 // Après optimisation O1
-procedure Test;
+procedure Test;  
 begin
   WriteLn('Hello');
 end;
@@ -624,12 +624,12 @@ end;
 3. **Common subexpression elimination (CSE)**
 ```pascal
 // Avant
-a := b * c + 10;
+a := b * c + 10;  
 d := b * c + 20;
 
 // Après optimisation O1
-temp := b * c;  // Calcul fait une seule fois
-a := temp + 10;
+temp := b * c;  // Calcul fait une seule fois  
+a := temp + 10;  
 d := temp + 20;
 ```
 
@@ -655,8 +655,8 @@ for i := 1 to 8 do
 // Pseudo-code illustratif (step n'existe pas en Pascal) :
 //   for i := 1 to 8 step 4 do ...
 // Le compilateur génère l'équivalent de :
-i := 1;
-while i <= 8 do
+i := 1;  
+while i <= 8 do  
 begin
   arr[i] := i * 2;
   arr[i+1] := (i+1) * 2;
@@ -670,20 +670,20 @@ end;
 ```pascal
 // Réorganisation pour éviter les dépendances
 // Avant
-a := b + c;  // Instruction 1
-d := a * 2;  // Dépend de 1, doit attendre
+a := b + c;  // Instruction 1  
+d := a * 2;  // Dépend de 1, doit attendre  
 e := f + g;  // Indépendant
 
 // Après optimisation O2
-a := b + c;  // Instruction 1
-e := f + g;  // Exécuté en parallèle avec 1
+a := b + c;  // Instruction 1  
+e := f + g;  // Exécuté en parallèle avec 1  
 d := a * 2;  // Maintenant a est prêt
 ```
 
 3. **Register allocation (allocation de registres)**
 ```pascal
 // Variables fréquemment utilisées gardées dans les registres
-function Calculate: Integer;
+function Calculate: Integer;  
 var
   i, sum: Integer;  // Seront dans des registres, pas en mémoire
 begin
@@ -696,7 +696,7 @@ end;
 
 4. **Function inlining sélectif**
 ```pascal
-function Small(x: Integer): Integer; inline;
+function Small(x: Integer): Integer; inline;  
 begin
   Result := x * 2;
 end;
@@ -718,7 +718,7 @@ Optimisations maximales pour la vitesse, peut augmenter la taille.
 1. **Aggressive inlining**
 ```pascal
 // Même les fonctions moyennes sont inline
-function ProcessData(const data: array of Integer): Integer;
+function ProcessData(const data: array of Integer): Integer;  
 var
   i: Integer;
 begin
@@ -805,24 +805,24 @@ unit MaBibliotheque;
 
 interface
 
-procedure UtiliseDansLeProgramme;
-procedure JamaisAppelee;  // Cette procédure sera éliminée
+procedure UtiliseDansLeProgramme;  
+procedure JamaisAppelee;  // Cette procédure sera éliminée  
 procedure AutreFonctionInutile;  // Celle-ci aussi
 
 implementation
 
-procedure UtiliseDansLeProgramme;
+procedure UtiliseDansLeProgramme;  
 begin
   WriteLn('Je suis utilisée');
 end;
 
-procedure JamaisAppelee;
+procedure JamaisAppelee;  
 begin
   WriteLn('Code inutile de 1000 lignes...');
   // Tout ce code sera supprimé de l'exécutable
 end;
 
-procedure AutreFonctionInutile;
+procedure AutreFonctionInutile;  
 begin
   // Également supprimée
 end;
@@ -844,19 +844,19 @@ Optimisation globale du programme entier.
 
 ```pascal
 // Fichier unit1.pas
-unit Unit1;
-interface
-function GetValue: Integer;
-implementation
-function GetValue: Integer;
+unit Unit1;  
+interface  
+function GetValue: Integer;  
+implementation  
+function GetValue: Integer;  
 begin
   Result := 42;  // Toujours retourne 42
-end;
+end;  
 end.
 
 // Fichier main.pas
-uses Unit1;
-var x: Integer;
+uses Unit1;  
+var x: Integer;  
 begin
   x := GetValue;  // Avec -OWall, devient directement x := 42
   WriteLn(x);
@@ -902,10 +902,10 @@ end;
 **Transformations appliquées :**
 ```pascal
 // Simplifications mathématiques
-x * 1.0 → x
-x / 1.0 → x
-x + 0.0 → x
-x - x → 0.0
+x * 1.0 → x  
+x / 1.0 → x  
+x + 0.0 → x  
+x - x → 0.0  
 x / x → 1.0 (dangereux si x=0!)
 
 // Réorganisations
@@ -987,19 +987,19 @@ var
 **Optimisations de concaténation :**
 ```pascal
 // Mauvais : réallocations multiples
-s := '';
+s := '';  
 for i := 1 to 1000 do
   s := s + IntToStr(i) + ', ';
 
 // Bon : pré-allocation
-SetLength(s, 10000);  // Pré-alloue la mémoire
-p := 1;
-for i := 1 to 1000 do
+SetLength(s, 10000);  // Pré-alloue la mémoire  
+p := 1;  
+for i := 1 to 1000 do  
 begin
   tmp := IntToStr(i) + ', ';
   Move(tmp[1], s[p], Length(tmp));
   Inc(p, Length(tmp));
-end;
+end;  
 SetLength(s, p-1);
 ```
 
@@ -1027,13 +1027,13 @@ for i := 0 to High(arr) do
   Process(arr[i]);
 
 // Bon : calcul une seule fois
-len := High(arr);
+len := High(arr);  
 for i := 0 to len do
   Process(arr[i]);
 
 // Encore mieux : pointeurs pour gros tableaux
-p := @arr[0];
-for i := 0 to len do
+p := @arr[0];  
+for i := 0 to len do  
 begin
   Process(p^);
   Inc(p);
@@ -1077,7 +1077,7 @@ for i := 0 to 999 do
   arr[i] := arr[i] * (x + y);  // x+y calculé 1000 fois
 
 // Bon
-temp := x + y;  // Calculé une fois
+temp := x + y;  // Calculé une fois  
 for i := 0 to 999 do
   arr[i] := arr[i] * temp;
 
@@ -1089,7 +1089,7 @@ for i := 0 to 999 do
   c[i] := a[i] + 1;
 
 // Bon
-for i := 0 to 999 do
+for i := 0 to 999 do  
 begin
   a[i] := b[i] * 2;
   c[i] := a[i] + 1;  // Meilleure localité cache
@@ -1097,7 +1097,7 @@ end;
 
 // Loop tiling pour le cache
 // Parcours de matrice optimisé
-const TILE_SIZE = 64;
+const TILE_SIZE = 64;  
 for ii := 0 to (N-1) div TILE_SIZE do
   for jj := 0 to (N-1) div TILE_SIZE do
     for i := ii*TILE_SIZE to Min((ii+1)*TILE_SIZE-1, N-1) do
@@ -1109,19 +1109,19 @@ for ii := 0 to (N-1) div TILE_SIZE do
 
 ```pascal
 // Inline explicite pour petites fonctions
-function Square(x: Integer): Integer; inline;
+function Square(x: Integer): Integer; inline;  
 begin
   Result := x * x;
 end;
 
 // Passage par référence pour gros objets
-procedure ProcessLargeData(const Data: TLargeArray);  // const = pas de copie
+procedure ProcessLargeData(const Data: TLargeArray);  // const = pas de copie  
 begin
   // Traitement...
 end;
 
 // Tail call optimization
-function Factorial(n: Integer; acc: Int64 = 1): Int64;
+function Factorial(n: Integer; acc: Int64 = 1): Int64;  
 begin
   if n <= 1 then
     Result := acc
@@ -1183,7 +1183,7 @@ end;
 
 ```pascal
 // Variables locales sur la pile (rapide)
-procedure FastProc;
+procedure FastProc;  
 var
   localArray: array[0..99] of Integer;  // Sur la pile
 begin
@@ -1192,7 +1192,7 @@ end;
 
 // Éviter la récursion profonde
 // Mauvais : risque de stack overflow
-function RecursiveSum(n: Integer): Int64;
+function RecursiveSum(n: Integer): Int64;  
 begin
   if n = 0 then
     Result := 0
@@ -1201,7 +1201,7 @@ begin
 end;
 
 // Bon : version itérative
-function IterativeSum(n: Integer): Int64;
+function IterativeSum(n: Integer): Int64;  
 var
   i: Integer;
 begin
@@ -1252,13 +1252,13 @@ end;
 
 **Compilation optimisée Windows :**
 ```batch
-rem Compilation 32 bits optimisée
+rem Compilation 32 bits optimisée  
 fpc -O3 -OpPENTIUM4 -CfSSE2 -Xs -XX programme.pas
 
-rem Compilation 64 bits optimisée
+rem Compilation 64 bits optimisée  
 fpc -O3 -OpCOREAVX -CfAVX2 -Xs -XX programme.pas
 
-rem Avec optimisations de lien
+rem Avec optimisations de lien  
 fpc -O3 -XX -CX -Xs -WG programme.pas
 ```
 
@@ -1316,7 +1316,7 @@ strip --strip-all programme
 ```pascal
 // Détection des capacités CPU au runtime
 {$ASMMODE INTEL}
-function HasSSE42: Boolean;
+function HasSSE42: Boolean;  
 var
   RegEAX, RegEBX, RegECX, RegEDX: UInt32;
 begin
@@ -1334,7 +1334,7 @@ begin
 end;
 
 // Sélection d'algorithme selon la plateforme
-procedure ProcessData(const Data: array of Integer);
+procedure ProcessData(const Data: array of Integer);  
 begin
   {$IFDEF WINDOWS}
     {$IFDEF CPU64}
@@ -1388,7 +1388,7 @@ end;
 // Désactivation temporaire pour du code critique
 {$PUSH}
 {$OPTIMIZATION OFF}
-procedure CriticalDebugCode;
+procedure CriticalDebugCode;  
 begin
   // Code qui doit rester exactement comme écrit
   // pour le débogage ou des raisons de timing
@@ -1399,7 +1399,7 @@ end;
 {$PUSH}
 {$OPTIMIZATION LEVEL4}
 {$OPTIMIZATION FASTMATH}
-function HeavyComputation(x: Double): Double;
+function HeavyComputation(x: Double): Double;  
 begin
   // Calcul intensif avec optimisations maximales
   Result := Sin(x) * Cos(x) + Exp(x);
@@ -1431,7 +1431,7 @@ end;
 ```pascal
 // Forcer l'inline
 {$INLINE ON}
-function AlwaysInline(x: Integer): Integer; inline;
+function AlwaysInline(x: Integer): Integer; inline;  
 begin
   Result := x * 2;
 end;
@@ -1443,7 +1443,7 @@ end;
 // Désactiver l'inline pour certaines fonctions
 {$PUSH}
 {$INLINE OFF}
-function NeverInline(x: Integer): Integer;
+function NeverInline(x: Integer): Integer;  
 begin
   // Fonction complexe qui ne doit pas être inline
   Result := ComplexCalculation(x);
@@ -1496,7 +1496,7 @@ type
     function Calculate(n: Integer): Integer;
   end;
 
-function TMemoizedFunc.Calculate(n: Integer): Integer;
+function TMemoizedFunc.Calculate(n: Integer): Integer;  
 begin
   if not FCache.TryGetValue(n, Result) then
   begin
@@ -1512,18 +1512,18 @@ const
     0.0000, 0.0175, 0.0349, // ... etc
   );
 
-function FastSin(degrees: Integer): Single; inline;
+function FastSin(degrees: Integer): Single; inline;  
 begin
   Result := SinTable[degrees mod 360];
 end;
 
 // 3. Bit twiddling hacks
-function IsPowerOfTwo(x: Cardinal): Boolean; inline;
+function IsPowerOfTwo(x: Cardinal): Boolean; inline;  
 begin
   Result := (x <> 0) and ((x and (x - 1)) = 0);
 end;
 
-function CountBits(x: Cardinal): Integer;
+function CountBits(x: Cardinal): Integer;  
 begin
   x := x - ((x shr 1) and $55555555);
   x := (x and $33333333) + ((x shr 2) and $33333333);
@@ -1534,7 +1534,7 @@ end;
 var
   GlobalBuffer: array[0..1023] of Byte;  // Buffer réutilisable
 
-procedure ProcessWithStaticBuffer;
+procedure ProcessWithStaticBuffer;  
 begin
   // Utilise GlobalBuffer au lieu d'allouer dynamiquement
   FillChar(GlobalBuffer, SizeOf(GlobalBuffer), 0);
@@ -1549,7 +1549,7 @@ end;
 // Exemple : Recherche
 
 // O(n) - Recherche linéaire
-function LinearSearch(const arr: array of Integer; value: Integer): Integer;
+function LinearSearch(const arr: array of Integer; value: Integer): Integer;  
 var
   i: Integer;
 begin
@@ -1560,7 +1560,7 @@ begin
 end;
 
 // O(log n) - Recherche binaire (tableau trié)
-function BinarySearch(const arr: array of Integer; value: Integer): Integer;
+function BinarySearch(const arr: array of Integer; value: Integer): Integer;  
 var
   low, high, mid: Integer;
 begin
@@ -1594,7 +1594,7 @@ end;
 {$ASMMODE INTEL}
 
 // Copie de mémoire optimisée avec SSE
-procedure FastMemCopy(Dest, Source: Pointer; Size: NativeInt);
+procedure FastMemCopy(Dest, Source: Pointer; Size: NativeInt);  
 asm
   {$IFDEF CPUX64}
   // Version 64 bits avec instructions AVX si disponible
@@ -1636,7 +1636,7 @@ asm
 end;
 
 // Calcul de checksum optimisé
-function FastChecksum(Data: PByte; Size: Integer): Cardinal;
+function FastChecksum(Data: PByte; Size: Integer): Cardinal;  
 asm
   {$IFDEF CPUX64}
     xor rax, rax
@@ -1684,14 +1684,14 @@ type
     destructor Destroy; override;
   end;
 
-constructor TProfiler.Create(const AName: string);
+constructor TProfiler.Create(const AName: string);  
 begin
   FName := AName;
   FStartTime := Now;
   WriteLn(Format('Profiling %s started', [FName]));
 end;
 
-destructor TProfiler.Destroy;
+destructor TProfiler.Destroy;  
 var
   ElapsedMS: Int64;
 begin
@@ -1701,7 +1701,7 @@ begin
 end;
 
 // Utilisation
-procedure TestFunction;
+procedure TestFunction;  
 var
   Prof: TProfiler;
 begin
@@ -1721,17 +1721,17 @@ end;
 {$IFDEF WINDOWS}
 uses Windows;
 
-function GetHighPrecisionTime: Int64;
+function GetHighPrecisionTime: Int64;  
 begin
   QueryPerformanceCounter(Result);
 end;
 
-function GetHighPrecisionFrequency: Int64;
+function GetHighPrecisionFrequency: Int64;  
 begin
   QueryPerformanceFrequency(Result);
 end;
 
-procedure ProfileCode(const Name: string; Proc: TProcedure);
+procedure ProfileCode(const Name: string; Proc: TProcedure);  
 var
   Start, Stop, Freq: Int64;
   ElapsedMS: Double;
@@ -1748,15 +1748,15 @@ end;
 
 **Outils externes Windows :**
 ```batch
-rem Intel VTune Profiler
+rem Intel VTune Profiler  
 amplxe-cl -collect hotspots programme.exe
 
-rem Very Sleepy (gratuit)
+rem Very Sleepy (gratuit)  
 sleepy programme.exe
 
-rem Windows Performance Toolkit
-wpr -start CPU
-programme.exe
+rem Windows Performance Toolkit  
+wpr -start CPU  
+programme.exe  
 wpr -stop output.etl
 ```
 
@@ -1766,7 +1766,7 @@ wpr -stop output.etl
 {$IFDEF LINUX}
 uses BaseUnix, Unix;
 
-function GetCPUTime: Double;
+function GetCPUTime: Double;  
 var
   usage: TRUsage;
 begin
@@ -1774,7 +1774,7 @@ begin
   Result := usage.ru_utime.tv_sec + usage.ru_utime.tv_usec / 1000000.0;
 end;
 
-procedure ProfileMemory;
+procedure ProfileMemory;  
 var
   status: Text;
   line: string;
@@ -1799,11 +1799,11 @@ end;
 **Outils externes Linux :**
 ```bash
 # Valgrind avec Callgrind
-valgrind --tool=callgrind ./programme
+valgrind --tool=callgrind ./programme  
 kcachegrind callgrind.out.*
 
 # Perf
-perf record -g ./programme
+perf record -g ./programme  
 perf report
 
 # Gprof
@@ -1838,7 +1838,7 @@ uses heaptrc;
 var
   OldMemMgr: TMemoryManager;
 
-function TrackedGetMem(Size: PtrUInt): Pointer;
+function TrackedGetMem(Size: PtrUInt): Pointer;  
 begin
   Result := OldMemMgr.GetMem(Size);
   if Result <> nil then
@@ -1850,14 +1850,14 @@ begin
   end;
 end;
 
-function TrackedFreeMem(p: Pointer): PtrUInt;
+function TrackedFreeMem(p: Pointer): PtrUInt;  
 begin
   Result := OldMemMgr.FreeMem(p);
   Inc(TotalFreed, Result);
   Dec(CurrentUsage, Result);
 end;
 
-function TrackedReallocMem(var p: Pointer; Size: PtrUInt): Pointer;
+function TrackedReallocMem(var p: Pointer; Size: PtrUInt): Pointer;  
 var
   OldSize: PtrUInt;
 begin
@@ -1897,7 +1897,7 @@ end.
 
 ```pascal
 // Version non optimisée
-procedure ProcessImageSlow(var Img: TBitmap);
+procedure ProcessImageSlow(var Img: TBitmap);  
 var
   x, y: Integer;
   pixel: TColor;
@@ -1912,7 +1912,7 @@ begin
 end;
 
 // Version optimisée
-procedure ProcessImageFast(var Img: TBitmap);
+procedure ProcessImageFast(var Img: TBitmap);  
 type
   TRGBTriple = packed record
     B, G, R: Byte;
@@ -1942,7 +1942,7 @@ begin
 end;
 
 // Version SIMD pour encore plus de performance
-procedure ProcessImageSIMD(var Img: TBitmap);
+procedure ProcessImageSIMD(var Img: TBitmap);  
 asm
   // Code assembleur SSE/AVX pour traiter
   // plusieurs pixels simultanément
@@ -1953,7 +1953,7 @@ end;
 
 ```pascal
 // Version basique
-function ParseJSONSlow(const Text: string): TJSONObject;
+function ParseJSONSlow(const Text: string): TJSONObject;  
 var
   i: Integer;
   current: Char;
@@ -1974,7 +1974,7 @@ begin
 end;
 
 // Version optimisée
-function ParseJSONFast(const Text: string): TJSONObject;
+function ParseJSONFast(const Text: string): TJSONObject;  
 var
   p, pEnd: PChar;
 
@@ -2010,7 +2010,7 @@ end;
 
 ```pascal
 // Quicksort optimisé avec plusieurs techniques
-procedure OptimizedQuickSort(var A: array of Integer);
+procedure OptimizedQuickSort(var A: array of Integer);  
 const
   INSERTION_SORT_THRESHOLD = 16;  // Seuil pour insertion sort
 
@@ -2100,7 +2100,7 @@ type
     procedure Start;
   end;
 
-procedure TOptimizedTCPServer.HandleClient(Socket: TSocket);
+procedure TOptimizedTCPServer.HandleClient(Socket: TSocket);  
 var
   Buffer: PByteArray;
   BytesRead: Integer;
@@ -2135,7 +2135,7 @@ end;
 
 ```pascal
 // Problème : variable non initialisée
-procedure Problematic;
+procedure Problematic;  
 var
   x: Integer;  // Non initialisé!
 begin
@@ -2146,7 +2146,7 @@ begin
 end;
 
 // Solution : toujours initialiser
-procedure Fixed;
+procedure Fixed;  
 var
   x: Integer;
 begin
@@ -2160,13 +2160,13 @@ end;
 
 ```pascal
 // Problème avec -Oofastmath
-function CompareFloats(a, b: Double): Boolean;
+function CompareFloats(a, b: Double): Boolean;  
 begin
   Result := a = b;  // Dangereux avec fastmath!
 end;
 
 // Solution : comparaison avec epsilon
-function CompareFloatsSafe(a, b: Double): Boolean;
+function CompareFloatsSafe(a, b: Double): Boolean;  
 const
   EPSILON = 1E-9;
 begin
@@ -2178,7 +2178,7 @@ end;
 
 ```pascal
 // Code sensible au timing
-procedure DelayLoop;
+procedure DelayLoop;  
 var
   i: Integer;
 begin
@@ -2187,7 +2187,7 @@ begin
 end;
 
 // Solution : utiliser les bonnes méthodes
-procedure ProperDelay;
+procedure ProperDelay;  
 begin
   {$OPTIMIZATION OFF}
   // Ou utiliser Sleep/Delay du système
@@ -2200,7 +2200,7 @@ end;
 
 ```pascal
 // Code dépendant de l'ordre d'évaluation des paramètres
-function DangerousCode: Integer;
+function DangerousCode: Integer;  
 var
   x: Integer;
 
@@ -2217,7 +2217,7 @@ begin
 end;
 
 // Solution : séparer les effets de bord
-function SafeCode: Integer;
+function SafeCode: Integer;  
 var
   x, temp1, temp2: Integer;
 begin
@@ -2235,19 +2235,19 @@ end;
 ```pascal
 // 1. Logging conditionnel
 {$IFDEF DEBUG_OPTIMIZATION}
-procedure LogOptimization(const Msg: string);
+procedure LogOptimization(const Msg: string);  
 begin
   WriteLn('[OPT] ', Msg);
 end;
 {$ELSE}
-procedure LogOptimization(const Msg: string); inline;
+procedure LogOptimization(const Msg: string); inline;  
 begin
   // Vide en release - sera éliminé
 end;
 {$ENDIF}
 
 // 2. Assertions pour vérifier les invariants
-procedure OptimizedFunction(x: Integer);
+procedure OptimizedFunction(x: Integer);  
 begin
   {$ASSERTIONS ON}
   Assert(x >= 0, 'x must be non-negative');
@@ -2257,12 +2257,12 @@ begin
 end;
 
 // 3. Marqueurs pour empêcher l'optimisation
-procedure KeepVariable(var x);
+procedure KeepVariable(var x);  
 begin
   // Force le compilateur à garder la variable
 end;
 
-procedure TestWithMarker;
+procedure TestWithMarker;  
 var
   importantVar: Integer;
 begin
@@ -2288,13 +2288,13 @@ type
     procedure Report;
   end;
 
-procedure TPerformanceMonitor.BeginSection(const Name: string);
+procedure TPerformanceMonitor.BeginSection(const Name: string);  
 begin
   FCurrent := Name;
   FStart := GetTickCount64;
 end;
 
-procedure TPerformanceMonitor.EndSection;
+procedure TPerformanceMonitor.EndSection;  
 var
   elapsed: Int64;
 begin
@@ -2305,7 +2305,7 @@ begin
     FSections.Add(FCurrent, elapsed);
 end;
 
-procedure TPerformanceMonitor.Report;
+procedure TPerformanceMonitor.Report;  
 var
   pair: TPair<string, Int64>;
   total: Int64;
@@ -2437,11 +2437,11 @@ end;
 @echo off
 setlocal EnableDelayedExpansion
 
-rem Configuration
-set PROJECT=MonProjet
+rem Configuration  
+set PROJECT=MonProjet  
 set FPC=fpc
 
-rem Mode Debug
+rem Mode Debug  
 if "%1"=="debug" (
     echo Building DEBUG version...
     %FPC% -O0 -g -gh -gl -Ci -Co -Ct -Cr -Sa -vewh %PROJECT%.pas
@@ -2450,7 +2450,7 @@ if "%1"=="debug" (
     goto end
 )
 
-rem Mode Release
+rem Mode Release  
 if "%1"=="release" (
     echo Building RELEASE version...
     %FPC% -O3 -XX -CX -Xs -v0 %PROJECT%.pas
@@ -2465,7 +2465,7 @@ if "%1"=="release" (
     goto end
 )
 
-rem Mode Profile
+rem Mode Profile  
 if "%1"=="profile" (
     echo Building PROFILE version...
     %FPC% -O2 -pg %PROJECT%.pas
@@ -2475,11 +2475,11 @@ if "%1"=="profile" (
     goto end
 )
 
-echo Usage: build.bat [debug^|release^|profile]
+echo Usage: build.bat [debug^|release^|profile]  
 goto end
 
 :error
-echo Build failed with error %errorlevel%
+echo Build failed with error %errorlevel%  
 exit /b 1
 
 :end
@@ -2491,11 +2491,11 @@ endlocal
 ```bash
 #!/bin/bash
 
-PROJECT="MonProjet"
+PROJECT="MonProjet"  
 FPC="fpc"
 
 # Détection architecture
-ARCH=$(uname -m)
+ARCH=$(uname -m)  
 case $ARCH in
     x86_64)
         CPU_OPT="-CpCOREAVX"
@@ -2509,9 +2509,9 @@ case $ARCH in
 esac
 
 # Couleurs pour output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
+RED='\033[0;31m'  
+GREEN='\033[0;32m'  
+YELLOW='\033[1;33m'  
 NC='\033[0m' # No Color
 
 function build_debug {
@@ -2722,7 +2722,7 @@ type
 var
   Benchmarks: array of TBenchmark;
 
-procedure AddBenchmark(const AName: string; ATime: Int64);
+procedure AddBenchmark(const AName: string; ATime: Int64);  
 var
   idx: Integer;
 begin
@@ -2733,7 +2733,7 @@ begin
 end;
 
 // Test 1 : Calculs mathématiques intensifs
-procedure BenchmarkMath;
+procedure BenchmarkMath;  
 var
   Start: TDateTime;
   i: Integer;
@@ -2753,7 +2753,7 @@ begin
 end;
 
 // Test 2 : Manipulation de chaînes
-procedure BenchmarkStrings;
+procedure BenchmarkStrings;  
 var
   Start: TDateTime;
   i: Integer;
@@ -2773,7 +2773,7 @@ begin
 end;
 
 // Test 3 : Accès mémoire et tableaux
-procedure BenchmarkArrays;
+procedure BenchmarkArrays;  
 const
   SIZE = 1000000;
 var
@@ -2802,7 +2802,7 @@ begin
 end;
 
 // Test 4 : Récursion
-function Fibonacci(n: Integer): Int64;
+function Fibonacci(n: Integer): Int64;  
 begin
   if n <= 1 then
     Result := n
@@ -2810,7 +2810,7 @@ begin
     Result := Fibonacci(n - 1) + Fibonacci(n - 2);
 end;
 
-procedure BenchmarkRecursion;
+procedure BenchmarkRecursion;  
 var
   Start: TDateTime;
   result: Int64;
@@ -2822,7 +2822,7 @@ begin
 end;
 
 // Affichage des résultats
-procedure ShowResults;
+procedure ShowResults;  
 var
   i: Integer;
   Total: Int64;
@@ -2879,40 +2879,40 @@ end.
 ```
 === Résultats comparatifs (Intel Core i7) ===
 
-Optimisation: -O0 (Aucune)
-Math Operations     :   2340 ms
-String Operations   :    567 ms
-Array Operations    :   1890 ms
-Recursion (Fib 40)  :   4532 ms
+Optimisation: -O0 (Aucune)  
+Math Operations     :   2340 ms  
+String Operations   :    567 ms  
+Array Operations    :   1890 ms  
+Recursion (Fib 40)  :   4532 ms  
 TOTAL              :   9329 ms
 
-Optimisation: -O1 (Basique)
-Math Operations     :   1876 ms (-20%)
-String Operations   :    423 ms (-25%)
-Array Operations    :   1234 ms (-35%)
-Recursion (Fib 40)  :   3421 ms (-24%)
+Optimisation: -O1 (Basique)  
+Math Operations     :   1876 ms (-20%)  
+String Operations   :    423 ms (-25%)  
+Array Operations    :   1234 ms (-35%)  
+Recursion (Fib 40)  :   3421 ms (-24%)  
 TOTAL              :   6954 ms (-25%)
 
-Optimisation: -O2 (Standard)
-Math Operations     :   1123 ms (-52%)
-String Operations   :    312 ms (-45%)
-Array Operations    :    789 ms (-58%)
-Recursion (Fib 40)  :   2234 ms (-51%)
+Optimisation: -O2 (Standard)  
+Math Operations     :   1123 ms (-52%)  
+String Operations   :    312 ms (-45%)  
+Array Operations    :    789 ms (-58%)  
+Recursion (Fib 40)  :   2234 ms (-51%)  
 TOTAL              :   4458 ms (-52%)
 
-Optimisation: -O3 (Agressive)
-Math Operations     :    892 ms (-62%)
-String Operations   :    298 ms (-47%)
-Array Operations    :    623 ms (-67%)
-Recursion (Fib 40)  :   1876 ms (-59%)
+Optimisation: -O3 (Agressive)  
+Math Operations     :    892 ms (-62%)  
+String Operations   :    298 ms (-47%)  
+Array Operations    :    623 ms (-67%)  
+Recursion (Fib 40)  :   1876 ms (-59%)  
 TOTAL              :   3689 ms (-60%)
 
-Optimisation: -Os (Taille)
-Math Operations     :   1456 ms (-38%)
-String Operations   :    389 ms (-31%)
-Array Operations    :    945 ms (-50%)
-Recursion (Fib 40)  :   2678 ms (-41%)
-TOTAL              :   5468 ms (-41%)
+Optimisation: -Os (Taille)  
+Math Operations     :   1456 ms (-38%)  
+String Operations   :    389 ms (-31%)  
+Array Operations    :    945 ms (-50%)  
+Recursion (Fib 40)  :   2678 ms (-41%)  
+TOTAL              :   5468 ms (-41%)  
 Taille exe: 245 KB (-45% vs -O0)
 ```
 

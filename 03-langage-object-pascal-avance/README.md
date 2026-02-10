@@ -130,7 +130,7 @@ Les optimisations avancées du langage peuvent varier selon la plateforme cible 
 
 ```pascal
 // Assembleur inline multi-architecture
-procedure FastCopy(const Source; var Dest; Size: NativeInt);
+procedure FastCopy(const Source; var Dest; Size: NativeInt);  
 begin
   {$IFDEF CPUX86_64}
     // Optimisation SSE pour x64
@@ -253,7 +253,7 @@ Préparez un environnement permettant de tester sur les deux plateformes :
 
 ```bash
 # Ubuntu - Installation des outils de développement
-sudo apt-get update
+sudo apt-get update  
 sudo apt-get install lazarus fp-compiler fp-units-* gdb valgrind
 
 # Windows - Via Chocolatey
@@ -298,18 +298,18 @@ type
 
 { TVector2D }
 
-operator +(const A, B: TVector2D): TVector2D;
+operator +(const A, B: TVector2D): TVector2D;  
 begin
   Result.X := A.X + B.X;
   Result.Y := A.Y + B.Y;
 end;
 
-function TVector2D.Magnitude: Double;
+function TVector2D.Magnitude: Double;  
 begin
   Result := Sqrt(X * X + Y * Y);
 end;
 
-procedure TVector2D.Normalize;
+procedure TVector2D.Normalize;  
 var
   Mag: Double;
 begin
@@ -323,24 +323,24 @@ end;
 
 { TCache }
 
-constructor TCache<T>.Create;
+constructor TCache<T>.Create;  
 begin
   inherited Create;
   FItems := specialize TDictionary<string, T>.Create;
 end;
 
-destructor TCache<T>.Destroy;
+destructor TCache<T>.Destroy;  
 begin
   FItems.Free;
   inherited;
 end;
 
-procedure TCache<T>.Add(const Key: string; Value: T);
+procedure TCache<T>.Add(const Key: string; Value: T);  
 begin
   FItems.AddOrSetValue(Key, Value);
 end;
 
-function TCache<T>.TryGet(const Key: string; out Value: T): Boolean;
+function TCache<T>.TryGet(const Key: string; out Value: T): Boolean;  
 begin
   Result := FItems.TryGetValue(Key, Value);
 end;

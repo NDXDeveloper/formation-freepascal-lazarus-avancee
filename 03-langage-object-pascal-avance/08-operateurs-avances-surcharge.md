@@ -28,7 +28,7 @@ FreePascal permet de surcharger de nombreux opérateurs :
 -    // Soustraction et négation unaire
 *    // Multiplication
 /    // Division
-div  // Division entière
+div  // Division entière  
 mod  // Modulo
 **   // Puissance
 
@@ -41,13 +41,13 @@ mod  // Modulo
 >=   // Supérieur ou égal
 
 // Opérateurs logiques
-and  // ET logique
-or   // OU logique
-xor  // OU exclusif
+and  // ET logique  
+or   // OU logique  
+xor  // OU exclusif  
 not  // NON logique
 
 // Opérateurs bit à bit
-shl  // Décalage à gauche
+shl  // Décalage à gauche  
 shr  // Décalage à droite
 
 // Opérateurs spéciaux
@@ -68,7 +68,7 @@ type
   end;
 
 // Surcharge de l'opérateur + pour additionner deux fractions
-operator + (const A, B: TFraction): TFraction;
+operator + (const A, B: TFraction): TFraction;  
 begin
   // Addition de fractions : a/b + c/d = (a*d + b*c) / (b*d)
   Result.Numerator := A.Numerator * B.Denominator +
@@ -77,7 +77,7 @@ begin
 end;
 
 // Surcharge de l'opérateur - pour soustraire
-operator - (const A, B: TFraction): TFraction;
+operator - (const A, B: TFraction): TFraction;  
 begin
   Result.Numerator := A.Numerator * B.Denominator -
                       B.Numerator * A.Denominator;
@@ -85,14 +85,14 @@ begin
 end;
 
 // Surcharge de l'opérateur * pour multiplier
-operator * (const A, B: TFraction): TFraction;
+operator * (const A, B: TFraction): TFraction;  
 begin
   Result.Numerator := A.Numerator * B.Numerator;
   Result.Denominator := A.Denominator * B.Denominator;
 end;
 
 // Surcharge de l'opérateur / pour diviser
-operator / (const A, B: TFraction): TFraction;
+operator / (const A, B: TFraction): TFraction;  
 begin
   // Division = multiplication par l'inverse
   Result.Numerator := A.Numerator * B.Denominator;
@@ -100,20 +100,20 @@ begin
 end;
 
 // Surcharge de l'opérateur = pour comparer
-operator = (const A, B: TFraction): Boolean;
+operator = (const A, B: TFraction): Boolean;  
 begin
   // Deux fractions sont égales si leurs produits croisés sont égaux
   Result := A.Numerator * B.Denominator = B.Numerator * A.Denominator;
 end;
 
 // Surcharge de l'opérateur <
-operator < (const A, B: TFraction): Boolean;
+operator < (const A, B: TFraction): Boolean;  
 begin
   Result := A.Numerator * B.Denominator < B.Numerator * A.Denominator;
 end;
 
 // Fonction helper pour créer une fraction
-function MakeFraction(Num, Denom: Integer): TFraction;
+function MakeFraction(Num, Denom: Integer): TFraction;  
 begin
   Result.Numerator := Num;
   Result.Denominator := Denom;
@@ -122,7 +122,7 @@ begin
 end;
 
 // Fonction pour simplifier une fraction
-procedure SimplifyFraction(var F: TFraction);
+procedure SimplifyFraction(var F: TFraction);  
 var
   GCD: Integer;
 
@@ -156,7 +156,7 @@ begin
 end;
 
 // Utilisation
-procedure UseFractions;
+procedure UseFractions;  
 var
   F1, F2, F3: TFraction;
 begin
@@ -184,55 +184,55 @@ type
   end;
 
 // Constructeur helper
-function Vec2D(AX, AY: Double): TVector2D;
+function Vec2D(AX, AY: Double): TVector2D;  
 begin
   Result.X := AX;
   Result.Y := AY;
 end;
 
 // Addition de vecteurs
-operator + (const A, B: TVector2D): TVector2D;
+operator + (const A, B: TVector2D): TVector2D;  
 begin
   Result.X := A.X + B.X;
   Result.Y := A.Y + B.Y;
 end;
 
 // Soustraction de vecteurs
-operator - (const A, B: TVector2D): TVector2D;
+operator - (const A, B: TVector2D): TVector2D;  
 begin
   Result.X := A.X - B.X;
   Result.Y := A.Y - B.Y;
 end;
 
 // Négation (opérateur unaire -)
-operator - (const A: TVector2D): TVector2D;
+operator - (const A: TVector2D): TVector2D;  
 begin
   Result.X := -A.X;
   Result.Y := -A.Y;
 end;
 
 // Multiplication par un scalaire (vecteur * nombre)
-operator * (const V: TVector2D; Scalar: Double): TVector2D;
+operator * (const V: TVector2D; Scalar: Double): TVector2D;  
 begin
   Result.X := V.X * Scalar;
   Result.Y := V.Y * Scalar;
 end;
 
 // Multiplication par un scalaire (nombre * vecteur)
-operator * (Scalar: Double; const V: TVector2D): TVector2D;
+operator * (Scalar: Double; const V: TVector2D): TVector2D;  
 begin
   Result.X := V.X * Scalar;
   Result.Y := V.Y * Scalar;
 end;
 
 // Produit scalaire (dot product)
-operator * (const A, B: TVector2D): Double;
+operator * (const A, B: TVector2D): Double;  
 begin
   Result := A.X * B.X + A.Y * B.Y;
 end;
 
 // Division par un scalaire
-operator / (const V: TVector2D; Scalar: Double): TVector2D;
+operator / (const V: TVector2D; Scalar: Double): TVector2D;  
 begin
   if Scalar = 0 then
     raise EDivByZero.Create('Division par zéro');
@@ -241,7 +241,7 @@ begin
 end;
 
 // Égalité (avec tolérance pour les flottants)
-operator = (const A, B: TVector2D): Boolean;
+operator = (const A, B: TVector2D): Boolean;  
 const
   Epsilon = 1E-9;
 begin
@@ -250,7 +250,7 @@ begin
 end;
 
 // Conversion implicite depuis un tableau
-operator := (const Values: array of Double): TVector2D;
+operator := (const Values: array of Double): TVector2D;  
 begin
   if Length(Values) >= 2 then
   begin
@@ -262,12 +262,12 @@ begin
 end;
 
 // Méthodes helper pour les vecteurs
-function Length(const V: TVector2D): Double;
+function Length(const V: TVector2D): Double;  
 begin
   Result := Sqrt(V.X * V.X + V.Y * V.Y);
 end;
 
-function Normalize(const V: TVector2D): TVector2D;
+function Normalize(const V: TVector2D): TVector2D;  
 var
   Len: Double;
 begin
@@ -278,13 +278,13 @@ begin
     Result := V;
 end;
 
-function Distance(const A, B: TVector2D): Double;
+function Distance(const A, B: TVector2D): Double;  
 begin
   Result := Length(B - A);
 end;
 
 // Utilisation
-procedure UseVectors;
+procedure UseVectors;  
 var
   V1, V2, V3: TVector2D;
   DotProduct: Double;
@@ -333,13 +333,13 @@ type
     function ToString: string; override;
   end;
 
-constructor TComplex.Create(AReal, AImaginary: Double);
+constructor TComplex.Create(AReal, AImaginary: Double);  
 begin
   FReal := AReal;
   FImaginary := AImaginary;
 end;
 
-function TComplex.ToString: string;
+function TComplex.ToString: string;  
 begin
   if FImaginary >= 0 then
     Result := Format('%.2f + %.2fi', [FReal, FImaginary])
@@ -348,21 +348,21 @@ begin
 end;
 
 // Addition de nombres complexes
-operator + (const A, B: TComplex): TComplex;
+operator + (const A, B: TComplex): TComplex;  
 begin
   Result := TComplex.Create(A.Real + B.Real,
                             A.Imaginary + B.Imaginary);
 end;
 
 // Soustraction
-operator - (const A, B: TComplex): TComplex;
+operator - (const A, B: TComplex): TComplex;  
 begin
   Result := TComplex.Create(A.Real - B.Real,
                             A.Imaginary - B.Imaginary);
 end;
 
 // Multiplication
-operator * (const A, B: TComplex): TComplex;
+operator * (const A, B: TComplex): TComplex;  
 var
   RealPart, ImagPart: Double;
 begin
@@ -373,7 +373,7 @@ begin
 end;
 
 // Division
-operator / (const A, B: TComplex): TComplex;
+operator / (const A, B: TComplex): TComplex;  
 var
   Denominator, RealPart, ImagPart: Double;
 begin
@@ -388,7 +388,7 @@ begin
 end;
 
 // Égalité
-operator = (const A, B: TComplex): Boolean;
+operator = (const A, B: TComplex): Boolean;  
 const
   Epsilon = 1E-9;
 begin
@@ -397,19 +397,19 @@ begin
 end;
 
 // Module (valeur absolue) d'un nombre complexe
-function Abs(const C: TComplex): Double;
+function Abs(const C: TComplex): Double;  
 begin
   Result := Sqrt(C.Real * C.Real + C.Imaginary * C.Imaginary);
 end;
 
 // Conjugué d'un nombre complexe
-function Conjugate(const C: TComplex): TComplex;
+function Conjugate(const C: TComplex): TComplex;  
 begin
   Result := TComplex.Create(C.Real, -C.Imaginary);
 end;
 
 // Utilisation
-procedure UseComplex;
+procedure UseComplex;  
 var
   C1, C2, C3: TComplex;
 begin
@@ -448,53 +448,53 @@ type
   end;
 
 // Conversion implicite : affectation automatique
-operator := (Value: Double): TTemperature;
+operator := (Value: Double): TTemperature;  
 begin
   Result.Celsius := Value;
 end;
 
 // Conversion implicite : température vers string
-operator := (const Temp: TTemperature): string;
+operator := (const Temp: TTemperature): string;  
 begin
   Result := Format('%.1f°C', [Temp.Celsius]);
 end;
 
 // Conversion explicite : Celsius vers Fahrenheit
-operator Explicit(const Temp: TTemperature): Double;
+operator Explicit(const Temp: TTemperature): Double;  
 begin
   Result := Temp.Celsius * 9/5 + 32; // Retourne en Fahrenheit
 end;
 
 // Conversion depuis Integer
-operator := (Value: Integer): TTemperature;
+operator := (Value: Integer): TTemperature;  
 begin
   Result.Celsius := Value;
 end;
 
 // Opérateurs arithmétiques
-operator + (const T1, T2: TTemperature): TTemperature;
+operator + (const T1, T2: TTemperature): TTemperature;  
 begin
   Result.Celsius := T1.Celsius + T2.Celsius;
 end;
 
-operator - (const T1, T2: TTemperature): TTemperature;
+operator - (const T1, T2: TTemperature): TTemperature;  
 begin
   Result.Celsius := T1.Celsius - T2.Celsius;
 end;
 
 // Comparaisons
-operator > (const T1, T2: TTemperature): Boolean;
+operator > (const T1, T2: TTemperature): Boolean;  
 begin
   Result := T1.Celsius > T2.Celsius;
 end;
 
-operator < (const T1, T2: TTemperature): Boolean;
+operator < (const T1, T2: TTemperature): Boolean;  
 begin
   Result := T1.Celsius < T2.Celsius;
 end;
 
 // Utilisation
-procedure UseTemperature;
+procedure UseTemperature;  
 var
   T1, T2, T3: TTemperature;
   Fahrenheit: Double;
@@ -539,19 +539,19 @@ type
   TIntPair = specialize TPair<Integer>;
 
 // Opérateurs pour TIntPair
-operator + (const A, B: TIntPair): TIntPair;
+operator + (const A, B: TIntPair): TIntPair;  
 begin
   Result.First := A.First + B.First;
   Result.Second := A.Second + B.Second;
 end;
 
-operator * (const P: TIntPair; Scalar: Integer): TIntPair;
+operator * (const P: TIntPair; Scalar: Integer): TIntPair;  
 begin
   Result.First := P.First * Scalar;
   Result.Second := P.Second * Scalar;
 end;
 
-operator = (const A, B: TIntPair): Boolean;
+operator = (const A, B: TIntPair): Boolean;  
 begin
   Result := (A.First = B.First) and (A.Second = B.Second);
 end;
@@ -576,7 +576,7 @@ type
   TDoubleMatrix = specialize TMatrix<Double>;
 
 // Opérateurs pour matrices de Double
-operator + (const A, B: TDoubleMatrix): TDoubleMatrix;
+operator + (const A, B: TDoubleMatrix): TDoubleMatrix;  
 var
   I, J: Integer;
 begin
@@ -586,7 +586,7 @@ begin
       Result[I, J] := A[I, J] + B[I, J];
 end;
 
-operator * (const M: TDoubleMatrix; Scalar: Double): TDoubleMatrix;
+operator * (const M: TDoubleMatrix; Scalar: Double): TDoubleMatrix;  
 var
   I, J: Integer;
 begin
@@ -614,24 +614,24 @@ type
     function Count: Integer;
   end;
 
-procedure TBitSet.Clear;
+procedure TBitSet.Clear;  
 begin
   FBits := 0;
 end;
 
-procedure TBitSet.SetBit(Index: Integer);
+procedure TBitSet.SetBit(Index: Integer);  
 begin
   if (Index >= 0) and (Index < 32) then
     FBits := FBits or (1 shl Index);
 end;
 
-procedure TBitSet.ClearBit(Index: Integer);
+procedure TBitSet.ClearBit(Index: Integer);  
 begin
   if (Index >= 0) and (Index < 32) then
     FBits := FBits and not (1 shl Index);
 end;
 
-function TBitSet.GetBit(Index: Integer): Boolean;
+function TBitSet.GetBit(Index: Integer): Boolean;  
 begin
   if (Index >= 0) and (Index < 32) then
     Result := (FBits and (1 shl Index)) <> 0
@@ -639,7 +639,7 @@ begin
     Result := False;
 end;
 
-function TBitSet.Count: Integer;
+function TBitSet.Count: Integer;  
 var
   Temp: Cardinal;
 begin
@@ -653,62 +653,62 @@ begin
 end;
 
 // Union (OR)
-operator or (const A, B: TBitSet): TBitSet;
+operator or (const A, B: TBitSet): TBitSet;  
 begin
   Result.FBits := A.FBits or B.FBits;
 end;
 
 // Intersection (AND)
-operator and (const A, B: TBitSet): TBitSet;
+operator and (const A, B: TBitSet): TBitSet;  
 begin
   Result.FBits := A.FBits and B.FBits;
 end;
 
 // Différence symétrique (XOR)
-operator xor (const A, B: TBitSet): TBitSet;
+operator xor (const A, B: TBitSet): TBitSet;  
 begin
   Result.FBits := A.FBits xor B.FBits;
 end;
 
 // Complément (NOT)
-operator not (const A: TBitSet): TBitSet;
+operator not (const A: TBitSet): TBitSet;  
 begin
   Result.FBits := not A.FBits;
 end;
 
 // Décalage à gauche
-operator shl (const A: TBitSet; Shift: Integer): TBitSet;
+operator shl (const A: TBitSet; Shift: Integer): TBitSet;  
 begin
   Result.FBits := A.FBits shl Shift;
 end;
 
 // Décalage à droite
-operator shr (const A: TBitSet; Shift: Integer): TBitSet;
+operator shr (const A: TBitSet; Shift: Integer): TBitSet;  
 begin
   Result.FBits := A.FBits shr Shift;
 end;
 
 // Test d'appartenance
-operator in (Bit: Integer; const S: TBitSet): Boolean;
+operator in (Bit: Integer; const S: TBitSet): Boolean;  
 begin
   Result := S.GetBit(Bit);
 end;
 
 // Égalité
-operator = (const A, B: TBitSet): Boolean;
+operator = (const A, B: TBitSet): Boolean;  
 begin
   Result := A.FBits = B.FBits;
 end;
 
 // Inclusion
-operator <= (const A, B: TBitSet): Boolean;
+operator <= (const A, B: TBitSet): Boolean;  
 begin
   // A est inclus dans B si A AND B = A
   Result := (A.FBits and B.FBits) = A.FBits;
 end;
 
 // Utilisation
-procedure UseBitSet;
+procedure UseBitSet;  
 var
   Set1, Set2, Set3: TBitSet;
 begin
@@ -751,7 +751,7 @@ type
   end;
 
 // Constructeur helper
-function Interval(AMin, AMax: Double): TInterval;
+function Interval(AMin, AMax: Double): TInterval;  
 begin
   if AMin > AMax then
     raise Exception.Create('Min doit être <= Max');
@@ -760,13 +760,13 @@ begin
 end;
 
 // Test si une valeur est dans l'intervalle
-operator in (Value: Double; const I: TInterval): Boolean;
+operator in (Value: Double; const I: TInterval): Boolean;  
 begin
   Result := (Value >= I.Min) and (Value <= I.Max);
 end;
 
 // Test si un intervalle est dans un autre
-operator in (const A, B: TInterval): Boolean;
+operator in (const A, B: TInterval): Boolean;  
 begin
   Result := (A.Min >= B.Min) and (A.Max <= B.Max);
 end;
@@ -774,7 +774,7 @@ end;
 // Nécessite : uses Math;  (pour Max, Min)
 
 // Intersection de deux intervalles
-operator * (const A, B: TInterval): TInterval;
+operator * (const A, B: TInterval): TInterval;  
 begin
   Result.Min := Max(A.Min, B.Min);
   Result.Max := Min(A.Max, B.Max);
@@ -783,7 +783,7 @@ begin
 end;
 
 // Union de deux intervalles (s'ils se chevauchent)
-operator + (const A, B: TInterval): TInterval;
+operator + (const A, B: TInterval): TInterval;  
 begin
   if (A.Max < B.Min) or (B.Max < A.Min) then
     raise Exception.Create('Intervalles non contigus');
@@ -792,13 +792,13 @@ begin
 end;
 
 // Comparaison : A < B si A est entièrement avant B
-operator < (const A, B: TInterval): Boolean;
+operator < (const A, B: TInterval): Boolean;  
 begin
   Result := A.Max < B.Min;
 end;
 
 // Égalité
-operator = (const A, B: TInterval): Boolean;
+operator = (const A, B: TInterval): Boolean;  
 const
   Epsilon = 1E-9;
 begin
@@ -807,13 +807,13 @@ begin
 end;
 
 // Opérateur symétrique (chevauche)
-operator >< (const A, B: TInterval): Boolean;
+operator >< (const A, B: TInterval): Boolean;  
 begin
   Result := not ((A.Max < B.Min) or (B.Max < A.Min));
 end;
 
 // Utilisation
-procedure UseIntervals;
+procedure UseIntervals;  
 var
   I1, I2, I3: TInterval;
   Value: Double;
@@ -852,14 +852,14 @@ type
   end;
 
 // Constructeur
-function Money(AAmount: Currency; const ACurrency: string = 'EUR'): TMoney;
+function Money(AAmount: Currency; const ACurrency: string = 'EUR'): TMoney;  
 begin
   Result.Amount := AAmount;
   Result.CurrencyCode := ACurrency;
 end;
 
 // Addition (même devise seulement)
-operator + (const A, B: TMoney): TMoney;
+operator + (const A, B: TMoney): TMoney;  
 begin
   if A.CurrencyCode <> B.CurrencyCode then
     raise Exception.Create('Devises différentes');
@@ -868,7 +868,7 @@ begin
 end;
 
 // Soustraction
-operator - (const A, B: TMoney): TMoney;
+operator - (const A, B: TMoney): TMoney;  
 begin
   if A.CurrencyCode <> B.CurrencyCode then
     raise Exception.Create('Devises différentes');
@@ -877,19 +877,19 @@ begin
 end;
 
 // Multiplication par un nombre
-operator * (const M: TMoney; Factor: Double): TMoney;
+operator * (const M: TMoney; Factor: Double): TMoney;  
 begin
   Result.Amount := M.Amount * Factor;
   Result.CurrencyCode := M.CurrencyCode;
 end;
 
-operator * (Factor: Double; const M: TMoney): TMoney;
+operator * (Factor: Double; const M: TMoney): TMoney;  
 begin
   Result := M * Factor;
 end;
 
 // Division par un nombre
-operator / (const M: TMoney; Divisor: Double): TMoney;
+operator / (const M: TMoney; Divisor: Double): TMoney;  
 begin
   if Divisor = 0 then
     raise EDivByZero.Create('Division par zéro');
@@ -898,7 +898,7 @@ begin
 end;
 
 // Division entre deux montants (ratio)
-operator / (const A, B: TMoney): Double;
+operator / (const A, B: TMoney): Double;  
 begin
   if A.CurrencyCode <> B.CurrencyCode then
     raise Exception.Create('Devises différentes');
@@ -908,33 +908,33 @@ begin
 end;
 
 // Comparaisons
-operator = (const A, B: TMoney): Boolean;
+operator = (const A, B: TMoney): Boolean;  
 begin
   Result := (A.Amount = B.Amount) and (A.CurrencyCode = B.CurrencyCode);
 end;
 
-operator < (const A, B: TMoney): Boolean;
+operator < (const A, B: TMoney): Boolean;  
 begin
   if A.CurrencyCode <> B.CurrencyCode then
     raise Exception.Create('Devises différentes');
   Result := A.Amount < B.Amount;
 end;
 
-operator > (const A, B: TMoney): Boolean;
+operator > (const A, B: TMoney): Boolean;  
 begin
   if A.CurrencyCode <> B.CurrencyCode then
     raise Exception.Create('Devises différentes');
   Result := A.Amount > B.Amount;
 end;
 
-operator <= (const A, B: TMoney): Boolean;
+operator <= (const A, B: TMoney): Boolean;  
 begin
   if A.CurrencyCode <> B.CurrencyCode then
     raise Exception.Create('Devises différentes');
   Result := A.Amount <= B.Amount;
 end;
 
-operator >= (const A, B: TMoney): Boolean;
+operator >= (const A, B: TMoney): Boolean;  
 begin
   if A.CurrencyCode <> B.CurrencyCode then
     raise Exception.Create('Devises différentes');
@@ -942,20 +942,20 @@ begin
 end;
 
 // Négation
-operator - (const M: TMoney): TMoney;
+operator - (const M: TMoney): TMoney;  
 begin
   Result.Amount := -M.Amount;
   Result.CurrencyCode := M.CurrencyCode;
 end;
 
 // Conversion vers string
-operator := (const M: TMoney): string;
+operator := (const M: TMoney): string;  
 begin
   Result := Format('%.2f %s', [M.Amount, M.CurrencyCode]);
 end;
 
 // Utilisation avec chaînage
-procedure UseMoneyChaining;
+procedure UseMoneyChaining;  
 var
   Price, Tax, Shipping, Total: TMoney;
   Discount: Double;
@@ -993,7 +993,7 @@ type
   TDay = (Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday);
 
 // Opérateur successor (jour suivant)
-operator Inc(const Day: TDay): TDay;
+operator Inc(const Day: TDay): TDay;  
 begin
   if Day = Sunday then
     Result := Monday  // Retour au début
@@ -1002,7 +1002,7 @@ begin
 end;
 
 // Opérateur predecessor (jour précédent)
-operator Dec(const Day: TDay): TDay;
+operator Dec(const Day: TDay): TDay;  
 begin
   if Day = Monday then
     Result := Sunday  // Retour à la fin
@@ -1011,7 +1011,7 @@ begin
 end;
 
 // Addition de jours
-operator + (const Day: TDay; Days: Integer): TDay;
+operator + (const Day: TDay; Days: Integer): TDay;  
 var
   I: Integer;
 begin
@@ -1025,13 +1025,13 @@ begin
 end;
 
 // Soustraction de jours
-operator - (const Day: TDay; Days: Integer): TDay;
+operator - (const Day: TDay; Days: Integer): TDay;  
 begin
   Result := Day + (-Days);
 end;
 
 // Distance entre deux jours
-operator - (const Day1, Day2: TDay): Integer;
+operator - (const Day1, Day2: TDay): Integer;  
 var
   D: TDay;
 begin
@@ -1050,7 +1050,7 @@ begin
 end;
 
 // Comparaison cyclique
-operator < (const Day1, Day2: TDay): Boolean;
+operator < (const Day1, Day2: TDay): Boolean;  
 begin
   Result := Ord(Day1) < Ord(Day2);
 end;
@@ -1066,7 +1066,7 @@ type
 // lui-même au lieu d'utiliser l'opérateur natif des ensembles).
 
 // Utilisation
-procedure UseEnumOperators;
+procedure UseEnumOperators;  
 var
   Today, NextWeek: TDay;
   UserPerms, AdminPerms, EffectivePerms: TPermissions;
@@ -1133,24 +1133,24 @@ type
     property Value: T read Get;
   end;
 
-class operator TSmartPtr<T>.Initialize(var SP: TSmartPtr<T>);
+class operator TSmartPtr<T>.Initialize(var SP: TSmartPtr<T>);  
 begin
   SP.FObject := nil;
   SP.FRefCount := nil;
 end;
 
-class operator TSmartPtr<T>.Finalize(var SP: TSmartPtr<T>);
+class operator TSmartPtr<T>.Finalize(var SP: TSmartPtr<T>);  
 begin
   SP.Release;
 end;
 
-procedure TSmartPtr<T>.AddRef;
+procedure TSmartPtr<T>.AddRef;  
 begin
   if Assigned(FRefCount) then
     Inc(FRefCount^);
 end;
 
-procedure TSmartPtr<T>.Release;
+procedure TSmartPtr<T>.Release;  
 begin
   if Assigned(FRefCount) then
   begin
@@ -1176,13 +1176,13 @@ begin
   end;
 end;
 
-class operator TSmartPtr<T>.AddRef(var SP: TSmartPtr<T>);
+class operator TSmartPtr<T>.AddRef(var SP: TSmartPtr<T>);  
 begin
   SP.AddRef;
 end;
 
 // Conversion depuis un objet
-class operator TSmartPtr<T>.:=(AObject: T): TSmartPtr<T>;
+class operator TSmartPtr<T>.:=(AObject: T): TSmartPtr<T>;  
 begin
   Result.FObject := AObject;
   if Assigned(AObject) then
@@ -1195,24 +1195,24 @@ begin
 end;
 
 // Conversion vers un objet
-class operator TSmartPtr<T>.:=(const SP: TSmartPtr<T>): T;
+class operator TSmartPtr<T>.:=(const SP: TSmartPtr<T>): T;  
 begin
   Result := SP.FObject;
 end;
 
 // Comparaison entre smart pointers
-class operator TSmartPtr<T>.=(const A, B: TSmartPtr<T>): Boolean;
+class operator TSmartPtr<T>.=(const A, B: TSmartPtr<T>): Boolean;  
 begin
   Result := A.FObject = B.FObject;
 end;
 
 // Comparaison avec un objet
-class operator TSmartPtr<T>.=(const SP: TSmartPtr<T>; Obj: T): Boolean;
+class operator TSmartPtr<T>.=(const SP: TSmartPtr<T>; Obj: T): Boolean;  
 begin
   Result := SP.FObject = Obj;
 end;
 
-function TSmartPtr<T>.Get: T;
+function TSmartPtr<T>.Get: T;  
 begin
   Result := FObject;
 end;
@@ -1227,19 +1227,19 @@ type
 
   TMyClassPtr = TSmartPtr<TMyClass>;
 
-constructor TMyClass.Create(const AName: string);
+constructor TMyClass.Create(const AName: string);  
 begin
   Name := AName;
   WriteLn('Création de ', Name);
 end;
 
-destructor TMyClass.Destroy;
+destructor TMyClass.Destroy;  
 begin
   WriteLn('Destruction de ', Name);
   inherited;
 end;
 
-procedure UseSmartPointers;
+procedure UseSmartPointers;  
 var
   P1, P2: TMyClassPtr;
   Obj: TMyClass;
@@ -1275,7 +1275,7 @@ type
   TMatrix3x3 = array[0..2, 0..2] of Double;
 
 // Création d'une matrice identité
-function IdentityMatrix: TMatrix3x3;
+function IdentityMatrix: TMatrix3x3;  
 var
   I, J: Integer;
 begin
@@ -1288,7 +1288,7 @@ begin
 end;
 
 // Addition de matrices
-operator + (const A, B: TMatrix3x3): TMatrix3x3;
+operator + (const A, B: TMatrix3x3): TMatrix3x3;  
 var
   I, J: Integer;
 begin
@@ -1298,7 +1298,7 @@ begin
 end;
 
 // Soustraction
-operator - (const A, B: TMatrix3x3): TMatrix3x3;
+operator - (const A, B: TMatrix3x3): TMatrix3x3;  
 var
   I, J: Integer;
 begin
@@ -1308,7 +1308,7 @@ begin
 end;
 
 // Multiplication de matrices
-operator * (const A, B: TMatrix3x3): TMatrix3x3;
+operator * (const A, B: TMatrix3x3): TMatrix3x3;  
 var
   I, J, K: Integer;
 begin
@@ -1322,7 +1322,7 @@ begin
 end;
 
 // Multiplication par un scalaire
-operator * (const M: TMatrix3x3; S: Double): TMatrix3x3;
+operator * (const M: TMatrix3x3; S: Double): TMatrix3x3;  
 var
   I, J: Integer;
 begin
@@ -1331,7 +1331,7 @@ begin
       Result[I, J] := M[I, J] * S;
 end;
 
-operator * (S: Double; const M: TMatrix3x3): TMatrix3x3;
+operator * (S: Double; const M: TMatrix3x3): TMatrix3x3;  
 begin
   Result := M * S;
 end;
@@ -1340,7 +1340,7 @@ end;
 type
   TVector3 = array[0..2] of Double;
 
-operator * (const M: TMatrix3x3; const V: TVector3): TVector3;
+operator * (const M: TMatrix3x3; const V: TVector3): TVector3;  
 var
   I, J: Integer;
 begin
@@ -1353,7 +1353,7 @@ begin
 end;
 
 // Puissance de matrice
-operator ** (const M: TMatrix3x3; N: Integer): TMatrix3x3;
+operator ** (const M: TMatrix3x3; N: Integer): TMatrix3x3;  
 var
   I: Integer;
 begin
@@ -1366,7 +1366,7 @@ begin
 end;
 
 // Égalité avec tolérance
-operator = (const A, B: TMatrix3x3): Boolean;
+operator = (const A, B: TMatrix3x3): Boolean;  
 const
   Epsilon = 1E-9;
 var
@@ -1383,14 +1383,14 @@ begin
 end;
 
 // Fonctions helper
-function Det(const M: TMatrix3x3): Double;
+function Det(const M: TMatrix3x3): Double;  
 begin
   Result := M[0,0] * (M[1,1] * M[2,2] - M[1,2] * M[2,1]) -
             M[0,1] * (M[1,0] * M[2,2] - M[1,2] * M[2,0]) +
             M[0,2] * (M[1,0] * M[2,1] - M[1,1] * M[2,0]);
 end;
 
-function Transpose(const M: TMatrix3x3): TMatrix3x3;
+function Transpose(const M: TMatrix3x3): TMatrix3x3;  
 var
   I, J: Integer;
 begin
@@ -1400,7 +1400,7 @@ begin
 end;
 
 // Utilisation
-procedure UseMatrixOperators;
+procedure UseMatrixOperators;  
 var
   M1, M2, M3: TMatrix3x3;
   V1, V2: TVector3;
@@ -1448,20 +1448,20 @@ type
     procedure CheckOverflow;
   end;
 
-function SafeInt(Value: Int64): TSafeInt;
+function SafeInt(Value: Int64): TSafeInt;  
 begin
   Result.FValue := Value;
   Result.FOverflow := False;
 end;
 
-procedure TSafeInt.CheckOverflow;
+procedure TSafeInt.CheckOverflow;  
 begin
   if FOverflow then
     raise EOverflow.Create('Dépassement arithmétique détecté');
 end;
 
 // Addition sûre
-operator + (const A, B: TSafeInt): TSafeInt;
+operator + (const A, B: TSafeInt): TSafeInt;  
 begin
   Result.FOverflow := A.FOverflow or B.FOverflow;
 
@@ -1478,7 +1478,7 @@ begin
 end;
 
 // Multiplication sûre
-operator * (const A, B: TSafeInt): TSafeInt;
+operator * (const A, B: TSafeInt): TSafeInt;  
 begin
   Result.FOverflow := A.FOverflow or B.FOverflow;
 
@@ -1495,7 +1495,7 @@ begin
 end;
 
 // Division sûre
-operator / (const A, B: TSafeInt): TSafeInt;
+operator / (const A, B: TSafeInt): TSafeInt;  
 begin
   Result.FOverflow := A.FOverflow or B.FOverflow;
 
@@ -1511,14 +1511,14 @@ begin
 end;
 
 // Conversion avec validation
-operator := (Value: Integer): TSafeInt;
+operator := (Value: Integer): TSafeInt;  
 begin
   Result.FValue := Value;
   Result.FOverflow := False;
 end;
 
 // Utilisation
-procedure UseSafeInt;
+procedure UseSafeInt;  
 var
   A, B, C: TSafeInt;
 begin
@@ -1553,31 +1553,31 @@ type
   end;
 
 // ✅ BON : Comportement intuitif
-operator + (const A, B: TMyNumber): TMyNumber;
+operator + (const A, B: TMyNumber): TMyNumber;  
 begin
   Result.Value := A.Value + B.Value;
 end;
 
 // ❌ MAUVAIS : Comportement surprenant
-operator + (const A, B: TMyNumber): TMyNumber;
+operator + (const A, B: TMyNumber): TMyNumber;  
 begin
   Result.Value := A.Value * B.Value; // NON ! + ne doit pas multiplier
 end;
 
 // 2. Commutativité quand appropriée
-operator * (const A: TMyType; B: Double): TMyType;
+operator * (const A: TMyType; B: Double): TMyType;  
 begin
   // Implémentation
 end;
 
 // Aussi définir l'inverse
-operator * (B: Double; const A: TMyType): TMyType;
+operator * (B: Double; const A: TMyType): TMyType;  
 begin
   Result := A * B;  // Déléguer à la première version
 end;
 
 // 3. Gestion des cas limites
-operator / (const A, B: TMyType): TMyType;
+operator / (const A, B: TMyType): TMyType;  
 begin
   if B.IsZero then
     raise EDivByZero.Create('Division par zéro');
@@ -1585,7 +1585,7 @@ begin
 end;
 
 // 4. Performance : passer par référence
-operator + (const A, B: TLargeRecord): TLargeRecord; // const = passage par référence
+operator + (const A, B: TLargeRecord): TLargeRecord; // const = passage par référence  
 begin
   // Plus efficace pour les grandes structures
 end;
@@ -1612,7 +1612,7 @@ type
   end;
 
 // Utiliser + pour concaténer des entiers !?
-operator + (const A, B: TBadExample): string;
+operator + (const A, B: TBadExample): string;  
 begin
   Result := IntToStr(A.Value) + IntToStr(B.Value);
 end;
@@ -1621,20 +1621,20 @@ end;
 var
   GlobalCounter: Integer = 0;
 
-operator + (const A, B: TMyType): TMyType;
+operator + (const A, B: TMyType): TMyType;  
 begin
   Inc(GlobalCounter); // NON ! Les opérateurs doivent être purs
   Result.Value := A.Value + B.Value;
 end;
 
 // ❌ ÉVITER : Opérateurs non symétriques sans raison
-operator = (const A, B: TMyType): Boolean;
+operator = (const A, B: TMyType): Boolean;  
 begin
   Result := A.Value = B.Value * 2; // Pourquoi multiplier B par 2 ?
 end;
 
 // ❌ ÉVITER : Conversions implicites dangereuses
-operator := (Value: Pointer): TMyType;
+operator := (Value: Pointer): TMyType;  
 begin
   Result.Data := Value^; // Déréférencement dangereux
 end;

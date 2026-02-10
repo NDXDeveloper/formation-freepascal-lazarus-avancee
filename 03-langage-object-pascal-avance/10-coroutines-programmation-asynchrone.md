@@ -19,7 +19,7 @@ uses
   SysUtils, Classes;
 
 // Opération bloquante traditionnelle
-procedure BlockingOperation;
+procedure BlockingOperation;  
 begin
   WriteLn('Début de l''opération...');
   Sleep(2000);  // Bloque le programme pendant 2 secondes
@@ -38,7 +38,7 @@ type
     property OnComplete: TNotifyEvent read FOnComplete write FOnComplete;
   end;
 
-procedure TAsyncOperation.Execute;
+procedure TAsyncOperation.Execute;  
 begin
   WriteLn('Opération asynchrone démarrée...');
   Sleep(2000);  // Simule un travail long
@@ -51,7 +51,7 @@ begin
                 end);
 end;
 
-procedure NonBlockingOperation;
+procedure NonBlockingOperation;  
 var
   AsyncOp: TAsyncOperation;
 begin
@@ -95,13 +95,13 @@ type
     property State: TCoroutineState read FState;
   end;
 
-constructor TSimpleCoroutine.Create;
+constructor TSimpleCoroutine.Create;  
 begin
   FState := csReady;
   FCurrentStep := 0;
 end;
 
-function TSimpleCoroutine.Resume: Boolean;
+function TSimpleCoroutine.Resume: Boolean;  
 begin
   if FState = csCompleted then
     Exit(False);
@@ -115,12 +115,12 @@ begin
   Result := FState <> csCompleted;
 end;
 
-function TSimpleCoroutine.GetYieldValue: Variant;
+function TSimpleCoroutine.GetYieldValue: Variant;  
 begin
   Result := FYieldValue;
 end;
 
-procedure TSimpleCoroutine.Reset;
+procedure TSimpleCoroutine.Reset;  
 begin
   FState := csReady;
   FCurrentStep := 0;
@@ -138,13 +138,13 @@ type
     constructor Create(AMax: Integer);
   end;
 
-constructor TCounterCoroutine.Create(AMax: Integer);
+constructor TCounterCoroutine.Create(AMax: Integer);  
 begin
   inherited Create;
   FMax := AMax;
 end;
 
-procedure TCounterCoroutine.ExecuteStep;
+procedure TCounterCoroutine.ExecuteStep;  
 begin
   case FCurrentStep of
     0..999:  // Limite arbitraire pour éviter une boucle infinie
@@ -164,7 +164,7 @@ begin
 end;
 
 // Utilisation
-procedure UseSimpleCoroutine;
+procedure UseSimpleCoroutine;  
 var
   Counter: TCounterCoroutine;
 begin
@@ -207,7 +207,7 @@ type
     property Current: T read GetCurrent;
   end;
 
-constructor TGenerator<T>.Create(AProc: TGeneratorProc);
+constructor TGenerator<T>.Create(AProc: TGeneratorProc);  
 begin
   FProc := AProc;
   FValues := TList<T>.Create;
@@ -215,13 +215,13 @@ begin
   FGenerated := False;
 end;
 
-destructor TGenerator<T>.Destroy;
+destructor TGenerator<T>.Destroy;  
 begin
   FValues.Free;
   inherited;
 end;
 
-procedure TGenerator<T>.CollectValues;
+procedure TGenerator<T>.CollectValues;  
 begin
   if not FGenerated then
   begin
@@ -233,14 +233,14 @@ begin
   end;
 end;
 
-function TGenerator<T>.MoveNext: Boolean;
+function TGenerator<T>.MoveNext: Boolean;  
 begin
   CollectValues;
   Inc(FIndex);
   Result := FIndex < FValues.Count;
 end;
 
-function TGenerator<T>.GetCurrent: T;
+function TGenerator<T>.GetCurrent: T;  
 begin
   if (FIndex >= 0) and (FIndex < FValues.Count) then
     Result := FValues[FIndex]
@@ -248,7 +248,7 @@ begin
     Result := Default(T);
 end;
 
-procedure TGenerator<T>.Reset;
+procedure TGenerator<T>.Reset;  
 begin
   FIndex := -1;
 end;
@@ -259,7 +259,7 @@ type
   TStringGenerator = specialize TGenerator<string>;
 
 // Utilisation
-procedure UseGenerators;
+procedure UseGenerators;  
 var
   Numbers: TIntGenerator;
   Fibonacci: TIntGenerator;
@@ -367,7 +367,7 @@ type
     property State: TFutureState read FState;
   end;
 
-constructor TIntFuture.Create;
+constructor TIntFuture.Create;  
 begin
   InitializeCriticalSection(FLock);
   FState := fsPending;
@@ -375,13 +375,13 @@ begin
   FError := '';
 end;
 
-destructor TIntFuture.Destroy;
+destructor TIntFuture.Destroy;  
 begin
   DeleteCriticalSection(FLock);
   inherited;
 end;
 
-procedure TIntFuture.Resolve(Value: Integer);
+procedure TIntFuture.Resolve(Value: Integer);  
 begin
   EnterCriticalSection(FLock);
   try
@@ -398,7 +398,7 @@ begin
   end;
 end;
 
-procedure TIntFuture.Reject(const Error: string);
+procedure TIntFuture.Reject(const Error: string);  
 begin
   EnterCriticalSection(FLock);
   try
@@ -415,7 +415,7 @@ begin
   end;
 end;
 
-function TIntFuture.Then_(OnComplete: TIntProc): TIntFuture;
+function TIntFuture.Then_(OnComplete: TIntProc): TIntFuture;  
 begin
   Result := Self;
 
@@ -431,7 +431,7 @@ begin
   end;
 end;
 
-function TIntFuture.Catch(OnError: TStringProc): TIntFuture;
+function TIntFuture.Catch(OnError: TStringProc): TIntFuture;  
 begin
   Result := Self;
 
@@ -447,7 +447,7 @@ begin
   end;
 end;
 
-function TIntFuture.IsComplete: Boolean;
+function TIntFuture.IsComplete: Boolean;  
 begin
   EnterCriticalSection(FLock);
   try
@@ -457,7 +457,7 @@ begin
   end;
 end;
 
-function TIntFuture.GetValue: Integer;
+function TIntFuture.GetValue: Integer;  
 begin
   EnterCriticalSection(FLock);
   try
@@ -470,7 +470,7 @@ begin
   end;
 end;
 
-function TIntFuture.GetError: string;
+function TIntFuture.GetError: string;  
 begin
   EnterCriticalSection(FLock);
   try
@@ -493,7 +493,7 @@ type
     property Future: TIntFuture read FFuture;
   end;
 
-constructor TAsyncTask.Create(Computation: TIntFunc);
+constructor TAsyncTask.Create(Computation: TIntFunc);  
 begin
   inherited Create(True);
   FreeOnTerminate := True;
@@ -501,7 +501,7 @@ begin
   FComputation := Computation;
 end;
 
-procedure TAsyncTask.Execute;
+procedure TAsyncTask.Execute;  
 begin
   try
     // Simule un calcul long
@@ -515,7 +515,7 @@ begin
 end;
 
 // Utilisation
-procedure UseFutures;
+procedure UseFutures;  
 var
   Task1, Task2: TAsyncTask;
   Future1, Future2: TIntFuture;
@@ -590,14 +590,14 @@ type
     property IsComplete: Boolean read FIsComplete;
   end;
 
-procedure TAsyncContext.SetContinuation(Continuation: TProc);
+procedure TAsyncContext.SetContinuation(Continuation: TProc);  
 begin
   FContinuation := Continuation;
   if FIsComplete and Assigned(FContinuation) then
     FContinuation();
 end;
 
-procedure TAsyncContext.Complete;
+procedure TAsyncContext.Complete;  
 begin
   FIsComplete := True;
   if Assigned(FContinuation) then
@@ -622,19 +622,19 @@ type
     function Await(AsyncOp: TProc): TAsyncContext;
   end;
 
-constructor TAsyncFunction.Create;
+constructor TAsyncFunction.Create;  
 begin
   FCurrentStep := 0;
   FContext := TAsyncContext.Create;
 end;
 
-destructor TAsyncFunction.Destroy;
+destructor TAsyncFunction.Destroy;  
 begin
   FContext.Free;
   inherited;
 end;
 
-procedure TAsyncFunction.AddStep(Step: TProc);
+procedure TAsyncFunction.AddStep(Step: TProc);  
 var
   Len: Integer;
 begin
@@ -643,13 +643,13 @@ begin
   FSteps[Len] := Step;
 end;
 
-procedure TAsyncFunction.Start;
+procedure TAsyncFunction.Start;  
 begin
   FCurrentStep := 0;
   ExecuteNextStep;
 end;
 
-procedure TAsyncFunction.ExecuteNextStep;
+procedure TAsyncFunction.ExecuteNextStep;  
 begin
   if FCurrentStep < Length(FSteps) then
   begin
@@ -658,7 +658,7 @@ begin
   end;
 end;
 
-function TAsyncFunction.Await(AsyncOp: TProc): TAsyncContext;
+function TAsyncFunction.Await(AsyncOp: TProc): TAsyncContext;  
 begin
   Result := TAsyncContext.Create;
 
@@ -680,7 +680,7 @@ begin
 end;
 
 // Exemple d'utilisation
-procedure AsyncAwaitExample;
+procedure AsyncAwaitExample;  
 var
   AsyncFunc: TAsyncFunction;
   Data: string;
@@ -785,14 +785,14 @@ type
     property IsClosed: Boolean read FClosed;
   end;
 
-constructor TChannel<T>.Create(BufferSize: Integer);
+constructor TChannel<T>.Create(BufferSize: Integer);  
 begin
   InitializeCriticalSection(FLock);
   FQueue := specialize TThreadedQueue<T>.Create(BufferSize, INFINITE, 0);
   FClosed := False;
 end;
 
-destructor TChannel<T>.Destroy;
+destructor TChannel<T>.Destroy;  
 begin
   Close;
   FQueue.Free;
@@ -800,7 +800,7 @@ begin
   inherited;
 end;
 
-procedure TChannel<T>.Send(const Value: T);
+procedure TChannel<T>.Send(const Value: T);  
 begin
   EnterCriticalSection(FLock);
   try
@@ -813,17 +813,17 @@ begin
   FQueue.PushItem(Value);
 end;
 
-function TChannel<T>.Receive(out Value: T; Timeout: Cardinal): Boolean;
+function TChannel<T>.Receive(out Value: T; Timeout: Cardinal): Boolean;  
 begin
   Result := FQueue.PopItem(Value) = wrSignaled;
 end;
 
-function TChannel<T>.TryReceive(out Value: T): Boolean;
+function TChannel<T>.TryReceive(out Value: T): Boolean;  
 begin
   Result := Receive(Value, 0);
 end;
 
-procedure TChannel<T>.Close;
+procedure TChannel<T>.Close;  
 begin
   EnterCriticalSection(FLock);
   try
@@ -861,14 +861,14 @@ type
     constructor Create(Channel: TIntChannel; const Name: string);
   end;
 
-constructor TProducer.Create(Channel: TIntChannel; Count: Integer);
+constructor TProducer.Create(Channel: TIntChannel; Count: Integer);  
 begin
   inherited Create(True);
   FChannel := Channel;
   FCount := Count;
 end;
 
-procedure TProducer.Execute;
+procedure TProducer.Execute;  
 var
   I: Integer;
 begin
@@ -881,14 +881,14 @@ begin
   WriteLn('[Producteur] Terminé');
 end;
 
-constructor TConsumer.Create(Channel: TIntChannel; const Name: string);
+constructor TConsumer.Create(Channel: TIntChannel; const Name: string);  
 begin
   inherited Create(True);
   FChannel := Channel;
   FName := Name;
 end;
 
-procedure TConsumer.Execute;
+procedure TConsumer.Execute;  
 var
   Value: Integer;
 begin
@@ -903,7 +903,7 @@ begin
 end;
 
 // Utilisation
-procedure UseChannels;
+procedure UseChannels;  
 var
   Channel: TIntChannel;
   Producer: TProducer;
@@ -976,7 +976,7 @@ type
     property Name: string read FName;
   end;
 
-constructor TActor.Create(const AName: string);
+constructor TActor.Create(const AName: string);  
 begin
   inherited Create(True);
   FName := AName;
@@ -984,13 +984,13 @@ begin
   FRunning := True;
 end;
 
-destructor TActor.Destroy;
+destructor TActor.Destroy;  
 begin
   FMailbox.Free;
   inherited;
 end;
 
-procedure TActor.Execute;
+procedure TActor.Execute;  
 var
   Msg: TActorMessage;
 begin
@@ -1006,12 +1006,12 @@ begin
   end;
 end;
 
-procedure TActor.Send(const Msg: TActorMessage);
+procedure TActor.Send(const Msg: TActorMessage);  
 begin
   FMailbox.PushItem(Msg);
 end;
 
-procedure TActor.Stop;
+procedure TActor.Stop;  
 var
   StopMsg: TActorMessage;
 begin
@@ -1030,13 +1030,13 @@ type
     constructor Create;
   end;
 
-constructor TCalculatorActor.Create;
+constructor TCalculatorActor.Create;  
 begin
   inherited Create('Calculator');
   FResult := 0;
 end;
 
-procedure TCalculatorActor.HandleMessage(const Msg: TActorMessage);
+procedure TCalculatorActor.HandleMessage(const Msg: TActorMessage);  
 begin
   if Msg.MessageType = 'ADD' then
   begin
@@ -1071,20 +1071,20 @@ type
     destructor Destroy; override;
   end;
 
-constructor TLoggerActor.Create;
+constructor TLoggerActor.Create;  
 begin
   inherited Create('Logger');
   AssignFile(FLogFile, 'actor_log.txt');
   Rewrite(FLogFile);
 end;
 
-destructor TLoggerActor.Destroy;
+destructor TLoggerActor.Destroy;  
 begin
   CloseFile(FLogFile);
   inherited;
 end;
 
-procedure TLoggerActor.HandleMessage(const Msg: TActorMessage);
+procedure TLoggerActor.HandleMessage(const Msg: TActorMessage);  
 begin
   WriteLn(FLogFile, Format('[%s] %s: %s',
     [DateTimeToStr(Now), Msg.MessageType, VarToStr(Msg.Data)]));
@@ -1107,25 +1107,25 @@ type
     procedure StopAll;
   end;
 
-constructor TActorSystem.Create;
+constructor TActorSystem.Create;  
 begin
   FActors := TStringList.Create;
   FActors.OwnsObjects := True;
 end;
 
-destructor TActorSystem.Destroy;
+destructor TActorSystem.Destroy;  
 begin
   StopAll;
   FActors.Free;
   inherited;
 end;
 
-procedure TActorSystem.RegisterActor(Actor: TActor);
+procedure TActorSystem.RegisterActor(Actor: TActor);  
 begin
   FActors.AddObject(Actor.Name, Actor);
 end;
 
-function TActorSystem.GetActor(const Name: string): TActor;
+function TActorSystem.GetActor(const Name: string): TActor;  
 var
   Index: Integer;
 begin
@@ -1136,7 +1136,7 @@ begin
     Result := nil;
 end;
 
-procedure TActorSystem.StartAll;
+procedure TActorSystem.StartAll;  
 var
   I: Integer;
 begin
@@ -1144,7 +1144,7 @@ begin
     TActor(FActors.Objects[I]).Start;
 end;
 
-procedure TActorSystem.StopAll;
+procedure TActorSystem.StopAll;  
 var
   I: Integer;
   Actor: TActor;
@@ -1165,7 +1165,7 @@ begin
 end;
 
 // Utilisation du système d'acteurs
-procedure UseActorSystem;
+procedure UseActorSystem;  
 var
   System: TActorSystem;
   CalcMsg, LogMsg: TActorMessage;
@@ -1267,13 +1267,13 @@ begin
   FNextRun := Now + (FInterval / MSecsPerDay);
 end;
 
-procedure TScheduledTask.Execute;
+procedure TScheduledTask.Execute;  
 begin
   if Assigned(FAction) then
     FAction();
 end;
 
-procedure TScheduledTask.UpdateNextRun;
+procedure TScheduledTask.UpdateNextRun;  
 begin
   if FRepeating then
     FNextRun := Now + (FInterval / MSecsPerDay)
@@ -1281,7 +1281,7 @@ begin
     FEnabled := False;
 end;
 
-function TScheduledTask.ShouldRun: Boolean;
+function TScheduledTask.ShouldRun: Boolean;  
 begin
   Result := FEnabled and (Now >= FNextRun);
 end;
@@ -1308,14 +1308,14 @@ type
     procedure RunEvery(const Name: string; Interval: Integer; Action: TProc);
   end;
 
-constructor TTaskScheduler.Create;
+constructor TTaskScheduler.Create;  
 begin
   inherited Create(True);
   FTasks := TThreadList.Create;
   FRunning := True;
 end;
 
-destructor TTaskScheduler.Destroy;
+destructor TTaskScheduler.Destroy;  
 var
   List: TList;
   I: Integer;
@@ -1331,7 +1331,7 @@ begin
   inherited;
 end;
 
-procedure TTaskScheduler.Execute;
+procedure TTaskScheduler.Execute;  
 begin
   while FRunning do
   begin
@@ -1340,7 +1340,7 @@ begin
   end;
 end;
 
-procedure TTaskScheduler.ProcessTasks;
+procedure TTaskScheduler.ProcessTasks;  
 var
   List: TList;
   I: Integer;
@@ -1369,7 +1369,7 @@ begin
   end;
 end;
 
-procedure TTaskScheduler.AddTask(Task: TScheduledTask);
+procedure TTaskScheduler.AddTask(Task: TScheduledTask);  
 var
   List: TList;
 begin
@@ -1381,7 +1381,7 @@ begin
   end;
 end;
 
-procedure TTaskScheduler.RemoveTask(const Name: string);
+procedure TTaskScheduler.RemoveTask(const Name: string);  
 var
   List: TList;
   I: Integer;
@@ -1404,12 +1404,12 @@ begin
   end;
 end;
 
-procedure TTaskScheduler.Stop;
+procedure TTaskScheduler.Stop;  
 begin
   FRunning := False;
 end;
 
-procedure TTaskScheduler.RunOnce(const Name: string; Delay: Integer; Action: TProc);
+procedure TTaskScheduler.RunOnce(const Name: string; Delay: Integer; Action: TProc);  
 var
   Task: TScheduledTask;
 begin
@@ -1417,7 +1417,7 @@ begin
   AddTask(Task);
 end;
 
-procedure TTaskScheduler.RunEvery(const Name: string; Interval: Integer; Action: TProc);
+procedure TTaskScheduler.RunEvery(const Name: string; Interval: Integer; Action: TProc);  
 var
   Task: TScheduledTask;
 begin
@@ -1441,19 +1441,19 @@ type
     procedure Stop;
   end;
 
-constructor TEventLoop.Create;
+constructor TEventLoop.Create;  
 begin
   FEvents := TThreadList.Create;
   FRunning := False;
 end;
 
-destructor TEventLoop.Destroy;
+destructor TEventLoop.Destroy;  
 begin
   FEvents.Free;
   inherited;
 end;
 
-procedure TEventLoop.Post(Event: TProc);
+procedure TEventLoop.Post(Event: TProc);  
 var
   List: TList;
   P: Pointer;
@@ -1467,7 +1467,7 @@ begin
   end;
 end;
 
-procedure TEventLoop.ProcessEvents;
+procedure TEventLoop.ProcessEvents;  
 var
   List: TList;
   Event: TProc;
@@ -1487,7 +1487,7 @@ begin
   end;
 end;
 
-procedure TEventLoop.Run;
+procedure TEventLoop.Run;  
 begin
   FRunning := True;
   while FRunning do
@@ -1497,13 +1497,13 @@ begin
   end;
 end;
 
-procedure TEventLoop.Stop;
+procedure TEventLoop.Stop;  
 begin
   FRunning := False;
 end;
 
 // Utilisation
-procedure UseScheduler;
+procedure UseScheduler;  
 var
   Scheduler: TTaskScheduler;
   Counter: Integer;
@@ -1579,7 +1579,7 @@ type
     property Value: T read FValue;
   end;
 
-procedure TObservable<T>.Subscribe(Observer: TObserver);
+procedure TObservable<T>.Subscribe(Observer: TObserver);  
 var
   Len: Integer;
 begin
@@ -1588,7 +1588,7 @@ begin
   FObservers[Len] := Observer;
 end;
 
-procedure TObservable<T>.Emit(Value: T);
+procedure TObservable<T>.Emit(Value: T);  
 var
   Observer: TObserver;
 begin
@@ -1598,7 +1598,7 @@ begin
       Observer(Value);
 end;
 
-function TObservable<T>.Map<U>(Transform: specialize TFunc<T, U>): specialize TObservable<U>;
+function TObservable<T>.Map<U>(Transform: specialize TFunc<T, U>): specialize TObservable<U>;  
 var
   Result_: specialize TObservable<U>;
   Self_: TObservable<T>;
@@ -1614,7 +1614,7 @@ begin
   Result := Result_;
 end;
 
-function TObservable<T>.Filter(Predicate: specialize TPredicate<T>): TObservable<T>;
+function TObservable<T>.Filter(Predicate: specialize TPredicate<T>): TObservable<T>;  
 var
   Result_: TObservable<T>;
 begin
@@ -1638,18 +1638,18 @@ type
     procedure Complete;
   end;
 
-procedure TSubject<T>.Next(Value: T);
+procedure TSubject<T>.Next(Value: T);  
 begin
   Emit(Value);
 end;
 
-procedure TSubject<T>.Error(const ErrorMsg: string);
+procedure TSubject<T>.Error(const ErrorMsg: string);  
 begin
   WriteLn('[ERROR] ', ErrorMsg);
   // Notifier les observateurs de l'erreur
 end;
 
-procedure TSubject<T>.Complete;
+procedure TSubject<T>.Complete;  
 begin
   WriteLn('[COMPLETE]');
   // Notifier les observateurs de la fin
@@ -1662,7 +1662,7 @@ type
   TIntSubject = specialize TSubject<Integer>;
 
 // Utilisation
-procedure UseReactiveProgramming;
+procedure UseReactiveProgramming;  
 var
   Numbers: TIntSubject;
   Doubled: TIntObservable;
@@ -1750,30 +1750,30 @@ type
     function GetCount: Integer;
   end;
 
-constructor TCountDownLatch.Create(InitialCount: Integer);
+constructor TCountDownLatch.Create(InitialCount: Integer);  
 begin
   FCount := InitialCount;
   FEvent := TEvent.Create(nil, True, False, '');
 end;
 
-destructor TCountDownLatch.Destroy;
+destructor TCountDownLatch.Destroy;  
 begin
   FEvent.Free;
   inherited;
 end;
 
-procedure TCountDownLatch.CountDown;
+procedure TCountDownLatch.CountDown;  
 begin
   if InterlockedDecrement(FCount) = 0 then
     FEvent.SetEvent;
 end;
 
-procedure TCountDownLatch.Await;
+procedure TCountDownLatch.Await;  
 begin
   FEvent.WaitFor(INFINITE);
 end;
 
-function TCountDownLatch.GetCount: Integer;
+function TCountDownLatch.GetCount: Integer;  
 begin
   Result := FCount;
 end;
@@ -1795,7 +1795,7 @@ type
     procedure Reset;
   end;
 
-constructor TCyclicBarrier.Create(Parties: Integer);
+constructor TCyclicBarrier.Create(Parties: Integer);  
 begin
   FParties := Parties;
   FCount := Parties;
@@ -1804,14 +1804,14 @@ begin
   FEvent := TEvent.Create(nil, True, False, '');
 end;
 
-destructor TCyclicBarrier.Destroy;
+destructor TCyclicBarrier.Destroy;  
 begin
   FEvent.Free;
   FLock.Free;
   inherited;
 end;
 
-procedure TCyclicBarrier.Await;
+procedure TCyclicBarrier.Await;  
 var
   LocalGen: Integer;
 begin
@@ -1839,7 +1839,7 @@ begin
   end;
 end;
 
-procedure TCyclicBarrier.Reset;
+procedure TCyclicBarrier.Reset;  
 begin
   FLock.Acquire;
   try
@@ -1863,14 +1863,14 @@ type
     constructor Create(const AName: string; Barrier: TCyclicBarrier);
   end;
 
-constructor TBarrierWorker.Create(const AName: string; Barrier: TCyclicBarrier);
+constructor TBarrierWorker.Create(const AName: string; Barrier: TCyclicBarrier);  
 begin
   inherited Create(True);
   FName := AName;
   FBarrier := Barrier;
 end;
 
-procedure TBarrierWorker.Execute;
+procedure TBarrierWorker.Execute;  
 var
   I: Integer;
 begin
@@ -1888,7 +1888,7 @@ begin
 end;
 
 // Utilisation
-procedure UseSynchronization;
+procedure UseSynchronization;  
 var
   Latch: TCountDownLatch;
   Barrier: TCyclicBarrier;
@@ -1979,7 +1979,7 @@ begin
   FProcessor := Processor;
 end;
 
-procedure TPipelineStage<TIn, TOut>.Execute;
+procedure TPipelineStage<TIn, TOut>.Execute;  
 var
   InputValue: TIn;
   OutputValue: TOut;
@@ -2024,7 +2024,7 @@ type
     property OutputChannel: TIntChannel read FOutputChannel;
   end;
 
-constructor TFanOutManager.Create(WorkerCount: Integer);
+constructor TFanOutManager.Create(WorkerCount: Integer);  
 var
   I: Integer;
 begin
@@ -2056,7 +2056,7 @@ begin
   end;
 end;
 
-destructor TFanOutManager.Destroy;
+destructor TFanOutManager.Destroy;  
 begin
   Stop;
   FInputChannel.Free;
@@ -2064,7 +2064,7 @@ begin
   inherited;
 end;
 
-procedure TFanOutManager.Start;
+procedure TFanOutManager.Start;  
 var
   Worker: TThread;
 begin
@@ -2072,7 +2072,7 @@ begin
     Worker.Start;
 end;
 
-procedure TFanOutManager.Stop;
+procedure TFanOutManager.Stop;  
 var
   Worker: TThread;
 begin
