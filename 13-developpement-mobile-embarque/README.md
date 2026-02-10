@@ -749,11 +749,11 @@ Préparez-vous à explorer comment transformer vos compétences Pascal en applic
 
 **Points clés à retenir** :
 
-✓ FreePascal compile nativement pour ARM, permettant des applications performantes
-✓ Le code métier peut être partagé entre desktop, mobile et embarqué
-✓ LAMW offre un support mature pour Android
-✓ Les contraintes matérielles nécessitent une approche optimisée
-✓ L'écosystème FreePascal/Lazarus s'étend constamment vers de nouvelles plateformes
+✓ FreePascal compile nativement pour ARM, permettant des applications performantes  
+✓ Le code métier peut être partagé entre desktop, mobile et embarqué  
+✓ LAMW offre un support mature pour Android  
+✓ Les contraintes matérielles nécessitent une approche optimisée  
+✓ L'écosystème FreePascal/Lazarus s'étend constamment vers de nouvelles plateformes  
 ✓ La communauté est active et accueillante pour les nouveaux développeurs
 
 **Prochaine section** : 13.1 LAMW - Lazarus Android Module Wizard

@@ -12,18 +12,18 @@ Les microcontrôleurs sont des ordinateurs miniatures intégrés dans un seul ci
 
 **Avantages** :
 
-✅ **Syntaxe claire et lisible** : Plus accessible que C/C++ pour les débutants
-✅ **Typage fort** : Moins d'erreurs de programmation
-✅ **Pas de pointeurs complexes** : Plus sûr et plus simple
-✅ **Code structuré** : Encourages les bonnes pratiques
-✅ **Performance** : Code natif compilé, aussi rapide que C
+✅ **Syntaxe claire et lisible** : Plus accessible que C/C++ pour les débutants  
+✅ **Typage fort** : Moins d'erreurs de programmation  
+✅ **Pas de pointeurs complexes** : Plus sûr et plus simple  
+✅ **Code structuré** : Encourages les bonnes pratiques  
+✅ **Performance** : Code natif compilé, aussi rapide que C  
 ✅ **Portabilité** : Le même code peut tourner sur PC et microcontrôleur
 
 **Limitations** :
 
-⚠️ **Bibliothèques limitées** : Moins de bibliothèques que l'écosystème Arduino C++
-⚠️ **Communauté plus restreinte** : Moins de ressources et d'exemples
-⚠️ **Documentation** : Moins abondante que pour Arduino IDE officiel
+⚠️ **Bibliothèques limitées** : Moins de bibliothèques que l'écosystème Arduino C++  
+⚠️ **Communauté plus restreinte** : Moins de ressources et d'exemples  
+⚠️ **Documentation** : Moins abondante que pour Arduino IDE officiel  
 ⚠️ **Outils** : Configuration plus technique qu'Arduino IDE
 
 ## Architectures supportées
@@ -1672,17 +1672,17 @@ FreePascal offre une alternative intéressante pour la programmation de microcon
 
 ### Points forts
 
-✅ **Syntaxe claire** : Code plus lisible et maintenable
-✅ **Typage fort** : Moins d'erreurs à l'exécution
-✅ **Performances** : Équivalentes au C/C++
-✅ **Portabilité** : Code partageable avec d'autres plateformes
+✅ **Syntaxe claire** : Code plus lisible et maintenable  
+✅ **Typage fort** : Moins d'erreurs à l'exécution  
+✅ **Performances** : Équivalentes au C/C++  
+✅ **Portabilité** : Code partageable avec d'autres plateformes  
 ✅ **Apprentissage** : Excellent pour l'enseignement
 
 ### Points à améliorer
 
-⚠️ **Écosystème** : Moins de bibliothèques que Arduino C++
-⚠️ **Documentation** : Moins d'exemples et de tutoriels
-⚠️ **Outils** : Configuration plus complexe qu'Arduino IDE
+⚠️ **Écosystème** : Moins de bibliothèques que Arduino C++  
+⚠️ **Documentation** : Moins d'exemples et de tutoriels  
+⚠️ **Outils** : Configuration plus complexe qu'Arduino IDE  
 ⚠️ **Communauté** : Plus restreinte
 
 ### Recommandations finales

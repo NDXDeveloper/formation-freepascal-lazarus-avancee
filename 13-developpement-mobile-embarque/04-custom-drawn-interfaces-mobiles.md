@@ -3336,6 +3336,9 @@ uses
 
 type
   TTestCustomComponents = class(TTestCase)
+  private
+    FClicked: Boolean;
+    procedure HandleButtonClick(Sender: TObject);
   published
     procedure TestButtonClick;
     procedure TestEditValidation;
@@ -3344,24 +3347,25 @@ type
 
 implementation
 
+procedure TTestCustomComponents.HandleButtonClick(Sender: TObject);
+begin
+  FClicked := True;
+end;
+
 procedure TTestCustomComponents.TestButtonClick;
 var
   button: TCustomDrawnButton;
-  clicked: Boolean;
 begin
-  clicked := False;
+  FClicked := False;
 
   button := TCustomDrawnButton.Create(nil);
   try
-    button.OnClick := procedure(Sender: TObject)
-      begin
-        clicked := True;
-      end;
+    button.OnClick := @HandleButtonClick;
 
     // Simuler un clic
     button.Click;
 
-    AssertTrue('Le bouton devrait être cliqué', clicked);
+    AssertTrue('Le bouton devrait être cliqué', FClicked);
   finally
     button.Free;
   end;

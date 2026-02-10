@@ -526,11 +526,11 @@ Lazarus permet le débogage pas à pas du code Pascal :
 // Afficher des valeurs pour déboguer
 procedure TAndroidModule1.DebugCalculation;
 var
-  Result: Integer;
+  Calcul: Integer;
 begin
-  Result := 10 + 20;
-  ShowMessage('Résultat: ' + IntToStr(Result));
-  jForm.Log('DEBUG', 'Résultat = ' + IntToStr(Result));
+  Calcul := 10 + 20;
+  ShowMessage('Résultat: ' + IntToStr(Calcul));
+  jForm.Log('DEBUG', 'Résultat = ' + IntToStr(Calcul));
 end;
 
 // Gestion des exceptions

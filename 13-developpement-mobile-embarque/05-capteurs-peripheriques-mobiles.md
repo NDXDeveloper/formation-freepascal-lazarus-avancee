@@ -2569,12 +2569,12 @@ Les capteurs et périphériques mobiles offrent des possibilités infinies pour 
 
 ### Points clés à retenir
 
-✓ **Économie d'énergie** : Arrêtez les capteurs quand ils ne sont pas nécessaires
-✓ **Permissions** : Demandez uniquement ce dont vous avez besoin
-✓ **Filtrage** : Les données brutes sont souvent bruitées
-✓ **Combinaison** : Les capteurs sont plus puissants ensemble
-✓ **Tests réels** : Testez toujours sur de vrais appareils
-✓ **Feedback utilisateur** : Vibrations et sons pour confirmer les actions
+✓ **Économie d'énergie** : Arrêtez les capteurs quand ils ne sont pas nécessaires  
+✓ **Permissions** : Demandez uniquement ce dont vous avez besoin  
+✓ **Filtrage** : Les données brutes sont souvent bruitées  
+✓ **Combinaison** : Les capteurs sont plus puissants ensemble  
+✓ **Tests réels** : Testez toujours sur de vrais appareils  
+✓ **Feedback utilisateur** : Vibrations et sons pour confirmer les actions  
 ✓ **Gestion des erreurs** : Tous les appareils n'ont pas tous les capteurs
 
 ### Ressources complémentaires

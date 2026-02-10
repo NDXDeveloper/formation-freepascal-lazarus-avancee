@@ -759,26 +759,26 @@ Important pour les marchés où Google Play n'est pas disponible (Chine).
 
 Si vous ciblez l'Europe, vous devez :
 
-✅ Avoir une politique de confidentialité claire
-✅ Obtenir le consentement pour les cookies/tracking
-✅ Permettre l'accès et la suppression des données
-✅ Notifier les violations de données
+✅ Avoir une politique de confidentialité claire  
+✅ Obtenir le consentement pour les cookies/tracking  
+✅ Permettre l'accès et la suppression des données  
+✅ Notifier les violations de données  
 ✅ Désigner un DPO si nécessaire
 
 ### COPPA (États-Unis)
 
 Pour les applications destinées aux enfants (<13 ans) :
 
-✅ Ne pas collecter de données personnelles sans consentement parental
-✅ Politique de confidentialité adaptée
+✅ Ne pas collecter de données personnelles sans consentement parental  
+✅ Politique de confidentialité adaptée  
 ✅ Pas de publicité comportementale
 
 ### Licences open source
 
 Si vous utilisez des bibliothèques open source dans votre app FreePascal :
 
-✅ Respecter les termes de la licence (GPL, MIT, Apache, etc.)
-✅ Inclure les mentions légales dans l'app
+✅ Respecter les termes de la licence (GPL, MIT, Apache, etc.)  
+✅ Inclure les mentions légales dans l'app  
 ✅ Fournir le code source si requis (GPL)
 
 ## Monétisation
@@ -1579,11 +1579,11 @@ La distribution d'applications sur les stores est un processus qui demande de la
 
 ### Points clés à retenir
 
-✅ **Préparation** : Testez exhaustivement avant de publier
-✅ **Sécurité** : Gardez vos clés de signature en lieu sûr
-✅ **Conformité** : Respectez les guidelines et lois (RGPD, etc.)
-✅ **Marketing** : L'ASO est crucial pour la visibilité
-✅ **Support** : Répondez aux utilisateurs rapidement
+✅ **Préparation** : Testez exhaustivement avant de publier  
+✅ **Sécurité** : Gardez vos clés de signature en lieu sûr  
+✅ **Conformité** : Respectez les guidelines et lois (RGPD, etc.)  
+✅ **Marketing** : L'ASO est crucial pour la visibilité  
+✅ **Support** : Répondez aux utilisateurs rapidement  
 ✅ **Itération** : Améliorez continuellement selon les retours
 
 ### Workflow recommandé

@@ -1391,13 +1391,14 @@ end;
 
 destructor TJNIConnectionPool.Destroy;
 var
-    conn: TJNIConnection;
+    LockedList: TList<TJNIConnection>;
+    i: Integer;
 begin
-    with FPool.LockList do
+    LockedList := FPool.LockList;
     try
-        for conn in FPool.LockList do
-            conn.Free;
-        Clear;
+        for i := LockedList.Count - 1 downto 0 do
+            LockedList[i].Free;
+        LockedList.Clear;
     finally
         FPool.UnlockList;
     end;
@@ -1407,13 +1408,15 @@ end;
 
 function TJNIConnectionPool.Acquire(AEnv: PJNIEnv;
                                     const AClassName: string): TJNIConnection;
+var
+    LockedList: TList<TJNIConnection>;
 begin
-    with FPool.LockList do
+    LockedList := FPool.LockList;
     try
-        if Count > 0 then
+        if LockedList.Count > 0 then
         begin
-            Result := Items[Count - 1];
-            Delete(Count - 1);
+            Result := LockedList[LockedList.Count - 1];
+            LockedList.Delete(LockedList.Count - 1);
         end
         else
             Result := TJNIConnection.Create(AEnv, AClassName);
@@ -1423,11 +1426,13 @@ begin
 end;
 
 procedure TJNIConnectionPool.Release(AConnection: TJNIConnection);
+var
+    LockedList: TList<TJNIConnection>;
 begin
-    with FPool.LockList do
+    LockedList := FPool.LockList;
     try
-        if Count < FMaxSize then
-            Add(AConnection)
+        if LockedList.Count < FMaxSize then
+            LockedList.Add(AConnection)
         else
             AConnection.Free;  // Pool plein, détruire
     finally
@@ -1663,7 +1668,12 @@ end;
 
 ### Mesurer les appels JNI
 
+> **Note** : Les exemples suivants utilisent `{$mode delphi}` avec `uses Generics.Collections` pour les types génériques (`TDictionary<>`, `TList<>`, `TThreadList<>`). Le type `TProc` n'existe pas en FPC et doit être défini : `type TProc = reference to procedure;` (nécessite FPC 3.3.1+).
+
 ```pascal
+type
+    TProc = reference to procedure;  // Équivalent du TProc Delphi
+
 function MesureTempsJNI(env: PJNIEnv; const operation: string;
                        callback: TProc): Int64;
 var
@@ -1969,7 +1979,7 @@ function SecureStringOperation(
 var
     nativeStr: PChar;
     len: jsize;
-    result: string;
+    processedStr: string;
 begin
     Result := nil;
 
@@ -1998,18 +2008,18 @@ begin
 
     try
         // 4. Validation supplémentaire (caractères, format, etc.)
-        result := String(nativeStr);
-        if not IsValidFormat(result) then
+        processedStr := String(nativeStr);
+        if not IsValidFormat(processedStr) then
         begin
             LogJNI('ERROR', 'String format invalid');
             Exit;
         end;
 
         // 5. Traitement sécurisé
-        result := ProcessSecurely(result);
+        processedStr := ProcessSecurely(processedStr);
 
         // 6. Retour sécurisé
-        Result := (*env)->NewStringUTF(env, PChar(result));
+        Result := (*env)->NewStringUTF(env, PChar(processedStr));
     finally
         (*env)->ReleaseStringUTFChars(env, input, nativeStr);
     end;
