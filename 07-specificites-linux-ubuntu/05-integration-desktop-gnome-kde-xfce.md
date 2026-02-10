@@ -190,27 +190,25 @@ var
 begin
   Result := False;
 
-  case GetDesktopEnvironment of
-    'gnome':
-      begin
-        Process := TProcess.Create(nil);
-        Output := TStringList.Create;
-        try
-          Process.Executable := 'gsettings';
-          Process.Parameters.Add('get');
-          Process.Parameters.Add('org.gnome.desktop.interface');
-          Process.Parameters.Add('gtk-theme');
-          Process.Options := [poUsePipes, poWaitOnExit];
-          Process.Execute;
-          Output.LoadFromStream(Process.Output);
-          Result := Pos('dark', LowerCase(Output.Text)) > 0;
-        finally
-          Process.Free;
-          Output.Free;
-        end;
-      end;
-    // Ajoutez d'autres environnements selon les besoins
+  if GetDesktopEnvironment = 'gnome' then
+  begin
+    Process := TProcess.Create(nil);
+    Output := TStringList.Create;
+    try
+      Process.Executable := 'gsettings';
+      Process.Parameters.Add('get');
+      Process.Parameters.Add('org.gnome.desktop.interface');
+      Process.Parameters.Add('gtk-theme');
+      Process.Options := [poUsePipes, poWaitOnExit];
+      Process.Execute;
+      Output.LoadFromStream(Process.Output);
+      Result := Pos('dark', LowerCase(Output.Text)) > 0;
+    finally
+      Process.Free;
+      Output.Free;
+    end;
   end;
+  // Ajoutez d'autres environnements selon les besoins
 end;
 ```
 

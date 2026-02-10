@@ -1983,7 +1983,7 @@ unit DotEnvConfig;
 interface
 
 uses
-  Classes, SysUtils, fgl;
+  Classes, SysUtils, fgl, unix;
 
 type
   TEnvVars = specialize TFPGMap<string, string>;
@@ -2178,9 +2178,10 @@ var
   i: Integer;
 begin
   // Exporter toutes les variables vers l'environnement système
+  // Note : sous Linux, utiliser fpSetEnv de l'unité unix
   for i := 0 to FVariables.Count - 1 do
-    SetEnvironmentVariable(PChar(FVariables.Keys[i]),
-                          PChar(FVariables.Data[i]));
+    fpSetEnv(PChar(FVariables.Keys[i]),
+             PChar(FVariables.Data[i]), 1);
 end;
 
 end.
@@ -2921,16 +2922,19 @@ var
 begin
   Ext := LowerCase(ExtractFileExt(FConfigPath));
 
-  case Ext of
-    '.ini', '.conf', '.cfg': Result := cfIni;
-    '.json': Result := cfJson;
-    '.xml': Result := cfXml;
-    '.yaml', '.yml': Result := cfYaml;
-    '.env': Result := cfEnv;
+  if (Ext = '.ini') or (Ext = '.conf') or (Ext = '.cfg') then
+    Result := cfIni
+  else if Ext = '.json' then
+    Result := cfJson
+  else if Ext = '.xml' then
+    Result := cfXml
+  else if (Ext = '.yaml') or (Ext = '.yml') then
+    Result := cfYaml
+  else if Ext = '.env' then
+    Result := cfEnv
   else
     // Essayer de détecter par le contenu
     Result := cfIni; // Par défaut
-  end;
 end;
 
 procedure TCompleteConfigManager.Load;

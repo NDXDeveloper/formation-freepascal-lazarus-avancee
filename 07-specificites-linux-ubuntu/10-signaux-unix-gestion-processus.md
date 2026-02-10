@@ -266,6 +266,7 @@ type
 var
   SignalStats: array[1..5] of TSignalInfo;
   Running: Boolean = True;
+  i: Integer;
 
 procedure ActionTerminate;
 begin
@@ -306,6 +307,8 @@ begin
 end;
 
 procedure InitializeSignals;
+var
+  i: Integer;
 begin
   // Configuration du tableau de signaux
   SignalStats[1].Signal := SIGTERM;
@@ -329,7 +332,6 @@ begin
   SignalStats[5].Action := nil; // Pas d'action spécifique
 
   // Installation des gestionnaires
-  var i: Integer;
   for i := Low(SignalStats) to High(SignalStats) do
   begin
     FpSignal(SignalStats[i].Signal, @SignalHandler);
@@ -358,7 +360,6 @@ begin
 
   WriteLn;
   WriteLn('=== Statistiques finales ===');
-  var i: Integer;
   for i := Low(SignalStats) to High(SignalStats) do
   begin
     if SignalStats[i].Count > 0 then

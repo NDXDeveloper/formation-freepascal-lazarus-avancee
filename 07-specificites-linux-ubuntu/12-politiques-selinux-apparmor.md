@@ -85,13 +85,14 @@ begin
       Status := ExecuterCommande('/usr/sbin/getenforce', []);
       WriteLn('Status SELinux : ', Status);
 
-      case Status of
-        'Enforcing': WriteLn('  → SELinux est ACTIF et applique les règles');
-        'Permissive': WriteLn('  → SELinux enregistre les violations mais ne bloque pas');
-        'Disabled': WriteLn('  → SELinux est désactivé');
+      if Status = 'Enforcing' then
+        WriteLn('  → SELinux est ACTIF et applique les règles')
+      else if Status = 'Permissive' then
+        WriteLn('  → SELinux enregistre les violations mais ne bloque pas')
+      else if Status = 'Disabled' then
+        WriteLn('  → SELinux est désactivé')
       else
         WriteLn('  → Status inconnu');
-      end;
     end
     else
       WriteLn('Commande getenforce non trouvée');
@@ -105,6 +106,8 @@ end;
 procedure VerifierAppArmor;
 var
   Status: string;
+  ProfileCount: Integer;
+  Lines: TStringList;
 begin
   WriteLn('=== Vérification d''AppArmor ===');
 
@@ -135,8 +138,8 @@ begin
     if FileExists('/sys/kernel/security/apparmor/profiles') then
     begin
       Status := ExecuterCommande('cat', ['/sys/kernel/security/apparmor/profiles']);
-      var ProfileCount := 0;
-      var Lines: TStringList := TStringList.Create;
+      ProfileCount := 0;
+      Lines := TStringList.Create;
       try
         Lines.Text := Status;
         ProfileCount := Lines.Count;
@@ -497,13 +500,13 @@ end;
 procedure VerifierContexteProcessus;
 var
   Contexte: string;
+  F: TextFile;
 begin
   WriteLn('=== Contexte du processus actuel ===');
 
   if FileExists('/proc/self/attr/current') then
   begin
     try
-      var F: TextFile;
       AssignFile(F, '/proc/self/attr/current');
       Reset(F);
       ReadLn(F, Contexte);
@@ -519,13 +522,16 @@ begin
   WriteLn;
 end;
 
+var
+  Status: string;
+
 begin
   WriteLn('Comprendre SELinux pour les développeurs');
   WriteLn('========================================');
   WriteLn;
 
   // Vérifier si SELinux est actif
-  var Status := ExecuterCommande('/usr/sbin/getenforce', []);
+  Status := ExecuterCommande('/usr/sbin/getenforce', []);
   WriteLn('Status SELinux : ', Trim(Status));
   WriteLn;
 
@@ -770,6 +776,7 @@ end;
 procedure AfficherRapport;
 var
   i: Integer;
+  Start: Integer;
   Operations: TStringList;
 begin
   if Length(Violations) = 0 then
@@ -804,7 +811,7 @@ begin
   WriteLn('Détails des violations (10 dernières) :');
   WriteLn('----------------------------------------');
 
-  var Start := Max(0, Length(Violations) - 10);
+  Start := Max(0, Length(Violations) - 10);
   for i := Start to High(Violations) do
   begin
     with Violations[i] do
@@ -820,6 +827,7 @@ end;
 procedure GenererSuggestions;
 var
   i: Integer;
+  Perms: string;
   Chemins: TStringList;
 begin
   if Length(Violations) = 0 then Exit;
@@ -845,7 +853,7 @@ begin
     for i := 0 to Chemins.Count - 1 do
     begin
       // Déterminer les permissions nécessaires
-      var Perms := 'r'; // Lecture par défaut
+      Perms := 'r'; // Lecture par défaut
 
       // Vérifier si c'est un fichier de config
       if Pos('/etc/', Chemins[i]) = 1 then
@@ -914,6 +922,7 @@ var
   i: Integer;
   Ligne: string;
   AVC: TAVCMessage;
+  PosStart, PosEnd: Integer;
 begin
   Proc := TProcess.Create(nil);
   Output := TStringList.Create;
@@ -944,11 +953,11 @@ begin
           AVC.Timestamp := Now; // Simplification
 
           // Extraire la permission
-          var PosStart := Pos('denied', Ligne);
+          PosStart := Pos('denied', Ligne);
           if PosStart > 0 then
           begin
             PosStart := Pos('{', Ligne, PosStart);
-            var PosEnd := Pos('}', Ligne, PosStart);
+            PosEnd := Pos('}', Ligne, PosStart);
             if (PosStart > 0) and (PosEnd > PosStart) then
               AVC.Permission := Copy(Ligne, PosStart + 1, PosEnd - PosStart - 1);
           end;
@@ -958,7 +967,7 @@ begin
           if PosStart > 0 then
           begin
             PosStart := PosStart + 6;
-            var PosEnd := Pos('"', Ligne, PosStart);
+            PosEnd := Pos('"', Ligne, PosStart);
             if PosEnd > PosStart then
               AVC.Comm := Copy(Ligne, PosStart, PosEnd - PosStart);
           end;
@@ -968,7 +977,7 @@ begin
           if PosStart > 0 then
           begin
             PosStart := PosStart + 6;
-            var PosEnd := Pos('"', Ligne, PosStart);
+            PosEnd := Pos('"', Ligne, PosStart);
             if PosEnd > PosStart then
               AVC.Path := Copy(Ligne, PosStart, PosEnd - PosStart);
           end;
@@ -1035,22 +1044,26 @@ begin
   end;
 end;
 
+var
+  Proc: TProcess;
+  Status: string;
+  Len: Integer;
+
 begin
   WriteLn('Analyseur de violations SELinux');
   WriteLn('===============================');
   WriteLn;
 
   // Vérifier si SELinux est actif
-  var Proc := TProcess.Create(nil);
+  Proc := TProcess.Create(nil);
   try
     Proc.Executable := 'getenforce';
     Proc.Options := [poUsePipes, poWaitOnExit];
 
     try
       Proc.Execute;
-      var Status: string;
       SetLength(Status, 100);
-      var Len := Proc.Output.Read(Status[1], 100);
+      Len := Proc.Output.Read(Status[1], 100);
       SetLength(Status, Len);
 
       WriteLn('Status SELinux : ', Trim(Status));
@@ -1154,6 +1167,10 @@ begin
 end;
 
 procedure TSecurityAwareForm.DetectSecuritySystem;
+var
+  F: TextFile;
+  Profile: string;
+  Context: string;
 begin
   FSecuritySystem := ssNone;
   FIsRestricted := False;
@@ -1168,8 +1185,6 @@ begin
 
       // Vérifier si notre processus est confiné
       try
-        var F: TextFile;
-        var Profile: string;
         AssignFile(F, '/proc/self/attr/current');
         Reset(F);
         ReadLn(F, Profile);
@@ -1196,8 +1211,6 @@ begin
 
     // Vérifier le contexte
     try
-      var F: TextFile;
-      var Context: string;
       AssignFile(F, '/proc/self/attr/current');
       Reset(F);
       ReadLn(F, Context);
@@ -1312,6 +1325,8 @@ begin
 end;
 
 function TSecurityAwareForm.TryWriteFile(const Path: string): Boolean;
+var
+  F: TextFile;
 begin
   Result := False;
   try
@@ -1319,7 +1334,6 @@ begin
     ForceDirectories(ExtractFileDir(Path));
 
     // Essayer d'écrire
-    var F: TextFile;
     AssignFile(F, Path);
     Rewrite(F);
     WriteLn(F, 'Test écriture');
@@ -2178,19 +2192,17 @@ end;
 procedure TSecureApp.InitializePaths;
 begin
   // Adapter les chemins selon le système de sécurité
-  case FSecuritySystem of
-    'AppArmor', 'SELinux':
-    begin
-      // Utiliser des chemins compatibles avec les restrictions
-      FConfigPath := GetEnvironmentVariable('HOME') + '/.config/monapp/';
-      FLogPath := '/tmp/monapp_' + IntToStr(GetProcessID) + '/';
-    end;
-    else
-    begin
-      // Pas de restrictions particulières
-      FConfigPath := '/etc/monapp/';
-      FLogPath := '/var/log/monapp/';
-    end;
+  if (FSecuritySystem = 'AppArmor') or (FSecuritySystem = 'SELinux') then
+  begin
+    // Utiliser des chemins compatibles avec les restrictions
+    FConfigPath := GetEnvironmentVariable('HOME') + '/.config/monapp/';
+    FLogPath := '/tmp/monapp_' + IntToStr(GetProcessID) + '/';
+  end
+  else
+  begin
+    // Pas de restrictions particulières
+    FConfigPath := '/etc/monapp/';
+    FLogPath := '/var/log/monapp/';
   end;
 
   WriteLn('Chemin de configuration : ', FConfigPath);

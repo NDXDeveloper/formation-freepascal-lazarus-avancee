@@ -1842,6 +1842,8 @@ var
   {$IFDEF UNIX}
   Display: PGdkDisplay;
   Screen: PGdkScreen;
+  RealDPI: Double;
+  XftDPI: string;
   {$ENDIF}
 begin
   Info := TStringList.Create;
@@ -1884,7 +1886,6 @@ begin
         // Calcul du DPI réel
         if gdk_screen_get_width_mm(Screen) > 0 then
         begin
-          var RealDPI: Double;
           RealDPI := gdk_screen_get_width(Screen) * 25.4 / gdk_screen_get_width_mm(Screen);
           Info.Add(Format('  DPI calculé depuis la taille physique : %.1f', [RealDPI]));
         end;
@@ -1926,7 +1927,6 @@ begin
       if GetEnvironmentVariable('DISPLAY') <> '' then
       begin
         // Essayer de lire les paramètres Xft
-        var XftDPI: string;
         XftDPI := GetEnvironmentVariable('Xft.dpi');
         if XftDPI <> '' then
           Info.Add('  Xft.dpi = ' + XftDPI);
@@ -2092,6 +2092,12 @@ var
   Info: TStringList;
   DesktopEnv, SessionType: string;
   Output: string;
+  {$IFDEF UNIX}
+  Settings: PGtkSettings;
+  ThemeName: PChar;
+  IconTheme: PChar;
+  FontName: PChar;
+  {$ENDIF}
 begin
   Info := TStringList.Create;
   try
@@ -2185,31 +2191,23 @@ begin
 
     {$IFDEF UNIX}
     // Paramètres GTK actuels
-    var
-      Settings: PGtkSettings;
+    Settings := gtk_settings_get_default();
+    if Settings <> nil then
     begin
-      Settings := gtk_settings_get_default();
-      if Settings <> nil then
-      begin
-        var ThemeName: PChar;
-        var IconTheme: PChar;
-        var FontName: PChar;
-
-        g_object_get(Settings,
+      g_object_get(Settings,
                     'gtk-theme-name', @ThemeName,
                     'gtk-icon-theme-name', @IconTheme,
                     'gtk-font-name', @FontName,
                     nil);
 
-        Info.Add('');
-        Info.Add('Paramètres GTK actuels :');
-        if ThemeName <> nil then
-          Info.Add('  Thème : ' + ThemeName);
-        if IconTheme <> nil then
-          Info.Add('  Icônes : ' + IconTheme);
-        if FontName <> nil then
-          Info.Add('  Police : ' + FontName);
-      end;
+      Info.Add('');
+      Info.Add('Paramètres GTK actuels :');
+      if ThemeName <> nil then
+        Info.Add('  Thème : ' + ThemeName);
+      if IconTheme <> nil then
+        Info.Add('  Icônes : ' + IconTheme);
+      if FontName <> nil then
+        Info.Add('  Police : ' + FontName);
     end;
     {$ENDIF}
 

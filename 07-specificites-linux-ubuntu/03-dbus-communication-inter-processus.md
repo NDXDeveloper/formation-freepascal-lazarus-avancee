@@ -529,7 +529,7 @@ Voici un exemple complet de deux applications communiquant via D-Bus :
 program DBusServer;
 
 uses
-  SysUtils, MyDBusService;
+  SysUtils, Crt, MyDBusService;
 
 var
   Service: TMyDBusService;
@@ -540,7 +540,7 @@ begin
   try
     if Service.Start then
     begin
-      WriteLn('Serveur en écoute. Appuyez sur Entrée pour arrêter...');
+      WriteLn('Serveur en écoute. Appuyez sur une touche pour arrêter...');
 
       // Boucle principale
       while not KeyPressed do

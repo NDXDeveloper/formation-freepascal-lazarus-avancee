@@ -391,10 +391,12 @@ begin
     WriteLn('Config: ', GetEnvironmentVariable('MONAPPLI_CONFIG'));
 end;
 
-// Définir une variable d'environnement
+// Définir une variable d'environnement (Linux)
 procedure SetEnvironmentVar(const Name, Value: string);
 begin
-  SetEnvironmentVariable(Name, Value);
+  {$IFDEF UNIX}
+  fpSetEnv(PChar(Name), PChar(Value), 1); // unité unix
+  {$ENDIF}
 end;
 ```
 
