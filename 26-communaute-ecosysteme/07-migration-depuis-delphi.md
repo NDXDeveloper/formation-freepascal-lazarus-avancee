@@ -280,15 +280,15 @@ Lazarus Project
 ```
 
 **Avantages :**
-✅ Simple et direct
-✅ Pas de code dupliqué
-✅ Passage net à FreePascal
+✅ Simple et direct  
+✅ Pas de code dupliqué  
+✅ Passage net à FreePascal  
 ✅ Rapidité (si petit projet)
 
 **Inconvénients :**
-❌ Risqué sur gros projets
-❌ Période de non-productivité
-❌ Tests massifs nécessaires
+❌ Risqué sur gros projets  
+❌ Période de non-productivité  
+❌ Tests massifs nécessaires  
 ❌ Retour arrière difficile
 
 **Recommandé pour :**
@@ -321,15 +321,15 @@ Delphi Project                Lazarus Project
 ```
 
 **Avantages :**
-✅ Moins risqué
-✅ Tests progressifs
-✅ Apprentissage graduel
+✅ Moins risqué  
+✅ Tests progressifs  
+✅ Apprentissage graduel  
 ✅ Production continue
 
 **Inconvénients :**
-❌ Plus long
-❌ Maintenance double temporairement
-❌ Gestion de la compatibilité
+❌ Plus long  
+❌ Maintenance double temporairement  
+❌ Gestion de la compatibilité  
 ❌ Coordination nécessaire
 
 **Recommandé pour :**
@@ -360,15 +360,15 @@ Delphi Project
 ```
 
 **Avantages :**
-✅ Code modernisé
-✅ Dette technique réduite
-✅ Meilleures pratiques
+✅ Code modernisé  
+✅ Dette technique réduite  
+✅ Meilleures pratiques  
 ✅ Documentation améliorée
 
 **Inconvénients :**
-❌ Effort plus important
-❌ Risque de régression
-❌ Délai plus long
+❌ Effort plus important  
+❌ Risque de régression  
+❌ Délai plus long  
 ❌ Budget plus élevé
 
 **Recommandé pour :**
@@ -432,15 +432,15 @@ end.
 ```
 
 **Avantages :**
-✅ Aucune interruption de service
-✅ Tests A/B possibles
-✅ Rollback facile
+✅ Aucune interruption de service  
+✅ Tests A/B possibles  
+✅ Rollback facile  
 ✅ Transition en douceur
 
 **Inconvénients :**
-❌ Double maintenance coûteuse
-❌ Code plus complexe (directives)
-❌ Synchronisation nécessaire
+❌ Double maintenance coûteuse  
+❌ Code plus complexe (directives)  
+❌ Synchronisation nécessaire  
 ❌ À limiter dans le temps
 
 **Recommandé pour :**
@@ -694,10 +694,10 @@ Si vous envisagez d'autres options que FreePascal/Lazarus :
 
 **Pourquoi FreePascal/Lazarus est souvent le meilleur choix pour Delphi :**
 
-✅ **5-20% de réécriture** vs 100% dans les autres langages
-✅ **Compétences Pascal préservées** vs apprentissage nouveau langage
-✅ **Migration progressive possible** vs réécriture complète
-✅ **Coût minimal** vs investissement massif
+✅ **5-20% de réécriture** vs 100% dans les autres langages  
+✅ **Compétences Pascal préservées** vs apprentissage nouveau langage  
+✅ **Migration progressive possible** vs réécriture complète  
+✅ **Coût minimal** vs investissement massif  
 ✅ **Multi-plateforme natif** sans frameworks lourds
 
 ---

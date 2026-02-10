@@ -134,7 +134,12 @@ unit StringHelpers;
 
 interface
 
+uses
+  SysUtils;
+
 type
+  TStringArray = array of string;
+
   {**
     Classe helper pour étendre TString avec des méthodes utilitaires.
 
@@ -472,7 +477,7 @@ Un guide utilisateur complet devrait contenir :
 
 **docs/user-guide.md :**
 
-```markdown
+````markdown
 # Guide Utilisateur - StringHelpers Library
 
 ## Introduction
@@ -570,7 +575,7 @@ end.
 ```
 
 **Résultat attendu :**
-```
+````
 Chaîne vide
 Fruit 1: pomme
 Fruit 2: banane
@@ -930,16 +935,16 @@ Nous allons créer une interface de calculatrice classique.
 
 **Disposition suggérée :**
 ```
-┌─────────────────┐
-│ EditDisplay     │
-├─────┬─────┬─────┤
-│  7  │  8  │  9  │ ÷
-├─────┼─────┼─────┤
-│  4  │  5  │  6  │ ×
-├─────┼─────┼─────┤
-│  1  │  2  │  3  │ -
-├─────┼─────┼─────┤
-│  0  │  C  │  =  │ +
+┌─────────────────┐  
+│ EditDisplay     │  
+├─────┬─────┬─────┤  
+│  7  │  8  │  9  │ ÷  
+├─────┼─────┼─────┤  
+│  4  │  5  │  6  │ ×  
+├─────┼─────┼─────┤  
+│  1  │  2  │  3  │ -  
+├─────┼─────┼─────┤  
+│  0  │  C  │  =  │ +  
 └─────┴─────┴─────┘
 ```
 
@@ -1723,7 +1728,7 @@ procedure OldMethod; deprecated 'Use NewMethod';
 
 **Dans le guide :**
 
-```markdown
+````markdown
 ## OldMethod [DEPRECATED]
 
 ⚠️ **Cette méthode est obsolète depuis la version 2.0 et sera supprimée
@@ -1740,7 +1745,7 @@ OldMethod(param1, param2);
 // Nouveau code
 NewMethod(param1, param2, defaultValue);
 ```
-```
+````
 
 ## Mesurer l'efficacité
 
@@ -1810,10 +1815,10 @@ NewMethod(param1, param2, defaultValue);
 
 La documentation est un investissement qui rapporte énormément :
 
-✅ **Moins de questions** → Plus de temps pour développer
-✅ **Plus d'utilisateurs** → Adoption facilitée
-✅ **Meilleure qualité** → Réflexion sur l'API
-✅ **Collaboration** → Contributeurs mieux informés
+✅ **Moins de questions** → Plus de temps pour développer  
+✅ **Plus d'utilisateurs** → Adoption facilitée  
+✅ **Meilleure qualité** → Réflexion sur l'API  
+✅ **Collaboration** → Contributeurs mieux informés  
 ✅ **Professionnalisme** → Crédibilité accrue
 
 **Rappels clés :**

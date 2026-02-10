@@ -733,7 +733,7 @@ end;
 
 **Structure d'un bon rapport de bug :**
 
-```markdown
+````markdown
 ## Description
 Brief description of the bug
 
@@ -772,7 +772,7 @@ end;
 - The bug only occurs when compiled with -O3 optimization
 - Works correctly with FPC 3.0.4
 - Stack trace attached
-```
+````
 
 **Informations essentielles à inclure :**
 - Version exacte de FPC/Lazarus
@@ -894,7 +894,7 @@ end;
 
 Chaque package devrait avoir un fichier README :
 
-```markdown
+````markdown
 # FCL-DB - Free Component Library Database
 
 ## Description
@@ -939,7 +939,7 @@ end;
 
 ## Documentation
 Full documentation: https://wiki.freepascal.org/fcl-db
-```
+````
 
 ### 4. Créer des tests
 
@@ -957,6 +957,8 @@ uses
 
 type
   TTestSysUtils = class(TTestCase)
+  private
+    procedure DoFormatInvalid;
   published
     procedure TestFormatSimple;
     procedure TestFormatWithArgs;
@@ -972,21 +974,21 @@ end;
 
 procedure TTestSysUtils.TestFormatWithArgs;
 var
-  Result: string;
+  S: string;
 begin
-  Result := Format('%s has %d apples', ['John', 5]);
-  AssertEquals('John has 5 apples', Result);
+  S := Format('%s has %d apples', ['John', 5]);
+  AssertEquals('John has 5 apples', S);
+end;
+
+procedure TTestSysUtils.DoFormatInvalid;
+begin
+  Format('%z', []); // Format spécifier invalide
 end;
 
 procedure TTestSysUtils.TestFormatInvalid;
 begin
   // Doit lever une exception
   AssertException(EConvertError, @DoFormatInvalid);
-end;
-
-procedure DoFormatInvalid;
-begin
-  Format('%z', []); // Format spécifier invalide
 end;
 
 initialization
@@ -1500,7 +1502,7 @@ Thanks!"
 
 **Exemple de proposition :**
 
-```markdown
+````markdown
 # Proposal: Add inline variables in for loops
 
 ## Motivation
@@ -1537,7 +1539,7 @@ end;
 
 ## Implementation Complexity
 Medium - requires parser changes but no deep semantic changes
-```
+````
 
 ## Conseils pour contribuer efficacement
 

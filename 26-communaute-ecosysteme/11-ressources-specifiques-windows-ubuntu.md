@@ -1220,4 +1220,4 @@ Documentez votre setup :
 
 **Les ressources ne manquent pas, mais sont parfois dispersées. Cette liste vous fournit les points d'entrée essentiels pour devenir autonome dans votre développement FreePascal/Lazarus sur Windows et Ubuntu.**
 
-⏭️
+🔝 Retour au [Sommaire](/SOMMAIRE.md)

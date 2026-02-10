@@ -760,8 +760,8 @@ Liste curatée de ressources :
 
 ### Stack Overflow
 
-**Tag FreePascal :** https://stackoverflow.com/questions/tagged/freepascal
-**Tag Lazarus :** https://stackoverflow.com/questions/tagged/lazarus
+**Tag FreePascal :** https://stackoverflow.com/questions/tagged/freepascal  
+**Tag Lazarus :** https://stackoverflow.com/questions/tagged/lazarus  
 
 **Bonnes pratiques SO :**
 

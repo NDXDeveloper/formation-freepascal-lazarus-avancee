@@ -35,32 +35,32 @@ Avant d'utiliser un projet, évaluez sa qualité :
 
 **Critères de qualité :**
 
-✅ **Documentation** : README clair, exemples, API documentée
-✅ **Activité** : Commits récents, issues résolues
-✅ **Communauté** : Nombre d'utilisateurs, contributeurs actifs
-✅ **Tests** : Suite de tests, CI/CD
-✅ **Licence** : Compatible avec vos besoins
-✅ **Maintenance** : Réponses aux issues, releases régulières
+✅ **Documentation** : README clair, exemples, API documentée  
+✅ **Activité** : Commits récents, issues résolues  
+✅ **Communauté** : Nombre d'utilisateurs, contributeurs actifs  
+✅ **Tests** : Suite de tests, CI/CD  
+✅ **Licence** : Compatible avec vos besoins  
+✅ **Maintenance** : Réponses aux issues, releases régulières  
 ✅ **Code** : Qualité, lisibilité, organisation
 
 **Red flags :**
 
-❌ Pas de commit depuis 2+ ans (projet abandonné)
-❌ Issues ouvertes sans réponse
-❌ Pas de documentation
-❌ Code non testé
-❌ Licence restrictive ou absente
-❌ Un seul contributeur sans successeur
+❌ Pas de commit depuis 2+ ans (projet abandonné)  
+❌ Issues ouvertes sans réponse  
+❌ Pas de documentation  
+❌ Code non testé  
+❌ Licence restrictive ou absente  
+❌ Un seul contributeur sans successeur  
 ❌ Dépendances obsolètes ou non maintenues
 
 ## Frameworks et bibliothèques majeurs
 
 ### mORMot 2
 
-**Catégorie** : Framework SOA/Microservices et ORM
-**Auteur** : Arnaud Bouchez et contributeurs
-**Licence** : GPL/LGPL/MPL tri-license
-**URL** : https://github.com/synopse/mORMot2
+**Catégorie** : Framework SOA/Microservices et ORM  
+**Auteur** : Arnaud Bouchez et contributeurs  
+**Licence** : GPL/LGPL/MPL tri-license  
+**URL** : https://github.com/synopse/mORMot2  
 
 **Description :**
 
@@ -125,10 +125,10 @@ end;
 
 ### Castle Game Engine
 
-**Catégorie** : Moteur de jeu 3D
-**Auteur** : Michalis Kamburelis et contributeurs
-**Licence** : LGPL/GPL (commercial-friendly)
-**URL** : https://castle-engine.io/
+**Catégorie** : Moteur de jeu 3D  
+**Auteur** : Michalis Kamburelis et contributeurs  
+**Licence** : LGPL/GPL (commercial-friendly)  
+**URL** : https://castle-engine.io/  
 
 **Description :**
 
@@ -193,10 +193,10 @@ end.
 
 ### Brook Framework
 
-**Catégorie** : Framework Web
-**Auteur** : Silvio Clecio et contributeurs
-**Licence** : LGPL
-**URL** : https://github.com/risoflora/brookframework
+**Catégorie** : Framework Web  
+**Auteur** : Silvio Clecio et contributeurs  
+**Licence** : LGPL  
+**URL** : https://github.com/risoflora/brookframework  
 
 **Description :**
 
@@ -272,10 +272,10 @@ end.
 
 ### BGRABitmap
 
-**Catégorie** : Graphiques 2D
-**Auteur** : Circular et contributeurs
-**Licence** : Modifiée LGPL
-**URL** : https://github.com/bgrabitmap/bgrabitmap
+**Catégorie** : Graphiques 2D  
+**Auteur** : Circular et contributeurs  
+**Licence** : Modifiée LGPL  
+**URL** : https://github.com/bgrabitmap/bgrabitmap  
 
 **Description :**
 
@@ -345,10 +345,10 @@ end;
 
 ### TAChart
 
-**Catégorie** : Graphiques et diagrammes
-**Auteur** : Luiz Américo et contributeurs
-**Licence** : LGPL (inclus dans Lazarus)
-**URL** : Dans Lazarus (components/tachart)
+**Catégorie** : Graphiques et diagrammes  
+**Auteur** : Luiz Américo et contributeurs  
+**Licence** : LGPL (inclus dans Lazarus)  
+**URL** : Dans Lazarus (components/tachart)  
 
 **Description :**
 
@@ -412,10 +412,10 @@ end;
 
 ### Synapse
 
-**Catégorie** : Réseau et protocoles
-**Auteur** : Lukas Gebauer
-**Licence** : BSD-like (très permissive)
-**URL** : http://synapse.ararat.cz/
+**Catégorie** : Réseau et protocoles  
+**Auteur** : Lukas Gebauer  
+**Licence** : BSD-like (très permissive)  
+**URL** : http://synapse.ararat.cz/  
 
 **Description :**
 
@@ -513,10 +513,10 @@ end;
 
 ### Indy (Internet Direct)
 
-**Catégorie** : Composants réseau
-**Auteur** : Chad Z. Hower et équipe Indy
-**Licence** : Double license (BSD-like + commercial)
-**URL** : https://github.com/IndySockets/Indy
+**Catégorie** : Composants réseau  
+**Auteur** : Chad Z. Hower et équipe Indy  
+**Licence** : Double license (BSD-like + commercial)  
+**URL** : https://github.com/IndySockets/Indy  
 
 **Description :**
 
@@ -587,10 +587,10 @@ end;
 
 ### ZEOS Database Objects (ZDBC)
 
-**Catégorie** : Accès base de données
-**Auteur** : Équipe ZEOS
-**Licence** : LGPL
-**URL** : https://sourceforge.net/projects/zeoslib/
+**Catégorie** : Accès base de données  
+**Auteur** : Équipe ZEOS  
+**Licence** : LGPL  
+**URL** : https://sourceforge.net/projects/zeoslib/  
 
 **Description :**
 
@@ -673,10 +673,10 @@ end.
 
 ### tiOPF (TechInsite Object Persistence Framework)
 
-**Catégorie** : ORM et persistance
-**Auteur** : Graeme Geldenhuys et contributeurs
-**Licence** : BSD
-**URL** : https://github.com/graemeg/tiopf
+**Catégorie** : ORM et persistance  
+**Auteur** : Graeme Geldenhuys et contributeurs  
+**Licence** : BSD  
+**URL** : https://github.com/graemeg/tiopf  
 
 **Description :**
 
@@ -742,10 +742,10 @@ end;
 
 ### Pas2JS (Pascal to JavaScript Transpiler)
 
-**Catégorie** : Transpileur
-**Auteur** : Mattias Gaertner et équipe FPC
-**Licence** : LGPL
-**URL** : http://wiki.freepascal.org/pas2js
+**Catégorie** : Transpileur  
+**Auteur** : Mattias Gaertner et équipe FPC  
+**Licence** : LGPL  
+**URL** : http://wiki.freepascal.org/pas2js  
 
 **Description :**
 
@@ -801,10 +801,10 @@ Génère du JavaScript qui s'exécute dans le navigateur.
 
 ### LazProfiler
 
-**Catégorie** : Profiling et optimisation
-**Auteur** : Mattias Gaertner
-**Licence** : GPL
-**URL** : https://wiki.lazarus.freepascal.org/LazProfiler
+**Catégorie** : Profiling et optimisation  
+**Auteur** : Mattias Gaertner  
+**Licence** : GPL  
+**URL** : https://wiki.lazarus.freepascal.org/LazProfiler  
 
 **Description :**
 
@@ -842,10 +842,10 @@ LazProfiler est un profileur pour identifier les goulots d'étranglement de perf
 
 ### FPCUnit (Free Pascal Unit Testing)
 
-**Catégorie** : Tests unitaires
-**Auteur** : Équipe FreePascal
-**Licence** : LGPL
-**URL** : Inclus dans FreePascal (packages/fcl-fpcunit)
+**Catégorie** : Tests unitaires  
+**Auteur** : Équipe FreePascal  
+**Licence** : LGPL  
+**URL** : Inclus dans FreePascal (packages/fcl-fpcunit)  
 
 **Description :**
 
@@ -930,10 +930,10 @@ end.
 
 ### Double Commander
 
-**Catégorie** : Gestionnaire de fichiers
-**Auteur** : Communauté (Alexander Koblov et autres)
-**Licence** : GPL
-**URL** : https://doublecmd.sourceforge.io/
+**Catégorie** : Gestionnaire de fichiers  
+**Auteur** : Communauté (Alexander Koblov et autres)  
+**Licence** : GPL  
+**URL** : https://doublecmd.sourceforge.io/  
 
 **Description :**
 
@@ -960,10 +960,10 @@ Double Commander est un gestionnaire de fichiers open source multi-plateforme à
 
 ### Lazarus IDE lui-même
 
-**Catégorie** : IDE
-**Auteur** : Équipe Lazarus
-**Licence** : GPL/LGPL
-**URL** : https://www.lazarus-ide.org/
+**Catégorie** : IDE  
+**Auteur** : Équipe Lazarus  
+**Licence** : GPL/LGPL  
+**URL** : https://www.lazarus-ide.org/  
 
 **Description :**
 
@@ -984,10 +984,10 @@ Le code source est dans votre installation Lazarus ou sur GitLab.
 
 ### fpGUI Toolkit
 
-**Catégorie** : Toolkit GUI
-**Auteur** : Graeme Geldenhuys
-**Licence** : LGPL modifiée
-**URL** : https://github.com/graemeg/fpGUI
+**Catégorie** : Toolkit GUI  
+**Auteur** : Graeme Geldenhuys  
+**Licence** : LGPL modifiée  
+**URL** : https://github.com/graemeg/fpGUI  
 
 **Description :**
 
@@ -1315,7 +1315,7 @@ Documentez les versions utilisées :
 
 Template d'issue :
 
-```markdown
+````markdown
 **Describe the bug**
 When I call `Function X` with parameter Y, I get error Z.
 
@@ -1338,7 +1338,7 @@ Should return default value or raise exception.
 
 **Additional context**
 Stack trace:
-```
+````
 ...
 ```
 ```
@@ -1398,18 +1398,18 @@ examples/
 
 **Code :**
 
-✅ Suivre le style du projet existant
-✅ Commits atomiques et bien décrits
-✅ Ajouter des tests si possible
-✅ Pas de reformatage massif (sauf si demandé)
+✅ Suivre le style du projet existant  
+✅ Commits atomiques et bien décrits  
+✅ Ajouter des tests si possible  
+✅ Pas de reformatage massif (sauf si demandé)  
 ✅ Un seul sujet par PR
 
 **Communication :**
 
-✅ Être poli et respectueux
-✅ Accepter les critiques constructives
-✅ Répondre aux commentaires de review
-✅ Être patient (mainteneurs souvent bénévoles)
+✅ Être poli et respectueux  
+✅ Accepter les critiques constructives  
+✅ Répondre aux commentaires de review  
+✅ Être patient (mainteneurs souvent bénévoles)  
 ✅ Remercier pour le temps accordé
 
 **Processus :**
@@ -1473,8 +1473,8 @@ examples/
 
 **Attention :**
 
-⚠️ Vérifier TOUTES les dépendances transitives
-⚠️ Certaines licences ont des conditions spécifiques
+⚠️ Vérifier TOUTES les dépendances transitives  
+⚠️ Certaines licences ont des conditions spécifiques  
 ⚠️ En cas de doute, consulter un juriste
 
 ### Choisir une licence pour votre projet
@@ -1929,10 +1929,10 @@ end.
 
 **Avantages FreePascal pour CLI :**
 
-✅ Binaire statique sans dépendances
-✅ Démarrage instantané (vs Python/Ruby)
-✅ Cross-compilation facile (Linux/Windows)
-✅ Performance native
+✅ Binaire statique sans dépendances  
+✅ Démarrage instantané (vs Python/Ruby)  
+✅ Cross-compilation facile (Linux/Windows)  
+✅ Performance native  
 ✅ Déploiement simple (un seul fichier)
 
 **Leçon :** FreePascal excelle pour outils CLI système, alternative crédible à Go/Rust avec syntaxe plus accessible.
@@ -2023,10 +2023,10 @@ Avant d'intégrer un projet open source dans votre code, vérifiez :
 
 ### Risques à évaluer
 
-⚠️ **Projet mono-contributeur** : Risque d'abandon
-⚠️ **Pas de release depuis 2+ ans** : Potentiellement mort
-⚠️ **Issues ouvertes non traitées** : Mainteneur débordé/parti
-⚠️ **Licence GPL pour usage commercial** : Incompatibilité juridique
+⚠️ **Projet mono-contributeur** : Risque d'abandon  
+⚠️ **Pas de release depuis 2+ ans** : Potentiellement mort  
+⚠️ **Issues ouvertes non traitées** : Mainteneur débordé/parti  
+⚠️ **Licence GPL pour usage commercial** : Incompatibilité juridique  
 ⚠️ **Dépendances obsolètes** : Maintenance future problématique
 
 ---
@@ -2173,10 +2173,10 @@ This translation will help French-speaking users.
 
 ### Progression dans la contribution
 
-**Niveau 1 (mois 1-3) :** Documentation, traductions, tests
-**Niveau 2 (mois 3-6) :** Bugs mineurs, exemples, tutoriels
-**Niveau 3 (mois 6-12) :** Fonctionnalités, optimisations
-**Niveau 4 (an 1+) :** Architecture, maintenance, mentoring
+**Niveau 1 (mois 1-3) :** Documentation, traductions, tests  
+**Niveau 2 (mois 3-6) :** Bugs mineurs, exemples, tutoriels  
+**Niveau 3 (mois 6-12) :** Fonctionnalités, optimisations  
+**Niveau 4 (an 1+) :** Architecture, maintenance, mentoring  
 
 ---
 

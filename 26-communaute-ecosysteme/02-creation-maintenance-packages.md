@@ -549,7 +549,7 @@ MonPackage/
 
 ### Fichier README.md
 
-```markdown
+````markdown
 # MonPackage
 
 ## Description
@@ -615,7 +615,7 @@ Les contributions sont les bienvenues ! Voir [CONTRIBUTING.md](CONTRIBUTING.md)
 - Issues GitHub : https://github.com/username/monpackage/issues
 - Forum Lazarus : Section appropriate
 - Email : votre@email.com
-```
+````
 
 ## Gestion des dépendances
 
@@ -870,7 +870,7 @@ pasdoc \
 
 Créer un guide utilisateur complet dans `docs/manual.md` :
 
-```markdown
+````markdown
 # Guide utilisateur MonPackage
 
 ## Installation
@@ -928,7 +928,7 @@ Réponse...
 ### Que faire si Y ne fonctionne pas ?
 
 Solution...
-```
+````
 
 ## Tests du package
 
@@ -1318,7 +1318,7 @@ Write-Host "5. Redémarrer Lazarus"
 
 2. **Templates d'issues** :
 
-```markdown
+````markdown
 <!-- .github/ISSUE_TEMPLATE/bug_report.md -->
 ---
 name: Bug Report
@@ -1354,7 +1354,7 @@ Description de ce qui se passe réellement.
 
 ## Informations supplémentaires
 Captures d'écran, messages d'erreur, etc.
-```
+````
 
 ### Répondre aux utilisateurs
 
@@ -1368,7 +1368,7 @@ Captures d'écran, messages d'erreur, etc.
 
 **Exemple de réponse :**
 
-```markdown
+````markdown
 Merci pour ce rapport détaillé !
 
 Le problème vient de la méthode `X` qui ne gère pas correctement
@@ -1383,7 +1383,7 @@ else
 ```
 
 Je vais corriger cela dans la prochaine version (1.2.1).
-```
+````
 
 ### Mises à jour et patches
 
@@ -1598,7 +1598,12 @@ unit StringUtils;
 
 interface
 
+uses
+  SysUtils;
+
 type
+  TStringArray = array of string;
+
   { TStringUtils - Utilitaires pour chaînes }
   TStringUtils = class
   public
@@ -1779,12 +1784,12 @@ Créer et maintenir un package de qualité est un processus enrichissant qui dem
 
 **Points clés à retenir :**
 
-✅ Structure organisée et claire
-✅ Documentation complète et à jour
-✅ Tests unitaires exhaustifs
-✅ Compatibilité multi-plateforme
-✅ Gestion de versions rigoureuse
-✅ Distribution facilitée (OPM)
+✅ Structure organisée et claire  
+✅ Documentation complète et à jour  
+✅ Tests unitaires exhaustifs  
+✅ Compatibilité multi-plateforme  
+✅ Gestion de versions rigoureuse  
+✅ Distribution facilitée (OPM)  
 ✅ Support communautaire actif
 
 En suivant ces bonnes pratiques, vous créerez des packages qui seront appréciés et utilisés par la communauté FreePascal/Lazarus pendant de nombreuses années !

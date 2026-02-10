@@ -379,10 +379,10 @@ je travaille sur [projet intéressant]. Je suis ici pour
 **Prise de notes efficace :**
 
 Structure suggérée :
-```markdown
+````markdown
 # Session : [Titre]
-**Speaker :** [Nom] (@twitter)
-**Date :** [Date et heure]
+**Speaker :** [Nom] (@twitter)  
+**Date :** [Date et heure]  
 
 ## Points clés
 - Point important 1
@@ -403,7 +403,7 @@ Structure suggérée :
 - Slides : [URL]
 - Code : [GitHub URL]
 - Article : [Blog URL]
-```
+````
 
 #### Networking
 
@@ -451,10 +451,10 @@ Si vous êtes timide ou introverti, pas de panique :
 
 **Red flags à éviter :**
 
-❌ Monopoliser un speaker 30 minutes
-❌ Être insistant ou pushy (vente, recrutement)
-❌ Critiquer publiquement d'autres technos/personnes
-❌ Être condescendant avec les débutants
+❌ Monopoliser un speaker 30 minutes  
+❌ Être insistant ou pushy (vente, recrutement)  
+❌ Critiquer publiquement d'autres technos/personnes  
+❌ Être condescendant avec les débutants  
 ❌ Violer le code de conduite
 
 #### Participer activement
@@ -712,11 +712,11 @@ du package [X], et contributeur régulier à Lazarus...
 
 **Conseils pour être accepté :**
 
-✅ **Bon titre** : Descriptif et accrocheur
-✅ **Résumé clair** : On comprend de quoi ça parle
-✅ **Pertinence** : Intéressant pour la communauté
-✅ **Originalité** : Pas une redite d'autres talks
-✅ **Crédibilité** : Bio montrant votre expertise
+✅ **Bon titre** : Descriptif et accrocheur  
+✅ **Résumé clair** : On comprend de quoi ça parle  
+✅ **Pertinence** : Intéressant pour la communauté  
+✅ **Originalité** : Pas une redite d'autres talks  
+✅ **Crédibilité** : Bio montrant votre expertise  
 ✅ **Réaliste** : Vous pouvez vraiment tenir vos promesses
 
 ### Préparer sa présentation
