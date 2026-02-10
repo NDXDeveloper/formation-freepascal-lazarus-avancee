@@ -503,16 +503,16 @@ end;
 procedure TUDPGameServer.SendToClient(const Address: string;
                                      const Msg: TNetworkMessage);
 var
-  Parts: TStringArray;
   IP: string;
   Port: Integer;
   Data: TBytes;
+  ColonPos: Integer;
 begin
-  Parts := Address.Split([':']);
-  if Length(Parts) = 2 then
+  ColonPos := Pos(':', Address);
+  if ColonPos > 0 then
   begin
-    IP := Parts[0];
-    Port := StrToIntDef(Parts[1], 0);
+    IP := Copy(Address, 1, ColonPos - 1);
+    Port := StrToIntDef(Copy(Address, ColonPos + 1, Length(Address)), 0);
 
     SetLength(Data, SizeOf(Msg));
     Move(Msg, Data[0], SizeOf(Msg));

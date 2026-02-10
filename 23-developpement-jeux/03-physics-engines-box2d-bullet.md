@@ -673,6 +673,8 @@ begin
 end;
 
 procedure TGame.Update(dt: Single);
+var
+  Vel: b2Vec2;
 begin
   // Simuler la physique
   b2World_Step(FWorld, dt, 8, 3);

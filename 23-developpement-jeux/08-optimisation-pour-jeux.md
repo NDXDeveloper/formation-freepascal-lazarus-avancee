@@ -1056,7 +1056,7 @@ var
 begin
   xhalf := 0.5 * x;
   i := $5f3759df - (i shr 1);
-  Result := Result * (1.5 - xhalf * Result * Result);
+  Result := x * (1.5 - xhalf * x * x);
 end;
 ```
 
@@ -1768,7 +1768,7 @@ type
     FMaxEntries: Integer;
   public
     function GetPath(StartX, StartY, EndX, EndY: Integer): TPath;
-    procedure PrunCache;
+    procedure PruneCache;
   end;
 
 function TPathCache.GetPath(StartX, StartY, EndX, EndY: Integer): TPath;
@@ -1934,10 +1934,10 @@ L'optimisation est un processus continu qui nécessite :
 
 ### Points clés à retenir
 
-✅ **CPU** : Réduire les allocations, optimiser les boucles, utiliser le caching
-✅ **GPU** : Batch rendering, culling, LOD, optimiser les shaders
-✅ **Mémoire** : Object pooling, streaming, compression
-✅ **Réseau** : Interpolation, prédiction, compression des données
+✅ **CPU** : Réduire les allocations, optimiser les boucles, utiliser le caching  
+✅ **GPU** : Batch rendering, culling, LOD, optimiser les shaders  
+✅ **Mémoire** : Object pooling, streaming, compression  
+✅ **Réseau** : Interpolation, prédiction, compression des données  
 ✅ **Multi-plateforme** : Tester sur Windows et Linux, adapter aux spécificités
 
 L'optimisation prématurée est certes la racine de tous les maux, mais l'optimisation réfléchie et mesurée est la clé d'un jeu professionnel et agréable à jouer !

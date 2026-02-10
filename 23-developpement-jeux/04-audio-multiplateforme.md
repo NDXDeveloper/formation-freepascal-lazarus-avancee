@@ -325,10 +325,10 @@ Le mixage combine plusieurs sources audio en une seule sortie.
 
 **Concepts importants** :
 
-**Volume principal (Master)** : Contrôle le volume global
-**Catégories** : Musique, effets sonores, voix, ambiance
-**Priorités** : Quels sons jouer quand on atteint la limite de sources simultanées
-**Ducking** : Réduire automatiquement la musique pendant les dialogues
+**Volume principal (Master)** : Contrôle le volume global  
+**Catégories** : Musique, effets sonores, voix, ambiance  
+**Priorités** : Quels sons jouer quand on atteint la limite de sources simultanées  
+**Ducking** : Réduire automatiquement la musique pendant les dialogues  
 
 ## Architecture audio typique pour un jeu
 
@@ -398,12 +398,12 @@ AudioManager (Gestionnaire principal)
 
 ### Optimisations
 
-**Préchargement** : Charger les sons fréquents au démarrage
-**Streaming** : Pour la musique et les sons très longs
-**Pooling** : Réutiliser les sources audio
-**Distance culling** : Ne pas jouer les sons trop lointains
-**LOD audio** : Sons plus simples pour les sources éloignées
-**Priorités** : Système de priorités pour gérer les limites
+**Préchargement** : Charger les sons fréquents au démarrage  
+**Streaming** : Pour la musique et les sons très longs  
+**Pooling** : Réutiliser les sources audio  
+**Distance culling** : Ne pas jouer les sons trop lointains  
+**LOD audio** : Sons plus simples pour les sources éloignées  
+**Priorités** : Système de priorités pour gérer les limites  
 
 ## Plan du chapitre
 
@@ -486,12 +486,12 @@ Les sections suivantes de ce chapitre vous guideront dans l'implémentation conc
 
 **Points clés à retenir** :
 
-✅ L'audio est crucial pour l'immersion et le feedback
-✅ Chaque plateforme a ses propres API audio natives
-✅ OpenAL est la solution recommandée pour le multi-plateforme
-✅ Comprendre les concepts de base (sources, buffers, listener) est essentiel
-✅ Commencez simple, optimisez plus tard
-✅ L'audio 3D ajoute une dimension d'immersion importante
+✅ L'audio est crucial pour l'immersion et le feedback  
+✅ Chaque plateforme a ses propres API audio natives  
+✅ OpenAL est la solution recommandée pour le multi-plateforme  
+✅ Comprendre les concepts de base (sources, buffers, listener) est essentiel  
+✅ Commencez simple, optimisez plus tard  
+✅ L'audio 3D ajoute une dimension d'immersion importante  
 ✅ Le streaming est indispensable pour la musique de fond
 
 Passons maintenant aux implémentations concrètes, en commençant par les solutions Windows avec DirectSound et XAudio2.

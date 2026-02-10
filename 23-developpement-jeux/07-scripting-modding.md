@@ -754,8 +754,8 @@ end;
 
 Pour intégrer avec des plateformes existantes :
 
-**Steam Workshop** : Utiliser le Steamworks SDK
-**Mod.io** : API REST simple
+**Steam Workshop** : Utiliser le Steamworks SDK  
+**Mod.io** : API REST simple  
 
 ```pascal
 procedure UploadModToModIO(const ModPath: string; APIKey: string);

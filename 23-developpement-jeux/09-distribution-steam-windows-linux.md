@@ -849,7 +849,7 @@ begin
   // Charger libsteam_api.so
   SteamLibHandle := LoadLibrary('libsteam_api.so');
 
-  if SteamLibHandle = nil then
+  if SteamLibHandle = NilHandle then
   begin
     WriteLn('Erreur : libsteam_api.so introuvable');
     WriteLn('Assurez-vous que la bibliothèque est dans le dossier du jeu');
@@ -959,10 +959,10 @@ Distribuer votre jeu FreePascal sur Steam est tout à fait possible et peut vous
 
 ### Points clés à retenir
 
-✅ **Préparation** : Investissez du temps dans la page store et le marketing
-✅ **Multi-plateforme** : Supportez au moins Windows et Linux
-✅ **Intégration** : Testez soigneusement toutes les fonctionnalités Steam
-✅ **Qualité** : Un jeu bien fini vaut mieux qu'un jeu riche mais buggé
+✅ **Préparation** : Investissez du temps dans la page store et le marketing  
+✅ **Multi-plateforme** : Supportez au moins Windows et Linux  
+✅ **Intégration** : Testez soigneusement toutes les fonctionnalités Steam  
+✅ **Qualité** : Un jeu bien fini vaut mieux qu'un jeu riche mais buggé  
 ✅ **Communauté** : Restez à l'écoute et mettez à jour régulièrement
 
 Avec FreePascal et Lazarus, vous pouvez créer des jeux de qualité professionnelle et les distribuer sur la plus grande plateforme de jeux au monde. Bonne chance avec votre projet !

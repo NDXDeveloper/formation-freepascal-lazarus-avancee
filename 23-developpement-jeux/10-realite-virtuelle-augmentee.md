@@ -2597,13 +2597,13 @@ Le développement VR/AR avec FreePascal et Lazarus est tout à fait possible et 
 
 ### Points clés à retenir
 
-✅ **Performance critique** : La VR exige 90+ FPS constants
-✅ **Confort utilisateur** : Éviter le motion sickness est prioritaire
-✅ **Bindings nécessaires** : Créez des interfaces Pascal pour les SDK VR/AR
-✅ **Tests réels** : Toujours tester sur du matériel physique
-✅ **Optimisation** : Utilisez toutes les techniques disponibles
-✅ **Audio spatial** : Crucial pour l'immersion
-✅ **UI adaptée** : Interfaces 3D, pas 2D
+✅ **Performance critique** : La VR exige 90+ FPS constants  
+✅ **Confort utilisateur** : Éviter le motion sickness est prioritaire  
+✅ **Bindings nécessaires** : Créez des interfaces Pascal pour les SDK VR/AR  
+✅ **Tests réels** : Toujours tester sur du matériel physique  
+✅ **Optimisation** : Utilisez toutes les techniques disponibles  
+✅ **Audio spatial** : Crucial pour l'immersion  
+✅ **UI adaptée** : Interfaces 3D, pas 2D  
 ✅ **Multi-plateforme** : Windows et Linux pour la VR PC
 
 ### L'avenir est immersif
