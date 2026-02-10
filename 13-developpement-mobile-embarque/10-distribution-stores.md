@@ -114,7 +114,7 @@ keytool -genkey -v -keystore mon-app-key.keystore \
 
 **Stockage sécurisé** :
 ```
-mon-app-key.keystore         # Le fichier de clé
+mon-app-key.keystore         # Le fichier de clé  
 keystore-info.txt            # Mots de passe et informations
 ```
 
@@ -162,23 +162,23 @@ Google recommande maintenant le format AAB plutôt qu'APK :
 lazbuild --build-mode=Release MonProjet.lpi
 
 # 2. Créer la structure AAB
-mkdir -p build/aab/base/manifest
-mkdir -p build/aab/base/dex
-mkdir -p build/aab/base/lib/armeabi-v7a
+mkdir -p build/aab/base/manifest  
+mkdir -p build/aab/base/dex  
+mkdir -p build/aab/base/lib/armeabi-v7a  
 mkdir -p build/aab/base/lib/arm64-v8a
 
 # 3. Copier les fichiers compilés
-cp android/AndroidManifest.xml build/aab/base/manifest/
-cp android/classes.dex build/aab/base/dex/
-cp lib/armeabi-v7a/libmonprojet.so build/aab/base/lib/armeabi-v7a/
+cp android/AndroidManifest.xml build/aab/base/manifest/  
+cp android/classes.dex build/aab/base/dex/  
+cp lib/armeabi-v7a/libmonprojet.so build/aab/base/lib/armeabi-v7a/  
 cp lib/arm64-v8a/libmonprojet.so build/aab/base/lib/arm64-v8a/
 
 # 4. Créer le fichier AAB (archive ZIP)
-cd build/aab
+cd build/aab  
 zip -r ../../MonProjet.aab *
 
 # 5. Signer l'AAB
-cd ../..
+cd ../..  
 jarsigner -keystore mon-app-key.keystore MonProjet.aab mon-app
 ```
 
@@ -235,11 +235,11 @@ Description complète (max 4000 caractères)
 # Générer différentes tailles d'icônes
 # À partir d'une icône 1024x1024 px
 
-convert icon-1024.png -resize 512x512 icon-512.png
-convert icon-1024.png -resize 192x192 mipmap-xxxhdpi/ic_launcher.png
-convert icon-1024.png -resize 144x144 mipmap-xxhdpi/ic_launcher.png
-convert icon-1024.png -resize 96x96 mipmap-xhdpi/ic_launcher.png
-convert icon-1024.png -resize 72x72 mipmap-hdpi/ic_launcher.png
+convert icon-1024.png -resize 512x512 icon-512.png  
+convert icon-1024.png -resize 192x192 mipmap-xxxhdpi/ic_launcher.png  
+convert icon-1024.png -resize 144x144 mipmap-xxhdpi/ic_launcher.png  
+convert icon-1024.png -resize 96x96 mipmap-xhdpi/ic_launcher.png  
+convert icon-1024.png -resize 72x72 mipmap-hdpi/ic_launcher.png  
 convert icon-1024.png -resize 48x48 mipmap-mdpi/ic_launcher.png
 ```
 
@@ -253,11 +253,11 @@ Répondre au questionnaire Google sur :
 
 **Exemple pour une application simple** :
 ```
-Public cible : Tout public (3+)
-Violence : Aucune
-Contenu sexuel : Aucun
-Langage inapproprié : Aucun
-Publicités : Non
+Public cible : Tout public (3+)  
+Violence : Aucune  
+Contenu sexuel : Aucun  
+Langage inapproprié : Aucun  
+Publicités : Non  
 Achats intégrés : Non
 ```
 
@@ -705,7 +705,7 @@ Categories:
 
 License: GPL-3.0-only
 
-AuthorName: Votre Nom
+AuthorName: Votre Nom  
 AuthorEmail: email@example.com
 
 Summary: Description courte
@@ -717,7 +717,7 @@ Description: |-
   * Feature 1
   * Feature 2
 
-RepoType: git
+RepoType: git  
 Repo: https://github.com/votre-username/votre-app
 
 Builds:
@@ -865,7 +865,7 @@ unit Analytics;
 
 interface
 
-procedure TrackScreen(const ScreenName: string);
+procedure TrackScreen(const ScreenName: string);  
 procedure TrackEvent(const Category, Action, Label: string; Value: Integer = 0);
 
 implementation
@@ -874,13 +874,13 @@ implementation
 uses
   jni;
 
-procedure TrackScreen(const ScreenName: string);
+procedure TrackScreen(const ScreenName: string);  
 begin
   // Appel JNI vers Firebase Analytics
   // FirebaseAnalytics.logEvent("screen_view", params)
 end;
 
-procedure TrackEvent(const Category, Action, Label: string; Value: Integer);
+procedure TrackEvent(const Category, Action, Label: string; Value: Integer);  
 begin
   // Appel JNI vers Firebase Analytics
   // FirebaseAnalytics.logEvent(action, bundle)
@@ -890,12 +890,12 @@ end;
 
 {$IFDEF IOS}
 
-procedure TrackScreen(const ScreenName: string);
+procedure TrackScreen(const ScreenName: string);  
 begin
   // Appel vers Firebase Analytics iOS
 end;
 
-procedure TrackEvent(const Category, Action, Label: string; Value: Integer);
+procedure TrackEvent(const Category, Action, Label: string; Value: Integer);  
 begin
   // Appel vers Firebase Analytics iOS
 end;
@@ -1006,21 +1006,21 @@ Merci pour vos retours ! Continuez à nous envoyer vos suggestions.
 
 **Phase 1 : Test interne (10-100 testeurs)**
 ```
-Durée : 1-3 jours
+Durée : 1-3 jours  
 Objectif : Vérifier qu'il n'y a pas de bugs critiques
 ```
 
 **Phase 2 : Bêta fermée (100-1000 utilisateurs)**
 ```
-Durée : 3-7 jours
+Durée : 3-7 jours  
 Objectif : Tester sur différents appareils, recueillir feedback
 ```
 
 **Phase 3 : Déploiement progressif**
 ```
-Jour 1-2 : 10% des utilisateurs
-Jour 3-4 : 25% des utilisateurs
-Jour 5-6 : 50% des utilisateurs
+Jour 1-2 : 10% des utilisateurs  
+Jour 3-4 : 25% des utilisateurs  
+Jour 5-6 : 50% des utilisateurs  
 Jour 7+  : 100% des utilisateurs
 ```
 
@@ -1050,9 +1050,9 @@ git checkout -b hotfix/1.2.1 main
 # App Store : Demander une validation accélérée
 
 # 6. Merger dans main et develop
-git checkout main
-git merge hotfix/1.2.1
-git checkout develop
+git checkout main  
+git merge hotfix/1.2.1  
+git checkout develop  
 git merge hotfix/1.2.1
 ```
 
@@ -1094,7 +1094,7 @@ Pourriez-vous nous envoyer un email à support@monapp.com avec :
 - Version d'Android
 - Une capture d'écran si possible
 
-Nous allons résoudre ce problème rapidement.
+Nous allons résoudre ce problème rapidement.  
 Mise à jour : Version 1.2.1 publiée aujourd'hui avec correction.
 
 L'équipe MonApp"
@@ -1229,11 +1229,11 @@ end.
 **Pré-lancement** :
 
 ```
-T-30 jours : Créer page de destination (landing page)
-T-21 jours : Ouvrir inscriptions bêta
-T-14 jours : Campagne teasing sur réseaux sociaux
-T-7 jours  : Envoyer communiqué de presse
-T-3 jours  : Contacter influenceurs/blogueurs
+T-30 jours : Créer page de destination (landing page)  
+T-21 jours : Ouvrir inscriptions bêta  
+T-14 jours : Campagne teasing sur réseaux sociaux  
+T-7 jours  : Envoyer communiqué de presse  
+T-3 jours  : Contacter influenceurs/blogueurs  
 Jour J     : Lancement officiel !
 ```
 
@@ -1265,8 +1265,8 @@ Jour J     : Lancement officiel !
 
 **Budget recommandé pour démarrer** :
 ```
-Test initial : 50-100 € / jour pendant 7 jours
-Optimisation : Ajuster selon CPI (Cost Per Install)
+Test initial : 50-100 € / jour pendant 7 jours  
+Optimisation : Ajuster selon CPI (Cost Per Install)  
 Objectif CPI : 0.50 € - 2.00 € (variable selon secteur)
 ```
 
@@ -1277,7 +1277,7 @@ Objectif CPI : 0.50 € - 2.00 € (variable selon secteur)
 **Écran "À propos"** minimal :
 
 ```pascal
-procedure ShowAboutScreen;
+procedure ShowAboutScreen;  
 begin
   ShowMessage(
     'MonApp v1.2.0' + sLineBreak +
@@ -1324,7 +1324,7 @@ implementation
 uses
   Dialogs;
 
-procedure ShowLicenses;
+procedure ShowLicenses;  
 begin
   ShowMessage(LICENSES_TEXT);
 end;
@@ -1378,7 +1378,7 @@ Date de dernière mise à jour : [Date]
 
 1. **Consentement explicite**
 ```pascal
-procedure RequestConsent;
+procedure RequestConsent;  
 begin
   if not IsConsentGiven then
   begin
@@ -1393,13 +1393,13 @@ end;
 
 2. **Droit d'accès et suppression**
 ```pascal
-procedure ExportUserData;
+procedure ExportUserData;  
 begin
   // Générer un fichier JSON avec toutes les données utilisateur
   GenerateJSON(UserData, 'user_data.json');
 end;
 
-procedure DeleteUserAccount;
+procedure DeleteUserAccount;  
 begin
   if Confirm('Êtes-vous sûr de vouloir supprimer votre compte ?') then
   begin

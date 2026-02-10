@@ -280,7 +280,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TAndroidModule1.jButton1Click(Sender: TObject);
+procedure TAndroidModule1.jButton1Click(Sender: TObject);  
 begin
   // Votre code ici
   jTextView1.Text := 'Bouton cliqué !';
@@ -295,19 +295,19 @@ Les événements Android sont similaires aux événements Lazarus standards :
 
 ```pascal
 // Événement Click sur un bouton
-procedure TAndroidModule1.jButton1Click(Sender: TObject);
+procedure TAndroidModule1.jButton1Click(Sender: TObject);  
 begin
   ShowMessage('Bouton cliqué');
 end;
 
 // Événement de changement de texte
-procedure TAndroidModule1.jEditText1Change(Sender: TObject);
+procedure TAndroidModule1.jEditText1Change(Sender: TObject);  
 begin
   jTextView1.Text := jEditText1.Text;
 end;
 
 // Événement de sélection dans une liste
-procedure TAndroidModule1.jListView1ItemClick(Sender: TObject; ItemIndex: Integer);
+procedure TAndroidModule1.jListView1ItemClick(Sender: TObject; ItemIndex: Integer);  
 begin
   ShowMessage('Item ' + IntToStr(ItemIndex) + ' sélectionné');
 end;
@@ -319,19 +319,19 @@ Chaque composant LAMW possède des propriétés Android spécifiques :
 
 ```pascal
 // Configuration d'un TextView
-jTextView1.Text := 'Mon texte';
-jTextView1.TextSize := 18;
-jTextView1.TextColor := colbrRed;
+jTextView1.Text := 'Mon texte';  
+jTextView1.TextSize := 18;  
+jTextView1.TextColor := colbrRed;  
 jTextView1.TextAlignment := taCenter;
 
 // Configuration d'un EditText
-jEditText1.Hint := 'Entrez votre nom';
-jEditText1.InputTypeEx := itxText;
+jEditText1.Hint := 'Entrez votre nom';  
+jEditText1.InputTypeEx := itxText;  
 jEditText1.MaxLength := 50;
 
 // Configuration d'un Button
-jButton1.Text := 'Valider';
-jButton1.BackgroundColor := colbrBlue;
+jButton1.Text := 'Valider';  
+jButton1.BackgroundColor := colbrBlue;  
 jButton1.Enabled := True;
 ```
 
@@ -351,7 +351,7 @@ begin
 end;
 
 // Utilisation
-procedure TAndroidModule1.ShowToastMessage(const Msg: string);
+procedure TAndroidModule1.ShowToastMessage(const Msg: string);  
 begin
   // LAMW fournit des helpers pour simplifier les appels JNI
   jForm.ShowMessage(Msg);
@@ -395,12 +395,12 @@ Pour Android 6.0 et supérieur, certaines permissions doivent être demandées �
 
 ```pascal
 // Vérifier une permission
-if jForm.HasPermission('android.permission.CAMERA') then
+if jForm.HasPermission('android.permission.CAMERA') then  
 begin
   // Permission accordée, utiliser la caméra
   OpenCamera;
-end
-else
+end  
+else  
 begin
   // Demander la permission
   jForm.RequestPermission('android.permission.CAMERA', 100);
@@ -499,10 +499,10 @@ LAMW s'intègre avec le système de logs Android (LogCat) :
 jForm.Log('TAG', 'Message de debug');
 
 // Différents niveaux de log
-jForm.LogVerbose('TAG', 'Détails verbeux');
-jForm.LogDebug('TAG', 'Information de débogage');
-jForm.LogInfo('TAG', 'Information générale');
-jForm.LogWarning('TAG', 'Avertissement');
+jForm.LogVerbose('TAG', 'Détails verbeux');  
+jForm.LogDebug('TAG', 'Information de débogage');  
+jForm.LogInfo('TAG', 'Information générale');  
+jForm.LogWarning('TAG', 'Avertissement');  
 jForm.LogError('TAG', 'Erreur');
 ```
 
@@ -524,7 +524,7 @@ Lazarus permet le débogage pas à pas du code Pascal :
 
 ```pascal
 // Afficher des valeurs pour déboguer
-procedure TAndroidModule1.DebugCalculation;
+procedure TAndroidModule1.DebugCalculation;  
 var
   Calcul: Integer;
 begin
@@ -534,7 +534,7 @@ begin
 end;
 
 // Gestion des exceptions
-procedure TAndroidModule1.SafeOperation;
+procedure TAndroidModule1.SafeOperation;  
 begin
   try
     // Code potentiellement dangereux
@@ -557,7 +557,7 @@ end;
 
 ```pascal
 // Libérer les ressources
-procedure TAndroidModule1.OnDestroy;
+procedure TAndroidModule1.OnDestroy;  
 begin
   // Libérer les objets créés
   if Assigned(MyObject) then
@@ -571,7 +571,7 @@ end;
 
 ```pascal
 // Exécuter du code en arrière-plan
-procedure TAndroidModule1.LoadDataAsync;
+procedure TAndroidModule1.LoadDataAsync;  
 begin
   jForm.AsyncTask(
     procedure // OnExecute (thread séparé)
@@ -602,7 +602,7 @@ Techniques pour réduire la taille :
 
 ```pascal
 // Économie de batterie
-procedure TAndroidModule1.OptimizePower;
+procedure TAndroidModule1.OptimizePower;  
 begin
   // Désactiver les mises à jour quand non visible
   if not jForm.IsActive then
@@ -650,7 +650,7 @@ begin
 end;
 
 // Sauvegarder un fichier
-procedure TAndroidModule1.SaveTextFile;
+procedure TAndroidModule1.SaveTextFile;  
 var
   SL: TStringList;
 begin
@@ -669,12 +669,12 @@ end;
 
 ```pascal
 // Jouer un son
-jMediaPlayer1.LoadFromAssets('sound.mp3');
+jMediaPlayer1.LoadFromAssets('sound.mp3');  
 jMediaPlayer1.Play;
 
 // Contrôles
-jMediaPlayer1.Pause;
-jMediaPlayer1.Stop;
+jMediaPlayer1.Pause;  
+jMediaPlayer1.Stop;  
 jMediaPlayer1.SeekTo(5000); // 5 secondes
 ```
 
@@ -741,42 +741,42 @@ Une application Android passe par plusieurs états :
 
 ```pascal
 // Application créée
-procedure TAndroidModule1.OnCreate;
+procedure TAndroidModule1.OnCreate;  
 begin
   // Initialisation
   InitComponents;
 end;
 
 // Application visible
-procedure TAndroidModule1.OnStart;
+procedure TAndroidModule1.OnStart;  
 begin
   // Démarrer les mises à jour
   jTimer1.Enabled := True;
 end;
 
 // Application au premier plan
-procedure TAndroidModule1.OnResume;
+procedure TAndroidModule1.OnResume;  
 begin
   // Reprendre les opérations
   ResumeOperations;
 end;
 
 // Application en arrière-plan
-procedure TAndroidModule1.OnPause;
+procedure TAndroidModule1.OnPause;  
 begin
   // Suspendre les opérations coûteuses
   PauseOperations;
 end;
 
 // Application plus visible
-procedure TAndroidModule1.OnStop;
+procedure TAndroidModule1.OnStop;  
 begin
   // Arrêter les mises à jour
   jTimer1.Enabled := False;
 end;
 
 // Application détruite
-procedure TAndroidModule1.OnDestroy;
+procedure TAndroidModule1.OnDestroy;  
 begin
   // Libérer les ressources
   CleanupResources;
@@ -789,7 +789,7 @@ Lorsque l'appareil tourne (changement d'orientation), Android détruit et recré
 
 ```pascal
 // Sauvegarder l'état
-procedure TAndroidModule1.OnSaveInstanceState(outState: jObject);
+procedure TAndroidModule1.OnSaveInstanceState(outState: jObject);  
 begin
   // Sauvegarder les données importantes
   SaveStateString(outState, 'username', jEditText1.Text);
@@ -797,7 +797,7 @@ begin
 end;
 
 // Restaurer l'état
-procedure TAndroidModule1.OnRestoreInstanceState(savedState: jObject);
+procedure TAndroidModule1.OnRestoreInstanceState(savedState: jObject);  
 begin
   // Restaurer les données
   jEditText1.Text := RestoreStateString(savedState, 'username', '');

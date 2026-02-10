@@ -74,7 +74,7 @@ FreePascal supporte plusieurs architectures de microcontrôleurs :
 #          C:\avrdude\
 
 # 4. Vérifier l'installation
-fpc -version
+fpc -version  
 avrdude -v
 ```
 
@@ -82,7 +82,7 @@ avrdude -v
 
 ```bash
 # 1. Installer FreePascal
-sudo apt update
+sudo apt update  
 sudo apt install fpc -y
 
 # 2. Installer AVRDude
@@ -94,7 +94,7 @@ sudo usermod -a -G dialout $USER
 # 4. Se déconnecter/reconnecter pour appliquer les changements
 
 # 5. Vérifier l'installation
-fpc -version
+fpc -version  
 avrdude -v
 ```
 
@@ -195,8 +195,8 @@ avrdude -c arduino -p atmega328p -P /dev/ttyACM0 -b 115200 -U flash:w:blink.hex:
 @echo off
 REM Script de compilation et téléversement pour Arduino
 
-SET PROJECT=%1
-SET PORT=COM3
+SET PROJECT=%1  
+SET PORT=COM3  
 SET MCU=atmega328p
 
 if "%PROJECT%"=="" (
@@ -204,8 +204,8 @@ if "%PROJECT%"=="" (
     exit /b 1
 )
 
-echo ========================================
-echo  Compilation...
+echo ========================================  
+echo  Compilation...  
 echo ========================================
 
 fpc -Pavr -Cp%MCU:~3% -Tembedded -Os %PROJECT%
@@ -217,9 +217,9 @@ if %errorlevel% neq 0 (
 
 SET HEXFILE=%~n1.hex
 
-echo.
-echo ========================================
-echo  Televerement sur %PORT%...
+echo.  
+echo ========================================  
+echo  Televerement sur %PORT%...  
 echo ========================================
 
 avrdude -c arduino -p %MCU% -P %PORT% -b 115200 -U flash:w:%HEXFILE%:i
@@ -229,9 +229,9 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo.
-echo ========================================
-echo  TERMINE !
+echo.  
+echo ========================================  
+echo  TERMINE !  
 echo ========================================
 ```
 
@@ -241,8 +241,8 @@ echo ========================================
 #!/bin/bash
 # Script de compilation et téléversement pour Arduino
 
-PROJECT=$1
-PORT=/dev/ttyACM0
+PROJECT=$1  
+PORT=/dev/ttyACM0  
 MCU=atmega328p
 
 if [ -z "$PROJECT" ]; then
@@ -250,8 +250,8 @@ if [ -z "$PROJECT" ]; then
     exit 1
 fi
 
-echo "========================================"
-echo "  Compilation..."
+echo "========================================"  
+echo "  Compilation..."  
 echo "========================================"
 
 fpc -Pavr -CpATMEGA328P -Tembedded -Os "$PROJECT"
@@ -263,9 +263,9 @@ fi
 
 HEXFILE="${PROJECT%.pas}.hex"
 
-echo ""
-echo "========================================"
-echo "  Téléversement sur $PORT..."
+echo ""  
+echo "========================================"  
+echo "  Téléversement sur $PORT..."  
 echo "========================================"
 
 avrdude -c arduino -p $MCU -P $PORT -b 115200 -U flash:w:$HEXFILE:i
@@ -275,9 +275,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo ""
-echo "========================================"
-echo "  TERMINÉ !"
+echo ""  
+echo "========================================"  
+echo "  TERMINÉ !"  
 echo "========================================"
 ```
 
@@ -327,12 +327,12 @@ const
   INPUT_PULLUP = 2;
 
 // Fonctions de base
-procedure setup;
+procedure setup;  
 procedure loop;
 
 // Fonctions utilitaires
-procedure waitMs(ms: Word);
-procedure waitUs(us: Word);
+procedure waitMs(ms: Word);  
+procedure waitUs(us: Word);  
 function millis: LongWord;
 
 implementation
@@ -340,27 +340,27 @@ implementation
 var
   millisCounter: LongWord = 0;
 
-procedure setup;
+procedure setup;  
 begin
   // À redéfinir dans le programme principal
 end;
 
-procedure loop;
+procedure loop;  
 begin
   // À redéfinir dans le programme principal
 end;
 
-procedure waitMs(ms: Word);
+procedure waitMs(ms: Word);  
 begin
   delay(ms);
 end;
 
-procedure waitUs(us: Word);
+procedure waitUs(us: Word);  
 begin
   delayMicroseconds(us);
 end;
 
-function millis: LongWord;
+function millis: LongWord;  
 begin
   Result := millisCounter;
 end;
@@ -507,7 +507,7 @@ var
   voltage: Real;
   temperature: Real;
 
-procedure updateLEDs(temp: Real);
+procedure updateLEDs(temp: Real);  
 begin
   // Tout éteindre
   digitalWrite(LED_COLD, LOW);
@@ -589,11 +589,11 @@ end.
 
 ```bash
 # Linux
-sudo apt install screen
+sudo apt install screen  
 screen /dev/ttyACM0 9600
 
 # Ou avec minicom
-sudo apt install minicom
+sudo apt install minicom  
 minicom -D /dev/ttyACM0 -b 9600
 
 # Windows : utiliser PuTTY ou Arduino IDE Serial Monitor
@@ -670,7 +670,7 @@ const
   ECHO_PIN = 10;
   LED_PIN  = 13;
 
-function measureDistance: Word;
+function measureDistance: Word;  
 var
   duration: LongWord;
   distance: Word;
@@ -781,7 +781,7 @@ var
   ledState: Byte;
   counter: Word;
 
-procedure buttonPressed; interrupt;
+procedure buttonPressed; interrupt;  
 begin
   // Basculer l'état de la LED
   ledState := 1 - ledState;
@@ -825,7 +825,7 @@ uses
 const
   LED_PIN = 13;
 
-procedure goToSleep;
+procedure goToSleep;  
 begin
   // Configurer le mode de sommeil
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
@@ -986,7 +986,7 @@ var
   temp: Real;
   humidity: Real;
 
-procedure initializeDevices;
+procedure initializeDevices;  
 begin
   // Initialiser le capteur DHT22
   dht.init(DHT_PIN);
@@ -1006,7 +1006,7 @@ begin
   lcd.clear;
 end;
 
-procedure displayData;
+procedure displayData;  
 begin
   // Afficher sur l'écran LCD
   lcd.setCursor(0, 0);
@@ -1148,7 +1148,7 @@ void loop() {
 
 ```pascal
 // FreePascal
-program Blink;
+program Blink;  
 uses arduino;
 
 begin
@@ -1238,7 +1238,7 @@ const
 type
   TMotorDirection = (mdForward, mdBackward, mdStop);
 
-procedure setMotor(pwmPin, in1Pin, in2Pin: Byte; speed: Byte; direction: TMotorDirection);
+procedure setMotor(pwmPin, in1Pin, in2Pin: Byte; speed: Byte; direction: TMotorDirection);  
 begin
   case direction of
     mdForward:
@@ -1264,25 +1264,25 @@ begin
   end;
 end;
 
-procedure moveForward(speed: Byte);
+procedure moveForward(speed: Byte);  
 begin
   setMotor(MOTOR_L_PWM, MOTOR_L_IN1, MOTOR_L_IN2, speed, mdForward);
   setMotor(MOTOR_R_PWM, MOTOR_R_IN1, MOTOR_R_IN2, speed, mdForward);
 end;
 
-procedure turnLeft(speed: Byte);
+procedure turnLeft(speed: Byte);  
 begin
   setMotor(MOTOR_L_PWM, MOTOR_L_IN1, MOTOR_L_IN2, speed, mdBackward);
   setMotor(MOTOR_R_PWM, MOTOR_R_IN1, MOTOR_R_IN2, speed, mdForward);
 end;
 
-procedure turnRight(speed: Byte);
+procedure turnRight(speed: Byte);  
 begin
   setMotor(MOTOR_L_PWM, MOTOR_L_IN1, MOTOR_L_IN2, speed, mdForward);
   setMotor(MOTOR_R_PWM, MOTOR_R_IN1, MOTOR_R_IN2, speed, mdBackward);
 end;
 
-procedure stopMotors;
+procedure stopMotors;  
 begin
   setMotor(MOTOR_L_PWM, MOTOR_L_IN1, MOTOR_L_IN2, 0, mdStop);
   setMotor(MOTOR_R_PWM, MOTOR_R_IN1, MOTOR_R_IN2, 0, mdStop);
@@ -1387,7 +1387,7 @@ var
   server: TESPWebServer;
   temp, humidity: Real;
 
-procedure handleRoot;
+procedure handleRoot;  
 var
   html: String;
 begin
@@ -1418,7 +1418,7 @@ begin
   server.send(200, 'text/html', html);
 end;
 
-procedure handleData;
+procedure handleData;  
 var
   json: String;
 begin
@@ -1492,12 +1492,12 @@ var
   temp, humidity: Real;
   logFile: TFile;
 
-function getTimestamp: String;
+function getTimestamp: String;  
 begin
   Result := rtc.getDate + ' ' + rtc.getTime;
 end;
 
-procedure logData;
+procedure logData;  
 var
   dataLine: String;
 begin
@@ -1631,7 +1631,7 @@ program SafeProgram;
 uses
   arduino;
 
-function safeDivide(a, b: Integer): Integer;
+function safeDivide(a, b: Integer): Integer;  
 begin
   if b = 0 then
   begin
@@ -1642,7 +1642,7 @@ begin
     Result := a div b;
 end;
 
-function safeAnalogRead(pin: Byte): Word;
+function safeAnalogRead(pin: Byte): Word;  
 begin
   if (pin >= A0) and (pin <= A5) then
     Result := analogRead(pin)

@@ -100,7 +100,7 @@ Ubuntu propose des versions officielles pour Raspberry Pi :
 
 ```bash
 # Mise à jour du système
-sudo apt update
+sudo apt update  
 sudo apt upgrade
 
 # Installation de FreePascal et Lazarus
@@ -120,7 +120,7 @@ Pour obtenir la dernière version de FreePascal et Lazarus :
 
 ```bash
 # Télécharger FpcUpDeluxe
-wget https://github.com/LongDirtyAnimAlf/fpcupdeluxe/releases/download/1.8.2/fpcupdeluxe-arm-linux
+wget https://github.com/LongDirtyAnimAlf/fpcupdeluxe/releases/download/1.8.2/fpcupdeluxe-arm-linux  
 chmod +x fpcupdeluxe-arm-linux
 
 # Lancer FpcUpDeluxe
@@ -138,12 +138,12 @@ Pour les utilisateurs avancés ou pour des besoins spécifiques :
 sudo apt install build-essential subversion
 
 # Téléchargement des sources FPC
-svn checkout https://svn.freepascal.org/svn/fpc/tags/release_3_2_2 fpc-3.2.2
+svn checkout https://svn.freepascal.org/svn/fpc/tags/release_3_2_2 fpc-3.2.2  
 cd fpc-3.2.2
 
 # Compilation
-make clean
-make all
+make clean  
+make all  
 sudo make install
 
 # Configuration
@@ -237,9 +237,9 @@ fpc hello_rpi.pas
   Bonjour depuis Raspberry Pi!
 =================================
 
-Architecture : aarch64-linux
-Système      : linux
-Date         : 03/10/2025 14:30:00
+Architecture : aarch64-linux  
+Système      : linux  
+Date         : 03/10/2025 14:30:00  
 Utilisateur  : pi
 ```
 
@@ -255,7 +255,7 @@ program SystemInfo;
 uses
   SysUtils, Process;
 
-function ExecuteCommand(const cmd: string): string;
+function ExecuteCommand(const cmd: string): string;  
 var
   process: TProcess;
   outputList: TStringList;
@@ -310,7 +310,7 @@ program CPUTemperature;
 uses
   SysUtils, Classes;
 
-function GetCPUTemp: Double;
+function GetCPUTemp: Double;  
 var
   tempFile: TextFile;
   tempStr: string;
@@ -376,7 +376,7 @@ type
 var
   MainForm: TMainForm;
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   Caption := 'Raspberry Pi - FreePascal';
   Width := 400;
@@ -403,7 +403,7 @@ begin
   Timer.Enabled := True;
 end;
 
-function TMainForm.GetCPUTemp: Double;
+function TMainForm.GetCPUTemp: Double;  
 var
   tempFile: TextFile;
   tempStr: string;
@@ -422,7 +422,7 @@ begin
   end;
 end;
 
-procedure TMainForm.TimerTimer(Sender: TObject);
+procedure TMainForm.TimerTimer(Sender: TObject);  
 begin
   TempLabel.Caption := Format('Température: %.1f°C', [GetCPUTemp]);
 end;
@@ -506,7 +506,7 @@ sudo raspi-config
 # Aller dans "Interface Options" → "SSH" → "Enable"
 
 # Ou directement
-sudo systemctl enable ssh
+sudo systemctl enable ssh  
 sudo systemctl start ssh
 ```
 
@@ -542,8 +542,8 @@ Monter le système de fichiers du Raspberry Pi sur votre PC :
 
 ```bash
 # Sur Ubuntu/Linux
-sudo apt install sshfs
-mkdir ~/raspberry
+sudo apt install sshfs  
+mkdir ~/raspberry  
 sshfs pi@raspberrypi.local:/home/pi ~/raspberry
 
 # Sur Windows (avec WinFsp + SSHFS-Win)
@@ -563,7 +563,7 @@ program PowerMonitor;
 uses
   SysUtils;
 
-function GetThrottleStatus: string;
+function GetThrottleStatus: string;  
 var
   cmd: string;
 begin
@@ -573,7 +573,7 @@ begin
   Result := 'Voir documentation vcgencmd';
 end;
 
-function GetVoltage: string;
+function GetVoltage: string;  
 var
   cmd: string;
 begin
@@ -594,7 +594,7 @@ Modifier `/boot/config.txt` pour overclocker (à vos risques) :
 
 ```ini
 # Exemple pour Raspberry Pi 4
-over_voltage=6
+over_voltage=6  
 arm_freq=2000
 ```
 

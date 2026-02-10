@@ -78,7 +78,7 @@ jForm.StartSensor(stAccelerometer);
 **2. Réception des événements**
 ```pascal
 // Callback appelé à chaque nouvelle mesure
-procedure OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);
+procedure OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);  
 begin
   // Traiter les données
 end;
@@ -118,13 +118,13 @@ type
     procedure UpdateAccelerometer;
   end;
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   // Démarrer l'accéléromètre
   jForm.StartSensor(stAccelerometer);
 end;
 
-procedure TFormMain.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);
+procedure TFormMain.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);  
 begin
   if SensorType = stAccelerometer then
   begin
@@ -135,7 +135,7 @@ begin
   end;
 end;
 
-procedure TFormMain.UpdateAccelerometer;
+procedure TFormMain.UpdateAccelerometer;  
 begin
   jTextViewX.Text := Format('X: %.2f m/s²', [FAccelX]);
   jTextViewY.Text := Format('Y: %.2f m/s²', [FAccelY]);
@@ -151,7 +151,7 @@ const
 var
   LastShakeTime: TDateTime;
 
-procedure TFormMain.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);
+procedure TFormMain.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);  
 var
   acceleration: Single;
 begin
@@ -176,7 +176,7 @@ begin
   end;
 end;
 
-procedure TFormMain.OnShakeDetected;
+procedure TFormMain.OnShakeDetected;  
 begin
   ShowMessage('Secousse détectée !');
   jForm.Vibrate(100);
@@ -194,7 +194,7 @@ end;
 type
   TDeviceOrientation = (doPortrait, doLandscape, doFaceUp, doFaceDown);
 
-function DetectOrientation(X, Y, Z: Single): TDeviceOrientation;
+function DetectOrientation(X, Y, Z: Single): TDeviceOrientation;  
 begin
   // Z positif = écran vers le haut
   if Z > 8 then
@@ -211,7 +211,7 @@ begin
     Result := doLandscape;
 end;
 
-procedure TFormMain.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);
+procedure TFormMain.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);  
 var
   orientation: TDeviceOrientation;
 begin
@@ -244,7 +244,7 @@ type
     procedure DrawGame;
   end;
 
-procedure TFormGame.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);
+procedure TFormGame.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);  
 const
   SENSITIVITY = 2.0;
 begin
@@ -267,7 +267,7 @@ begin
   end;
 end;
 
-procedure TFormGame.DrawGame;
+procedure TFormGame.DrawGame;  
 begin
   jCanvas1.Clear(colbrWhite);
   jCanvas1.DrawCircle(Round(FBallX), Round(FBallY), FBallRadius, colbrBlue);
@@ -288,7 +288,7 @@ type
     FLastTime: TDateTime;
   end;
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   jForm.StartSensor(stGyroscope);
   FLastTime := Now;
@@ -297,7 +297,7 @@ begin
   FAngleZ := 0;
 end;
 
-procedure TFormMain.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);
+procedure TFormMain.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);  
 var
   currentTime: TDateTime;
   deltaTime: Single;
@@ -322,7 +322,7 @@ begin
   end;
 end;
 
-procedure TFormMain.UpdateDisplay;
+procedure TFormMain.UpdateDisplay;  
 begin
   jTextView1.Text := Format('Rotation X: %.2f rad/s', [FRotationX]);
   jTextView2.Text := Format('Rotation Y: %.2f rad/s', [FRotationY]);
@@ -339,7 +339,7 @@ end;
 const
   ROTATION_THRESHOLD = 2.0;  // rad/s
 
-procedure TFormMain.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);
+procedure TFormMain.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);  
 begin
   if SensorType = stGyroscope then
   begin
@@ -354,14 +354,14 @@ begin
   end;
 end;
 
-procedure TFormMain.OnRotateClockwise;
+procedure TFormMain.OnRotateClockwise;  
 begin
   // Rotation horaire détectée
   // Exemple : faire pivoter une image
   jImageView1.Rotation := jImageView1.Rotation + 90;
 end;
 
-procedure TFormMain.OnRotateCounterClockwise;
+procedure TFormMain.OnRotateCounterClockwise;  
 begin
   // Rotation antihoraire détectée
   jImageView1.Rotation := jImageView1.Rotation - 90;
@@ -382,12 +382,12 @@ type
     procedure DrawCompass;
   end;
 
-procedure TFormCompass.FormCreate(Sender: TObject);
+procedure TFormCompass.FormCreate(Sender: TObject);  
 begin
   jForm.StartSensor(stMagnetometer);
 end;
 
-procedure TFormCompass.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);
+procedure TFormCompass.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);  
 begin
   if SensorType = stMagnetometer then
   begin
@@ -398,7 +398,7 @@ begin
   end;
 end;
 
-procedure TFormCompass.UpdateCompass;
+procedure TFormCompass.UpdateCompass;  
 var
   azimuthDegrees: Single;
   direction: string;
@@ -437,7 +437,7 @@ begin
   DrawCompass;
 end;
 
-procedure TFormCompass.DrawCompass;
+procedure TFormCompass.DrawCompass;  
 var
   centerX, centerY: Integer;
   radius: Integer;
@@ -482,7 +482,7 @@ var
   AccelData: array[0..2] of Single;
   MagneticData: array[0..2] of Single;
 
-procedure TFormCompass.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);
+procedure TFormCompass.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);  
 begin
   case SensorType of
     stAccelerometer:
@@ -504,7 +504,7 @@ begin
   CalculateOrientation(AccelData, MagneticData);
 end;
 
-procedure CalculateOrientation(const Accel, Magnetic: array of Single);
+procedure CalculateOrientation(const Accel, Magnetic: array of Single);  
 var
   rotationMatrix: array[0..8] of Single;
   orientationAngles: array[0..2] of Single;
@@ -553,7 +553,7 @@ type
     procedure UpdateLocationDisplay;
   end;
 
-procedure TFormLocation.FormCreate(Sender: TObject);
+procedure TFormLocation.FormCreate(Sender: TObject);  
 begin
   // Vérifier la permission
   if not jForm.HasPermission('android.permission.ACCESS_FINE_LOCATION') then
@@ -591,7 +591,7 @@ begin
   UpdateLocationDisplay;
 end;
 
-procedure TFormLocation.UpdateLocationDisplay;
+procedure TFormLocation.UpdateLocationDisplay;  
 begin
   jTextViewLat.Text := Format('Latitude: %.6f°', [FLatitude]);
   jTextViewLon.Text := Format('Longitude: %.6f°', [FLongitude]);
@@ -622,7 +622,7 @@ end;
 
 **Calculer la distance entre deux points** :
 ```pascal
-function CalculateDistance(Lat1, Lon1, Lat2, Lon2: Double): Double;
+function CalculateDistance(Lat1, Lon1, Lat2, Lon2: Double): Double;  
 const
   EARTH_RADIUS = 6371000;  // Rayon de la Terre en mètres
 var
@@ -643,7 +643,7 @@ begin
 end;
 
 // Utilisation
-procedure TFormLocation.CalculerDistanceDestination;
+procedure TFormLocation.CalculerDistanceDestination;  
 var
   destinationLat, destinationLon: Double;
   distance: Double;
@@ -678,7 +678,7 @@ type
     procedure CalculateTrackStatistics;
   end;
 
-procedure TFormTracking.StartTracking;
+procedure TFormTracking.StartTracking;  
 begin
   SetLength(FTrackPoints, 0);
   FTotalDistance := 0;
@@ -721,13 +721,13 @@ begin
   CalculateTrackStatistics;
 end;
 
-procedure TFormTracking.AddTrackPoint(const Point: TLocationPoint);
+procedure TFormTracking.AddTrackPoint(const Point: TLocationPoint);  
 begin
   SetLength(FTrackPoints, Length(FTrackPoints) + 1);
   FTrackPoints[High(FTrackPoints)] := Point;
 end;
 
-procedure TFormTracking.CalculateTrackStatistics;
+procedure TFormTracking.CalculateTrackStatistics;  
 var
   duration: Double;
   avgSpeed: Double;
@@ -748,7 +748,7 @@ begin
                                 [avgSpeed * 3.6]);
 end;
 
-procedure TFormTracking.StopTracking;
+procedure TFormTracking.StopTracking;  
 begin
   FIsTracking := False;
   jForm.StopLocationUpdates;
@@ -760,7 +760,7 @@ begin
   SaveTrack;
 end;
 
-procedure TFormTracking.SaveTrack;
+procedure TFormTracking.SaveTrack;  
 var
   fs: TFileStream;
   i: Integer;
@@ -807,12 +807,12 @@ end;
 ### Capteur de lumière ambiante
 
 ```pascal
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   jForm.StartSensor(stLight);
 end;
 
-procedure TFormMain.OnLightSensorChanged(Luminosity: Single);
+procedure TFormMain.OnLightSensorChanged(Luminosity: Single);  
 begin
   // Luminosity en lux
   jTextView1.Text := Format('Luminosité: %.0f lux', [Luminosity]);
@@ -844,12 +844,12 @@ end;
 ### Capteur de proximité
 
 ```pascal
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   jForm.StartSensor(stProximity);
 end;
 
-procedure TFormMain.OnProximitySensorChanged(Distance: Single; IsNear: Boolean);
+procedure TFormMain.OnProximitySensorChanged(Distance: Single; IsNear: Boolean);  
 begin
   if IsNear then
   begin
@@ -881,7 +881,7 @@ type
     FScreenWasOn: Boolean;
   end;
 
-procedure TFormPhone.OnCallStarted;
+procedure TFormPhone.OnCallStarted;  
 begin
   FInCall := True;
   FScreenWasOn := jForm.IsScreenOn;
@@ -890,7 +890,7 @@ begin
   jForm.StartSensor(stProximity);
 end;
 
-procedure TFormPhone.OnProximitySensorChanged(Distance: Single; IsNear: Boolean);
+procedure TFormPhone.OnProximitySensorChanged(Distance: Single; IsNear: Boolean);  
 begin
   if not FInCall then
     Exit;
@@ -908,7 +908,7 @@ begin
   end;
 end;
 
-procedure TFormPhone.OnCallEnded;
+procedure TFormPhone.OnCallEnded;  
 begin
   FInCall := False;
   jForm.StopSensor(stProximity);
@@ -922,12 +922,12 @@ end;
 ### Capteur de pression atmosphérique
 
 ```pascal
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   jForm.StartSensor(stPressure);
 end;
 
-procedure TFormMain.OnPressureSensorChanged(Pressure: Single);
+procedure TFormMain.OnPressureSensorChanged(Pressure: Single);  
 var
   altitude: Single;
 begin
@@ -957,14 +957,14 @@ var
   ReferencePressure: Single;
   LastAltitude: Single;
 
-procedure TFormMain.CalibrateAltitude;
+procedure TFormMain.CalibrateAltitude;  
 begin
   // Étalonner au niveau actuel
   ReferencePressure := CurrentPressure;
   LastAltitude := 0;
 end;
 
-procedure TFormMain.OnPressureSensorChanged(Pressure: Single);
+procedure TFormMain.OnPressureSensorChanged(Pressure: Single);  
 var
   currentAltitude: Single;
   altitudeChange: Single;
@@ -990,13 +990,13 @@ end;
 ### Capteur d'humidité et température
 
 ```pascal
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   jForm.StartSensor(stHumidity);
   jForm.StartSensor(stTemperature);
 end;
 
-procedure TFormMain.OnHumiditySensorChanged(Humidity: Single);
+procedure TFormMain.OnHumiditySensorChanged(Humidity: Single);  
 begin
   jTextView1.Text := Format('Humidité: %.1f%%', [Humidity]);
 
@@ -1013,7 +1013,7 @@ begin
     jTextView2.Text := 'Air très humide';
 end;
 
-procedure TFormMain.OnTemperatureSensorChanged(Temperature: Single);
+procedure TFormMain.OnTemperatureSensorChanged(Temperature: Single);  
 begin
   jTextView3.Text := Format('Température: %.1f°C', [Temperature]);
 
@@ -1033,7 +1033,7 @@ end;
 
 **Calcul de l'indice de confort** :
 ```pascal
-function CalculateComfortIndex(Temperature, Humidity: Single): string;
+function CalculateComfortIndex(Temperature, Humidity: Single): string;  
 var
   heatIndex: Single;
 begin
@@ -1065,7 +1065,7 @@ begin
     Result := 'Confortable';
 end;
 
-procedure TFormMain.UpdateComfortIndex;
+procedure TFormMain.UpdateComfortIndex;  
 begin
   jTextView5.Text := 'Confort: ' +
     CalculateComfortIndex(CurrentTemperature, CurrentHumidity);
@@ -1077,7 +1077,7 @@ end;
 ### Prendre une photo
 
 ```pascal
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   // Vérifier la permission
   if not jForm.HasPermission('android.permission.CAMERA') then
@@ -1086,7 +1086,7 @@ begin
   end;
 end;
 
-procedure TFormMain.jButtonTakePhotoClick(Sender: TObject);
+procedure TFormMain.jButtonTakePhotoClick(Sender: TObject);  
 var
   photoPath: string;
 begin
@@ -1130,7 +1130,7 @@ type
     jButtonSwitch: jButton;
   end;
 
-procedure TFormCamera.FormCreate(Sender: TObject);
+procedure TFormCamera.FormCreate(Sender: TObject);  
 begin
   // Configuration de la vue caméra
   jCameraView1.Width := jForm.Width;
@@ -1139,7 +1139,7 @@ begin
   jCameraView1.Start;
 end;
 
-procedure TFormCamera.jButtonCaptureClick(Sender: TObject);
+procedure TFormCamera.jButtonCaptureClick(Sender: TObject);  
 begin
   // Capturer l'image
   jCameraView1.TakePicture;
@@ -1169,7 +1169,7 @@ begin
   ).Start;
 end;
 
-procedure TFormCamera.jButtonSwitchClick(Sender: TObject);
+procedure TFormCamera.jButtonSwitchClick(Sender: TObject);  
 begin
   // Basculer entre caméra avant et arrière
   jCameraView1.Stop;
@@ -1186,7 +1186,7 @@ end;
 ### Flash et modes caméra
 
 ```pascal
-procedure TFormCamera.ConfigureCamera;
+procedure TFormCamera.ConfigureCamera;  
 begin
   // Mode flash
   jCameraView1.FlashMode := fmAuto;  // Auto, On, Off, Torch
@@ -1204,7 +1204,7 @@ begin
   jCameraView1.SetZoom(2.0);  // Zoom x2
 end;
 
-procedure TFormCamera.jButtonFlashClick(Sender: TObject);
+procedure TFormCamera.jButtonFlashClick(Sender: TObject);  
 begin
   // Basculer le flash
   case jCameraView1.FlashMode of
@@ -1227,7 +1227,7 @@ begin
 end;
 
 // Zoom avec geste pinch
-procedure TFormCamera.jCameraView1Pinch(Sender: TObject; Scale: Single);
+procedure TFormCamera.jCameraView1Pinch(Sender: TObject; Scale: Single);  
 var
   newZoom: Single;
 begin
@@ -1249,7 +1249,7 @@ type
     jBarcodeScanner1: jBarcodeScanner;
   end;
 
-procedure TFormScanner.FormCreate(Sender: TObject);
+procedure TFormScanner.FormCreate(Sender: TObject);  
 begin
   if not jForm.HasPermission('android.permission.CAMERA') then
   begin
@@ -1257,7 +1257,7 @@ begin
   end;
 end;
 
-procedure TFormScanner.jButtonScanClick(Sender: TObject);
+procedure TFormScanner.jButtonScanClick(Sender: TObject);  
 begin
   // Démarrer le scanner
   jBarcodeScanner1.Scan;
@@ -1299,7 +1299,7 @@ begin
   jForm.Vibrate(100);
 end;
 
-procedure TFormScanner.TraiterQRCode(const data: string);
+procedure TFormScanner.TraiterQRCode(const data: string);  
 begin
   // Vérifier si c'est une URL
   if (Pos('http://', data) = 1) or (Pos('https://', data) = 1) then
@@ -1324,7 +1324,7 @@ begin
   end;
 end;
 
-procedure TFormScanner.RechercherProduit(const ean: string);
+procedure TFormScanner.RechercherProduit(const ean: string);  
 var
   url: string;
 begin
@@ -1336,7 +1336,7 @@ begin
   jHttpClient1.Execute;
 end;
 
-procedure TFormScanner.ParseWiFiQRCode(const data: string);
+procedure TFormScanner.ParseWiFiQRCode(const data: string);  
 var
   ssid, password, security: string;
 begin
@@ -1367,7 +1367,7 @@ type
     FIsRecording: Boolean;
   end;
 
-procedure TFormRecorder.FormCreate(Sender: TObject);
+procedure TFormRecorder.FormCreate(Sender: TObject);  
 begin
   // Vérifier la permission
   if not jForm.HasPermission('android.permission.RECORD_AUDIO') then
@@ -1378,7 +1378,7 @@ begin
   FIsRecording := False;
 end;
 
-procedure TFormRecorder.jButtonRecordClick(Sender: TObject);
+procedure TFormRecorder.jButtonRecordClick(Sender: TObject);  
 begin
   if not jForm.HasPermission('android.permission.RECORD_AUDIO') then
   begin
@@ -1405,7 +1405,7 @@ begin
   jTextView1.Text := 'Enregistrement en cours...';
 end;
 
-procedure TFormRecorder.jButtonStopClick(Sender: TObject);
+procedure TFormRecorder.jButtonStopClick(Sender: TObject);  
 begin
   if FIsRecording then
   begin
@@ -1421,7 +1421,7 @@ begin
   end;
 end;
 
-procedure TFormRecorder.jButtonPlayClick(Sender: TObject);
+procedure TFormRecorder.jButtonPlayClick(Sender: TObject);  
 begin
   if FileExists(FRecordingPath) then
   begin
@@ -1442,7 +1442,7 @@ type
     procedure UpdateSoundLevel;
   end;
 
-procedure TFormSoundMeter.FormCreate(Sender: TObject);
+procedure TFormSoundMeter.FormCreate(Sender: TObject);  
 begin
   // Configuration pour mesurer le niveau sonore
   FAudioRecorder := jAudioRecorder.Create(Self);
@@ -1460,7 +1460,7 @@ begin
   FTimer.Enabled := True;
 end;
 
-procedure TFormSoundMeter.UpdateSoundLevel;
+procedure TFormSoundMeter.UpdateSoundLevel;  
 var
   amplitude: Integer;
   decibels: Single;
@@ -1489,7 +1489,7 @@ begin
   end;
 end;
 
-destructor TFormSoundMeter.Destroy;
+destructor TFormSoundMeter.Destroy;  
 begin
   FTimer.Enabled := False;
   FAudioRecorder.Stop;
@@ -1505,7 +1505,7 @@ type
     jSpeechRecognizer1: jSpeechRecognizer;
   end;
 
-procedure TFormVoiceRecognition.jButtonListenClick(Sender: TObject);
+procedure TFormVoiceRecognition.jButtonListenClick(Sender: TObject);  
 begin
   // Démarrer la reconnaissance vocale
   jSpeechRecognizer1.Language := 'fr-FR';  // Français
@@ -1540,7 +1540,7 @@ begin
   end;
 end;
 
-procedure TFormVoiceRecognition.TraiterCommandeVocale(const commande: string);
+procedure TFormVoiceRecognition.TraiterCommandeVocale(const commande: string);  
 var
   cmd: string;
 begin
@@ -1568,7 +1568,7 @@ end;
 ### Synthèse vocale (Text-to-Speech)
 
 ```pascal
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   // Initialiser le TTS
   jTextToSpeech1.Language := 'fr-FR';
@@ -1576,7 +1576,7 @@ begin
   jTextToSpeech1.SpeechRate := 1.0;  // Vitesse (0.5 - 2.0)
 end;
 
-procedure TFormMain.jButtonSpeakClick(Sender: TObject);
+procedure TFormMain.jButtonSpeakClick(Sender: TObject);  
 var
   text: string;
 begin
@@ -1588,13 +1588,13 @@ begin
   end;
 end;
 
-procedure TFormMain.jTextToSpeech1Done(Sender: TObject);
+procedure TFormMain.jTextToSpeech1Done(Sender: TObject);  
 begin
   ShowMessage('Lecture terminée');
 end;
 
 // Lire un texte long en plusieurs parties
-procedure TFormMain.LireTexteLong(const texte: string);
+procedure TFormMain.LireTexteLong(const texte: string);  
 var
   parts: TStringList;
   i: Integer;
@@ -1629,19 +1629,19 @@ end;
 ### Vibrations simples
 
 ```pascal
-procedure TFormMain.VibrerCourt;
+procedure TFormMain.VibrerCourt;  
 begin
   // Vibration courte (50ms)
   jForm.Vibrate(50);
 end;
 
-procedure TFormMain.VibrerMoyen;
+procedure TFormMain.VibrerMoyen;  
 begin
   // Vibration moyenne (200ms)
   jForm.Vibrate(200);
 end;
 
-procedure TFormMain.VibrerLong;
+procedure TFormMain.VibrerLong;  
 begin
   // Vibration longue (500ms)
   jForm.Vibrate(500);
@@ -1651,7 +1651,7 @@ end;
 ### Patterns de vibration
 
 ```pascal
-procedure TFormMain.VibrerPattern;
+procedure TFormMain.VibrerPattern;  
 var
   pattern: array of Integer;
 begin
@@ -1669,7 +1669,7 @@ begin
   jForm.VibratePattern(pattern, -1);  // -1 = ne pas répéter
 end;
 
-procedure TFormMain.VibrerNotification;
+procedure TFormMain.VibrerNotification;  
 var
   pattern: array of Integer;
 begin
@@ -1683,7 +1683,7 @@ begin
   jForm.VibratePattern(pattern, -1);
 end;
 
-procedure TFormMain.VibrerAlarme;
+procedure TFormMain.VibrerAlarme;  
 var
   pattern: array of Integer;
 begin
@@ -1697,7 +1697,7 @@ begin
   jForm.VibratePattern(pattern, 0);  // Répéter indéfiniment à partir de l'index 0
 end;
 
-procedure TFormMain.ArreterVibration;
+procedure TFormMain.ArreterVibration;  
 begin
   jForm.CancelVibration;
 end;
@@ -1706,7 +1706,7 @@ end;
 ### Feedback haptique contextuel
 
 ```pascal
-procedure ProvideFeedback(feedbackType: TFeedbackType);
+procedure ProvideFeedback(feedbackType: TFeedbackType);  
 begin
   case feedbackType of
     ftClick:
@@ -1739,19 +1739,19 @@ begin
 end;
 
 // Utilisation
-procedure TFormMain.jButton1Click(Sender: TObject);
+procedure TFormMain.jButton1Click(Sender: TObject);  
 begin
   ProvideFeedback(ftClick);
   // ... action du bouton
 end;
 
-procedure TFormMain.OnSaveSuccess;
+procedure TFormMain.OnSaveSuccess;  
 begin
   ProvideFeedback(ftSuccess);
   ShowMessage('Sauvegarde réussie');
 end;
 
-procedure TFormMain.OnError;
+procedure TFormMain.OnError;  
 begin
   ProvideFeedback(ftError);
   ShowMessage('Une erreur s''est produite');
@@ -1761,7 +1761,7 @@ end;
 ## Flash / Lampe torche
 
 ```pascal
-procedure TFormMain.AllumerLampe;
+procedure TFormMain.AllumerLampe;  
 begin
   if jForm.HasCameraFlash then
   begin
@@ -1774,13 +1774,13 @@ begin
   end;
 end;
 
-procedure TFormMain.EteindreLampe;
+procedure TFormMain.EteindreLampe;  
 begin
   jForm.SetFlashMode(fmOff);
   jButtonFlash.Text := 'Allumer';
 end;
 
-procedure TFormMain.jButtonFlashClick(Sender: TObject);
+procedure TFormMain.jButtonFlashClick(Sender: TObject);  
 begin
   if jForm.IsFlashOn then
     EteindreLampe
@@ -1791,13 +1791,13 @@ end;
 
 **Lampe torche avec contrôle d'intensité** :
 ```pascal
-procedure TFormMain.ConfigurerIntensiteLampe;
+procedure TFormMain.ConfigurerIntensiteLampe;  
 begin
   // Certains appareils supportent différents niveaux
   jForm.SetFlashBrightness(0.5);  // 50% de luminosité
 end;
 
-procedure TFormMain.jTrackBarIntensityChange(Sender: TObject);
+procedure TFormMain.jTrackBarIntensityChange(Sender: TObject);  
 var
   intensity: Single;
 begin
@@ -1821,7 +1821,7 @@ type
     FStrobeActive: Boolean;
   end;
 
-procedure TFormStrobe.StartStrobe(frequency: Integer);
+procedure TFormStrobe.StartStrobe(frequency: Integer);  
 begin
   FStrobeActive := True;
 
@@ -1831,7 +1831,7 @@ begin
   FStrobeTimer.Enabled := True;
 end;
 
-procedure TFormStrobe.OnStrobeTimer(Sender: TObject);
+procedure TFormStrobe.OnStrobeTimer(Sender: TObject);  
 begin
   if jForm.IsFlashOn then
     jForm.SetFlashMode(fmOff)
@@ -1839,7 +1839,7 @@ begin
     jForm.SetFlashMode(fmTorch);
 end;
 
-procedure TFormStrobe.StopStrobe;
+procedure TFormStrobe.StopStrobe;  
 begin
   FStrobeActive := False;
 
@@ -1852,7 +1852,7 @@ begin
   jForm.SetFlashMode(fmOff);
 end;
 
-procedure TFormStrobe.jButtonStrobeClick(Sender: TObject);
+procedure TFormStrobe.jButtonStrobeClick(Sender: TObject);  
 begin
   if FStrobeActive then
     StopStrobe
@@ -1863,7 +1863,7 @@ end;
 
 **Signal SOS** :
 ```pascal
-procedure TFormMain.EnvoyerSignalSOS;
+procedure TFormMain.EnvoyerSignalSOS;  
 begin
   // S : 3 flashs courts
   // O : 3 flashs longs
@@ -1940,7 +1940,7 @@ type
     Bearing: Double;
   end;
 
-procedure TFormARCompass.FormCreate(Sender: TObject);
+procedure TFormARCompass.FormCreate(Sender: TObject);  
 begin
   // Démarrer tous les capteurs nécessaires
   jForm.StartSensor(stAccelerometer);
@@ -1955,7 +1955,7 @@ begin
   InitializePOIs;
 end;
 
-procedure TFormARCompass.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);
+procedure TFormARCompass.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);  
 begin
   case SensorType of
     stAccelerometer:
@@ -1986,7 +1986,7 @@ begin
   UpdatePOIDistances;
 end;
 
-procedure TFormARCompass.UpdateOrientation;
+procedure TFormARCompass.UpdateOrientation;  
 var
   rotationMatrix: array[0..8] of Single;
   orientationAngles: array[0..2] of Single;
@@ -2002,7 +2002,7 @@ begin
   DrawARView;
 end;
 
-procedure TFormARCompass.DrawARView;
+procedure TFormARCompass.DrawARView;  
 var
   i: Integer;
   poi: TPOI;
@@ -2038,7 +2038,7 @@ begin
   jCanvas1.Invalidate;
 end;
 
-procedure TFormARCompass.DrawPOI(const poi: TPOI; X, Y: Integer);
+procedure TFormARCompass.DrawPOI(const poi: TPOI; X, Y: Integer);  
 begin
   // Icône du POI
   jCanvas1.DrawCircle(X, Y, 20, colbrBlue);
@@ -2049,7 +2049,7 @@ begin
                     X - 50, Y - 25, colbrWhite, 12);
 end;
 
-procedure TFormARCompass.UpdatePOIDistances;
+procedure TFormARCompass.UpdatePOIDistances;  
 var
   i: Integer;
 begin
@@ -2069,7 +2069,7 @@ begin
   end;
 end;
 
-function CalculateBearing(Lat1, Lon1, Lat2, Lon2: Double): Double;
+function CalculateBearing(Lat1, Lon1, Lat2, Lon2: Double): Double;  
 var
   dLon: Double;
   y, x: Double;
@@ -2103,7 +2103,7 @@ const
   FALL_THRESHOLD = 25.0;  // Seuil d'accélération pour détecter une chute
   FREE_FALL_THRESHOLD = 2.0;  // Seuil de chute libre
 
-procedure TFormFallDetector.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);
+procedure TFormFallDetector.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);  
 var
   totalAccel: Single;
   isFalling: Boolean;
@@ -2128,7 +2128,7 @@ begin
   end;
 end;
 
-function TFormFallDetector.DetectFall: Boolean;
+function TFormFallDetector.DetectFall: Boolean;  
 var
   i: Integer;
   maxAccel, minAccel: Single;
@@ -2154,7 +2154,7 @@ begin
     Result := True;
 end;
 
-procedure TFormFallDetector.OnFallDetected;
+procedure TFormFallDetector.OnFallDetected;  
 begin
   // Vibration d'alerte
   jForm.Vibrate(1000);
@@ -2174,7 +2174,7 @@ begin
   StartEmergencyCountdown(30);  // 30 secondes pour annuler
 end;
 
-procedure TFormFallDetector.StartEmergencyCountdown(seconds: Integer);
+procedure TFormFallDetector.StartEmergencyCountdown(seconds: Integer);  
 var
   countdown: Integer;
 begin
@@ -2204,7 +2204,7 @@ begin
   ).Start;
 end;
 
-procedure TFormFallDetector.SendEmergencyAlert;
+procedure TFormFallDetector.SendEmergencyAlert;  
 var
   message: string;
 begin
@@ -2223,7 +2223,7 @@ begin
   jNotificationManager1.Notify(999);
 end;
 
-procedure TFormFallDetector.jDialogYN1Click(Sender: TObject; Button: TDlgResponse);
+procedure TFormFallDetector.jDialogYN1Click(Sender: TObject; Button: TDlgResponse);  
 begin
   if Button = dlgNo then
   begin
@@ -2260,7 +2260,7 @@ const
   STRIDE_LENGTH = 0.7;  // Longueur de foulée moyenne en mètres
   CALORIES_PER_STEP = 0.04;  // Calories par pas
 
-procedure TFormPedometer.FormCreate(Sender: TObject);
+procedure TFormPedometer.FormCreate(Sender: TObject);  
 begin
   jForm.StartSensor(stAccelerometer);
 
@@ -2269,7 +2269,7 @@ begin
   FStepThreshold := STEP_THRESHOLD;
 end;
 
-procedure TFormPedometer.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);
+procedure TFormPedometer.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);  
 begin
   if SensorType = stAccelerometer then
   begin
@@ -2280,7 +2280,7 @@ begin
   end;
 end;
 
-procedure TFormPedometer.DetectStep;
+procedure TFormPedometer.DetectStep;  
 var
   timeSinceLastStep: Double;
 begin
@@ -2302,7 +2302,7 @@ begin
   end;
 end;
 
-procedure TFormPedometer.UpdateStatistics;
+procedure TFormPedometer.UpdateStatistics;  
 begin
   // Calculer la distance
   FDistanceWalked := FStepCount * STRIDE_LENGTH;
@@ -2329,7 +2329,7 @@ begin
   end;
 end;
 
-procedure TFormPedometer.OnGoalReached;
+procedure TFormPedometer.OnGoalReached;  
 begin
   ShowMessage('Félicitations ! Vous avez atteint votre objectif de 10000 pas !');
   jForm.Vibrate(500);
@@ -2340,7 +2340,7 @@ begin
   jNotificationManager1.Notify(1);
 end;
 
-procedure TFormPedometer.ResetDailyStats;
+procedure TFormPedometer.ResetDailyStats;  
 begin
   FStepCount := 0;
   FDistanceWalked := 0;
@@ -2356,7 +2356,7 @@ end;
 
 ```pascal
 // Arrêter les capteurs quand l'app est en arrière-plan
-procedure TFormMain.OnPause;
+procedure TFormMain.OnPause;  
 begin
   // Arrêter les capteurs gourmands
   jForm.StopSensor(stAccelerometer);
@@ -2368,7 +2368,7 @@ begin
   SaveState;
 end;
 
-procedure TFormMain.OnResume;
+procedure TFormMain.OnResume;  
 begin
   // Redémarrer les capteurs nécessaires
   jForm.StartSensor(stAccelerometer);
@@ -2379,7 +2379,7 @@ end;
 ### Vérification de disponibilité
 
 ```pascal
-function CheckSensorAvailability: Boolean;
+function CheckSensorAvailability: Boolean;  
 var
   availability: string;
 begin
@@ -2425,7 +2425,7 @@ type
     procedure Filter(var X, Y, Z: Single);
   end;
 
-constructor TLowPassFilter.Create(AAlpha: Single);
+constructor TLowPassFilter.Create(AAlpha: Single);  
 begin
   inherited Create;
   FAlpha := AAlpha;  // 0.0 - 1.0, plus petit = plus de filtrage
@@ -2434,7 +2434,7 @@ begin
   FFilteredValues[2] := 0;
 end;
 
-procedure TLowPassFilter.Filter(var X, Y, Z: Single);
+procedure TLowPassFilter.Filter(var X, Y, Z: Single);  
 begin
   // Filtre passe-bas simple
   FFilteredValues[0] := FAlpha * X + (1 - FAlpha) * FFilteredValues[0];
@@ -2450,13 +2450,13 @@ end;
 var
   AccelFilter: TLowPassFilter;
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   AccelFilter := TLowPassFilter.Create(0.1);  // Filtrage fort
   jForm.StartSensor(stAccelerometer);
 end;
 
-procedure TFormMain.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);
+procedure TFormMain.OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);  
 begin
   if SensorType = stAccelerometer then
   begin
@@ -2472,7 +2472,7 @@ end;
 ### Gestion des permissions runtime
 
 ```pascal
-procedure TFormMain.RequestAllSensorsPermissions;
+procedure TFormMain.RequestAllSensorsPermissions;  
 var
   permissions: TStringList;
 begin

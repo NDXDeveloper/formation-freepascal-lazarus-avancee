@@ -52,11 +52,11 @@ Sur macOS, vous devez compiler FPC avec le support des cibles iOS :
 
 ```bash
 # Télécharger les sources de FreePascal
-git clone https://gitlab.com/freepascal.org/fpc/source.git fpc-source
+git clone https://gitlab.com/freepascal.org/fpc/source.git fpc-source  
 cd fpc-source
 
 # Compiler FPC avec support iOS
-make clean
+make clean  
 make all OS_TARGET=darwin CPU_TARGET=aarch64
 
 # Installer
@@ -76,7 +76,7 @@ Ou manuellement :
 
 ```bash
 # Configurer le compilateur pour iOS
-fpc -Pi386 -Tiphonesim # Pour le simulateur iOS (x86_64)
+fpc -Pi386 -Tiphonesim # Pour le simulateur iOS (x86_64)  
 fpc -Paarch64 -Tdarwin # Pour les appareils iOS réels (ARM64)
 ```
 
@@ -211,8 +211,8 @@ Chaque application iOS nécessite un fichier `Info.plist` :
 fpc -Pi386 -Tiphonesim -Cn app.pas
 
 # Créer le bundle d'application
-mkdir -p iOSApp.app
-cp app iOSApp.app/
+mkdir -p iOSApp.app  
+cp app iOSApp.app/  
 cp Info.plist iOSApp.app/
 ```
 
@@ -299,7 +299,7 @@ type
     procedure buttonPressed(sender: id); message 'buttonPressed:';
   end;
 
-procedure TMyViewController.viewDidLoad;
+procedure TMyViewController.viewDidLoad;  
 var
   frame: CGRect;
 begin
@@ -325,7 +325,7 @@ begin
   view.addSubview(myButton);
 end;
 
-procedure TMyViewController.buttonPressed(sender: id);
+procedure TMyViewController.buttonPressed(sender: id);  
 begin
   WriteLn('Bouton pressé!');
   // Afficher une alerte, changer de vue, etc.

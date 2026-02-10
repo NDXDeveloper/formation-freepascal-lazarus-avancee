@@ -35,7 +35,7 @@ Accent Color (Couleur d'accent)
 **Exemple de configuration** :
 ```pascal
 // Définir les couleurs de l'application
-procedure ConfigurerCouleurs;
+procedure ConfigurerCouleurs;  
 begin
     jForm.SetPrimaryColor($FF2196F3);      // Bleu Material 500
     jForm.SetPrimaryDarkColor($FF1976D2);  // Bleu Material 700
@@ -48,13 +48,13 @@ end;
 Les composants Android ont différents niveaux d'élévation qui créent des ombres :
 
 ```
-Niveau 0  : Surface de base (fond d'écran)
-Niveau 2  : Cartes au repos (jCardView)
-Niveau 4  : Cartes actives
-Niveau 6  : Snackbar
-Niveau 8  : Menu, boutons flottants au repos
-Niveau 12 : Boutons flottants actifs
-Niveau 16 : Dialogs, navigation drawer
+Niveau 0  : Surface de base (fond d'écran)  
+Niveau 2  : Cartes au repos (jCardView)  
+Niveau 4  : Cartes actives  
+Niveau 6  : Snackbar  
+Niveau 8  : Menu, boutons flottants au repos  
+Niveau 12 : Boutons flottants actifs  
+Niveau 16 : Dialogs, navigation drawer  
 Niveau 24 : Navigation drawer au-dessus du contenu
 ```
 
@@ -84,7 +84,7 @@ type
         jButton2: jButton;
     end;
 
-procedure TAndroidModule1.ConfigurerLayout;
+procedure TAndroidModule1.ConfigurerLayout;  
 begin
     // Configuration du panel comme LinearLayout vertical
     jPanel1.LayoutParamWidth := lpMatchParent;
@@ -120,7 +120,7 @@ end;
 Positionne les éléments les uns par rapport aux autres.
 
 ```pascal
-procedure ConfigurerRelativeLayout;
+procedure ConfigurerRelativeLayout;  
 begin
     // Logo en haut à gauche
     jImageView1.LayoutParamWidth := 64;
@@ -157,7 +157,7 @@ end;
 Le layout le plus flexible et performant pour des interfaces complexes.
 
 ```pascal
-procedure ConfigurerConstraintLayout;
+procedure ConfigurerConstraintLayout;  
 begin
     // Centre l'élément horizontalement et verticalement
     jButton1.AddLayoutRule(lprCenterHorizontal);
@@ -174,7 +174,7 @@ end;
 Empile les éléments les uns sur les autres, utile pour les superpositions.
 
 ```pascal
-procedure ConfigurerFrameLayout;
+procedure ConfigurerFrameLayout;  
 begin
     // Image de fond
     jImageView1.LayoutParamWidth := lpMatchParent;
@@ -196,7 +196,7 @@ end;
 Champ de saisie de texte avec de nombreuses options.
 
 ```pascal
-procedure ConfigurerEditText;
+procedure ConfigurerEditText;  
 begin
     // Configuration de base
     jEditText1.Hint := 'Entrez votre email';
@@ -218,19 +218,19 @@ end;
 
 **Types de clavier disponibles** :
 ```pascal
-itxText              // Texte standard
-itxTextEmailAddress  // Clavier avec @ et .
-itxTextPassword      // Masque le texte
-itxNumber            // Numérique
-itxPhone             // Clavier téléphone
-itxTextUri           // URL
-itxTextMultiLine     // Multi-lignes
+itxText              // Texte standard  
+itxTextEmailAddress  // Clavier avec @ et .  
+itxTextPassword      // Masque le texte  
+itxNumber            // Numérique  
+itxPhone             // Clavier téléphone  
+itxTextUri           // URL  
+itxTextMultiLine     // Multi-lignes  
 itxNumberDecimal     // Nombre décimal
 ```
 
 **Validation en temps réel** :
 ```pascal
-procedure jEditText1Change(Sender: TObject);
+procedure jEditText1Change(Sender: TObject);  
 begin
     if not IsValidEmail(jEditText1.Text) then
     begin
@@ -242,7 +242,7 @@ begin
     end;
 end;
 
-function IsValidEmail(const Email: string): Boolean;
+function IsValidEmail(const Email: string): Boolean;  
 begin
     Result := Pos('@', Email) > 0;  // Validation simplifiée
 end;
@@ -253,7 +253,7 @@ end;
 Améliore EditText avec un label flottant et des messages d'erreur élégants.
 
 ```pascal
-procedure ConfigurerTextInputLayout;
+procedure ConfigurerTextInputLayout;  
 begin
     // Créer le layout
     jTextInputLayout1.Hint := 'Adresse email';
@@ -292,7 +292,7 @@ end;
 Case à cocher pour options binaires.
 
 ```pascal
-procedure ConfigurerCheckBox;
+procedure ConfigurerCheckBox;  
 begin
     jCheckBox1.Text := 'Accepter les conditions';
     jCheckBox1.Checked := False;
@@ -302,7 +302,7 @@ begin
     jCheckBox1.ButtonDrawable := 'my_checkbox_selector';
 end;
 
-procedure jCheckBox1Click(Sender: TObject);
+procedure jCheckBox1Click(Sender: TObject);  
 begin
     if jCheckBox1.Checked then
         jButton1.Enabled := True  // Activer le bouton de validation
@@ -324,7 +324,7 @@ type
         jRadioButton3: jRadioButton;
     end;
 
-procedure ConfigurerRadioGroup;
+procedure ConfigurerRadioGroup;  
 begin
     // Configuration du groupe
     jRadioGroup1.LayoutParamWidth := lpMatchParent;
@@ -338,7 +338,7 @@ begin
     jRadioButton1.Checked := True;
 end;
 
-procedure jRadioGroup1Click(Sender: TObject; checkedId: Integer);
+procedure jRadioGroup1Click(Sender: TObject; checkedId: Integer);  
 begin
     case checkedId of
         1: ShowMessage('Option 1 sélectionnée');
@@ -353,7 +353,7 @@ end;
 Interrupteur on/off moderne.
 
 ```pascal
-procedure ConfigurerSwitch;
+procedure ConfigurerSwitch;  
 begin
     jSwitch1.Text := 'Notifications';
     jSwitch1.Checked := True;
@@ -365,7 +365,7 @@ begin
     jSwitch1.TrackColor := colbrBlue;
 end;
 
-procedure jSwitch1Click(Sender: TObject);
+procedure jSwitch1Click(Sender: TObject);  
 begin
     if jSwitch1.Checked then
         ActiverNotifications
@@ -379,7 +379,7 @@ end;
 Liste déroulante (ComboBox Android).
 
 ```pascal
-procedure ConfigurerSpinner;
+procedure ConfigurerSpinner;  
 var
     items: TStringList;
 begin
@@ -411,7 +411,7 @@ end;
 Affichage de texte avec formatage riche.
 
 ```pascal
-procedure ConfigurerTextView;
+procedure ConfigurerTextView;  
 begin
     // Texte et style
     jTextView1.Text := 'Bienvenue dans l''application';
@@ -437,7 +437,7 @@ end;
 
 **Formatage HTML** :
 ```pascal
-procedure AfficherTexteHTML;
+procedure AfficherTexteHTML;  
 var
     html: string;
 begin
@@ -454,7 +454,7 @@ end;
 Affichage d'images avec gestion avancée.
 
 ```pascal
-procedure ConfigurerImageView;
+procedure ConfigurerImageView;  
 begin
     // Charger depuis les ressources
     jImageView1.SetImage('drawable', 'logo');
@@ -473,10 +473,10 @@ end;
 
 **Modes d'affichage (ScaleType)** :
 ```pascal
-stCenter        // Centre sans redimensionner
-stCenterCrop    // Remplit en recadrant (conserve ratio)
-stCenterInside  // Contient complètement (conserve ratio)
-stFitCenter     // Ajuste pour que tout soit visible
+stCenter        // Centre sans redimensionner  
+stCenterCrop    // Remplit en recadrant (conserve ratio)  
+stCenterInside  // Contient complètement (conserve ratio)  
+stFitCenter     // Ajuste pour que tout soit visible  
 stFitXY         // Étire pour remplir (déforme)
 ```
 
@@ -501,7 +501,7 @@ Indicateur de progression.
 
 ```pascal
 // Barre de progression horizontale
-procedure ConfigurerProgressBar;
+procedure ConfigurerProgressBar;  
 begin
     jProgressBar1.Style := pbsHorizontal;
     jProgressBar1.Max := 100;
@@ -513,14 +513,14 @@ begin
 end;
 
 // Progression circulaire indéterminée
-procedure ConfigurerProgressCirculaire;
+procedure ConfigurerProgressCirculaire;  
 begin
     jProgressBar2.Style := pbsSpinning;
     jProgressBar2.Indeterminate := True;
 end;
 
 // Mise à jour de la progression
-procedure UpdateProgress(value: Integer);
+procedure UpdateProgress(value: Integer);  
 begin
     jProgressBar1.Progress := value;
     jTextView1.Text := Format('%d%%', [value]);
@@ -539,7 +539,7 @@ type
         jBottomNavigationView1: jBottomNavigationView;
     end;
 
-procedure ConfigurerBottomNavigation;
+procedure ConfigurerBottomNavigation;  
 begin
     // Ajouter les items
     jBottomNavigationView1.AddItem(0, 'Accueil', 'ic_home');
@@ -556,7 +556,7 @@ begin
     jBottomNavigationView1.ItemTextColor := colbrBlue;
 end;
 
-procedure jBottomNavigationView1ItemSelected(Sender: TObject; ItemId: Integer);
+procedure jBottomNavigationView1ItemSelected(Sender: TObject; ItemId: Integer);  
 begin
     case ItemId of
         0: AfficherAccueil;
@@ -590,7 +590,7 @@ type
         jViewPager1: jViewPager;
     end;
 
-procedure ConfigurerTabs;
+procedure ConfigurerTabs;  
 begin
     // Ajouter les onglets
     jTabLayout1.AddTab('Récents');
@@ -607,7 +607,7 @@ begin
     jTabLayout1.SetupWithViewPager(jViewPager1);
 end;
 
-procedure jViewPager1PageChanged(Sender: TObject; position: Integer);
+procedure jViewPager1PageChanged(Sender: TObject; position: Integer);  
 begin
     case position of
         0: ChargerRecents;
@@ -628,7 +628,7 @@ type
         jNavigationView1: jNavigationView;
     end;
 
-procedure ConfigurerDrawer;
+procedure ConfigurerDrawer;  
 begin
     // Configuration du drawer
     jDrawerLayout1.DrawerWidth := 280;  // Largeur en dp
@@ -645,7 +645,7 @@ begin
     jNavigationView1.SetHeaderView('layout', 'drawer_header');
 end;
 
-procedure jNavigationView1ItemSelected(Sender: TObject; ItemId: Integer);
+procedure jNavigationView1ItemSelected(Sender: TObject; ItemId: Integer);  
 begin
     // Fermer le drawer
     jDrawerLayout1.CloseDrawer;
@@ -660,7 +660,7 @@ begin
 end;
 
 // Ouvrir/fermer programmatiquement
-procedure ToggleDrawer;
+procedure ToggleDrawer;  
 begin
     if jDrawerLayout1.IsDrawerOpen then
         jDrawerLayout1.CloseDrawer
@@ -676,7 +676,7 @@ end;
 Liste déroulante classique.
 
 ```pascal
-procedure ConfigurerListView;
+procedure ConfigurerListView;  
 var
     items: TStringList;
 begin
@@ -710,12 +710,12 @@ end;
 
 **Liste avec icônes** :
 ```pascal
-procedure AjouterItemAvecIcone(const texte, icone: string);
+procedure AjouterItemAvecIcone(const texte, icone: string);  
 begin
     jListView1.AddItem(texte, icone);
 end;
 
-procedure RemplirListeContacts;
+procedure RemplirListeContacts;  
 begin
     AjouterItemAvecIcone('Alice Martin', 'ic_contact');
     AjouterItemAvecIcone('Bob Dupont', 'ic_contact');
@@ -728,7 +728,7 @@ end;
 Liste moderne, performante et flexible.
 
 ```pascal
-procedure ConfigurerRecyclerView;
+procedure ConfigurerRecyclerView;  
 begin
     // Type de layout
     jRecyclerView1.SetLayoutManager(lmLinear);  // Liste verticale
@@ -753,7 +753,7 @@ type
         procedure BindViewHolder(position: Integer; holder: TViewHolder);
     end;
 
-procedure UtiliserRecyclerView;
+procedure UtiliserRecyclerView;  
 var
     data: TStringList;
 begin
@@ -772,7 +772,7 @@ end;
 
 **Gestionnaire de layout en grille** :
 ```pascal
-procedure ConfigurerGrille;
+procedure ConfigurerGrille;  
 begin
     jRecyclerView1.SetLayoutManager(lmGrid);
     jRecyclerView1.SetSpanCount(2);  // 2 colonnes
@@ -787,7 +787,7 @@ end;
 Boîte de dialogue standard.
 
 ```pascal
-procedure AfficherDialogueSimple;
+procedure AfficherDialogueSimple;  
 begin
     jDialogYN1.Title := 'Confirmation';
     jDialogYN1.Msg := 'Voulez-vous vraiment supprimer cet élément ?';
@@ -796,7 +796,7 @@ begin
     jDialogYN1.Show;
 end;
 
-procedure jDialogYN1Click(Sender: TObject; Button: TDlgResponse);
+procedure jDialogYN1Click(Sender: TObject; Button: TDlgResponse);  
 begin
     case Button of
         dlgYes: SupprimerElement;
@@ -807,7 +807,7 @@ end;
 
 **Dialogue avec liste de choix** :
 ```pascal
-procedure AfficherDialogueChoix;
+procedure AfficherDialogueChoix;  
 var
     items: TStringList;
 begin
@@ -834,7 +834,7 @@ end;
 
 **Dialogue personnalisé** :
 ```pascal
-procedure AfficherDialoguePersonnalise;
+procedure AfficherDialoguePersonnalise;  
 begin
     jDialogCustom1.SetTitle('Connexion');
     jDialogCustom1.SetLayout('layout', 'dialog_login');
@@ -849,14 +849,14 @@ end;
 Panneau qui glisse depuis le bas de l'écran.
 
 ```pascal
-procedure AfficherBottomSheet;
+procedure AfficherBottomSheet;  
 begin
     jBottomSheet1.SetContentView('layout', 'bottom_sheet_content');
     jBottomSheet1.PeekHeight := 200;  // Hauteur initiale
     jBottomSheet1.Show;
 end;
 
-procedure jBottomSheet1StateChanged(Sender: TObject; newState: Integer);
+procedure jBottomSheet1StateChanged(Sender: TObject; newState: Integer);  
 begin
     case newState of
         bsExpanded: // Complètement étendu
@@ -871,7 +871,7 @@ end;
 Notification temporaire en bas d'écran (alternative au Toast).
 
 ```pascal
-procedure AfficherSnackbar;
+procedure AfficherSnackbar;  
 begin
     jSnackbar1.Text := 'Élément supprimé';
     jSnackbar1.Duration := sdShort;  // 2 secondes
@@ -880,7 +880,7 @@ begin
     jSnackbar1.Show;
 end;
 
-procedure jSnackbar1ActionClick(Sender: TObject);
+procedure jSnackbar1ActionClick(Sender: TObject);  
 begin
     // L'utilisateur a cliqué sur "ANNULER"
     RestaurerElement;
@@ -894,7 +894,7 @@ end;
 Bouton d'action flottant, élément signature de Material Design.
 
 ```pascal
-procedure ConfigurerFAB;
+procedure ConfigurerFAB;  
 begin
     jFloatingActionButton1.SetImage('drawable', 'ic_add');
     jFloatingActionButton1.BackgroundColor := colbrBlue;
@@ -910,7 +910,7 @@ begin
     jFloatingActionButton1.MarginRight := 16;
 end;
 
-procedure jFloatingActionButton1Click(Sender: TObject);
+procedure jFloatingActionButton1Click(Sender: TObject);  
 begin
     // Action principale de l'écran
     AjouterNouvelElement;
@@ -919,7 +919,7 @@ end;
 
 **FAB étendu avec texte** :
 ```pascal
-procedure ConfigurerFABEtendu;
+procedure ConfigurerFABEtendu;  
 begin
     jFloatingActionButton1.Extended := True;
     jFloatingActionButton1.Text := 'NOUVEAU';
@@ -932,7 +932,7 @@ end;
 Barre d'outils moderne remplaçant l'ActionBar.
 
 ```pascal
-procedure ConfigurerToolbar;
+procedure ConfigurerToolbar;  
 begin
     // Configuration de base
     jToolbar1.Title := 'Mon Application';
@@ -950,7 +950,7 @@ begin
     jToolbar1.Elevation := 4;
 end;
 
-procedure jToolbar1NavigationClick(Sender: TObject);
+procedure jToolbar1NavigationClick(Sender: TObject);  
 begin
     // Ouvrir le drawer ou retour arrière
     jDrawerLayout1.OpenDrawer;
@@ -959,7 +959,7 @@ end;
 
 **Menu dans la Toolbar** :
 ```pascal
-procedure ConfigurerMenuToolbar;
+procedure ConfigurerMenuToolbar;  
 begin
     // Ajouter des items au menu
     jToolbar1.AddMenuItem(1, 'Rechercher', 'ic_search', mitIfRoom);
@@ -967,7 +967,7 @@ begin
     jToolbar1.AddMenuItem(3, 'À propos', '', mitNever);
 end;
 
-procedure jToolbar1MenuItemClick(Sender: TObject; MenuItemId: Integer);
+procedure jToolbar1MenuItemClick(Sender: TObject; MenuItemId: Integer);  
 begin
     case MenuItemId of
         1: LancerRecherche;
@@ -979,9 +979,9 @@ end;
 
 **Options de visibilité des items** :
 ```pascal
-mitAlways     // Toujours visible dans la toolbar
-mitIfRoom     // Visible si place disponible, sinon dans menu overflow
-mitNever      // Toujours dans le menu overflow (trois points)
+mitAlways     // Toujours visible dans la toolbar  
+mitIfRoom     // Visible si place disponible, sinon dans menu overflow  
+mitNever      // Toujours dans le menu overflow (trois points)  
 mitWithText   // Afficher avec texte si possible
 ```
 
@@ -990,14 +990,14 @@ mitWithText   // Afficher avec texte si possible
 Menu qui apparaît sur un long clic.
 
 ```pascal
-procedure ConfigurerMenuContextuel;
+procedure ConfigurerMenuContextuel;  
 begin
     jContextMenu1.AddItem(1, 'Copier');
     jContextMenu1.AddItem(2, 'Coller');
     jContextMenu1.AddItem(3, 'Supprimer');
 end;
 
-procedure jListView1ItemLongClick(Sender: TObject; ItemIndex: Integer);
+procedure jListView1ItemLongClick(Sender: TObject; ItemIndex: Integer);  
 begin
     jContextMenu1.Show(jListView1, ItemIndex);
 end;
@@ -1020,7 +1020,7 @@ end;
 Carte Material Design avec ombres et élévation.
 
 ```pascal
-procedure ConfigurerCardView;
+procedure ConfigurerCardView;  
 begin
     // Dimensions
     jCardView1.LayoutParamWidth := lpMatchParent;
@@ -1047,7 +1047,7 @@ end;
 
 **Carte cliquable avec effet ripple** :
 ```pascal
-procedure ConfigurerCarteCliquable;
+procedure ConfigurerCarteCliquable;  
 begin
     jCardView1.Clickable := True;
     jCardView1.Focusable := True;
@@ -1055,7 +1055,7 @@ begin
     jCardView1.RippleColor := colbrLightGray;
 end;
 
-procedure jCardView1Click(Sender: TObject);
+procedure jCardView1Click(Sender: TObject);  
 begin
     // Action lors du clic sur la carte
     AfficherDetails;
@@ -1083,7 +1083,7 @@ end;
 Navigateur web intégré.
 
 ```pascal
-procedure ConfigurerWebView;
+procedure ConfigurerWebView;  
 begin
     // Activer JavaScript
     jWebView1.JavaScriptEnabled := True;
@@ -1102,7 +1102,7 @@ begin
 end;
 
 // Charger du HTML local
-procedure ChargerHTMLLocal;
+procedure ChargerHTMLLocal;  
 var
     html: string;
 begin
@@ -1115,19 +1115,19 @@ begin
 end;
 
 // Charger depuis les assets
-procedure ChargerDepuisAssets;
+procedure ChargerDepuisAssets;  
 begin
     jWebView1.LoadFromAssets('pages/index.html');
 end;
 
 // Événements
-procedure jWebView1PageStarted(Sender: TObject; url: string);
+procedure jWebView1PageStarted(Sender: TObject; url: string);  
 begin
     jProgressBar1.Visible := True;
     jProgressBar1.Indeterminate := True;
 end;
 
-procedure jWebView1PageFinished(Sender: TObject; url: string);
+procedure jWebView1PageFinished(Sender: TObject; url: string);  
 begin
     jProgressBar1.Visible := False;
 end;
@@ -1142,20 +1142,20 @@ end;
 **Communication JavaScript ↔ Pascal** :
 ```pascal
 // Appeler JavaScript depuis Pascal
-procedure AppelerJavaScript;
+procedure AppelerJavaScript;  
 begin
     jWebView1.EvaluateJavaScript('alert("Hello from Pascal!")');
     jWebView1.EvaluateJavaScript('document.getElementById("titre").innerHTML = "Nouveau titre"');
 end;
 
 // Exposer une fonction Pascal à JavaScript
-procedure ExposerFonctionPascal;
+procedure ExposerFonctionPascal;  
 begin
     jWebView1.AddJavaScriptInterface('MyApp', 'showToast');
 end;
 
 // Fonction appelable depuis JavaScript
-procedure OnJavaScriptCall(const functionName, params: string);
+procedure OnJavaScriptCall(const functionName, params: string);  
 begin
     if functionName = 'showToast' then
         ShowMessage(params);
@@ -1167,7 +1167,7 @@ end;
 Lecteur vidéo intégré.
 
 ```pascal
-procedure ConfigurerVideoView;
+procedure ConfigurerVideoView;  
 begin
     // Chemin de la vidéo
     jVideoView1.SetVideoPath('/sdcard/Movies/video.mp4');
@@ -1183,30 +1183,30 @@ begin
     jVideoView1.LayoutParamHeight := 300;
 end;
 
-procedure jButton1Click(Sender: TObject);
+procedure jButton1Click(Sender: TObject);  
 begin
     jVideoView1.Start;  // Démarrer la lecture
 end;
 
-procedure jButton2Click(Sender: TObject);
+procedure jButton2Click(Sender: TObject);  
 begin
     jVideoView1.Pause;  // Mettre en pause
 end;
 
-procedure jButton3Click(Sender: TObject);
+procedure jButton3Click(Sender: TObject);  
 begin
     jVideoView1.Stop;   // Arrêter
 end;
 
 // Événements
-procedure jVideoView1Prepared(Sender: TObject);
+procedure jVideoView1Prepared(Sender: TObject);  
 begin
     // Vidéo prête, récupérer la durée
     jTextView1.Text := Format('Durée: %d secondes',
                               [jVideoView1.Duration div 1000]);
 end;
 
-procedure jVideoView1Completion(Sender: TObject);
+procedure jVideoView1Completion(Sender: TObject);  
 begin
     // Lecture terminée
     ShowMessage('Vidéo terminée');
@@ -1223,7 +1223,7 @@ type
         jMediaPlayer1: jMediaPlayer;
     end;
 
-procedure ConfigurerMediaPlayer;
+procedure ConfigurerMediaPlayer;  
 begin
     // Charger depuis les assets
     jMediaPlayer1.LoadFromAssets('audio/music.mp3');
@@ -1233,7 +1233,7 @@ begin
     jMediaPlayer1.Volume := 0.8;     // Volume 80%
 end;
 
-procedure jButton1Click(Sender: TObject);
+procedure jButton1Click(Sender: TObject);  
 begin
     if not jMediaPlayer1.IsPlaying then
         jMediaPlayer1.Play
@@ -1241,14 +1241,14 @@ begin
         jMediaPlayer1.Pause;
 end;
 
-procedure jSeekBar1ProgressChanged(Sender: TObject; progress: Integer);
+procedure jSeekBar1ProgressChanged(Sender: TObject; progress: Integer);  
 begin
     // Chercher dans la piste
     jMediaPlayer1.SeekTo(progress);
 end;
 
 // Mise à jour de la progression
-procedure UpdateProgress;
+procedure UpdateProgress;  
 var
     position, duration: Integer;
 begin
@@ -1264,7 +1264,7 @@ begin
     end;
 end;
 
-function FormatTime(milliseconds: Integer): string;
+function FormatTime(milliseconds: Integer): string;  
 var
     seconds, minutes: Integer;
 begin
@@ -1287,14 +1287,14 @@ type
         jCanvas1: jCanvas;
     end;
 
-procedure ConfigurerCanvas;
+procedure ConfigurerCanvas;  
 begin
     jCanvas1.LayoutParamWidth := lpMatchParent;
     jCanvas1.LayoutParamHeight := 400;
     jCanvas1.BackgroundColor := colbrWhite;
 end;
 
-procedure jCanvas1Draw(Sender: TObject; Canvas: TObject);
+procedure jCanvas1Draw(Sender: TObject; Canvas: TObject);  
 begin
     // Dessiner un rectangle
     jCanvas1.DrawRect(50, 50, 200, 150, colbrBlue);
@@ -1310,7 +1310,7 @@ begin
 end;
 
 // Dessiner un chemin complexe
-procedure DessinerChemin;
+procedure DessinerChemin;  
 begin
     jCanvas1.BeginPath;
     jCanvas1.MoveTo(100, 300);
@@ -1322,14 +1322,14 @@ begin
 end;
 
 // Dessin interactif
-procedure jCanvas1TouchDown(Sender: TObject; x, y: Single);
+procedure jCanvas1TouchDown(Sender: TObject; x, y: Single);  
 begin
     // Commencer un nouveau trait
     FLastX := x;
     FLastY := y;
 end;
 
-procedure jCanvas1TouchMove(Sender: TObject; x, y: Single);
+procedure jCanvas1TouchMove(Sender: TObject; x, y: Single);  
 begin
     // Dessiner en suivant le doigt
     jCanvas1.DrawLine(FLastX, FLastY, x, y, colbrBlack, 3);
@@ -1346,7 +1346,7 @@ end;
 Créer et afficher des notifications système.
 
 ```pascal
-procedure AfficherNotification;
+procedure AfficherNotification;  
 begin
     jNotificationManager1.Title := 'Nouveau message';
     jNotificationManager1.Message := 'Vous avez reçu un nouveau message';
@@ -1370,7 +1370,7 @@ end;
 
 **Notification avec actions** :
 ```pascal
-procedure NotificationAvecActions;
+procedure NotificationAvecActions;  
 begin
     jNotificationManager1.Title := 'Appel entrant';
     jNotificationManager1.Message := 'Alice Martin';
@@ -1382,7 +1382,7 @@ begin
     jNotificationManager1.Notify(2);
 end;
 
-procedure jNotificationManager1ActionClick(Sender: TObject; ActionId: Integer);
+procedure jNotificationManager1ActionClick(Sender: TObject; ActionId: Integer);  
 begin
     case ActionId of
         1: RepondreAppel;
@@ -1393,7 +1393,7 @@ end;
 
 **Notification avec progression** :
 ```pascal
-procedure NotificationProgression;
+procedure NotificationProgression;  
 var
     i: Integer;
 begin
@@ -1418,7 +1418,7 @@ end;
 
 **Canaux de notification (Android 8.0+)** :
 ```pascal
-procedure CreerCanaux;
+procedure CreerCanaux;  
 begin
     // Canal pour messages
     jNotificationManager1.CreateChannel(
@@ -1437,7 +1437,7 @@ begin
     );
 end;
 
-procedure UtiliserCanal;
+procedure UtiliserCanal;  
 begin
     jNotificationManager1.ChannelId := 'messages';
     jNotificationManager1.Title := 'Nouveau message';
@@ -1464,7 +1464,7 @@ Certaines permissions nécessitent l'accord explicite de l'utilisateur à l'exé
 ### Demander une permission
 
 ```pascal
-procedure DemanderPermissionCamera;
+procedure DemanderPermissionCamera;  
 begin
     if jForm.HasPermission('android.permission.CAMERA') then
     begin
@@ -1478,7 +1478,7 @@ begin
     end;
 end;
 
-procedure OnPermissionResult(Permission: string; GrantResult: TPermissionResult);
+procedure OnPermissionResult(Permission: string; GrantResult: TPermissionResult);  
 begin
     case GrantResult of
         prGranted:
@@ -1507,7 +1507,7 @@ end;
 ### Demander plusieurs permissions
 
 ```pascal
-procedure DemanderPermissionsMultiples;
+procedure DemanderPermissionsMultiples;  
 var
     permissions: TStringList;
 begin
@@ -1550,7 +1550,7 @@ end;
 ### Expliquer pourquoi la permission est nécessaire
 
 ```pascal
-procedure DemanderPermissionAvecExplication;
+procedure DemanderPermissionAvecExplication;  
 begin
     if jForm.ShouldShowRequestPermissionRationale('android.permission.CAMERA') then
     begin
@@ -1570,7 +1570,7 @@ begin
     end;
 end;
 
-procedure jDialogYN1Click(Sender: TObject; Button: TDlgResponse);
+procedure jDialogYN1Click(Sender: TObject; Button: TDlgResponse);  
 begin
     if Button = dlgYes then
         jForm.RequestPermission('android.permission.CAMERA', 100);
@@ -1588,7 +1588,7 @@ type
         FLocationEnabled: Boolean;
     end;
 
-procedure DemarrerLocalisation;
+procedure DemarrerLocalisation;  
 begin
     if not jForm.HasPermission('android.permission.ACCESS_FINE_LOCATION') then
     begin
@@ -1601,13 +1601,13 @@ begin
     FLocationEnabled := True;
 end;
 
-procedure ArreterLocalisation;
+procedure ArreterLocalisation;  
 begin
     jForm.StopLocationUpdates;
     FLocationEnabled := False;
 end;
 
-procedure OnLocationChanged(Latitude, Longitude: Double; Accuracy: Single);
+procedure OnLocationChanged(Latitude, Longitude: Double; Accuracy: Single);  
 begin
     jTextView1.Text := Format('Lat: %.6f, Lon: %.6f', [Latitude, Longitude]);
     jTextView2.Text := Format('Précision: %.0f mètres', [Accuracy]);
@@ -1620,7 +1620,7 @@ end;
 ### Capteurs de mouvement
 
 ```pascal
-procedure DemarrerCapteurs;
+procedure DemarrerCapteurs;  
 begin
     // Démarrer l'accéléromètre
     jForm.StartSensor(stAccelerometer);
@@ -1632,14 +1632,14 @@ begin
     jForm.StartSensor(stMagnetometer);
 end;
 
-procedure ArreterCapteurs;
+procedure ArreterCapteurs;  
 begin
     jForm.StopSensor(stAccelerometer);
     jForm.StopSensor(stGyroscope);
     jForm.StopSensor(stMagnetometer);
 end;
 
-procedure OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);
+procedure OnSensorChanged(SensorType: TSensorType; X, Y, Z: Single);  
 begin
     case SensorType of
         stAccelerometer:
@@ -1667,7 +1667,7 @@ begin
     end;
 end;
 
-procedure CalculerOrientation(X, Y, Z: Single);
+procedure CalculerOrientation(X, Y, Z: Single);  
 var
     angle: Single;
 begin
@@ -1682,7 +1682,7 @@ end;
 ### Caméra
 
 ```pascal
-procedure OuvrirCamera;
+procedure OuvrirCamera;  
 begin
     if not jForm.HasPermission('android.permission.CAMERA') then
     begin
@@ -1694,7 +1694,7 @@ begin
     jForm.TakePicture('photo.jpg');
 end;
 
-procedure OnActivityResult(RequestCode, ResultCode: Integer; Data: jObject);
+procedure OnActivityResult(RequestCode, ResultCode: Integer; Data: jObject);  
 begin
     if (RequestCode = 100) and (ResultCode = RESULT_OK) then
     begin
@@ -1711,26 +1711,26 @@ type
         jCameraView1: jCameraView;
     end;
 
-procedure ConfigurerCameraPersonnalisee;
+procedure ConfigurerCameraPersonnalisee;  
 begin
     jCameraView1.LayoutParamWidth := lpMatchParent;
     jCameraView1.LayoutParamHeight := 400;
     jCameraView1.CameraFacing := cfBack;  // Caméra arrière
 end;
 
-procedure jButton1Click(Sender: TObject);
+procedure jButton1Click(Sender: TObject);  
 begin
     // Capturer l'image
     jCameraView1.TakePicture;
 end;
 
-procedure jCameraView1PictureTaken(Sender: TObject; const FilePath: string);
+procedure jCameraView1PictureTaken(Sender: TObject; const FilePath: string);  
 begin
     ShowMessage('Photo sauvegardée : ' + FilePath);
     jImageView1.LoadFromFile(FilePath);
 end;
 
-procedure jButton2Click(Sender: TObject);
+procedure jButton2Click(Sender: TObject);  
 begin
     // Basculer entre caméra avant/arrière
     if jCameraView1.CameraFacing = cfBack then
@@ -1743,7 +1743,7 @@ end;
 ### Scanner de codes-barres / QR codes
 
 ```pascal
-procedure ScannerCodeQR;
+procedure ScannerCodeQR;  
 begin
     if not jForm.HasPermission('android.permission.CAMERA') then
     begin
@@ -1773,7 +1773,7 @@ end;
 ### Vibration
 
 ```pascal
-procedure FaireVibrer;
+procedure FaireVibrer;  
 begin
     if jForm.HasPermission('android.permission.VIBRATE') then
     begin
@@ -1782,7 +1782,7 @@ begin
     end;
 end;
 
-procedure VibrationPattern;
+procedure VibrationPattern;  
 var
     pattern: array[0..5] of Integer;
 begin
@@ -1801,7 +1801,7 @@ end;
 ### Flash / Lampe torche
 
 ```pascal
-procedure AllumerFlash;
+procedure AllumerFlash;  
 begin
     if jForm.HasCameraFlash then
     begin
@@ -1813,12 +1813,12 @@ begin
     end;
 end;
 
-procedure EteindreFlash;
+procedure EteindreFlash;  
 begin
     jForm.SetFlashMode(fmOff);
 end;
 
-procedure BasculerFlash;
+procedure BasculerFlash;  
 begin
     if jForm.IsFlashOn then
         EteindreFlash
@@ -1832,7 +1832,7 @@ end;
 ### Chemins de stockage
 
 ```pascal
-function ObtenirChemins: string;
+function ObtenirChemins: string;  
 var
     info: string;
 begin
@@ -1857,7 +1857,7 @@ end;
 ### Lire et écrire des fichiers
 
 ```pascal
-procedure SauvegarderFichier;
+procedure SauvegarderFichier;  
 var
     content: string;
     filePath: string;
@@ -1874,7 +1874,7 @@ begin
     end;
 end;
 
-procedure ChargerFichier;
+procedure ChargerFichier;  
 var
     content: string;
     filePath: string;
@@ -1892,7 +1892,7 @@ begin
     end;
 end;
 
-procedure ListerFichiers;
+procedure ListerFichiers;  
 var
     files: TStringList;
     i: Integer;
@@ -1913,13 +1913,13 @@ end;
 ### Sélecteur de fichiers
 
 ```pascal
-procedure OuvrirSelecteurFichier;
+procedure OuvrirSelecteurFichier;  
 begin
     jFilePicker1.FileType := 'image/*';  // Seulement les images
     jFilePicker1.Show;
 end;
 
-procedure jFilePicker1Result(Sender: TObject; const FilePath: string);
+procedure jFilePicker1Result(Sender: TObject; const FilePath: string);  
 begin
     if FilePath <> '' then
     begin
@@ -1935,7 +1935,7 @@ begin
 end;
 
 // Types de fichiers courants
-procedure SelectionnerTypeFichier;
+procedure SelectionnerTypeFichier;  
 begin
     // Images
     jFilePicker1.FileType := 'image/*';
@@ -1961,7 +1961,7 @@ end;
 Stockage léger de paires clé-valeur.
 
 ```pascal
-procedure SauvegarderPreferences;
+procedure SauvegarderPreferences;  
 begin
     jForm.SavePreference('username', jEditText1.Text);
     jForm.SavePreference('email', jEditText2.Text);
@@ -1970,7 +1970,7 @@ begin
     ShowMessage('Préférences sauvegardées');
 end;
 
-procedure ChargerPreferences;
+procedure ChargerPreferences;  
 var
     username, email: string;
     age: Integer;
@@ -1987,13 +1987,13 @@ begin
                               [age, BoolToStr(premium, True)]);
 end;
 
-procedure EffacerPreferences;
+procedure EffacerPreferences;  
 begin
     jForm.ClearPreferences;
     ShowMessage('Toutes les préférences effacées');
 end;
 
-procedure EffacerPreferenceSpecifique;
+procedure EffacerPreferenceSpecifique;  
 begin
     jForm.DeletePreference('username');
 end;
@@ -2007,7 +2007,7 @@ type
         jSQLite1: jSQLite;
     end;
 
-procedure CreerBaseDeDonnees;
+procedure CreerBaseDeDonnees;  
 begin
     // Créer/ouvrir la base de données
     jSQLite1.DatabaseName := 'myapp.db';
@@ -2033,7 +2033,7 @@ begin
     );
 end;
 
-procedure InsererDonnees;
+procedure InsererDonnees;  
 begin
     // Insertion simple
     jSQLite1.ExecuteSQL(
@@ -2061,7 +2061,7 @@ begin
     end;
 end;
 
-procedure LireDonnees;
+procedure LireDonnees;  
 var
     cursor: jCursor;
     users: TStringList;
@@ -2084,7 +2084,7 @@ begin
     end;
 end;
 
-procedure RechercherDonnees;
+procedure RechercherDonnees;  
 var
     cursor: jCursor;
     searchTerm: string;
@@ -2111,7 +2111,7 @@ begin
     end;
 end;
 
-procedure MettreAJourDonnees;
+procedure MettreAJourDonnees;  
 begin
     jSQLite1.PrepareSQL('UPDATE users SET email = ? WHERE id = ?');
     jSQLite1.BindText(1, 'newemail@example.com');
@@ -2121,7 +2121,7 @@ begin
     ShowMessage(Format('%d ligne(s) modifiée(s)', [jSQLite1.RowsAffected]));
 end;
 
-procedure SupprimerDonnees;
+procedure SupprimerDonnees;  
 begin
     jSQLite1.PrepareSQL('DELETE FROM users WHERE id = ?');
     jSQLite1.BindInt(1, 1);
@@ -2142,7 +2142,7 @@ type
     end;
 
 // Requête GET simple
-procedure RequeteGET;
+procedure RequeteGET;  
 begin
     jHttpClient1.URL := 'https://api.example.com/users';
     jHttpClient1.Method := hmGET;
@@ -2164,13 +2164,13 @@ begin
     end;
 end;
 
-procedure jHttpClient1Error(Sender: TObject; ErrorMsg: string);
+procedure jHttpClient1Error(Sender: TObject; ErrorMsg: string);  
 begin
     ShowMessage('Erreur réseau: ' + ErrorMsg);
 end;
 
 // Requête POST avec données
-procedure RequetePOST;
+procedure RequetePOST;  
 var
     jsonData: string;
 begin
@@ -2184,7 +2184,7 @@ begin
 end;
 
 // Upload de fichier
-procedure UploadFichier;
+procedure UploadFichier;  
 var
     filePath: string;
 begin
@@ -2197,7 +2197,7 @@ begin
 end;
 
 // Téléchargement de fichier
-procedure TelechargerFichier;
+procedure TelechargerFichier;  
 var
     savePath: string;
 begin
@@ -2229,7 +2229,7 @@ end;
 uses
     fpjson, jsonparser;
 
-procedure TraiterReponseJSON(const jsonString: string);
+procedure TraiterReponseJSON(const jsonString: string);  
 var
     jsonData: TJSONData;
     jsonArray: TJSONArray;
@@ -2269,7 +2269,7 @@ begin
     end;
 end;
 
-function CreerJSON: string;
+function CreerJSON: string;  
 var
     json: TJSONObject;
 begin
@@ -2295,13 +2295,13 @@ type
         jWebSocket1: jWebSocket;
     end;
 
-procedure ConnecterWebSocket;
+procedure ConnecterWebSocket;  
 begin
     jWebSocket1.URL := 'wss://echo.websocket.org';
     jWebSocket1.Connect;
 end;
 
-procedure jWebSocket1Connected(Sender: TObject);
+procedure jWebSocket1Connected(Sender: TObject);  
 begin
     ShowMessage('WebSocket connecté');
 
@@ -2309,22 +2309,22 @@ begin
     jWebSocket1.Send('Hello WebSocket!');
 end;
 
-procedure jWebSocket1MessageReceived(Sender: TObject; const Message: string);
+procedure jWebSocket1MessageReceived(Sender: TObject; const Message: string);  
 begin
     jTextView1.Text := 'Reçu: ' + Message;
 end;
 
-procedure jWebSocket1Error(Sender: TObject; const ErrorMsg: string);
+procedure jWebSocket1Error(Sender: TObject; const ErrorMsg: string);  
 begin
     ShowMessage('Erreur WebSocket: ' + ErrorMsg);
 end;
 
-procedure jWebSocket1Closed(Sender: TObject);
+procedure jWebSocket1Closed(Sender: TObject);  
 begin
     ShowMessage('WebSocket déconnecté');
 end;
 
-procedure EnvoyerMessage;
+procedure EnvoyerMessage;  
 begin
     if jWebSocket1.IsConnected then
         jWebSocket1.Send(jEditText1.Text)
@@ -2332,7 +2332,7 @@ begin
         ShowMessage('Non connecté');
 end;
 
-procedure DeconnecterWebSocket;
+procedure DeconnecterWebSocket;  
 begin
     jWebSocket1.Disconnect;
 end;
@@ -2343,13 +2343,13 @@ end;
 ### Partage de contenu
 
 ```pascal
-procedure PartagerTexte;
+procedure PartagerTexte;  
 begin
     jForm.ShareText('Découvrez cette application !',
                     'Partage depuis mon app');
 end;
 
-procedure PartagerImage;
+procedure PartagerImage;  
 var
     imagePath: string;
 begin
@@ -2357,7 +2357,7 @@ begin
     jForm.ShareFile(imagePath, 'Partager la photo', 'image/*');
 end;
 
-procedure PartagerPlusieurs;
+procedure PartagerPlusieurs;  
 var
     files: TStringList;
 begin
@@ -2373,7 +2373,7 @@ begin
     end;
 end;
 
-procedure PartagerVersApplication;
+procedure PartagerVersApplication;  
 begin
     // Partager spécifiquement vers une app (ex: WhatsApp)
     jForm.ShareToPackage('com.whatsapp', 'Message WhatsApp',
@@ -2385,13 +2385,13 @@ end;
 
 ```pascal
 // Ouvrir une URL dans le navigateur
-procedure OuvrirURL;
+procedure OuvrirURL;  
 begin
     jForm.OpenURL('https://www.example.com');
 end;
 
 // Appeler un numéro
-procedure AppelerNumero;
+procedure AppelerNumero;  
 begin
     if jForm.HasPermission('android.permission.CALL_PHONE') then
         jForm.CallPhone('+33123456789')
@@ -2400,13 +2400,13 @@ begin
 end;
 
 // Envoyer un SMS
-procedure EnvoyerSMS;
+procedure EnvoyerSMS;  
 begin
     jForm.SendSMS('+33123456789', 'Bonjour depuis mon app!');
 end;
 
 // Envoyer un email
-procedure EnvoyerEmail;
+procedure EnvoyerEmail;  
 begin
     jForm.SendEmail(
         'contact@example.com',           // Destinataire
@@ -2417,18 +2417,18 @@ begin
 end;
 
 // Ouvrir la galerie photos
-procedure OuvrirGalerie;
+procedure OuvrirGalerie;  
 begin
     jForm.PickImageFromGallery;
 end;
 
-procedure OnImagePicked(const ImagePath: string);
+procedure OnImagePicked(const ImagePath: string);  
 begin
     jImageView1.LoadFromFile(ImagePath);
 end;
 
 // Ouvrir Google Maps
-procedure OuvrirMaps;
+procedure OuvrirMaps;  
 var
     latitude, longitude: Double;
 begin
@@ -2439,13 +2439,13 @@ begin
 end;
 
 // Ouvrir les paramètres de l'application
-procedure OuvrirParametresApp;
+procedure OuvrirParametresApp;  
 begin
     jForm.OpenAppSettings;
 end;
 
 // Installer une APK
-procedure InstallerAPK;
+procedure InstallerAPK;  
 var
     apkPath: string;
 begin
@@ -2460,7 +2460,7 @@ end;
 
 ```pascal
 // Animation de translation
-procedure AnimerDeplacement;
+procedure AnimerDeplacement;  
 begin
     jButton1.AnimateTranslation(
         0, 0,           // Position de départ (relative)
@@ -2471,7 +2471,7 @@ begin
 end;
 
 // Animation de rotation
-procedure AnimerRotation;
+procedure AnimerRotation;  
 begin
     jImageView1.AnimateRotation(
         0,              // Angle de départ
@@ -2482,7 +2482,7 @@ begin
 end;
 
 // Animation d'échelle
-procedure AnimerZoom;
+procedure AnimerZoom;  
 begin
     jImageView1.AnimateScale(
         1.0, 1.0,       // Échelle de départ (normale)
@@ -2493,7 +2493,7 @@ begin
 end;
 
 // Animation de transparence
-procedure AnimerFadeIn;
+procedure AnimerFadeIn;  
 begin
     jTextView1.AnimateAlpha(
         0.0,            // Transparent
@@ -2503,13 +2503,13 @@ begin
     );
 end;
 
-procedure AnimerFadeOut;
+procedure AnimerFadeOut;  
 begin
     jTextView1.AnimateAlpha(1.0, 0.0, 500, aiLinear);
 end;
 
 // Combinaison d'animations
-procedure AnimationComplexe;
+procedure AnimationComplexe;  
 begin
     // Déplacement + rotation + zoom simultanés
     jButton1.BeginAnimationSet;
@@ -2520,7 +2520,7 @@ begin
 end;
 
 // Callback de fin d'animation
-procedure jButton1AnimationEnd(Sender: TObject);
+procedure jButton1AnimationEnd(Sender: TObject);  
 begin
     ShowMessage('Animation terminée');
 end;
@@ -2528,19 +2528,19 @@ end;
 
 **Types d'interpolation** :
 ```pascal
-aiLinear           // Vitesse constante
-aiAccelerate       // Accélère
-aiDecelerate       // Décélère
-aiAccelerateDecelerate  // Accélère puis décélère
-aiBounce           // Rebondit à la fin
-aiOvershoot        // Dépasse puis revient
+aiLinear           // Vitesse constante  
+aiAccelerate       // Accélère  
+aiDecelerate       // Décélère  
+aiAccelerateDecelerate  // Accélère puis décélère  
+aiBounce           // Rebondit à la fin  
+aiOvershoot        // Dépasse puis revient  
 aiAnticipate       // Recule avant d'avancer
 ```
 
 ### Transitions entre Activities
 
 ```pascal
-procedure TransitionAvecAnimation;
+procedure TransitionAvecAnimation;  
 begin
     // Définir les animations de transition
     jForm.SetActivityTransition(
@@ -2555,9 +2555,9 @@ end;
 
 **Types de transitions** :
 ```pascal
-atSlideLeft, atSlideRight, atSlideUp, atSlideDown
-atFadeIn, atFadeOut
-atZoomIn, atZoomOut
+atSlideLeft, atSlideRight, atSlideUp, atSlideDown  
+atFadeIn, atFadeOut  
+atZoomIn, atZoomOut  
 atNone  // Pas d'animation
 ```
 
@@ -2578,7 +2578,7 @@ type
         procedure OnUpdate; override;
     end;
 
-procedure TMonWidget.OnCreate;
+procedure TMonWidget.OnCreate;  
 begin
     inherited;
 
@@ -2590,13 +2590,13 @@ begin
     jButton1.Text := 'Actualiser';
 end;
 
-procedure TMonWidget.OnUpdate;
+procedure TMonWidget.OnUpdate;  
 begin
     // Mise à jour périodique du widget
     jTextView1.Text := 'Heure: ' + TimeToStr(Now);
 end;
 
-procedure jButton1Click(Sender: TObject);
+procedure jButton1Click(Sender: TObject);  
 begin
     // Action au clic sur le bouton du widget
     OnUpdate;  // Actualiser manuellement
@@ -2618,13 +2618,13 @@ type
         procedure OnTouch(x, y: Single); override;
     end;
 
-procedure TMonLiveWallpaper.OnCreate;
+procedure TMonLiveWallpaper.OnCreate;  
 begin
     inherited;
     SetFrameRate(30);  // 30 FPS
 end;
 
-procedure TMonLiveWallpaper.OnDraw;
+procedure TMonLiveWallpaper.OnDraw;  
 var
     i: Integer;
 begin
@@ -2642,7 +2642,7 @@ begin
     end;
 end;
 
-procedure TMonLiveWallpaper.OnTouch(x, y: Single);
+procedure TMonLiveWallpaper.OnTouch(x, y: Single);  
 begin
     // Réagir au toucher de l'utilisateur
     FCanvas.DrawCircle(x, y, 100, colbrWhite);
@@ -2695,7 +2695,7 @@ end;
 ### Chargement d'images optimisé
 
 ```pascal
-procedure ChargerImageOptimisee;
+procedure ChargerImageOptimisee;  
 begin
     // Charger en arrière-plan
     jImageView1.LoadFromURLAsync('https://example.com/large-image.jpg');
@@ -2712,7 +2712,7 @@ begin
     jImageView1.MaxHeight := 500;
 end;
 
-procedure jImageView1LoadComplete(Sender: TObject; Success: Boolean);
+procedure jImageView1LoadComplete(Sender: TObject; Success: Boolean);  
 begin
     if Success then
         jProgressBar1.Visible := False
@@ -2724,7 +2724,7 @@ end;
 ### Gestion de la mémoire
 
 ```pascal
-procedure OnLowMemory;
+procedure OnLowMemory;  
 begin
     // Libérer les ressources non essentielles
     jImageView1.RecycleBitmap;
@@ -2736,7 +2736,7 @@ begin
     System.gc;
 end;
 
-procedure OnTrimMemory(level: Integer);
+procedure OnTrimMemory(level: Integer);  
 begin
     case level of
         TRIM_MEMORY_RUNNING_CRITICAL:
@@ -2759,7 +2759,7 @@ end;
 ### Support des lecteurs d'écran
 
 ```pascal
-procedure ConfigurerAccessibilite;
+procedure ConfigurerAccessibilite;  
 begin
     // Descriptions pour les lecteurs d'écran
     jButton1.ContentDescription := 'Bouton de validation du formulaire';
@@ -2773,7 +2773,7 @@ begin
 end;
 
 // Annoncer un événement
-procedure AnnoncerEvenement;
+procedure AnnoncerEvenement;  
 begin
     jForm.AnnounceForAccessibility('Fichier téléchargé avec succès');
 end;
@@ -2782,7 +2782,7 @@ end;
 ### Tailles de texte adaptatives
 
 ```pascal
-procedure RespectferPreferencesTaille;
+procedure RespectferPreferencesTaille;  
 var
     userTextScale: Single;
 begin
@@ -2798,7 +2798,7 @@ end;
 ### Contraste et couleurs
 
 ```pascal
-procedure AdapterContraste;
+procedure AdapterContraste;  
 var
     highContrastEnabled: Boolean;
 begin
@@ -2824,7 +2824,7 @@ end;
 ### Responsive Design
 
 ```pascal
-procedure AdapterALaTailleEcran;
+procedure AdapterALaTailleEcran;  
 var
     screenSize: TScreenSize;
     orientation: TOrientation;
@@ -2876,7 +2876,7 @@ end;
 ### Thèmes et styles cohérents
 
 ```pascal
-procedure AppliquerTheme;
+procedure AppliquerTheme;  
 begin
     // Thème clair
     jForm.SetTheme(tmLight);
@@ -2888,7 +2888,7 @@ begin
     jForm.SetTheme(tmAuto);
 end;
 
-procedure DetecterThemeSysteme;
+procedure DetecterThemeSysteme;  
 begin
     if jForm.IsDarkModeEnabled then
     begin
@@ -2907,7 +2907,7 @@ end;
 
 ```pascal
 // Simuler différentes configurations
-procedure TesterConfigurations;
+procedure TesterConfigurations;  
 begin
     {$IFDEF DEBUG}
     // Forcer une petite taille d'écran
@@ -3008,7 +3008,7 @@ type
         procedure jFAB1Click(Sender: TObject);
     end;
 
-procedure TNoteApp.jFormCreate(Sender: TObject);
+procedure TNoteApp.jFormCreate(Sender: TObject);  
 begin
     // Configuration de la Toolbar
     jToolbar1.Title := 'Mes Notes';
@@ -3029,7 +3029,7 @@ begin
     LoadNotes;
 end;
 
-procedure TNoteApp.InitDatabase;
+procedure TNoteApp.InitDatabase;  
 begin
     jSQLite1.DatabaseName := 'notes.db';
     jSQLite1.Open;
@@ -3046,7 +3046,7 @@ begin
     );
 end;
 
-procedure TNoteApp.LoadNotes;
+procedure TNoteApp.LoadNotes;  
 var
     cursor: jCursor;
 begin
@@ -3070,12 +3070,12 @@ begin
     cursor.Close;
 end;
 
-procedure TNoteApp.jFAB1Click(Sender: TObject);
+procedure TNoteApp.jFAB1Click(Sender: TObject);  
 begin
     AddNote;
 end;
 
-procedure TNoteApp.AddNote;
+procedure TNoteApp.AddNote;  
 begin
     jBottomSheet1.SetContentView('layout', 'edit_note');
     jBottomSheet1.Show;
@@ -3104,7 +3104,7 @@ type
         procedure jFormCreate(Sender: TObject);
     end;
 
-procedure TWeatherApp.jFormCreate(Sender: TObject);
+procedure TWeatherApp.jFormCreate(Sender: TObject);  
 begin
     FApiKey := 'YOUR_API_KEY';
 
@@ -3115,7 +3115,7 @@ begin
         jForm.RequestPermission('android.permission.ACCESS_FINE_LOCATION', 100);
 end;
 
-procedure TWeatherApp.LoadWeather(const city: string);
+procedure TWeatherApp.LoadWeather(const city: string);  
 var
     url: string;
 begin
@@ -3127,7 +3127,7 @@ begin
     jHttpClient1.Execute;
 end;
 
-procedure TWeatherApp.ParseWeatherData(const jsonData: string);
+procedure TWeatherApp.ParseWeatherData(const jsonData: string);  
 var
     json: TJSONObject;
     main, weather: TJSONObject;
@@ -3179,7 +3179,7 @@ type
         procedure jButton1Click(Sender: TObject);
     end;
 
-procedure TChatApp.jFormCreate(Sender: TObject);
+procedure TChatApp.jFormCreate(Sender: TObject);  
 begin
     // Récupérer le nom d'utilisateur
     FUsername := jForm.LoadPreference('username', '');
@@ -3200,13 +3200,13 @@ begin
     jRecyclerView1.ReverseLayout := True;  // Messages récents en bas
 end;
 
-procedure TChatApp.ConnectToServer;
+procedure TChatApp.ConnectToServer;  
 begin
     jWebSocket1.URL := 'wss://chat.example.com/socket';
     jWebSocket1.Connect;
 end;
 
-procedure TChatApp.jButton1Click(Sender: TObject);
+procedure TChatApp.jButton1Click(Sender: TObject);  
 begin
     if jEditText1.Text <> '' then
     begin
@@ -3215,7 +3215,7 @@ begin
     end;
 end;
 
-procedure TChatApp.SendMessage(const message: string);
+procedure TChatApp.SendMessage(const message: string);  
 var
     json: TJSONObject;
 begin
@@ -3238,7 +3238,7 @@ begin
     end;
 end;
 
-procedure TChatApp.ReceiveMessage(const sender, message: string; timestamp: TDateTime);
+procedure TChatApp.ReceiveMessage(const sender, message: string; timestamp: TDateTime);  
 begin
     // Ajouter à l'interface
     jRecyclerView1.AddMessage(sender, message, timestamp, False);  // False = message reçu
@@ -3308,18 +3308,18 @@ Avant de publier votre application sur le Play Store :
 ### Analyse des retours
 ```pascal
 // Intégrer des analytics
-procedure TrackEvent(const category, action, label: string);
+procedure TrackEvent(const category, action, label: string);  
 begin
     jAnalytics1.LogEvent(category, action, label);
 end;
 
-procedure TrackScreenView(const screenName: string);
+procedure TrackScreenView(const screenName: string);  
 begin
     jAnalytics1.SetCurrentScreen(screenName);
 end;
 
 // Crash reporting
-procedure OnCrash(const errorMessage, stackTrace: string);
+procedure OnCrash(const errorMessage, stackTrace: string);  
 begin
     jCrashReporter1.LogError(errorMessage, stackTrace);
 end;
@@ -3328,14 +3328,14 @@ end;
 ### Mises à jour
 ```pascal
 // Vérifier les mises à jour
-procedure CheckForUpdates;
+procedure CheckForUpdates;  
 begin
     jHttpClient1.URL := 'https://api.monapp.com/version';
     jHttpClient1.Method := hmGET;
     jHttpClient1.Execute;
 end;
 
-procedure OnVersionReceived(latestVersion: Integer);
+procedure OnVersionReceived(latestVersion: Integer);  
 const
     CURRENT_VERSION = 10;  // Version actuelle
 begin
@@ -3353,13 +3353,13 @@ end;
 ### Support utilisateurs
 ```pascal
 // Feedback intégré
-procedure AfficherFormulaireSupport;
+procedure AfficherFormulaireSupport;  
 begin
     jBottomSheet1.SetContentView('layout', 'support_form');
     jBottomSheet1.Show;
 end;
 
-procedure EnvoyerFeedback(const sujet, message: string);
+procedure EnvoyerFeedback(const sujet, message: string);  
 var
     json: string;
 begin

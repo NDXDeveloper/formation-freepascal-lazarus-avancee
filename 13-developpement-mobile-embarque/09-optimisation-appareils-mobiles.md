@@ -129,7 +129,7 @@ type
 
 implementation
 
-constructor TObjectPool.Create(CreateFunc: function: T; MaxSize: Integer);
+constructor TObjectPool.Create(CreateFunc: function: T; MaxSize: Integer);  
 begin
   inherited Create;
   FCreateFunc := CreateFunc;
@@ -138,7 +138,7 @@ begin
   FInUse := TList.Create(False);     // Ne possède pas les objets
 end;
 
-destructor TObjectPool.Destroy;
+destructor TObjectPool.Destroy;  
 begin
   Clear;
   FAvailable.Free;
@@ -146,7 +146,7 @@ begin
   inherited Destroy;
 end;
 
-function TObjectPool.Acquire: T;
+function TObjectPool.Acquire: T;  
 begin
   if FAvailable.Count > 0 then
   begin
@@ -163,7 +163,7 @@ begin
   FInUse.Add(Result);
 end;
 
-procedure TObjectPool.Release(Obj: T);
+procedure TObjectPool.Release(Obj: T);  
 begin
   if FInUse.Remove(Obj) >= 0 then
   begin
@@ -174,7 +174,7 @@ begin
   end;
 end;
 
-procedure TObjectPool.Clear;
+procedure TObjectPool.Clear;  
 begin
   FAvailable.Clear;
   FInUse.Clear;
@@ -201,7 +201,7 @@ type
 
   TMessagePool = specialize TObjectPool<TMessage>;
 
-function CreateMessage: TMessage;
+function CreateMessage: TMessage;  
 begin
   Result := TMessage.Create;
 end;
@@ -253,7 +253,7 @@ uses
   SysUtils;
 
 // ❌ MAUVAIS - Concaténation répétée (O(n²))
-procedure BadConcat;
+procedure BadConcat;  
 var
   result: string;
   i: Integer;
@@ -264,7 +264,7 @@ begin
 end;
 
 // ✅ BON - Utiliser TStringBuilder (O(n))
-procedure GoodConcat;
+procedure GoodConcat;  
 var
   sb: TStringBuilder;
   i: Integer;
@@ -286,7 +286,7 @@ begin
 end;
 
 // ✅ MEILLEUR - Éviter les allocations inutiles
-procedure BestApproach;
+procedure BestApproach;  
 const
   BUFFER_SIZE = 5000;
 var
@@ -338,13 +338,13 @@ type
     destructor Destroy; override;
   end;
 
-constructor TDataHolder.Create;
+constructor TDataHolder.Create;  
 begin
   inherited Create;
   FData := TStringList.Create;
 end;
 
-destructor TDataHolder.Destroy;
+destructor TDataHolder.Destroy;  
 begin
   FData.Free;  // Important : libérer les ressources
   inherited Destroy;
@@ -412,25 +412,25 @@ type
 
 implementation
 
-constructor TAsyncTask.Create;
+constructor TAsyncTask.Create;  
 begin
   inherited Create(True);  // Créer suspendu
   FreeOnTerminate := True;
 end;
 
-procedure TAsyncTask.DoProgress;
+procedure TAsyncTask.DoProgress;  
 begin
   if Assigned(FOnProgress) then
     FOnProgress(FProgress);
 end;
 
-procedure TAsyncTask.DoComplete;
+procedure TAsyncTask.DoComplete;  
 begin
   if Assigned(FOnComplete) then
     FOnComplete(FResult);
 end;
 
-procedure TAsyncTask.Execute;
+procedure TAsyncTask.Execute;  
 var
   i: Integer;
 begin
@@ -476,7 +476,7 @@ type
     procedure OnTaskComplete(Result: string);
   end;
 
-procedure TMainForm.btnStartClick(Sender: TObject);
+procedure TMainForm.btnStartClick(Sender: TObject);  
 var
   task: TAsyncTask;
 begin
@@ -489,13 +489,13 @@ begin
   task.Start;
 end;
 
-procedure TMainForm.OnTaskProgress(Progress: Integer);
+procedure TMainForm.OnTaskProgress(Progress: Integer);  
 begin
   ProgressBar.Position := Progress;
   Application.ProcessMessages;  // Garder l'UI réactive
 end;
 
-procedure TMainForm.OnTaskComplete(Result: string);
+procedure TMainForm.OnTaskComplete(Result: string);  
 begin
   lblStatus.Caption := Result;
   btnStart.Enabled := True;
@@ -530,7 +530,7 @@ var
   i: Integer;
 
 // ❌ LENT - Accès répété aux propriétés
-procedure SlowLoop;
+procedure SlowLoop;  
 var
   i: Integer;
   sum: Integer;
@@ -541,7 +541,7 @@ begin
 end;
 
 // ✅ RAPIDE - Utiliser des variables locales
-procedure FastLoop;
+procedure FastLoop;  
 var
   i, sum, len: Integer;
   localData: ^TDataArray;
@@ -555,7 +555,7 @@ begin
 end;
 
 // ✅ PLUS RAPIDE - Déroulement de boucle (loop unrolling)
-procedure FasterLoop;
+procedure FasterLoop;  
 var
   i, sum: Integer;
 begin
@@ -621,7 +621,7 @@ type
 
 implementation
 
-constructor TLazyImage.Create(const Filename: string);
+constructor TLazyImage.Create(const Filename: string);  
 begin
   inherited Create;
   FFilename := Filename;
@@ -629,14 +629,14 @@ begin
   FLoaded := False;
 end;
 
-destructor TLazyImage.Destroy;
+destructor TLazyImage.Destroy;  
 begin
   if Assigned(FBitmap) then
     FBitmap.Free;
   inherited Destroy;
 end;
 
-procedure TLazyImage.EnsureLoaded;
+procedure TLazyImage.EnsureLoaded;  
 begin
   if not FLoaded then
   begin
@@ -655,13 +655,13 @@ begin
   end;
 end;
 
-function TLazyImage.GetBitmap: TBitmap;
+function TLazyImage.GetBitmap: TBitmap;  
 begin
   EnsureLoaded;
   Result := FBitmap;
 end;
 
-procedure TLazyImage.Unload;
+procedure TLazyImage.Unload;  
 begin
   if Assigned(FBitmap) then
   begin
@@ -706,7 +706,7 @@ uses
   jni, AndroidAPI;
 {$ENDIF}
 
-procedure TPowerManager.AcquireWakeLock;
+procedure TPowerManager.AcquireWakeLock;  
 begin
   if not FWakeLockActive then
   begin
@@ -721,7 +721,7 @@ begin
   end;
 end;
 
-procedure TPowerManager.ReleaseWakeLock;
+procedure TPowerManager.ReleaseWakeLock;  
 begin
   if FWakeLockActive then
   begin
@@ -752,7 +752,7 @@ uses
 var
   powerMgr: TPowerManager;
 
-procedure DoHeavyWork;
+procedure DoHeavyWork;  
 begin
   // Acquérir le wake lock seulement pendant le travail
   powerMgr.AcquireWakeLock;
@@ -815,13 +815,13 @@ type
 
 implementation
 
-constructor TLocationManager.Create;
+constructor TLocationManager.Create;  
 begin
   inherited Create;
   FActive := False;
 end;
 
-procedure TLocationManager.StartUpdates(Accuracy: TLocationAccuracy; IntervalMs: Integer);
+procedure TLocationManager.StartUpdates(Accuracy: TLocationAccuracy; IntervalMs: Integer);  
 begin
   FAccuracy := Accuracy;
   FUpdateInterval := IntervalMs;
@@ -841,7 +841,7 @@ begin
   FActive := True;
 end;
 
-procedure TLocationManager.StopUpdates;
+procedure TLocationManager.StopUpdates;  
 begin
   if FActive then
   begin
@@ -870,13 +870,13 @@ var
   locMgr: TLocationManager;
   lastUpdateTime: TDateTime;
 
-procedure OnLocationUpdate(Lat, Lon: Double);
+procedure OnLocationUpdate(Lat, Lon: Double);  
 begin
   WriteLn(Format('Position: %.6f, %.6f', [Lat, Lon]));
   lastUpdateTime := Now;
 end;
 
-procedure OptimizedTracking;
+procedure OptimizedTracking;  
 begin
   locMgr := TLocationManager.Create;
   try
@@ -951,7 +951,7 @@ type
 
 implementation
 
-constructor TBatchProcessor.Create(BatchSize: Integer; MaxWaitMs: Integer);
+constructor TBatchProcessor.Create(BatchSize: Integer; MaxWaitMs: Integer);  
 begin
   inherited Create;
   FQueue := TBatchList.Create;
@@ -960,14 +960,14 @@ begin
   FLastProcessTime := Now;
 end;
 
-destructor TBatchProcessor.Destroy;
+destructor TBatchProcessor.Destroy;  
 begin
   Flush;  // Traiter les éléments restants
   FQueue.Free;
   inherited Destroy;
 end;
 
-procedure TBatchProcessor.ProcessBatch;
+procedure TBatchProcessor.ProcessBatch;  
 var
   i: Integer;
   item: TBatchItem;
@@ -988,7 +988,7 @@ begin
   FLastProcessTime := Now;
 end;
 
-procedure TBatchProcessor.Add(const Data: string);
+procedure TBatchProcessor.Add(const Data: string);  
 var
   item: TBatchItem;
   waitTime: Integer;
@@ -1010,7 +1010,7 @@ begin
     ProcessBatch;
 end;
 
-procedure TBatchProcessor.Flush;
+procedure TBatchProcessor.Flush;  
 begin
   ProcessBatch;
 end;
@@ -1084,7 +1084,7 @@ type
 
 implementation
 
-class function TUIScaler.GetScreenDensity: TScreenDensity;
+class function TUIScaler.GetScreenDensity: TScreenDensity;  
 var
   dpi: Integer;
 begin
@@ -1104,7 +1104,7 @@ begin
     Result := sdExtraHigh;
 end;
 
-class function TUIScaler.GetScaleFactor: Single;
+class function TUIScaler.GetScaleFactor: Single;  
 begin
   case GetScreenDensity of
     sdLow:       Result := 0.75;
@@ -1114,7 +1114,7 @@ begin
   end;
 end;
 
-class procedure TUIScaler.ScaleControl(Control: TControl);
+class procedure TUIScaler.ScaleControl(Control: TControl);  
 var
   factor: Single;
 begin
@@ -1132,7 +1132,7 @@ begin
   end;
 end;
 
-class procedure TUIScaler.ScaleForm(Form: TForm);
+class procedure TUIScaler.ScaleForm(Form: TForm);  
 var
   i: Integer;
 begin
@@ -1145,7 +1145,7 @@ begin
     ScaleControl(Form.Controls[i]);
 end;
 
-class function TUIScaler.ScaleValue(Value: Integer): Integer;
+class function TUIScaler.ScaleValue(Value: Integer): Integer;  
 begin
   Result := Round(Value * GetScaleFactor);
 end;
@@ -1171,7 +1171,7 @@ type
     procedure FormCreate(Sender: TObject);
   end;
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   // Adapter automatiquement l'interface selon l'écran
   TUIScaler.ScaleForm(Self);
@@ -1235,7 +1235,7 @@ type
 
 implementation
 
-constructor TVirtualListBox.Create(AOwner: TComponent);
+constructor TVirtualListBox.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FItemCount := 0;
@@ -1244,7 +1244,7 @@ begin
   CalculateVisibleItems;
 end;
 
-procedure TVirtualListBox.CalculateVisibleItems;
+procedure TVirtualListBox.CalculateVisibleItems;  
 begin
   if FItemHeight > 0 then
     FVisibleItems := (Height div FItemHeight) + 2  // +2 pour le défilement fluide
@@ -1252,7 +1252,7 @@ begin
     FVisibleItems := 0;
 end;
 
-procedure TVirtualListBox.Paint;
+procedure TVirtualListBox.Paint;  
 var
   i, y: Integer;
   itemIndex: Integer;
@@ -1296,7 +1296,7 @@ begin
   end;
 end;
 
-procedure TVirtualListBox.Resize;
+procedure TVirtualListBox.Resize;  
 begin
   inherited Resize;
   CalculateVisibleItems;
@@ -1314,7 +1314,7 @@ begin
     TopIndex := TopIndex + 3; // Défiler vers le bas
 end;
 
-procedure TVirtualListBox.SetItemCount(Value: Integer);
+procedure TVirtualListBox.SetItemCount(Value: Integer);  
 begin
   if FItemCount <> Value then
   begin
@@ -1324,7 +1324,7 @@ begin
   end;
 end;
 
-procedure TVirtualListBox.SetItemHeight(Value: Integer);
+procedure TVirtualListBox.SetItemHeight(Value: Integer);  
 begin
   if FItemHeight <> Value then
   begin
@@ -1334,7 +1334,7 @@ begin
   end;
 end;
 
-procedure TVirtualListBox.SetTopIndex(Value: Integer);
+procedure TVirtualListBox.SetTopIndex(Value: Integer);  
 begin
   // Limiter le défilement
   if Value < 0 then
@@ -1352,7 +1352,7 @@ begin
   end;
 end;
 
-procedure TVirtualListBox.UpdateScrollBar;
+procedure TVirtualListBox.UpdateScrollBar;  
 begin
   // Configurer la barre de défilement
   // À implémenter selon les besoins
@@ -1379,7 +1379,7 @@ type
     procedure GetItemText(Index: Integer; var Text: string);
   end;
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   virtualList := TVirtualListBox.Create(Self);
   virtualList.Parent := Self;
@@ -1390,7 +1390,7 @@ begin
   virtualList.ItemCount := 10000;
 end;
 
-procedure TMainForm.GetItemText(Index: Integer; var Text: string);
+procedure TMainForm.GetItemText(Index: Integer; var Text: string);  
 begin
   // Générer le texte dynamiquement (pas de stockage)
   Text := Format('Élément #%d - Contenu généré à la demande', [Index]);
@@ -1463,9 +1463,9 @@ type
   end;
 
 // Fonctions d'easing
-function EaseLinear(t: Single): Single;
-function EaseInQuad(t: Single): Single;
-function EaseOutQuad(t: Single): Single;
+function EaseLinear(t: Single): Single;  
+function EaseInQuad(t: Single): Single;  
+function EaseOutQuad(t: Single): Single;  
 function EaseInOutQuad(t: Single): Single;
 
 implementation
@@ -1474,22 +1474,22 @@ uses
   Math, DateUtils;
 
 // Fonctions d'easing
-function EaseLinear(t: Single): Single;
+function EaseLinear(t: Single): Single;  
 begin
   Result := t;
 end;
 
-function EaseInQuad(t: Single): Single;
+function EaseInQuad(t: Single): Single;  
 begin
   Result := t * t;
 end;
 
-function EaseOutQuad(t: Single): Single;
+function EaseOutQuad(t: Single): Single;  
 begin
   Result := t * (2 - t);
 end;
 
-function EaseInOutQuad(t: Single): Single;
+function EaseInOutQuad(t: Single): Single;  
 begin
   if t < 0.5 then
     Result := 2 * t * t
@@ -1499,7 +1499,7 @@ end;
 
 { TPropertyAnimation }
 
-constructor TPropertyAnimation.Create(AOwner: TComponent);
+constructor TPropertyAnimation.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FTimer := TTimer.Create(Self);
@@ -1510,13 +1510,13 @@ begin
   FEasing := @EaseOutQuad;  // Easing par défaut
 end;
 
-destructor TPropertyAnimation.Destroy;
+destructor TPropertyAnimation.Destroy;  
 begin
   Stop;
   inherited Destroy;
 end;
 
-procedure TPropertyAnimation.Start(FromValue, ToValue, DurationMs: Integer);
+procedure TPropertyAnimation.Start(FromValue, ToValue, DurationMs: Integer);  
 begin
   FStartValue := FromValue;
   FEndValue := ToValue;
@@ -1526,13 +1526,13 @@ begin
   FTimer.Enabled := True;
 end;
 
-procedure TPropertyAnimation.Stop;
+procedure TPropertyAnimation.Stop;  
 begin
   FRunning := False;
   FTimer.Enabled := False;
 end;
 
-procedure TPropertyAnimation.TimerTick(Sender: TObject);
+procedure TPropertyAnimation.TimerTick(Sender: TObject);  
 var
   elapsed: Integer;
   progress: Single;
@@ -1569,7 +1569,7 @@ end;
 
 { TPositionAnimation }
 
-procedure TPositionAnimation.UpdateProperty(Value: Integer);
+procedure TPositionAnimation.UpdateProperty(Value: Integer);  
 begin
   if not Assigned(FControl) then Exit;
 
@@ -1581,7 +1581,7 @@ end;
 
 { TOpacityAnimation }
 
-procedure TOpacityAnimation.UpdateProperty(Value: Integer);
+procedure TOpacityAnimation.UpdateProperty(Value: Integer);  
 begin
   if not Assigned(FControl) then Exit;
 
@@ -1613,7 +1613,7 @@ type
     animation: TPositionAnimation;
   end;
 
-procedure TMainForm.btnAnimateClick(Sender: TObject);
+procedure TMainForm.btnAnimateClick(Sender: TObject);  
 begin
   if not Assigned(animation) then
   begin
@@ -1627,7 +1627,7 @@ begin
   animation.Start(pnlBox.Left, 300, 500);
 end;
 
-procedure TMainForm.AnimationComplete(Sender: TObject);
+procedure TMainForm.AnimationComplete(Sender: TObject);  
 begin
   ShowMessage('Animation terminée!');
 end;
@@ -1689,20 +1689,20 @@ implementation
 uses
   DateUtils;
 
-constructor TNetworkCache.Create(MaxSize: Integer);
+constructor TNetworkCache.Create(MaxSize: Integer);  
 begin
   inherited Create;
   FCache := TCacheMap.Create;
   FMaxSize := MaxSize;
 end;
 
-destructor TNetworkCache.Destroy;
+destructor TNetworkCache.Destroy;  
 begin
   FCache.Free;
   inherited Destroy;
 end;
 
-function TNetworkCache.IsExpired(const Entry: TCacheEntry): Boolean;
+function TNetworkCache.IsExpired(const Entry: TCacheEntry): Boolean;  
 var
   elapsed: Integer;
 begin
@@ -1710,7 +1710,7 @@ begin
   Result := elapsed >= Entry.ExpiresIn;
 end;
 
-procedure TNetworkCache.Cleanup;
+procedure TNetworkCache.Cleanup;  
 var
   keysToRemove: TStringList;
   key: string;
@@ -1741,7 +1741,7 @@ begin
   end;
 end;
 
-procedure TNetworkCache.Put(const Key, Data: string; ExpiresInSeconds: Integer);
+procedure TNetworkCache.Put(const Key, Data: string; ExpiresInSeconds: Integer);  
 var
   entry: TCacheEntry;
 begin
@@ -1756,7 +1756,7 @@ begin
     Cleanup;
 end;
 
-function TNetworkCache.Get(const Key: string; out Data: string): Boolean;
+function TNetworkCache.Get(const Key: string; out Data: string): Boolean;  
 var
   entry: TCacheEntry;
 begin
@@ -1777,17 +1777,17 @@ begin
   end;
 end;
 
-procedure TNetworkCache.Clear;
+procedure TNetworkCache.Clear;  
 begin
   FCache.Clear;
 end;
 
-procedure TNetworkCache.Remove(const Key: string);
+procedure TNetworkCache.Remove(const Key: string);  
 begin
   FCache.Remove(Key);
 end;
 
-function TNetworkCache.GetCount: Integer;
+function TNetworkCache.GetCount: Integer;  
 begin
   Result := FCache.Count;
 end;
@@ -1827,7 +1827,7 @@ type
 
 implementation
 
-constructor THTTPManager.Create;
+constructor THTTPManager.Create;  
 begin
   inherited Create;
   FClient := TFPHTTPClient.Create(nil);
@@ -1839,14 +1839,14 @@ begin
   FClient.IOTimeout := FTimeout;
 end;
 
-destructor THTTPManager.Destroy;
+destructor THTTPManager.Destroy;  
 begin
   FClient.Free;
   FCache.Free;
   inherited Destroy;
 end;
 
-function THTTPManager.Get(const URL: string; UseCache: Boolean): string;
+function THTTPManager.Get(const URL: string; UseCache: Boolean): string;  
 var
   cachedData: string;
 begin
@@ -1880,7 +1880,7 @@ begin
   end;
 end;
 
-function THTTPManager.Post(const URL, Data: string): string;
+function THTTPManager.Post(const URL, Data: string): string;  
 var
   stream: TStringStream;
 begin
@@ -1947,7 +1947,7 @@ uses
 const
   QUEUE_FILE = 'sync_queue.json';
 
-constructor TDeferredSyncManager.Create;
+constructor TDeferredSyncManager.Create;  
 begin
   inherited Create;
   FQueue := TSyncQueue.Create;
@@ -1957,14 +1957,14 @@ begin
   LoadQueueFromDisk;
 end;
 
-destructor TDeferredSyncManager.Destroy;
+destructor TDeferredSyncManager.Destroy;  
 begin
   SaveQueueToDisk;
   FQueue.Free;
   inherited Destroy;
 end;
 
-procedure TDeferredSyncManager.Add(const ID, Data: string);
+procedure TDeferredSyncManager.Add(const ID, Data: string);  
 var
   item: TSyncItem;
 begin
@@ -1979,7 +1979,7 @@ begin
   WriteLn(Format('Élément ajouté à la file : %s (Total: %d)', [ID, FQueue.Count]));
 end;
 
-procedure TDeferredSyncManager.ProcessQueue;
+procedure TDeferredSyncManager.ProcessQueue;  
 var
   i: Integer;
   item: TSyncItem;
@@ -2034,13 +2034,13 @@ begin
   end;
 end;
 
-procedure TDeferredSyncManager.Clear;
+procedure TDeferredSyncManager.Clear;  
 begin
   FQueue.Clear;
   SaveQueueToDisk;
 end;
 
-function TDeferredSyncManager.SendItem(const Item: TSyncItem): Boolean;
+function TDeferredSyncManager.SendItem(const Item: TSyncItem): Boolean;  
 begin
   // Simuler l'envoi réseau
   // Dans une vraie application, utiliser THTTPManager
@@ -2052,7 +2052,7 @@ begin
   end;
 end;
 
-procedure TDeferredSyncManager.SaveQueueToDisk;
+procedure TDeferredSyncManager.SaveQueueToDisk;  
 var
   jsonArray: TJSONArray;
   jsonItem: TJSONObject;
@@ -2082,7 +2082,7 @@ begin
   end;
 end;
 
-procedure TDeferredSyncManager.LoadQueueFromDisk;
+procedure TDeferredSyncManager.LoadQueueFromDisk;  
 var
   jsonData: TJSONData;
   jsonArray: TJSONArray;
@@ -2133,7 +2133,7 @@ begin
   end;
 end;
 
-function TDeferredSyncManager.GetQueueSize: Integer;
+function TDeferredSyncManager.GetQueueSize: Integer;  
 begin
   Result := FQueue.Count;
 end;
@@ -2212,7 +2212,7 @@ implementation
 uses
   zstream;
 
-class function TCompressionManager.Compress(const Data: string): TBytes;
+class function TCompressionManager.Compress(const Data: string): TBytes;  
 var
   input: TStringStream;
   output: TBytesStream;
@@ -2236,7 +2236,7 @@ begin
   end;
 end;
 
-class function TCompressionManager.Decompress(const Data: TBytes): string;
+class function TCompressionManager.Decompress(const Data: TBytes): string;  
 var
   input: TBytesStream;
   output: TStringStream;
@@ -2259,7 +2259,7 @@ begin
   end;
 end;
 
-class procedure TCompressionManager.CompressFile(const SourceFile, DestFile: string);
+class procedure TCompressionManager.CompressFile(const SourceFile, DestFile: string);  
 var
   input, output: TFileStream;
   compressor: TCompressionStream;
@@ -2279,7 +2279,7 @@ begin
   end;
 end;
 
-class procedure TCompressionManager.DecompressFile(const SourceFile, DestFile: string);
+class procedure TCompressionManager.DecompressFile(const SourceFile, DestFile: string);  
 var
   input, output: TFileStream;
   decompressor: TDecompressionStream;
@@ -2404,7 +2404,7 @@ type
 
 implementation
 
-constructor TDatabaseManager.Create(const DatabaseFile: string);
+constructor TDatabaseManager.Create(const DatabaseFile: string);  
 begin
   inherited Create;
 
@@ -2420,7 +2420,7 @@ begin
   ConfigureForMobile;
 end;
 
-destructor TDatabaseManager.Destroy;
+destructor TDatabaseManager.Destroy;  
 begin
   if FConnection.Connected then
     FConnection.Close;
@@ -2431,7 +2431,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TDatabaseManager.ConfigureForMobile;
+procedure TDatabaseManager.ConfigureForMobile;  
 begin
   // Optimisations SQLite pour mobile
 
@@ -2457,29 +2457,29 @@ begin
   ExecuteSQL('PRAGMA temp_store = MEMORY');
 end;
 
-procedure TDatabaseManager.BeginBatch;
+procedure TDatabaseManager.BeginBatch;  
 begin
   FTransaction.StartTransaction;
 end;
 
-procedure TDatabaseManager.EndBatch;
+procedure TDatabaseManager.EndBatch;  
 begin
   FTransaction.Commit;
 end;
 
-procedure TDatabaseManager.Vacuum;
+procedure TDatabaseManager.Vacuum;  
 begin
   // Compacter la base de données (récupérer l'espace)
   ExecuteSQL('VACUUM');
 end;
 
-procedure TDatabaseManager.Analyze;
+procedure TDatabaseManager.Analyze;  
 begin
   // Mettre à jour les statistiques pour l'optimiseur
   ExecuteSQL('ANALYZE');
 end;
 
-function TDatabaseManager.ExecuteQuery(const SQL: string): TSQLQuery;
+function TDatabaseManager.ExecuteQuery(const SQL: string): TSQLQuery;  
 begin
   Result := TSQLQuery.Create(nil);
   Result.Database := FConnection;
@@ -2487,7 +2487,7 @@ begin
   Result.Open;
 end;
 
-procedure TDatabaseManager.ExecuteSQL(const SQL: string);
+procedure TDatabaseManager.ExecuteSQL(const SQL: string);  
 var
   query: TSQLQuery;
 begin
@@ -2629,20 +2629,20 @@ implementation
 uses
   DateUtils;
 
-constructor TPerformanceMonitor.Create;
+constructor TPerformanceMonitor.Create;  
 begin
   inherited Create;
   FMetrics := TMetricsList.Create;
   FMonitoring := False;
 end;
 
-destructor TPerformanceMonitor.Destroy;
+destructor TPerformanceMonitor.Destroy;  
 begin
   FMetrics.Free;
   inherited Destroy;
 end;
 
-function TPerformanceMonitor.GetMemoryUsage: Int64;
+function TPerformanceMonitor.GetMemoryUsage: Int64;  
 begin
   {$IFDEF WINDOWS}
   Result := GetHeapStatus.TotalAllocated;
@@ -2652,7 +2652,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TPerformanceMonitor.StartMeasure(const MetricName: string);
+procedure TPerformanceMonitor.StartMeasure(const MetricName: string);  
 begin
   if FMonitoring then
     raise Exception.Create('Une mesure est déjà en cours');
@@ -2663,7 +2663,7 @@ begin
   FMonitoring := True;
 end;
 
-procedure TPerformanceMonitor.StopMeasure;
+procedure TPerformanceMonitor.StopMeasure;  
 begin
   if not FMonitoring then
     raise Exception.Create('Aucune mesure en cours');
@@ -2675,7 +2675,7 @@ begin
   FMonitoring := False;
 end;
 
-procedure TPerformanceMonitor.PrintReport;
+procedure TPerformanceMonitor.PrintReport;  
 var
   metric: TPerformanceMetric;
   totalDuration: Int64;
@@ -2705,7 +2705,7 @@ begin
   WriteLn('═══════════════════════════════════════════════════');
 end;
 
-procedure TPerformanceMonitor.SaveReport(const Filename: string);
+procedure TPerformanceMonitor.SaveReport(const Filename: string);  
 var
   report: TStringList;
   metric: TPerformanceMetric;
@@ -2731,7 +2731,7 @@ begin
   end;
 end;
 
-procedure TPerformanceMonitor.Clear;
+procedure TPerformanceMonitor.Clear;  
 begin
   FMetrics.Clear;
 end;
@@ -2754,7 +2754,7 @@ var
   i: Integer;
   data: array[0..9999] of Integer;
 
-procedure HeavyOperation;
+procedure HeavyOperation;  
 var
   j, k: Integer;
 begin
@@ -2893,19 +2893,19 @@ implementation
 class var
   FreeOnTerminate: Boolean = True;
 
-constructor TAppManager.Create;
+constructor TAppManager.Create;  
 begin
   inherited Create;
 end;
 
-class function TAppManager.Instance: TAppManager;
+class function TAppManager.Instance: TAppManager;  
 begin
   if not Assigned(FInstance) then
     FInstance := TAppManager.Create;
   Result := FInstance;
 end;
 
-class procedure TAppManager.FreeInstance;
+class procedure TAppManager.FreeInstance;  
 begin
   if Assigned(FInstance) then
   begin
@@ -2914,42 +2914,42 @@ begin
   end;
 end;
 
-procedure TAppManager.Initialize;
+procedure TAppManager.Initialize;  
 begin
   WriteLn('Application initialisée');
 end;
 
-procedure TAppManager.Shutdown;
+procedure TAppManager.Shutdown;  
 begin
   WriteLn('Application arrêtée');
 end;
 
 { TMobileEventManager }
 
-constructor TMobileEventManager.Create;
+constructor TMobileEventManager.Create;  
 begin
   inherited Create;
   FObservers := TInterfaceList.Create;
 end;
 
-destructor TMobileEventManager.Destroy;
+destructor TMobileEventManager.Destroy;  
 begin
   FObservers.Free;
   inherited Destroy;
 end;
 
-procedure TMobileEventManager.RegisterObserver(Observer: IMobileEventObserver);
+procedure TMobileEventManager.RegisterObserver(Observer: IMobileEventObserver);  
 begin
   if FObservers.IndexOf(Observer) < 0 then
     FObservers.Add(Observer);
 end;
 
-procedure TMobileEventManager.UnregisterObserver(Observer: IMobileEventObserver);
+procedure TMobileEventManager.UnregisterObserver(Observer: IMobileEventObserver);  
 begin
   FObservers.Remove(Observer);
 end;
 
-procedure TMobileEventManager.NotifyEvent(Event: TMobileEvent);
+procedure TMobileEventManager.NotifyEvent(Event: TMobileEvent);  
 var
   i: Integer;
   observer: IMobileEventObserver;
@@ -2974,7 +2974,7 @@ program PerformanceTests;
 uses
   SysUtils, Classes, PerformanceMonitor;
 
-procedure TestStringConcatenation(monitor: TPerformanceMonitor);
+procedure TestStringConcatenation(monitor: TPerformanceMonitor);  
 var
   i: Integer;
   result: string;
@@ -2997,7 +2997,7 @@ begin
   monitor.StopMeasure;
 end;
 
-procedure TestListOperations(monitor: TPerformanceMonitor);
+procedure TestListOperations(monitor: TPerformanceMonitor);  
 var
   list: TStringList;
   i: Integer;

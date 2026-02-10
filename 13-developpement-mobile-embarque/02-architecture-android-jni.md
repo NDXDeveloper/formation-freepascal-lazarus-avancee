@@ -326,7 +326,7 @@ Exemple :
 
 **Côté Pascal** : Appel d'une méthode Java
 ```pascal
-procedure AppelerMethodeJava;
+procedure AppelerMethodeJava;  
 var
     jcls: jclass;
     jmethod: jmethodID;
@@ -692,7 +692,7 @@ TAndroidModule1 = class(jForm)
     procedure jButton1Click(Sender: TObject);
 end;
 
-procedure TAndroidModule1.jButton1Click(Sender: TObject);
+procedure TAndroidModule1.jButton1Click(Sender: TObject);  
 begin
     ShowMessage('Bouton cliqué !');
 end;
@@ -735,7 +735,7 @@ jButton1Click() en Pascal est déclenché
 jTextView1.Text := 'Nouveau texte';
 
 // En coulisse, LAMW génère :
-procedure jTextView_SetText(env: PJNIEnv; obj: jobject; text: jstring); cdecl;
+procedure jTextView_SetText(env: PJNIEnv; obj: jobject; text: jstring); cdecl;  
 begin
     // Appel de la méthode Java setText()
     (*env)->CallVoidMethod(env, obj, methodID_setText, text);
@@ -776,7 +776,7 @@ end;
 **Solution** : Attacher le thread à la JVM
 
 ```pascal
-procedure ThreadWorker;
+procedure ThreadWorker;  
 var
     env: PJNIEnv;
     vm: PJavaVM;
@@ -806,7 +806,7 @@ end;
 **Vérifier et gérer les exceptions** :
 
 ```pascal
-procedure AppelerMethodePotentiellementDangereuse(env: PJNIEnv);
+procedure AppelerMethodePotentiellementDangereuse(env: PJNIEnv);  
 var
     exception: jthrowable;
 begin
@@ -846,7 +846,7 @@ var
     cachedClassRef: jclass;
 
 // Initialisation (une seule fois)
-procedure InitializeJNICache(env: PJNIEnv);
+procedure InitializeJNICache(env: PJNIEnv);  
 var
     localClass: jclass;
 begin
@@ -867,7 +867,7 @@ begin
 end;
 
 // Utilisation ultérieure (rapide)
-procedure AppelerMethode(env: PJNIEnv; obj: jobject);
+procedure AppelerMethode(env: PJNIEnv; obj: jobject);  
 begin
     (*env)->CallVoidMethod(env, obj, cachedMethodID);
 end;
@@ -877,7 +877,7 @@ end;
 
 **Inefficace** :
 ```pascal
-for i := 1 to 1000 do
+for i := 1 to 1000 do  
 begin
     jstr := ConvertToJString(env, 'Texte');  // Conversion répétée
     (*env)->CallVoidMethod(env, obj, methodID, jstr);
@@ -887,7 +887,7 @@ end;
 
 **Efficace** :
 ```pascal
-jstr := ConvertToJString(env, 'Texte');  // Conversion unique
+jstr := ConvertToJString(env, 'Texte');  // Conversion unique  
 try
     for i := 1 to 1000 do
         (*env)->CallVoidMethod(env, obj, methodID, jstr);
@@ -904,7 +904,7 @@ end;
 
 ```pascal
 // Inefficace : appels multiples
-procedure TransfererDonneesLent(env: PJNIEnv; obj: jobject; data: array of Integer);
+procedure TransfererDonneesLent(env: PJNIEnv; obj: jobject; data: array of Integer);  
 var
     i: Integer;
 begin
@@ -913,7 +913,7 @@ begin
 end;
 
 // Efficace : un seul appel avec tableau
-procedure TransfererDonneesRapide(env: PJNIEnv; obj: jobject; data: array of Integer);
+procedure TransfererDonneesRapide(env: PJNIEnv; obj: jobject; data: array of Integer);  
 var
     jarray: jintArray;
     i: Integer;
@@ -940,7 +940,7 @@ end;
 
 **Mauvais code** :
 ```pascal
-procedure TraiterBeaucoupObjets(env: PJNIEnv);
+procedure TraiterBeaucoupObjets(env: PJNIEnv);  
 var
     i: Integer;
     obj: jobject;
@@ -958,7 +958,7 @@ end;
 
 **Option 1 : Libérer manuellement**
 ```pascal
-procedure TraiterBeaucoupObjets(env: PJNIEnv);
+procedure TraiterBeaucoupObjets(env: PJNIEnv);  
 var
     i: Integer;
     obj: jobject;
@@ -977,7 +977,7 @@ end;
 
 **Option 2 : Frame local (plus élégant)**
 ```pascal
-procedure TraiterBeaucoupObjets(env: PJNIEnv);
+procedure TraiterBeaucoupObjets(env: PJNIEnv);  
 var
     i: Integer;
     obj: jobject;
@@ -1010,14 +1010,14 @@ end;
 
 **Dans le code Pascal** :
 ```pascal
-procedure LogJNI(const tag, message: string);
+procedure LogJNI(const tag, message: string);  
 begin
     {$IFDEF DEBUG}
     __android_log_write(ANDROID_LOG_DEBUG, PChar(tag), PChar(message));
     {$ENDIF}
 end;
 
-function MaFonctionJNI(env: PJNIEnv; this: jobject): jint; cdecl;
+function MaFonctionJNI(env: PJNIEnv; this: jobject): jint; cdecl;  
 begin
     LogJNI('JNI', 'MaFonctionJNI appelée');
 
@@ -1042,7 +1042,7 @@ adb logcat | grep "JNI"
 adb shell setprop debug.checkjni 1
 
 # Redémarrer l'app
-adb shell am force-stop com.example.monapp
+adb shell am force-stop com.example.monapp  
 adb shell am start -n com.example.monapp/.MainActivity
 ```
 
@@ -1096,7 +1096,7 @@ type
         function ToString: string;
     end;
 
-constructor TJStringWrapper.Create(AEnv: PJNIEnv; const AString: string);
+constructor TJStringWrapper.Create(AEnv: PJNIEnv; const AString: string);  
 begin
     inherited Create;
     FEnv := AEnv;
@@ -1104,7 +1104,7 @@ begin
     FNativeString := nil;
 end;
 
-destructor TJStringWrapper.Destroy;
+destructor TJStringWrapper.Destroy;  
 begin
     if Assigned(FNativeString) then
         (*FEnv)->ReleaseStringUTFChars(FEnv, FJString, FNativeString);
@@ -1113,7 +1113,7 @@ begin
     inherited;
 end;
 
-function TJStringWrapper.ToString: string;
+function TJStringWrapper.ToString: string;  
 begin
     if not Assigned(FNativeString) then
         FNativeString := (*FEnv)->GetStringUTFChars(FEnv, FJString, nil);
@@ -1121,7 +1121,7 @@ begin
 end;
 
 // Utilisation
-procedure ExempleUtilisation(env: PJNIEnv);
+procedure ExempleUtilisation(env: PJNIEnv);  
 var
     jstr: TJStringWrapper;
 begin
@@ -1160,12 +1160,12 @@ type
         property MainActivity: jobject read FMainActivity;
     end;
 
-class function TAppController.GetInstance: TAppController;
+class function TAppController.GetInstance: TAppController;  
 begin
     Result := FInstance;
 end;
 
-constructor TAppController.Create(AEnv: PJNIEnv; AActivity: jobject);
+constructor TAppController.Create(AEnv: PJNIEnv; AActivity: jobject);  
 begin
     inherited Create;
     FEnv := AEnv;
@@ -1173,7 +1173,7 @@ begin
     FInstance := Self;
 end;
 
-destructor TAppController.Destroy;
+destructor TAppController.Destroy;  
 begin
     if Assigned(FMainActivity) then
         (*FEnv)->DeleteGlobalRef(FEnv, FMainActivity);
@@ -1181,7 +1181,7 @@ begin
     inherited;
 end;
 
-procedure TAppController.ShowToast(const Message: string);
+procedure TAppController.ShowToast(const Message: string);  
 var
     jcls: jclass;
     jmethod: jmethodID;
@@ -1200,7 +1200,7 @@ begin
 end;
 
 // Utilisation depuis n'importe où dans le code Pascal
-procedure MaFonction;
+procedure MaFonction;  
 begin
     TAppController.Instance.ShowToast('Opération terminée !');
 end;
@@ -1272,7 +1272,7 @@ begin
     (*env)->DeleteLocalRef(env, jcls);
 end;
 
-procedure CallSuccess(var cb: TOperationCallback; const result: string);
+procedure CallSuccess(var cb: TOperationCallback; const result: string);  
 var
     jstr: jstring;
 begin
@@ -1285,7 +1285,7 @@ begin
     end;
 end;
 
-procedure CallError(var cb: TOperationCallback; const error: string);
+procedure CallError(var cb: TOperationCallback; const error: string);  
 var
     jstr: jstring;
 begin
@@ -1298,14 +1298,14 @@ begin
     end;
 end;
 
-procedure FreeCallback(var cb: TOperationCallback);
+procedure FreeCallback(var cb: TOperationCallback);  
 begin
     if Assigned(cb.callback) then
         (*cb.env)->DeleteGlobalRef(cb.env, cb.callback);
 end;
 
 // Thread worker
-procedure WorkerThread(data: Pointer);
+procedure WorkerThread(data: Pointer);  
 var
     cb: TOperationCallback;
     vm: PJavaVM;
@@ -1382,14 +1382,14 @@ type
         procedure Release(AConnection: TJNIConnection);
     end;
 
-constructor TJNIConnectionPool.Create(AMaxSize: Integer);
+constructor TJNIConnectionPool.Create(AMaxSize: Integer);  
 begin
     inherited Create;
     FPool := TThreadList<TJNIConnection>.Create;
     FMaxSize := AMaxSize;
 end;
 
-destructor TJNIConnectionPool.Destroy;
+destructor TJNIConnectionPool.Destroy;  
 var
     LockedList: TList<TJNIConnection>;
     i: Integer;
@@ -1425,7 +1425,7 @@ begin
     end;
 end;
 
-procedure TJNIConnectionPool.Release(AConnection: TJNIConnection);
+procedure TJNIConnectionPool.Release(AConnection: TJNIConnection);  
 var
     LockedList: TList<TJNIConnection>;
 begin
@@ -1444,12 +1444,12 @@ end;
 var
     Pool: TJNIConnectionPool;
 
-procedure InitPool;
+procedure InitPool;  
 begin
     Pool := TJNIConnectionPool.Create(10);
 end;
 
-procedure UtiliserPool(env: PJNIEnv);
+procedure UtiliserPool(env: PJNIEnv);  
 var
     conn: TJNIConnection;
 begin
@@ -1690,7 +1690,7 @@ begin
 end;
 
 // Utilisation
-procedure ExemplePerformance(env: PJNIEnv);
+procedure ExemplePerformance(env: PJNIEnv);  
 var
     temps: Int64;
 begin
@@ -1883,13 +1883,13 @@ type
 var
     PerfMonitor: TPerformanceMonitor;
 
-constructor TPerformanceMonitor.Create;
+constructor TPerformanceMonitor.Create;  
 begin
     inherited;
     FMeasurements := TDictionary<string, TList<Int64>>.Create;
 end;
 
-procedure TPerformanceMonitor.StartMeasure(const AName: string);
+procedure TPerformanceMonitor.StartMeasure(const AName: string);  
 begin
     if not FMeasurements.ContainsKey(AName) then
         FMeasurements.Add(AName, TList<Int64>.Create);
@@ -1897,7 +1897,7 @@ begin
     FMeasurements[AName].Add(-GetTickCount64); // Négatif = début
 end;
 
-procedure TPerformanceMonitor.StopMeasure(const AName: string);
+procedure TPerformanceMonitor.StopMeasure(const AName: string);  
 var
     list: TList<Int64>;
     lastIndex: Integer;
@@ -1910,7 +1910,7 @@ begin
     end;
 end;
 
-procedure TPerformanceMonitor.PrintStats;
+procedure TPerformanceMonitor.PrintStats;  
 var
     pair: TPair<string, TList<Int64>>;
     time: Int64;
@@ -1945,7 +1945,7 @@ begin
 end;
 
 // Utilisation
-procedure MonFonctionJNI(env: PJNIEnv);
+procedure MonFonctionJNI(env: PJNIEnv);  
 begin
     PerfMonitor.StartMeasure('MonFonctionJNI');
     try
@@ -1957,7 +1957,7 @@ begin
 end;
 
 // À l'arrêt de l'application
-procedure OnApplicationExit;
+procedure OnApplicationExit;  
 begin
     PerfMonitor.PrintStats;
     PerfMonitor.Free;
@@ -2078,7 +2078,7 @@ end;
 ### Gestion sécurisée des exceptions
 
 ```pascal
-procedure SafeJNICall(env: PJNIEnv; operation: TProc);
+procedure SafeJNICall(env: PJNIEnv; operation: TProc);  
 var
     exception: jthrowable;
     jcls: jclass;
@@ -2125,7 +2125,7 @@ begin
 end;
 
 // Utilisation
-procedure MyJNIFunction(env: PJNIEnv; this: jobject); cdecl;
+procedure MyJNIFunction(env: PJNIEnv; this: jobject); cdecl;  
 begin
     SafeJNICall(env,
         procedure
@@ -2170,7 +2170,7 @@ begin
 end;
 
 // Utilisation
-procedure MyFunction(env: PJNIEnv; value: jint; name: jstring);
+procedure MyFunction(env: PJNIEnv; value: jint; name: jstring);  
 begin
     LogJNICallWithParams(env, 'MyFunction', [value, 'name_param']);
     // ... reste du code
@@ -2180,7 +2180,7 @@ end;
 #### 2. Assertions JNI
 
 ```pascal
-procedure AssertJNI(condition: Boolean; const message: string);
+procedure AssertJNI(condition: Boolean; const message: string);  
 begin
     if not condition then
     begin
@@ -2192,7 +2192,7 @@ begin
 end;
 
 // Utilisation
-procedure ProcessObject(env: PJNIEnv; obj: jobject);
+procedure ProcessObject(env: PJNIEnv; obj: jobject);  
 begin
     AssertJNI(Assigned(env), 'env must not be nil');
     AssertJNI(Assigned(obj), 'obj must not be nil');
@@ -2204,7 +2204,7 @@ end;
 #### 3. Dump de l'état JNI
 
 ```pascal
-procedure DumpJNIState(env: PJNIEnv; obj: jobject);
+procedure DumpJNIState(env: PJNIEnv; obj: jobject);  
 var
     jcls: jclass;
     method: jmethodID;
@@ -2272,11 +2272,11 @@ Pour déboguer avec GDB ou LLDB :
 adb shell ps | grep com.example.monapp
 
 # Attacher gdbserver
-adb shell
+adb shell  
 gdbserver :5039 --attach <PID>
 
 # Dans un autre terminal
-adb forward tcp:5039 tcp:5039
+adb forward tcp:5039 tcp:5039  
 gdb
 (gdb) target remote :5039
 (gdb) break Java_com_example_monapp_MainActivity_myNativeFunction
@@ -2294,7 +2294,7 @@ gdb
 ### Compatibilité entre versions Android
 
 ```pascal
-function GetAndroidVersion(env: PJNIEnv): Integer;
+function GetAndroidVersion(env: PJNIEnv): Integer;  
 var
     versionCls: jclass;
     sdkIntField: jfieldID;
@@ -2311,7 +2311,7 @@ begin
 end;
 
 // Utilisation pour code conditionnel
-procedure VersionSpecificCode(env: PJNIEnv);
+procedure VersionSpecificCode(env: PJNIEnv);  
 var
     apiLevel: Integer;
 begin
@@ -2362,12 +2362,12 @@ type
 var
     Bridge: IJNIBridge;
 
-procedure InitBridge(env: PJNIEnv);
+procedure InitBridge(env: PJNIEnv);  
 begin
     Bridge := TJNIBridgeImpl.Create(env);
 end;
 
-procedure BusinessLogic;
+procedure BusinessLogic;  
 begin
     // Code métier indépendant de JNI
     Bridge.CallJavaMethod('showToast', ['Message']);
@@ -2384,7 +2384,7 @@ type
         jniV4_Q               // Android 10+
     );
 
-function DetermineJNIVersion(apiLevel: Integer): TJNIInterfaceVersion;
+function DetermineJNIVersion(apiLevel: Integer): TJNIInterfaceVersion;  
 begin
     if apiLevel >= 29 then
         Result := jniV4_Q
@@ -2397,7 +2397,7 @@ begin
 end;
 
 // Adapter le comportement selon la version
-procedure AdaptiveJNICall(env: PJNIEnv; version: TJNIInterfaceVersion);
+procedure AdaptiveJNICall(env: PJNIEnv; version: TJNIInterfaceVersion);  
 begin
     case version of
         jniV4_Q: UseModernAPI(env);
@@ -2432,7 +2432,7 @@ end;
 /// end;
 /// </code>
 /// </example>
-function JStringToPascal(env: PJNIEnv; jstr: jstring): string;
+function JStringToPascal(env: PJNIEnv; jstr: jstring): string;  
 var
     nativeStr: PChar;
 begin

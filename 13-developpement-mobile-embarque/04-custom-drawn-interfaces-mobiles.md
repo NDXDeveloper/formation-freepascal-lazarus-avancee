@@ -167,12 +167,12 @@ implementation
 
 {$R *.lfm}
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   ConfigurerInterface;
 end;
 
-procedure TFormMain.ConfigurerInterface;
+procedure TFormMain.ConfigurerInterface;  
 begin
   // Configuration du label
   CDLabel1.Caption := 'Bienvenue dans Custom Drawn';
@@ -189,7 +189,7 @@ begin
   CDButton1.Font.Color := clWhite;
 end;
 
-procedure TFormMain.CDButton1Click(Sender: TObject);
+procedure TFormMain.CDButton1Click(Sender: TObject);  
 begin
   ShowMessage('Bonjour ' + CDEdit1.Text + ' !');
 end;
@@ -207,7 +207,7 @@ type
     CDButton1: TCustomDrawnButton;
   end;
 
-procedure ConfigurerBoutons;
+procedure ConfigurerBoutons;  
 begin
   // Bouton standard
   CDButton1.Caption := 'Cliquez-moi';
@@ -227,14 +227,14 @@ begin
   CDButton1.ShadowOffset := 2;
 end;
 
-procedure CDButton1Click(Sender: TObject);
+procedure CDButton1Click(Sender: TObject);  
 begin
   // Action au clic
   ProcesserAction;
 end;
 
 // Bouton avec icône
-procedure AjouterIcone;
+procedure AjouterIcone;  
 var
   icon: TBitmap;
 begin
@@ -258,7 +258,7 @@ type
     CDEdit1: TCustomDrawnEdit;
   end;
 
-procedure ConfigurerChampsSaisie;
+procedure ConfigurerChampsSaisie;  
 begin
   // Configuration de base
   CDEdit1.Text := '';
@@ -283,21 +283,21 @@ begin
 end;
 
 // Champ mot de passe
-procedure ConfigurerMotDePasse;
+procedure ConfigurerMotDePasse;  
 begin
   CDEdit1.PasswordChar := '•';
   CDEdit1.HintText := 'Mot de passe';
 end;
 
 // Champ numérique
-procedure ConfigurerChampNumerique;
+procedure ConfigurerChampNumerique;  
 begin
   CDEdit1.NumbersOnly := True;
   CDEdit1.HintText := 'Entrez votre âge';
 end;
 
 // Validation en temps réel
-procedure CDEdit1Change(Sender: TObject);
+procedure CDEdit1Change(Sender: TObject);  
 begin
   if not IsValidEmail(CDEdit1.Text) then
   begin
@@ -311,7 +311,7 @@ begin
   end;
 end;
 
-function IsValidEmail(const email: string): Boolean;
+function IsValidEmail(const email: string): Boolean;  
 begin
   Result := (Pos('@', email) > 0) and (Pos('.', email) > Pos('@', email));
 end;
@@ -325,7 +325,7 @@ type
     CDLabel1: TCustomDrawnLabel;
   end;
 
-procedure ConfigurerLabels;
+procedure ConfigurerLabels;  
 begin
   // Configuration de base
   CDLabel1.Caption := 'Mon Application';
@@ -347,7 +347,7 @@ begin
 end;
 
 // Label avec texte multilignes
-procedure ConfigurerLabelMultiligne;
+procedure ConfigurerLabelMultiligne;  
 begin
   CDLabel1.WordWrap := True;
   CDLabel1.AutoSize := True;
@@ -356,7 +356,7 @@ begin
 end;
 
 // Label avec ombre portée
-procedure AjouterOmbre;
+procedure AjouterOmbre;  
 begin
   CDLabel1.ShowShadow := True;
   CDLabel1.ShadowColor := clGray;
@@ -373,7 +373,7 @@ type
     CDCheckBox1: TCustomDrawnCheckBox;
   end;
 
-procedure ConfigurerCheckBox;
+procedure ConfigurerCheckBox;  
 begin
   CDCheckBox1.Caption := 'Accepter les conditions';
   CDCheckBox1.Checked := False;
@@ -386,7 +386,7 @@ begin
   CDCheckBox1.BorderColor := clGray;
 end;
 
-procedure CDCheckBox1Change(Sender: TObject);
+procedure CDCheckBox1Change(Sender: TObject);  
 begin
   if CDCheckBox1.Checked then
     CDButton1.Enabled := True
@@ -395,7 +395,7 @@ begin
 end;
 
 // CheckBox avec état intermédiaire
-procedure ConfigurerTroisEtats;
+procedure ConfigurerTroisEtats;  
 begin
   CDCheckBox1.AllowGrayed := True;
   CDCheckBox1.State := cbGrayed;  // cbUnchecked, cbChecked, cbGrayed
@@ -411,7 +411,7 @@ type
     CDRadio1, CDRadio2, CDRadio3: TCustomDrawnRadioButton;
   end;
 
-procedure ConfigurerRadioButtons;
+procedure ConfigurerRadioButtons;  
 begin
   // Option 1
   CDRadio1.Caption := 'Option 1';
@@ -433,7 +433,7 @@ begin
   CDRadio1.RadioColor := clBlue;
 end;
 
-procedure CDRadio1Click(Sender: TObject);
+procedure CDRadio1Click(Sender: TObject);  
 begin
   case GetSelectedRadio of
     1: TraiterOption1;
@@ -442,7 +442,7 @@ begin
   end;
 end;
 
-function GetSelectedRadio: Integer;
+function GetSelectedRadio: Integer;  
 begin
   if CDRadio1.Checked then Result := 1
   else if CDRadio2.Checked then Result := 2
@@ -459,7 +459,7 @@ type
     CDListBox1: TCustomDrawnListBox;
   end;
 
-procedure ConfigurerListBox;
+procedure ConfigurerListBox;  
 begin
   // Ajouter des items
   CDListBox1.Items.Add('Item 1');
@@ -479,7 +479,7 @@ begin
   CDListBox1.ItemIndex := 0;  // Sélectionner le premier
 end;
 
-procedure CDListBox1Click(Sender: TObject);
+procedure CDListBox1Click(Sender: TObject);  
 var
   selectedItem: string;
 begin
@@ -491,7 +491,7 @@ begin
 end;
 
 // Liste avec images
-procedure AjouterImagesListe;
+procedure AjouterImagesListe;  
 var
   imageList: TImageList;
 begin
@@ -517,7 +517,7 @@ type
     CDTimer1: TTimer;
   end;
 
-procedure ConfigurerProgressBar;
+procedure ConfigurerProgressBar;  
 begin
   // Configuration
   CDProgressBar1.Min := 0;
@@ -538,7 +538,7 @@ begin
 end;
 
 // Progression animée
-procedure CDTimer1Timer(Sender: TObject);
+procedure CDTimer1Timer(Sender: TObject);  
 begin
   if CDProgressBar1.Position < CDProgressBar1.Max then
     CDProgressBar1.Position := CDProgressBar1.Position + 1
@@ -549,7 +549,7 @@ begin
   end;
 end;
 
-procedure DemarrerProgression;
+procedure DemarrerProgression;  
 begin
   CDProgressBar1.Position := 0;
   CDTimer1.Interval := 100;  // 100ms
@@ -557,7 +557,7 @@ begin
 end;
 
 // Barre de progression circulaire
-procedure ConfigurerProgressBarCirculaire;
+procedure ConfigurerProgressBarCirculaire;  
 begin
   CDProgressBar1.Style := pbsCircular;
   CDProgressBar1.Width := 100;
@@ -574,7 +574,7 @@ type
     CDTrackBar1: TCustomDrawnTrackBar;
   end;
 
-procedure ConfigurerTrackBar;
+procedure ConfigurerTrackBar;  
 begin
   // Configuration
   CDTrackBar1.Min := 0;
@@ -591,13 +591,13 @@ begin
   CDTrackBar1.Orientation := trHorizontal;  // ou trVertical
 end;
 
-procedure CDTrackBar1Change(Sender: TObject);
+procedure CDTrackBar1Change(Sender: TObject);  
 begin
   CDLabel1.Caption := Format('Valeur: %d', [CDTrackBar1.Position]);
 end;
 
 // Curseur de volume avec icônes
-procedure ConfigurerCurseurVolume;
+procedure ConfigurerCurseurVolume;  
 begin
   CDTrackBar1.Min := 0;
   CDTrackBar1.Max := 100;
@@ -638,7 +638,7 @@ type
     property CardColor: TColor read FCardColor write FCardColor;
   end;
 
-constructor TCustomCard.Create(AOwner: TComponent);
+constructor TCustomCard.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -650,7 +650,7 @@ begin
   FContent := 'Contenu';
 end;
 
-procedure TCustomCard.SetTitle(const Value: string);
+procedure TCustomCard.SetTitle(const Value: string);  
 begin
   if FTitle <> Value then
   begin
@@ -659,7 +659,7 @@ begin
   end;
 end;
 
-procedure TCustomCard.SetContent(const Value: string);
+procedure TCustomCard.SetContent(const Value: string);  
 begin
   if FContent <> Value then
   begin
@@ -668,7 +668,7 @@ begin
   end;
 end;
 
-procedure TCustomCard.Paint;
+procedure TCustomCard.Paint;  
 var
   rect: TRect;
 begin
@@ -735,7 +735,7 @@ type
     FCard1, FCard2: TCustomCard;
   end;
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   // Créer la première carte
   FCard1 := TCustomCard.Create(Self);
@@ -757,12 +757,12 @@ begin
   FCard2.OnClick := @Card2Click;
 end;
 
-procedure TFormMain.Card1Click(Sender: TObject);
+procedure TFormMain.Card1Click(Sender: TObject);  
 begin
   ShowMessage('Carte 1 cliquée !');
 end;
 
-procedure TFormMain.Card2Click(Sender: TObject);
+procedure TFormMain.Card2Click(Sender: TObject);  
 begin
   ShowMessage('Carte 2 cliquée !');
 end;
@@ -807,14 +807,14 @@ type
     property FontSize: Integer read FFontSize;
   end;
 
-constructor TAppTheme.Create;
+constructor TAppTheme.Create;  
 begin
   inherited Create;
   // Thème clair par défaut
   ApplyTheme(tsLight);
 end;
 
-procedure TAppTheme.ApplyTheme(AStyle: TThemeStyle);
+procedure TAppTheme.ApplyTheme(AStyle: TThemeStyle);  
 begin
   FCurrentStyle := AStyle;
 
@@ -850,7 +850,7 @@ begin
   FFontSize := 14;
 end;
 
-procedure TAppTheme.ApplyToControl(AControl: TControl);
+procedure TAppTheme.ApplyToControl(AControl: TControl);  
 begin
   if AControl is TCustomDrawnButton then
   begin
@@ -891,13 +891,13 @@ end;
 var
   AppTheme: TAppTheme;
 
-procedure InitializeTheme;
+procedure InitializeTheme;  
 begin
   AppTheme := TAppTheme.Create;
   AppTheme.ApplyTheme(tsLight);
 end;
 
-procedure ApplyThemeToForm(AForm: TForm);
+procedure ApplyThemeToForm(AForm: TForm);  
 var
   i: Integer;
 begin
@@ -910,7 +910,7 @@ begin
   end;
 end;
 
-procedure ToggleTheme;
+procedure ToggleTheme;  
 begin
   if AppTheme.CurrentStyle = tsLight then
     AppTheme.ApplyTheme(tsDark)
@@ -935,7 +935,7 @@ type
     // ... autres propriétés
   end;
 
-procedure SaveThemeToFile(const ATheme: TThemeConfig; const AFileName: string);
+procedure SaveThemeToFile(const ATheme: TThemeConfig; const AFileName: string);  
 var
   json: TJSONObject;
   fs: TFileStream;
@@ -959,7 +959,7 @@ begin
   end;
 end;
 
-function LoadThemeFromFile(const AFileName: string): TThemeConfig;
+function LoadThemeFromFile(const AFileName: string): TThemeConfig;  
 var
   json: TJSONObject;
   fs: TFileStream;
@@ -981,14 +981,14 @@ begin
   end;
 end;
 
-function ColorToHex(AColor: TColor): string;
+function ColorToHex(AColor: TColor): string;  
 begin
   Result := '#' + IntToHex(Red(AColor), 2) +
                   IntToHex(Green(AColor), 2) +
                   IntToHex(Blue(AColor), 2);
 end;
 
-function HexToColor(const AHex: string): TColor;
+function HexToColor(const AHex: string): TColor;  
 var
   hex: string;
 begin
@@ -1021,7 +1021,7 @@ type
     procedure TouchUp(X, Y: Integer); virtual;
   end;
 
-procedure TFormMain.TouchDown(X, Y: Integer);
+procedure TFormMain.TouchDown(X, Y: Integer);  
 begin
   FTouchStartX := X;
   FTouchStartY := Y;
@@ -1029,7 +1029,7 @@ begin
   FIsSwiping := False;
 end;
 
-procedure TFormMain.TouchMove(X, Y: Integer);
+procedure TFormMain.TouchMove(X, Y: Integer);  
 var
   deltaX, deltaY: Integer;
 begin
@@ -1061,7 +1061,7 @@ begin
   end;
 end;
 
-procedure TFormMain.TouchUp(X, Y: Integer);
+procedure TFormMain.TouchUp(X, Y: Integer);  
 var
   duration: Double;
   deltaX, deltaY: Integer;
@@ -1086,37 +1086,37 @@ begin
 end;
 
 // Gestionnaires d'événements
-procedure TFormMain.OnSwipeLeft;
+procedure TFormMain.OnSwipeLeft;  
 begin
   // Navigation vers la page suivante
   ShowNextPage;
 end;
 
-procedure TFormMain.OnSwipeRight;
+procedure TFormMain.OnSwipeRight;  
 begin
   // Navigation vers la page précédente
   ShowPreviousPage;
 end;
 
-procedure TFormMain.OnSwipeUp;
+procedure TFormMain.OnSwipeUp;  
 begin
   // Défiler vers le haut
   ScrollUp;
 end;
 
-procedure TFormMain.OnSwipeDown;
+procedure TFormMain.OnSwipeDown;  
 begin
   // Actualiser (pull to refresh)
   RefreshContent;
 end;
 
-procedure TFormMain.OnTap(X, Y: Integer);
+procedure TFormMain.OnTap(X, Y: Integer);  
 begin
   // Gérer le clic simple
   HandleClick(X, Y);
 end;
 
-procedure TFormMain.OnLongPress(X, Y: Integer);
+procedure TFormMain.OnLongPress(X, Y: Integer);  
 begin
   // Afficher un menu contextuel
   ShowContextMenu(X, Y);
@@ -1144,7 +1144,7 @@ type
     procedure MultiTouchUp;
   end;
 
-procedure TFormMain.MultiTouchDown(const Points: array of TTouchPoint);
+procedure TFormMain.MultiTouchDown(const Points: array of TTouchPoint);  
 var
   i: Integer;
 begin
@@ -1160,7 +1160,7 @@ begin
   end;
 end;
 
-procedure TFormMain.MultiTouchMove(const Points: array of TTouchPoint);
+procedure TFormMain.MultiTouchMove(const Points: array of TTouchPoint);  
 var
   currentDistance, scale: Single;
 begin
@@ -1175,12 +1175,12 @@ begin
   end;
 end;
 
-function CalculateDistance(const P1, P2: TTouchPoint): Single;
+function CalculateDistance(const P1, P2: TTouchPoint): Single;  
 begin
   Result := Sqrt(Sqr(P2.X - P1.X) + Sqr(P2.Y - P1.Y));
 end;
 
-procedure ApplyZoom(scale: Single);
+procedure ApplyZoom(scale: Single);  
 begin
   // Limiter le zoom
   if scale < 0.5 then scale := 0.5;
@@ -1195,7 +1195,7 @@ end;
 ### Feedback tactile
 
 ```pascal
-procedure ProvideTouchFeedback(const FeedbackType: TTouchFeedbackType);
+procedure ProvideTouchFeedback(const FeedbackType: TTouchFeedbackType);  
 begin
   case FeedbackType of
     tfClick:
@@ -1227,7 +1227,7 @@ begin
   end;
 end;
 
-procedure ShowRippleEffect;
+procedure ShowRippleEffect;  
 var
   ripple: TRippleAnimation;
 begin
@@ -1279,13 +1279,13 @@ begin
   FTimer.Enabled := False;
 end;
 
-destructor TCustomAnimation.Destroy;
+destructor TCustomAnimation.Destroy;  
 begin
   FTimer.Free;
   inherited Destroy;
 end;
 
-procedure TCustomAnimation.Start;
+procedure TCustomAnimation.Start;  
 begin
   FStartTime := Now;
 
@@ -1319,7 +1319,7 @@ begin
   FTimer.Enabled := True;
 end;
 
-procedure TCustomAnimation.OnTimerTick(Sender: TObject);
+procedure TCustomAnimation.OnTimerTick(Sender: TObject);  
 var
   elapsed, progress: Double;
   currentValue: Single;
@@ -1358,13 +1358,13 @@ begin
   FControl.Invalidate;
 end;
 
-procedure TCustomAnimation.Stop;
+procedure TCustomAnimation.Stop;  
 begin
   FTimer.Enabled := False;
 end;
 
 // Utilisation
-procedure AnimerAffichage;
+procedure AnimerAffichage;  
 var
   anim: TCustomAnimation;
 begin
@@ -1396,19 +1396,19 @@ type
     procedure ShowPage(AIndex: Integer; ATransition: TPageTransition);
   end;
 
-constructor TPageManager.Create;
+constructor TPageManager.Create;  
 begin
   inherited Create;
   FPages := TList.Create;
 end;
 
-destructor TPageManager.Destroy;
+destructor TPageManager.Destroy;  
 begin
   FPages.Free;
   inherited Destroy;
 end;
 
-procedure TPageManager.AddPage(APage: TCustomDrawnPanel);
+procedure TPageManager.AddPage(APage: TCustomDrawnPanel);  
 begin
   FPages.Add(APage);
   APage.Visible := FPages.Count = 1;  // Première page visible
@@ -1417,7 +1417,7 @@ begin
     FCurrentPage := APage;
 end;
 
-procedure TPageManager.ShowPage(AIndex: Integer; ATransition: TPageTransition);
+procedure TPageManager.ShowPage(AIndex: Integer; ATransition: TPageTransition);  
 var
   newPage: TCustomDrawnPanel;
 begin
@@ -1533,7 +1533,7 @@ type
     procedure OnResize;
   end;
 
-constructor TResponsiveLayout.Create(AForm: TForm);
+constructor TResponsiveLayout.Create(AForm: TForm);  
 begin
   inherited Create;
   FForm := AForm;
@@ -1541,7 +1541,7 @@ begin
   DetectOrientation;
 end;
 
-procedure TResponsiveLayout.DetectScreenSize;
+procedure TResponsiveLayout.DetectScreenSize;  
 var
   screenWidth: Integer;
 begin
@@ -1557,7 +1557,7 @@ begin
     FCurrentScreenSize := ssXLarge;
 end;
 
-procedure TResponsiveLayout.DetectOrientation;
+procedure TResponsiveLayout.DetectOrientation;  
 begin
   if Screen.Width > Screen.Height then
     FCurrentOrientation := orLandscape
@@ -1565,7 +1565,7 @@ begin
     FCurrentOrientation := orPortrait;
 end;
 
-procedure TResponsiveLayout.ApplyLayout;
+procedure TResponsiveLayout.ApplyLayout;  
 var
   i: Integer;
   ctrl: TControl;
@@ -1620,21 +1620,21 @@ begin
     ApplyLandscapeLayout;
 end;
 
-procedure TResponsiveLayout.ApplyPortraitLayout;
+procedure TResponsiveLayout.ApplyPortraitLayout;  
 begin
   // Disposer les éléments verticalement
   // Une colonne
   // ...
 end;
 
-procedure TResponsiveLayout.ApplyLandscapeLayout;
+procedure TResponsiveLayout.ApplyLandscapeLayout;  
 begin
   // Disposer les éléments horizontalement
   // Deux colonnes
   // ...
 end;
 
-procedure TResponsiveLayout.OnResize;
+procedure TResponsiveLayout.OnResize;  
 var
   oldSize: TScreenSize;
   oldOrientation: TOrientation;
@@ -1657,13 +1657,13 @@ end;
 var
   ResponsiveLayout: TResponsiveLayout;
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   ResponsiveLayout := TResponsiveLayout.Create(Self);
   ResponsiveLayout.ApplyLayout;
 end;
 
-procedure TFormMain.FormResize(Sender: TObject);
+procedure TFormMain.FormResize(Sender: TObject);  
 begin
   ResponsiveLayout.OnResize;
 end;
@@ -1689,7 +1689,7 @@ type
     property Spacing: Integer read FSpacing write FSpacing;
   end;
 
-constructor TResponsiveGrid.Create(AOwner: TComponent);
+constructor TResponsiveGrid.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FItems := TList.Create;
@@ -1697,13 +1697,13 @@ begin
   CalculateColumns;
 end;
 
-destructor TResponsiveGrid.Destroy;
+destructor TResponsiveGrid.Destroy;  
 begin
   FItems.Free;
   inherited Destroy;
 end;
 
-procedure TResponsiveGrid.CalculateColumns;
+procedure TResponsiveGrid.CalculateColumns;  
 var
   availableWidth: Integer;
   minItemWidth: Integer;
@@ -1716,14 +1716,14 @@ begin
     FColumns := 1;
 end;
 
-procedure TResponsiveGrid.AddItem(AItem: TControl);
+procedure TResponsiveGrid.AddItem(AItem: TControl);  
 begin
   AItem.Parent := Self;
   FItems.Add(AItem);
   ArrangeItems;
 end;
 
-procedure TResponsiveGrid.ArrangeItems;
+procedure TResponsiveGrid.ArrangeItems;  
 var
   i, row, col: Integer;
   itemWidth, itemHeight: Integer;
@@ -1755,14 +1755,14 @@ begin
             (itemHeight + FSpacing);
 end;
 
-procedure TResponsiveGrid.Refresh;
+procedure TResponsiveGrid.Refresh;  
 begin
   ArrangeItems;
   Invalidate;
 end;
 
 // Utilisation
-procedure CreerGrillePhotos;
+procedure CreerGrillePhotos;  
 var
   grid: TResponsiveGrid;
   i: Integer;
@@ -1800,7 +1800,7 @@ type
     procedure Draw(ACanvas: TCanvas);
   end;
 
-constructor TOptimizedDrawing.Create(AWidth, AHeight: Integer);
+constructor TOptimizedDrawing.Create(AWidth, AHeight: Integer);  
 begin
   inherited Create;
   FBuffer := TBitmap.Create;
@@ -1808,18 +1808,18 @@ begin
   FDirty := True;
 end;
 
-destructor TOptimizedDrawing.Destroy;
+destructor TOptimizedDrawing.Destroy;  
 begin
   FBuffer.Free;
   inherited Destroy;
 end;
 
-procedure TOptimizedDrawing.MarkDirty;
+procedure TOptimizedDrawing.MarkDirty;  
 begin
   FDirty := True;
 end;
 
-procedure TOptimizedDrawing.Draw(ACanvas: TCanvas);
+procedure TOptimizedDrawing.Draw(ACanvas: TCanvas);  
 begin
   if FDirty then
   begin
@@ -1846,26 +1846,26 @@ type
     procedure InvalidateContent;
   end;
 
-constructor TOptimizedPanel.Create(AOwner: TComponent);
+constructor TOptimizedPanel.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FDrawingBuffer := TOptimizedDrawing.Create(Width, Height);
   DoubleBuffered := True;  // Double buffering système
 end;
 
-destructor TOptimizedPanel.Destroy;
+destructor TOptimizedPanel.Destroy;  
 begin
   FDrawingBuffer.Free;
   inherited Destroy;
 end;
 
-procedure TOptimizedPanel.Paint;
+procedure TOptimizedPanel.Paint;  
 begin
   inherited Paint;
   FDrawingBuffer.Draw(Canvas);
 end;
 
-procedure TOptimizedPanel.Resize;
+procedure TOptimizedPanel.Resize;  
 begin
   inherited Resize;
   FDrawingBuffer.Free;
@@ -1873,7 +1873,7 @@ begin
   FDrawingBuffer.MarkDirty;
 end;
 
-procedure TOptimizedPanel.InvalidateContent;
+procedure TOptimizedPanel.InvalidateContent;  
 begin
   FDrawingBuffer.MarkDirty;
   Invalidate;
@@ -1894,7 +1894,7 @@ type
     function ShouldRender: Boolean;
   end;
 
-constructor TFrameRateLimiter.Create(AFPS: Integer);
+constructor TFrameRateLimiter.Create(AFPS: Integer);  
 begin
   inherited Create;
   FTargetFPS := AFPS;
@@ -1902,7 +1902,7 @@ begin
   FLastFrameTime := Now;
 end;
 
-function TFrameRateLimiter.ShouldRender: Boolean;
+function TFrameRateLimiter.ShouldRender: Boolean;  
 var
   currentTime: TDateTime;
   elapsed: Double;
@@ -1931,7 +1931,7 @@ type
     destructor Destroy; override;
   end;
 
-constructor TAnimatedPanel.Create(AOwner: TComponent);
+constructor TAnimatedPanel.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
 
@@ -1944,13 +1944,13 @@ begin
   FTimer.Enabled := True;
 end;
 
-destructor TAnimatedPanel.Destroy;
+destructor TAnimatedPanel.Destroy;  
 begin
   FFrameLimiter.Free;
   inherited Destroy;
 end;
 
-procedure TAnimatedPanel.OnTimerTick(Sender: TObject);
+procedure TAnimatedPanel.OnTimerTick(Sender: TObject);  
 begin
   if FFrameLimiter.ShouldRender then
   begin
@@ -1962,7 +1962,7 @@ begin
   end;
 end;
 
-procedure TAnimatedPanel.Paint;
+procedure TAnimatedPanel.Paint;  
 var
   centerX, centerY: Integer;
   radius: Integer;
@@ -2011,7 +2011,7 @@ type
     procedure SetItems(AItems: TStringList);
   end;
 
-constructor TOptimizedListView.Create(AOwner: TComponent);
+constructor TOptimizedListView.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FItems := TStringList.Create;
@@ -2019,7 +2019,7 @@ begin
   FVisibleStartIndex := 0;
 end;
 
-destructor TOptimizedListView.Destroy;
+destructor TOptimizedListView.Destroy;  
 var
   i: Integer;
 begin
@@ -2030,7 +2030,7 @@ begin
   inherited Destroy;
 end;
 
-function TOptimizedListView.GetOrCreateViewHolder: TViewHolder;
+function TOptimizedListView.GetOrCreateViewHolder: TViewHolder;  
 var
   holder: TViewHolder;
 begin
@@ -2054,7 +2054,7 @@ begin
   end;
 end;
 
-procedure TOptimizedListView.RecycleViews;
+procedure TOptimizedListView.RecycleViews;  
 var
   itemHeight: Integer;
   visibleCount: Integer;
@@ -2089,13 +2089,13 @@ begin
   end;
 end;
 
-procedure TOptimizedListView.Paint;
+procedure TOptimizedListView.Paint;  
 begin
   inherited Paint;
   RecycleViews;
 end;
 
-procedure TOptimizedListView.Scroll(Delta: Integer);
+procedure TOptimizedListView.Scroll(Delta: Integer);  
 begin
   FVisibleStartIndex := FVisibleStartIndex + Delta;
   if FVisibleStartIndex < 0 then
@@ -2146,7 +2146,7 @@ type
 
 implementation
 
-class function TPlatformHelper.GetPlatformName: string;
+class function TPlatformHelper.GetPlatformName: string;  
 begin
   {$IFDEF ANDROID}
   Result := 'Android';
@@ -2165,7 +2165,7 @@ begin
   {$ENDIF}
 end;
 
-class function TPlatformHelper.GetScreenDPI: Integer;
+class function TPlatformHelper.GetScreenDPI: Integer;  
 begin
   {$IFDEF ANDROID}
   Result := GetAndroidDPI;
@@ -2181,7 +2181,7 @@ begin
   {$ENDIF}
 end;
 
-class procedure TPlatformHelper.Vibrate(Duration: Integer);
+class procedure TPlatformHelper.Vibrate(Duration: Integer);  
 begin
   {$IFDEF ANDROID}
   AndroidVibrate(Duration);
@@ -2192,7 +2192,7 @@ begin
   // Windows et Linux : pas de vibration
 end;
 
-class procedure TPlatformHelper.ShowNotification(const Title, Message: string);
+class procedure TPlatformHelper.ShowNotification(const Title, Message: string);  
 begin
   {$IFDEF ANDROID}
   ShowAndroidNotification(Title, Message);
@@ -2208,7 +2208,7 @@ begin
   {$ENDIF}
 end;
 
-class function TPlatformHelper.GetDeviceInfo: string;
+class function TPlatformHelper.GetDeviceInfo: string;  
 begin
   Result := Format('Platform: %s, DPI: %d',
                    [GetPlatformName, GetScreenDPI]);
@@ -2254,14 +2254,14 @@ type
 
 implementation
 
-constructor TResourceManager.Create(const ABasePath: string);
+constructor TResourceManager.Create(const ABasePath: string);  
 begin
   inherited Create;
   FBasePath := ABasePath;
   FCurrentScale := DetermineScale;
 end;
 
-function TResourceManager.DetermineScale: TResourceScale;
+function TResourceManager.DetermineScale: TResourceScale;  
 var
   dpi: Integer;
 begin
@@ -2275,7 +2275,7 @@ begin
     Result := rs3x;       // xxhdpi/xxxhdpi
 end;
 
-function TResourceManager.GetScaledPath(const AFileName: string): string;
+function TResourceManager.GetScaledPath(const AFileName: string): string;  
 var
   name, ext: string;
   scaleSuffix: string;
@@ -2296,7 +2296,7 @@ begin
     Result := FBasePath + AFileName;
 end;
 
-function TResourceManager.LoadImage(const AName: string): TBitmap;
+function TResourceManager.LoadImage(const AName: string): TBitmap;  
 var
   path: string;
 begin
@@ -2315,7 +2315,7 @@ begin
   end;
 end;
 
-function TResourceManager.LoadIcon(const AName: string; ASize: Integer): TBitmap;
+function TResourceManager.LoadIcon(const AName: string; ASize: Integer): TBitmap;  
 var
   original: TBitmap;
 begin
@@ -2367,7 +2367,7 @@ function GetPlatformConfig: TPlatformConfig;
 
 implementation
 
-function GetPlatformConfig: TPlatformConfig;
+function GetPlatformConfig: TPlatformConfig;  
 begin
   {$IFDEF ANDROID}
   Result.DefaultFontSize := 14;
@@ -2461,7 +2461,7 @@ implementation
 uses
   fpjson, jsonparser;
 
-procedure TFormTodo.FormCreate(Sender: TObject);
+procedure TFormTodo.FormCreate(Sender: TObject);  
 begin
   FTodoList := TTodoList.Create(True);  // True = possède les objets
   FNextID := 1;
@@ -2483,7 +2483,7 @@ begin
   RefreshUI;
 end;
 
-procedure TFormTodo.CDButtonAddClick(Sender: TObject);
+procedure TFormTodo.CDButtonAddClick(Sender: TObject);  
 begin
   if Trim(CDEditNewTask.Text) <> '' then
   begin
@@ -2494,7 +2494,7 @@ begin
   end;
 end;
 
-procedure TFormTodo.AddTask(const ATitle: string);
+procedure TFormTodo.AddTask(const ATitle: string);  
 var
   task: TTodoItem;
 begin
@@ -2507,7 +2507,7 @@ begin
   FTodoList.Add(task);
 end;
 
-procedure TFormTodo.ToggleTask(AID: Integer);
+procedure TFormTodo.ToggleTask(AID: Integer);  
 var
   i: Integer;
 begin
@@ -2523,7 +2523,7 @@ begin
   end;
 end;
 
-procedure TFormTodo.DeleteTask(AID: Integer);
+procedure TFormTodo.DeleteTask(AID: Integer);  
 var
   i: Integer;
 begin
@@ -2539,7 +2539,7 @@ begin
   end;
 end;
 
-procedure TFormTodo.RefreshUI;
+procedure TFormTodo.RefreshUI;  
 var
   i: Integer;
 begin
@@ -2552,7 +2552,7 @@ begin
     CreateTaskCard(FTodoList[i]);
 end;
 
-procedure TFormTodo.CreateTaskCard(ATask: TTodoItem);
+procedure TFormTodo.CreateTaskCard(ATask: TTodoItem);  
 var
   card: TCustomCard;
   checkbox: TCustomDrawnCheckBox;
@@ -2600,7 +2600,7 @@ begin
   deleteBtn.OnClick := @OnDeleteButtonClick;
 end;
 
-procedure TFormTodo.OnTaskCheckboxChange(Sender: TObject);
+procedure TFormTodo.OnTaskCheckboxChange(Sender: TObject);  
 var
   checkbox: TCustomDrawnCheckBox;
 begin
@@ -2608,7 +2608,7 @@ begin
   ToggleTask(checkbox.Tag);
 end;
 
-procedure TFormTodo.OnDeleteButtonClick(Sender: TObject);
+procedure TFormTodo.OnDeleteButtonClick(Sender: TObject);  
 var
   btn: TCustomDrawnButton;
 begin
@@ -2622,7 +2622,7 @@ begin
   end;
 end;
 
-procedure TFormTodo.LoadTasks;
+procedure TFormTodo.LoadTasks;  
 var
   json: TJSONObject;
   tasksArray: TJSONArray;
@@ -2662,7 +2662,7 @@ begin
   end;
 end;
 
-procedure TFormTodo.SaveTasks;
+procedure TFormTodo.SaveTasks;  
 var
   json: TJSONObject;
   tasksArray: TJSONArray;
@@ -2749,7 +2749,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TFormCalculator.FormCreate(Sender: TObject);
+procedure TFormCalculator.FormCreate(Sender: TObject);  
 begin
   // Configuration de l'affichage
   CDLabelDisplay.Alignment := taRightJustify;
@@ -2769,7 +2769,7 @@ begin
   CreateButtons;
 end;
 
-procedure TFormCalculator.CreateButtons;
+procedure TFormCalculator.CreateButtons;  
 const
   ButtonLabels: array[0..19] of string = (
     '7', '8', '9', '÷',
@@ -2832,7 +2832,7 @@ begin
   end;
 end;
 
-procedure TFormCalculator.OnNumberClick(Sender: TObject);
+procedure TFormCalculator.OnNumberClick(Sender: TObject);  
 var
   digit: string;
   currentText: string;
@@ -2857,7 +2857,7 @@ begin
   FCurrentValue := StrToFloatDef(currentText, 0);
 end;
 
-procedure TFormCalculator.OnOperationClick(Sender: TObject);
+procedure TFormCalculator.OnOperationClick(Sender: TObject);  
 var
   op: string;
 begin
@@ -2880,7 +2880,7 @@ begin
   UpdateDisplay(FloatToStr(FStoredValue));
 end;
 
-procedure TFormCalculator.OnEqualsClick(Sender: TObject);
+procedure TFormCalculator.OnEqualsClick(Sender: TObject);  
 var
   result: Double;
 begin
@@ -2896,7 +2896,7 @@ begin
   FNewNumber := True;
 end;
 
-procedure TFormCalculator.OnClearClick(Sender: TObject);
+procedure TFormCalculator.OnClearClick(Sender: TObject);  
 begin
   FCurrentValue := 0;
   FStoredValue := 0;
@@ -2905,7 +2905,7 @@ begin
   UpdateDisplay('0');
 end;
 
-function TFormCalculator.Calculate: Double;
+function TFormCalculator.Calculate: Double;  
 begin
   Result := 0;
 
@@ -2927,7 +2927,7 @@ begin
   end;
 end;
 
-procedure TFormCalculator.UpdateDisplay(const AValue: string);
+procedure TFormCalculator.UpdateDisplay(const AValue: string);  
 var
   displayValue: string;
 begin
@@ -3010,7 +3010,7 @@ implementation
 
 {$R *.lfm}
 
-constructor TFormDrawing.Create(AOwner: TComponent);
+constructor TFormDrawing.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FAllPaths := TFPList.Create;
@@ -3019,7 +3019,7 @@ begin
   FIsDrawing := False;
 end;
 
-destructor TFormDrawing.Destroy;
+destructor TFormDrawing.Destroy;  
 var
   i: Integer;
 begin
@@ -3031,7 +3031,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TFormDrawing.FormCreate(Sender: TObject);
+procedure TFormDrawing.FormCreate(Sender: TObject);  
 begin
   // Configuration du canvas
   CDPanelCanvas.Color := clWhite;
@@ -3055,7 +3055,7 @@ begin
   CreateColorButtons;
 end;
 
-procedure TFormDrawing.CreateColorButtons;
+procedure TFormDrawing.CreateColorButtons;  
 const
   Colors: array[0..7] of TColor = (
     clBlack, clRed, clGreen, clBlue,
@@ -3088,7 +3088,7 @@ begin
   end;
 end;
 
-procedure TFormDrawing.OnColorButtonClick(Sender: TObject);
+procedure TFormDrawing.OnColorButtonClick(Sender: TObject);  
 begin
   FCurrentColor := TColor(TCustomDrawnButton(Sender).Tag);
 end;
@@ -3140,7 +3140,7 @@ begin
   end;
 end;
 
-procedure TFormDrawing.CDPanelCanvasPaint(Sender: TObject);
+procedure TFormDrawing.CDPanelCanvasPaint(Sender: TObject);  
 var
   i, j: Integer;
   path: TDrawPath;
@@ -3188,7 +3188,7 @@ begin
   end;
 end;
 
-procedure TFormDrawing.CDButtonClearClick(Sender: TObject);
+procedure TFormDrawing.CDButtonClearClick(Sender: TObject);  
 var
   i: Integer;
 begin
@@ -3205,7 +3205,7 @@ begin
   end;
 end;
 
-procedure TFormDrawing.SaveDrawing(const AFileName: string);
+procedure TFormDrawing.SaveDrawing(const AFileName: string);  
 var
   fs: TFileStream;
   i, j, pathCount, pointCount: Integer;
@@ -3237,7 +3237,7 @@ begin
   end;
 end;
 
-procedure TFormDrawing.LoadDrawing(const AFileName: string);
+procedure TFormDrawing.LoadDrawing(const AFileName: string);  
 var
   fs: TFileStream;
   i, j, pathCount, pointCount: Integer;
@@ -3287,7 +3287,7 @@ end.
 // Organisation recommandée
 
 // 1. Séparer les composants personnalisés
-unit MyCustomComponents;
+unit MyCustomComponents;  
 interface
   type
     TMyButton = class(TCustomDrawnButton)
@@ -3295,7 +3295,7 @@ interface
     end;
 
 // 2. Séparer les styles et thèmes
-unit MyThemes;
+unit MyThemes;  
 interface
   type
     TMyTheme = class
@@ -3303,7 +3303,7 @@ interface
     end;
 
 // 3. Séparer la logique métier
-unit MyBusinessLogic;
+unit MyBusinessLogic;  
 interface
   type
     TDataManager = class
@@ -3311,7 +3311,7 @@ interface
     end;
 
 // 4. Formulaires minimalistes
-unit MyForm;
+unit MyForm;  
 interface
   uses
     MyCustomComponents, MyThemes, MyBusinessLogic;
@@ -3347,12 +3347,12 @@ type
 
 implementation
 
-procedure TTestCustomComponents.HandleButtonClick(Sender: TObject);
+procedure TTestCustomComponents.HandleButtonClick(Sender: TObject);  
 begin
   FClicked := True;
 end;
 
-procedure TTestCustomComponents.TestButtonClick;
+procedure TTestCustomComponents.TestButtonClick;  
 var
   button: TCustomDrawnButton;
 begin
@@ -3371,7 +3371,7 @@ begin
   end;
 end;
 
-procedure TTestCustomComponents.TestEditValidation;
+procedure TTestCustomComponents.TestEditValidation;  
 var
   edit: TCustomDrawnEdit;
 begin
@@ -3387,7 +3387,7 @@ begin
   end;
 end;
 
-procedure TTestCustomComponents.TestThemeApplication;
+procedure TTestCustomComponents.TestThemeApplication;  
 var
   theme: TAppTheme;
   button: TCustomDrawnButton;
