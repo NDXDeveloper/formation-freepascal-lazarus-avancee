@@ -532,8 +532,8 @@ Test 1 : Programme seul → 5.2s
 Test 2 : Programme + Chrome + 10 tabs → 8.7s
 ```
 
-**Conclusion erronée** : "Mon programme est devenu plus lent"
-**Réalité** : La charge système était différente
+**Conclusion erronée** : "Mon programme est devenu plus lent"  
+**Réalité** : La charge système était différente  
 
 **Solution** : Toujours profiler dans les **mêmes conditions** (même charge système, même température CPU, etc.)
 
@@ -595,7 +595,7 @@ Call trace for block $00123456 size 148
 Pour des micro-benchmarks reproductibles :
 
 ```pascal
-uses fpcunit, testutils;
+uses fpcunit, testutils, SysUtils, DateUtils;
 
 procedure TTestPerformance.TestOptimisation;
 var
@@ -637,8 +637,8 @@ end;
 
 Définissez des objectifs mesurables avant d'optimiser :
 
-**Mauvais objectif** : "Rendre le programme plus rapide"
-**Bon objectif** : "Réduire le temps de chargement de 10s à 2s"
+**Mauvais objectif** : "Rendre le programme plus rapide"  
+**Bon objectif** : "Réduire le temps de chargement de 10s à 2s"  
 
 **Exemples d'objectifs** :
 - Temps de réponse < 100ms pour une requête
@@ -677,13 +677,13 @@ Maintenant que vous comprenez les concepts fondamentaux du profiling multi-plate
 
 ## Résumé des points clés
 
-✅ **Profiler avant d'optimiser** : Ne jamais optimiser sans mesures
-✅ **Règle 80/20** : 80% du temps est dans 20% du code
-✅ **Focus sur les hotspots** : Optimiser ce qui compte vraiment
-✅ **Mesurer, optimiser, valider** : Workflow itératif
-✅ **Multi-plateforme** : Profiler sur Windows ET Linux
-✅ **Outils appropriés** : Sampling pour prod, instrumentation pour debug
-✅ **Symboles de débogage** : Essentiels pour des résultats lisibles
+✅ **Profiler avant d'optimiser** : Ne jamais optimiser sans mesures  
+✅ **Règle 80/20** : 80% du temps est dans 20% du code  
+✅ **Focus sur les hotspots** : Optimiser ce qui compte vraiment  
+✅ **Mesurer, optimiser, valider** : Workflow itératif  
+✅ **Multi-plateforme** : Profiler sur Windows ET Linux  
+✅ **Outils appropriés** : Sampling pour prod, instrumentation pour debug  
+✅ **Symboles de débogage** : Essentiels pour des résultats lisibles  
 ✅ **Objectifs mesurables** : Définir ce qu'on veut atteindre
 
 Le profiling est une compétence qui s'acquiert avec la pratique. Plus vous profilez, plus vous développerez une intuition sur ce qui peut causer des problèmes de performance, mais **toujours validez avec des mesures réelles**.

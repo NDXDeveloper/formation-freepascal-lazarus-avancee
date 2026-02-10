@@ -583,6 +583,7 @@ end;
 const
   NbElements = 1000000;
 var
+  i: Integer;
   StartTime: TDateTime;
   Duree: Double;
   ElementsParSeconde: Double;
@@ -633,8 +634,8 @@ end;
 
 ### Latence vs Débit
 
-**Latence** : Temps pour une opération individuelle
-**Débit** : Nombre d'opérations par seconde
+**Latence** : Temps pour une opération individuelle  
+**Débit** : Nombre d'opérations par seconde  
 
 **Exemple** :
 ```
@@ -664,25 +665,26 @@ Comparer différentes implémentations :
 procedure BenchmarkImplementations;
 var
   i, Iterations: Integer;
-  TimeA, TimeB: TDateTime;
+  StartTime: TDateTime;
+  ElapsedA, ElapsedB: Int64;
 begin
   Iterations := 1000000;
 
   // Test implémentation A
-  TimeA := Now;
+  StartTime := Now;
   for i := 1 to Iterations do
     ImplementationA();
-  TimeA := MilliSecondsBetween(Now, TimeA);
+  ElapsedA := MilliSecondsBetween(Now, StartTime);
 
   // Test implémentation B
-  TimeB := Now;
+  StartTime := Now;
   for i := 1 to Iterations do
     ImplementationB();
-  TimeB := MilliSecondsBetween(Now, TimeB);
+  ElapsedB := MilliSecondsBetween(Now, StartTime);
 
-  WriteLn('Implémentation A : ', TimeA, ' ms');
-  WriteLn('Implémentation B : ', TimeB, ' ms');
-  WriteLn('B est ', (TimeA / TimeB):0:2, 'x plus rapide');
+  WriteLn('Implémentation A : ', ElapsedA, ' ms');
+  WriteLn('Implémentation B : ', ElapsedB, ' ms');
+  WriteLn('B est ', (ElapsedA / ElapsedB):0:2, 'x plus rapide');
 end;
 ```
 

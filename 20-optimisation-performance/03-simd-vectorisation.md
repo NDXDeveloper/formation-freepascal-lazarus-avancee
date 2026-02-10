@@ -1102,6 +1102,7 @@ type
 
 var
   ProcessOptimal: TProcessFunc;
+  Features: TCPUFeatures;
 
 procedure ProcessScalar(Data: PSingle; Count: Integer);
 var i: Integer;
@@ -1156,7 +1157,7 @@ end;
 
 initialization
   // Sélectionner la meilleure implémentation au démarrage
-  var Features := DetectCPUFeatures;
+  Features := DetectCPUFeatures;
 
   if Features.HasAVX2 then
   begin
@@ -2308,11 +2309,11 @@ end.
 
 ### Quand NE PAS utiliser SIMD
 
-❌ Code avec beaucoup de branchements (`if/else`)
-❌ Dépendances entre itérations
-❌ Accès mémoire non contigus/aléatoires
-❌ Petites quantités de données (< 100 éléments)
-❌ Code critique pour la maintenabilité
+❌ Code avec beaucoup de branchements (`if/else`)  
+❌ Dépendances entre itérations  
+❌ Accès mémoire non contigus/aléatoires  
+❌ Petites quantités de données (< 100 éléments)  
+❌ Code critique pour la maintenabilité  
 ❌ Pas de gain mesuré significatif (< 2x)
 
 ### Prochaines étapes

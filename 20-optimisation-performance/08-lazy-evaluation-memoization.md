@@ -330,6 +330,9 @@ end;
 Pour éviter que le cache ne devienne trop volumineux, on peut ajouter une durée de vie aux entrées :
 
 ```pascal
+uses
+  Generics.Collections, SysUtils, DateUtils;
+
 type
   TCachedValue<T> = record
     Value: T;
@@ -391,6 +394,7 @@ procedure TTimedMemoizer<TKey, TValue>.CleanExpired;
 var
   KeysToRemove: TList<TKey>;
   Pair: TPair<TKey, TCachedValue<TValue>>;
+  Key: TKey;
 begin
   KeysToRemove := TList<TKey>.Create;
   try
@@ -398,7 +402,7 @@ begin
       if SecondsBetween(Now, Pair.Value.Timestamp) >= FCacheDuration then
         KeysToRemove.Add(Pair.Key);
 
-    for var Key in KeysToRemove do
+    for Key in KeysToRemove do
       FCache.Remove(Key);
   finally
     KeysToRemove.Free;

@@ -59,8 +59,8 @@ end;
 
 ### 1. QuickSort (Tri rapide)
 
-**Complexité** : O(n log n) en moyenne, O(n²) au pire
-**Usage** : Tri général, le plus utilisé
+**Complexité** : O(n log n) en moyenne, O(n²) au pire  
+**Usage** : Tri général, le plus utilisé  
 
 ```pascal
 procedure QuickSort(var A: array of Integer; Left, Right: Integer);
@@ -139,8 +139,8 @@ end;
 
 ### 2. MergeSort (Tri fusion)
 
-**Complexité** : O(n log n) garanti (pas de pire cas O(n²))
-**Usage** : Quand la stabilité est importante, ou pour garantir O(n log n)
+**Complexité** : O(n log n) garanti (pas de pire cas O(n²))  
+**Usage** : Quand la stabilité est importante, ou pour garantir O(n log n)  
 
 ```pascal
 procedure Merge(var A: array of Integer; Left, Mid, Right: Integer);
@@ -206,8 +206,8 @@ end;
 
 ### 3. HeapSort (Tri par tas)
 
-**Complexité** : O(n log n) garanti
-**Usage** : Tri en place (pas de mémoire supplémentaire)
+**Complexité** : O(n log n) garanti  
+**Usage** : Tri en place (pas de mémoire supplémentaire)  
 
 ```pascal
 procedure Heapify(var A: array of Integer; N, I: Integer);
@@ -336,8 +336,8 @@ end.
 
 ### 1. Recherche linéaire
 
-**Complexité** : O(n)
-**Usage** : Tableau non trié, ou petit tableau
+**Complexité** : O(n)  
+**Usage** : Tableau non trié, ou petit tableau  
 
 ```pascal
 function LinearSearch(const A: array of Integer; Value: Integer): Integer;
@@ -355,8 +355,8 @@ end;
 
 ### 2. Recherche binaire
 
-**Complexité** : O(log n)
-**Usage** : Tableau **trié**
+**Complexité** : O(log n)  
+**Usage** : Tableau **trié**  
 
 ```pascal
 function BinarySearch(const A: array of Integer; Value: Integer): Integer;
@@ -427,8 +427,8 @@ end;
 
 ### 3. Recherche dans une table de hachage
 
-**Complexité** : O(1) en moyenne
-**Usage** : Le plus rapide pour recherches fréquentes
+**Complexité** : O(1) en moyenne  
+**Usage** : Le plus rapide pour recherches fréquentes  
 
 ```pascal
 uses Generics.Collections;

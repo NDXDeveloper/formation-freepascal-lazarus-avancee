@@ -296,8 +296,8 @@ end;
 
 ### Principe de localité
 
-**Localité temporelle** : Une donnée récemment accédée sera probablement réutilisée bientôt.
-**Localité spatiale** : Les données voisines seront probablement accédées ensemble.
+**Localité temporelle** : Une donnée récemment accédée sera probablement réutilisée bientôt.  
+**Localité spatiale** : Les données voisines seront probablement accédées ensemble.  
 
 ```pascal
 // ✅ Bonne localité spatiale
@@ -833,6 +833,9 @@ implementation
 uses
   CPUFeatures;  // Détection des capacités (voir section 20.3)
 
+var
+  Features: TCPUFeatures;
+
 procedure ProcessScalar(Data: Pointer; Size: Integer);
 begin
   // Implémentation de base
@@ -856,7 +859,7 @@ end;
 initialization
   // Sélectionner la meilleure implémentation au démarrage
   {$IFDEF CPUX64}
-  var Features := DetectCPUFeatures;
+  Features := DetectCPUFeatures;
 
   if Features.HasAVX2 then
     ProcessData := @ProcessAVX2
@@ -1032,8 +1035,8 @@ Result := Value div 10;  // Avec -O3, optimisé automatiquement
 
 ### 4. Latence vs Throughput
 
-**Latence** : Temps pour une opération seule
-**Throughput** : Nombre d'opérations par cycle
+**Latence** : Temps pour une opération seule  
+**Throughput** : Nombre d'opérations par cycle  
 
 ```pascal
 // Addition entière :
@@ -1633,10 +1636,10 @@ sync; echo 3 > /proc/sys/vm/drop_caches
 
 ### Erreurs à éviter
 
-❌ Optimiser sans mesurer
-❌ Micro-optimiser avant l'algorithme
-❌ Ignorer les différences de plateformes
-❌ Sacrifier la lisibilité sans gain mesurable
+❌ Optimiser sans mesurer  
+❌ Micro-optimiser avant l'algorithme  
+❌ Ignorer les différences de plateformes  
+❌ Sacrifier la lisibilité sans gain mesurable  
 ❌ Optimiser du code rarement exécuté
 
 ## Conclusion

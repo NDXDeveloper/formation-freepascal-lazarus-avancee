@@ -1184,8 +1184,9 @@ type
 
 function CalculateStats(const Timings: array of QWord): TBenchmarkStats;
 var
-  i: Integer;
+  i, j: Integer;
   Sum, SumSquares: Double;
+  Temp: QWord;
   SortedTimings: array of QWord;
 begin
   if Length(Timings) = 0 then Exit;
@@ -1215,10 +1216,10 @@ begin
   SortedTimings := Copy(Timings);
   // Tri simple (bubble sort suffisant pour benchmarks)
   for i := 0 to High(SortedTimings) do
-    for var j := 0 to High(SortedTimings) - i - 1 do
+    for j := 0 to High(SortedTimings) - i - 1 do
       if SortedTimings[j] > SortedTimings[j+1] then
       begin
-        var Temp := SortedTimings[j];
+        Temp := SortedTimings[j];
         SortedTimings[j] := SortedTimings[j+1];
         SortedTimings[j+1] := Temp;
       end;
@@ -1233,6 +1234,7 @@ var
   Stats: TBenchmarkStats;
   SW: TStopwatch;
   i: Integer;
+  CV: Double;
 begin
   SetLength(Timings, Runs);
   SW := TStopwatch.Create;
@@ -1260,7 +1262,7 @@ begin
     WriteLn('  Écart-σ : ', FormatFloat('0.00', Stats.StdDev), ' ms');
 
     // Coefficient de variation (stabilité)
-    var CV := (Stats.StdDev / Stats.Mean) * 100;
+    CV := (Stats.StdDev / Stats.Mean) * 100;
     WriteLn('  CV      : ', FormatFloat('0.00', CV), ' %');
 
     if CV < 5 then

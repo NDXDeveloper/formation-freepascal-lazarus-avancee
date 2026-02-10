@@ -399,6 +399,19 @@ implementation
 uses
   SysUtils, Classes, CrossPlatformTimer;
 
+function FileSize(const FileName: string): Int64;
+var
+  SR: TSearchRec;
+begin
+  if FindFirst(FileName, faAnyFile, SR) = 0 then
+  begin
+    Result := SR.Size;
+    FindClose(SR);
+  end
+  else
+    Result := 0;
+end;
+
 procedure BenchmarkFileWrite;
 var
   Timer: TPlatformTimer;
@@ -434,19 +447,6 @@ begin
   finally
     Timer.Free;
   end;
-end;
-
-function FileSize(const FileName: string): Int64;
-var
-  SR: TSearchRec;
-begin
-  if FindFirst(FileName, faAnyFile, SR) = 0 then
-  begin
-    Result := SR.Size;
-    FindClose(SR);
-  end
-  else
-    Result := 0;
 end;
 
 procedure BenchmarkFileRead;
@@ -1321,6 +1321,16 @@ procedure GetDiskPerformance;
 
 implementation
 
+function ExtractNumber(const S: string): string;
+var
+  i: Integer;
+begin
+  Result := '';
+  for i := 1 to Length(S) do
+    if S[i] in ['0'..'9'] then
+      Result := Result + S[i];
+end;
+
 procedure GetCPUInfo;
 var
   F: TextFile;
@@ -1386,16 +1396,6 @@ begin
     WriteLn('Mémoire disponible: ', MemFree div 1024, ' MB');
     WriteLn('Mémoire utilisée  : ', Result div 1024, ' MB');
   end;
-end;
-
-function ExtractNumber(const S: string): string;
-var
-  i: Integer;
-begin
-  Result := '';
-  for i := 1 to Length(S) do
-    if S[i] in ['0'..'9'] then
-      Result := Result + S[i];
 end;
 
 procedure GetDiskPerformance;

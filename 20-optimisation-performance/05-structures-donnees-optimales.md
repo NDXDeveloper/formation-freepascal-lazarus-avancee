@@ -181,6 +181,9 @@ end;
 ```pascal
 program CompareListTypes;
 
+uses
+  Classes, SysUtils, DateUtils;
+
 const
   N = 100000;
 
@@ -539,6 +542,7 @@ end;
 ### TMap (unité Generics.Collections)
 
 ```pascal
+{$mode delphi}
 uses Generics.Collections;
 
 type
@@ -546,6 +550,7 @@ type
 
 var
   Map: TSortedDict;
+  Pair: TPair<Integer, string>;
 begin
   Map := TSortedDict.Create;
   try
@@ -554,7 +559,7 @@ begin
     Map.Add(2, 'Two');
 
     // Parcours (non ordonné avec TDictionary)
-    for var Pair in Map do
+    for Pair in Map do
       WriteLn(Pair.Key, ': ', Pair.Value);
   finally
     Map.Free;
@@ -1196,7 +1201,7 @@ end;
 **Solution** : TDictionary
 
 ```pascal
-uses Generics.Collections;
+uses Generics.Collections, SysUtils, DateUtils;
 
 type
   TContact = record

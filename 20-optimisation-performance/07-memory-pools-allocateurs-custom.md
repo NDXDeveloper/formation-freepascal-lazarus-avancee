@@ -18,6 +18,9 @@ Les **memory pools** (réservoirs de mémoire) et **allocateurs custom** permett
 // ❌ Allocations répétées (lent)
 program SlowAllocations;
 
+uses
+  SysUtils, DateUtils;
+
 type
   PData = ^TData;
   TData = record
@@ -154,6 +157,9 @@ end;
 
 ```pascal
 program PoolDemo;
+
+uses
+  SysUtils, DateUtils;
 
 type
   TData = record
@@ -625,6 +631,7 @@ end;
 function TFreeListAllocator.Allocate(Size: NativeUInt): Pointer;
 var
   Current, Prev: PFreeBlock;
+  NewBlock: PFreeBlock;
   BlockSize: NativeUInt;
 begin
   // Aligner la taille
@@ -643,7 +650,7 @@ begin
       if Current^.Size >= BlockSize + SizeOf(TFreeBlock) then
       begin
         // Diviser le bloc
-        var NewBlock := PFreeBlock(PByte(Current) + BlockSize);
+        NewBlock := PFreeBlock(PByte(Current) + BlockSize);
         NewBlock^.Size := Current^.Size - BlockSize;
         NewBlock^.Next := Current^.Next;
 
@@ -811,10 +818,12 @@ begin
 end;
 
 // Utilisation
+var
+  Root: PTreeNode;
 begin
   NodeAllocator := TSlab.Create(SizeOf(TTreeNode), 1000);
   try
-    var Root := CreateTree(15);  // Crée 2^15-1 = 32,767 nœuds
+    Root := CreateTree(15);  // Crée 2^15-1 = 32,767 nœuds
     // ... utiliser l'arbre ...
     FreeTree(Root);
   finally
@@ -1634,6 +1643,9 @@ Créations/destructions fréquentes d'objets ?
 
 ```pascal
 program ComprehensiveBenchmark;
+
+uses
+  SysUtils, DateUtils;
 
 const
   Operations = 100000;
