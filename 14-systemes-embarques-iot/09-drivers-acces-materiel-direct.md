@@ -2575,12 +2575,12 @@ end;
 
 L'accès matériel direct avec FreePascal est un domaine technique mais extrêmement gratifiant. Vous avez maintenant les connaissances pour :
 
-✓ Comprendre l'architecture matérielle (registres, MMIO, interruptions)
-✓ Programmer des microcontrôleurs (GPIO, UART, ADC, PWM, Timers)
-✓ Accéder au matériel sur PC (Windows via drivers, Linux via sysfs)
-✓ Utiliser les bus de communication (I2C, SPI, USB)
-✓ Gérer les interruptions et le DMA
-✓ Optimiser et déboguer le code embarqué
+✓ Comprendre l'architecture matérielle (registres, MMIO, interruptions)  
+✓ Programmer des microcontrôleurs (GPIO, UART, ADC, PWM, Timers)  
+✓ Accéder au matériel sur PC (Windows via drivers, Linux via sysfs)  
+✓ Utiliser les bus de communication (I2C, SPI, USB)  
+✓ Gérer les interruptions et le DMA  
+✓ Optimiser et déboguer le code embarqué  
 ✓ Créer des projets complets robustes et sûrs
 
 **Conseils pour progresser** :

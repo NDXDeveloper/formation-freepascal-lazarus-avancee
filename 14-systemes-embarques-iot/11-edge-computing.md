@@ -2795,10 +2795,10 @@ end;
 
 L'**Edge Computing** avec FreePascal permet de créer des systèmes :
 
-✅ **Réactifs** : Traitement local en < 100ms
-✅ **Autonomes** : Fonctionnent sans connexion cloud
-✅ **Économiques** : Réduction 90-99% du trafic réseau
-✅ **Sécurisés** : Données sensibles restent locales
+✅ **Réactifs** : Traitement local en < 100ms  
+✅ **Autonomes** : Fonctionnent sans connexion cloud  
+✅ **Économiques** : Réduction 90-99% du trafic réseau  
+✅ **Sécurisés** : Données sensibles restent locales  
 ✅ **Scalables** : Chaque edge device est indépendant
 
 ### Récapitulatif architecture Edge
@@ -3603,11 +3603,11 @@ L'**Edge Computing** révolutionne l'IoT et les systèmes embarqués en déplaç
 
 ### Avantages de FreePascal pour Edge
 
-✅ **Multi-plateforme** : Un seul code pour ESP32, Raspberry Pi, PC
-✅ **Performant** : Code natif optimisé
-✅ **Lisible** : Syntaxe claire vs C/C++
-✅ **Robuste** : Typage fort, moins de bugs
-✅ **Complet** : Bibliothèques pour réseau, DB, ML
+✅ **Multi-plateforme** : Un seul code pour ESP32, Raspberry Pi, PC  
+✅ **Performant** : Code natif optimisé  
+✅ **Lisible** : Syntaxe claire vs C/C++  
+✅ **Robuste** : Typage fort, moins de bugs  
+✅ **Complet** : Bibliothèques pour réseau, DB, ML  
 ✅ **Gratuit** : Open source, pas de licence
 
 ### Prochaines étapes

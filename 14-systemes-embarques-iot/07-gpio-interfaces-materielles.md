@@ -2208,7 +2208,7 @@ begin
   Longitude := 0;
   Altitude := 0;
 
-  if not Sentence.StartsWith('$GPGGA') then
+  if Copy(Sentence, 1, 6) <> '$GPGGA' then
     Exit;
 
   Parts := TStringList.Create;
@@ -2268,7 +2268,7 @@ begin
   Longitude := 0;
   Speed := 0;
 
-  if not Sentence.StartsWith('$GPRMC') then
+  if Copy(Sentence, 1, 6) <> '$GPRMC' then
     Exit;
 
   Parts := TStringList.Create;
@@ -2352,7 +2352,7 @@ begin
           if Ch = 10 then // Line Feed
           begin
             // Traiter la ligne complète
-            if Line.StartsWith('$GPGGA') then
+            if Copy(Line, 1, 6) = '$GPGGA' then
             begin
               if TGPSParser.ParseGGA(Line, Latitude, Longitude, Altitude) then
               begin
@@ -2361,7 +2361,7 @@ begin
                 WriteLn(Format('  Altitude: %.1f m', [Altitude]));
               end;
             end
-            else if Line.StartsWith('$GPRMC') then
+            else if Copy(Line, 1, 6) = '$GPRMC' then
             begin
               if TGPSParser.ParseRMC(Line, Latitude, Longitude, Speed) then
               begin
@@ -2837,7 +2837,7 @@ begin
   FSerialPort := PortName;
   {$IFDEF WINDOWS}
   // Windows: format "COM3", "COM4", etc.
-  if not FSerialPort.StartsWith('\\.\') then
+  if Copy(FSerialPort, 1, 4) <> '\\.\' then
     FSerialPort := '\\.\' + FSerialPort;
   {$ENDIF}
 

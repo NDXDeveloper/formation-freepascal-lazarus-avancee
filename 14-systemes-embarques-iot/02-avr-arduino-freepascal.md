@@ -85,8 +85,8 @@ Microcontrôleur minimal pour projets compacts :
 
 Avec USB natif :
 
-**Particularité** : peut émuler clavier/souris USB
-**Usage** : interfaces HID (Human Interface Device), macropads, contrôleurs de jeu
+**Particularité** : peut émuler clavier/souris USB  
+**Usage** : interfaces HID (Human Interface Device), macropads, contrôleurs de jeu  
 
 ## Architecture matérielle AVR
 

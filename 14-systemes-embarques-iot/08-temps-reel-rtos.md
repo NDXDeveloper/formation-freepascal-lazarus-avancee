@@ -50,8 +50,8 @@ end;
 
 ### Latence et Jitter
 
-**Latence** : délai entre un événement et sa réponse
-**Jitter** : variation de cette latence dans le temps
+**Latence** : délai entre un événement et sa réponse  
+**Jitter** : variation de cette latence dans le temps  
 
 ```
 Système non temps réel :
