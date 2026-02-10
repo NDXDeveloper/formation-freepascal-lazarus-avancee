@@ -55,7 +55,7 @@ type
 
 implementation
 
-constructor TGestionnaireUtilisateurs.Create;
+constructor TGestionnaireUtilisateurs.Create;  
 begin
   // Dépendances créées DANS le constructeur
   FConnexion := TMySQL56Connection.Create(nil);
@@ -71,14 +71,14 @@ begin
   FConnexion.Open;
 end;
 
-destructor TGestionnaireUtilisateurs.Destroy;
+destructor TGestionnaireUtilisateurs.Destroy;  
 begin
   FTransaction.Free;
   FConnexion.Free;
   inherited;
 end;
 
-function TGestionnaireUtilisateurs.CreerUtilisateur(const Email, MotDePasse: String): Integer;
+function TGestionnaireUtilisateurs.CreerUtilisateur(const Email, MotDePasse: String): Integer;  
 var
   Query: TSQLQuery;
 begin
@@ -166,7 +166,7 @@ type
   end;
 
 // Utilisation
-Gestionnaire := TGestionnaireUtilisateurs.Create;
+Gestionnaire := TGestionnaireUtilisateurs.Create;  
 Gestionnaire.Connexion := MaConnexion;  // Injection après création
 ```
 
@@ -235,7 +235,7 @@ begin
   FTransaction := ATransaction;
 end;
 
-function TGestionnaireUtilisateurs.CreerUtilisateur(const Email, MotDePasse: String): Integer;
+function TGestionnaireUtilisateurs.CreerUtilisateur(const Email, MotDePasse: String): Integer;  
 var
   Query: TSQLQuery;
 begin
@@ -254,7 +254,7 @@ begin
   end;
 end;
 
-function TGestionnaireUtilisateurs.VerifierMotDePasse(const Email, MotDePasse: String): Boolean;
+function TGestionnaireUtilisateurs.VerifierMotDePasse(const Email, MotDePasse: String): Boolean;  
 var
   Query: TSQLQuery;
 begin
@@ -322,7 +322,7 @@ end;
 ### Utilisation en tests
 
 ```pascal
-procedure TTestGestionnaireUtilisateurs.TestCreerUtilisateur;
+procedure TTestGestionnaireUtilisateurs.TestCreerUtilisateur;  
 var
   Connexion: TSQLite3Connection;  // SQLite en mémoire pour les tests !
   Transaction: TSQLTransaction;
@@ -468,7 +468,7 @@ type
 
 implementation
 
-constructor TGestionnaireUtilisateurs.Create(ADatabase: IDatabaseConnection);
+constructor TGestionnaireUtilisateurs.Create(ADatabase: IDatabaseConnection);  
 begin
   if ADatabase = nil then
     raise Exception.Create('La base de données ne peut pas être nil');
@@ -476,7 +476,7 @@ begin
   FDB := ADatabase;
 end;
 
-function TGestionnaireUtilisateurs.CreerUtilisateur(const Email, MotDePasse: String): Integer;
+function TGestionnaireUtilisateurs.CreerUtilisateur(const Email, MotDePasse: String): Integer;  
 begin
   FDB.BeginTransaction;
   try
@@ -491,7 +491,7 @@ begin
   end;
 end;
 
-function TGestionnaireUtilisateurs.VerifierMotDePasse(const Email, MotDePasse: String): Boolean;
+function TGestionnaireUtilisateurs.VerifierMotDePasse(const Email, MotDePasse: String): Boolean;  
 var
   ResultSet: IResultSet;
 begin
@@ -541,7 +541,7 @@ type
     function ExecuteQuery(const SQL: String; const Params: array of Variant): IResultSet;
   end;
 
-function TStubDatabase.ExecuteQuery(const SQL: String; const Params: array of Variant): IResultSet;
+function TStubDatabase.ExecuteQuery(const SQL: String; const Params: array of Variant): IResultSet;  
 begin
   // Toujours retourner un résultat vide
   Result := TEmptyResultSet.Create;
@@ -566,7 +566,7 @@ type
   end;
 
 // Implémentation qui stocke en mémoire plutôt qu'en base
-constructor TFakeDatabase.Create;
+constructor TFakeDatabase.Create;  
 begin
   FData := TStringList.Create;
 end;
@@ -591,7 +591,7 @@ type
     function GetLastSQL: String;
   end;
 
-function TMockDatabase.ExecuteNonQuery(const SQL: String; const Params: array of Variant): Integer;
+function TMockDatabase.ExecuteNonQuery(const SQL: String; const Params: array of Variant): Integer;  
 begin
   FExecuteNonQueryCalled := True;
   FLastSQL := SQL;
@@ -661,7 +661,7 @@ implementation
 
 { TMockDatabase }
 
-constructor TMockDatabase.Create;
+constructor TMockDatabase.Create;  
 begin
   FExecutedSQL := TStringList.Create;
   FData := TDictionary<String, String>.Create;
@@ -669,71 +669,71 @@ begin
   FInTransaction := False;
 end;
 
-destructor TMockDatabase.Destroy;
+destructor TMockDatabase.Destroy;  
 begin
   FData.Free;
   FExecutedSQL.Free;
   inherited;
 end;
 
-procedure TMockDatabase.Open;
+procedure TMockDatabase.Open;  
 begin
   FIsOpen := True;
 end;
 
-procedure TMockDatabase.Close;
+procedure TMockDatabase.Close;  
 begin
   FIsOpen := False;
 end;
 
-function TMockDatabase.IsConnected: Boolean;
+function TMockDatabase.IsConnected: Boolean;  
 begin
   Result := FIsOpen;
 end;
 
-function TMockDatabase.ExecuteNonQuery(const SQL: String; const Params: array of Variant): Integer;
+function TMockDatabase.ExecuteNonQuery(const SQL: String; const Params: array of Variant): Integer;  
 begin
   FExecutedSQL.Add(SQL);
   Result := 1;  // Simuler 1 ligne affectée
 end;
 
-function TMockDatabase.ExecuteQuery(const SQL: String; const Params: array of Variant): IResultSet;
+function TMockDatabase.ExecuteQuery(const SQL: String; const Params: array of Variant): IResultSet;  
 begin
   FExecutedSQL.Add(SQL);
   Result := TMockResultSet.Create(FData, FData.Count = 0);
 end;
 
-procedure TMockDatabase.BeginTransaction;
+procedure TMockDatabase.BeginTransaction;  
 begin
   FInTransaction := True;
 end;
 
-procedure TMockDatabase.Commit;
+procedure TMockDatabase.Commit;  
 begin
   FInTransaction := False;
 end;
 
-procedure TMockDatabase.Rollback;
+procedure TMockDatabase.Rollback;  
 begin
   FInTransaction := False;
 end;
 
-procedure TMockDatabase.AddData(const Key, Value: String);
+procedure TMockDatabase.AddData(const Key, Value: String);  
 begin
   FData.Add(Key, Value);
 end;
 
-function TMockDatabase.GetExecutedSQL: TStringList;
+function TMockDatabase.GetExecutedSQL: TStringList;  
 begin
   Result := FExecutedSQL;
 end;
 
-function TMockDatabase.WasInTransaction: Boolean;
+function TMockDatabase.WasInTransaction: Boolean;  
 begin
   Result := FInTransaction or (FExecutedSQL.Count > 0);
 end;
 
-procedure TMockDatabase.Reset;
+procedure TMockDatabase.Reset;  
 begin
   FExecutedSQL.Clear;
   FData.Clear;
@@ -743,18 +743,18 @@ end;
 
 { TMockResultSet }
 
-constructor TMockResultSet.Create(AData: TDictionary<String, String>; AIsEmpty: Boolean);
+constructor TMockResultSet.Create(AData: TDictionary<String, String>; AIsEmpty: Boolean);  
 begin
   FData := AData;
   FIsEmpty := AIsEmpty;
 end;
 
-function TMockResultSet.Next: Boolean;
+function TMockResultSet.Next: Boolean;  
 begin
   Result := not FIsEmpty;
 end;
 
-function TMockResultSet.GetString(const FieldName: String): String;
+function TMockResultSet.GetString(const FieldName: String): String;  
 begin
   if FData.ContainsKey(FieldName) then
     Result := FData[FieldName]
@@ -762,12 +762,12 @@ begin
     Result := '';
 end;
 
-function TMockResultSet.GetInteger(const FieldName: String): Integer;
+function TMockResultSet.GetInteger(const FieldName: String): Integer;  
 begin
   Result := StrToIntDef(GetString(FieldName), 0);
 end;
 
-function TMockResultSet.IsEOF: Boolean;
+function TMockResultSet.IsEOF: Boolean;  
 begin
   Result := FIsEmpty;
 end;
@@ -806,7 +806,7 @@ type
 
 implementation
 
-procedure TTestGestionnaireUtilisateurs.SetUp;
+procedure TTestGestionnaireUtilisateurs.SetUp;  
 begin
   inherited;
   FMockDB := TMockDatabase.Create;
@@ -814,14 +814,14 @@ begin
   FGestionnaire := TGestionnaireUtilisateurs.Create(FMockDB);
 end;
 
-procedure TTestGestionnaireUtilisateurs.TearDown;
+procedure TTestGestionnaireUtilisateurs.TearDown;  
 begin
   FGestionnaire.Free;
   // Le mock est libéré automatiquement (interface)
   inherited;
 end;
 
-procedure TTestGestionnaireUtilisateurs.TestCreerUtilisateur;
+procedure TTestGestionnaireUtilisateurs.TestCreerUtilisateur;  
 var
   ID: Integer;
 begin
@@ -839,7 +839,7 @@ begin
     Pos('INSERT', UpperCase(FMockDB.GetExecutedSQL[0])) > 0);
 end;
 
-procedure TTestGestionnaireUtilisateurs.TestCreerUtilisateurUtiliseTransaction;
+procedure TTestGestionnaireUtilisateurs.TestCreerUtilisateurUtiliseTransaction;  
 begin
   // Test
   FGestionnaire.CreerUtilisateur('test@example.com', 'password123');
@@ -848,7 +848,7 @@ begin
   AssertTrue('Transaction utilisée', FMockDB.WasInTransaction);
 end;
 
-procedure TTestGestionnaireUtilisateurs.TestVerifierMotDePasseCorrect;
+procedure TTestGestionnaireUtilisateurs.TestVerifierMotDePasseCorrect;  
 var
   Resultat: Boolean;
 begin
@@ -862,7 +862,7 @@ begin
   AssertTrue('Mot de passe correct', Resultat);
 end;
 
-procedure TTestGestionnaireUtilisateurs.TestVerifierMotDePasseIncorrect;
+procedure TTestGestionnaireUtilisateurs.TestVerifierMotDePasseIncorrect;  
 var
   Resultat: Boolean;
 begin
@@ -876,7 +876,7 @@ begin
   AssertFalse('Mot de passe incorrect', Resultat);
 end;
 
-procedure TTestGestionnaireUtilisateurs.TestVerifierUtilisateurInexistant;
+procedure TTestGestionnaireUtilisateurs.TestVerifierUtilisateurInexistant;  
 var
   Resultat: Boolean;
 begin
@@ -963,12 +963,12 @@ implementation
 
 { TUtilisateurRepositoryDB }
 
-constructor TUtilisateurRepositoryDB.Create(ADatabase: IDatabaseConnection);
+constructor TUtilisateurRepositoryDB.Create(ADatabase: IDatabaseConnection);  
 begin
   FDB := ADatabase;
 end;
 
-function TUtilisateurRepositoryDB.Creer(Utilisateur: TUtilisateur): Integer;
+function TUtilisateurRepositoryDB.Creer(Utilisateur: TUtilisateur): Integer;  
 begin
   FDB.BeginTransaction;
   try
@@ -984,7 +984,7 @@ begin
   end;
 end;
 
-function TUtilisateurRepositoryDB.ChargerParID(ID: Integer): TUtilisateur;
+function TUtilisateurRepositoryDB.ChargerParID(ID: Integer): TUtilisateur;  
 var
   RS: IResultSet;
 begin
@@ -1002,7 +1002,7 @@ begin
   end;
 end;
 
-function TUtilisateurRepositoryDB.ChargerParEmail(const Email: String): TUtilisateur;
+function TUtilisateurRepositoryDB.ChargerParEmail(const Email: String): TUtilisateur;  
 var
   RS: IResultSet;
 begin
@@ -1020,7 +1020,7 @@ begin
   end;
 end;
 
-function TUtilisateurRepositoryDB.Modifier(Utilisateur: TUtilisateur): Boolean;
+function TUtilisateurRepositoryDB.Modifier(Utilisateur: TUtilisateur): Boolean;  
 begin
   FDB.BeginTransaction;
   try
@@ -1036,7 +1036,7 @@ begin
   end;
 end;
 
-function TUtilisateurRepositoryDB.Supprimer(ID: Integer): Boolean;
+function TUtilisateurRepositoryDB.Supprimer(ID: Integer): Boolean;  
 begin
   FDB.BeginTransaction;
   try
@@ -1049,7 +1049,7 @@ begin
   end;
 end;
 
-function TUtilisateurRepositoryDB.ChargerTous: TList<TUtilisateur>;
+function TUtilisateurRepositoryDB.ChargerTous: TList<TUtilisateur>;  
 var
   RS: IResultSet;
   Utilisateur: TUtilisateur;
@@ -1073,13 +1073,13 @@ end;
 
 { TUtilisateurRepositoryMock }
 
-constructor TUtilisateurRepositoryMock.Create;
+constructor TUtilisateurRepositoryMock.Create;  
 begin
   FUtilisateurs := TDictionary<Integer, TUtilisateur>.Create;
   FNextID := 1;
 end;
 
-destructor TUtilisateurRepositoryMock.Destroy;
+destructor TUtilisateurRepositoryMock.Destroy;  
 var
   Utilisateur: TUtilisateur;
 begin
@@ -1091,7 +1091,7 @@ begin
   inherited;
 end;
 
-function TUtilisateurRepositoryMock.Creer(Utilisateur: TUtilisateur): Integer;
+function TUtilisateurRepositoryMock.Creer(Utilisateur: TUtilisateur): Integer;  
 var
   Copie: TUtilisateur;
 begin
@@ -1109,7 +1109,7 @@ begin
   Inc(FNextID);
 end;
 
-function TUtilisateurRepositoryMock.ChargerParID(ID: Integer): TUtilisateur;
+function TUtilisateurRepositoryMock.ChargerParID(ID: Integer): TUtilisateur;  
 var
   Original: TUtilisateur;
 begin
@@ -1128,7 +1128,7 @@ begin
     Result := nil;
 end;
 
-function TUtilisateurRepositoryMock.ChargerParEmail(const Email: String): TUtilisateur;
+function TUtilisateurRepositoryMock.ChargerParEmail(const Email: String): TUtilisateur;  
 var
   Utilisateur: TUtilisateur;
 begin
@@ -1149,7 +1149,7 @@ begin
   end;
 end;
 
-function TUtilisateurRepositoryMock.Modifier(Utilisateur: TUtilisateur): Boolean;
+function TUtilisateurRepositoryMock.Modifier(Utilisateur: TUtilisateur): Boolean;  
 var
   Existant: TUtilisateur;
 begin
@@ -1165,7 +1165,7 @@ begin
     Result := False;
 end;
 
-function TUtilisateurRepositoryMock.Supprimer(ID: Integer): Boolean;
+function TUtilisateurRepositoryMock.Supprimer(ID: Integer): Boolean;  
 var
   Utilisateur: TUtilisateur;
 begin
@@ -1180,7 +1180,7 @@ begin
     Result := False;
 end;
 
-function TUtilisateurRepositoryMock.ChargerTous: TList<TUtilisateur>;
+function TUtilisateurRepositoryMock.ChargerTous: TList<TUtilisateur>;  
 var
   Original, Copie: TUtilisateur;
 begin
@@ -1197,7 +1197,7 @@ begin
   end;
 end;
 
-procedure TUtilisateurRepositoryMock.AjouterUtilisateur(Utilisateur: TUtilisateur);
+procedure TUtilisateurRepositoryMock.AjouterUtilisateur(Utilisateur: TUtilisateur);  
 var
   Copie: TUtilisateur;
 begin
@@ -1213,7 +1213,7 @@ begin
     FNextID := Copie.ID + 1;
 end;
 
-function TUtilisateurRepositoryMock.Count: Integer;
+function TUtilisateurRepositoryMock.Count: Integer;  
 begin
   Result := FUtilisateurs.Count;
 end;
@@ -1252,21 +1252,21 @@ type
 
 implementation
 
-procedure TTestServiceUtilisateurs.SetUp;
+procedure TTestServiceUtilisateurs.SetUp;  
 begin
   inherited;
   FRepository := TUtilisateurRepositoryMock.Create;
   FService := TServiceUtilisateurs.Create(FRepository);
 end;
 
-procedure TTestServiceUtilisateurs.TearDown;
+procedure TTestServiceUtilisateurs.TearDown;  
 begin
   FService.Free;
   // Le repository mock est libéré automatiquement (interface)
   inherited;
 end;
 
-procedure TTestServiceUtilisateurs.TestInscriptionUtilisateur;
+procedure TTestServiceUtilisateurs.TestInscriptionUtilisateur;  
 var
   Utilisateur: TUtilisateur;
   ID: Integer;
@@ -1298,7 +1298,7 @@ begin
   end;
 end;
 
-procedure TTestServiceUtilisateurs.TestInscriptionEmailDuplique;
+procedure TTestServiceUtilisateurs.TestInscriptionEmailDuplique;  
 var
   Utilisateur1, Utilisateur2: TUtilisateur;
 begin
@@ -1333,7 +1333,7 @@ begin
   AssertEquals('Un seul utilisateur', 1, FRepository.Count);
 end;
 
-procedure TTestServiceUtilisateurs.TestAuthentification;
+procedure TTestServiceUtilisateurs.TestAuthentification;  
 var
   Utilisateur: TUtilisateur;
   UtilisateurConnecte: TUtilisateur;
@@ -1358,7 +1358,7 @@ begin
   end;
 end;
 
-procedure TTestServiceUtilisateurs.TestAuthentificationEchec;
+procedure TTestServiceUtilisateurs.TestAuthentificationEchec;  
 var
   Utilisateur: TUtilisateur;
   UtilisateurConnecte: TUtilisateur;
@@ -1381,7 +1381,7 @@ begin
   AssertNull('Utilisateur inexistant', UtilisateurConnecte);
 end;
 
-procedure TTestServiceUtilisateurs.TestModificationProfil;
+procedure TTestServiceUtilisateurs.TestModificationProfil;  
 var
   Utilisateur: TUtilisateur;
   ID: Integer;
@@ -1478,18 +1478,18 @@ type
 
 implementation
 
-constructor TSpyLogger.Create;
+constructor TSpyLogger.Create;  
 begin
   FLogEntries := TList<TLogEntry>.Create;
 end;
 
-destructor TSpyLogger.Destroy;
+destructor TSpyLogger.Destroy;  
 begin
   FLogEntries.Free;
   inherited;
 end;
 
-procedure TSpyLogger.Debug(const Message: String);
+procedure TSpyLogger.Debug(const Message: String);  
 var
   Entry: TLogEntry;
 begin
@@ -1499,7 +1499,7 @@ begin
   FLogEntries.Add(Entry);
 end;
 
-procedure TSpyLogger.Info(const Message: String);
+procedure TSpyLogger.Info(const Message: String);  
 var
   Entry: TLogEntry;
 begin
@@ -1509,7 +1509,7 @@ begin
   FLogEntries.Add(Entry);
 end;
 
-procedure TSpyLogger.Warning(const Message: String);
+procedure TSpyLogger.Warning(const Message: String);  
 var
   Entry: TLogEntry;
 begin
@@ -1519,7 +1519,7 @@ begin
   FLogEntries.Add(Entry);
 end;
 
-procedure TSpyLogger.Error(const Message: String);
+procedure TSpyLogger.Error(const Message: String);  
 var
   Entry: TLogEntry;
 begin
@@ -1529,17 +1529,17 @@ begin
   FLogEntries.Add(Entry);
 end;
 
-function TSpyLogger.GetLogCount: Integer;
+function TSpyLogger.GetLogCount: Integer;  
 begin
   Result := FLogEntries.Count;
 end;
 
-function TSpyLogger.GetLogEntry(Index: Integer): TLogEntry;
+function TSpyLogger.GetLogEntry(Index: Integer): TLogEntry;  
 begin
   Result := FLogEntries[Index];
 end;
 
-function TSpyLogger.WasDebugCalled: Boolean;
+function TSpyLogger.WasDebugCalled: Boolean;  
 var
   Entry: TLogEntry;
 begin
@@ -1549,7 +1549,7 @@ begin
       Exit(True);
 end;
 
-function TSpyLogger.WasErrorCalled: Boolean;
+function TSpyLogger.WasErrorCalled: Boolean;  
 var
   Entry: TLogEntry;
 begin
@@ -1559,7 +1559,7 @@ begin
       Exit(True);
 end;
 
-function TSpyLogger.GetMessagesContaining(const Text: String): TList<TLogEntry>;
+function TSpyLogger.GetMessagesContaining(const Text: String): TList<TLogEntry>;  
 var
   Entry: TLogEntry;
 begin
@@ -1569,7 +1569,7 @@ begin
       Result.Add(Entry);
 end;
 
-procedure TSpyLogger.Clear;
+procedure TSpyLogger.Clear;  
 begin
   FLogEntries.Clear;
 end;
@@ -1580,7 +1580,7 @@ end.
 ### Utilisation du Spy
 
 ```pascal
-procedure TTestServiceAvecLogging.TestCreationUtilisateurLogsInfo;
+procedure TTestServiceAvecLogging.TestCreationUtilisateurLogsInfo;  
 var
   SpyLogger: TSpyLogger;
   Service: TServiceUtilisateurs;
@@ -1613,7 +1613,7 @@ begin
   end;
 end;
 
-procedure TTestServiceAvecLogging.TestErreurLogsError;
+procedure TTestServiceAvecLogging.TestErreurLogsError;  
 var
   SpyLogger: TSpyLogger;
   Service: TServiceUtilisateurs;
@@ -1674,13 +1674,13 @@ type
 
 implementation
 
-constructor TDIContainer.Create;
+constructor TDIContainer.Create;  
 begin
   FBindings := TDictionary<String, TFactoryMethod>.Create;
   FSingletons := TDictionary<String, TObject>.Create;
 end;
 
-destructor TDIContainer.Destroy;
+destructor TDIContainer.Destroy;  
 var
   Obj: TObject;
 begin
@@ -1706,7 +1706,7 @@ begin
   end;
 end;
 
-function TDIContainer.Resolve(const InterfaceName: String): TObject;
+function TDIContainer.Resolve(const InterfaceName: String): TObject;  
 begin
   // Vérifier si c'est un singleton déjà créé
   if FSingletons.ContainsKey(InterfaceName) then
@@ -1719,7 +1719,7 @@ begin
     raise Exception.CreateFmt('Aucune liaison trouvée pour %s', [InterfaceName]);
 end;
 
-procedure TDIContainer.Clear;
+procedure TDIContainer.Clear;  
 var
   Obj: TObject;
 begin
@@ -1792,7 +1792,7 @@ end.
 ### Configuration pour les tests
 
 ```pascal
-procedure ConfigurerContainerPourTests(Container: TDIContainer);
+procedure ConfigurerContainerPourTests(Container: TDIContainer);  
 begin
   // Utiliser des mocks pour les tests
   Container.Bind('IDatabaseConnection',
@@ -1868,7 +1868,7 @@ type
 
 implementation
 
-function TFileSystemWindows.ReadFile(const FileName: String): String;
+function TFileSystemWindows.ReadFile(const FileName: String): String;  
 var
   FileStream: TFileStream;
   StringList: TStringList;
@@ -1882,7 +1882,7 @@ begin
   end;
 end;
 
-procedure TFileSystemWindows.WriteFile(const FileName, Content: String);
+procedure TFileSystemWindows.WriteFile(const FileName, Content: String);  
 var
   StringList: TStringList;
 begin
@@ -1895,19 +1895,19 @@ begin
   end;
 end;
 
-function TFileSystemWindows.FileExists(const FileName: String): Boolean;
+function TFileSystemWindows.FileExists(const FileName: String): Boolean;  
 begin
   Result := SysUtils.FileExists(FileName);
 end;
 
-function TFileSystemWindows.GetTempPath: String;
+function TFileSystemWindows.GetTempPath: String;  
 begin
   Result := GetEnvironmentVariable('TEMP');
   if Result = '' then
     Result := 'C:\Temp';
 end;
 
-function TFileSystemWindows.GetPathSeparator: Char;
+function TFileSystemWindows.GetPathSeparator: Char;  
 begin
   Result := '\';
 end;
@@ -1937,7 +1937,7 @@ type
 
 implementation
 
-function TFileSystemLinux.ReadFile(const FileName: String): String;
+function TFileSystemLinux.ReadFile(const FileName: String): String;  
 var
   StringList: TStringList;
 begin
@@ -1950,7 +1950,7 @@ begin
   end;
 end;
 
-procedure TFileSystemLinux.WriteFile(const FileName, Content: String);
+procedure TFileSystemLinux.WriteFile(const FileName, Content: String);  
 var
   StringList: TStringList;
 begin
@@ -1963,17 +1963,17 @@ begin
   end;
 end;
 
-function TFileSystemLinux.FileExists(const FileName: String): Boolean;
+function TFileSystemLinux.FileExists(const FileName: String): Boolean;  
 begin
   Result := SysUtils.FileExists(FileName);
 end;
 
-function TFileSystemLinux.GetTempPath: String;
+function TFileSystemLinux.GetTempPath: String;  
 begin
   Result := '/tmp';
 end;
 
-function TFileSystemLinux.GetPathSeparator: Char;
+function TFileSystemLinux.GetPathSeparator: Char;  
 begin
   Result := '/';
 end;
@@ -2011,7 +2011,7 @@ implementation
 uses
   MockFileSystem;  // Pour les tests
 
-class function TFileSystemFactory.Create: IFileSystem;
+class function TFileSystemFactory.Create: IFileSystem;  
 begin
   {$IFDEF WINDOWS}
   Result := TFileSystemWindows.Create;
@@ -2022,7 +2022,7 @@ begin
   {$ENDIF}
 end;
 
-class function TFileSystemFactory.CreateForTesting: IFileSystem;
+class function TFileSystemFactory.CreateForTesting: IFileSystem;  
 begin
   // Retourner toujours un mock pour les tests
   Result := TMockFileSystem.Create;
@@ -2075,14 +2075,14 @@ type
 
 implementation
 
-constructor TMockFileSystem.Create;
+constructor TMockFileSystem.Create;  
 begin
   FFiles := TDictionary<String, String>.Create;
   FReadCalls := TStringList.Create;
   FWriteCalls := TStringList.Create;
 end;
 
-destructor TMockFileSystem.Destroy;
+destructor TMockFileSystem.Destroy;  
 begin
   FWriteCalls.Free;
   FReadCalls.Free;
@@ -2090,7 +2090,7 @@ begin
   inherited;
 end;
 
-function TMockFileSystem.ReadFile(const FileName: String): String;
+function TMockFileSystem.ReadFile(const FileName: String): String;  
 begin
   FReadCalls.Add(FileName);
 
@@ -2100,55 +2100,55 @@ begin
     raise Exception.CreateFmt('Fichier non trouvé : %s', [FileName]);
 end;
 
-procedure TMockFileSystem.WriteFile(const FileName, Content: String);
+procedure TMockFileSystem.WriteFile(const FileName, Content: String);  
 begin
   FWriteCalls.Add(FileName);
   FFiles.AddOrSetValue(FileName, Content);
 end;
 
-function TMockFileSystem.FileExists(const FileName: String): Boolean;
+function TMockFileSystem.FileExists(const FileName: String): Boolean;  
 begin
   Result := FFiles.ContainsKey(FileName);
 end;
 
-function TMockFileSystem.GetTempPath: String;
+function TMockFileSystem.GetTempPath: String;  
 begin
   Result := '/mock/temp/';
 end;
 
-function TMockFileSystem.GetPathSeparator: Char;
+function TMockFileSystem.GetPathSeparator: Char;  
 begin
   Result := '/';
 end;
 
-procedure TMockFileSystem.AddFile(const FileName, Content: String);
+procedure TMockFileSystem.AddFile(const FileName, Content: String);  
 begin
   FFiles.AddOrSetValue(FileName, Content);
 end;
 
-procedure TMockFileSystem.RemoveFile(const FileName: String);
+procedure TMockFileSystem.RemoveFile(const FileName: String);  
 begin
   FFiles.Remove(FileName);
 end;
 
-procedure TMockFileSystem.Clear;
+procedure TMockFileSystem.Clear;  
 begin
   FFiles.Clear;
   FReadCalls.Clear;
   FWriteCalls.Clear;
 end;
 
-function TMockFileSystem.WasReadCalled(const FileName: String): Boolean;
+function TMockFileSystem.WasReadCalled(const FileName: String): Boolean;  
 begin
   Result := FReadCalls.IndexOf(FileName) >= 0;
 end;
 
-function TMockFileSystem.WasWriteCalled(const FileName: String): Boolean;
+function TMockFileSystem.WasWriteCalled(const FileName: String): Boolean;  
 begin
   Result := FWriteCalls.IndexOf(FileName) >= 0;
 end;
 
-function TMockFileSystem.GetWrittenContent(const FileName: String): String;
+function TMockFileSystem.GetWrittenContent(const FileName: String): String;  
 begin
   if FFiles.ContainsKey(FileName) then
     Result := FFiles[FileName]
@@ -2156,12 +2156,12 @@ begin
     Result := '';
 end;
 
-function TMockFileSystem.GetReadCallCount: Integer;
+function TMockFileSystem.GetReadCallCount: Integer;  
 begin
   Result := FReadCalls.Count;
 end;
 
-function TMockFileSystem.GetWriteCallCount: Integer;
+function TMockFileSystem.GetWriteCallCount: Integer;  
 begin
   Result := FWriteCalls.Count;
 end;
@@ -2200,21 +2200,21 @@ type
 
 implementation
 
-procedure TTestGestionnaireFichiers.SetUp;
+procedure TTestGestionnaireFichiers.SetUp;  
 begin
   inherited;
   FMockFS := TMockFileSystem.Create;
   FGestionnaire := TGestionnaireFichiers.Create(FMockFS);
 end;
 
-procedure TTestGestionnaireFichiers.TearDown;
+procedure TTestGestionnaireFichiers.TearDown;  
 begin
   FGestionnaire.Free;
   // FMockFS libéré automatiquement (interface)
   inherited;
 end;
 
-procedure TTestGestionnaireFichiers.TestChargerConfiguration;
+procedure TTestGestionnaireFichiers.TestChargerConfiguration;  
 var
   Config: String;
 begin
@@ -2235,7 +2235,7 @@ begin
   AssertTrue('Lecture effectuée', FMockFS.WasReadCalled('config.ini'));
 end;
 
-procedure TTestGestionnaireFichiers.TestSauvegarderConfiguration;
+procedure TTestGestionnaireFichiers.TestSauvegarderConfiguration;  
 var
   Config: String;
 begin
@@ -2249,7 +2249,7 @@ begin
   AssertEquals('Contenu correct', Config, FMockFS.GetWrittenContent('settings.ini'));
 end;
 
-procedure TTestGestionnaireFichiers.TestChargerFichierInexistant;
+procedure TTestGestionnaireFichiers.TestChargerFichierInexistant;  
 begin
   // Ne pas créer le fichier dans le mock
 
@@ -2262,7 +2262,7 @@ begin
   end;
 end;
 
-procedure TTestGestionnaireFichiers.TestMultiplesLectures;
+procedure TTestGestionnaireFichiers.TestMultiplesLectures;  
 begin
   FMockFS.AddFile('file1.txt', 'Contenu 1');
   FMockFS.AddFile('file2.txt', 'Contenu 2');
@@ -2277,7 +2277,7 @@ begin
   AssertEquals('3 lectures', 3, FMockFS.GetReadCallCount);
 end;
 
-procedure TTestGestionnaireFichiers.TestCheminMultiPlateforme;
+procedure TTestGestionnaireFichiers.TestCheminMultiPlateforme;  
 var
   Chemin: String;
 begin
@@ -2319,7 +2319,7 @@ type
 
 implementation
 
-class function TMockGenerator.GenerateMock(InterfaceInfo: PTypeInfo): String;
+class function TMockGenerator.GenerateMock(InterfaceInfo: PTypeInfo): String;  
 var
   IntfData: PTypeData;
   i: Integer;
@@ -2399,20 +2399,20 @@ type
 
 implementation
 
-constructor TSimpleMock.Create;
+constructor TSimpleMock.Create;  
 begin
   FCalls := TList<TMethodCall>.Create;
   FExpectedCalls := TDictionary<String, Variant>.Create;
 end;
 
-destructor TSimpleMock.Destroy;
+destructor TSimpleMock.Destroy;  
 begin
   FExpectedCalls.Free;
   FCalls.Free;
   inherited;
 end;
 
-procedure TSimpleMock.RecordCall(const MethodName: String; const Params: array of Variant);
+procedure TSimpleMock.RecordCall(const MethodName: String; const Params: array of Variant);  
 var
   Call: TMethodCall;
   i: Integer;
@@ -2425,12 +2425,12 @@ begin
   FCalls.Add(Call);
 end;
 
-procedure TSimpleMock.ExpectCall(const MethodName: String; ReturnValue: Variant);
+procedure TSimpleMock.ExpectCall(const MethodName: String; ReturnValue: Variant);  
 begin
   FExpectedCalls.AddOrSetValue(MethodName, ReturnValue);
 end;
 
-function TSimpleMock.GetReturnValue(const MethodName: String): Variant;
+function TSimpleMock.GetReturnValue(const MethodName: String): Variant;  
 begin
   if FExpectedCalls.ContainsKey(MethodName) then
     Result := FExpectedCalls[MethodName]
@@ -2438,7 +2438,7 @@ begin
     Result := Null;
 end;
 
-function TSimpleMock.WasCalled(const MethodName: String): Boolean;
+function TSimpleMock.WasCalled(const MethodName: String): Boolean;  
 var
   Call: TMethodCall;
 begin
@@ -2448,7 +2448,7 @@ begin
       Exit(True);
 end;
 
-function TSimpleMock.GetCallCount(const MethodName: String): Integer;
+function TSimpleMock.GetCallCount(const MethodName: String): Integer;  
 var
   Call: TMethodCall;
 begin
@@ -2458,12 +2458,12 @@ begin
       Inc(Result);
 end;
 
-function TSimpleMock.GetTotalCallCount: Integer;
+function TSimpleMock.GetTotalCallCount: Integer;  
 begin
   Result := FCalls.Count;
 end;
 
-procedure TSimpleMock.Reset;
+procedure TSimpleMock.Reset;  
 begin
   FCalls.Clear;
   FExpectedCalls.Clear;
@@ -2478,7 +2478,7 @@ end.
 
 ✅ **Bon :**
 ```pascal
-constructor TService.Create(ARepository: IRepository; ALogger: ILogger);
+constructor TService.Create(ARepository: IRepository; ALogger: ILogger);  
 begin
   if ARepository = nil then
     raise Exception.Create('Repository requis');
@@ -2492,7 +2492,7 @@ end;
 
 ❌ **Mauvais :**
 ```pascal
-constructor TService.Create;
+constructor TService.Create;  
 begin
   // Dépendances créées en dur
   FRepository := TRepository.Create(ConnectToDB);
@@ -2545,9 +2545,9 @@ TMockEverything = class(TInterfacedObject, IDatabase, ILogger, IEmailSender);
 
 ```pascal
 // Noms explicites
-TMockUserRepository
-TStubEmailService
-TSpyLogger
+TMockUserRepository  
+TStubEmailService  
+TSpyLogger  
 TFakeDatabase
 
 // Pas seulement "Mock"
@@ -2557,14 +2557,14 @@ TMock1, TMock2, TMyMock
 ### 5. Réinitialiser les mocks entre les tests
 
 ```pascal
-procedure TMyTest.SetUp;
+procedure TMyTest.SetUp;  
 begin
   inherited;
   FMock := TMockDatabase.Create;
   FMock.Reset;  // S'assurer qu'il est vide
 end;
 
-procedure TMyTest.TearDown;
+procedure TMyTest.TearDown;  
 begin
   FMock := nil;  // Libération automatique (interface)
   inherited;
@@ -2582,7 +2582,7 @@ AssertEquals('Utilisateur créé', 'user@test.com', User.Email);
 ❌ **Mauvais :**
 ```pascal
 // Vérifier les détails d'implémentation
-AssertTrue('BeginTransaction appelé', Mock.WasBeginTransactionCalled);
+AssertTrue('BeginTransaction appelé', Mock.WasBeginTransactionCalled);  
 AssertTrue('SQL exact', Mock.LastSQL = 'INSERT INTO users...');
 ```
 
@@ -2615,7 +2615,7 @@ type
 
 ```pascal
 // 100% mock, aucune dépendance réelle
-procedure TestCalculerTotal;
+procedure TestCalculerTotal;  
 var
   MockRepo: IProductRepository;
   MockTax: ITaxCalculator;
@@ -2638,7 +2638,7 @@ end;
 
 ```pascal
 // Mix de vrais composants et mocks
-procedure TestCreateOrder;
+procedure TestCreateOrder;  
 var
   RealDB: IDatabaseConnection;
   MockEmail: IEmailService;
@@ -2662,7 +2662,7 @@ end;
 
 ```pascal
 // Tout est réel, sauf les services externes critiques
-procedure TestCompleteCheckoutFlow;
+procedure TestCompleteCheckoutFlow;  
 var
   RealDB: IDatabaseConnection;
   RealFileSystem: IFileSystem;
@@ -2691,7 +2691,7 @@ L'avantage majeur de l'injection de dépendances et du mocking est que votre **l
 
 ```pascal
 // Ce test fonctionne à l'identique sur les deux OS
-procedure TestSauvegarderFichier;
+procedure TestSauvegarderFichier;  
 var
   MockFS: IFileSystem;
   Service: TDocumentService;

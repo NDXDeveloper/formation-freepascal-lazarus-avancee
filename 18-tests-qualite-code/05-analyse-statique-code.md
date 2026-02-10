@@ -146,15 +146,15 @@ SOURCE_DIR="$1"
 echo "=== Analyse statique FreePascal ==="
 
 # Recherche de TODO/FIXME
-echo -e "\n--- TODO et FIXME trouvés ---"
+echo -e "\n--- TODO et FIXME trouvés ---"  
 grep -rn "//.*\(TODO\|FIXME\)" "$SOURCE_DIR"
 
 # Variables avec un seul caractère (mauvaise pratique)
-echo -e "\n--- Variables à un caractère ---"
+echo -e "\n--- Variables à un caractère ---"  
 grep -rn "var\s\+[a-z]\s*:" "$SOURCE_DIR"
 
 # Procédures très longues (> 100 lignes)
-echo -e "\n--- Procédures potentiellement trop longues ---"
+echo -e "\n--- Procédures potentiellement trop longues ---"  
 awk '/^procedure|^function/{start=NR; name=$0}
      /^end;/{if(NR-start>100) print FILENAME":"start":"name}' "$SOURCE_DIR"/*.pas
 
@@ -179,8 +179,8 @@ chmod +x fpc_lint.sh
 sudo apt-get install openjdk-11-jdk
 
 # Télécharger SonarQube
-wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.9.0.65466.zip
-unzip sonarqube-9.9.0.65466.zip
+wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.9.0.65466.zip  
+unzip sonarqube-9.9.0.65466.zip  
 cd sonarqube-9.9.0.65466
 
 # Démarrer
@@ -221,7 +221,7 @@ Mesure le nombre de chemins d'exécution indépendants.
 
 **Exemple simple (complexité = 1) :**
 ```pascal
-function Addition(a, b: Integer): Integer;
+function Addition(a, b: Integer): Integer;  
 begin
   Result := a + b;  // Un seul chemin
 end;
@@ -229,7 +229,7 @@ end;
 
 **Exemple complexe (complexité = 4) :**
 ```pascal
-function Categoriser(age: Integer): String;
+function Categoriser(age: Integer): String;  
 begin
   if age < 18 then        // Chemin 1
     Result := 'Mineur'
@@ -293,19 +293,19 @@ if age > AGE_MAJORITE then
 **Problème :**
 ```pascal
 // Dans FormA
-Button1.Width := 100;
-Button1.Height := 30;
+Button1.Width := 100;  
+Button1.Height := 30;  
 Button1.Font.Size := 10;
 
 // Dans FormB
-Button2.Width := 100;
-Button2.Height := 30;
+Button2.Width := 100;  
+Button2.Height := 30;  
 Button2.Font.Size := 10;
 ```
 
 **Solution :**
 ```pascal
-procedure ConfigurerBoutonStandard(btn: TButton);
+procedure ConfigurerBoutonStandard(btn: TButton);  
 begin
   btn.Width := 100;
   btn.Height := 30;
@@ -377,17 +377,17 @@ compilation:
 **`analysis_config.ini`**
 ```ini
 [General]
-MaxLineLength=120
-MaxFunctionLines=100
+MaxLineLength=120  
+MaxFunctionLines=100  
 MaxComplexity=10
 
 [Warnings]
-UnusedVariables=true
-UnusedParameters=true
+UnusedVariables=true  
+UnusedParameters=true  
 UninitializedVariables=true
 
 [Style]
-IndentSize=2
+IndentSize=2  
 UseSpaces=true
 ```
 
@@ -442,14 +442,14 @@ Write-Host "=== Analyse terminée ===" -ForegroundColor Green
 
 ```
 === Rapport d'analyse statique ===
-Projet: MonApplication
-Date: 2025-10-06
+Projet: MonApplication  
+Date: 2025-10-06  
 Fichiers analysés: 45
 
 --- Résumé ---
-Erreurs critiques:    2
-Avertissements:      15
-Suggestions:         38
+Erreurs critiques:    2  
+Avertissements:      15  
+Suggestions:         38  
 Total problèmes:     55
 
 --- Détails ---
@@ -487,7 +487,7 @@ uses
 var
   TotalLines, CodeLines, CommentLines, BlankLines: Integer;
 
-procedure AnalyzeFile(const FileName: string);
+procedure AnalyzeFile(const FileName: string);  
 var
   F: TextFile;
   Line: string;

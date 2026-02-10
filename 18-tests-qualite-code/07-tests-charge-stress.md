@@ -74,7 +74,7 @@ type
     property ExecutionTime: QWord read FEndTime;
   end;
 
-constructor TWorkerThread.Create(ThreadID, Iterations: Integer);
+constructor TWorkerThread.Create(ThreadID, Iterations: Integer);  
 begin
   inherited Create(False);
   FreeOnTerminate := False;
@@ -83,7 +83,7 @@ begin
   FErrors := 0;
 end;
 
-procedure TWorkerThread.Execute;
+procedure TWorkerThread.Execute;  
 var
   i, j, result: Integer;
 begin
@@ -179,17 +179,17 @@ end.
 **Sortie typique :**
 ```
 === Test de charge - Calculs intensifs ===
-Threads:    50
+Threads:    50  
 Opérations: 100 par thread
 
 Démarrage du test...
 
 === Résultats ===
-Temps total:           3245 ms
-Temps min par thread:  2890 ms
-Temps max par thread:  3210 ms
-Temps moyen par thread:3050 ms
-Erreurs totales:       0
+Temps total:           3245 ms  
+Temps min par thread:  2890 ms  
+Temps max par thread:  3210 ms  
+Temps moyen par thread:3050 ms  
+Erreurs totales:       0  
 Débit:                 1540 op/sec
 ✓ Test réussi sans erreur
 ```
@@ -224,7 +224,7 @@ type
     property TotalTime: QWord read FTotalTime;
   end;
 
-constructor TDBWorkerThread.Create(ThreadID, Queries: Integer);
+constructor TDBWorkerThread.Create(ThreadID, Queries: Integer);  
 begin
   inherited Create(False);
   FreeOnTerminate := False;
@@ -234,7 +234,7 @@ begin
   FSuccesses := 0;
 end;
 
-procedure TDBWorkerThread.Execute;
+procedure TDBWorkerThread.Execute;  
 var
   conn: TSQLite3Connection;
   trans: TSQLTransaction;
@@ -292,7 +292,7 @@ begin
   FTotalTime := GetTickCount64 - startTime;
 end;
 
-procedure InitDatabase;
+procedure InitDatabase;  
 var
   conn: TSQLite3Connection;
   trans: TSQLTransaction;
@@ -435,7 +435,7 @@ type
     property RequestCount: Integer read FRequestCount;
   end;
 
-constructor TMyHTTPServer.Create(AOwner: TComponent);
+constructor TMyHTTPServer.Create(AOwner: TComponent);  
 begin
   inherited Create(AOwner);
   FRequestCount := 0;
@@ -508,7 +508,7 @@ type
     property TotalTime: QWord read FTotalTime;
   end;
 
-constructor THTTPClientThread.Create(ThreadID, Requests: Integer; const ServerURL: string);
+constructor THTTPClientThread.Create(ThreadID, Requests: Integer; const ServerURL: string);  
 begin
   inherited Create(False);
   FreeOnTerminate := False;
@@ -519,7 +519,7 @@ begin
   FErrors := 0;
 end;
 
-procedure THTTPClientThread.Execute;
+procedure THTTPClientThread.Execute;  
 var
   client: TFPHTTPClient;
   i: Integer;
@@ -658,7 +658,7 @@ type
     property Completed: Boolean read FCompleted;
   end;
 
-constructor TStressWorker.Create(ID: Integer);
+constructor TStressWorker.Create(ID: Integer);  
 begin
   inherited Create(False);
   FreeOnTerminate := False;
@@ -666,7 +666,7 @@ begin
   FCompleted := False;
 end;
 
-procedure TStressWorker.Execute;
+procedure TStressWorker.Execute;  
 var
   i, j, sum: Integer;
 begin
@@ -782,7 +782,7 @@ uses
   {$IFDEF UNIX}, BaseUnix{$ENDIF};
 
 {$IFDEF WINDOWS}
-function GetMemoryUsage: QWord;
+function GetMemoryUsage: QWord;  
 var
   memStatus: TMemoryStatusEx;
 begin
@@ -793,7 +793,7 @@ end;
 {$ENDIF}
 
 {$IFDEF UNIX}
-function GetMemoryUsage: QWord;
+function GetMemoryUsage: QWord;  
 var
   statFile: TextFile;
   line: string;
@@ -837,7 +837,7 @@ type
     property Samples: Integer read FSamples;
   end;
 
-constructor TMonitorThread.Create(IntervalMs: Integer);
+constructor TMonitorThread.Create(IntervalMs: Integer);  
 begin
   inherited Create(False);
   FreeOnTerminate := False;
@@ -846,7 +846,7 @@ begin
   FSamples := 0;
 end;
 
-procedure TMonitorThread.Execute;
+procedure TMonitorThread.Execute;  
 var
   currentMemory: QWord;
 begin
@@ -870,13 +870,13 @@ type
     constructor Create;
   end;
 
-constructor TWorkerThread.Create;
+constructor TWorkerThread.Create;  
 begin
   inherited Create(False);
   FreeOnTerminate := False;
 end;
 
-procedure TWorkerThread.Execute;
+procedure TWorkerThread.Execute;  
 var
   i, j: Integer;
 begin
@@ -974,14 +974,14 @@ type
     constructor Create(CauseLeaks: Boolean);
   end;
 
-constructor TLeakyThread.Create(CauseLeaks: Boolean);
+constructor TLeakyThread.Create(CauseLeaks: Boolean);  
 begin
   inherited Create(False);
   FreeOnTerminate := False;
   FLeaks := CauseLeaks;
 end;
 
-procedure TLeakyThread.Execute;
+procedure TLeakyThread.Execute;  
 var
   i: Integer;
   list: TStringList;
@@ -996,12 +996,12 @@ begin
   end;
 end;
 
-function GetCurrentMemory: QWord;
+function GetCurrentMemory: QWord;  
 begin
   Result := GetHeapStatus.TotalAllocated;
 end;
 
-procedure RunTest(const TestName: string; CauseLeaks: Boolean);
+procedure RunTest(const TestName: string; CauseLeaks: Boolean);  
 const
   NB_THREADS = 10;
 var
@@ -1073,7 +1073,7 @@ type
     procedure Execute; override;
   end;
 
-procedure TThread1.Execute;
+procedure TThread1.Execute;  
 begin
   try
     WriteLn('Thread 1: Tentative de verrouillage Lock1...');
@@ -1102,7 +1102,7 @@ begin
   end;
 end;
 
-procedure TThread2.Execute;
+procedure TThread2.Execute;  
 begin
   try
     WriteLn('Thread 2: Tentative de verrouillage Lock2...');
@@ -1189,7 +1189,7 @@ type
     AvgLatency: Double;
   end;
 
-procedure GenerateHTMLReport(const Results: array of TTestResult; const FileName: string);
+procedure GenerateHTMLReport(const Results: array of TTestResult; const FileName: string);  
 var
   html: TStringList;
   i: Integer;
@@ -1399,12 +1399,12 @@ ab -n 1000 -c 10 -H "Authorization: Bearer token123" http://localhost:8080/
 **Lecture des résultats :**
 
 ```
-Concurrency Level:      10
-Time taken for tests:   5.234 seconds
-Complete requests:      1000
-Failed requests:        0
-Total transferred:      234000 bytes
-Requests per second:    191.06 [#/sec] (mean)
+Concurrency Level:      10  
+Time taken for tests:   5.234 seconds  
+Complete requests:      1000  
+Failed requests:        0  
+Total transferred:      234000 bytes  
+Requests per second:    191.06 [#/sec] (mean)  
 Time per request:       52.34 [ms] (mean)
 ```
 
@@ -1417,8 +1417,8 @@ Time per request:       52.34 [ms] (mean)
 sudo apt-get install wrk
 
 # Ou compiler depuis les sources
-git clone https://github.com/wg/wrk.git
-cd wrk
+git clone https://github.com/wg/wrk.git  
+cd wrk  
 make
 ```
 
@@ -1435,8 +1435,8 @@ wrk -t4 -c100 -d30s -s script.lua http://localhost:8080/
 **Script Lua exemple (script.lua) :**
 
 ```lua
-wrk.method = "POST"
-wrk.body   = '{"username":"test","password":"pass123"}'
+wrk.method = "POST"  
+wrk.body   = '{"username":"test","password":"pass123"}'  
 wrk.headers["Content-Type"] = "application/json"
 ```
 
@@ -1482,7 +1482,7 @@ type
     procedure Execute; override;
   end;
 
-procedure TWorker.Execute;
+procedure TWorker.Execute;  
 var
   i, sum: Integer;
 begin
@@ -1491,7 +1491,7 @@ begin
     sum := sum + i;
 end;
 
-procedure RampUpTest(StartThreads, EndThreads, StepSize, StepDurationMs: Integer);
+procedure RampUpTest(StartThreads, EndThreads, StepSize, StepDurationMs: Integer);  
 var
   currentThreads: Integer;
   threads: array of TWorker;
@@ -1563,7 +1563,7 @@ type
     procedure Execute; override;
   end;
 
-procedure TWorker.Execute;
+procedure TWorker.Execute;  
 var
   i, sum: Integer;
 begin
@@ -1572,7 +1572,7 @@ begin
     sum := sum + i;
 end;
 
-procedure ExecutePhase(const PhaseName: string; NbThreads: Integer);
+procedure ExecutePhase(const PhaseName: string; NbThreads: Integer);  
 var
   threads: array of TWorker;
   i: Integer;
@@ -1642,7 +1642,7 @@ type
     property Running: Boolean read FRunning;
   end;
 
-procedure TWorker.Execute;
+procedure TWorker.Execute;  
 var
   i, sum: Integer;
 begin
@@ -1657,7 +1657,7 @@ begin
   FRunning := False;
 end;
 
-procedure TWorker.Stop;
+procedure TWorker.Stop;  
 begin
   Terminate;
 end;
@@ -1763,10 +1763,10 @@ end.
 #!/bin/bash
 # monitor.sh - Script de surveillance pendant les tests
 
-LOG_FILE="system_monitor.log"
+LOG_FILE="system_monitor.log"  
 INTERVAL=5  # Échantillonner toutes les 5 secondes
 
-echo "Démarrage de la surveillance système..." | tee -a $LOG_FILE
+echo "Démarrage de la surveillance système..." | tee -a $LOG_FILE  
 echo "Timestamp,CPU%,Memory%,DiskIO,NetRX,NetTX" | tee -a $LOG_FILE
 
 while true; do
@@ -1820,7 +1820,7 @@ Charge: 200 utilisateurs
 - Mémoire: 2.8 GB ✓
 - Erreurs: 15% ⚠️
 
-Conclusion: Limite du système entre 100 et 200 utilisateurs
+Conclusion: Limite du système entre 100 et 200 utilisateurs  
 Action: Optimiser le code ou augmenter les ressources serveur
 ```
 
@@ -1881,7 +1881,7 @@ load-test:
 
 ```python
 #!/usr/bin/env python3
-import sys
+import sys  
 import re
 
 def analyze_load_test(filename):
@@ -2015,7 +2015,7 @@ type
     property Errors: Integer read FErrors;
   end;
 
-constructor TShopperThread.Create(ThreadID: Integer; const BaseURL: string);
+constructor TShopperThread.Create(ThreadID: Integer; const BaseURL: string);  
 begin
   inherited Create(False);
   FreeOnTerminate := False;
@@ -2025,7 +2025,7 @@ begin
   FErrors := 0;
 end;
 
-procedure TShopperThread.PerformAction(Scenario: TUserScenario);
+procedure TShopperThread.PerformAction(Scenario: TUserScenario);  
 var
   client: TFPHTTPClient;
   url: string;
@@ -2057,7 +2057,7 @@ begin
   end;
 end;
 
-procedure TShopperThread.Execute;
+procedure TShopperThread.Execute;  
 var
   i: Integer;
 begin
@@ -2214,7 +2214,7 @@ end.
 **Diagnostic :**
 ```pascal
 // Ajouter des timeouts
-if not Lock.TryEnter(5000) then // 5 secondes
+if not Lock.TryEnter(5000) then // 5 secondes  
 begin
   WriteLn('TIMEOUT: Possible deadlock détecté');
   Exit;
@@ -2281,8 +2281,8 @@ Get-Process -Id <PID> | Select-Object -Property *
   RAPPORT DE TEST DE CHARGE
 ========================================
 
-Date: 2025-10-06
-Application: Serveur E-commerce v2.3
+Date: 2025-10-06  
+Application: Serveur E-commerce v2.3  
 Testeur: Équipe QA
 
 1. CONFIGURATION DU TEST

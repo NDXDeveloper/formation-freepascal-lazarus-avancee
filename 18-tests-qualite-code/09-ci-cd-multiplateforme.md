@@ -203,9 +203,9 @@ Un pipeline CI/CD est une série d'étapes automatisées :
 
 **Exemple de scénarios :**
 ```
-Push sur develop    → Build + Tests (rapide)
-Pull Request        → Build + Tests complets + Qualité
-Push sur main       → Build + Tests + Deploy staging
+Push sur develop    → Build + Tests (rapide)  
+Pull Request        → Build + Tests complets + Qualité  
+Push sur main       → Build + Tests + Deploy staging  
 Tag v1.0.0         → Build + Tests + Deploy production
 ```
 
@@ -214,7 +214,7 @@ Tag v1.0.0         → Build + Tests + Deploy production
 Le système CI/CD récupère le code source depuis le dépôt Git :
 
 ```bash
-git clone https://github.com/user/projet.git
+git clone https://github.com/user/projet.git  
 git checkout $COMMIT_SHA
 ```
 
@@ -304,12 +304,12 @@ Déploiement automatique vers les environnements :
 
 ```bash
 # Staging (automatique)
-scp MonProgramme user@staging-server:/opt/app/
+scp MonProgramme user@staging-server:/opt/app/  
 ssh user@staging-server "systemctl restart app"
 
 # Production (manuel, nécessite validation)
 # Clic dans l'interface CI/CD
-scp MonProgramme user@prod-server:/opt/app/
+scp MonProgramme user@prod-server:/opt/app/  
 ssh user@prod-server "systemctl restart app"
 ```
 
@@ -348,8 +348,8 @@ Compiler pour plusieurs plateformes depuis une seule machine.
 
 ```bash
 # Installer le cross-compiler
-apt-get install fpc-source
-cd /usr/lib/fpc/$(fpc -iV)
+apt-get install fpc-source  
+cd /usr/lib/fpc/$(fpc -iV)  
 make crossinstall OS_TARGET=win64 CPU_TARGET=x86_64
 
 # Cross-compiler
@@ -371,8 +371,8 @@ fpc -Twin64 -Px86_64 MonProgramme.pas
 Combiner les deux approches :
 
 ```
-Build initial       → Cross-compilation (rapide)
-Tests              → Natif (fiable)
+Build initial       → Cross-compilation (rapide)  
+Tests              → Natif (fiable)  
 Packaging final    → Natif (garantie)
 ```
 
@@ -547,9 +547,9 @@ Développeur
 
 **1. Temps de Build**
 ```
-Objectif : < 10 minutes
-Bon : 5-10 minutes
-Acceptable : 10-20 minutes
+Objectif : < 10 minutes  
+Bon : 5-10 minutes  
+Acceptable : 10-20 minutes  
 Problématique : > 20 minutes
 ```
 
@@ -559,9 +559,9 @@ Problématique : > 20 minutes
 
 **2. Taux de Succès**
 ```
-Excellent : > 95%
-Bon : 90-95%
-Acceptable : 80-90%
+Excellent : > 95%  
+Bon : 90-95%  
+Acceptable : 80-90%  
 Problématique : < 80%
 ```
 
@@ -573,16 +573,16 @@ Problématique : < 80%
 **3. Fréquence de Déploiement**
 ```
 Élite : Plusieurs fois par jour
-Bon : Plusieurs fois par semaine
-Moyen : Plusieurs fois par mois
+Bon : Plusieurs fois par semaine  
+Moyen : Plusieurs fois par mois  
 Faible : Moins d'une fois par mois
 ```
 
 **4. Temps de Restauration (MTTR)**
 ```
-Excellent : < 1 heure
-Bon : 1-4 heures
-Acceptable : 4-24 heures
+Excellent : < 1 heure  
+Bon : 1-4 heures  
+Acceptable : 4-24 heures  
 Problématique : > 24 heures
 ```
 
@@ -590,22 +590,22 @@ Problématique : > 24 heures
 
 **1. Couverture de Code**
 ```
-Critique : > 80%
-Bon : 70-80%
-Acceptable : 60-70%
+Critique : > 80%  
+Bon : 70-80%  
+Acceptable : 60-70%  
 Insuffisant : < 60%
 ```
 
 **2. Dette Technique**
 ```
-Nombre de warnings : 0 (objectif)
-Duplication de code : < 3%
+Nombre de warnings : 0 (objectif)  
+Duplication de code : < 3%  
 Complexité cyclomatique moyenne : < 10
 ```
 
 **3. Bugs Détectés**
 ```
-Pré-production : 100% (idéal)
+Pré-production : 100% (idéal)  
 Production : 0% (idéal)
 ```
 
@@ -637,8 +637,8 @@ deploy:
 
 Donnez uniquement les permissions nécessaires :
 ```
-Runner de build      → Lecture du code
-Runner de test       → Lecture + exécution tests
+Runner de build      → Lecture du code  
+Runner de test       → Lecture + exécution tests  
 Runner de déploiement → Toutes permissions (limité)
 ```
 
@@ -742,7 +742,7 @@ Un pipeline doit produire le même résultat à chaque exécution :
 fpc -B MonProgramme.pas  # Peut utiliser des .ppu obsolètes
 
 # ✅ Idempotent (clean build)
-rm -f *.o *.ppu
+rm -f *.o *.ppu  
 fpc MonProgramme.pas
 ```
 
@@ -785,17 +785,17 @@ Le CI/CD multi-plateforme transforme radicalement la manière de développer des
 
 ### Avant CI/CD
 ```
-Développement → 😰 Stress
-Compilation manuelle → ⏱️ Perte de temps
-Tests manuels → 🐛 Bugs manqués
+Développement → 😰 Stress  
+Compilation manuelle → ⏱️ Perte de temps  
+Tests manuels → 🐛 Bugs manqués  
 Déploiement risqué → 😱 Nuits blanches
 ```
 
 ### Avec CI/CD
 ```
-Développement → 😊 Sérénité
-Build automatique → ⚡ Gain de temps
-Tests automatiques → ✅ Qualité garantie
+Développement → 😊 Sérénité  
+Build automatique → ⚡ Gain de temps  
+Tests automatiques → ✅ Qualité garantie  
 Déploiement sûr → 🚀 Livraisons fréquentes
 ```
 

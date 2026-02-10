@@ -36,7 +36,7 @@ FreePascal supporte plusieurs formats de commentaires pour la documentation.
   @param b Le second nombre
   @return La somme de a et b
 }
-function Additionner(a, b: Integer): Integer;
+function Additionner(a, b: Integer): Integer;  
 begin
   Result := a + b;
 end;
@@ -75,7 +75,7 @@ type
 /// </summary>
 /// <param name="email">L'adresse email à vérifier</param>
 /// <returns>True si l'email est valide, False sinon</returns>
-function EstEmailValide(const email: string): Boolean;
+function EstEmailValide(const email: string): Boolean;  
 begin
   Result := Pos('@', email) > 0;
 end;
@@ -169,7 +169,7 @@ type
 
 implementation
 
-class function TMathHelper.Factorielle(n: Integer): Int64;
+class function TMathHelper.Factorielle(n: Integer): Int64;  
 var
   i: Integer;
 begin
@@ -181,7 +181,7 @@ begin
     Result := Result * i;
 end;
 
-class function TMathHelper.EstPremier(n: Integer): Boolean;
+class function TMathHelper.EstPremier(n: Integer): Boolean;  
 var
   i: Integer;
 begin
@@ -216,7 +216,7 @@ end.
 
 ```bash
 # Installation via apt
-sudo apt-get update
+sudo apt-get update  
 sudo apt-get install pasdoc
 
 # Vérifier l'installation
@@ -236,9 +236,9 @@ pasdoc --version
 
 ```bash
 # Prérequis : Lazarus installé
-cd C:\temp
-git clone https://github.com/pasdoc/pasdoc.git
-cd pasdoc\source
+cd C:\temp  
+git clone https://github.com/pasdoc/pasdoc.git  
+cd pasdoc\source  
 lazbuild pasdoc.lpi
 ```
 
@@ -504,14 +504,14 @@ pasdoc --format=html \
 #!/bin/bash
 # Script de génération de documentation
 
-PROJECT_NAME="Mon Projet FreePascal"
-SOURCE_DIR="src"
-OUTPUT_DIR="docs"
+PROJECT_NAME="Mon Projet FreePascal"  
+SOURCE_DIR="src"  
+OUTPUT_DIR="docs"  
 VERSION=$(cat VERSION.txt)
 
-echo "=== Génération de la documentation ==="
-echo "Projet: $PROJECT_NAME"
-echo "Version: $VERSION"
+echo "=== Génération de la documentation ==="  
+echo "Projet: $PROJECT_NAME"  
+echo "Version: $VERSION"  
 echo
 
 # Nettoyer l'ancien répertoire de documentation
@@ -524,7 +524,7 @@ fi
 mkdir -p "$OUTPUT_DIR"
 
 # Générer la documentation
-echo "Génération de la documentation HTML..."
+echo "Génération de la documentation HTML..."  
 pasdoc --format=html \
        --output="$OUTPUT_DIR" \
        --title="$PROJECT_NAME" \
@@ -578,9 +578,9 @@ $SourceDir = "src"
 $OutputDir = "docs"
 $Version = Get-Content "VERSION.txt"
 
-Write-Host "=== Génération de la documentation ===" -ForegroundColor Green
-Write-Host "Projet: $ProjectName"
-Write-Host "Version: $Version"
+Write-Host "=== Génération de la documentation ===" -ForegroundColor Green  
+Write-Host "Projet: $ProjectName"  
+Write-Host "Version: $Version"  
 Write-Host ""
 
 # Nettoyer l'ancien répertoire
@@ -775,19 +775,19 @@ type
 
 implementation
 
-constructor TRectangle.Create(AWidth, AHeight: Double);
+constructor TRectangle.Create(AWidth, AHeight: Double);  
 begin
   inherited Create;
   FWidth := AWidth;
   FHeight := AHeight;
 end;
 
-function TRectangle.CalculerAire: Double;
+function TRectangle.CalculerAire: Double;  
 begin
   Result := FWidth * FHeight;
 end;
 
-function TRectangle.CalculerPerimetre: Double;
+function TRectangle.CalculerPerimetre: Double;  
 begin
   Result := 2 * (FWidth + FHeight);
 end;
@@ -847,7 +847,7 @@ type
 
 implementation
 
-constructor TAPIDocGenerator.Create(const Title, Version, Description: string);
+constructor TAPIDocGenerator.Create(const Title, Version, Description: string);  
 var
   info: TJSONObject;
 begin
@@ -865,13 +865,13 @@ begin
   FSpec.Add('paths', TJSONObject.Create);
 end;
 
-destructor TAPIDocGenerator.Destroy;
+destructor TAPIDocGenerator.Destroy;  
 begin
   FSpec.Free;
   inherited Destroy;
 end;
 
-procedure TAPIDocGenerator.AddEndpoint(const Path, Method, Summary, Description: string);
+procedure TAPIDocGenerator.AddEndpoint(const Path, Method, Summary, Description: string);  
 var
   paths, pathItem, methodItem: TJSONObject;
 begin
@@ -890,7 +890,7 @@ begin
   pathItem.Add(LowerCase(Method), methodItem);
 end;
 
-procedure TAPIDocGenerator.SaveToFile(const FileName: string);
+procedure TAPIDocGenerator.SaveToFile(const FileName: string);  
 var
   sl: TStringList;
 begin
@@ -1044,14 +1044,14 @@ function LoadConfig(const FileName: string): Boolean; deprecated;
 
 ## Description
 
-Ce projet fournit une bibliothèque complète pour la manipulation
+Ce projet fournit une bibliothèque complète pour la manipulation  
 de données géométriques en 2D et 3D.
 
 ## Installation
 
 ```bash
-git clone https://github.com/user/mon-projet.git
-cd mon-projet
+git clone https://github.com/user/mon-projet.git  
+cd mon-projet  
 lazbuild mon-projet.lpi
 ```
 
@@ -1124,14 +1124,14 @@ sudo apt-get install doxygen graphviz
 
 **Configuration (`Doxyfile`) :**
 ```
-PROJECT_NAME = "Mon Projet"
-OUTPUT_DIRECTORY = docs
-INPUT = src
-FILE_PATTERNS = *.pas *.pp
-RECURSIVE = YES
-GENERATE_HTML = YES
-GENERATE_LATEX = NO
-OPTIMIZE_OUTPUT_FOR_C = NO
+PROJECT_NAME = "Mon Projet"  
+OUTPUT_DIRECTORY = docs  
+INPUT = src  
+FILE_PATTERNS = *.pas *.pp  
+RECURSIVE = YES  
+GENERATE_HTML = YES  
+GENERATE_LATEX = NO  
+OPTIMIZE_OUTPUT_FOR_C = NO  
 EXTRACT_ALL = YES
 ```
 
@@ -1167,10 +1167,10 @@ docs/
 ```python
 # Configuration Sphinx pour FreePascal
 
-project = 'Mon Projet FreePascal'
-copyright = '2025, Mon Nom'
-author = 'Mon Nom'
-version = '1.0'
+project = 'Mon Projet FreePascal'  
+copyright = '2025, Mon Nom'  
+author = 'Mon Nom'  
+version = '1.0'  
 release = '1.0.0'
 
 # Extensions
@@ -1262,7 +1262,7 @@ API Reference
 
 ```bash
 # Construire la documentation
-cd docs
+cd docs  
 make html
 
 # Ouvrir dans le navigateur
@@ -1287,8 +1287,8 @@ Alternative multi-langage simple d'utilisation.
 
 ```bash
 # Télécharger la dernière version
-wget https://www.naturaldocs.org/download/natural_docs_2.2.zip
-unzip natural_docs_2.2.zip
+wget https://www.naturaldocs.org/download/natural_docs_2.2.zip  
+unzip natural_docs_2.2.zip  
 sudo mv NaturalDocs /opt/
 
 # Créer un lien symbolique
@@ -1309,7 +1309,7 @@ Output Folder: docs
    Name: Documentation
 
 # Exclusions
-Ignore Source Folder: test
+Ignore Source Folder: test  
 Ignore Source Folder: temp
 ```
 
@@ -1377,19 +1377,19 @@ type
 
 implementation
 
-constructor THelpSystem.Create;
+constructor THelpSystem.Create;  
 begin
   inherited Create;
   SetLength(FTopics, 0);
 end;
 
-destructor THelpSystem.Destroy;
+destructor THelpSystem.Destroy;  
 begin
   SetLength(FTopics, 0);
   inherited Destroy;
 end;
 
-procedure THelpSystem.LoadFromFile(const FileName: string);
+procedure THelpSystem.LoadFromFile(const FileName: string);  
 var
   json: TJSONData;
   topics: TJSONArray;
@@ -1423,7 +1423,7 @@ begin
   end;
 end;
 
-function THelpSystem.Search(const Query: string): Integer;
+function THelpSystem.Search(const Query: string): Integer;  
 var
   i, j: Integer;
   lowerQuery: string;
@@ -1444,7 +1444,7 @@ begin
   end;
 end;
 
-procedure THelpSystem.ShowTopic(TopicIndex: Integer);
+procedure THelpSystem.ShowTopic(TopicIndex: Integer);  
 begin
   if (TopicIndex >= 0) and (TopicIndex <= High(FTopics)) then
   begin
@@ -1457,7 +1457,7 @@ begin
     WriteLn('Sujet non trouvé.');
 end;
 
-procedure THelpSystem.GenerateHTML(const OutputFile: string);
+procedure THelpSystem.GenerateHTML(const OutputFile: string);  
 var
   html: TStringList;
   i: Integer;
@@ -1618,7 +1618,7 @@ type
 
 implementation
 
-constructor TUserManualGenerator.Create(const ATitle, AVersion: string);
+constructor TUserManualGenerator.Create(const ATitle, AVersion: string);  
 begin
   inherited Create;
   FTitle := ATitle;
@@ -1626,7 +1626,7 @@ begin
   SetLength(FSections, 0);
 end;
 
-procedure TUserManualGenerator.AddSection(const Title, Content: string; Level: Integer);
+procedure TUserManualGenerator.AddSection(const Title, Content: string; Level: Integer);  
 var
   idx: Integer;
 begin
@@ -1638,13 +1638,13 @@ begin
   FSections[idx].ScreenshotPath := '';
 end;
 
-procedure TUserManualGenerator.AddScreenshot(const Path: string);
+procedure TUserManualGenerator.AddScreenshot(const Path: string);  
 begin
   if Length(FSections) > 0 then
     FSections[High(FSections)].ScreenshotPath := Path;
 end;
 
-procedure TUserManualGenerator.GenerateHTML(const OutputFile: string);
+procedure TUserManualGenerator.GenerateHTML(const OutputFile: string);  
 var
   html: TStringList;
   i: Integer;
@@ -1712,7 +1712,7 @@ begin
   end;
 end;
 
-procedure TUserManualGenerator.GenerateMarkdown(const OutputFile: string);
+procedure TUserManualGenerator.GenerateMarkdown(const OutputFile: string);  
 var
   md: TStringList;
   i: Integer;
@@ -1762,7 +1762,7 @@ begin
   end;
 end;
 
-procedure TUserManualGenerator.GeneratePDF(const OutputFile: string);
+procedure TUserManualGenerator.GeneratePDF(const OutputFile: string);  
 begin
   // Pour générer un PDF, on peut:
   // 1. Utiliser une bibliothèque comme fpReport
@@ -1935,10 +1935,10 @@ echo "✓ Documentation version $VERSION créée dans docs/v$VERSION"
 ```makefile
 # Makefile pour générer la documentation
 
-PROJECT_NAME = Mon Projet
-VERSION = $(shell cat VERSION.txt)
-SOURCE_DIR = src
-DOCS_DIR = docs
+PROJECT_NAME = Mon Projet  
+VERSION = $(shell cat VERSION.txt)  
+SOURCE_DIR = src  
+DOCS_DIR = docs  
 BUILD_DIR = $(DOCS_DIR)/build
 
 .PHONY: all clean docs html pdf help
@@ -2021,7 +2021,7 @@ type
     CommentLines: Integer;
   end;
 
-function AnalyzeSourceFile(const FileName: string): TDocStats;
+function AnalyzeSourceFile(const FileName: string): TDocStats;  
 var
   lines: TStringList;
   i: Integer;
@@ -2085,7 +2085,7 @@ begin
   end;
 end;
 
-procedure PrintStats(const Stats: TDocStats);
+procedure PrintStats(const Stats: TDocStats);  
 var
   funcCoverage, classCoverage, commentRatio: Double;
 begin
@@ -2176,7 +2176,7 @@ end.
 **Générer un rapport HTML :**
 
 ```pascal
-procedure GenerateDocCoverageReport(const Stats: TDocStats; const OutputFile: string);
+procedure GenerateDocCoverageReport(const Stats: TDocStats; const OutputFile: string);  
 var
   html: TStringList;
   funcCoverage, classCoverage, commentRatio: Double;
@@ -2290,7 +2290,7 @@ docs/
 #!/bin/bash
 # generate_multilang_docs.sh
 
-LANGUAGES=("en" "fr" "de")
+LANGUAGES=("en" "fr" "de")  
 SOURCE_DIR="src"
 
 for lang in "${LANGUAGES[@]}"; do
@@ -2364,7 +2364,7 @@ procedure GenerateProjectDocumentation;
 
 implementation
 
-procedure GenerateProjectDocumentation;
+procedure GenerateProjectDocumentation;  
 var
   process: TProcess;
   outputLines: TStringList;
@@ -2526,7 +2526,7 @@ program LinkChecker;
 uses
   Classes, SysUtils, RegExpr, fphttpclient;
 
-function ExtractLinks(const HTMLContent: string): TStringList;
+function ExtractLinks(const HTMLContent: string): TStringList;  
 var
   regex: TRegExpr;
 begin
@@ -2548,7 +2548,7 @@ begin
   end;
 end;
 
-function CheckLink(const URL: string): Boolean;
+function CheckLink(const URL: string): Boolean;  
 var
   client: TFPHTTPClient;
 begin

@@ -42,7 +42,7 @@ Il existe plusieurs niveaux de couverture, du plus simple au plus complexe :
 **Exemple :**
 
 ```pascal
-function Diviser(a, b: Integer): Integer;
+function Diviser(a, b: Integer): Integer;  
 begin
   if b = 0 then          // Ligne 1
     raise Exception.Create('Division par zéro');  // Ligne 2
@@ -76,7 +76,7 @@ end;
 **Exemple :**
 
 ```pascal
-function ClasserNote(note: Integer): string;
+function ClasserNote(note: Integer): string;  
 begin
   if note >= 90 then       // Branche A: vraie ou fausse ?
     Result := 'Excellent'
@@ -104,17 +104,17 @@ end;
 **Exemple :**
 
 ```pascal
-function Additionner(a, b: Integer): Integer;
+function Additionner(a, b: Integer): Integer;  
 begin
   Result := a + b;
 end;
 
-function Soustraire(a, b: Integer): Integer;
+function Soustraire(a, b: Integer): Integer;  
 begin
   Result := a - b;
 end;
 
-function Multiplier(a, b: Integer): Integer;
+function Multiplier(a, b: Integer): Integer;  
 begin
   Result := a * b;
 end;
@@ -123,7 +123,7 @@ end;
 **Test :**
 ```pascal
 // Test qui appelle seulement 2 fonctions sur 3
-x := Additionner(5, 3);    // ✅ Fonction appelée
+x := Additionner(5, 3);    // ✅ Fonction appelée  
 y := Multiplier(4, 2);     // ✅ Fonction appelée
                            // ❌ Soustraire jamais appelée
 ```
@@ -156,7 +156,7 @@ else
 **Exemple :**
 
 ```pascal
-procedure Traiter(x, y: Integer);
+procedure Traiter(x, y: Integer);  
 begin
   if x > 0 then      // Point de décision 1
     WriteLn('X positif');
@@ -249,20 +249,20 @@ Commencez par tester en priorité :
 
 ```pascal
 // Tester le chemin nominal (cas normal)
-procedure TestAdditionNormale;
+procedure TestAdditionNormale;  
 begin
   AssertEquals(5, Additionner(2, 3));
 end;
 
 // Tester les cas limites
-procedure TestAdditionZero;
+procedure TestAdditionZero;  
 begin
   AssertEquals(5, Additionner(5, 0));
   AssertEquals(5, Additionner(0, 5));
 end;
 
 // Tester les cas d'erreur
-procedure TestAdditionNegatif;
+procedure TestAdditionNegatif;  
 begin
   AssertEquals(-1, Additionner(2, -3));
 end;
@@ -379,7 +379,7 @@ Quelle que soit la plateforme, le processus est similaire :
 **Mauvaise approche :**
 ```pascal
 // Test inutile juste pour augmenter la couverture
-procedure TestGetterSetterEvident;
+procedure TestGetterSetterEvident;  
 begin
   personne.SetNom('Jean');
   AssertEquals('Jean', personne.GetNom);
@@ -389,7 +389,7 @@ end;
 **Bonne approche :**
 ```pascal
 // Test qui vérifie la logique métier
-procedure TestValidationNomPersonne;
+procedure TestValidationNomPersonne;  
 begin
   // Nom valide
   AssertTrue(personne.SetNom('Jean Dupont'));
@@ -411,13 +411,13 @@ end;
 
 ```pascal
 // ❌ Incomplet : teste seulement le cas normal
-procedure TestDivision;
+procedure TestDivision;  
 begin
   AssertEquals(5, Diviser(10, 2));
 end;
 
 // ✅ Complet : teste normal + cas limites + erreurs
-procedure TestDivisionComplete;
+procedure TestDivisionComplete;  
 begin
   // Cas normal
   AssertEquals(5, Diviser(10, 2));
@@ -437,7 +437,7 @@ Certains codes ne méritent pas d'être testés :
 
 ```pascal
 {$IFDEF COVERAGE_EXCLUDE}
-procedure LoggerDebug(msg: string);
+procedure LoggerDebug(msg: string);  
 begin
   // Simple logging, pas de logique métier
   WriteLn(FormatDateTime('hh:nn:ss', Now), ' - ', msg);
@@ -496,13 +496,13 @@ CI/CD
 
 ```pascal
 // Ce code est 100% couvert mais FAUX
-function CalculerMoyenne(a, b: Integer): Real;
+function CalculerMoyenne(a, b: Integer): Real;  
 begin
   Result := a + b;  // ❌ Oubli de diviser par 2
 end;
 
 // Test qui passe mais ne vérifie rien d'utile
-procedure TestMoyenne;
+procedure TestMoyenne;  
 begin
   resultat := CalculerMoyenne(10, 20);
   AssertTrue(resultat > 0);  // ✅ Passe mais ne vérifie pas que résultat = 15
@@ -513,7 +513,7 @@ end;
 
 ```pascal
 // 100% de couverture, 0% de valeur
-procedure TestBidon;
+procedure TestBidon;  
 begin
   FonctionComplexe(param1, param2);
   // ❌ Aucune assertion ! Le test ne vérifie rien

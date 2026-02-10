@@ -153,13 +153,13 @@ C'est une approche où **on écrit les tests AVANT le code**. Le cycle est simpl
 
 ```pascal
 // 1. RED : Écrire le test (qui échoue)
-procedure TestAdditionner;
+procedure TestAdditionner;  
 begin
   AssertEquals(5, Additionner(2, 3));  // Le test échoue car Additionner n'existe pas
 end;
 
 // 2. GREEN : Écrire le code minimal
-function Additionner(a, b: Integer): Integer;
+function Additionner(a, b: Integer): Integer;  
 begin
   Result := a + b;  // Simple mais fonctionnel
 end;

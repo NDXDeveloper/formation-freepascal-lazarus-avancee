@@ -125,22 +125,22 @@ type
 
 implementation
 
-function TCalculatrice.Additionner(a, b: Integer): Integer;
+function TCalculatrice.Additionner(a, b: Integer): Integer;  
 begin
   Result := a + b;
 end;
 
-function TCalculatrice.Soustraire(a, b: Integer): Integer;
+function TCalculatrice.Soustraire(a, b: Integer): Integer;  
 begin
   Result := a - b;
 end;
 
-function TCalculatrice.Multiplier(a, b: Integer): Integer;
+function TCalculatrice.Multiplier(a, b: Integer): Integer;  
 begin
   Result := a * b;
 end;
 
-function TCalculatrice.Diviser(a, b: Double): Double;
+function TCalculatrice.Diviser(a, b: Double): Double;  
 begin
   if b = 0 then
     raise Exception.Create('Division par zéro impossible');
@@ -184,19 +184,19 @@ type
 
 implementation
 
-procedure TTestCalculatrice.SetUp;
+procedure TTestCalculatrice.SetUp;  
 begin
   // Initialisation avant chaque test
   FCalculatrice := TCalculatrice.Create;
 end;
 
-procedure TTestCalculatrice.TearDown;
+procedure TTestCalculatrice.TearDown;  
 begin
   // Nettoyage après chaque test
   FCalculatrice.Free;
 end;
 
-procedure TTestCalculatrice.TestAddition;
+procedure TTestCalculatrice.TestAddition;  
 begin
   // Vérification que 2 + 3 = 5
   AssertEquals('Addition simple', 5, FCalculatrice.Additionner(2, 3));
@@ -208,26 +208,26 @@ begin
   AssertEquals('Addition avec zéro', 7, FCalculatrice.Additionner(7, 0));
 end;
 
-procedure TTestCalculatrice.TestSoustraction;
+procedure TTestCalculatrice.TestSoustraction;  
 begin
   AssertEquals('Soustraction simple', 2, FCalculatrice.Soustraire(5, 3));
   AssertEquals('Soustraction négative', -5, FCalculatrice.Soustraire(3, 8));
 end;
 
-procedure TTestCalculatrice.TestMultiplication;
+procedure TTestCalculatrice.TestMultiplication;  
 begin
   AssertEquals('Multiplication simple', 15, FCalculatrice.Multiplier(3, 5));
   AssertEquals('Multiplication par zéro', 0, FCalculatrice.Multiplier(42, 0));
   AssertEquals('Multiplication négative', -12, FCalculatrice.Multiplier(-3, 4));
 end;
 
-procedure TTestCalculatrice.TestDivision;
+procedure TTestCalculatrice.TestDivision;  
 begin
   AssertEquals('Division simple', 2.5, FCalculatrice.Diviser(5, 2), 0.001);
   AssertEquals('Division entière', 3.0, FCalculatrice.Diviser(9, 3), 0.001);
 end;
 
-procedure TTestCalculatrice.TestDivisionParZero;
+procedure TTestCalculatrice.TestDivisionParZero;  
 begin
   // Vérifier qu'une exception est levée
   AssertException('Division par zéro doit lever une exception',
@@ -235,7 +235,7 @@ begin
                   @TestDivisionReelle);
 end;
 
-procedure TestDivisionReelle;
+procedure TestDivisionReelle;  
 var
   Calc: TCalculatrice;
 begin
@@ -322,7 +322,7 @@ La méthode `SetUp` est appelée automatiquement **avant chaque test**. Utilisez
 - Configurer l'environnement
 
 ```pascal
-procedure TTestCalculatrice.SetUp;
+procedure TTestCalculatrice.SetUp;  
 begin
   FCalculatrice := TCalculatrice.Create;
   // Autres initialisations...
@@ -338,7 +338,7 @@ La méthode `TearDown` est appelée automatiquement **après chaque test**. Util
 - Nettoyer les ressources
 
 ```pascal
-procedure TTestCalculatrice.TearDown;
+procedure TTestCalculatrice.TearDown;  
 begin
   FCalculatrice.Free;
   // Autres nettoyages...
@@ -370,9 +370,9 @@ Adoptez une convention de nommage claire :
 
 ```pascal
 // Format : Test + Méthode + Scénario
-procedure TestAddition_NombresPositifs;
-procedure TestAddition_NombresNegatifs;
-procedure TestAddition_AvecZero;
+procedure TestAddition_NombresPositifs;  
+procedure TestAddition_NombresNegatifs;  
+procedure TestAddition_AvecZero;  
 procedure TestDivision_ParZero_LeveException;
 ```
 
@@ -381,7 +381,7 @@ procedure TestDivision_ParZero_LeveException;
 Pour tester plusieurs cas similaires :
 
 ```pascal
-procedure TTestCalculatrice.TestAddition_PlusieursCas;
+procedure TTestCalculatrice.TestAddition_PlusieursCas;  
 begin
   AssertEquals('Cas 1', 5, FCalculatrice.Additionner(2, 3));
   AssertEquals('Cas 2', 0, FCalculatrice.Additionner(-5, 5));
@@ -406,7 +406,7 @@ TTestCalculatrice
   TestDivision: OK
   TestDivisionParZero: OK
 
-Tests exécutés: 5
+Tests exécutés: 5  
 Succès: 5
 Échecs: 0
 Erreurs: 0
@@ -442,13 +442,13 @@ Chaque test doit vérifier **un seul comportement** :
 
 ```pascal
 // ✅ BON : test ciblé
-procedure TestAddition_NombresPositifs;
+procedure TestAddition_NombresPositifs;  
 begin
   AssertEquals(5, FCalculatrice.Additionner(2, 3));
 end;
 
 // ❌ MAUVAIS : teste trop de choses
-procedure TestTout;
+procedure TestTout;  
 begin
   AssertEquals(5, FCalculatrice.Additionner(2, 3));
   AssertEquals(2, FCalculatrice.Soustraire(5, 3));
@@ -465,12 +465,12 @@ Les tests ne doivent **jamais dépendre les uns des autres** :
 var
   ResultatGlobal: Integer;
 
-procedure Test1;
+procedure Test1;  
 begin
   ResultatGlobal := FCalculatrice.Additionner(2, 3);
 end;
 
-procedure Test2;
+procedure Test2;  
 begin
   // Dépend de Test1 !
   AssertEquals(10, ResultatGlobal + 5);
@@ -494,7 +494,7 @@ AssertEquals(5, FCalculatrice.Additionner(2, 3));
 Structurez vos tests en trois parties :
 
 ```pascal
-procedure TestAddition;
+procedure TestAddition;  
 var
   Resultat: Integer;
 begin
@@ -519,7 +519,7 @@ N'oubliez pas de tester :
 - Les conditions limites
 
 ```pascal
-procedure TestAddition_CasLimites;
+procedure TestAddition_CasLimites;  
 begin
   // Valeur maximale
   AssertEquals(MaxInt, FCalculatrice.Additionner(MaxInt, 0));
@@ -539,7 +539,7 @@ end;
 Lorsque votre code dépend de la plateforme, utilisez des directives conditionnelles :
 
 ```pascal
-procedure TTestFichiers.TestCheminFichier;
+procedure TTestFichiers.TestCheminFichier;  
 var
   CheminAttendu: String;
 begin
@@ -559,7 +559,7 @@ end;
 Créez des tests spécifiques pour vérifier la compatibilité multi-plateforme :
 
 ```pascal
-procedure TTestCompatibilite.TestSeparateurChemin;
+procedure TTestCompatibilite.TestSeparateurChemin;  
 begin
   {$IFDEF WINDOWS}
   AssertEquals('\', PathDelim);
@@ -630,10 +630,10 @@ Pour mesurer la couverture de code :
 #### Sur Windows
 
 ```batch
-REM Compiler avec les options de couverture
+REM Compiler avec les options de couverture  
 fpc -B -gh -gl MonProjet.pas
 
-REM Exécuter les tests
+REM Exécuter les tests  
 MonProjetTests.exe
 
 REM Générer le rapport (nécessite des outils tiers)
@@ -649,7 +649,7 @@ fpc -B -Cg -gl MonProjet.pas
 ./MonProjetTests
 
 # Générer le rapport avec lcov
-lcov --capture --directory . --output-file coverage.info
+lcov --capture --directory . --output-file coverage.info  
 genhtml coverage.info --output-directory coverage_report
 ```
 
@@ -691,17 +691,17 @@ Pour exécuter uniquement un test spécifique :
 
 ```pascal
 // Temporairement, commentez les autres tests
-procedure TTestCalculatrice.SetUp;
+procedure TTestCalculatrice.SetUp;  
 begin
   FCalculatrice := TCalculatrice.Create;
 end;
 
 {
-procedure TestAddition;
+procedure TestAddition;  
 procedure TestSoustraction;
 }
 
-procedure TestMultiplication;  // Seulement celui-ci
+procedure TestMultiplication;  // Seulement celui-ci  
 begin
   // ...
 end;

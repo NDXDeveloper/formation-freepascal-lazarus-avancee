@@ -238,7 +238,7 @@ uses
   {$ENDIF}
   SysUtils;
 
-constructor TBenchmark.Create;
+constructor TBenchmark.Create;  
 begin
   inherited Create;
   {$IFDEF WINDOWS}
@@ -246,7 +246,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TBenchmark.Start;
+procedure TBenchmark.Start;  
 begin
   {$IFDEF WINDOWS}
   QueryPerformanceCounter(FStartTime);
@@ -330,7 +330,7 @@ var
   temps: Double;
 
 // Méthode 1: Recherche linéaire simple
-function RechercheLineaire(valeur: Integer): Boolean;
+function RechercheLineaire(valeur: Integer): Boolean;  
 var
   i: Integer;
 begin
@@ -344,7 +344,7 @@ begin
 end;
 
 // Méthode 2: Recherche avec Break
-function RechercheAvecBreak(valeur: Integer): Boolean;
+function RechercheAvecBreak(valeur: Integer): Boolean;  
 var
   i: Integer;
 begin
@@ -358,7 +358,7 @@ begin
 end;
 
 // Méthode 3: Recherche dichotomique (tableau trié)
-function RechercheDichotomique(valeur: Integer): Boolean;
+function RechercheDichotomique(valeur: Integer): Boolean;  
 var
   gauche, droite, milieu: Integer;
 begin
@@ -415,8 +415,8 @@ end.
 
 **Résultats typiques :**
 ```
-Recherche linéaire:          0.850 ms
-Recherche avec Break:        0.850 ms
+Recherche linéaire:          0.850 ms  
+Recherche avec Break:        0.850 ms  
 Recherche dichotomique:      0.002 ms
 ```
 
@@ -440,7 +440,7 @@ var
   temps: Double;
   i: Integer;
 
-procedure TestTList;
+procedure TestTList;  
 var
   liste: TList;
   i: Integer;
@@ -454,7 +454,7 @@ begin
   end;
 end;
 
-procedure TestTFPList;
+procedure TestTFPList;  
 var
   liste: TFPList;
   i: Integer;
@@ -508,7 +508,7 @@ var
   tempsTotal, tempsCalcul, tempsAffichage: Double;
   bench: TBenchmark;
 
-procedure FonctionCouteuse;
+procedure FonctionCouteuse;  
 var
   i, j, somme: Integer;
 begin
@@ -522,7 +522,7 @@ begin
   tempsCalcul := tempsCalcul + bench.Stop;
 end;
 
-procedure AfficherResultat(valeur: Integer);
+procedure AfficherResultat(valeur: Integer);  
 begin
   bench.Start;
 
@@ -609,19 +609,19 @@ uses
 var
   compteurs: array[1..10] of Integer;
 
-procedure Zone1;
+procedure Zone1;  
 begin
   Inc(compteurs[1]);
   Sleep(10);
 end;
 
-procedure Zone2;
+procedure Zone2;  
 begin
   Inc(compteurs[2]);
   Sleep(50);
 end;
 
-procedure Zone3;
+procedure Zone3;  
 begin
   Inc(compteurs[3]);
   Sleep(5);
@@ -685,7 +685,7 @@ implementation
 uses
   BenchmarkUnit;
 
-procedure TBenchmarkSuite.Ajouter(const Nom: string; Proc: TBenchmarkProc; Iterations: Integer);
+procedure TBenchmarkSuite.Ajouter(const Nom: string; Proc: TBenchmarkProc; Iterations: Integer);  
 var
   idx: Integer;
 begin
@@ -695,7 +695,7 @@ begin
   FResultats[idx].Iterations := Iterations;
 end;
 
-procedure TBenchmarkSuite.Executer;
+procedure TBenchmarkSuite.Executer;  
 var
   i, j: Integer;
   bench: TBenchmark;
@@ -722,7 +722,7 @@ begin
   end;
 end;
 
-procedure TBenchmarkSuite.AfficherResultats;
+procedure TBenchmarkSuite.AfficherResultats;  
 var
   i: Integer;
   tempsMoyen: Double;
@@ -753,7 +753,7 @@ end.
 Les premières exécutions sont souvent plus lentes (cache CPU, compilation JIT, etc.).
 
 ```pascal
-procedure BenchmarkAvecPrechauffage;
+procedure BenchmarkAvecPrechauffage;  
 var
   i: Integer;
   bench: TBenchmark;
@@ -784,7 +784,7 @@ end;
 Une seule mesure n'est pas fiable. Il faut moyenner plusieurs exécutions.
 
 ```pascal
-procedure BenchmarkMultiple;
+procedure BenchmarkMultiple;  
 const
   NB_TESTS = 10;
 var
@@ -825,18 +825,18 @@ end;
 
 ```pascal
 // MAUVAIS : Mesure trop de choses
-bench.Start;
-liste := TStringList.Create;
+bench.Start;  
+liste := TStringList.Create;  
 try
   for i := 1 to 1000 do
     liste.Add(IntToStr(i));
 finally
   liste.Free;
-end;
+end;  
 temps := bench.Stop;
 
 // BON : Mesure uniquement l'ajout
-liste := TStringList.Create;
+liste := TStringList.Create;  
 try
   bench.Start;
   for i := 1 to 1000 do
@@ -943,15 +943,15 @@ end.
 
 **Windows :**
 ```
-Opérations CPU:      850.00 ms
-Allocations:          45.00 ms
+Opérations CPU:      850.00 ms  
+Allocations:          45.00 ms  
 Appels système:       12.00 ms
 ```
 
 **Linux :**
 ```
-Opérations CPU:      820.00 ms
-Allocations:          38.00 ms
+Opérations CPU:      820.00 ms  
+Allocations:          38.00 ms  
 Appels système:        8.00 ms
 ```
 
@@ -982,14 +982,14 @@ type
     property TempsTotal: Double read FTempsTotal;
   end;
 
-constructor TWorkerThread.Create(Iterations: Integer);
+constructor TWorkerThread.Create(Iterations: Integer);  
 begin
   inherited Create(False);
   FreeOnTerminate := False;
   FIterations := Iterations;
 end;
 
-procedure TWorkerThread.Execute;
+procedure TWorkerThread.Execute;  
 var
   i, j, somme: Integer;
   bench: TBenchmark;
@@ -1167,7 +1167,7 @@ type
     Temps: Double;
   end;
 
-procedure AfficherGraphique(const resultats: array of TBenchResult);
+procedure AfficherGraphique(const resultats: array of TBenchResult);  
 const
   LARGEUR_MAX = 60;
 var
@@ -1252,20 +1252,20 @@ end.
 #!/bin/bash
 # benchmark_auto.sh
 
-PROJECT_DIR="/chemin/vers/projet"
-OUTPUT_DIR="$PROJECT_DIR/benchmark_results"
+PROJECT_DIR="/chemin/vers/projet"  
+OUTPUT_DIR="$PROJECT_DIR/benchmark_results"  
 DATE=$(date +%Y%m%d_%H%M%S)
 
-echo "=== Benchmark Automatique ==="
-echo "Date: $(date)"
+echo "=== Benchmark Automatique ==="  
+echo "Date: $(date)"  
 echo
 
 # Créer le dossier de sortie
 mkdir -p "$OUTPUT_DIR"
 
 # Compiler avec optimisation
-echo "Compilation..."
-cd "$PROJECT_DIR"
+echo "Compilation..."  
+cd "$PROJECT_DIR"  
 fpc -O3 -XX benchmark_suite.pas
 
 if [ $? -ne 0 ]; then
@@ -1278,8 +1278,8 @@ echo "Exécution des benchmarks..."
 ./benchmark_suite > "$OUTPUT_DIR/results_$DATE.txt"
 
 # Afficher les résultats
-echo
-echo "=== Résultats ==="
+echo  
+echo "=== Résultats ==="  
 cat "$OUTPUT_DIR/results_$DATE.txt"
 
 # Comparer avec les résultats précédents
@@ -1295,7 +1295,7 @@ if [ -n "$PREV_FILE" ]; then
     diff "$PREV_FILE" "$OUTPUT_DIR/results_$DATE.txt" || true
 fi
 
-echo
+echo  
 echo "Résultats sauvegardés dans: $OUTPUT_DIR/results_$DATE.txt"
 ```
 
@@ -1308,15 +1308,15 @@ $ProjectDir = "C:\Projets\MonProjet"
 $OutputDir = "$ProjectDir\benchmark_results"
 $Date = Get-Date -Format "yyyyMMdd_HHmmss"
 
-Write-Host "=== Benchmark Automatique ===" -ForegroundColor Green
-Write-Host "Date: $(Get-Date)"
+Write-Host "=== Benchmark Automatique ===" -ForegroundColor Green  
+Write-Host "Date: $(Get-Date)"  
 Write-Host ""
 
 # Créer le dossier de sortie
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
 
 # Compiler avec optimisation
-Write-Host "Compilation..." -ForegroundColor Yellow
+Write-Host "Compilation..." -ForegroundColor Yellow  
 Set-Location $ProjectDir
 & "C:\lazarus\fpc\bin\x86_64-win64\fpc.exe" -O3 -XX benchmark_suite.pas
 
@@ -1331,8 +1331,8 @@ $Output = & ".\benchmark_suite.exe"
 $Output | Out-File -FilePath "$OutputDir\results_$Date.txt"
 
 # Afficher les résultats
-Write-Host ""
-Write-Host "=== Résultats ===" -ForegroundColor Green
+Write-Host ""  
+Write-Host "=== Résultats ===" -ForegroundColor Green  
 Write-Host $Output
 
 # Comparer avec les résultats précédents
@@ -1348,7 +1348,7 @@ if ($PrevFile) {
     Compare-Object (Get-Content $PrevFile.FullName) (Get-Content "$OutputDir\results_$Date.txt")
 }
 
-Write-Host ""
+Write-Host ""  
 Write-Host "Résultats sauvegardés dans: $OutputDir\results_$Date.txt" -ForegroundColor Green
 ```
 
@@ -1372,7 +1372,7 @@ var
   temps: Double;
   i: Integer;
 
-procedure InitDatabase;
+procedure InitDatabase;  
 begin
   conn := TSQLite3Connection.Create(nil);
   trans := TSQLTransaction.Create(nil);
@@ -1407,21 +1407,21 @@ begin
   WriteLn;
 end;
 
-procedure TestSansIndex;
+procedure TestSansIndex;  
 begin
   query.SQL.Text := 'SELECT * FROM test_data WHERE valeur = 500';
   query.Open;
   query.Close;
 end;
 
-procedure TestAvecIndex;
+procedure TestAvecIndex;  
 begin
   query.SQL.Text := 'SELECT * FROM test_data WHERE id = 500';
   query.Open;
   query.Close;
 end;
 
-procedure TestCount;
+procedure TestCount;  
 begin
   query.SQL.Text := 'SELECT COUNT(*) FROM test_data';
   query.Open;
@@ -1491,7 +1491,7 @@ program NetworkBenchmark;
 uses
   SysUtils, Sockets, BenchmarkUnit;
 
-function PingServer(const Host: string; Port: Word): Double;
+function PingServer(const Host: string; Port: Word): Double;  
 var
   sock: TSocket;
   addr: TInetSockAddr;
@@ -1581,17 +1581,17 @@ var
   historique: array of TBenchmarkHistory;
   config: TIniFile;
 
-procedure SauvegarderResultats(const Nom: string; Temps: Double);
+procedure SauvegarderResultats(const Nom: string; Temps: Double);  
 begin
   config.WriteFloat('Benchmarks', Nom, Temps);
 end;
 
-function ChargerResultatPrecedent(const Nom: string): Double;
+function ChargerResultatPrecedent(const Nom: string): Double;  
 begin
   Result := config.ReadFloat('Benchmarks', Nom, -1);
 end;
 
-procedure AnalyserRegression(const Nom: string; TempsActuel: Double);
+procedure AnalyserRegression(const Nom: string; TempsActuel: Double);  
 var
   tempsPrecedent: Double;
   idx: Integer;
@@ -1614,7 +1614,7 @@ begin
   SauvegarderResultats(Nom, TempsActuel);
 end;
 
-procedure AfficherRapportRegression;
+procedure AfficherRapportRegression;  
 var
   i: Integer;
   aRegressions: Boolean;
@@ -1662,7 +1662,7 @@ begin
 end;
 
 // Simulation de benchmarks
-procedure BenchmarkA;
+procedure BenchmarkA;  
 var
   i, somme: Integer;
 begin
@@ -1671,7 +1671,7 @@ begin
     somme := somme + i;
 end;
 
-procedure BenchmarkB;
+procedure BenchmarkB;  
 var
   i: Integer;
   liste: TStringList;

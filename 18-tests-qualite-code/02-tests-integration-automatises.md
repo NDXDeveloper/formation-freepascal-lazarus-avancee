@@ -27,7 +27,7 @@ Imaginez une application de gestion d'utilisateurs :
 **Test Unitaire :**
 ```pascal
 // Teste uniquement la validation du mot de passe
-procedure TestValidationMotDePasse;
+procedure TestValidationMotDePasse;  
 begin
   AssertTrue(EstMotDePasseValide('MonP@ssw0rd123'));
   AssertFalse(EstMotDePasseValide('12345'));
@@ -37,7 +37,7 @@ end;
 **Test d'Intégration :**
 ```pascal
 // Teste la création complète d'un utilisateur en base de données
-procedure TestCreationUtilisateur;
+procedure TestCreationUtilisateur;  
 var
   Utilisateur: TUtilisateur;
 begin
@@ -71,12 +71,12 @@ Même si tous vos tests unitaires passent, votre application peut échouer pour 
 
 ```pascal
 // Ces deux fonctions passent leurs tests unitaires individuellement
-function CalculerTotalCommande(Commande: TCommande): Currency;
+function CalculerTotalCommande(Commande: TCommande): Currency;  
 begin
   Result := Commande.MontantHT * (1 + Commande.TauxTVA);
 end;
 
-function EnregistrerCommande(Commande: TCommande): Boolean;
+function EnregistrerCommande(Commande: TCommande): Boolean;  
 begin
   Commande.Total := CalculerTotalCommande(Commande);
   BaseDeDonnees.Sauvegarder(Commande);
@@ -146,7 +146,7 @@ implementation
 uses
   SysUtils, IniFiles;
 
-class procedure TConfigurationTests.Initialiser;
+class procedure TConfigurationTests.Initialiser;  
 var
   Config: TIniFile;
   CheminConfig: String;
@@ -177,7 +177,7 @@ begin
   end;
 end;
 
-class procedure TConfigurationTests.Nettoyer;
+class procedure TConfigurationTests.Nettoyer;  
 begin
   // Nettoyer les fichiers temporaires
   if DirectoryExists(FCheminBase) then
@@ -199,7 +199,7 @@ Créez une base de données dédiée aux tests :
 -- Script de création : config/test_database.sql
 
 -- Windows (SQL Server / MySQL)
-CREATE DATABASE test_monprojet;
+CREATE DATABASE test_monprojet;  
 USE test_monprojet;
 
 -- Ubuntu (PostgreSQL)
@@ -262,7 +262,7 @@ type
 
 implementation
 
-procedure TTestBaseIntegrationDB.SetUp;
+procedure TTestBaseIntegrationDB.SetUp;  
 begin
   inherited;
 
@@ -302,7 +302,7 @@ begin
   NettoierTables;
 end;
 
-procedure TTestBaseIntegrationDB.TearDown;
+procedure TTestBaseIntegrationDB.TearDown;  
 begin
   // Toujours faire un rollback pour ne pas polluer la base
   if FTransaction.Active then
@@ -315,7 +315,7 @@ begin
   inherited;
 end;
 
-procedure TTestBaseIntegrationDB.InitialiserSchema;
+procedure TTestBaseIntegrationDB.InitialiserSchema;  
 begin
   // Lire et exécuter le script SQL de création
   // (implémentation simplifiée)
@@ -323,7 +323,7 @@ begin
   ExecuterSQL('CREATE TABLE IF NOT EXISTS commandes (...)');
 end;
 
-procedure TTestBaseIntegrationDB.NettoierTables;
+procedure TTestBaseIntegrationDB.NettoierTables;  
 begin
   try
     // Supprimer toutes les données
@@ -336,13 +336,13 @@ begin
   end;
 end;
 
-procedure TTestBaseIntegrationDB.ExecuterSQL(const SQL: String);
+procedure TTestBaseIntegrationDB.ExecuterSQL(const SQL: String);  
 begin
   FQuery.SQL.Text := SQL;
   FQuery.ExecSQL;
 end;
 
-function TTestBaseIntegrationDB.CompterLignes(const NomTable: String): Integer;
+function TTestBaseIntegrationDB.CompterLignes(const NomTable: String): Integer;  
 begin
   FQuery.SQL.Text := 'SELECT COUNT(*) as total FROM ' + NomTable;
   FQuery.Open;
@@ -388,19 +388,19 @@ type
 
 implementation
 
-procedure TTestIntegrationUtilisateurs.SetUp;
+procedure TTestIntegrationUtilisateurs.SetUp;  
 begin
   inherited;
   FGestionnaire := TGestionnaireUtilisateurs.Create(Connexion, Transaction);
 end;
 
-procedure TTestIntegrationUtilisateurs.TearDown;
+procedure TTestIntegrationUtilisateurs.TearDown;  
 begin
   FGestionnaire.Free;
   inherited;
 end;
 
-procedure TTestIntegrationUtilisateurs.TestCreerUtilisateur;
+procedure TTestIntegrationUtilisateurs.TestCreerUtilisateur;  
 var
   Utilisateur: TUtilisateur;
   ID: Integer;
@@ -428,7 +428,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationUtilisateurs.TestChargerUtilisateur;
+procedure TTestIntegrationUtilisateurs.TestChargerUtilisateur;  
 var
   Utilisateur, UtilisateurCharge: TUtilisateur;
   ID: Integer;
@@ -463,7 +463,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationUtilisateurs.TestModifierUtilisateur;
+procedure TTestIntegrationUtilisateurs.TestModifierUtilisateur;  
 var
   Utilisateur: TUtilisateur;
   ID: Integer;
@@ -498,7 +498,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationUtilisateurs.TestSupprimerUtilisateur;
+procedure TTestIntegrationUtilisateurs.TestSupprimerUtilisateur;  
 var
   Utilisateur: TUtilisateur;
   ID: Integer;
@@ -526,7 +526,7 @@ begin
   AssertNull('Utilisateur supprimé', Utilisateur);
 end;
 
-procedure TTestIntegrationUtilisateurs.TestEmailDuplique;
+procedure TTestIntegrationUtilisateurs.TestEmailDuplique;  
 var
   Utilisateur1, Utilisateur2: TUtilisateur;
 begin
@@ -566,7 +566,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationUtilisateurs.TestTransactionRollback;
+procedure TTestIntegrationUtilisateurs.TestTransactionRollback;  
 var
   Utilisateur: TUtilisateur;
 begin
@@ -634,7 +634,7 @@ type
 
 implementation
 
-procedure TTestIntegrationFichiers.SetUp;
+procedure TTestIntegrationFichiers.SetUp;  
 begin
   inherited;
 
@@ -649,7 +649,7 @@ begin
   FGestionnaire := TGestionnaireFichiers.Create;
 end;
 
-procedure TTestIntegrationFichiers.TearDown;
+procedure TTestIntegrationFichiers.TearDown;  
 begin
   FGestionnaire.Free;
 
@@ -660,7 +660,7 @@ begin
   inherited;
 end;
 
-function TTestIntegrationFichiers.CreerFichierTest(const NomFichier, Contenu: String): String;
+function TTestIntegrationFichiers.CreerFichierTest(const NomFichier, Contenu: String): String;  
 var
   Fichier: TextFile;
 begin
@@ -674,13 +674,13 @@ begin
   end;
 end;
 
-procedure TTestIntegrationFichiers.SupprimerFichierTest(const CheminComplet: String);
+procedure TTestIntegrationFichiers.SupprimerFichierTest(const CheminComplet: String);  
 begin
   if FileExists(CheminComplet) then
     DeleteFile(CheminComplet);
 end;
 
-procedure TTestIntegrationFichiers.TestLireFichier;
+procedure TTestIntegrationFichiers.TestLireFichier;  
 var
   CheminFichier, Contenu: String;
 begin
@@ -695,7 +695,7 @@ begin
   AssertTrue('Contenu correct', Pos('Contenu de test', Contenu) > 0);
 end;
 
-procedure TTestIntegrationFichiers.TestEcrireFichier;
+procedure TTestIntegrationFichiers.TestEcrireFichier;  
 var
   CheminFichier, ContenuEcrit, ContenuLu: String;
 begin
@@ -713,7 +713,7 @@ begin
   AssertEquals('Contenu identique', ContenuEcrit, ContenuLu);
 end;
 
-procedure TTestIntegrationFichiers.TestCopierFichier;
+procedure TTestIntegrationFichiers.TestCopierFichier;  
 var
   CheminSource, CheminDest, ContenuSource, ContenuDest: String;
 begin
@@ -734,7 +734,7 @@ begin
   AssertEquals('Contenu identique', ContenuSource, ContenuDest);
 end;
 
-procedure TTestIntegrationFichiers.TestDeplacerFichier;
+procedure TTestIntegrationFichiers.TestDeplacerFichier;  
 var
   CheminSource, CheminDest, Contenu: String;
 begin
@@ -753,7 +753,7 @@ begin
   AssertEquals('Contenu préservé', Contenu, FGestionnaire.LireFichier(CheminDest));
 end;
 
-procedure TTestIntegrationFichiers.TestSupprimerFichier;
+procedure TTestIntegrationFichiers.TestSupprimerFichier;  
 var
   CheminFichier: String;
 begin
@@ -768,7 +768,7 @@ begin
   AssertFalse('Fichier supprimé', FileExists(CheminFichier));
 end;
 
-procedure TTestIntegrationFichiers.TestCreerRepertoire;
+procedure TTestIntegrationFichiers.TestCreerRepertoire;  
 var
   CheminRepertoire: String;
 begin
@@ -781,7 +781,7 @@ begin
   AssertTrue('Répertoire créé', DirectoryExists(CheminRepertoire));
 end;
 
-procedure TTestIntegrationFichiers.TestListerFichiers;
+procedure TTestIntegrationFichiers.TestListerFichiers;  
 var
   Fichiers: TStringList;
 begin
@@ -807,7 +807,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationFichiers.TestCheminMultiPlateforme;
+procedure TTestIntegrationFichiers.TestCheminMultiPlateforme;  
 var
   Chemin: String;
 begin
@@ -883,7 +883,7 @@ type
 
 implementation
 
-procedure TTestIntegrationAPI.SetUp;
+procedure TTestIntegrationAPI.SetUp;  
 begin
   inherited;
 
@@ -900,13 +900,13 @@ begin
   FClient.Token := 'test_token_12345';  // Token de test
 end;
 
-procedure TTestIntegrationAPI.TearDown;
+procedure TTestIntegrationAPI.TearDown;  
 begin
   FClient.Free;
   inherited;
 end;
 
-procedure TTestIntegrationAPI.TestConnexionAPI;
+procedure TTestIntegrationAPI.TestConnexionAPI;  
 var
   Reponse: TJSONObject;
 begin
@@ -920,7 +920,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationAPI.TestRecupererUtilisateur;
+procedure TTestIntegrationAPI.TestRecupererUtilisateur;  
 var
   Utilisateur: TJSONObject;
 begin
@@ -936,7 +936,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationAPI.TestCreerUtilisateur;
+procedure TTestIntegrationAPI.TestCreerUtilisateur;  
 var
   NouvelUtilisateur, Resultat: TJSONObject;
   ID: Integer;
@@ -966,7 +966,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationAPI.TestModifierUtilisateur;
+procedure TTestIntegrationAPI.TestModifierUtilisateur;  
 var
   Utilisateur, Modification, UtilisateurModifie: TJSONObject;
   ID: Integer;
@@ -1004,7 +1004,7 @@ begin
   FClient.SupprimerUtilisateur(ID);
 end;
 
-procedure TTestIntegrationAPI.TestSupprimerUtilisateur;
+procedure TTestIntegrationAPI.TestSupprimerUtilisateur;  
 var
   Utilisateur: TJSONObject;
   ID: Integer;
@@ -1041,7 +1041,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationAPI.TestGestionErreurs;
+procedure TTestIntegrationAPI.TestGestionErreurs;  
 begin
   // Tester avec un ID inexistant
   try
@@ -1107,7 +1107,7 @@ type
 
 implementation
 
-procedure TTestIntegrationCommande.SetUp;
+procedure TTestIntegrationCommande.SetUp;  
 begin
   inherited;
 
@@ -1120,7 +1120,7 @@ begin
   FServicePaiement.ModeTest := True;
 end;
 
-procedure TTestIntegrationCommande.TearDown;
+procedure TTestIntegrationCommande.TearDown;  
 begin
   FServicePaiement.Free;
   FGestionnaireCommandes.Free;
@@ -1129,7 +1129,7 @@ begin
   inherited;
 end;
 
-procedure TTestIntegrationCommande.TestScenarioCompletCommande;
+procedure TTestIntegrationCommande.TestScenarioCompletCommande;  
 var
   Utilisateur: TUtilisateur;
   Produit1, Produit2: TProduit;
@@ -1227,7 +1227,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationCommande.TestCommandeAvecProduitsIndisponibles;
+procedure TTestIntegrationCommande.TestCommandeAvecProduitsIndisponibles;  
 var
   Utilisateur: TUtilisateur;
   Produit: TProduit;
@@ -1280,7 +1280,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationCommande.TestCommandeAvecPaiementEchoue;
+procedure TTestIntegrationCommande.TestCommandeAvecPaiementEchoue;  
 var
   Utilisateur: TUtilisateur;
   Produit: TProduit;
@@ -1353,7 +1353,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationCommande.TestCommandeAvecReduction;
+procedure TTestIntegrationCommande.TestCommandeAvecReduction;  
 var
   Utilisateur: TUtilisateur;
   Produit: TProduit;
@@ -1449,7 +1449,7 @@ Chaque test doit partir d'un état propre et prévisible. Sans nettoyage appropr
 #### 1. Rollback des transactions
 
 ```pascal
-procedure TTestBaseIntegrationDB.TearDown;
+procedure TTestBaseIntegrationDB.TearDown;  
 begin
   // TOUJOURS faire un rollback si la transaction est active
   if FTransaction.Active then
@@ -1467,7 +1467,7 @@ end;
 #### 2. Suppression explicite
 
 ```pascal
-procedure TTestIntegrationFichiers.TearDown;
+procedure TTestIntegrationFichiers.TearDown;  
 begin
   // Supprimer tous les fichiers de test
   if DirectoryExists(FCheminTest) then
@@ -1484,7 +1484,7 @@ end;
 #### 3. Réinitialisation de base de données
 
 ```pascal
-procedure TTestBaseIntegrationDB.NettoierTables;
+procedure TTestBaseIntegrationDB.NettoierTables;  
 begin
   try
     // Désactiver temporairement les contraintes
@@ -1526,14 +1526,14 @@ type
     procedure TearDown; override;
   end;
 
-procedure TTestAvecCompteur.SetUp;
+procedure TTestAvecCompteur.SetUp;  
 begin
   inherited;
   Inc(FCompteurTests);
   WriteLn(Format('Début test #%d : %s', [FCompteurTests, TestName]));
 end;
 
-procedure TTestAvecCompteur.TearDown;
+procedure TTestAvecCompteur.TearDown;  
 begin
   WriteLn(Format('Fin test #%d : %s', [FCompteurTests, TestName]));
   inherited;
@@ -1553,7 +1553,7 @@ Les tests d'intégration dépendent souvent de :
 ### Solution 1 : Variables d'environnement
 
 ```pascal
-function ObtenirConnectionString: String;
+function ObtenirConnectionString: String;  
 begin
   // Essayer d'abord la variable d'environnement
   Result := GetEnvironmentVariable('DB_TEST_CONNECTION');
@@ -1576,15 +1576,15 @@ end;
 ```ini
 ; config/test.ini
 [Database]
-Host=localhost
-Port=5432
-Database=test_monprojet
-User=testuser
+Host=localhost  
+Port=5432  
+Database=test_monprojet  
+User=testuser  
 Password=testpass
 
 [API]
-BaseURL=http://localhost:8080/api
-Token=test_token_12345
+BaseURL=http://localhost:8080/api  
+Token=test_token_12345  
 Timeout=30
 
 [Files]
@@ -1592,7 +1592,7 @@ TempPath=/tmp/tests/
 ```
 
 ```pascal
-procedure ChargerConfiguration;
+procedure ChargerConfiguration;  
 var
   Config: TIniFile;
 begin
@@ -1627,7 +1627,7 @@ type
     property EmailsEnvoyes: TStringList read FEmailsEnvoyes;
   end;
 
-procedure TServiceEmail.EnvoyerEmail(const Destinataire, Sujet, Corps: String);
+procedure TServiceEmail.EnvoyerEmail(const Destinataire, Sujet, Corps: String);  
 begin
   if FModeTest then
   begin
@@ -1650,7 +1650,7 @@ end;
 #### Chemins de fichiers
 
 ```pascal
-procedure TTestMultiPlateforme.TestCheminFichier;
+procedure TTestMultiPlateforme.TestCheminFichier;  
 var
   CheminAttendu: String;
 begin
@@ -1666,7 +1666,7 @@ begin
 end;
 
 // Meilleure approche : utiliser PathDelim
-procedure TTestMultiPlateforme.TestCheminFichierPortable;
+procedure TTestMultiPlateforme.TestCheminFichierPortable;  
 var
   Chemin: String;
 begin
@@ -1688,7 +1688,7 @@ end;
 #### Fins de ligne
 
 ```pascal
-procedure TTestMultiPlateforme.TestFinsDeLigne;
+procedure TTestMultiPlateforme.TestFinsDeLigne;  
 var
   Contenu, ContenuLu: String;
 begin
@@ -1714,7 +1714,7 @@ end;
 
 ```pascal
 {$IFDEF UNIX}
-procedure TTestMultiPlateformeUnix.TestPermissionsFichier;
+procedure TTestMultiPlateformeUnix.TestPermissionsFichier;  
 var
   CheminFichier: String;
   Permissions: Integer;
@@ -1740,7 +1740,7 @@ end;
 {$ENDIF}
 
 {$IFDEF WINDOWS}
-procedure TTestMultiPlateformeWindows.TestAttributsFichier;
+procedure TTestMultiPlateformeWindows.TestAttributsFichier;  
 var
   CheminFichier: String;
   Attributs: Integer;
@@ -1768,7 +1768,7 @@ end;
 ### Sensibilité à la casse
 
 ```pascal
-procedure TTestMultiPlateforme.TestSensibiliteCasse;
+procedure TTestMultiPlateforme.TestSensibiliteCasse;  
 var
   CheminMaj, CheminMin: String;
 begin
@@ -1836,19 +1836,19 @@ type
 
 implementation
 
-procedure TTestIntegrationBibliotheques.SetUp;
+procedure TTestIntegrationBibliotheques.SetUp;  
 begin
   inherited;
   FGestionnaire := TGestionnaireBibliotheques.Create;
 end;
 
-procedure TTestIntegrationBibliotheques.TearDown;
+procedure TTestIntegrationBibliotheques.TearDown;  
 begin
   FGestionnaire.Free;
   inherited;
 end;
 
-procedure TTestIntegrationBibliotheques.TestChargerBibliotheque;
+procedure TTestIntegrationBibliotheques.TestChargerBibliotheque;  
 var
   CheminBiblio: String;
   Handle: TLibHandle;
@@ -1871,7 +1871,7 @@ begin
   end;
 end;
 
-procedure TTestIntegrationBibliotheques.TestAppelerFonction;
+procedure TTestIntegrationBibliotheques.TestAppelerFonction;  
 var
   Handle: TLibHandle;
   Fonction: Pointer;
@@ -1910,7 +1910,7 @@ begin
   {$ENDIF}
 end;
 
-procedure TTestIntegrationBibliotheques.TestBibliothequeInexistante;
+procedure TTestIntegrationBibliotheques.TestBibliothequeInexistante;  
 begin
   try
     FGestionnaire.Charger('bibliotheque_inexistante.xyz');
@@ -1961,30 +1961,30 @@ type
 
 implementation
 
-procedure TTestPerformanceIntegration.SetUp;
+procedure TTestPerformanceIntegration.SetUp;  
 begin
   inherited;
   FGestionnaire := TGestionnaireUtilisateurs.Create(Connexion, Transaction);
 end;
 
-procedure TTestPerformanceIntegration.TearDown;
+procedure TTestPerformanceIntegration.TearDown;  
 begin
   FGestionnaire.Free;
   inherited;
 end;
 
-procedure TTestPerformanceIntegration.DemarrerChrono;
+procedure TTestPerformanceIntegration.DemarrerChrono;  
 begin
   FTempsDebut := Now;
 end;
 
-function TTestPerformanceIntegration.ArreterChrono: Int64;
+function TTestPerformanceIntegration.ArreterChrono: Int64;  
 begin
   Result := MilliSecondsBetween(Now, FTempsDebut);
   WriteLn(Format('Temps d''exécution : %d ms', [Result]));
 end;
 
-procedure TTestPerformanceIntegration.TestPerformanceInsertionMasse;
+procedure TTestPerformanceIntegration.TestPerformanceInsertionMasse;  
 var
   i: Integer;
   Utilisateur: TUtilisateur;
@@ -2020,7 +2020,7 @@ begin
   WriteLn(Format('%.2f insertions/seconde', [NB_UTILISATEURS / (TempsPasse / 1000)]));
 end;
 
-procedure TTestPerformanceIntegration.TestPerformanceRequeteComplexe;
+procedure TTestPerformanceIntegration.TestPerformanceRequeteComplexe;  
 var
   i: Integer;
   Utilisateur: TUtilisateur;
@@ -2062,7 +2062,7 @@ begin
   end;
 end;
 
-procedure TTestPerformanceIntegration.TestPerformanceTransaction;
+procedure TTestPerformanceIntegration.TestPerformanceTransaction;  
 var
   i: Integer;
   Utilisateur: TUtilisateur;
@@ -2112,7 +2112,7 @@ end.
 
 ```pascal
 // Utiliser SQLite en mémoire pour tests rapides
-procedure TTestRapideIntegration.SetUp;
+procedure TTestRapideIntegration.SetUp;  
 begin
   inherited;
 
@@ -2163,23 +2163,23 @@ MonProjet/
 
 ```batch
 @echo off
-echo ========================================
-echo Tests d'integration - Windows
+echo ========================================  
+echo Tests d'integration - Windows  
 echo ========================================
 
-REM Définir les variables d'environnement
+REM Définir les variables d'environnement  
 set DB_TEST_CONNECTION=localhost:3306:test_db:root:
 
-REM Compiler
-echo Compilation...
+REM Compiler  
+echo Compilation...  
 lazbuild MonProjetTests.lpi
 
-REM Exécuter seulement les tests d'intégration
-echo.
-echo Execution des tests d'integration...
+REM Exécuter seulement les tests d'intégration  
+echo.  
+echo Execution des tests d'integration...  
 MonProjetTests.exe --suite=TTestIntegration --format=plain
 
-REM Vérifier le code de retour
+REM Vérifier le code de retour  
 if %ERRORLEVEL% NEQ 0 (
     echo.
     echo ECHEC : Des tests ont echoue
@@ -2196,19 +2196,19 @@ if %ERRORLEVEL% NEQ 0 (
 ```bash
 #!/bin/bash
 
-echo "========================================"
-echo "Tests d'intégration - Ubuntu"
+echo "========================================"  
+echo "Tests d'intégration - Ubuntu"  
 echo "========================================"
 
 # Définir les variables d'environnement
 export DB_TEST_CONNECTION="localhost:5432:test_db:postgres:postgres"
 
 # Compiler
-echo "Compilation..."
+echo "Compilation..."  
 lazbuild MonProjetTests.lpi
 
 # Exécuter seulement les tests d'intégration
-echo ""
+echo ""  
 echo "Exécution des tests d'intégration..."
 ./MonProjetTests --suite=TTestIntegration --format=plain
 
@@ -2401,7 +2401,7 @@ test:ubuntu:
 
 ✅ **Bon :**
 ```pascal
-procedure TestCreerUtilisateur;
+procedure TestCreerUtilisateur;  
 begin
   // Toujours partir d'un état propre
   NettoierTables;
@@ -2418,7 +2418,7 @@ end;
 
 ❌ **Mauvais :**
 ```pascal
-procedure TestCreerUtilisateur;
+procedure TestCreerUtilisateur;  
 begin
   // Suppose qu'il y a déjà des données
   Utilisateur := ChargerUtilisateur(1);  // Et si l'ID 1 n'existe pas ?
@@ -2442,7 +2442,7 @@ AssertEquals('test@example.com', Utilisateur.Email);
 ### 3. Tester les cas d'erreur
 
 ```pascal
-procedure TestCreationAvecEmailInvalide;
+procedure TestCreationAvecEmailInvalide;  
 begin
   Utilisateur := TUtilisateur.Create;
   try
@@ -2488,14 +2488,14 @@ type
     procedure TestEnvoiEmail;
   end;
 
-procedure TTestAvecServiceExterne.SetUp;
+procedure TTestAvecServiceExterne.SetUp;  
 begin
   inherited;
   FServiceEmail := TServiceEmail.Create;
   FServiceEmail.ModeTest := True;  // Ne pas envoyer réellement
 end;
 
-procedure TTestAvecServiceExterne.TestEnvoiEmail;
+procedure TTestAvecServiceExterne.TestEnvoiEmail;  
 begin
   // Test sans dépendre d'un serveur SMTP réel
   FServiceEmail.EnvoyerEmail('test@example.com', 'Sujet', 'Corps');
@@ -2521,7 +2521,7 @@ end;
   Prérequis : base de données vide
   Postcondition : 1 utilisateur, 2 produits, 1 commande
 }
-procedure TTestIntegrationCommande.TestScenarioCompletCommande;
+procedure TTestIntegrationCommande.TestScenarioCompletCommande;  
 begin
   // ...
 end;

@@ -28,7 +28,7 @@ Modifier des données valides pour créer des entrées invalides.
 
 **Exemple :**
 ```
-Donnée valide:    "John Doe"
+Donnée valide:    "John Doe"  
 Après mutation:   "John\x00Doe"      (caractère nul)
                   "John' OR '1'='1"  (injection SQL)
                   "John" + "D"*10000 (overflow)
@@ -40,7 +40,7 @@ Créer des données complètement aléatoires selon des règles.
 
 **Exemple :**
 ```
-Email valide:     "user@example.com"
+Email valide:     "user@example.com"  
 Génération:       "a@b"
                   "@@@@@"
                   "user@.com"
@@ -72,12 +72,12 @@ uses
   SysUtils;
 
 // Fonction à tester
-function Diviser(a, b: Integer): Double;
+function Diviser(a, b: Integer): Double;  
 begin
   Result := a / b;  // Bug potentiel: division par zéro
 end;
 
-procedure FuzzDiviser;
+procedure FuzzDiviser;  
 var
   i: Integer;
   a, b: Integer;
@@ -138,7 +138,7 @@ end.
 ❌ ERREUR avec a=-45 b=0: Division by zero
 ⚠️  Cas limite détecté: 500 / 1 = Inf
 
-Tests effectués: 1000
+Tests effectués: 1000  
 Erreurs trouvées: 15
 ⚠️  La fonction nécessite une amélioration!
 ```
@@ -146,7 +146,7 @@ Erreurs trouvées: 15
 **Version corrigée :**
 
 ```pascal
-function DiviserSecurise(a, b: Integer): Double;
+function DiviserSecurise(a, b: Integer): Double;  
 begin
   if b = 0 then
     raise Exception.Create('Division par zéro interdite');
@@ -166,7 +166,7 @@ uses
   SysUtils, Classes;
 
 // Fonction à tester : Parser une liste de nombres séparés par des virgules
-function ParseNumberList(const input: string): TStringList;
+function ParseNumberList(const input: string): TStringList;  
 var
   parts: TStringList;
   i: Integer;
@@ -186,7 +186,7 @@ begin
   end;
 end;
 
-procedure FuzzParser;
+procedure FuzzParser;  
 var
   testCases: array of string;
   i: Integer;
@@ -261,15 +261,15 @@ end.
 ```
 === Fuzzing du parser de nombres ===
 
-Test  1: "1,2,3" → OK (3 éléments)
-Test  2: "" → ❌ ERREUR: '' is not a valid integer value
-Test  3: ",,," → ❌ ERREUR: '' is not a valid integer value
-Test  4: "1,,3" → ❌ ERREUR: '' is not a valid integer value
-Test  5: "abc,def" → ❌ ERREUR: 'abc' is not a valid integer value
+Test  1: "1,2,3" → OK (3 éléments)  
+Test  2: "" → ❌ ERREUR: '' is not a valid integer value  
+Test  3: ",,," → ❌ ERREUR: '' is not a valid integer value  
+Test  4: "1,,3" → ❌ ERREUR: '' is not a valid integer value  
+Test  5: "abc,def" → ❌ ERREUR: 'abc' is not a valid integer value  
 Test  6: "1,2," → ❌ ERREUR: '' is not a valid integer value
 ...
 
-Tests effectués: 15
+Tests effectués: 15  
 Erreurs trouvées: 12
 ⚠️  Le parser doit être renforcé!
 ```
@@ -277,7 +277,7 @@ Erreurs trouvées: 12
 **Version sécurisée :**
 
 ```pascal
-function ParseNumberListSecure(const input: string): TStringList;
+function ParseNumberListSecure(const input: string): TStringList;  
 var
   parts: TStringList;
   i, num: Integer;
@@ -333,9 +333,9 @@ type
     fstOverflow         // Chaînes très longues
   );
 
-function GenerateRandomString(StringType: TFuzzStringType; MinLen, MaxLen: Integer): string;
-function GenerateRandomInteger(Min, Max: Integer): Integer;
-function GenerateRandomFloat(Min, Max: Double): Double;
+function GenerateRandomString(StringType: TFuzzStringType; MinLen, MaxLen: Integer): string;  
+function GenerateRandomInteger(Min, Max: Integer): Integer;  
+function GenerateRandomFloat(Min, Max: Double): Double;  
 function GenerateRandomBoolean: Boolean;
 
 implementation
@@ -343,22 +343,22 @@ implementation
 uses
   SysUtils;
 
-function GenerateRandomInteger(Min, Max: Integer): Integer;
+function GenerateRandomInteger(Min, Max: Integer): Integer;  
 begin
   Result := Random(Max - Min + 1) + Min;
 end;
 
-function GenerateRandomFloat(Min, Max: Double): Double;
+function GenerateRandomFloat(Min, Max: Double): Double;  
 begin
   Result := Min + Random * (Max - Min);
 end;
 
-function GenerateRandomBoolean: Boolean;
+function GenerateRandomBoolean: Boolean;  
 begin
   Result := Random(2) = 1;
 end;
 
-function GenerateRandomString(StringType: TFuzzStringType; MinLen, MaxLen: Integer): string;
+function GenerateRandomString(StringType: TFuzzStringType; MinLen, MaxLen: Integer): string;  
 const
   ALPHANUMERIC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   SPECIAL_CHARS = '!@#$%^&*()_+-=[]{}|;:''",.<>?/\~`';
@@ -501,7 +501,7 @@ uses
   SysUtils, Classes;
 
 // Fonction à tester : Parser un fichier de configuration
-procedure LoadConfigFile(const FileName: string);
+procedure LoadConfigFile(const FileName: string);  
 var
   lines: TStringList;
   i: Integer;
@@ -532,7 +532,7 @@ begin
   end;
 end;
 
-procedure GenerateFuzzedConfigFile(const FileName: string; TestCase: Integer);
+procedure GenerateFuzzedConfigFile(const FileName: string; TestCase: Integer);  
 var
   f: TextFile;
 begin
@@ -648,7 +648,7 @@ program HTTPServerFuzzer;
 uses
   SysUtils, Classes, Sockets;
 
-function SendHTTPRequest(const Host: string; Port: Word; const Request: string): string;
+function SendHTTPRequest(const Host: string; Port: Word; const Request: string): string;  
 var
   sock: TSocket;
   addr: TInetSockAddr;
@@ -683,7 +683,7 @@ begin
   end;
 end;
 
-procedure FuzzHTTPServer(const Host: string; Port: Word);
+procedure FuzzHTTPServer(const Host: string; Port: Word);  
 var
   testCases: array of string;
   i: Integer;
@@ -778,7 +778,7 @@ uses
   SysUtils;
 
 // Fonction à tester
-function Abs(x: Integer): Integer;
+function Abs(x: Integer): Integer;  
 begin
   if x < 0 then
     Result := -x
@@ -787,7 +787,7 @@ begin
 end;
 
 // Propriété 1: Abs(x) >= 0 pour tout x
-function PropertyAbsAlwaysPositive: Boolean;
+function PropertyAbsAlwaysPositive: Boolean;  
 var
   i, x, result: Integer;
 begin
@@ -805,7 +805,7 @@ begin
 end;
 
 // Propriété 2: Abs(Abs(x)) = Abs(x) (idempotence)
-function PropertyAbsIdempotent: Boolean;
+function PropertyAbsIdempotent: Boolean;  
 var
   i, x, abs1, abs2: Integer;
 begin
@@ -824,7 +824,7 @@ begin
 end;
 
 // Propriété 3: Abs(-x) = Abs(x) (symétrie)
-function PropertyAbsSymmetric: Boolean;
+function PropertyAbsSymmetric: Boolean;  
 var
   i, x, absX, absNegX: Integer;
 begin
@@ -843,7 +843,7 @@ begin
 end;
 
 // Propriété 4: Abs(x * y) = Abs(x) * Abs(y)
-function PropertyAbsMultiplicative: Boolean;
+function PropertyAbsMultiplicative: Boolean;  
 var
   i, x, y: Integer;
   absXY, absXAbsY: Int64;
@@ -947,7 +947,7 @@ implementation
 uses
   FuzzGenerators;
 
-constructor TFuzzRunner.Create(TestFunc: TFuzzTestFunc);
+constructor TFuzzRunner.Create(TestFunc: TFuzzTestFunc);  
 begin
   inherited Create;
   FTestFunction := TestFunc;
@@ -957,7 +957,7 @@ begin
   FCrashedTests := 0;
 end;
 
-procedure TFuzzRunner.AddTestCase(const Input: string; Expected: TFuzzTestResult);
+procedure TFuzzRunner.AddTestCase(const Input: string; Expected: TFuzzTestResult);  
 var
   idx: Integer;
 begin
@@ -967,7 +967,7 @@ begin
   FTestCases[idx].ExpectedResult := Expected;
 end;
 
-procedure TFuzzRunner.GenerateRandomTests(Count: Integer);
+procedure TFuzzRunner.GenerateRandomTests(Count: Integer);  
 var
   i: Integer;
   testType: TFuzzStringType;
@@ -981,7 +981,7 @@ begin
   end;
 end;
 
-procedure TFuzzRunner.RunAllTests;
+procedure TFuzzRunner.RunAllTests;  
 var
   i: Integer;
   result: Boolean;
@@ -1025,7 +1025,7 @@ begin
   WriteLn;
 end;
 
-procedure TFuzzRunner.PrintReport;
+procedure TFuzzRunner.PrintReport;  
 var
   i: Integer;
 begin
@@ -1076,7 +1076,7 @@ uses
   SysUtils, FuzzFramework, FuzzGenerators;
 
 // Fonction à tester : Validation d'email
-function ValidateEmail(const email: string): Boolean;
+function ValidateEmail(const email: string): Boolean;  
 var
   atPos, dotPos: Integer;
 begin
@@ -1101,7 +1101,7 @@ begin
 end;
 
 // Wrapper pour le framework
-function TestEmailValidation(const input: string): Boolean;
+function TestEmailValidation(const input: string): Boolean;  
 begin
   try
     Result := ValidateEmail(input);
@@ -1154,7 +1154,7 @@ program XMLFuzzer;
 uses
   SysUtils, Classes, DOM, XMLRead;
 
-procedure TestXMLParser(const xmlContent: string);
+procedure TestXMLParser(const xmlContent: string);  
 var
   doc: TXMLDocument;
   stream: TStringStream;
@@ -1173,7 +1173,7 @@ begin
   end;
 end;
 
-procedure FuzzXMLParser;
+procedure FuzzXMLParser;  
 var
   testCases: array of string;
   i: Integer;
@@ -1265,13 +1265,13 @@ type
   end;
 
 // Fonction à tester : Nettoyage de chaînes SQL
-function SanitizeSQLInput(const input: string): string;
+function SanitizeSQLInput(const input: string): string;  
 begin
   // Implémentation simple (potentiellement vulnérable)
   Result := StringReplace(input, '''', '''''', [rfReplaceAll]);
 end;
 
-procedure RunSecurityFuzz;
+procedure RunSecurityFuzz;  
 var
   tests: array of TSecurityTest;
   i: Integer;
@@ -1434,20 +1434,20 @@ type
     procedure Reset;
   end;
 
-constructor TCoverageTracker.Create(TotalLines: Integer);
+constructor TCoverageTracker.Create(TotalLines: Integer);  
 begin
   inherited Create;
   FTotalLines := TotalLines;
   SetLength(FLinesCovered, TotalLines);
 end;
 
-procedure TCoverageTracker.MarkLine(LineNumber: Integer);
+procedure TCoverageTracker.MarkLine(LineNumber: Integer);  
 begin
   if (LineNumber >= 0) and (LineNumber < FTotalLines) then
     FLinesCovered[LineNumber] := True;
 end;
 
-function TCoverageTracker.GetCoverage: Double;
+function TCoverageTracker.GetCoverage: Double;  
 var
   i, covered: Integer;
 begin
@@ -1458,7 +1458,7 @@ begin
   Result := (covered * 100.0) / FTotalLines;
 end;
 
-procedure TCoverageTracker.Reset;
+procedure TCoverageTracker.Reset;  
 var
   i: Integer;
 begin
@@ -1470,7 +1470,7 @@ var
   coverage: TCoverageTracker;
 
 // Fonction à tester avec instrumentation manuelle
-function ProcessInput(const input: string): Integer;
+function ProcessInput(const input: string): Integer;  
 begin
   coverage.MarkLine(1);
   Result := 0;
@@ -1509,7 +1509,7 @@ begin
   coverage.MarkLine(10);
 end;
 
-procedure FuzzWithCoverage;
+procedure FuzzWithCoverage;  
 var
   i: Integer;
   input: string;
@@ -1652,7 +1652,7 @@ uses
 var
   dictionary: TStringList;
 
-procedure LoadDictionary;
+procedure LoadDictionary;  
 begin
   dictionary := TStringList.Create;
 
@@ -1678,7 +1678,7 @@ begin
   dictionary.Add('null');
 end;
 
-function GenerateDictionaryBasedInput: string;
+function GenerateDictionaryBasedInput: string;  
 var
   numTokens, i, idx: Integer;
 begin
@@ -1740,7 +1740,7 @@ var
   strategySuccess: array[TFuzzStrategy] of Integer;
   strategyAttempts: array[TFuzzStrategy] of Integer;
 
-function GetBestStrategy: TFuzzStrategy;
+function GetBestStrategy: TFuzzStrategy;  
 var
   s: TFuzzStrategy;
   bestScore: Double;
@@ -1763,7 +1763,7 @@ begin
   end;
 end;
 
-function GenerateInput(strategy: TFuzzStrategy): string;
+function GenerateInput(strategy: TFuzzStrategy): string;  
 begin
   case strategy of
     fsRandom:
@@ -1777,7 +1777,7 @@ begin
   end;
 end;
 
-function TestInput(const input: string): Boolean;
+function TestInput(const input: string): Boolean;  
 begin
   // Simuler un test
   Result := Random(10) > 7; // 30% de succès
@@ -1914,24 +1914,24 @@ end.
 #!/bin/bash
 # fuzzing_ci.sh - Script d'intégration continue pour fuzzing
 
-PROJECT_DIR="/chemin/vers/projet"
-FUZZ_DIR="$PROJECT_DIR/fuzzing"
-RESULTS_DIR="$FUZZ_DIR/results_$(date +%Y%m%d_%H%M%S)"
-CORPUS_DIR="$FUZZ_DIR/corpus"
+PROJECT_DIR="/chemin/vers/projet"  
+FUZZ_DIR="$PROJECT_DIR/fuzzing"  
+RESULTS_DIR="$FUZZ_DIR/results_$(date +%Y%m%d_%H%M%S)"  
+CORPUS_DIR="$FUZZ_DIR/corpus"  
 MAX_DURATION=600  # 10 minutes
 
-echo "=== Fuzzing CI/CD ==="
-echo "Projet: $PROJECT_DIR"
-echo "Durée max: $MAX_DURATION secondes"
+echo "=== Fuzzing CI/CD ==="  
+echo "Projet: $PROJECT_DIR"  
+echo "Durée max: $MAX_DURATION secondes"  
 echo
 
 # Créer les répertoires
-mkdir -p "$RESULTS_DIR"
+mkdir -p "$RESULTS_DIR"  
 mkdir -p "$CORPUS_DIR"
 
 # Compiler le programme de test
-cd "$PROJECT_DIR"
-echo "Compilation du programme de fuzzing..."
+cd "$PROJECT_DIR"  
+echo "Compilation du programme de fuzzing..."  
 fpc -O2 fuzzer.pas -o "$FUZZ_DIR/fuzzer"
 
 if [ $? -ne 0 ]; then
@@ -1940,16 +1940,16 @@ if [ $? -ne 0 ]; then
 fi
 
 # Lancer le fuzzing
-echo "Démarrage du fuzzing..."
+echo "Démarrage du fuzzing..."  
 timeout $MAX_DURATION "$FUZZ_DIR/fuzzer" > "$RESULTS_DIR/output.log" 2>&1
 
 # Analyser les résultats
-CRASHES=$(grep -c "CRASH" "$RESULTS_DIR/output.log")
+CRASHES=$(grep -c "CRASH" "$RESULTS_DIR/output.log")  
 ERRORS=$(grep -c "ERROR" "$RESULTS_DIR/output.log")
 
-echo
-echo "=== Résultats ==="
-echo "Crashes détectés: $CRASHES"
+echo  
+echo "=== Résultats ==="  
+echo "Crashes détectés: $CRASHES"  
 echo "Erreurs détectées: $ERRORS"
 
 # Extraire les cas problématiques
@@ -1987,17 +1987,17 @@ $ResultsDir = "$FuzzDir\results_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
 $CorpusDir = "$FuzzDir\corpus"
 $MaxDuration = 600  # 10 minutes en secondes
 
-Write-Host "=== Fuzzing CI/CD ===" -ForegroundColor Green
-Write-Host "Projet: $ProjectDir"
-Write-Host "Durée max: $MaxDuration secondes"
+Write-Host "=== Fuzzing CI/CD ===" -ForegroundColor Green  
+Write-Host "Projet: $ProjectDir"  
+Write-Host "Durée max: $MaxDuration secondes"  
 Write-Host ""
 
 # Créer les répertoires
-New-Item -ItemType Directory -Force -Path $ResultsDir | Out-Null
+New-Item -ItemType Directory -Force -Path $ResultsDir | Out-Null  
 New-Item -ItemType Directory -Force -Path $CorpusDir | Out-Null
 
 # Compiler
-Set-Location $ProjectDir
+Set-Location $ProjectDir  
 Write-Host "Compilation du programme de fuzzing..." -ForegroundColor Yellow
 & "C:\lazarus\fpc\bin\x86_64-win64\fpc.exe" -O2 fuzzer.pas -o"$FuzzDir\fuzzer.exe"
 
@@ -2027,9 +2027,9 @@ $content = Get-Content "$ResultsDir\output.log" -Raw
 $crashes = ([regex]::Matches($content, "CRASH")).Count
 $errors = ([regex]::Matches($content, "ERROR")).Count
 
-Write-Host ""
-Write-Host "=== Résultats ===" -ForegroundColor Green
-Write-Host "Crashes détectés: $crashes"
+Write-Host ""  
+Write-Host "=== Résultats ===" -ForegroundColor Green  
+Write-Host "Crashes détectés: $crashes"  
 Write-Host "Erreurs détectées: $errors"
 
 # Extraire les crashes
@@ -2188,14 +2188,14 @@ type
     property TransitionCount: Integer read FTransitionCount;
   end;
 
-constructor TStateMachine.Create;
+constructor TStateMachine.Create;  
 begin
   inherited Create;
   FCurrentState := stIdle;
   FTransitionCount := 0;
 end;
 
-function TStateMachine.ProcessEvent(Event: TEvent): Boolean;
+function TStateMachine.ProcessEvent(Event: TEvent): Boolean;  
 begin
   Result := True;
   Inc(FTransitionCount);
@@ -2237,7 +2237,7 @@ begin
   end;
 end;
 
-procedure FuzzStateMachine;
+procedure FuzzStateMachine;  
 const
   MAX_EVENTS = 1000;
 var
@@ -2329,7 +2329,7 @@ type
   end;
 
 // Fonction à tester : Désérialisation JSON
-function DeserializePerson(const jsonStr: string): TPerson;
+function DeserializePerson(const jsonStr: string): TPerson;  
 var
   json: TJSONObject;
   parser: TJSONParser;
@@ -2350,7 +2350,7 @@ begin
   end;
 end;
 
-procedure FuzzJSONDeserializer;
+procedure FuzzJSONDeserializer;  
 var
   testCases: array of string;
   i: Integer;
@@ -2436,9 +2436,9 @@ end.
      RAPPORT DE FUZZING
 ========================================
 
-Date: 2025-10-06 14:30:00
-Composant testé: Parser XML v2.3
-Durée: 4 heures 23 minutes
+Date: 2025-10-06 14:30:00  
+Composant testé: Parser XML v2.3  
+Durée: 4 heures 23 minutes  
 Stratégie: Mutation-based + Dictionary
 
 1. STATISTIQUES GLOBALES
