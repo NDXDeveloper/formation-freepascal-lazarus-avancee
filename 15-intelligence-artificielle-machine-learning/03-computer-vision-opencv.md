@@ -57,7 +57,7 @@ Installation via Online Package Manager de Lazarus :
 **Étape 1 : Installer OpenCV via APT**
 
 ```bash
-sudo apt update
+sudo apt update  
 sudo apt install libopencv-dev python3-opencv
 ```
 
@@ -81,13 +81,13 @@ Si vous avez besoin d'une version spécifique ou optimisée :
 sudo apt install build-essential cmake git pkg-config libgtk-3-dev
 
 # Télécharger OpenCV
-git clone https://github.com/opencv/opencv.git
-cd opencv
+git clone https://github.com/opencv/opencv.git  
+cd opencv  
 mkdir build && cd build
 
 # Compiler
-cmake ..
-make -j4
+cmake ..  
+make -j4  
 sudo make install
 ```
 
@@ -215,7 +215,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TForm1.MatToImage(const AMat: TMat; AImage: TImage);
+procedure TForm1.MatToImage(const AMat: TMat; AImage: TImage);  
 var
   bmp: TBitmap;
   tempMat: TMat;
@@ -257,7 +257,7 @@ begin
   end;
 end;
 
-procedure TForm1.ButtonLoadClick(Sender: TObject);
+procedure TForm1.ButtonLoadClick(Sender: TObject);  
 begin
   if OpenDialog1.Execute then
   begin
@@ -273,7 +273,7 @@ begin
   end;
 end;
 
-procedure TForm1.ButtonGrayClick(Sender: TObject);
+procedure TForm1.ButtonGrayClick(Sender: TObject);  
 var
   grayImage: TMat;
 begin
@@ -289,7 +289,7 @@ begin
   grayImage.release;
 end;
 
-procedure TForm1.ButtonBlurClick(Sender: TObject);
+procedure TForm1.ButtonBlurClick(Sender: TObject);  
 var
   blurredImage: TMat;
 begin
@@ -654,7 +654,7 @@ end;
 **Chemins des fichiers de cascade**
 
 ```pascal
-function GetCascadePath(const filename: string): string;
+function GetCascadePath(const filename: string): string;  
 begin
   {$IFDEF WINDOWS}
   Result := 'C:\opencv\data\haarcascades\' + filename;

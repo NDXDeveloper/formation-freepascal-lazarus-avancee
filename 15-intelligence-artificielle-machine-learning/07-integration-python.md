@@ -100,7 +100,7 @@ type
     procedure ClassifyImage(ImagePath: string);
   end;
 
-procedure TMainForm.LoadAIModel;
+procedure TMainForm.LoadAIModel;  
 begin
   // Charger un modèle TensorFlow pré-entraîné
   PythonEngine.ExecString('import tensorflow as tf');
@@ -108,7 +108,7 @@ begin
   MLModel := PythonEngine.EvalString('model');
 end;
 
-procedure TMainForm.ClassifyImage(ImagePath: string);
+procedure TMainForm.ClassifyImage(ImagePath: string);  
 var
   Prediction: string;
 begin
@@ -134,7 +134,7 @@ end;
 
 ```pascal
 // L'utilisateur charge un CSV via l'interface Lazarus
-procedure TMainForm.ButtonAnalyzeClick(Sender: TObject);
+procedure TMainForm.ButtonAnalyzeClick(Sender: TObject);  
 var
   CSVPath: string;
   AnalysisResults: string;
@@ -201,7 +201,7 @@ end;
 **Objectif** : Traiter de nombreux fichiers avec feedback visuel.
 
 ```pascal
-procedure TMainForm.ProcessImagesWithProgress;
+procedure TMainForm.ProcessImagesWithProgress;  
 var
   i: Integer;
   ImageFiles: TStringList;
@@ -255,7 +255,7 @@ Le moteur Python - le cœur de l'intégration :
 var
   PythonEngine: TPythonEngine;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);  
 begin
   PythonEngine := TPythonEngine.Create(Self);
   PythonEngine.DllPath := 'C:\Python39';  // Windows
@@ -275,7 +275,7 @@ Permet d'exposer des fonctions Pascal à Python :
 
 ```pascal
 // Python peut maintenant appeler des fonctions Pascal !
-procedure TForm1.PythonModuleInitialization(Sender: TObject);
+procedure TForm1.PythonModuleInitialization(Sender: TObject);  
 begin
   with Sender as TPythonModule do
   begin
@@ -286,7 +286,7 @@ begin
   end;
 end;
 
-function HelloFromPascal(Self, Args: PPyObject): PPyObject; cdecl;
+function HelloFromPascal(Self, Args: PPyObject): PPyObject; cdecl;  
 begin
   Result := PythonEngine.PyString_FromString('Hello from Pascal!');
 end;
@@ -300,13 +300,13 @@ Capture les sorties Python (print, erreurs) :
 var
   PythonIO: TPythonGUIInputOutput;
 
-procedure SetupPythonOutput;
+procedure SetupPythonOutput;  
 begin
   PythonIO := TPythonGUIInputOutput.Create(Self);
   PythonIO.OnSendData := @HandlePythonOutput;
 end;
 
-procedure HandlePythonOutput(Sender: TObject; const Data: string);
+procedure HandlePythonOutput(Sender: TObject; const Data: string);  
 begin
   // Afficher les print() Python dans un Memo
   MemoConsole.Lines.Add(Data);
@@ -321,8 +321,8 @@ Il existe plusieurs façons d'interagir avec Python depuis Pascal :
 
 ```pascal
 // Exécuter du code Python directement
-PythonEngine.ExecString('print("Hello from Python!")');
-PythonEngine.ExecString('x = 42');
+PythonEngine.ExecString('print("Hello from Python!")');  
+PythonEngine.ExecString('x = 42');  
 PythonEngine.ExecString('y = x * 2');
 ```
 
@@ -384,8 +384,8 @@ end;
 
 ```pascal
 // Pascal → Python
-PythonEngine.ExecString(Format('number = %d', [42]));
-PythonEngine.ExecString(Format('text = "%s"', ['Hello']));
+PythonEngine.ExecString(Format('number = %d', [42]));  
+PythonEngine.ExecString(Format('text = "%s"', ['Hello']));  
 PythonEngine.ExecString(Format('price = %.2f', [19.99]));
 
 // Python → Pascal
@@ -441,7 +441,7 @@ uses
   fpjson, jsonparser;
 
 // Pascal → Python via JSON
-procedure SendComplexData;
+procedure SendComplexData;  
 var
   JSONObj: TJSONObject;
   JSONStr: string;
@@ -465,7 +465,7 @@ begin
 end;
 
 // Python → Pascal via JSON
-procedure ReceiveComplexData;
+procedure ReceiveComplexData;  
 var
   JSONStr: string;
   JSONData: TJSONData;
@@ -491,7 +491,7 @@ end;
 La gestion des erreurs est cruciale pour une intégration robuste :
 
 ```pascal
-procedure SafePythonExecution;
+procedure SafePythonExecution;  
 begin
   try
     PythonEngine.ExecString('result = 10 / 0');  // Division par zéro
@@ -512,7 +512,7 @@ begin
 end;
 
 // Vérification explicite
-procedure CheckPythonError;
+procedure CheckPythonError;  
 begin
   PythonEngine.ExecString('import sys');
   PythonEngine.ExecString('result = undefined_variable');
@@ -582,14 +582,14 @@ type
 
 implementation
 
-constructor TAIService.Create;
+constructor TAIService.Create;  
 begin
   inherited Create;
   InitializePython;
   LoadMLModel;
 end;
 
-procedure TAIService.InitializePython;
+procedure TAIService.InitializePython;  
 begin
   FPythonEngine := TPythonEngine.Create(nil);
   FPythonEngine.LoadDll;
@@ -600,7 +600,7 @@ begin
   FPythonEngine.ExecString('from transformers import pipeline');
 end;
 
-procedure TAIService.LoadMLModel;
+procedure TAIService.LoadMLModel;  
 begin
   FPythonEngine.ExecString(
     'sentiment_analyzer = pipeline("sentiment-analysis")'
@@ -608,7 +608,7 @@ begin
   FModelLoaded := True;
 end;
 
-function TAIService.AnalyzeSentiment(const Text: string): Double;
+function TAIService.AnalyzeSentiment(const Text: string): Double;  
 var
   ScoreStr: string;
 begin
@@ -641,7 +641,7 @@ type
     function Translate(const Text, FromLang, ToLang: string): string;
   end;
 
-procedure TTranslationApp.InitializeTranslator;
+procedure TTranslationApp.InitializeTranslator;  
 begin
   FPython.ExecString('from googletrans import Translator');
   FPython.ExecString('translator = Translator()');
@@ -662,7 +662,7 @@ end;
 ### Cas 2 : Analyse de données CSV avec Pandas
 
 ```pascal
-procedure TDataAnalyzer.AnalyzeCSV(const FilePath: string);
+procedure TDataAnalyzer.AnalyzeCSV(const FilePath: string);  
 begin
   PythonEngine.ExecString('import pandas as pd');
   PythonEngine.ExecString(
@@ -688,7 +688,7 @@ end;
 ### Cas 3 : Détection d'objets en temps réel
 
 ```pascal
-procedure TCameraApp.ProcessVideoFrame;
+procedure TCameraApp.ProcessVideoFrame;  
 var
   Frame: TBitmap;
   DetectedObjects: string;

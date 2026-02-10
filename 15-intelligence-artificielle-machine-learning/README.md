@@ -36,7 +36,7 @@ Si vous développez déjà des applications Lazarus, intégrer l'IA devient natu
 
 ```pascal
 // Dans votre application Lazarus existante
-procedure TMainForm.ButtonRecognizeClick(Sender: TObject);
+procedure TMainForm.ButtonRecognizeClick(Sender: TObject);  
 var
   prediction: string;
 begin
@@ -82,10 +82,10 @@ L'**Intelligence Artificielle** est un domaine de l'informatique qui vise à cr�
 Le **Machine Learning** est une sous-catégorie de l'IA où les systèmes apprennent à partir de données sans être explicitement programmés pour chaque cas :
 
 ```
-Programmation classique :
+Programmation classique :  
 Données + Programme → Résultats
 
-Machine Learning :
+Machine Learning :  
 Données + Résultats souhaités → Programme (modèle)
 ```
 
@@ -93,7 +93,7 @@ Données + Résultats souhaités → Programme (modèle)
 
 **Programmation classique** (détection de spam) :
 ```pascal
-function IsSpam(email: string): Boolean;
+function IsSpam(email: string): Boolean;  
 begin
   Result := (Pos('viagra', LowerCase(email)) > 0) or
             (Pos('casino', LowerCase(email)) > 0) or
@@ -105,7 +105,7 @@ end;
 **Machine Learning** (détection de spam) :
 ```pascal
 // Le modèle apprend automatiquement les patterns
-function IsSpam(email: string): Boolean;
+function IsSpam(email: string): Boolean;  
 begin
   Result := TrainedModel.Predict(email) > 0.5;
   // Le modèle a appris sur des milliers d'exemples
@@ -119,13 +119,13 @@ end;
 Le système apprend à partir d'exemples étiquetés :
 
 ```
-Exemples d'entraînement :
-Image de chat → "chat"
-Image de chien → "chien"
+Exemples d'entraînement :  
+Image de chat → "chat"  
+Image de chien → "chien"  
 Image de chat → "chat"
 ...
 
-Après apprentissage :
+Après apprentissage :  
 Nouvelle image → Prédiction : "chat" ou "chien"
 ```
 
@@ -140,8 +140,8 @@ Nouvelle image → Prédiction : "chat" ou "chien"
 Le système découvre des structures dans des données non étiquetées :
 
 ```
-Données clients (sans catégories) →
-Algorithme de clustering →
+Données clients (sans catégories) →  
+Algorithme de clustering →  
 Groupes découverts :
   - Jeunes urbains
   - Familles rurales
@@ -163,8 +163,8 @@ Agent → Action → Environnement
    ↑                    ↓
    └── Récompense ←─────┘
 
-Exemple : Jeu vidéo
-Action : Sauter
+Exemple : Jeu vidéo  
+Action : Sauter  
 Récompense : +10 (a évité un obstacle)
           ou -10 (est tombé dans un trou)
 ```
@@ -198,10 +198,10 @@ var
 // Input = [Surface, Nombre de chambres, Année de construction]
 // Output = Prix
 
-TrainingSet[0].Input := [120.0, 3.0, 2010.0];
+TrainingSet[0].Input := [120.0, 3.0, 2010.0];  
 TrainingSet[0].Output := 250000.0;
 
-TrainingSet[1].Input := [85.0, 2.0, 1995.0];
+TrainingSet[1].Input := [85.0, 2.0, 1995.0];  
 TrainingSet[1].Output := 180000.0;
 // ... des milliers d'exemples
 ```
@@ -211,8 +211,8 @@ TrainingSet[1].Output := 180000.0;
 Les **features** sont les attributs mesurables des données d'entrée :
 
 ```
-Image (28x28 pixels) → 784 features (valeurs de pixels)
-Email → [longueur, nb_majuscules, présence_URL, ...] → Features
+Image (28x28 pixels) → 784 features (valeurs de pixels)  
+Email → [longueur, nb_majuscules, présence_URL, ...] → Features  
 Signal audio → [fréquences, amplitude, ...] → Features
 ```
 
@@ -266,7 +266,7 @@ Erreur
 La **fonction de perte** mesure à quel point les prédictions du modèle sont éloignées des vraies valeurs :
 
 ```pascal
-function MeanSquaredError(Predictions, Targets: array of Double): Double;
+function MeanSquaredError(Predictions, Targets: array of Double): Double;  
 var
   i: Integer;
   Sum: Double;
@@ -284,7 +284,7 @@ L'**optimisateur** ajuste les paramètres pour minimiser la fonction de perte. L
 
 ```pascal
 // Principe simplifié
-procedure UpdateWeight(var Weight: Double; Gradient, LearningRate: Double);
+procedure UpdateWeight(var Weight: Double; Gradient, LearningRate: Double);  
 begin
   Weight := Weight - LearningRate * Gradient;
 end;
@@ -293,7 +293,7 @@ end;
 Le **taux d'apprentissage** (learning rate) contrôle la vitesse d'apprentissage :
 
 ```
-Trop petit → Apprentissage très lent
+Trop petit → Apprentissage très lent  
 Trop grand → Le modèle ne converge pas
 ```
 
@@ -316,7 +316,7 @@ type
     Test: TDataSet;       // 15%
   end;
 
-function SplitData(AllData: TDataSet): TDataSplit;
+function SplitData(AllData: TDataSet): TDataSplit;  
 begin
   // Mélanger aléatoirement
   // Diviser selon les proportions
@@ -353,7 +353,7 @@ type
     function ComputeOutput(Inputs: array of Double): Double;
   end;
 
-function TNeuron.ComputeOutput(Inputs: array of Double): Double;
+function TNeuron.ComputeOutput(Inputs: array of Double): Double;  
 var
   i: Integer;
   Sum: Double;
@@ -371,13 +371,13 @@ Les **fonctions d'activation** introduisent de la non-linéarité :
 
 ```pascal
 // Sigmoid : Sortie entre 0 et 1
-function Sigmoid(x: Double): Double;
+function Sigmoid(x: Double): Double;  
 begin
   Result := 1.0 / (1.0 + Exp(-x));
 end;
 
 // ReLU : Max(0, x) - Très populaire
-function ReLU(x: Double): Double;
+function ReLU(x: Double): Double;  
 begin
   if x > 0 then
     Result := x
@@ -386,7 +386,7 @@ begin
 end;
 
 // Tanh : Sortie entre -1 et 1
-function Tanh(x: Double): Double;
+function Tanh(x: Double): Double;  
 begin
   Result := (Exp(x) - Exp(-x)) / (Exp(x) + Exp(-x));
 end;
@@ -430,7 +430,7 @@ type
 **Exemple de cas d'usage :**
 ```pascal
 // Application de tri automatique de documents
-function ClassifyDocument(ImagePath: string): TDocumentType;
+function ClassifyDocument(ImagePath: string): TDocumentType;  
 var
   CNN: TConvolutionalNetwork;
 begin
@@ -451,7 +451,7 @@ end;
 **Exemple :**
 ```pascal
 // Détection de langue
-function DetectLanguage(Text: string): string;
+function DetectLanguage(Text: string): string;  
 var
   Model: TLanguageClassifier;
 begin
@@ -478,7 +478,7 @@ end;
 **Exemple :**
 ```pascal
 // Surveillance de serveur
-function IsAnomalous(Metrics: TServerMetrics): Boolean;
+function IsAnomalous(Metrics: TServerMetrics): Boolean;  
 var
   Detector: TAnomalyDetector;
   AnomalyScore: Double;
@@ -532,7 +532,7 @@ Combiner le meilleur des deux mondes :
 uses
   PythonEngine;
 
-procedure TrainModelInPython;
+procedure TrainModelInPython;  
 begin
   PythonEngine.ExecString('import tensorflow as tf');
   PythonEngine.ExecString('model = tf.keras.models.Sequential([...])');
@@ -590,14 +590,14 @@ end;
 **Option A : Entraînement en Python**
 ```python
 # train_model.py
-import numpy as np
+import numpy as np  
 from sklearn.ensemble import RandomForestClassifier
 
 # Charger les données
 X, y = load_data('processed.dat')
 
 # Entraîner
-model = RandomForestClassifier()
+model = RandomForestClassifier()  
 model.fit(X, y)
 
 # Exporter pour Pascal
@@ -630,12 +630,12 @@ type
     procedure MakePrediction(Input: TData);
   end;
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);  
 begin
   AIModel := TNeuralNetwork.LoadFromFile('model.dat');
 end;
 
-procedure TMainForm.ButtonPredictClick(Sender: TObject);
+procedure TMainForm.ButtonPredictClick(Sender: TObject);  
 var
   Input: TVector;
   Result: string;
@@ -672,7 +672,7 @@ Pas de panique ! Vous n'avez pas besoin d'un doctorat en mathématiques. Voici l
 
 ```pascal
 // Produit scalaire de deux vecteurs
-function DotProduct(A, B: array of Double): Double;
+function DotProduct(A, B: array of Double): Double;  
 var
   i: Integer;
 begin
@@ -690,7 +690,7 @@ end;
 
 ```pascal
 // Dérivée de f(x) = x² en x
-function Derivative_x_squared(x: Double): Double;
+function Derivative_x_squared(x: Double): Double;  
 begin
   Result := 2 * x;
 end;
@@ -703,7 +703,7 @@ end;
 - Probabilités conditionnelles
 
 ```pascal
-function Mean(Data: array of Double): Double;
+function Mean(Data: array of Double): Double;  
 var
   Sum: Double;
   i: Integer;
@@ -755,7 +755,7 @@ var
 
 ```pascal
 // Lent : réallocations multiples
-procedure SlowWay;
+procedure SlowWay;  
 var
   Data: array of Double;
   i: Integer;
@@ -768,7 +768,7 @@ begin
 end;
 
 // Rapide : préallocation
-procedure FastWay;
+procedure FastWay;  
 var
   Data: array of Double;
   i: Integer;
@@ -783,7 +783,7 @@ end;
 
 ```pascal
 // Fonction appelée des millions de fois
-function ReLU(x: Double): Double; inline;
+function ReLU(x: Double): Double; inline;  
 begin
   if x > 0 then
     Result := x

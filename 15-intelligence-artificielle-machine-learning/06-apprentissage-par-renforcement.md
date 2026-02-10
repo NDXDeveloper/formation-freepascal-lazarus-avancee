@@ -97,7 +97,7 @@ L'apprentissage par renforcement est utilisé dans :
 ### Exemple simple : Le labyrinthe
 
 ```
-S = Start (Départ)
+S = Start (Départ)  
 G = Goal (Objectif)
 # = Mur
 . = Chemin libre
@@ -183,7 +183,7 @@ type
 
 implementation
 
-constructor TRLAgent.Create(AStateCount, AActionCount: Integer);
+constructor TRLAgent.Create(AStateCount, AActionCount: Integer);  
 begin
   FStateCount := AStateCount;
   FActionCount := AActionCount;
@@ -195,7 +195,7 @@ begin
   FEpisode := 0;
 end;
 
-procedure TRLAgent.Reset;
+procedure TRLAgent.Reset;  
 begin
   Inc(FEpisode);
 end;
@@ -264,7 +264,7 @@ type
 
 implementation
 
-constructor TQLearningAgent.Create(AStateCount, AActionCount: Integer);
+constructor TQLearningAgent.Create(AStateCount, AActionCount: Integer);  
 var
   i, j: Integer;
 begin
@@ -278,13 +278,13 @@ begin
       FQTable[i, j] := 0;
 end;
 
-destructor TQLearningAgent.Destroy;
+destructor TQLearningAgent.Destroy;  
 begin
   SetLength(FQTable, 0, 0);
   inherited;
 end;
 
-function TQLearningAgent.GetMaxQ(AState: TState): Double;
+function TQLearningAgent.GetMaxQ(AState: TState): Double;  
 var
   i: Integer;
 begin
@@ -295,7 +295,7 @@ begin
       Result := FQTable[AState, i];
 end;
 
-function TQLearningAgent.GetBestAction(AState: TState): TAction;
+function TQLearningAgent.GetBestAction(AState: TState): TAction;  
 var
   i: Integer;
   maxQ: Double;
@@ -313,7 +313,7 @@ begin
   end;
 end;
 
-function TQLearningAgent.ChooseAction(AState: TState): TAction;
+function TQLearningAgent.ChooseAction(AState: TState): TAction;  
 begin
   // Stratégie ε-greedy (epsilon-greedy)
   if Random < FEpsilon then
@@ -324,7 +324,7 @@ begin
     Result := GetBestAction(AState);
 end;
 
-procedure TQLearningAgent.Learn(const AExperience: TExperience);
+procedure TQLearningAgent.Learn(const AExperience: TExperience);  
 var
   currentQ, maxNextQ, target, delta: Double;
 begin
@@ -349,7 +349,7 @@ begin
     currentQ + FLearningRate * delta;
 end;
 
-procedure TQLearningAgent.Reset;
+procedure TQLearningAgent.Reset;  
 begin
   inherited Reset;
 
@@ -357,12 +357,12 @@ begin
   FEpsilon := Max(0.01, FEpsilon * 0.995);
 end;
 
-function TQLearningAgent.GetQValue(AState: TState; AAction: TAction): Double;
+function TQLearningAgent.GetQValue(AState: TState; AAction: TAction): Double;  
 begin
   Result := FQTable[AState, AAction];
 end;
 
-procedure TQLearningAgent.SaveQTable(const AFileName: string);
+procedure TQLearningAgent.SaveQTable(const AFileName: string);  
 var
   f: TextFile;
   i, j: Integer;
@@ -383,7 +383,7 @@ begin
   end;
 end;
 
-procedure TQLearningAgent.LoadQTable(const AFileName: string);
+procedure TQLearningAgent.LoadQTable(const AFileName: string);  
 var
   f: TextFile;
   i, j, stateCount, actionCount: Integer;
@@ -411,7 +411,7 @@ begin
   end;
 end;
 
-procedure TQLearningAgent.PrintQTable;
+procedure TQLearningAgent.PrintQTable;  
 var
   i, j: Integer;
 begin
@@ -492,7 +492,7 @@ type
 
 implementation
 
-constructor TGridWorld.Create(AWidth, AHeight: Integer);
+constructor TGridWorld.Create(AWidth, AHeight: Integer);  
 var
   x, y: Integer;
 begin
@@ -515,50 +515,50 @@ begin
   FGoalY := FHeight - 1;
 end;
 
-destructor TGridWorld.Destroy;
+destructor TGridWorld.Destroy;  
 begin
   SetLength(FGrid, 0, 0);
   inherited;
 end;
 
-function TGridWorld.PositionToState(AX, AY: Integer): TState;
+function TGridWorld.PositionToState(AX, AY: Integer): TState;  
 begin
   Result := AY * FWidth + AX;
 end;
 
-procedure TGridWorld.StateToPosition(AState: TState; out AX, AY: Integer);
+procedure TGridWorld.StateToPosition(AState: TState; out AX, AY: Integer);  
 begin
   AX := AState mod FWidth;
   AY := AState div FWidth;
 end;
 
-function TGridWorld.IsValidPosition(AX, AY: Integer): Boolean;
+function TGridWorld.IsValidPosition(AX, AY: Integer): Boolean;  
 begin
   Result := (AX >= 0) and (AX < FWidth) and
             (AY >= 0) and (AY < FHeight) and
             (FGrid[AX, AY] <> ctWall);
 end;
 
-procedure TGridWorld.SetWall(AX, AY: Integer);
+procedure TGridWorld.SetWall(AX, AY: Integer);  
 begin
   if (AX >= 0) and (AX < FWidth) and (AY >= 0) and (AY < FHeight) then
     FGrid[AX, AY] := ctWall;
 end;
 
-procedure TGridWorld.SetGoal(AX, AY: Integer);
+procedure TGridWorld.SetGoal(AX, AY: Integer);  
 begin
   FGoalX := AX;
   FGoalY := AY;
   FGrid[AX, AY] := ctGoal;
 end;
 
-procedure TGridWorld.SetStart(AX, AY: Integer);
+procedure TGridWorld.SetStart(AX, AY: Integer);  
 begin
   FStartX := AX;
   FStartY := AY;
 end;
 
-function TGridWorld.Reset: TState;
+function TGridWorld.Reset: TState;  
 begin
   FAgentX := FStartX;
   FAgentY := FStartY;
@@ -566,7 +566,7 @@ begin
   Result := PositionToState(FAgentX, FAgentY);
 end;
 
-function TGridWorld.Step(AAction: TAction; out AReward: Double; out ADone: Boolean): TState;
+function TGridWorld.Step(AAction: TAction; out AReward: Double; out ADone: Boolean): TState;  
 var
   newX, newY: Integer;
 begin
@@ -612,17 +612,17 @@ begin
   Result := PositionToState(FAgentX, FAgentY);
 end;
 
-function TGridWorld.GetStateCount: Integer;
+function TGridWorld.GetStateCount: Integer;  
 begin
   Result := FWidth * FHeight;
 end;
 
-function TGridWorld.GetActionCount: Integer;
+function TGridWorld.GetActionCount: Integer;  
 begin
   Result := 4; // Haut, Bas, Gauche, Droite
 end;
 
-function TGridWorld.GetValidActions(AState: TState): TArray<TAction>;
+function TGridWorld.GetValidActions(AState: TState): TArray<TAction>;  
 var
   x, y: Integer;
   actions: array of TAction;
@@ -661,7 +661,7 @@ begin
   Result := actions;
 end;
 
-procedure TGridWorld.Render;
+procedure TGridWorld.Render;  
 var
   x, y: Integer;
 begin
@@ -684,7 +684,7 @@ begin
   WriteLn('└', StringOfChar('─', FWidth * 2), '┘');
 end;
 
-procedure TGridWorld.RenderWithAgent(AState: TState);
+procedure TGridWorld.RenderWithAgent(AState: TState);  
 var
   x, y, agentX, agentY: Integer;
 begin
@@ -727,7 +727,7 @@ program TrainMaze;
 uses
   SysUtils, ReinforcementLearning, QLearning, GridWorld;
 
-procedure TrainAgent(AAgent: TQLearningAgent; AEnv: TGridWorld; AEpisodes: Integer);
+procedure TrainAgent(AAgent: TQLearningAgent; AEnv: TGridWorld; AEpisodes: Integer);  
 var
   episode, step: Integer;
   state, nextState: TState;
@@ -788,7 +788,7 @@ begin
   WriteLn(Format('Taux de succès final: %d%%', [(successCount * 100) div AEpisodes]));
 end;
 
-procedure TestAgent(AAgent: TQLearningAgent; AEnv: TGridWorld);
+procedure TestAgent(AAgent: TQLearningAgent; AEnv: TGridWorld);  
 var
   state: TState;
   action: TAction;
@@ -916,7 +916,7 @@ Un dilemme fondamental en RL : faut-il **explorer** de nouvelles actions ou **ex
 C'est la stratégie la plus simple et courante :
 
 ```pascal
-function EpsilonGreedyAction(AState: TState; AEpsilon: Double): TAction;
+function EpsilonGreedyAction(AState: TState; AEpsilon: Double): TAction;  
 begin
   if Random < AEpsilon then
     // Exploration : action aléatoire
@@ -934,7 +934,7 @@ end;
 FEpsilon := 1.0;
 
 // À chaque épisode, réduire l'exploration
-procedure UpdateEpsilon;
+procedure UpdateEpsilon;  
 begin
   // Décroissance exponentielle
   FEpsilon := FEpsilon * 0.995;
@@ -949,7 +949,7 @@ end;
 
 **Softmax / Boltzmann**
 ```pascal
-function SoftmaxAction(AState: TState; ATemperature: Double): TAction;
+function SoftmaxAction(AState: TState; ATemperature: Double): TAction;  
 var
   i: Integer;
   probabilities: array of Double;
@@ -1008,7 +1008,7 @@ type
     function ChooseAction(AState: TState): TAction; override;
   end;
 
-function TUCBAgent.ChooseAction(AState: TState): TAction;
+function TUCBAgent.ChooseAction(AState: TState): TAction;  
 var
   i: Integer;
   bestValue, value, exploration: Double;
@@ -1092,7 +1092,7 @@ type
 
 implementation
 
-constructor TSARSAAgent.Create(AStateCount, AActionCount: Integer);
+constructor TSARSAAgent.Create(AStateCount, AActionCount: Integer);  
 var
   i, j: Integer;
 begin
@@ -1107,13 +1107,13 @@ begin
   FNextAction := -1;
 end;
 
-destructor TSARSAAgent.Destroy;
+destructor TSARSAAgent.Destroy;  
 begin
   SetLength(FQTable, 0, 0);
   inherited;
 end;
 
-function TSARSAAgent.GetBestAction(AState: TState): TAction;
+function TSARSAAgent.GetBestAction(AState: TState): TAction;  
 var
   i: Integer;
   maxQ: Double;
@@ -1131,7 +1131,7 @@ begin
   end;
 end;
 
-function TSARSAAgent.ChooseAction(AState: TState): TAction;
+function TSARSAAgent.ChooseAction(AState: TState): TAction;  
 begin
   if Random < FEpsilon then
     Result := Random(FActionCount)
@@ -1141,7 +1141,7 @@ begin
   FNextAction := Result;
 end;
 
-procedure TSARSAAgent.Learn(const AExperience: TExperience);
+procedure TSARSAAgent.Learn(const AExperience: TExperience);  
 var
   currentQ, nextQ, target, delta: Double;
   nextAction: TAction;
@@ -1164,7 +1164,7 @@ begin
     currentQ + FLearningRate * delta;
 end;
 
-function TSARSAAgent.GetQValue(AState: TState; AAction: TAction): Double;
+function TSARSAAgent.GetQValue(AState: TState; AAction: TAction): Double;  
 begin
   Result := FQTable[AState, AAction];
 end;
@@ -1224,19 +1224,19 @@ type
 
 implementation
 
-constructor TReplayBuffer.Create(AMaxSize: Integer);
+constructor TReplayBuffer.Create(AMaxSize: Integer);  
 begin
   FMaxSize := AMaxSize;
   FBuffer := specialize TList<TExperience>.Create;
 end;
 
-destructor TReplayBuffer.Destroy;
+destructor TReplayBuffer.Destroy;  
 begin
   FBuffer.Free;
   inherited;
 end;
 
-procedure TReplayBuffer.Add(const AExperience: TExperience);
+procedure TReplayBuffer.Add(const AExperience: TExperience);  
 begin
   if FBuffer.Count >= FMaxSize then
     FBuffer.Delete(0); // Supprimer la plus ancienne
@@ -1244,7 +1244,7 @@ begin
   FBuffer.Add(AExperience);
 end;
 
-function TReplayBuffer.Sample(ABatchSize: Integer): specialize TList<TExperience>;
+function TReplayBuffer.Sample(ABatchSize: Integer): specialize TList<TExperience>;  
 var
   i, index: Integer;
 begin
@@ -1257,7 +1257,7 @@ begin
   end;
 end;
 
-function TReplayBuffer.Count: Integer;
+function TReplayBuffer.Count: Integer;  
 begin
   Result := FBuffer.Count;
 end;
@@ -1285,13 +1285,13 @@ type
     procedure Learn;
   end;
 
-procedure TDQNAgent.UpdateTargetNetwork;
+procedure TDQNAgent.UpdateTargetNetwork;  
 begin
   // Copier les poids du réseau principal vers le réseau cible
   FTargetNetwork.CopyWeightsFrom(FQNetwork);
 end;
 
-procedure TDQNAgent.Learn;
+procedure TDQNAgent.Learn;  
 var
   batch: TList<TExperience>;
   exp: TExperience;
@@ -1371,7 +1371,7 @@ type
 
 implementation
 
-constructor TPolicyNetwork.Create(AStateSize, AActionCount: Integer);
+constructor TPolicyNetwork.Create(AStateSize, AActionCount: Integer);  
 var
   i, j: Integer;
 begin
@@ -1387,13 +1387,13 @@ begin
       FWeights[i, j] := (Random - 0.5) * 0.1;
 end;
 
-destructor TPolicyNetwork.Destroy;
+destructor TPolicyNetwork.Destroy;  
 begin
   SetLength(FWeights, 0, 0);
   inherited;
 end;
 
-function TPolicyNetwork.Softmax(const ALogits: array of Double): TArray<Double>;
+function TPolicyNetwork.Softmax(const ALogits: array of Double): TArray<Double>;  
 var
   i: Integer;
   maxLogit, sumExp: Double;
@@ -1419,7 +1419,7 @@ begin
     Result[i] := Result[i] / sumExp;
 end;
 
-function TPolicyNetwork.GetActionProbabilities(AState: TState): TArray<Double>;
+function TPolicyNetwork.GetActionProbabilities(AState: TState): TArray<Double>;  
 var
   i: Integer;
   logits: array of Double;
@@ -1434,7 +1434,7 @@ begin
   SetLength(logits, 0);
 end;
 
-function TPolicyNetwork.SampleAction(AState: TState): TAction;
+function TPolicyNetwork.SampleAction(AState: TState): TAction;  
 var
   probs: TArray<Double>;
   randomValue, cumulative: Double;
@@ -1457,7 +1457,7 @@ begin
   end;
 end;
 
-procedure TPolicyNetwork.Update(const ATrajectory: TTrajectory);
+procedure TPolicyNetwork.Update(const ATrajectory: TTrajectory);  
 var
   i, t: Integer;
   returns: array of Double;
@@ -1557,7 +1557,7 @@ type
 
 implementation
 
-constructor TActorCriticAgent.Create(AStateCount, AActionCount: Integer);
+constructor TActorCriticAgent.Create(AStateCount, AActionCount: Integer);  
 var
   i, j: Integer;
 begin
@@ -1578,19 +1578,19 @@ begin
     FCriticWeights[i] := 0;
 end;
 
-destructor TActorCriticAgent.Destroy;
+destructor TActorCriticAgent.Destroy;  
 begin
   SetLength(FActorWeights, 0, 0);
   SetLength(FCriticWeights, 0);
   inherited;
 end;
 
-function TActorCriticAgent.GetStateValue(AState: TState): Double;
+function TActorCriticAgent.GetStateValue(AState: TState): Double;  
 begin
   Result := FCriticWeights[AState];
 end;
 
-function TActorCriticAgent.GetActionProbabilities(AState: TState): TArray<Double>;
+function TActorCriticAgent.GetActionProbabilities(AState: TState): TArray<Double>;  
 var
   i: Integer;
   sumExp, maxWeight: Double;
@@ -1615,7 +1615,7 @@ begin
     Result[i] := Result[i] / sumExp;
 end;
 
-function TActorCriticAgent.ChooseAction(AState: TState): TAction;
+function TActorCriticAgent.ChooseAction(AState: TState): TAction;  
 var
   probs: TArray<Double>;
   randomValue, cumulative: Double;
@@ -1659,13 +1659,13 @@ begin
   end;
 end;
 
-procedure TActorCriticAgent.UpdateCritic(AState: TState; ATDError: Double);
+procedure TActorCriticAgent.UpdateCritic(AState: TState; ATDError: Double);  
 begin
   FCriticWeights[AState] :=
     FCriticWeights[AState] + FCriticLR * ATDError;
 end;
 
-procedure TActorCriticAgent.Learn(const AExperience: TExperience);
+procedure TActorCriticAgent.Learn(const AExperience: TExperience);  
 var
   currentValue, nextValue, tdError, advantage: Double;
 begin
@@ -1748,7 +1748,7 @@ type
 
 implementation
 
-constructor TCartPoleEnv.Create;
+constructor TCartPoleEnv.Create;  
 begin
   FGravity := 9.8;
   FMassCart := 1.0;
@@ -1759,7 +1759,7 @@ begin
   FMaxSteps := 500;
 end;
 
-function TCartPoleEnv.Reset: TState;
+function TCartPoleEnv.Reset: TState;  
 begin
   // État initial aléatoire
   FState.X := (Random - 0.5) * 0.1;
@@ -1771,7 +1771,7 @@ begin
   Result := StateToDiscrete(FState);
 end;
 
-procedure TCartPoleEnv.UpdatePhysics(AForce: Double);
+procedure TCartPoleEnv.UpdatePhysics(AForce: Double);  
 var
   cosTheta, sinTheta: Double;
   temp, thetaAcc, xAcc: Double;
@@ -1795,7 +1795,7 @@ begin
   FState.ThetaDot := FState.ThetaDot + FTau * thetaAcc;
 end;
 
-function TCartPoleEnv.IsDone: Boolean;
+function TCartPoleEnv.IsDone: Boolean;  
 begin
   Result := (Abs(FState.X) > 2.4) or           // Chariot sort
             (Abs(FState.Theta) > 12 * Pi / 180) or // Perche tombe
@@ -1827,7 +1827,7 @@ begin
   Result := StateToDiscrete(FState);
 end;
 
-function TCartPoleEnv.StateToDiscrete(const AState: TCartPoleState): TState;
+function TCartPoleEnv.StateToDiscrete(const AState: TCartPoleState): TState;  
 var
   xBin, xDotBin, thetaBin, thetaDotBin: Integer;
 const
@@ -1853,26 +1853,26 @@ begin
             thetaDotBin * NUM_BINS * NUM_BINS * NUM_BINS;
 end;
 
-function TCartPoleEnv.GetStateCount: Integer;
+function TCartPoleEnv.GetStateCount: Integer;  
 const
   NUM_BINS = 6;
 begin
   Result := NUM_BINS * NUM_BINS * NUM_BINS * NUM_BINS;
 end;
 
-function TCartPoleEnv.GetActionCount: Integer;
+function TCartPoleEnv.GetActionCount: Integer;  
 begin
   Result := 2;  // Gauche ou Droite
 end;
 
-function TCartPoleEnv.GetValidActions(AState: TState): TArray<TAction>;
+function TCartPoleEnv.GetValidActions(AState: TState): TArray<TAction>;  
 begin
   SetLength(Result, 2);
   Result[0] := 0;
   Result[1] := 1;
 end;
 
-procedure TCartPoleEnv.Render;
+procedure TCartPoleEnv.Render;  
 var
   i, cartPos, poleX, poleY: Integer;
   line: string;
@@ -2090,7 +2090,7 @@ type
 
 implementation
 
-constructor TBandit.Create(AArms: Integer);
+constructor TBandit.Create(AArms: Integer);  
 var
   i: Integer;
 begin
@@ -2112,7 +2112,7 @@ begin
   FSteps := 0;
 end;
 
-destructor TBandit.Destroy;
+destructor TBandit.Destroy;  
 begin
   SetLength(FTrueValues, 0);
   SetLength(FEstimatedValues, 0);
@@ -2120,7 +2120,7 @@ begin
   inherited;
 end;
 
-function TBandit.PullArm(AArm: Integer): Double;
+function TBandit.PullArm(AArm: Integer): Double;  
 begin
   Inc(FSteps);
 
@@ -2131,7 +2131,7 @@ begin
   Inc(FActionCounts[AArm]);
 end;
 
-procedure TBandit.UpdateEstimate(AArm: Integer; AReward: Double);
+procedure TBandit.UpdateEstimate(AArm: Integer; AReward: Double);  
 var
   n: Integer;
 begin
@@ -2142,7 +2142,7 @@ begin
                             (AReward - FEstimatedValues[AArm]) / n;
 end;
 
-function TBandit.EpsilonGreedy(AEpsilon: Double): Integer;
+function TBandit.EpsilonGreedy(AEpsilon: Double): Integer;  
 var
   i, bestArm: Integer;
   maxValue: Double;
@@ -2171,7 +2171,7 @@ begin
   end;
 end;
 
-function TBandit.UCB(AC: Double): Integer;
+function TBandit.UCB(AC: Double): Integer;  
 var
   i, bestArm: Integer;
   maxValue, ucbValue: Double;
@@ -2200,7 +2200,7 @@ begin
   Result := bestArm;
 end;
 
-function TBandit.ThompsonSampling: Integer;
+function TBandit.ThompsonSampling: Integer;  
 var
   i, bestArm: Integer;
   samples: array of Double;
@@ -2227,7 +2227,7 @@ begin
   SetLength(samples, 0);
 end;
 
-procedure TBandit.PrintStats;
+procedure TBandit.PrintStats;  
 var
   i, bestArm: Integer;
   regret: Double;
@@ -2279,7 +2279,7 @@ program TestBandit;
 uses
   SysUtils, MultiArmedBandit;
 
-procedure TestStrategy(const AName: string; AProc: TProcedure);
+procedure TestStrategy(const AName: string; AProc: TProcedure);  
 begin
   WriteLn;
   WriteLn('========================================');
@@ -2427,7 +2427,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TFormRL.FormCreate(Sender: TObject);
+procedure TFormRL.FormCreate(Sender: TObject);  
 begin
   FEnv := TGridWorld.Create(8, 8);
 
@@ -2460,13 +2460,13 @@ begin
   Timer1.Enabled := False;
 end;
 
-procedure TFormRL.FormDestroy(Sender: TObject);
+procedure TFormRL.FormDestroy(Sender: TObject);  
 begin
   FAgent.Free;
   FEnv.Free;
 end;
 
-procedure TFormRL.ButtonStartClick(Sender: TObject);
+procedure TFormRL.ButtonStartClick(Sender: TObject);  
 begin
   Timer1.Enabled := not Timer1.Enabled;
 
@@ -2476,12 +2476,12 @@ begin
     ButtonStart.Caption := 'Démarrer';
 end;
 
-procedure TFormRL.ButtonStepClick(Sender: TObject);
+procedure TFormRL.ButtonStepClick(Sender: TObject);  
 begin
   PerformStep;
 end;
 
-procedure TFormRL.ButtonResetClick(Sender: TObject);
+procedure TFormRL.ButtonResetClick(Sender: TObject);  
 begin
   FCurrentState := FEnv.Reset;
   FAgent.Reset;
@@ -2493,12 +2493,12 @@ begin
   PaintBoxQValues.Invalidate;
 end;
 
-procedure TFormRL.Timer1Timer(Sender: TObject);
+procedure TFormRL.Timer1Timer(Sender: TObject);  
 begin
   PerformStep;
 end;
 
-procedure TFormRL.PerformStep;
+procedure TFormRL.PerformStep;  
 var
   action: TAction;
   nextState: TState;
@@ -2540,7 +2540,7 @@ begin
     PaintBoxQValues.Invalidate;
 end;
 
-procedure TFormRL.PaintBoxGridPaint(Sender: TObject);
+procedure TFormRL.PaintBoxGridPaint(Sender: TObject);  
 var
   cellWidth, cellHeight: Integer;
   x, y, agentX, agentY: Integer;
@@ -2577,7 +2577,7 @@ begin
   end;
 end;
 
-procedure TFormRL.PaintBoxQValuesPaint(Sender: TObject);
+procedure TFormRL.PaintBoxQValuesPaint(Sender: TObject);  
 var
   x, y, state, bestAction: Integer;
   cellWidth, cellHeight: Integer;
@@ -2629,7 +2629,7 @@ begin
   end;
 end;
 
-procedure DrawArrow(const ARect: TRect; ADirection: Integer);
+procedure DrawArrow(const ARect: TRect; ADirection: Integer);  
 var
   cx, cy: Integer;
 begin
@@ -2679,14 +2679,14 @@ interface
 uses
   SysUtils;
 
-function GetModelPath: string;
-function GetLogPath: string;
-procedure SaveModel(const AFileName: string; AAgent: TRLAgent);
+function GetModelPath: string;  
+function GetLogPath: string;  
+procedure SaveModel(const AFileName: string; AAgent: TRLAgent);  
 procedure LoadModel(const AFileName: string; AAgent: TRLAgent);
 
 implementation
 
-function GetModelPath: string;
+function GetModelPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := ExtractFilePath(ParamStr(0)) + 'models\';
@@ -2699,7 +2699,7 @@ begin
     ForceDirectories(Result);
 end;
 
-function GetLogPath: string;
+function GetLogPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := ExtractFilePath(ParamStr(0)) + 'logs\';
@@ -2712,7 +2712,7 @@ begin
     ForceDirectories(Result);
 end;
 
-procedure SaveModel(const AFileName: string; AAgent: TRLAgent);
+procedure SaveModel(const AFileName: string; AAgent: TRLAgent);  
 var
   fullPath: string;
 begin
@@ -2722,7 +2722,7 @@ begin
     TQLearningAgent(AAgent).SaveQTable(fullPath);
 end;
 
-procedure LoadModel(const AFileName: string; AAgent: TRLAgent);
+procedure LoadModel(const AFileName: string; AAgent: TRLAgent);  
 var
   fullPath: string;
 begin
@@ -2743,7 +2743,7 @@ end.
 
 **L'agent n'apprend pas**
 ```pascal
-procedure DiagnoseAgent(AAgent: TQLearningAgent; AEnv: IEnvironment);
+procedure DiagnoseAgent(AAgent: TQLearningAgent; AEnv: IEnvironment);  
 begin
   WriteLn('=== Diagnostic ===');
   WriteLn('Learning rate: ', AAgent.LearningRate:0:3);
@@ -2812,7 +2812,7 @@ type
 
 implementation
 
-constructor TRLMetrics.Create(const ALogFileName: string);
+constructor TRLMetrics.Create(const ALogFileName: string);  
 begin
   SetLength(FEpisodeRewards, 0);
   SetLength(FEpisodeLengths, 0);
@@ -2822,7 +2822,7 @@ begin
   WriteLn(FLogFile, 'Episode,Reward,Length,AvgReward100,AvgLength100');
 end;
 
-destructor TRLMetrics.Destroy;
+destructor TRLMetrics.Destroy;  
 begin
   CloseFile(FLogFile);
   SetLength(FEpisodeRewards, 0);
@@ -2830,7 +2830,7 @@ begin
   inherited;
 end;
 
-procedure TRLMetrics.RecordEpisode(AReward: Double; ALength: Integer);
+procedure TRLMetrics.RecordEpisode(AReward: Double; ALength: Integer);  
 var
   episode: Integer;
 begin
@@ -2850,7 +2850,7 @@ begin
   Flush(FLogFile);
 end;
 
-function TRLMetrics.GetAverageReward(ALastN: Integer): Double;
+function TRLMetrics.GetAverageReward(ALastN: Integer): Double;  
 var
   i, count, start: Integer;
   sum: Double;
@@ -2871,7 +2871,7 @@ begin
   Result := sum / (count - start);
 end;
 
-function TRLMetrics.GetAverageLength(ALastN: Integer): Double;
+function TRLMetrics.GetAverageLength(ALastN: Integer): Double;  
 var
   i, count, start: Integer;
   sum: Integer;
@@ -2892,7 +2892,7 @@ begin
   Result := sum / (count - start);
 end;
 
-procedure TRLMetrics.PrintSummary;
+procedure TRLMetrics.PrintSummary;  
 var
   i, totalEpisodes: Integer;
   bestReward, worstReward: Double;
@@ -2924,7 +2924,7 @@ begin
   WriteLn(Format('Longueur moyenne (100 derniers): %.2f', [GetAverageLength(100)]));
 end;
 
-procedure TRLMetrics.SaveToCSV(const AFileName: string);
+procedure TRLMetrics.SaveToCSV(const AFileName: string);  
 var
   f: TextFile;
   i: Integer;
@@ -3026,12 +3026,12 @@ type
 
 implementation
 
-constructor TTicTacToeEnv.Create;
+constructor TTicTacToeEnv.Create;  
 begin
   Reset;
 end;
 
-function TTicTacToeEnv.Reset: TState;
+function TTicTacToeEnv.Reset: TState;  
 var
   i, j: Integer;
 begin
@@ -3043,7 +3043,7 @@ begin
   Result := BoardToState;
 end;
 
-function TTicTacToeEnv.BoardToState: TState;
+function TTicTacToeEnv.BoardToState: TState;  
 var
   i, j: Integer;
 begin
@@ -3056,7 +3056,7 @@ begin
     end;
 end;
 
-function TTicTacToeEnv.CheckWinner: TPlayer;
+function TTicTacToeEnv.CheckWinner: TPlayer;  
 var
   i: Integer;
 begin
@@ -3092,7 +3092,7 @@ begin
   Result := pNone;
 end;
 
-function TTicTacToeEnv.IsFull: Boolean;
+function TTicTacToeEnv.IsFull: Boolean;  
 var
   i, j: Integer;
 begin
@@ -3103,7 +3103,7 @@ begin
   Result := True;
 end;
 
-function TTicTacToeEnv.IsValidMove(APosition: Integer): Boolean;
+function TTicTacToeEnv.IsValidMove(APosition: Integer): Boolean;  
 var
   row, col: Integer;
 begin
@@ -3114,7 +3114,7 @@ begin
             (FBoard[row, col] = pNone);
 end;
 
-procedure TTicTacToeEnv.MakeMove(APosition: Integer; APlayer: TPlayer);
+procedure TTicTacToeEnv.MakeMove(APosition: Integer; APlayer: TPlayer);  
 var
   row, col: Integer;
 begin
@@ -3169,17 +3169,17 @@ begin
   Result := BoardToState;
 end;
 
-function TTicTacToeEnv.GetStateCount: Integer;
+function TTicTacToeEnv.GetStateCount: Integer;  
 begin
   Result := 19683;  // 3^9 états possibles
 end;
 
-function TTicTacToeEnv.GetActionCount: Integer;
+function TTicTacToeEnv.GetActionCount: Integer;  
 begin
   Result := 9;  // 9 positions
 end;
 
-function TTicTacToeEnv.GetValidActions(AState: TState): TArray<TAction>;
+function TTicTacToeEnv.GetValidActions(AState: TState): TArray<TAction>;  
 var
   i, count: Integer;
   actions: array[0..8] of TAction;
@@ -3200,7 +3200,7 @@ begin
     Result[i] := actions[i];
 end;
 
-procedure TTicTacToeEnv.Render;
+procedure TTicTacToeEnv.Render;  
 var
   i, j: Integer;
   symbols: array[TPlayer] of Char = ('.', 'X', 'O');
@@ -3318,7 +3318,7 @@ begin
   end;
 end;
 
-procedure PlayAgainstHuman(AAgent: TQLearningAgent; AEnv: TTicTacToeEnv);
+procedure PlayAgainstHuman(AAgent: TQLearningAgent; AEnv: TTicTacToeEnv);  
 var
   state: TState;
   action, humanMove: TAction;

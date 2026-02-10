@@ -60,12 +60,12 @@ implementation
 uses
   SysUtils, Classes;
 
-constructor TNeuralNetwork.Create;
+constructor TNeuralNetwork.Create;  
 begin
   inherited Create;
 end;
 
-procedure TNeuralNetwork.LoadModel(const FileName: string);
+procedure TNeuralNetwork.LoadModel(const FileName: string);  
 var
   F: TextFile;
   Line: string;
@@ -85,12 +85,12 @@ begin
   end;
 end;
 
-function TNeuralNetwork.Sigmoid(x: Double): Double;
+function TNeuralNetwork.Sigmoid(x: Double): Double;  
 begin
   Result := 1.0 / (1.0 + Exp(-x));
 end;
 
-function TNeuralNetwork.Predict(const Input: TMatrix): TMatrix;
+function TNeuralNetwork.Predict(const Input: TMatrix): TMatrix;  
 var
   i, j, k: Integer;
   Sum: Double;
@@ -164,7 +164,7 @@ type
 
 implementation
 
-constructor TAIModel.Create;
+constructor TAIModel.Create;  
 begin
   inherited Create;
   FPythonEngine := TPythonEngine.Create(nil);
@@ -183,13 +183,13 @@ begin
   FModelLoaded := False;
 end;
 
-destructor TAIModel.Destroy;
+destructor TAIModel.Destroy;  
 begin
   FPythonEngine.Free;
   inherited Destroy;
 end;
 
-function TAIModel.LoadModel(const ModelPath: string): Boolean;
+function TAIModel.LoadModel(const ModelPath: string): Boolean;  
 var
   Script: TStringList;
 begin
@@ -223,7 +223,7 @@ begin
   end;
 end;
 
-function TAIModel.Predict(const InputData: array of Double): TArray<Double>;
+function TAIModel.Predict(const InputData: array of Double): TArray<Double>;  
 var
   PyInput, PyResult: PPyObject;
   i, ResultSize: Integer;
@@ -319,13 +319,13 @@ type
 
 implementation
 
-constructor TONNXModel.Create;
+constructor TONNXModel.Create;  
 begin
   inherited Create;
   LoadONNXLibrary;
 end;
 
-destructor TONNXModel.Destroy;
+destructor TONNXModel.Destroy;  
 begin
   if FSession <> nil then
     // Libérer la session
@@ -336,7 +336,7 @@ begin
   inherited Destroy;
 end;
 
-function TONNXModel.LoadONNXLibrary: Boolean;
+function TONNXModel.LoadONNXLibrary: Boolean;  
 begin
   {$IFDEF WINDOWS}
   FLibHandle := LoadLibrary('onnxruntime.dll');
@@ -358,7 +358,7 @@ begin
   end;
 end;
 
-function TONNXModel.LoadModel(const ModelPath: string): Boolean;
+function TONNXModel.LoadModel(const ModelPath: string): Boolean;  
 begin
   Result := False;
 
@@ -375,7 +375,7 @@ begin
     Result := True;
 end;
 
-function TONNXModel.Predict(const Input: array of Single): TArray<Single>;
+function TONNXModel.Predict(const Input: array of Single): TArray<Single>;  
 begin
   // Implémentation de la prédiction avec ONNX Runtime
   // Cette partie nécessite la gestion des tenseurs ONNX
@@ -414,7 +414,7 @@ type
 
 implementation
 
-constructor TAIService.Create;
+constructor TAIService.Create;  
 begin
   inherited Create;
   FModel := TAIModel.Create;
@@ -425,13 +425,13 @@ begin
   HTTPRouter.RegisterRoute('/health', rmGet, @HandleHealth);
 end;
 
-destructor TAIService.Destroy;
+destructor TAIService.Destroy;  
 begin
   FModel.Free;
   inherited Destroy;
 end;
 
-procedure TAIService.HandlePredict(ARequest: TRequest; AResponse: TResponse);
+procedure TAIService.HandlePredict(ARequest: TRequest; AResponse: TResponse);  
 var
   JSONData, JSONResult: TJSONObject;
   JSONArray: TJSONArray;
@@ -477,7 +477,7 @@ begin
   end;
 end;
 
-procedure TAIService.HandleHealth(ARequest: TRequest; AResponse: TResponse);
+procedure TAIService.HandleHealth(ARequest: TRequest; AResponse: TResponse);  
 begin
   AResponse.Content := '{"status": "healthy"}';
   AResponse.ContentType := 'application/json';
@@ -492,7 +492,7 @@ end.
 ### 1. Gestion de la mémoire
 
 ```pascal
-procedure OptimizeMemory;
+procedure OptimizeMemory;  
 begin
   // Libérer la mémoire régulièrement
   if GetHeapStatus.TotalAllocated > MaxMemoryThreshold then
@@ -553,13 +553,13 @@ type
     function DoStop: Boolean; override;
   end;
 
-function TAIModelService.DoStart: Boolean;
+function TAIModelService.DoStart: Boolean;  
 begin
   // Initialiser le modèle et démarrer le serveur
   Result := True;
 end;
 
-function TAIModelService.DoStop: Boolean;
+function TAIModelService.DoStop: Boolean;  
 begin
   // Arrêter proprement le service
   Result := True;
@@ -583,15 +583,15 @@ Créer un fichier `/etc/systemd/system/aimodel.service` :
 
 ```ini
 [Unit]
-Description=AI Model Service
+Description=AI Model Service  
 After=network.target
 
 [Service]
-Type=simple
-User=aiservice
-WorkingDirectory=/opt/aimodel
-ExecStart=/opt/aimodel/aiservice
-Restart=always
+Type=simple  
+User=aiservice  
+WorkingDirectory=/opt/aimodel  
+ExecStart=/opt/aimodel/aiservice  
+Restart=always  
 RestartSec=10
 
 [Install]
@@ -600,8 +600,8 @@ WantedBy=multi-user.target
 
 Activer et démarrer le service :
 ```bash
-sudo systemctl enable aimodel.service
-sudo systemctl start aimodel.service
+sudo systemctl enable aimodel.service  
+sudo systemctl start aimodel.service  
 sudo systemctl status aimodel.service
 ```
 
@@ -630,7 +630,7 @@ type
 
 implementation
 
-constructor TAILogger.Create(const LogPath: string);
+constructor TAILogger.Create(const LogPath: string);  
 begin
   inherited Create;
   FLogPath := LogPath;
@@ -642,13 +642,13 @@ begin
     Rewrite(FLogFile);
 end;
 
-destructor TAILogger.Destroy;
+destructor TAILogger.Destroy;  
 begin
   CloseFile(FLogFile);
   inherited Destroy;
 end;
 
-procedure TAILogger.Log(Level: TLogLevel; const Msg: string);
+procedure TAILogger.Log(Level: TLogLevel; const Msg: string);  
 var
   LevelStr: string;
 begin
@@ -675,15 +675,15 @@ end.
 FROM mcr.microsoft.com/windows/servercore:ltsc2022
 
 # Installer FreePascal
-ADD https://sourceforge.net/projects/freepascal/files/Win32/3.2.2/fpc-3.2.2.i386-win32.exe /fpc-installer.exe
+ADD https://sourceforge.net/projects/freepascal/files/Win32/3.2.2/fpc-3.2.2.i386-win32.exe /fpc-installer.exe  
 RUN fpc-installer.exe /SILENT
 
 # Copier l'application
-COPY aiservice.exe /app/
-COPY model.onnx /app/
+COPY aiservice.exe /app/  
+COPY model.onnx /app/  
 COPY onnxruntime.dll /app/
 
-WORKDIR /app
+WORKDIR /app  
 EXPOSE 8080
 
 CMD ["aiservice.exe"]
@@ -701,10 +701,10 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copier l'application
-COPY aiservice /app/
+COPY aiservice /app/  
 COPY model.onnx /app/
 
-WORKDIR /app
+WORKDIR /app  
 RUN chmod +x aiservice
 
 EXPOSE 8080

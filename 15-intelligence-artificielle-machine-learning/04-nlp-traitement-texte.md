@@ -64,8 +64,8 @@ end.
 
 **Sortie :**
 ```
-Bytes: 28
-Caractères UTF-8: 18
+Bytes: 28  
+Caractères UTF-8: 18  
 Majuscules: HÉLLO WØRLD! 你好 🌍
 ```
 
@@ -100,37 +100,37 @@ type
 
 implementation
 
-constructor TTextNormalizer.Create;
+constructor TTextNormalizer.Create;  
 begin
   FRegEx := TRegExpr.Create;
 end;
 
-destructor TTextNormalizer.Destroy;
+destructor TTextNormalizer.Destroy;  
 begin
   FRegEx.Free;
   inherited;
 end;
 
-function TTextNormalizer.ToLowerCase(const AText: string): string;
+function TTextNormalizer.ToLowerCase(const AText: string): string;  
 begin
   Result := UTF8LowerCase(AText);
 end;
 
-function TTextNormalizer.RemovePunctuation(const AText: string): string;
+function TTextNormalizer.RemovePunctuation(const AText: string): string;  
 begin
   // Remplacer toute ponctuation par un espace
   FRegEx.Expression := '[^\w\s]';
   Result := FRegEx.Replace(AText, ' ', True);
 end;
 
-function TTextNormalizer.RemoveExtraSpaces(const AText: string): string;
+function TTextNormalizer.RemoveExtraSpaces(const AText: string): string;  
 begin
   // Remplacer plusieurs espaces par un seul
   FRegEx.Expression := '\s+';
   Result := Trim(FRegEx.Replace(AText, ' ', True));
 end;
 
-function TTextNormalizer.RemoveAccents(const AText: string): string;
+function TTextNormalizer.RemoveAccents(const AText: string): string;  
 var
   i: Integer;
 begin
@@ -151,7 +151,7 @@ begin
   Result := StringReplace(Result, 'ç', 'c', [rfReplaceAll, rfIgnoreCase]);
 end;
 
-function TTextNormalizer.NormalizeAll(const AText: string): string;
+function TTextNormalizer.NormalizeAll(const AText: string): string;  
 begin
   Result := AText;
   Result := ToLowerCase(Result);
@@ -214,7 +214,7 @@ type
 
 implementation
 
-function TTokenizer.Tokenize(const AText: string): TStringList;
+function TTokenizer.Tokenize(const AText: string): TStringList;  
 var
   i, startPos: Integer;
   currentChar: Char;
@@ -323,7 +323,7 @@ type
 
 implementation
 
-function TNGramGenerator.GenerateBigrams(const ATokens: TStringList): TStringList;
+function TNGramGenerator.GenerateBigrams(const ATokens: TStringList): TStringList;  
 var
   i: Integer;
 begin
@@ -420,18 +420,18 @@ type
 
 implementation
 
-constructor TWordFrequency.Create;
+constructor TWordFrequency.Create;  
 begin
   FFrequencies := TWordFrequencyMap.Create;
 end;
 
-destructor TWordFrequency.Destroy;
+destructor TWordFrequency.Destroy;  
 begin
   FFrequencies.Free;
   inherited;
 end;
 
-procedure TWordFrequency.AddWord(const AWord: string);
+procedure TWordFrequency.AddWord(const AWord: string);  
 var
   count: Integer;
   normalizedWord: string;
@@ -445,7 +445,7 @@ begin
     FFrequencies.Add(normalizedWord, 1);
 end;
 
-procedure TWordFrequency.AddWords(const AWords: TStringList);
+procedure TWordFrequency.AddWords(const AWords: TStringList);  
 var
   i: Integer;
 begin
@@ -453,7 +453,7 @@ begin
     AddWord(AWords[i]);
 end;
 
-function TWordFrequency.GetFrequency(const AWord: string): Integer;
+function TWordFrequency.GetFrequency(const AWord: string): Integer;  
 var
   normalizedWord: string;
 begin
@@ -462,7 +462,7 @@ begin
     Result := 0;
 end;
 
-function TWordFrequency.GetTotalWords: Integer;
+function TWordFrequency.GetTotalWords: Integer;  
 var
   pair: TPair<string, Integer>;
 begin
@@ -471,12 +471,12 @@ begin
     Result := Result + pair.Value;
 end;
 
-function TWordFrequency.GetUniqueWords: Integer;
+function TWordFrequency.GetUniqueWords: Integer;  
 begin
   Result := FFrequencies.Count;
 end;
 
-function TWordFrequency.GetMostCommon(ACount: Integer): TStringList;
+function TWordFrequency.GetMostCommon(ACount: Integer): TStringList;  
 type
   TWordFreqPair = record
     Word: string;
@@ -516,7 +516,7 @@ begin
     Result.Add(Format('%s: %d', [pairs[i].Word, pairs[i].Freq]));
 end;
 
-procedure TWordFrequency.SaveToFile(const AFileName: string);
+procedure TWordFrequency.SaveToFile(const AFileName: string);  
 var
   sl: TStringList;
   pair: TPair<string, Integer>;
@@ -615,7 +615,7 @@ type
 
 implementation
 
-constructor TStopWordFilter.Create(const ALanguage: string);
+constructor TStopWordFilter.Create(const ALanguage: string);  
 begin
   FStopWords := specialize TList<string>.Create;
 
@@ -625,13 +625,13 @@ begin
     LoadEnglishStopWords;
 end;
 
-destructor TStopWordFilter.Destroy;
+destructor TStopWordFilter.Destroy;  
 begin
   FStopWords.Free;
   inherited;
 end;
 
-procedure TStopWordFilter.LoadFrenchStopWords;
+procedure TStopWordFilter.LoadFrenchStopWords;  
 const
   FrenchStops: array[0..39] of string = (
     'le', 'la', 'les', 'un', 'une', 'des', 'de', 'du',
@@ -649,7 +649,7 @@ begin
     FStopWords.Add(FrenchStops[i]);
 end;
 
-procedure TStopWordFilter.LoadEnglishStopWords;
+procedure TStopWordFilter.LoadEnglishStopWords;  
 const
   EnglishStops: array[0..24] of string = (
     'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at',
@@ -664,7 +664,7 @@ begin
     FStopWords.Add(EnglishStops[i]);
 end;
 
-function TStopWordFilter.IsStopWord(const AWord: string): Boolean;
+function TStopWordFilter.IsStopWord(const AWord: string): Boolean;  
 var
   normalizedWord: string;
 begin
@@ -672,7 +672,7 @@ begin
   Result := FStopWords.IndexOf(normalizedWord) >= 0;
 end;
 
-function TStopWordFilter.FilterStopWords(const AWords: TStringList): TStringList;
+function TStopWordFilter.FilterStopWords(const AWords: TStringList): TStringList;  
 var
   i: Integer;
 begin
@@ -683,13 +683,13 @@ begin
       Result.Add(AWords[i]);
 end;
 
-procedure TStopWordFilter.AddStopWord(const AWord: string);
+procedure TStopWordFilter.AddStopWord(const AWord: string);  
 begin
   if not IsStopWord(AWord) then
     FStopWords.Add(LowerCase(Trim(AWord)));
 end;
 
-procedure TStopWordFilter.LoadFromFile(const AFileName: string);
+procedure TStopWordFilter.LoadFromFile(const AFileName: string);  
 var
   sl: TStringList;
   i: Integer;
@@ -752,7 +752,7 @@ type
 
 implementation
 
-constructor TSentimentAnalyzer.Create;
+constructor TSentimentAnalyzer.Create;  
 begin
   FPositiveWords := specialize TList<string>.Create;
   FNegativeWords := specialize TList<string>.Create;
@@ -760,7 +760,7 @@ begin
   LoadDefaultLexicon;
 end;
 
-destructor TSentimentAnalyzer.Destroy;
+destructor TSentimentAnalyzer.Destroy;  
 begin
   FPositiveWords.Free;
   FNegativeWords.Free;
@@ -768,7 +768,7 @@ begin
   inherited;
 end;
 
-procedure TSentimentAnalyzer.LoadDefaultLexicon;
+procedure TSentimentAnalyzer.LoadDefaultLexicon;  
 begin
   // Mots positifs français
   FPositiveWords.Add('bon');
@@ -816,7 +816,7 @@ begin
   FIntensifiers.Add('assez', 0.8);
 end;
 
-function TSentimentAnalyzer.AnalyzeTokens(const ATokens: TStringList): TSentimentScore;
+function TSentimentAnalyzer.AnalyzeTokens(const ATokens: TStringList): TSentimentScore;  
 var
   i: Integer;
   word, prevWord: string;
@@ -858,7 +858,7 @@ begin
     Result.Overall := 0;
 end;
 
-function TSentimentAnalyzer.AnalyzeText(const AText: string): TSentimentScore;
+function TSentimentAnalyzer.AnalyzeText(const AText: string): TSentimentScore;  
 var
   tokenizer: TTokenizer;
   tokens: TStringList;
@@ -876,19 +876,19 @@ begin
   end;
 end;
 
-procedure TSentimentAnalyzer.AddPositiveWord(const AWord: string);
+procedure TSentimentAnalyzer.AddPositiveWord(const AWord: string);  
 begin
   if FPositiveWords.IndexOf(LowerCase(AWord)) < 0 then
     FPositiveWords.Add(LowerCase(AWord));
 end;
 
-procedure TSentimentAnalyzer.AddNegativeWord(const AWord: string);
+procedure TSentimentAnalyzer.AddNegativeWord(const AWord: string);  
 begin
   if FNegativeWords.IndexOf(LowerCase(AWord)) < 0 then
     FNegativeWords.Add(LowerCase(AWord));
 end;
 
-function TSentimentAnalyzer.GetSentimentLabel(const AScore: TSentimentScore): string;
+function TSentimentAnalyzer.GetSentimentLabel(const AScore: TSentimentScore): string;  
 begin
   if AScore.Overall > 0.5 then
     Result := 'Très positif'
@@ -991,14 +991,14 @@ implementation
 
 { TClassData }
 
-constructor TClassData.Create;
+constructor TClassData.Create;  
 begin
   WordCount := TWordProbabilities.Create;
   TotalWords := 0;
   DocumentCount := 0;
 end;
 
-destructor TClassData.Destroy;
+destructor TClassData.Destroy;  
 begin
   WordCount.Free;
   inherited;
@@ -1006,14 +1006,14 @@ end;
 
 { TNaiveBayesClassifier }
 
-constructor TNaiveBayesClassifier.Create;
+constructor TNaiveBayesClassifier.Create;  
 begin
   FClasses := specialize TDictionary<string, TClassData>.Create;
   FVocabulary := specialize TList<string>.Create;
   FTotalDocuments := 0;
 end;
 
-destructor TNaiveBayesClassifier.Destroy;
+destructor TNaiveBayesClassifier.Destroy;  
 var
   classData: TClassData;
 begin
@@ -1061,7 +1061,7 @@ begin
   Inc(FTotalDocuments);
 end;
 
-procedure TNaiveBayesClassifier.Train(const AText: string; const AClass: string);
+procedure TNaiveBayesClassifier.Train(const AText: string; const AClass: string);  
 var
   tokenizer: TTokenizer;
   tokens: TStringList;
@@ -1119,7 +1119,7 @@ begin
   end;
 end;
 
-function TNaiveBayesClassifier.Classify(const AText: string): string;
+function TNaiveBayesClassifier.Classify(const AText: string): string;  
 var
   probabilities: TWordProbabilities;
 begin
@@ -1167,7 +1167,7 @@ begin
   end;
 end;
 
-procedure TNaiveBayesClassifier.SaveModel(const AFileName: string);
+procedure TNaiveBayesClassifier.SaveModel(const AFileName: string);  
 var
   sl: TStringList;
   className: string;
@@ -1203,7 +1203,7 @@ begin
   end;
 end;
 
-procedure TNaiveBayesClassifier.LoadModel(const AFileName: string);
+procedure TNaiveBayesClassifier.LoadModel(const AFileName: string);  
 var
   sl: TStringList;
   i: Integer;
@@ -1344,7 +1344,7 @@ type
 
 implementation
 
-function TTextSimilarity.LevenshteinDistance(const S1, S2: string): Integer;
+function TTextSimilarity.LevenshteinDistance(const S1, S2: string): Integer;  
 var
   len1, len2, i, j: Integer;
   cost: Integer;
@@ -1378,7 +1378,7 @@ begin
   Result := d[len1, len2];
 end;
 
-function TTextSimilarity.LevenshteinSimilarity(const S1, S2: string): Double;
+function TTextSimilarity.LevenshteinSimilarity(const S1, S2: string): Double;  
 var
   distance, maxLen: Integer;
 begin
@@ -1391,7 +1391,7 @@ begin
     Result := 1.0 - (distance / maxLen);
 end;
 
-function TTextSimilarity.JaccardSimilarity(const ATokens1, ATokens2: TStringList): Double;
+function TTextSimilarity.JaccardSimilarity(const ATokens1, ATokens2: TStringList): Double;  
 var
   set1, set2, intersection, union: TStringList;
   i: Integer;
@@ -1435,7 +1435,7 @@ begin
   end;
 end;
 
-function TTextSimilarity.CosineSimilarity(const AText1, AText2: string): Double;
+function TTextSimilarity.CosineSimilarity(const AText1, AText2: string): Double;  
 var
   tokenizer: TTokenizer;
   tokens1, tokens2: TStringList;
@@ -1518,7 +1518,7 @@ begin
   end;
 end;
 
-function TTextSimilarity.NGramSimilarity(const S1, S2: string; N: Integer): Double;
+function TTextSimilarity.NGramSimilarity(const S1, S2: string; N: Integer): Double;  
 var
   ngrams1, ngrams2: TStringList;
   i: Integer;
@@ -1632,7 +1632,7 @@ type
 
 implementation
 
-constructor TNamedEntityRecognizer.Create;
+constructor TNamedEntityRecognizer.Create;  
 begin
   FRegEx := TRegExpr.Create;
   FPersonNames := TStringList.Create;
@@ -1651,7 +1651,7 @@ begin
   FLocations.Add('france');
 end;
 
-destructor TNamedEntityRecognizer.Destroy;
+destructor TNamedEntityRecognizer.Destroy;  
 begin
   FRegEx.Free;
   FPersonNames.Free;
@@ -1660,7 +1660,7 @@ begin
   inherited;
 end;
 
-function TNamedEntityRecognizer.ExtractEmails(const AText: string): TEntityList;
+function TNamedEntityRecognizer.ExtractEmails(const AText: string): TEntityList;  
 var
   entity: TEntity;
 begin
@@ -1679,7 +1679,7 @@ begin
   end;
 end;
 
-function TNamedEntityRecognizer.ExtractPhones(const AText: string): TEntityList;
+function TNamedEntityRecognizer.ExtractPhones(const AText: string): TEntityList;  
 var
   entity: TEntity;
 begin
@@ -1699,7 +1699,7 @@ begin
   end;
 end;
 
-function TNamedEntityRecognizer.ExtractURLs(const AText: string): TEntityList;
+function TNamedEntityRecognizer.ExtractURLs(const AText: string): TEntityList;  
 var
   entity: TEntity;
 begin
@@ -1718,7 +1718,7 @@ begin
   end;
 end;
 
-function TNamedEntityRecognizer.ExtractDates(const AText: string): TEntityList;
+function TNamedEntityRecognizer.ExtractDates(const AText: string): TEntityList;  
 var
   entity: TEntity;
 begin
@@ -1738,7 +1738,7 @@ begin
   end;
 end;
 
-function TNamedEntityRecognizer.ExtractCapitalizedWords(const AText: string): TEntityList;
+function TNamedEntityRecognizer.ExtractCapitalizedWords(const AText: string): TEntityList;  
 var
   entity: TEntity;
   word: string;
@@ -1778,7 +1778,7 @@ begin
   end;
 end;
 
-function TNamedEntityRecognizer.ExtractEntities(const AText: string): TEntityList;
+function TNamedEntityRecognizer.ExtractEntities(const AText: string): TEntityList;  
 var
   emails, phones, urls, dates, words: TEntityList;
   i: Integer;
@@ -1829,7 +1829,7 @@ begin
   target.LoadFromFile(AFileName);
 end;
 
-function TNamedEntityRecognizer.EntityTypeToString(AType: TEntityType): string;
+function TNamedEntityRecognizer.EntityTypeToString(AType: TEntityType): string;  
 begin
   case AType of
     etPerson: Result := 'Personne';
@@ -1897,7 +1897,7 @@ end.
 
 **Sortie attendue :**
 ```
-Texte analysé:
+Texte analysé:  
 Jean habite à Paris et son email est jean@example.com. Il travaille depuis le 15/03/2024. Son téléphone est 01 23 45 67 89. Visitez https://example.com pour plus d'infos.
 
 Entités extraites:
@@ -1951,7 +1951,7 @@ type
 
 implementation
 
-function TTextSummarizer.SplitIntoSentences(const AText: string): TStringList;
+function TTextSummarizer.SplitIntoSentences(const AText: string): TStringList;  
 var
   i, startPos: Integer;
   currentSentence: string;
@@ -1983,7 +1983,7 @@ begin
     Result.Add(Trim(currentSentence));
 end;
 
-function TTextSummarizer.CalculateWordFrequency(const ASentences: TStringList): TWordFrequencyMap;
+function TTextSummarizer.CalculateWordFrequency(const ASentences: TStringList): TWordFrequencyMap;  
 var
   tokenizer: TTokenizer;
   stopWords: TStopWordFilter;
@@ -2025,7 +2025,7 @@ begin
   end;
 end;
 
-function TTextSummarizer.CalculateTFIDF(const ASentences: TStringList): TSentenceScoreList;
+function TTextSummarizer.CalculateTFIDF(const ASentences: TStringList): TSentenceScoreList;  
 var
   wordFreq: TWordFrequencyMap;
   tokenizer: TTokenizer;
@@ -2101,7 +2101,7 @@ begin
   end;
 end;
 
-function TTextSummarizer.Summarize(const AText: string; ASentenceCount: Integer): string;
+function TTextSummarizer.Summarize(const AText: string; ASentenceCount: Integer): string;  
 var
   sentences: TStringList;
   scores: TSentenceScoreList;
@@ -2165,7 +2165,7 @@ begin
   end;
 end;
 
-function TTextSummarizer.SummarizeByRatio(const AText: string; ARatio: Double): string;
+function TTextSummarizer.SummarizeByRatio(const AText: string; ARatio: Double): string;  
 var
   sentences: TStringList;
   sentenceCount: Integer;
@@ -2273,7 +2273,7 @@ type
 
 implementation
 
-constructor TSpellChecker.Create;
+constructor TSpellChecker.Create;  
 begin
   FDictionary := TStringList.Create;
   FDictionary.Sorted := True;
@@ -2298,7 +2298,7 @@ begin
   AddWord('merci', 180);
 end;
 
-destructor TSpellChecker.Destroy;
+destructor TSpellChecker.Destroy;  
 begin
   FDictionary.Free;
   FWordFrequency.Free;
@@ -2306,7 +2306,7 @@ begin
   inherited;
 end;
 
-procedure TSpellChecker.LoadDictionary(const AFileName: string);
+procedure TSpellChecker.LoadDictionary(const AFileName: string);  
 var
   sl: TStringList;
   i, eqPos: Integer;
@@ -2330,7 +2330,7 @@ begin
   end;
 end;
 
-procedure TSpellChecker.AddWord(const AWord: string; AFrequency: Integer);
+procedure TSpellChecker.AddWord(const AWord: string; AFrequency: Integer);  
 var
   word: string;
 begin
@@ -2341,12 +2341,12 @@ begin
   FWordFrequency.AddOrSetValue(word, AFrequency);
 end;
 
-function TSpellChecker.IsCorrect(const AWord: string): Boolean;
+function TSpellChecker.IsCorrect(const AWord: string): Boolean;  
 begin
   Result := FDictionary.IndexOf(LowerCase(AWord)) >= 0;
 end;
 
-function TSpellChecker.CalculateProbability(const AWord: string): Double;
+function TSpellChecker.CalculateProbability(const AWord: string): Double;  
 var
   frequency, totalFreq: Integer;
   freq: Integer;
@@ -2393,7 +2393,7 @@ begin
   end;
 end;
 
-function TSpellChecker.Correct(const AWord: string): string;
+function TSpellChecker.Correct(const AWord: string): string;  
 var
   suggestions: TSuggestionList;
   i, j: Integer;
@@ -2583,7 +2583,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   FTokenizer := TTokenizer.Create;
   FNormalizer := TTextNormalizer.Create;
@@ -2608,7 +2608,7 @@ begin
   ListViewEntities.Columns[2].Width := 80;
 end;
 
-procedure TFormMain.FormDestroy(Sender: TObject);
+procedure TFormMain.FormDestroy(Sender: TObject);  
 begin
   FTokenizer.Free;
   FNormalizer.Free;
@@ -2619,7 +2619,7 @@ begin
   FSummarizer.Free;
 end;
 
-procedure TFormMain.ButtonLoadFileClick(Sender: TObject);
+procedure TFormMain.ButtonLoadFileClick(Sender: TObject);  
 begin
   if OpenDialog1.Execute then
   begin
@@ -2633,7 +2633,7 @@ begin
   end;
 end;
 
-procedure TFormMain.ButtonAnalyzeClick(Sender: TObject);
+procedure TFormMain.ButtonAnalyzeClick(Sender: TObject);  
 begin
   if Trim(MemoInput.Text) = '' then
   begin
@@ -2654,7 +2654,7 @@ begin
   end;
 end;
 
-procedure TFormMain.AnalyzeFrequency;
+procedure TFormMain.AnalyzeFrequency;  
 var
   tokens, filtered: TStringList;
   mostCommon: TStringList;
@@ -2696,7 +2696,7 @@ begin
   end;
 end;
 
-procedure TFormMain.AnalyzeSentiment;
+procedure TFormMain.AnalyzeSentiment;  
 var
   score: TSentimentScore;
 begin
@@ -2722,7 +2722,7 @@ begin
     MemoSentiment.Font.Color := clBlack;
 end;
 
-procedure TFormMain.ExtractEntities;
+procedure TFormMain.ExtractEntities;  
 var
   entities: TEntityList;
   i: Integer;
@@ -2744,7 +2744,7 @@ begin
   end;
 end;
 
-procedure TFormMain.GenerateSummary;
+procedure TFormMain.GenerateSummary;  
 var
   summary: string;
 begin
@@ -2765,7 +2765,7 @@ end.
 **Chemins de dictionnaires :**
 
 ```pascal
-function GetDictionaryPath: string;
+function GetDictionaryPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := ExtractFilePath(ParamStr(0)) + 'dictionaries\';
@@ -2778,7 +2778,7 @@ begin
     ForceDirectories(Result);
 end;
 
-function GetStopWordsFile(const ALanguage: string): string;
+function GetStopWordsFile(const ALanguage: string): string;  
 begin
   Result := GetDictionaryPath + 'stopwords_' + ALanguage + '.txt';
 
@@ -2787,7 +2787,7 @@ begin
     CreateDefaultStopWords(Result, ALanguage);
 end;
 
-procedure CreateDefaultStopWords(const AFileName, ALanguage: string);
+procedure CreateDefaultStopWords(const AFileName, ALanguage: string);  
 var
   sl: TStringList;
 begin
@@ -2876,7 +2876,7 @@ type
 
 implementation
 
-class function TPlatformTextUtils.LoadTextFile(const AFileName: string): string;
+class function TPlatformTextUtils.LoadTextFile(const AFileName: string): string;  
 var
   sl: TStringList;
 begin
@@ -2889,7 +2889,7 @@ begin
   end;
 end;
 
-class procedure TPlatformTextUtils.SaveTextFile(const AFileName, AText: string);
+class procedure TPlatformTextUtils.SaveTextFile(const AFileName, AText: string);  
 var
   sl: TStringList;
 begin
@@ -2902,7 +2902,7 @@ begin
   end;
 end;
 
-class function TPlatformTextUtils.GetLineEnding: string;
+class function TPlatformTextUtils.GetLineEnding: string;  
 begin
   {$IFDEF WINDOWS}
   Result := #13#10;  // CRLF
@@ -2912,7 +2912,7 @@ begin
   {$ENDIF}
 end;
 
-class function TPlatformTextUtils.NormalizePath(const APath: string): string;
+class function TPlatformTextUtils.NormalizePath(const APath: string): string;  
 begin
   Result := APath;
 
@@ -2959,19 +2959,19 @@ type
 
 implementation
 
-constructor TNLPAPIClient.Create(const AAPIKey: string);
+constructor TNLPAPIClient.Create(const AAPIKey: string);  
 begin
   FAPIKey := AAPIKey;
   FHTTPClient := TFPHTTPClient.Create(nil);
 end;
 
-destructor TNLPAPIClient.Destroy;
+destructor TNLPAPIClient.Destroy;  
 begin
   FHTTPClient.Free;
   inherited;
 end;
 
-function TNLPAPIClient.AnalyzeSentiment(const AText: string): Double;
+function TNLPAPIClient.AnalyzeSentiment(const AText: string): Double;  
 var
   requestData, response: string;
   jsonData: TJSONData;
@@ -3005,7 +3005,7 @@ begin
   end;
 end;
 
-function TNLPAPIClient.ExtractEntities(const AText: string): TJSONArray;
+function TNLPAPIClient.ExtractEntities(const AText: string): TJSONArray;  
 var
   requestData, response: string;
   jsonData: TJSONData;
@@ -3116,25 +3116,25 @@ type
 
 implementation
 
-constructor TNLPCache.Create(AMaxAge: Integer; AMaxSize: Integer);
+constructor TNLPCache.Create(AMaxAge: Integer; AMaxSize: Integer);  
 begin
   FCache := TCacheMap.Create;
   FMaxAge := AMaxAge;
   FMaxSize := AMaxSize;
 end;
 
-destructor TNLPCache.Destroy;
+destructor TNLPCache.Destroy;  
 begin
   FCache.Free;
   inherited;
 end;
 
-function TNLPCache.GetHash(const AText: string): string;
+function TNLPCache.GetHash(const AText: string): string;  
 begin
   Result := MD5Print(MD5String(AText));
 end;
 
-procedure TNLPCache.CleanOldEntries;
+procedure TNLPCache.CleanOldEntries;  
 var
   keysToRemove: TStringList;
   key: string;
@@ -3160,7 +3160,7 @@ begin
   end;
 end;
 
-function TNLPCache.Get(const AKey: string; out AValue: string): Boolean;
+function TNLPCache.Get(const AKey: string; out AValue: string): Boolean;  
 var
   hash: string;
   entry: TCacheEntry;
@@ -3181,7 +3181,7 @@ begin
   end;
 end;
 
-procedure TNLPCache.Put(const AKey, AValue: string);
+procedure TNLPCache.Put(const AKey, AValue: string);  
 var
   hash: string;
   entry: TCacheEntry;
@@ -3201,12 +3201,12 @@ begin
   FCache.AddOrSetValue(hash, entry);
 end;
 
-procedure TNLPCache.Clear;
+procedure TNLPCache.Clear;  
 begin
   FCache.Clear;
 end;
 
-function TNLPCache.GetStats: string;
+function TNLPCache.GetStats: string;  
 begin
   Result := Format('Cache: %d entrées, max: %d, age max: %d secondes',
                    [FCache.Count, FMaxSize, FMaxAge]);
@@ -3229,19 +3229,19 @@ type
     function AnalyzeText(const AText: string): TSentimentScore; override;
   end;
 
-constructor TCachedSentimentAnalyzer.Create;
+constructor TCachedSentimentAnalyzer.Create;  
 begin
   inherited Create;
   FCache := TNLPCache.Create(1800, 500); // 30 minutes, 500 entrées max
 end;
 
-destructor TCachedSentimentAnalyzer.Destroy;
+destructor TCachedSentimentAnalyzer.Destroy;  
 begin
   FCache.Free;
   inherited;
 end;
 
-function TCachedSentimentAnalyzer.AnalyzeText(const AText: string): TSentimentScore;
+function TCachedSentimentAnalyzer.AnalyzeText(const AText: string): TSentimentScore;  
 var
   cached: string;
   score: Double;
@@ -3304,7 +3304,7 @@ type
 
 implementation
 
-constructor TBatchProcessor.Create(AFiles: TStringList);
+constructor TBatchProcessor.Create(AFiles: TStringList);  
 begin
   inherited Create(True); // Créer suspendu
   FreeOnTerminate := False;
@@ -3317,14 +3317,14 @@ begin
   FLock := TCriticalSection.Create;
 end;
 
-destructor TBatchProcessor.Destroy;
+destructor TBatchProcessor.Destroy;  
 begin
   FFiles.Free;
   FLock.Free;
   inherited;
 end;
 
-procedure TBatchProcessor.ProcessDocument(const AFileName: string; AIndex: Integer);
+procedure TBatchProcessor.ProcessDocument(const AFileName: string; AIndex: Integer);  
 var
   startTime: QWord;
   content: string;
@@ -3364,7 +3364,7 @@ begin
   end;
 end;
 
-procedure TBatchProcessor.Execute;
+procedure TBatchProcessor.Execute;  
 var
   i: Integer;
 begin
@@ -3385,7 +3385,7 @@ begin
   end;
 end;
 
-function TBatchProcessor.GetResults: TStringList;
+function TBatchProcessor.GetResults: TStringList;  
 var
   i: Integer;
 begin
@@ -3418,7 +3418,7 @@ var
   processor: TBatchProcessor;
   results: TStringList;
 
-procedure OnProgress(Sender: TObject);
+procedure OnProgress(Sender: TObject);  
 begin
   WriteLn('Traitement: ', TBatchProcessor(Sender).FCurrentIndex, '/',
           TBatchProcessor(Sender).FFiles.Count);
@@ -3527,32 +3527,32 @@ end;
 
 ```
 # stopwords_fr.txt
-le
-la
-les
-un
-une
+le  
+la  
+les  
+un  
+une  
 des
 ...
 
 # dictionary_fr.txt
-mot=fréquence
-le=10000
-chat=500
+mot=fréquence  
+le=10000  
+chat=500  
 ordinateur=300
 ...
 
 # entities_persons.txt
-Jean
-Marie
-Pierre
+Jean  
+Marie  
+Pierre  
 Sophie
 ...
 
 # entities_locations.txt
-Paris
-Lyon
-Marseille
+Paris  
+Lyon  
+Marseille  
 France
 ...
 ```
@@ -3579,7 +3579,7 @@ type
     Experience: Integer; // Années d'expérience
   end;
 
-function AnalyzeCV(const AFileName: string): TCVData;
+function AnalyzeCV(const AFileName: string): TCVData;  
 var
   sl: TStringList;
   content: string;
@@ -3786,7 +3786,7 @@ const
   CONFIG_DIR = '.config/mynlpapp/';
 {$ENDIF}
 
-function GetConfigPath: string;
+function GetConfigPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := GetEnvironmentVariable('USERPROFILE') + '\' + CONFIG_DIR;
@@ -3996,7 +3996,7 @@ fpc -Mobjfpc -Sh -O3 MiniNLPApp.pas
 
 **Installation de FreePascal :**
 ```bash
-sudo apt update
+sudo apt update  
 sudo apt install fpc lazarus
 ```
 
@@ -4166,7 +4166,7 @@ begin
     Inc(FPassedCount);
 end;
 
-procedure TTestSuite.PrintResults;
+procedure TTestSuite.PrintResults;  
 var
   i: Integer;
 begin
@@ -4194,7 +4194,7 @@ begin
   WriteLn('=========================================');
 end;
 
-function TTestSuite.AllTestsPassed: Boolean;
+function TTestSuite.AllTestsPassed: Boolean;  
 begin
   Result := FPassedCount = FTestCount;
 end;
@@ -4294,7 +4294,7 @@ type
     ItemsPerSecond: Double;
   end;
 
-procedure RunBenchmark(const AName: string; AIterations: Integer; AProc: TProcedure);
+procedure RunBenchmark(const AName: string; AIterations: Integer; AProc: TProcedure);  
 var
   startTime, endTime: TDateTime;
   result: TBenchmarkResult;

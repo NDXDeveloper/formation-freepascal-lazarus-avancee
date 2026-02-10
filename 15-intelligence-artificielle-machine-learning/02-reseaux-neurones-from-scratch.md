@@ -102,35 +102,35 @@ type
   TMatrix = array of array of Double;
 
 // Fonctions utilitaires pour les vecteurs
-function CreateVector(Size: Integer): TVector;
-function VectorLength(const V: TVector): Integer;
-procedure FillVector(var V: TVector; Value: Double);
-procedure RandomizeVector(var V: TVector; MinVal, MaxVal: Double);
-function DotProduct(const A, B: TVector): Double;
-procedure AddVectors(var Result: TVector; const A, B: TVector);
-procedure ScaleVector(var V: TVector; Scale: Double);
+function CreateVector(Size: Integer): TVector;  
+function VectorLength(const V: TVector): Integer;  
+procedure FillVector(var V: TVector; Value: Double);  
+procedure RandomizeVector(var V: TVector; MinVal, MaxVal: Double);  
+function DotProduct(const A, B: TVector): Double;  
+procedure AddVectors(var Result: TVector; const A, B: TVector);  
+procedure ScaleVector(var V: TVector; Scale: Double);  
 function VectorToString(const V: TVector): string;
 
 // Fonctions utilitaires pour les matrices
-function CreateMatrix(Rows, Cols: Integer): TMatrix;
-procedure FillMatrix(var M: TMatrix; Value: Double);
-procedure RandomizeMatrix(var M: TMatrix; MinVal, MaxVal: Double);
-function MatrixMultiply(const A: TMatrix; const B: TVector): TVector;
+function CreateMatrix(Rows, Cols: Integer): TMatrix;  
+procedure FillMatrix(var M: TMatrix; Value: Double);  
+procedure RandomizeMatrix(var M: TMatrix; MinVal, MaxVal: Double);  
+function MatrixMultiply(const A: TMatrix; const B: TVector): TVector;  
 function MatrixToString(const M: TMatrix): string;
 
 implementation
 
-function CreateVector(Size: Integer): TVector;
+function CreateVector(Size: Integer): TVector;  
 begin
   SetLength(Result, Size);
 end;
 
-function VectorLength(const V: TVector): Integer;
+function VectorLength(const V: TVector): Integer;  
 begin
   Result := Length(V);
 end;
 
-procedure FillVector(var V: TVector; Value: Double);
+procedure FillVector(var V: TVector; Value: Double);  
 var
   i: Integer;
 begin
@@ -138,7 +138,7 @@ begin
     V[i] := Value;
 end;
 
-procedure RandomizeVector(var V: TVector; MinVal, MaxVal: Double);
+procedure RandomizeVector(var V: TVector; MinVal, MaxVal: Double);  
 var
   i: Integer;
   Range: Double;
@@ -148,7 +148,7 @@ begin
     V[i] := MinVal + Random * Range;
 end;
 
-function DotProduct(const A, B: TVector): Double;
+function DotProduct(const A, B: TVector): Double;  
 var
   i: Integer;
 begin
@@ -157,7 +157,7 @@ begin
     Result := Result + A[i] * B[i];
 end;
 
-procedure AddVectors(var Result: TVector; const A, B: TVector);
+procedure AddVectors(var Result: TVector; const A, B: TVector);  
 var
   i: Integer;
 begin
@@ -165,7 +165,7 @@ begin
     Result[i] := A[i] + B[i];
 end;
 
-procedure ScaleVector(var V: TVector; Scale: Double);
+procedure ScaleVector(var V: TVector; Scale: Double);  
 var
   i: Integer;
 begin
@@ -173,7 +173,7 @@ begin
     V[i] := V[i] * Scale;
 end;
 
-function VectorToString(const V: TVector): string;
+function VectorToString(const V: TVector): string;  
 var
   i: Integer;
 begin
@@ -187,7 +187,7 @@ begin
   Result := Result + ']';
 end;
 
-function CreateMatrix(Rows, Cols: Integer): TMatrix;
+function CreateMatrix(Rows, Cols: Integer): TMatrix;  
 var
   i: Integer;
 begin
@@ -196,7 +196,7 @@ begin
     SetLength(Result[i], Cols);
 end;
 
-procedure FillMatrix(var M: TMatrix; Value: Double);
+procedure FillMatrix(var M: TMatrix; Value: Double);  
 var
   i, j: Integer;
 begin
@@ -205,7 +205,7 @@ begin
       M[i][j] := Value;
 end;
 
-procedure RandomizeMatrix(var M: TMatrix; MinVal, MaxVal: Double);
+procedure RandomizeMatrix(var M: TMatrix; MinVal, MaxVal: Double);  
 var
   i, j: Integer;
   Range: Double;
@@ -216,7 +216,7 @@ begin
       M[i][j] := MinVal + Random * Range;
 end;
 
-function MatrixMultiply(const A: TMatrix; const B: TVector): TVector;
+function MatrixMultiply(const A: TMatrix; const B: TVector): TVector;  
 var
   i, j: Integer;
   Sum: Double;
@@ -232,7 +232,7 @@ begin
   end;
 end;
 
-function MatrixToString(const M: TMatrix): string;
+function MatrixToString(const M: TMatrix): string;  
 var
   i: Integer;
 begin
@@ -267,31 +267,31 @@ type
   TActivationType = (atSigmoid, atTanh, atReLU, atLeakyReLU, atSoftmax);
 
 // Fonctions d'activation
-function Sigmoid(x: Double): Double;
+function Sigmoid(x: Double): Double;  
 function SigmoidDerivative(x: Double): Double;
 
-function Tanh(x: Double): Double;
+function Tanh(x: Double): Double;  
 function TanhDerivative(x: Double): Double;
 
-function ReLU(x: Double): Double;
+function ReLU(x: Double): Double;  
 function ReLUDerivative(x: Double): Double;
 
-function LeakyReLU(x: Double): Double;
+function LeakyReLU(x: Double): Double;  
 function LeakyReLUDerivative(x: Double): Double;
 
 // Application sur des vecteurs
-procedure ApplyActivation(var V: array of Double; ActivationType: TActivationType);
+procedure ApplyActivation(var V: array of Double; ActivationType: TActivationType);  
 procedure ApplyActivationDerivative(var V: array of Double; ActivationType: TActivationType);
 
 implementation
 
 // Sigmoid : sortie entre 0 et 1
-function Sigmoid(x: Double): Double;
+function Sigmoid(x: Double): Double;  
 begin
   Result := 1.0 / (1.0 + Exp(-x));
 end;
 
-function SigmoidDerivative(x: Double): Double;
+function SigmoidDerivative(x: Double): Double;  
 var
   s: Double;
 begin
@@ -300,12 +300,12 @@ begin
 end;
 
 // Tanh : sortie entre -1 et 1
-function Tanh(x: Double): Double;
+function Tanh(x: Double): Double;  
 begin
   Result := (Exp(x) - Exp(-x)) / (Exp(x) + Exp(-x));
 end;
 
-function TanhDerivative(x: Double): Double;
+function TanhDerivative(x: Double): Double;  
 var
   t: Double;
 begin
@@ -314,7 +314,7 @@ begin
 end;
 
 // ReLU : Max(0, x) - Très populaire
-function ReLU(x: Double): Double;
+function ReLU(x: Double): Double;  
 begin
   if x > 0 then
     Result := x
@@ -322,7 +322,7 @@ begin
     Result := 0;
 end;
 
-function ReLUDerivative(x: Double): Double;
+function ReLUDerivative(x: Double): Double;  
 begin
   if x > 0 then
     Result := 1.0
@@ -331,7 +331,7 @@ begin
 end;
 
 // Leaky ReLU : Permet un petit gradient pour x < 0
-function LeakyReLU(x: Double): Double;
+function LeakyReLU(x: Double): Double;  
 const
   Alpha = 0.01;
 begin
@@ -341,7 +341,7 @@ begin
     Result := Alpha * x;
 end;
 
-function LeakyReLUDerivative(x: Double): Double;
+function LeakyReLUDerivative(x: Double): Double;  
 const
   Alpha = 0.01;
 begin
@@ -351,7 +351,7 @@ begin
     Result := Alpha;
 end;
 
-procedure ApplyActivation(var V: array of Double; ActivationType: TActivationType);
+procedure ApplyActivation(var V: array of Double; ActivationType: TActivationType);  
 var
   i: Integer;
 begin
@@ -374,7 +374,7 @@ begin
   end;
 end;
 
-procedure ApplyActivationDerivative(var V: array of Double; ActivationType: TActivationType);
+procedure ApplyActivationDerivative(var V: array of Double; ActivationType: TActivationType);  
 var
   i: Integer;
 begin
@@ -479,12 +479,12 @@ begin
   Initialize;
 end;
 
-destructor TLayer.Destroy;
+destructor TLayer.Destroy;  
 begin
   inherited Destroy;
 end;
 
-procedure TLayer.Initialize;
+procedure TLayer.Initialize;  
 var
   Range: Double;
 begin
@@ -496,7 +496,7 @@ begin
   FillVector(FBiases, 0.0);
 end;
 
-function TLayer.Forward(const Input: TVector): TVector;
+function TLayer.Forward(const Input: TVector): TVector;  
 var
   i, j: Integer;
   Sum: Double;
@@ -569,7 +569,7 @@ begin
   end;
 end;
 
-procedure TLayer.SaveToFile(const FileName: string);
+procedure TLayer.SaveToFile(const FileName: string);  
 var
   F: TextFile;
   i, j: Integer;
@@ -598,7 +598,7 @@ begin
   end;
 end;
 
-procedure TLayer.LoadFromFile(const FileName: string);
+procedure TLayer.LoadFromFile(const FileName: string);  
 var
   F: TextFile;
   i, j: Integer;
@@ -671,7 +671,7 @@ type
 
 implementation
 
-constructor TNeuralNetwork.Create;
+constructor TNeuralNetwork.Create;  
 begin
   inherited Create;
   SetLength(FLayers, 0);
@@ -679,7 +679,7 @@ begin
   FEpochs := 100;
 end;
 
-destructor TNeuralNetwork.Destroy;
+destructor TNeuralNetwork.Destroy;  
 var
   i: Integer;
 begin
@@ -702,7 +702,7 @@ begin
   FLayers[Len] := NewLayer;
 end;
 
-function TNeuralNetwork.Predict(const Input: TVector): TVector;
+function TNeuralNetwork.Predict(const Input: TVector): TVector;  
 var
   i: Integer;
   Current: TVector;
@@ -719,7 +719,7 @@ begin
   Result := Current;
 end;
 
-function TNeuralNetwork.MeanSquaredError(const Predicted, Target: TVector): Double;
+function TNeuralNetwork.MeanSquaredError(const Predicted, Target: TVector): Double;  
 var
   i: Integer;
   Sum: Double;
@@ -731,7 +731,7 @@ begin
   Result := Sum / Length(Predicted);
 end;
 
-function TNeuralNetwork.Accuracy(const Predicted, Target: TVector): Boolean;
+function TNeuralNetwork.Accuracy(const Predicted, Target: TVector): Boolean;  
 var
   PredictedClass, TargetClass: Integer;
   i: Integer;
@@ -828,7 +828,7 @@ begin
   WriteLn('=== Entraînement terminé ===');
 end;
 
-procedure TNeuralNetwork.SaveToFile(const FileName: string);
+procedure TNeuralNetwork.SaveToFile(const FileName: string);  
 var
   F: TextFile;
   i: Integer;
@@ -850,7 +850,7 @@ begin
   end;
 end;
 
-procedure TNeuralNetwork.LoadFromFile(const FileName: string);
+procedure TNeuralNetwork.LoadFromFile(const FileName: string);  
 var
   F: TextFile;
   LayerCount, i: Integer;
@@ -1075,7 +1075,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   FNetwork := nil;
 
@@ -1090,18 +1090,18 @@ begin
   Log('Prêt à créer un réseau');
 end;
 
-procedure TFormMain.FormDestroy(Sender: TObject);
+procedure TFormMain.FormDestroy(Sender: TObject);  
 begin
   if FNetwork <> nil then
     FNetwork.Free;
 end;
 
-procedure TFormMain.Log(const Msg: string);
+procedure TFormMain.Log(const Msg: string);  
 begin
   MemoLog.Lines.Add('[' + TimeToStr(Now) + '] ' + Msg);
 end;
 
-procedure TFormMain.ButtonCreateClick(Sender: TObject);
+procedure TFormMain.ButtonCreateClick(Sender: TObject);  
 var
   InputSize, HiddenSize, OutputSize: Integer;
 begin
@@ -1125,7 +1125,7 @@ begin
   PaintBoxVisualization.Invalidate;
 end;
 
-procedure TFormMain.CreateXORDataset;
+procedure TFormMain.CreateXORDataset;  
 begin
   SetLength(FTrainingData, 4);
   SetLength(FTargetData, 4);
@@ -1155,7 +1155,7 @@ begin
   FTargetData[3][0] := 0;
 end;
 
-procedure TFormMain.ButtonTrainClick(Sender: TObject);
+procedure TFormMain.ButtonTrainClick(Sender: TObject);  
 var
   Epochs: Integer;
   LearningRate: Double;
@@ -1195,7 +1195,7 @@ begin
   end;
 end;
 
-procedure TFormMain.ButtonTestClick(Sender: TObject);
+procedure TFormMain.ButtonTestClick(Sender: TObject);  
 var
   i: Integer;
   Output: TVector;
@@ -1219,7 +1219,7 @@ begin
   end;
 end;
 
-procedure TFormMain.ButtonSaveClick(Sender: TObject);
+procedure TFormMain.ButtonSaveClick(Sender: TObject);  
 var
   SaveDialog: TSaveDialog;
 begin
@@ -1244,7 +1244,7 @@ begin
   end;
 end;
 
-procedure TFormMain.ButtonLoadClick(Sender: TObject);
+procedure TFormMain.ButtonLoadClick(Sender: TObject);  
 var
   OpenDialog: TOpenDialog;
 begin
@@ -1269,7 +1269,7 @@ begin
   end;
 end;
 
-procedure TFormMain.DrawNetwork;
+procedure TFormMain.DrawNetwork;  
 var
   X, Y, LayerSpacing, NodeSpacing: Integer;
   Layer, Node: Integer;
@@ -1318,7 +1318,7 @@ begin
   end;
 end;
 
-procedure TFormMain.PaintBoxVisualizationPaint(Sender: TObject);
+procedure TFormMain.PaintBoxVisualizationPaint(Sender: TObject);  
 begin
   DrawNetwork;
 end;
@@ -1361,7 +1361,7 @@ type
 
 implementation
 
-constructor TMNISTClassifier.Create;
+constructor TMNISTClassifier.Create;  
 begin
   inherited Create;
 
@@ -1372,13 +1372,13 @@ begin
   FNetwork.AddLayer(64, 10, atSigmoid);
 end;
 
-destructor TMNISTClassifier.Destroy;
+destructor TMNISTClassifier.Destroy;  
 begin
   FNetwork.Free;
   inherited Destroy;
 end;
 
-function TMNISTClassifier.ImageToVector(Image: TBitmap): TVector;
+function TMNISTClassifier.ImageToVector(Image: TBitmap): TVector;  
 var
   x, y, idx: Integer;
   PixelColor: TColor;
@@ -1404,7 +1404,7 @@ begin
   end;
 end;
 
-function TMNISTClassifier.LabelToOneHot(LabelIndex: Integer): TVector;
+function TMNISTClassifier.LabelToOneHot(LabelIndex: Integer): TVector;  
 var
   i: Integer;
 begin
@@ -1437,7 +1437,7 @@ begin
   FNetwork.Train(Inputs, Targets, 100, 0.01);
 end;
 
-function TMNISTClassifier.Classify(Image: TBitmap): Integer;
+function TMNISTClassifier.Classify(Image: TBitmap): Integer;  
 var
   Input, Output: TVector;
   i: Integer;
@@ -1463,12 +1463,12 @@ begin
   end;
 end;
 
-procedure TMNISTClassifier.SaveModel(const FileName: string);
+procedure TMNISTClassifier.SaveModel(const FileName: string);  
 begin
   FNetwork.SaveToFile(FileName);
 end;
 
-procedure TMNISTClassifier.LoadModel(const FileName: string);
+procedure TMNISTClassifier.LoadModel(const FileName: string);  
 begin
   FNetwork.LoadFromFile(FileName);
 end;
@@ -1633,7 +1633,7 @@ type
                       out InputGradient: TVector);
   end;
 
-function TBatchNormLayer.Forward(const Input: TVector): TVector;
+function TBatchNormLayer.Forward(const Input: TVector): TVector;  
 var
   i: Integer;
   Normalized: Double;
@@ -1654,7 +1654,7 @@ end;
 ## Visualisation de l'apprentissage
 
 ```pascal
-procedure TFormMain.VisualizeTraining;
+procedure TFormMain.VisualizeTraining;  
 var
   Chart: TChart;
   Series: TLineSeries;
@@ -1733,7 +1733,7 @@ end;
 ### 2. Monitoring des activations
 
 ```pascal
-procedure MonitorActivations(Network: TNeuralNetwork; Input: TVector);
+procedure MonitorActivations(Network: TNeuralNetwork; Input: TVector);  
 var
   LayerIdx: Integer;
   Output: TVector;
@@ -1815,7 +1815,7 @@ var
   i: Integer;
   TestInput, Prediction: TVector;
 
-procedure LoadHouseData;
+procedure LoadHouseData;  
 begin
   SetLength(Houses, 5);
 
@@ -1836,7 +1836,7 @@ begin
   Houses[4].Location := 75007; Houses[4].Price := 1200000;
 end;
 
-procedure PrepareData;
+procedure PrepareData;  
 var
   i: Integer;
   MaxSurface, MaxAge, MaxLocation, MaxPrice: Double;
@@ -1960,7 +1960,7 @@ type
 
 implementation
 
-constructor TSentimentAnalyzer.Create(MaxWords: Integer);
+constructor TSentimentAnalyzer.Create(MaxWords: Integer);  
 begin
   inherited Create;
 
@@ -1976,14 +1976,14 @@ begin
   FNetwork.AddLayer(32, 1, atSigmoid);
 end;
 
-destructor TSentimentAnalyzer.Destroy;
+destructor TSentimentAnalyzer.Destroy;  
 begin
   FVocabulary.Free;
   FNetwork.Free;
   inherited Destroy;
 end;
 
-procedure TSentimentAnalyzer.BuildVocabulary(Texts: array of string);
+procedure TSentimentAnalyzer.BuildVocabulary(Texts: array of string);  
 var
   i, j: Integer;
   Words: TStringList;
@@ -2015,7 +2015,7 @@ begin
   WriteLn(Format('Vocabulaire construit : %d mots', [FVocabulary.Count]));
 end;
 
-function TSentimentAnalyzer.TextToVector(const Text: string): TVector;
+function TSentimentAnalyzer.TextToVector(const Text: string): TVector;  
 var
   i, WordIndex: Integer;
   Words: TStringList;
@@ -2076,7 +2076,7 @@ begin
   FNetwork.Train(Inputs, Targets, 500, 0.1);
 end;
 
-function TSentimentAnalyzer.Analyze(const Text: string): Double;
+function TSentimentAnalyzer.Analyze(const Text: string): Double;  
 var
   Input, Output: TVector;
 begin
@@ -2206,7 +2206,7 @@ type
 
 implementation
 
-constructor TAutoEncoder.Create(InputDim, LatentDim: Integer);
+constructor TAutoEncoder.Create(InputDim, LatentDim: Integer);  
 begin
   inherited Create;
 
@@ -2223,14 +2223,14 @@ begin
   FDecoder.AddLayer(32, InputDim, atSigmoid);
 end;
 
-destructor TAutoEncoder.Destroy;
+destructor TAutoEncoder.Destroy;  
 begin
   FEncoder.Free;
   FDecoder.Free;
   inherited Destroy;
 end;
 
-procedure TAutoEncoder.Train(Data: array of TVector; Epochs: Integer);
+procedure TAutoEncoder.Train(Data: array of TVector; Epochs: Integer);  
 var
   i, epoch: Integer;
   Encoded, Decoded: TVector;
@@ -2263,17 +2263,17 @@ begin
   end;
 end;
 
-function TAutoEncoder.Encode(const Input: TVector): TVector;
+function TAutoEncoder.Encode(const Input: TVector): TVector;  
 begin
   Result := FEncoder.Predict(Input);
 end;
 
-function TAutoEncoder.Decode(const Latent: TVector): TVector;
+function TAutoEncoder.Decode(const Latent: TVector): TVector;  
 begin
   Result := FDecoder.Predict(Latent);
 end;
 
-function TAutoEncoder.Reconstruct(const Input: TVector): TVector;
+function TAutoEncoder.Reconstruct(const Input: TVector): TVector;  
 begin
   Result := Decode(Encode(Input));
 end;
@@ -2341,7 +2341,7 @@ end;
 Pour augmenter artificiellement le dataset :
 
 ```pascal
-function AugmentImage(const Image: TVector): TVector;
+function AugmentImage(const Image: TVector): TVector;  
 begin
   Result := Copy(Image);
 
@@ -2418,7 +2418,7 @@ end;
 ## Benchmark et comparaison de performance
 
 ```pascal
-procedure BenchmarkNetwork;
+procedure BenchmarkNetwork;  
 var
   Network: TNeuralNetwork;
   Input: TVector;
@@ -2504,7 +2504,7 @@ BatchSize := 32;
 ### 3. Normalisation des données
 
 ```pascal
-procedure NormalizeData(var Data: array of TVector);
+procedure NormalizeData(var Data: array of TVector);  
 var
   i, j: Integer;
   Mean, StdDev: Double;

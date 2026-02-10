@@ -139,20 +139,20 @@ nvcc --version
 lspci | grep -i nvidia
 
 # Ajouter le dépôt NVIDIA
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
-sudo dpkg -i cuda-keyring_1.0-1_all.deb
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb  
+sudo dpkg -i cuda-keyring_1.0-1_all.deb  
 sudo apt-get update
 
 # Installer CUDA
 sudo apt-get install cuda
 
 # Configurer PATH
-echo 'export PATH=/usr/local/cuda/bin:$PATH' >> ~/.bashrc
-echo 'export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
+echo 'export PATH=/usr/local/cuda/bin:$PATH' >> ~/.bashrc  
+echo 'export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc  
 source ~/.bashrc
 
 # Vérifier
-nvcc --version
+nvcc --version  
 nvidia-smi
 ```
 
@@ -395,8 +395,8 @@ var
   clReleaseCommandQueue: function(command_queue: cl_command_queue): cl_int; cdecl;
   clReleaseContext: function(context: cl_context): cl_int; cdecl;
 
-function LoadOpenCL: Boolean;
-procedure UnloadOpenCL;
+function LoadOpenCL: Boolean;  
+procedure UnloadOpenCL;  
 function GetErrorString(AError: cl_int): string;
 
 implementation
@@ -404,7 +404,7 @@ implementation
 var
   OpenCLHandle: TLibHandle = 0;
 
-function LoadOpenCL: Boolean;
+function LoadOpenCL: Boolean;  
 begin
   Result := False;
 
@@ -445,7 +445,7 @@ begin
   Result := Assigned(clGetPlatformIDs);
 end;
 
-procedure UnloadOpenCL;
+procedure UnloadOpenCL;  
 begin
   if OpenCLHandle <> 0 then
   begin
@@ -454,7 +454,7 @@ begin
   end;
 end;
 
-function GetErrorString(AError: cl_int): string;
+function GetErrorString(AError: cl_int): string;  
 begin
   case AError of
     CL_SUCCESS: Result := 'Success';
@@ -746,7 +746,7 @@ Initialisation des données...
 Exécution sur GPU...
 ✓ Kernel exécuté en 2.35 ms
 
-Vérification des résultats...
+Vérification des résultats...  
 Quelques valeurs:
   A[0] + B[0] = 0 + 0 = 0
   A[1] + B[1] = 1 + 2 = 3
@@ -844,7 +844,7 @@ implementation
 
 { TGPUDevice }
 
-constructor TGPUDevice.Create;
+constructor TGPUDevice.Create;  
 begin
   FInitialized := False;
 
@@ -852,7 +852,7 @@ begin
     raise Exception.Create('OpenCL non disponible');
 end;
 
-destructor TGPUDevice.Destroy;
+destructor TGPUDevice.Destroy;  
 begin
   if FInitialized then
   begin
@@ -865,7 +865,7 @@ begin
   inherited;
 end;
 
-function TGPUDevice.Initialize(APreferGPU: Boolean): Boolean;
+function TGPUDevice.Initialize(APreferGPU: Boolean): Boolean;  
 var
   err: cl_int;
   numPlatforms: cl_uint;
@@ -919,7 +919,7 @@ begin
   Result := True;
 end;
 
-procedure TGPUDevice.LoadDeviceInfo;
+procedure TGPUDevice.LoadDeviceInfo;  
 var
   buffer: array[0..255] of Char;
   retSize: size_t;
@@ -943,7 +943,7 @@ begin
     FGlobalMemSize := memSize;
 end;
 
-function TGPUDevice.CreateBuffer(ASize: size_t; AFlags: cl_uint): cl_mem;
+function TGPUDevice.CreateBuffer(ASize: size_t; AFlags: cl_uint): cl_mem;  
 var
   err: cl_int;
 begin
@@ -952,7 +952,7 @@ begin
     Result := nil;
 end;
 
-function TGPUDevice.WriteBuffer(ABuffer: cl_mem; AData: Pointer; ASize: size_t): Boolean;
+function TGPUDevice.WriteBuffer(ABuffer: cl_mem; AData: Pointer; ASize: size_t): Boolean;  
 var
   err: cl_int;
 begin
@@ -960,7 +960,7 @@ begin
   Result := err = CL_SUCCESS;
 end;
 
-function TGPUDevice.ReadBuffer(ABuffer: cl_mem; AData: Pointer; ASize: size_t): Boolean;
+function TGPUDevice.ReadBuffer(ABuffer: cl_mem; AData: Pointer; ASize: size_t): Boolean;  
 var
   err: cl_int;
 begin
@@ -968,26 +968,26 @@ begin
   Result := err = CL_SUCCESS;
 end;
 
-procedure TGPUDevice.ReleaseBuffer(ABuffer: cl_mem);
+procedure TGPUDevice.ReleaseBuffer(ABuffer: cl_mem);  
 begin
   if Assigned(ABuffer) then
     clReleaseMemObject(ABuffer);
 end;
 
-procedure TGPUDevice.Finish;
+procedure TGPUDevice.Finish;  
 begin
   clFinish(FQueue);
 end;
 
 { TGPUKernel }
 
-constructor TGPUKernel.Create(ADevice: TGPUDevice);
+constructor TGPUKernel.Create(ADevice: TGPUDevice);  
 begin
   FDevice := ADevice;
   FCompiled := False;
 end;
 
-destructor TGPUKernel.Destroy;
+destructor TGPUKernel.Destroy;  
 begin
   if FCompiled then
   begin
@@ -1000,7 +1000,7 @@ begin
   inherited;
 end;
 
-function TGPUKernel.CompileFromSource(const ASource, AKernelName: string): Boolean;
+function TGPUKernel.CompileFromSource(const ASource, AKernelName: string): Boolean;  
 var
   err: cl_int;
   source: PChar;
@@ -1039,7 +1039,7 @@ begin
   Result := True;
 end;
 
-function TGPUKernel.CompileFromFile(const AFileName, AKernelName: string): Boolean;
+function TGPUKernel.CompileFromFile(const AFileName, AKernelName: string): Boolean;  
 var
   source: TStringList;
 begin
@@ -1052,7 +1052,7 @@ begin
   end;
 end;
 
-function TGPUKernel.SetArg(AIndex: Integer; ASize: size_t; AValue: Pointer): Boolean;
+function TGPUKernel.SetArg(AIndex: Integer; ASize: size_t; AValue: Pointer): Boolean;  
 var
   err: cl_int;
 begin
@@ -1060,7 +1060,7 @@ begin
   Result := err = CL_SUCCESS;
 end;
 
-function TGPUKernel.Execute(AGlobalSize: size_t; ALocalSize: size_t): Boolean;
+function TGPUKernel.Execute(AGlobalSize: size_t; ALocalSize: size_t): Boolean;  
 var
   err: cl_int;
   localSize: Psize_t;
@@ -1242,7 +1242,7 @@ program ImageBlurGPU;
 uses
   SysUtils, Graphics, GPUCompute;
 
-procedure ApplyBlur(ABitmap: TBitmap);
+procedure ApplyBlur(ABitmap: TBitmap);  
 var
   device: TGPUDevice;
   kernel: TGPUKernel;
@@ -1341,7 +1341,7 @@ const
 type
   TMatrix = array of array of Single;
 
-function MatrixMultiplyGPU(const A, B: TMatrix): TMatrix;
+function MatrixMultiplyGPU(const A, B: TMatrix): TMatrix;  
 var
   device: TGPUDevice;
   kernel: TGPUKernel;
@@ -1450,7 +1450,7 @@ const
     '    output[y * width + x] = (uchar4)(color, color, color, 255);' + LineEnding +
     '}';
 
-procedure GenerateMandelbrotGPU(ABitmap: TBitmap; AZoom, AOffsetX, AOffsetY: Single);
+procedure GenerateMandelbrotGPU(ABitmap: TBitmap; AZoom, AOffsetX, AOffsetY: Single);  
 var
   device: TGPUDevice;
   kernel: TGPUKernel;
@@ -1684,7 +1684,7 @@ type
 
 implementation
 
-constructor TGLCLBuffer.Create(AContext: cl_context; ASize: size_t);
+constructor TGLCLBuffer.Create(AContext: cl_context; ASize: size_t);  
 var
   err: cl_int;
 begin
@@ -1703,7 +1703,7 @@ begin
     raise Exception.Create('Erreur création buffer GL/CL: ' + GetErrorString(err));
 end;
 
-destructor TGLCLBuffer.Destroy;
+destructor TGLCLBuffer.Destroy;  
 begin
   if FCLBuffer <> nil then
     clReleaseMemObject(FCLBuffer);
@@ -1714,12 +1714,12 @@ begin
   inherited;
 end;
 
-procedure TGLCLBuffer.AcquireFromGL(AQueue: cl_command_queue);
+procedure TGLCLBuffer.AcquireFromGL(AQueue: cl_command_queue);  
 begin
   clEnqueueAcquireGLObjects(AQueue, 1, @FCLBuffer, 0, nil, nil);
 end;
 
-procedure TGLCLBuffer.ReleaseToGL(AQueue: cl_command_queue);
+procedure TGLCLBuffer.ReleaseToGL(AQueue: cl_command_queue);  
 begin
   clEnqueueReleaseGLObjects(AQueue, 1, @FCLBuffer, 0, nil, nil);
 end;
@@ -1734,7 +1734,7 @@ end.
 ### Détection automatique du meilleur device
 
 ```pascal
-function SelectBestDevice: TGPUDevice;
+function SelectBestDevice: TGPUDevice;  
 var
   platforms: array[0..9] of cl_platform_id;
   numPlatforms: cl_uint;
@@ -1788,7 +1788,7 @@ end;
 ### Configuration spécifique par OS
 
 ```pascal
-procedure ConfigureForPlatform(ADevice: TGPUDevice);
+procedure ConfigureForPlatform(ADevice: TGPUDevice);  
 begin
   {$IFDEF WINDOWS}
   // Optimisations Windows
@@ -1817,7 +1817,7 @@ end;
 ### 1. Vérification des erreurs
 
 ```pascal
-function CheckCLError(AError: cl_int; const AContext: string): Boolean;
+function CheckCLError(AError: cl_int; const AContext: string): Boolean;  
 begin
   Result := AError = CL_SUCCESS;
 
@@ -1879,7 +1879,7 @@ end;
 ### 3. Informations détaillées du device
 
 ```pascal
-procedure PrintDeviceInfo(ADevice: cl_device_id);
+procedure PrintDeviceInfo(ADevice: cl_device_id);  
 var
   buffer: array[0..1023] of Char;
   uintValue: cl_uint;
@@ -1932,7 +1932,7 @@ end;
 
 ```pascal
 // Toujours vérifier et libérer les ressources
-procedure SafeGPUCompute;
+procedure SafeGPUCompute;  
 var
   device: TGPUDevice;
   buffer: cl_mem;

@@ -138,7 +138,7 @@ choco install onnxruntime
 
 ```bash
 # Installer les dépendances
-sudo apt update
+sudo apt update  
 sudo apt install build-essential
 
 # Télécharger ONNX Runtime
@@ -148,8 +148,8 @@ wget https://github.com/microsoft/onnxruntime/releases/download/v1.16.0/onnxrunt
 tar -xzf onnxruntime-linux-x64-1.16.0.tgz
 
 # Installer
-sudo cp -r onnxruntime-linux-x64-1.16.0/lib/* /usr/local/lib/
-sudo cp -r onnxruntime-linux-x64-1.16.0/include/* /usr/local/include/
+sudo cp -r onnxruntime-linux-x64-1.16.0/lib/* /usr/local/lib/  
+sudo cp -r onnxruntime-linux-x64-1.16.0/include/* /usr/local/include/  
 sudo ldconfig
 ```
 
@@ -295,13 +295,13 @@ var
   OrtApi: ^TOrtApi;
   OrtLibHandle: TLibHandle;
 
-function LoadONNXRuntime: Boolean;
-procedure UnloadONNXRuntime;
+function LoadONNXRuntime: Boolean;  
+procedure UnloadONNXRuntime;  
 function CheckStatus(status: POrtStatus): Boolean;
 
 implementation
 
-function LoadONNXRuntime: Boolean;
+function LoadONNXRuntime: Boolean;  
 type
   TGetApiBaseFunc = function: Pointer; cdecl;
 var
@@ -339,7 +339,7 @@ begin
   Result := Assigned(OrtApi);
 end;
 
-procedure UnloadONNXRuntime;
+procedure UnloadONNXRuntime;  
 begin
   if OrtLibHandle <> 0 then
   begin
@@ -348,7 +348,7 @@ begin
   end;
 end;
 
-function CheckStatus(status: POrtStatus): Boolean;
+function CheckStatus(status: POrtStatus): Boolean;  
 var
   errorMsg: PChar;
   errorCode: OrtErrorCode;
@@ -390,7 +390,7 @@ D'abord, créons un modèle simple pour tester :
 
 ```python
 # create_simple_model.py
-import torch
+import torch  
 import torch.nn as nn
 
 class SimpleModel(nn.Module):
@@ -402,7 +402,7 @@ class SimpleModel(nn.Module):
         return self.linear(x)
 
 # Créer et entraîner
-model = SimpleModel()
+model = SimpleModel()  
 model.eval()
 
 # Exemple d'entrée
@@ -549,14 +549,14 @@ type
 
 implementation
 
-constructor TONNXModel.Create;
+constructor TONNXModel.Create;  
 begin
   FLoaded := False;
   FInputName := 'input';
   FOutputName := 'output';
 end;
 
-destructor TONNXModel.Destroy;
+destructor TONNXModel.Destroy;  
 begin
   if FLoaded then
   begin
@@ -571,7 +571,7 @@ begin
   inherited;
 end;
 
-function TONNXModel.LoadModel(const AModelPath: string): Boolean;
+function TONNXModel.LoadModel(const AModelPath: string): Boolean;  
 var
   status: POrtStatus;
 begin
@@ -616,7 +616,7 @@ begin
   Result := True;
 end;
 
-function TONNXModel.Predict(const AInputData: array of Single): TArray<Single>;
+function TONNXModel.Predict(const AInputData: array of Single): TArray<Single>;  
 var
   status: POrtStatus;
   memoryInfo: Pointer;
@@ -783,9 +783,9 @@ end.
 
 ```python
 # create_mnist_model.py
-import torch
-import torch.nn as nn
-import torchvision
+import torch  
+import torch.nn as nn  
+import torchvision  
 import torchvision.transforms as transforms
 
 class SimpleCNN(nn.Module):
@@ -807,11 +807,11 @@ class SimpleCNN(nn.Module):
         return x
 
 # Créer le modèle
-model = SimpleCNN()
+model = SimpleCNN()  
 model.eval()
 
 # Exporter
-dummy_input = torch.randn(1, 1, 28, 28)
+dummy_input = torch.randn(1, 1, 28, 28)  
 torch.onnx.export(
     model,
     dummy_input,
@@ -849,13 +849,13 @@ type
     function PreprocessImage(ABitmap: TBitmap): TArray<Single>;
   end;
 
-constructor TImageClassifier.Create;
+constructor TImageClassifier.Create;  
 begin
   FModel := TONNXModel.Create;
   FLabels := TStringList.Create;
 end;
 
-destructor TImageClassifier.Destroy;
+destructor TImageClassifier.Destroy;  
 begin
   FModel.Free;
   FLabels.Free;
@@ -893,7 +893,7 @@ begin
   Result := True;
 end;
 
-function TImageClassifier.PreprocessImage(ABitmap: TBitmap): TArray<Single>;
+function TImageClassifier.PreprocessImage(ABitmap: TBitmap): TArray<Single>;  
 var
   x, y: Integer;
   pixel: TColor;
@@ -924,7 +924,7 @@ begin
   end;
 end;
 
-function TImageClassifier.ClassifyImage(const AImagePath: string): string;
+function TImageClassifier.ClassifyImage(const AImagePath: string): string;  
 var
   bitmap: TBitmap;
   inputData, output: TArray<Single>;
@@ -1015,7 +1015,7 @@ end.
 
 ### ONNX Model Zoo
 
-Microsoft maintient un dépôt de modèles pré-entraînés au format ONNX :
+Microsoft maintient un dépôt de modèles pré-entraînés au format ONNX :  
 https://github.com/onnx/models
 
 **Catégories disponibles :**
@@ -1071,24 +1071,24 @@ type
                           ATopK: Integer = 5): TStringList;
   end;
 
-constructor TResNetClassifier.Create;
+constructor TResNetClassifier.Create;  
 begin
   FModel := TONNXModel.Create;
 end;
 
-destructor TResNetClassifier.Destroy;
+destructor TResNetClassifier.Destroy;  
 begin
   FModel.Free;
   inherited;
 end;
 
-function TResNetClassifier.LoadModel: Boolean;
+function TResNetClassifier.LoadModel: Boolean;  
 begin
   // ResNet-50 téléchargé depuis ONNX Model Zoo
   Result := FModel.LoadModel('resnet50-v2-7.onnx');
 end;
 
-function TResNetClassifier.PreprocessImageNet(ABitmap: TBitmap): TArray<Single>;
+function TResNetClassifier.PreprocessImageNet(ABitmap: TBitmap): TArray<Single>;  
 var
   x, y, c: Integer;
   pixel: TColor;
@@ -1128,7 +1128,7 @@ begin
   end;
 end;
 
-function TResNetClassifier.Softmax(const ALogits: TArray<Single>): TArray<Single>;
+function TResNetClassifier.Softmax(const ALogits: TArray<Single>): TArray<Single>;  
 var
   i: Integer;
   maxLogit, sumExp: Single;
@@ -1232,10 +1232,10 @@ Réduire la précision des poids pour accélérer l'inférence :
 
 **Python - Quantifier un modèle :**
 ```python
-import onnx
+import onnx  
 from onnxruntime.quantization import quantize_dynamic, QuantType
 
-model_fp32 = 'model.onnx'
+model_fp32 = 'model.onnx'  
 model_quant = 'model_quantized.onnx'
 
 quantize_dynamic(
@@ -1244,8 +1244,8 @@ quantize_dynamic(
     weight_type=QuantType.QUInt8
 )
 
-print("Modèle quantifié créé!")
-print(f"Taille originale: {os.path.getsize(model_fp32) / 1024 / 1024:.2f} MB")
+print("Modèle quantifié créé!")  
+print(f"Taille originale: {os.path.getsize(model_fp32) / 1024 / 1024:.2f} MB")  
 print(f"Taille quantifiée: {os.path.getsize(model_quant) / 1024 / 1024:.2f} MB")
 ```
 
@@ -1258,7 +1258,7 @@ print(f"Taille quantifiée: {os.path.getsize(model_quant) / 1024 / 1024:.2f} MB"
 ### 2. Configuration des threads
 
 ```pascal
-procedure OptimizeSessionOptions(var AOptions: POrtSessionOptions);
+procedure OptimizeSessionOptions(var AOptions: POrtSessionOptions);  
 var
   status: POrtStatus;
 begin
@@ -1277,7 +1277,7 @@ end;
 Traiter plusieurs images en une seule fois :
 
 ```pascal
-function PredictBatch(const AImages: array of TBitmap): TArray<TArray<Single>>;
+function PredictBatch(const AImages: array of TBitmap): TArray<TArray<Single>>;  
 var
   batchSize, i: Integer;
   inputData: TArray<Single>;
@@ -1307,7 +1307,7 @@ end;
 **Activer CUDA (si disponible) :**
 
 ```pascal
-procedure EnableCUDA(var ASessionOptions: POrtSessionOptions);
+procedure EnableCUDA(var ASessionOptions: POrtSessionOptions);  
 var
   status: POrtStatus;
 begin
@@ -1337,13 +1337,13 @@ interface
 uses
   SysUtils;
 
-function GetONNXRuntimePath: string;
-function GetModelsPath: string;
+function GetONNXRuntimePath: string;  
+function GetModelsPath: string;  
 procedure EnsureDirectories;
 
 implementation
 
-function GetONNXRuntimePath: string;
+function GetONNXRuntimePath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := 'C:\onnxruntime\bin\onnxruntime.dll';
@@ -1364,7 +1364,7 @@ begin
   {$ENDIF}
 end;
 
-function GetModelsPath: string;
+function GetModelsPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := ExtractFilePath(ParamStr(0)) + 'models\';
@@ -1379,7 +1379,7 @@ begin
   {$ENDIF}
 end;
 
-procedure EnsureDirectories;
+procedure EnsureDirectories;  
 var
   modelsPath: string;
 begin
@@ -1399,16 +1399,16 @@ end.
 @echo off
 echo Déploiement Windows...
 
-REM Copier l'exécutable
+REM Copier l'exécutable  
 copy /Y MyApp.exe deploy\windows\
 
-REM Copier ONNX Runtime
+REM Copier ONNX Runtime  
 copy /Y C:\onnxruntime\bin\onnxruntime.dll deploy\windows\
 
-REM Copier les modèles
+REM Copier les modèles  
 xcopy /Y /E models\*.onnx deploy\windows\models\
 
-echo Déploiement terminé!
+echo Déploiement terminé!  
 pause
 ```
 
@@ -1438,7 +1438,7 @@ export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
 ./MyApp
 EOF
 
-chmod +x deploy/linux/run.sh
+chmod +x deploy/linux/run.sh  
 chmod +x deploy/linux/MyApp
 
 echo "Déploiement terminé!"
@@ -1504,7 +1504,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);  
 begin
   FModel := TONNXModel.Create;
   FModelLoaded := False;
@@ -1514,18 +1514,18 @@ begin
   UpdateStatus('Prêt. Chargez un modèle pour commencer.');
 end;
 
-procedure TFormMain.FormDestroy(Sender: TObject);
+procedure TFormMain.FormDestroy(Sender: TObject);  
 begin
   FModel.Free;
 end;
 
-procedure TFormMain.UpdateStatus(const AMessage: string);
+procedure TFormMain.UpdateStatus(const AMessage: string);  
 begin
   LabelStatus.Caption := AMessage;
   Application.ProcessMessages;
 end;
 
-procedure TFormMain.ButtonLoadModelClick(Sender: TObject);
+procedure TFormMain.ButtonLoadModelClick(Sender: TObject);  
 begin
   OpenDialogModel.Filter := 'Modèles ONNX|*.onnx';
 
@@ -1550,7 +1550,7 @@ begin
   end;
 end;
 
-procedure TFormMain.ButtonLoadImageClick(Sender: TObject);
+procedure TFormMain.ButtonLoadImageClick(Sender: TObject);  
 begin
   OpenDialogImage.Filter := 'Images|*.bmp;*.jpg;*.jpeg;*.png';
 
@@ -1573,7 +1573,7 @@ begin
   end;
 end;
 
-procedure TFormMain.ButtonDetectClick(Sender: TObject);
+procedure TFormMain.ButtonDetectClick(Sender: TObject);  
 var
   inputData, output: TArray<Single>;
   detections: TArray<TDetection>;
@@ -1625,7 +1625,7 @@ begin
   end;
 end;
 
-procedure TFormMain.DrawDetections(const ADetections: TArray<TDetection>);
+procedure TFormMain.DrawDetections(const ADetections: TArray<TDetection>);  
 var
   bitmap: TBitmap;
   i: Integer;
@@ -1680,14 +1680,14 @@ end.
 
 ```python
 # convert_tensorflow_to_onnx.py
-import tensorflow as tf
+import tensorflow as tf  
 import tf2onnx
 
 # Charger un modèle TensorFlow
 model = tf.keras.models.load_model('my_model.h5')
 
 # Convertir en ONNX
-spec = (tf.TensorSpec((None, 224, 224, 3), tf.float32, name="input"),)
+spec = (tf.TensorSpec((None, 224, 224, 3), tf.float32, name="input"),)  
 output_path = "model.onnx"
 
 model_proto, _ = tf2onnx.convert.from_keras(
@@ -1703,12 +1703,12 @@ print(f"Modèle converti: {output_path}")
 
 ```python
 # convert_sklearn_to_onnx.py
-from sklearn.ensemble import RandomForestClassifier
-from skl2onnx import convert_sklearn
+from sklearn.ensemble import RandomForestClassifier  
+from skl2onnx import convert_sklearn  
 from skl2onnx.common.data_types import FloatTensorType
 
 # Entraîner un modèle scikit-learn
-model = RandomForestClassifier(n_estimators=10)
+model = RandomForestClassifier(n_estimators=10)  
 model.fit(X_train, y_train)
 
 # Définir les types d'entrée
@@ -1733,19 +1733,19 @@ import onnx
 model = onnx.load("model.onnx")
 
 # Vérifier la validité
-onnx.checker.check_model(model)
+onnx.checker.check_model(model)  
 print("✓ Modèle valide")
 
 # Afficher les informations
-print(f"Nom du modèle: {model.graph.name}")
-print(f"Producteur: {model.producer_name}")
+print(f"Nom du modèle: {model.graph.name}")  
+print(f"Producteur: {model.producer_name}")  
 print(f"Version: {model.model_version}")
 
-print("\nEntrées:")
+print("\nEntrées:")  
 for input in model.graph.input:
     print(f"  - {input.name}: {input.type}")
 
-print("\nSorties:")
+print("\nSorties:")  
 for output in model.graph.output:
     print(f"  - {output.name}: {output.type}")
 ```
@@ -1759,7 +1759,7 @@ for output in model.graph.output:
 **1. Bibliothèque ONNX Runtime introuvable**
 
 ```pascal
-procedure CheckONNXInstallation;
+procedure CheckONNXInstallation;  
 var
   paths: array[0..2] of string;
   i: Integer;
@@ -1805,7 +1805,7 @@ end;
 **2. Erreur de forme (shape mismatch)**
 
 ```pascal
-procedure PrintModelInfo(const AModelPath: string);
+procedure PrintModelInfo(const AModelPath: string);  
 begin
   WriteLn('Informations du modèle:');
   WriteLn('  Entrées attendues:');
@@ -1820,7 +1820,7 @@ end;
 **3. Performance lente**
 
 ```pascal
-procedure ProfileInference(AModel: TONNXModel; AIterations: Integer);
+procedure ProfileInference(AModel: TONNXModel; AIterations: Integer);  
 var
   i: Integer;
   startTime, endTime: QWord;
@@ -1872,17 +1872,17 @@ end;
 
 🛠️ **ONNX Simplifier**
 ```bash
-pip install onnx-simplifier
+pip install onnx-simplifier  
 python -m onnxsim input.onnx output.onnx
 ```
 
 🛠️ **ONNX Optimizer**
 ```python
-import onnx
+import onnx  
 from onnx import optimizer
 
-model = onnx.load("model.onnx")
-optimized_model = optimizer.optimize(model)
+model = onnx.load("model.onnx")  
+optimized_model = optimizer.optimize(model)  
 onnx.save(optimized_model, "model_optimized.onnx")
 ```
 
@@ -1991,13 +1991,13 @@ implementation
 
 { TModelCache }
 
-constructor TModelCache.Create;
+constructor TModelCache.Create;  
 begin
   FModels := TThreadList.Create;
   FCriticalSection := TCriticalSection.Create;
 end;
 
-destructor TModelCache.Destroy;
+destructor TModelCache.Destroy;  
 var
   list: TList;
   i: Integer;
@@ -2016,7 +2016,7 @@ begin
   inherited;
 end;
 
-function TModelCache.GetModel(const AModelName: string): TONNXModel;
+function TModelCache.GetModel(const AModelName: string): TONNXModel;  
 var
   list: TList;
   i: Integer;
@@ -2056,7 +2056,7 @@ begin
   end;
 end;
 
-procedure TModelCache.ReleaseModel(AModel: TONNXModel);
+procedure TModelCache.ReleaseModel(AModel: TONNXModel);  
 begin
   // Le modèle retourne dans le pool
   // TODO: Implémenter la gestion du pool
@@ -2064,7 +2064,7 @@ end;
 
 { TInferencePipeline }
 
-constructor TInferencePipeline.Create(ANumWorkers: Integer);
+constructor TInferencePipeline.Create(ANumWorkers: Integer);  
 begin
   FModelCache := TModelCache.Create;
   FRequestQueue := TThreadList.Create;
@@ -2075,7 +2075,7 @@ begin
   // TODO: Créer les threads workers
 end;
 
-destructor TInferencePipeline.Destroy;
+destructor TInferencePipeline.Destroy;  
 begin
   Stop;
   FModelCache.Free;
@@ -2084,19 +2084,19 @@ begin
   inherited;
 end;
 
-procedure TInferencePipeline.Start;
+procedure TInferencePipeline.Start;  
 begin
   FRunning := True;
   // TODO: Démarrer les threads workers
 end;
 
-procedure TInferencePipeline.Stop;
+procedure TInferencePipeline.Stop;  
 begin
   FRunning := False;
   // TODO: Attendre la fin des threads
 end;
 
-function TInferencePipeline.SubmitRequest(const ARequest: TInferenceRequest): string;
+function TInferencePipeline.SubmitRequest(const ARequest: TInferenceRequest): string;  
 var
   list: TList;
 begin
@@ -2127,7 +2127,7 @@ begin
   end;
 end;
 
-procedure TInferencePipeline.ProcessRequest(ARequest: TInferenceRequest);
+procedure TInferencePipeline.ProcessRequest(ARequest: TInferenceRequest);  
 var
   model: TONNXModel;
   startTime: QWord;
@@ -2187,7 +2187,7 @@ type
 var
   Service: TInferenceService;
 
-constructor TInferenceService.Create;
+constructor TInferenceService.Create;  
 begin
   FModel := TONNXModel.Create;
 
@@ -2195,13 +2195,13 @@ begin
     raise Exception.Create('Échec du chargement du modèle');
 end;
 
-destructor TInferenceService.Destroy;
+destructor TInferenceService.Destroy;  
 begin
   FModel.Free;
   inherited;
 end;
 
-procedure TInferenceService.HandlePredict(ARequest: TRequest; AResponse: TResponse);
+procedure TInferenceService.HandlePredict(ARequest: TRequest; AResponse: TResponse);  
 var
   jsonData: TJSONObject;
   inputArray: TJSONArray;
@@ -2262,7 +2262,7 @@ begin
   end;
 end;
 
-procedure TInferenceService.HandleStatus(ARequest: TRequest; AResponse: TResponse);
+procedure TInferenceService.HandleStatus(ARequest: TRequest; AResponse: TResponse);  
 var
   status: TJSONObject;
 begin
@@ -2372,7 +2372,7 @@ type
 
 implementation
 
-constructor TMetricsCollector.Create(const ALogFile: string);
+constructor TMetricsCollector.Create(const ALogFile: string);  
 begin
   FStartTime := Now;
 
@@ -2386,14 +2386,14 @@ begin
   WriteLn(FLogFile, 'timestamp,latency_ms,success');
 end;
 
-destructor TMetricsCollector.Destroy;
+destructor TMetricsCollector.Destroy;  
 begin
   CloseFile(FLogFile);
   SetLength(FLatencies, 0);
   inherited;
 end;
 
-procedure TMetricsCollector.RecordRequest(ALatency: Integer; ASuccess: Boolean);
+procedure TMetricsCollector.RecordRequest(ALatency: Integer; ASuccess: Boolean);  
 var
   elapsed: Double;
 begin
@@ -2431,12 +2431,12 @@ begin
   Flush(FLogFile);
 end;
 
-function TMetricsCollector.GetMetrics: TInferenceMetrics;
+function TMetricsCollector.GetMetrics: TInferenceMetrics;  
 begin
   Result := FMetrics;
 end;
 
-procedure TMetricsCollector.PrintMetrics;
+procedure TMetricsCollector.PrintMetrics;  
 begin
   WriteLn('=== Métriques d''inférence ===');
   WriteLn(Format('Requêtes totales: %d', [FMetrics.TotalRequests]));
@@ -2456,7 +2456,7 @@ begin
   WriteLn('=============================');
 end;
 
-procedure TMetricsCollector.ExportPrometheus(const AFileName: string);
+procedure TMetricsCollector.ExportPrometheus(const AFileName: string);  
 var
   f: TextFile;
 begin
@@ -2571,20 +2571,20 @@ type
     procedure ReleaseSlot;
   end;
 
-constructor TResourceLimiter.Create(AMaxRequests: Integer);
+constructor TResourceLimiter.Create(AMaxRequests: Integer);  
 begin
   FMaxConcurrentRequests := AMaxRequests;
   FCurrentRequests := 0;
   FLock := TCriticalSection.Create;
 end;
 
-destructor TResourceLimiter.Destroy;
+destructor TResourceLimiter.Destroy;  
 begin
   FLock.Free;
   inherited;
 end;
 
-function TResourceLimiter.AcquireSlot: Boolean;
+function TResourceLimiter.AcquireSlot: Boolean;  
 begin
   FLock.Enter;
   try
@@ -2600,7 +2600,7 @@ begin
   end;
 end;
 
-procedure TResourceLimiter.ReleaseSlot;
+procedure TResourceLimiter.ReleaseSlot;  
 begin
   FLock.Enter;
   try

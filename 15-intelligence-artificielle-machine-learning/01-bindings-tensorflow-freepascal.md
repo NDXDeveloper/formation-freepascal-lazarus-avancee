@@ -157,8 +157,8 @@ type
 // Déclarations des fonctions externes
 function TF_Version(): PChar; cdecl; external TensorFlowLib;
 
-function TF_NewStatus(): PTF_Status; cdecl; external TensorFlowLib;
-procedure TF_DeleteStatus(status: PTF_Status); cdecl; external TensorFlowLib;
+function TF_NewStatus(): PTF_Status; cdecl; external TensorFlowLib;  
+procedure TF_DeleteStatus(status: PTF_Status); cdecl; external TensorFlowLib;  
 function TF_GetCode(status: PTF_Status): TF_Code; cdecl; external TensorFlowLib;
 
 function TF_NewTensor(dtype: TF_DataType; dims: PInt64; num_dims: Integer;
@@ -199,7 +199,7 @@ Cette section permet d'utiliser le bon nom de bibliothèque selon le système d'
 #### 3. Les types opaques
 
 ```pascal
-PTF_Status = Pointer;
+PTF_Status = Pointer;  
 PTF_Tensor = Pointer;
 ```
 TensorFlow utilise des structures internes dont nous n'avons pas besoin de connaître les détails. On les manipule via des pointeurs opaques.
@@ -374,7 +374,7 @@ Les types TensorFlow ne correspondent pas toujours exactement aux types Pascal :
 
 TensorFlow utilise l'ordre "row-major" (par ligne), comme C. Pour une matrice 2x3 :
 ```
-dims[0] = 2  // nombre de lignes
+dims[0] = 2  // nombre de lignes  
 dims[1] = 3  // nombre de colonnes
 ```
 

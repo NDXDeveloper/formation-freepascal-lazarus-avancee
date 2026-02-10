@@ -205,7 +205,7 @@ begin
   EvaluatePopulation;
 end;
 
-destructor TGeneticAlgorithm.Destroy;
+destructor TGeneticAlgorithm.Destroy;  
 var
   i: Integer;
 begin
@@ -215,7 +215,7 @@ begin
   inherited;
 end;
 
-procedure TGeneticAlgorithm.InitializePopulation;
+procedure TGeneticAlgorithm.InitializePopulation;  
 var
   i, j: Integer;
 begin
@@ -231,7 +231,7 @@ begin
   end;
 end;
 
-procedure TGeneticAlgorithm.EvaluatePopulation;
+procedure TGeneticAlgorithm.EvaluatePopulation;  
 var
   i: Integer;
 begin
@@ -242,7 +242,7 @@ begin
   FBestIndividual := FPopulation[0];
 end;
 
-procedure TGeneticAlgorithm.SortPopulationByFitness;
+procedure TGeneticAlgorithm.SortPopulationByFitness;  
 var
   i, j: Integer;
   temp: TIndividual;
@@ -258,7 +258,7 @@ begin
       end;
 end;
 
-function TGeneticAlgorithm.SelectParent: TIndividual;
+function TGeneticAlgorithm.SelectParent: TIndividual;  
 var
   tournamentSize: Integer;
   i, randomIndex, bestIndex: Integer;
@@ -282,7 +282,7 @@ begin
   Result := FPopulation[bestIndex];
 end;
 
-function TGeneticAlgorithm.Crossover(const AParent1, AParent2: TIndividual): TIndividual;
+function TGeneticAlgorithm.Crossover(const AParent1, AParent2: TIndividual): TIndividual;  
 var
   i, crossoverPoint: Integer;
 begin
@@ -311,7 +311,7 @@ begin
   Result.Fitness := 0;
 end;
 
-procedure TGeneticAlgorithm.Mutate(var AIndividual: TIndividual);
+procedure TGeneticAlgorithm.Mutate(var AIndividual: TIndividual);  
 var
   i: Integer;
 begin
@@ -325,7 +325,7 @@ begin
   end;
 end;
 
-procedure TGeneticAlgorithm.EvolveOneGeneration;
+procedure TGeneticAlgorithm.EvolveOneGeneration;  
 var
   newPopulation: TPopulation;
   i: Integer;
@@ -362,7 +362,7 @@ begin
   Inc(FGeneration);
 end;
 
-procedure TGeneticAlgorithm.Evolve(AGenerations: Integer);
+procedure TGeneticAlgorithm.Evolve(AGenerations: Integer);  
 var
   i: Integer;
 begin
@@ -370,12 +370,12 @@ begin
     EvolveOneGeneration;
 end;
 
-function TGeneticAlgorithm.GetBestIndividual: TIndividual;
+function TGeneticAlgorithm.GetBestIndividual: TIndividual;  
 begin
   Result := FBestIndividual;
 end;
 
-function TGeneticAlgorithm.GetAverageFitness: Double;
+function TGeneticAlgorithm.GetAverageFitness: Double;  
 var
   i: Integer;
   sum: Double;
@@ -406,7 +406,7 @@ uses
 
 // Fonction à optimiser : f(x) = -x² + 10x
 // Maximum théorique en x = 5, f(5) = 25
-function ObjectiveFunction(const AChromosome: TChromosome): Double;
+function ObjectiveFunction(const AChromosome: TChromosome): Double;  
 var
   x: Double;
 begin
@@ -478,7 +478,7 @@ end.
 **Sortie attendue :**
 ```
 === Optimisation d'une fonction avec AG ===
-Fonction: f(x) = -x² + 10x
+Fonction: f(x) = -x² + 10x  
 Recherche du maximum sur [0, 10]
 
 Génération | Meilleur X | Meilleur F(X) | Fitness Moyenne
@@ -491,7 +491,7 @@ Génération | Meilleur X | Meilleur F(X) | Fitness Moyenne
         50 |     5.0001 |      25.0000 |         24.8932
 
 === RÉSULTAT FINAL ===
-x optimal trouvé: 5.0001
+x optimal trouvé: 5.0001  
 f(x) maximum: 25.0000
 
 Solution théorique: x = 5, f(5) = 25
@@ -511,7 +511,7 @@ La sélection détermine quels individus se reproduisent. Plusieurs méthodes ex
 
 **Sélection par Roulette**
 ```pascal
-function SelectParentRoulette: TIndividual;
+function SelectParentRoulette: TIndividual;  
 var
   totalFitness, randomPoint, currentSum: Double;
   i: Integer;
@@ -543,7 +543,7 @@ end;
 
 **Sélection par Rang**
 ```pascal
-function SelectParentRank: TIndividual;
+function SelectParentRank: TIndividual;  
 var
   totalRank, randomPoint, currentSum: Integer;
   i: Integer;
@@ -575,7 +575,7 @@ end;
 
 **Croisement en Un Point (déjà implémenté)**
 ```
-Parent 1: [A B C | D E F]
+Parent 1: [A B C | D E F]  
 Parent 2: [a b c | d e f]
           --------+-------
 Enfant :  [A B C | d e f]
@@ -583,7 +583,7 @@ Enfant :  [A B C | d e f]
 
 **Croisement en Deux Points**
 ```pascal
-function CrossoverTwoPoint(const AParent1, AParent2: TIndividual): TIndividual;
+function CrossoverTwoPoint(const AParent1, AParent2: TIndividual): TIndividual;  
 var
   i, point1, point2, temp: Integer;
 begin
@@ -623,7 +623,7 @@ end;
 
 **Croisement Uniforme**
 ```pascal
-function CrossoverUniform(const AParent1, AParent2: TIndividual): TIndividual;
+function CrossoverUniform(const AParent1, AParent2: TIndividual): TIndividual;  
 var
   i: Integer;
 begin
@@ -649,7 +649,7 @@ end;
 
 **Mutation Gaussienne**
 ```pascal
-procedure MutateGaussian(var AIndividual: TIndividual);
+procedure MutateGaussian(var AIndividual: TIndividual);  
 var
   i: Integer;
   delta: Double;
@@ -674,7 +674,7 @@ end;
 
 **Mutation par Inversion (pour problèmes combinatoires)**
 ```pascal
-procedure MutateInversion(var AIndividual: TIndividual);
+procedure MutateInversion(var AIndividual: TIndividual);  
 var
   i, j, point1, point2, temp: Integer;
 begin
@@ -768,7 +768,7 @@ type
 
 implementation
 
-constructor TTSPGA.Create(const ACities: TCityArray; APopulationSize: Integer);
+constructor TTSPGA.Create(const ACities: TCityArray; APopulationSize: Integer);  
 begin
   FCities := Copy(ACities);
   FPopulationSize := APopulationSize;
@@ -782,7 +782,7 @@ begin
   EvaluatePopulation;
 end;
 
-destructor TTSPGA.Destroy;
+destructor TTSPGA.Destroy;  
 var
   i: Integer;
 begin
@@ -793,7 +793,7 @@ begin
   inherited;
 end;
 
-function TTSPGA.GetCityDistance(const ACity1, ACity2: TCity): Double;
+function TTSPGA.GetCityDistance(const ACity1, ACity2: TCity): Double;  
 var
   dx, dy: Double;
 begin
@@ -802,7 +802,7 @@ begin
   Result := Sqrt(dx * dx + dy * dy);
 end;
 
-function TTSPGA.CalculateDistance(const ARoute: TRoute): Double;
+function TTSPGA.CalculateDistance(const ARoute: TRoute): Double;  
 var
   i: Integer;
 begin
@@ -815,7 +815,7 @@ begin
   Result := Result + GetCityDistance(FCities[ARoute[High(ARoute)]], FCities[ARoute[0]]);
 end;
 
-procedure TTSPGA.InitializePopulation;
+procedure TTSPGA.InitializePopulation;  
 var
   i, j, k, temp: Integer;
 begin
@@ -840,7 +840,7 @@ begin
   end;
 end;
 
-procedure TTSPGA.EvaluatePopulation;
+procedure TTSPGA.EvaluatePopulation;  
 var
   i: Integer;
 begin
@@ -851,7 +851,7 @@ begin
   FBestRoute := FPopulation[0];
 end;
 
-procedure TTSPGA.SortPopulation;
+procedure TTSPGA.SortPopulation;  
 var
   i, j: Integer;
   temp: TTSPIndividual;
@@ -867,7 +867,7 @@ begin
       end;
 end;
 
-function TTSPGA.SelectParent: TTSPIndividual;
+function TTSPGA.SelectParent: TTSPIndividual;  
 var
   tournamentSize, i, randomIndex, bestIndex: Integer;
   bestDistance: Double;
@@ -889,7 +889,7 @@ begin
   Result := FPopulation[bestIndex];
 end;
 
-function TTSPGA.OrderCrossover(const AParent1, AParent2: TTSPIndividual): TTSPIndividual;
+function TTSPGA.OrderCrossover(const AParent1, AParent2: TTSPIndividual): TTSPIndividual;  
 var
   i, j, point1, point2, temp, cityIndex: Integer;
   used: array of Boolean;
@@ -939,7 +939,7 @@ begin
   SetLength(used, 0);
 end;
 
-procedure TTSPGA.SwapMutation(var AIndividual: TTSPIndividual);
+procedure TTSPGA.SwapMutation(var AIndividual: TTSPIndividual);  
 var
   i, j, temp: Integer;
 begin
@@ -956,7 +956,7 @@ begin
   end;
 end;
 
-procedure TTSPGA.EvolveOneGeneration;
+procedure TTSPGA.EvolveOneGeneration;  
 var
   newPopulation: array of TTSPIndividual;
   i: Integer;
@@ -987,7 +987,7 @@ begin
   Inc(FGeneration);
 end;
 
-procedure TTSPGA.Evolve(AGenerations: Integer);
+procedure TTSPGA.Evolve(AGenerations: Integer);  
 var
   i: Integer;
 begin
@@ -995,12 +995,12 @@ begin
     EvolveOneGeneration;
 end;
 
-function TTSPGA.GetBestRoute: TTSPIndividual;
+function TTSPGA.GetBestRoute: TTSPIndividual;  
 begin
   Result := FBestRoute;
 end;
 
-function TTSPGA.GetAverageDistance: Double;
+function TTSPGA.GetAverageDistance: Double;  
 var
   i: Integer;
   sum: Double;
@@ -1024,7 +1024,7 @@ program TestTSP;
 uses
   SysUtils, Math, TSPGeneticAlgorithm;
 
-procedure CreateRandomCities(var ACities: TCityArray; ACount: Integer);
+procedure CreateRandomCities(var ACities: TCityArray; ACount: Integer);  
 var
   i: Integer;
 begin
@@ -1038,7 +1038,7 @@ begin
   end;
 end;
 
-procedure PrintRoute(const ARoute: TTSPIndividual; const ACities: TCityArray);
+procedure PrintRoute(const ARoute: TTSPIndividual; const ACities: TCityArray);  
 var
   i: Integer;
 begin
@@ -1139,7 +1139,7 @@ type
 // Exemple: sac à dos avec 5 objets
 // [True, False, True, True, False] = prendre objets 1, 3 et 4
 
-function DecodeBinary(const AChromosome: TBinaryChromosome): Integer;
+function DecodeBinary(const AChromosome: TBinaryChromosome): Integer;  
 var
   i, value: Integer;
 begin
@@ -1162,7 +1162,7 @@ type
 // Exemple: paramètres d'une fonction
 // [0.5, 2.3, -1.7] = x=0.5, y=2.3, z=-1.7
 
-function ScaleToRange(AValue, AMin, AMax: Double): Double;
+function ScaleToRange(AValue, AMin, AMax: Double): Double;  
 begin
   Result := AMin + AValue * (AMax - AMin);
 end;
@@ -1179,7 +1179,7 @@ type
 // Exemple: ordre de visite
 // [2, 0, 3, 1] = visiter 3ème, 1ère, 4ème, 2ème
 
-function IsValidPermutation(const AChromosome: TPermutationChromosome): Boolean;
+function IsValidPermutation(const AChromosome: TPermutationChromosome): Boolean;  
 var
   i, j: Integer;
 begin
@@ -1256,7 +1256,7 @@ var
   PopulationSize: Integer;
   MutationRate: Double;
 
-procedure InitializeItems;
+procedure InitializeItems;  
 begin
   SetLength(Items, 8);
 
@@ -1272,7 +1272,7 @@ begin
   MaxWeight := 20;
 end;
 
-procedure EvaluateIndividual(var AIndividual: TKnapsackIndividual);
+procedure EvaluateIndividual(var AIndividual: TKnapsackIndividual);  
 var
   i: Integer;
 begin
@@ -1295,7 +1295,7 @@ begin
     AIndividual.Fitness := AIndividual.TotalValue;
 end;
 
-procedure InitializePopulation;
+procedure InitializePopulation;  
 var
   i, j: Integer;
 begin
@@ -1312,7 +1312,7 @@ begin
   end;
 end;
 
-procedure SortPopulation;
+procedure SortPopulation;  
 var
   i, j: Integer;
   temp: TKnapsackIndividual;
@@ -1327,7 +1327,7 @@ begin
       end;
 end;
 
-function SelectParent: TKnapsackIndividual;
+function SelectParent: TKnapsackIndividual;  
 var
   i, bestIndex: Integer;
   bestFitness: Double;
@@ -1347,7 +1347,7 @@ begin
   Result := Population[bestIndex];
 end;
 
-function Crossover(const AParent1, AParent2: TKnapsackIndividual): TKnapsackIndividual;
+function Crossover(const AParent1, AParent2: TKnapsackIndividual): TKnapsackIndividual;  
 var
   i, point: Integer;
 begin
@@ -1363,7 +1363,7 @@ begin
   end;
 end;
 
-procedure Mutate(var AIndividual: TKnapsackIndividual);
+procedure Mutate(var AIndividual: TKnapsackIndividual);  
 var
   i: Integer;
 begin
@@ -1372,7 +1372,7 @@ begin
       AIndividual.Chromosome[i] := not AIndividual.Chromosome[i];
 end;
 
-procedure EvolveOneGeneration;
+procedure EvolveOneGeneration;  
 var
   newPopulation: array of TKnapsackIndividual;
   i: Integer;
@@ -1400,7 +1400,7 @@ begin
   SortPopulation;
 end;
 
-procedure PrintSolution(const AIndividual: TKnapsackIndividual);
+procedure PrintSolution(const AIndividual: TKnapsackIndividual);  
 var
   i: Integer;
 begin
@@ -1522,7 +1522,7 @@ implementation
 
 {$R *.lfm}
 
-function SimpleTestFunction(const AChromosome: TChromosome): Double;
+function SimpleTestFunction(const AChromosome: TChromosome): Double;  
 var
   x: Double;
 begin
@@ -1531,7 +1531,7 @@ begin
   Result := Sin(10 * x) * x;
 end;
 
-procedure TFormGA.FormCreate(Sender: TObject);
+procedure TFormGA.FormCreate(Sender: TObject);  
 begin
   FGA := TGeneticAlgorithm.Create(100, 1, @SimpleTestFunction);
   FGA.MutationRate := 0.05;
@@ -1545,13 +1545,13 @@ begin
   Timer1.Enabled := False;
 end;
 
-procedure TFormGA.FormDestroy(Sender: TObject);
+procedure TFormGA.FormDestroy(Sender: TObject);  
 begin
   FGA.Free;
   SetLength(FFitnessHistory, 0);
 end;
 
-procedure TFormGA.ButtonStartClick(Sender: TObject);
+procedure TFormGA.ButtonStartClick(Sender: TObject);  
 begin
   FRunning := True;
   Timer1.Enabled := True;
@@ -1559,7 +1559,7 @@ begin
   ButtonStop.Enabled := True;
 end;
 
-procedure TFormGA.ButtonStopClick(Sender: TObject);
+procedure TFormGA.ButtonStopClick(Sender: TObject);  
 begin
   FRunning := False;
   Timer1.Enabled := False;
@@ -1567,7 +1567,7 @@ begin
   ButtonStop.Enabled := False;
 end;
 
-procedure TFormGA.ButtonResetClick(Sender: TObject);
+procedure TFormGA.ButtonResetClick(Sender: TObject);  
 begin
   FGA.Free;
   FGA := TGeneticAlgorithm.Create(100, 1, @SimpleTestFunction);
@@ -1583,7 +1583,7 @@ begin
   LabelAvgFitness.Caption := 'Moyenne: 0.00';
 end;
 
-procedure TFormGA.Timer1Timer(Sender: TObject);
+procedure TFormGA.Timer1Timer(Sender: TObject);  
 var
   best: TIndividual;
 begin
@@ -1609,7 +1609,7 @@ begin
   PaintBox1.Invalidate;
 end;
 
-procedure TFormGA.PaintBox1Paint(Sender: TObject);
+procedure TFormGA.PaintBox1Paint(Sender: TObject);  
 var
   i: Integer;
   x1, y1, x2, y2: Integer;
@@ -1756,7 +1756,7 @@ end;
 Ajuster le taux de mutation selon la convergence :
 
 ```pascal
-procedure AdaptMutationRate(var AGA: TGeneticAlgorithm);
+procedure AdaptMutationRate(var AGA: TGeneticAlgorithm);  
 var
   diversity: Double;
 begin
@@ -1770,7 +1770,7 @@ begin
     AGA.MutationRate := Max(0.001, AGA.MutationRate * 0.8);
 end;
 
-function CalculateDiversity(AGA: TGeneticAlgorithm): Double;
+function CalculateDiversity(AGA: TGeneticAlgorithm): Double;  
 var
   i, j, k: Integer;
   differences: Integer;
@@ -1853,7 +1853,7 @@ begin
     FIslands[i] := TGeneticAlgorithm.Create(APopulationSize, AChromosomeLength, AFitnessFunction);
 end;
 
-destructor TIslandGA.Destroy;
+destructor TIslandGA.Destroy;  
 var
   i: Integer;
 begin
@@ -1863,7 +1863,7 @@ begin
   inherited;
 end;
 
-procedure TIslandGA.MigrateIndividuals;
+procedure TIslandGA.MigrateIndividuals;  
 var
   i, j, nextIsland: Integer;
   migrants: array of TIndividual;
@@ -1889,7 +1889,7 @@ begin
   SetLength(migrants, 0);
 end;
 
-procedure TIslandGA.EvolveOneGeneration;
+procedure TIslandGA.EvolveOneGeneration;  
 var
   i: Integer;
 begin
@@ -1903,7 +1903,7 @@ begin
     MigrateIndividuals;
 end;
 
-procedure TIslandGA.Evolve(AGenerations: Integer);
+procedure TIslandGA.Evolve(AGenerations: Integer);  
 var
   i: Integer;
 begin
@@ -1911,7 +1911,7 @@ begin
     EvolveOneGeneration;
 end;
 
-function TIslandGA.GetGlobalBest: TIndividual;
+function TIslandGA.GetGlobalBest: TIndividual;  
 var
   i: Integer;
   best, candidate: TIndividual;
@@ -1982,7 +1982,7 @@ begin
 end;
 
 // Utilisation dans l'AG
-procedure EvolveWithLocalSearch(AGA: TGeneticAlgorithm);
+procedure EvolveWithLocalSearch(AGA: TGeneticAlgorithm);  
 var
   i: Integer;
   pop: TPopulation;
@@ -2049,27 +2049,27 @@ type
 
 implementation
 
-constructor TNSGA2.Create(APopulationSize, AChromosomeLength: Integer);
+constructor TNSGA2.Create(APopulationSize, AChromosomeLength: Integer);  
 begin
   FPopulationSize := APopulationSize;
   FChromosomeLength := AChromosomeLength;
   SetLength(FPopulation, FPopulationSize);
 end;
 
-destructor TNSGA2.Destroy;
+destructor TNSGA2.Destroy;  
 begin
   SetLength(FPopulation, 0);
   SetLength(FObjectiveFunctions, 0);
   inherited;
 end;
 
-procedure TNSGA2.AddObjective(AFunction: TObjectiveFunction);
+procedure TNSGA2.AddObjective(AFunction: TObjectiveFunction);  
 begin
   SetLength(FObjectiveFunctions, Length(FObjectiveFunctions) + 1);
   FObjectiveFunctions[High(FObjectiveFunctions)] := AFunction;
 end;
 
-function TNSGA2.Dominates(const AIndiv1, AIndiv2: TMOIndividual): Boolean;
+function TNSGA2.Dominates(const AIndiv1, AIndiv2: TMOIndividual): Boolean;  
 var
   i: Integer;
   betterInOne, worseInOne: Boolean;
@@ -2089,7 +2089,7 @@ begin
   Result := betterInOne and (not worseInOne);
 end;
 
-procedure TNSGA2.EvaluateObjectives;
+procedure TNSGA2.EvaluateObjectives;  
 var
   i, j: Integer;
 begin
@@ -2102,7 +2102,7 @@ begin
   end;
 end;
 
-procedure TNSGA2.NonDominatedSort;
+procedure TNSGA2.NonDominatedSort;  
 var
   i, j: Integer;
   currentRank: Integer;
@@ -2182,7 +2182,7 @@ begin
   end;
 end;
 
-procedure TNSGA2.CalculateCrowdingDistance;
+procedure TNSGA2.CalculateCrowdingDistance;  
 var
   i, j, objIndex: Integer;
   sortedIndices: array of Integer;
@@ -2229,14 +2229,14 @@ begin
   end;
 end;
 
-procedure TNSGA2.EvolveOneGeneration;
+procedure TNSGA2.EvolveOneGeneration;  
 begin
   NonDominatedSort;
   CalculateCrowdingDistance;
   // Sélection, croisement, mutation (à implémenter)
 end;
 
-function TNSGA2.GetParetoFront: TMOPopulation;
+function TNSGA2.GetParetoFront: TMOPopulation;  
 var
   i, count: Integer;
 begin
@@ -2276,13 +2276,13 @@ interface
 uses
   SysUtils;
 
-function GetDataPath: string;
-function GetResultsPath: string;
+function GetDataPath: string;  
+function GetResultsPath: string;  
 procedure SaveResults(const AFileName: string; const AData: string);
 
 implementation
 
-function GetDataPath: string;
+function GetDataPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := ExtractFilePath(ParamStr(0)) + 'data\';
@@ -2295,7 +2295,7 @@ begin
     ForceDirectories(Result);
 end;
 
-function GetResultsPath: string;
+function GetResultsPath: string;  
 begin
   {$IFDEF WINDOWS}
   Result := ExtractFilePath(ParamStr(0)) + 'results\';
@@ -2308,7 +2308,7 @@ begin
     ForceDirectories(Result);
 end;
 
-procedure SaveResults(const AFileName: string; const AData: string);
+procedure SaveResults(const AFileName: string; const AData: string);  
 var
   fullPath: string;
   f: TextFile;
@@ -2348,7 +2348,7 @@ var
   Stocks: array of TStock;
   TotalBudget: Double;
 
-procedure InitializeStocks;
+procedure InitializeStocks;  
 begin
   SetLength(Stocks, 5);
 
@@ -2363,7 +2363,7 @@ end;
 
 // Fonction fitness : maximiser le ratio de Sharpe
 // (rendement - taux sans risque) / risque
-function PortfolioFitness(const AChromosome: TChromosome): Double;
+function PortfolioFitness(const AChromosome: TChromosome): Double;  
 var
   i: Integer;
   totalAllocation, expectedReturn, portfolioRisk: Double;
@@ -2408,7 +2408,7 @@ begin
   SetLength(allocations, 0);
 end;
 
-procedure PrintPortfolio(const AChromosome: TChromosome);
+procedure PrintPortfolio(const AChromosome: TChromosome);  
 var
   i: Integer;
   totalAllocation, allocation: Double;
@@ -2516,7 +2516,7 @@ end.
 ### 1. Vérifier la fonction fitness
 
 ```pascal
-procedure TestFitnessFunction;
+procedure TestFitnessFunction;  
 var
   testChromosome: TChromosome;
   fitness: Double;
@@ -2571,7 +2571,7 @@ type
 
 implementation
 
-constructor TGALogger.Create(const AFileName: string);
+constructor TGALogger.Create(const AFileName: string);  
 begin
   FEnabled := True;
   AssignFile(FLogFile, AFileName);
@@ -2579,14 +2579,14 @@ begin
   WriteLn(FLogFile, 'Generation,BestFitness,AvgFitness,Timestamp');
 end;
 
-destructor TGALogger.Destroy;
+destructor TGALogger.Destroy;  
 begin
   if FEnabled then
     CloseFile(FLogFile);
   inherited;
 end;
 
-procedure TGALogger.LogGeneration(AGeneration: Integer; ABestFitness, AAvgFitness: Double);
+procedure TGALogger.LogGeneration(AGeneration: Integer; ABestFitness, AAvgFitness: Double);  
 begin
   if not FEnabled then Exit;
 
@@ -2595,7 +2595,7 @@ begin
   Flush(FLogFile);
 end;
 
-procedure TGALogger.LogBestIndividual(const AIndividual: TIndividual);
+procedure TGALogger.LogBestIndividual(const AIndividual: TIndividual);  
 var
   i: Integer;
 begin
@@ -2618,7 +2618,7 @@ end.
 ### 3. Détecter la convergence prématurée
 
 ```pascal
-function DetectPrematureConvergence(AGA: TGeneticAlgorithm): Boolean;
+function DetectPrematureConvergence(AGA: TGeneticAlgorithm): Boolean;  
 var
   diversity: Double;
   avgFitness, bestFitness: Double;
@@ -2636,7 +2636,7 @@ begin
     WriteLn('⚠ ALERTE: Convergence prématurée détectée!');
 end;
 
-procedure HandlePrematureConvergence(var AGA: TGeneticAlgorithm);
+procedure HandlePrematureConvergence(var AGA: TGeneticAlgorithm);  
 var
   i, j: Integer;
   pop: TPopulation;
@@ -2692,19 +2692,19 @@ type
 
 implementation
 
-constructor TGAProfiler.Create;
+constructor TGAProfiler.Create;  
 begin
   FStartTime := Now;
   FFitnessEvaluations := 0;
   SetLength(FGenerationTimes, 0);
 end;
 
-procedure TGAProfiler.StartGeneration;
+procedure TGAProfiler.StartGeneration;  
 begin
   FStartTime := Now;
 end;
 
-procedure TGAProfiler.EndGeneration;
+procedure TGAProfiler.EndGeneration;  
 var
   elapsed: Int64;
 begin
@@ -2713,12 +2713,12 @@ begin
   FGenerationTimes[High(FGenerationTimes)] := elapsed;
 end;
 
-procedure TGAProfiler.RecordFitnessEvaluation;
+procedure TGAProfiler.RecordFitnessEvaluation;  
 begin
   Inc(FFitnessEvaluations);
 end;
 
-function TGAProfiler.GetAverageGenerationTime: Double;
+function TGAProfiler.GetAverageGenerationTime: Double;  
 var
   i: Integer;
   sum: Int64;
@@ -2736,7 +2736,7 @@ begin
   Result := sum / Length(FGenerationTimes);
 end;
 
-function TGAProfiler.GetEvaluationsPerSecond: Double;
+function TGAProfiler.GetEvaluationsPerSecond: Double;  
 var
   totalTime: Double;
 begin
@@ -2748,7 +2748,7 @@ begin
     Result := 0;
 end;
 
-procedure TGAProfiler.PrintStats;
+procedure TGAProfiler.PrintStats;  
 begin
   WriteLn('=== Statistiques de Performance ===');
   WriteLn(Format('Générations: %d', [Length(FGenerationTimes)]));
@@ -2828,7 +2828,7 @@ type
 var
   Jobs: array of TJob;
 
-procedure InitializeJobs;
+procedure InitializeJobs;  
 begin
   SetLength(Jobs, 6);
 
@@ -2840,7 +2840,7 @@ begin
   Jobs[5].ID := 6; Jobs[5].Duration := 2; Jobs[5].Priority := 4; Jobs[5].Deadline := 7;
 end;
 
-function EvaluateSchedule(const ASchedule: TChromosome): Double;
+function EvaluateSchedule(const ASchedule: TChromosome): Double;  
 var
   i, currentTime, jobIndex, lateness: Integer;
   totalPenalty: Double;
@@ -2895,7 +2895,7 @@ type
     ConnectionCost: Double;
   end;
 
-function EvaluateCircuitLayout(const AChromosome: TChromosome): Double;
+function EvaluateCircuitLayout(const AChromosome: TChromosome): Double;  
 var
   i: Integer;
   components: array of TComponent;
@@ -2931,7 +2931,7 @@ program MLHyperparameters;
 {$mode objfpc}{$H+}
 
 // Optimiser les hyperparamètres d'un réseau de neurones
-function EvaluateHyperparameters(const AChromosome: TChromosome): Double;
+function EvaluateHyperparameters(const AChromosome: TChromosome): Double;  
 var
   learningRate, momentum, dropout: Double;
   hiddenLayers, neuronsPerLayer: Integer;
@@ -2993,7 +2993,7 @@ begin
   end;
 end;
 
-function ChromosomeDistance(const AChrom1, AChrom2: TChromosome): Double;
+function ChromosomeDistance(const AChrom1, AChrom2: TChromosome): Double;  
 var
   i: Integer;
   sum: Double;
@@ -3097,13 +3097,13 @@ begin
   end;
 end;
 
-destructor TDifferentialEvolution.Destroy;
+destructor TDifferentialEvolution.Destroy;  
 begin
   SetLength(FPopulation, 0);
   inherited;
 end;
 
-function TDifferentialEvolution.Mutate(AIndex: Integer): TDEIndividual;
+function TDifferentialEvolution.Mutate(AIndex: Integer): TDEIndividual;  
 var
   i, r1, r2, r3: Integer;
 begin
@@ -3134,7 +3134,7 @@ begin
   end;
 end;
 
-function TDifferentialEvolution.Crossover(const ATarget, AMutant: TDEIndividual): TDEIndividual;
+function TDifferentialEvolution.Crossover(const ATarget, AMutant: TDEIndividual): TDEIndividual;  
 var
   i, jRand: Integer;
 begin
@@ -3150,7 +3150,7 @@ begin
   end;
 end;
 
-procedure TDifferentialEvolution.EvolveOneGeneration;
+procedure TDifferentialEvolution.EvolveOneGeneration;  
 var
   i: Integer;
   mutant, trial: TDEIndividual;
@@ -3172,7 +3172,7 @@ begin
   end;
 end;
 
-function TDifferentialEvolution.GetBestIndividual: TDEIndividual;
+function TDifferentialEvolution.GetBestIndividual: TDEIndividual;  
 var
   i: Integer;
 begin
