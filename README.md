@@ -79,10 +79,23 @@ Formation intégralement en français.
 ## 👤 Auteur
 
 **Nicolas DEOUX**
-Email : NDXdev@gmail.com
+
+- [NDXDev@gmail.com](mailto:NDXDev@gmail.com)
+- [LinkedIn](https://www.linkedin.com/in/nicolas-deoux-ab295980/)
+- [GitHub](https://github.com/NDXDeveloper)
+
 
 ## 📄 Licence
 
 Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
 ---
+
+<div align="center">
+
+[![Mettre une étoile sur GitHub](https://img.shields.io/github/stars/NDXDeveloper/formation-freepascal-lazarus-avancee?style=social)](https://github.com/NDXDeveloper/formation-freepascal-lazarus-avancee)
+[![Suivre](https://img.shields.io/github/followers/NDXDeveloper?style=social)](https://github.com/NDXDeveloper)
+
+**[Retour](#formation-freepascallazarus---niveau-d%C3%A9veloppeur-avanc%C3%A9)**
+
+</div>
