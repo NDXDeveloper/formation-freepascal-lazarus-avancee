@@ -93,7 +93,6 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 
 <div align="center">
   
-<img src="https://img.shields.io/github/stars/NDXDeveloper/formation-freepascal-lazarus-avancee" />
 <img src="https://img.shields.io/github/followers/NDXDeveloper" />
 
 **[Retour](#formation-freepascallazarus---niveau-d%C3%A9veloppeur-avanc%C3%A9)**
